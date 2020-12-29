@@ -1,7 +1,7 @@
-export const IP = "https://skoolgo.pixelmindit.com:5000/api";  // server
+export const IP = "https://skoolgo.pixelmindit.com:5700/api";  // server
 // export const IP = "http://localhost:5000/api"; // localhost
-export const SOCKETIP = "https://skoolgo.pixelmindit.com:5000";
-export const PRODIP = "https://skoolgo.pixelmindit.com:5000";
+export const SOCKETIP = "https://skoolgo.pixelmindit.com:5700";
+export const PRODIP = "https://skoolgo.pixelmindit.com:5700";
 export const BIO_STAR_MACHINE_ID = "546844789";
 export const BIO_STAR_IP = "http://skoolgo.pixelmindit.com:8795/v2";
 export const BIO_STAR_LOGIN = { "name": "testing", "user_id": "1", "password": "pixel1234" };

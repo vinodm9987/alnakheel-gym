@@ -1,9 +1,9 @@
 module.exports = {
-  PORT: 5000,
+  PORT: 5700,
   IP: "127.0.0.1:5000",
-  DBNAME: "PIXELGYM",
-  DB: `mongodb://127.0.0.1:27017/PIXELGYM`,
-  MODE: "DEV",
+  DBNAME: "alnakheel-gym",
+  DB: `mongodb://127.0.0.1:27017/alnakheel-gym`,
+  MODE: "PROD",
   BUILDPATH: "../build/index.html",
   DESIGNATION: ["Super Admin", "System Admin", "Member", "Employee", "Trainer"],
   SECRET: "PIXEl",
