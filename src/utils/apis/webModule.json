@@ -1,0 +1,468 @@
+[
+    {
+        "moduleName": "Dashboard",
+        "icon": "iconv1 iconv1-menu-dashboard",
+        "component": [
+            {
+                "componentName": "Admin Dashboard",
+                "route": "/",
+                "componentPath": "AdminDashboard",
+                "read": false,
+                "write": false
+            },
+            {
+                "componentName": "My Dashboard",
+                "route": "/",
+                "componentPath": "EmployeeDashboard",
+                "read": false,
+                "write": false
+            }
+        ]
+    },
+    {
+        "moduleName": "Members",
+        "icon": "iconv1 iconv1-menu-members",
+        "component": [
+            {
+                "componentName": "Add Members",
+                "route": "/add-member",
+                "componentPath": "AddMembers",
+                "read": false,
+                "write": false
+            },
+            {
+                "componentName": "Members List",
+                "route": "/members",
+                "componentPath": "Members",
+                "read": false,
+                "write": false
+            },
+            {
+                "componentName": "Member's Attendance",
+                "route": "/admin-attendance",
+                "componentPath": "AdminAttendance",
+                "read": false,
+                "write": false
+            },
+            {
+                "componentName": "Freeze Members",
+                "route": "/freeze-members",
+                "componentPath": "FreezeMembers",
+                "read": false,
+                "write": false
+            },
+            {
+                "componentName": "Trainer Members",
+                "route": "/trainer-members",
+                "componentPath": "TrainerMyMembers",
+                "read": false,
+                "write": false
+            },
+            {
+                "componentName": "Member Renewal",
+                "route": "/package-renewal",
+                "componentPath": "PackageRenewal",
+                "read": false,
+                "write": false
+            }
+        ]
+    },
+    {
+        "moduleName": "Appointment",
+        "icon": "iconv1 iconv1-menu-appointments",
+        "component": [
+            {
+                "componentName": "Book Appointment",
+                "route": "/appointment",
+                "componentPath": "FrontOfficeAppointment",
+                "read": false,
+                "write": false
+            }
+        ]
+    },
+    {
+        "moduleName": "Packages",
+        "icon": "iconv1 iconv1-menu-packages",
+        "component": [
+            {
+                "componentName": "Add Period",
+                "route": "/add-period",
+                "componentPath": "CreatePeriod",
+                "read": false,
+                "write": false
+            },
+            {
+                "componentName": "Add Package",
+                "route": "/add-package",
+                "componentPath": "Packages",
+                "read": false,
+                "write": false
+            }
+        ]
+    },
+    {
+        "moduleName": "Workouts",
+        "icon": "iconv1 iconv1-menu-workouts",
+        "component": [
+            {
+                "componentName": "Add Workouts",
+                "route": "/workouts",
+                "componentPath": "Workout",
+                "read": false,
+                "write": false
+            },
+            {
+                "componentName": "Workouts Level",
+                "route": "/workouts-level",
+                "componentPath": "WorkoutsLevel",
+                "read": false,
+                "write": false
+            },
+            {
+                "componentName": "Assign Workouts",
+                "route": "/manage-workouts",
+                "componentPath": "ManageWorkouts",
+                "read": false,
+                "write": false
+            },
+            {
+                "componentName": "Update Workouts",
+                "route": "/update-workouts",
+                "componentPath": "UpdateWorkouts",
+                "read": false,
+                "write": false
+            }
+        ]
+    },
+    {
+        "moduleName": "Diet Plans",
+        "icon": "iconv1 iconv1-menu-dietplans",
+        "component": [
+            {
+                "componentName": "Add Diet Food",
+                "route": "/add-diet-foods",
+                "componentPath": "DietFoodItems",
+                "read": false,
+                "write": false
+            },
+            {
+                "componentName": "Add Diet Session",
+                "route": "/add-diet-sessions",
+                "componentPath": "AddDietPlanSessions",
+                "read": false,
+                "write": false
+            },
+            {
+                "componentName": "Assign Diet Plan",
+                "route": "/manage-diet-plans",
+                "componentPath": "ManageDietPlans",
+                "read": false,
+                "write": false
+            },
+            {
+                "componentName": "Update Diet Plan",
+                "route": "/update-diet-plans",
+                "componentPath": "UpdateDietPlans",
+                "read": false,
+                "write": false
+            }
+        ]
+    },
+    {
+        "moduleName": "Classes",
+        "icon": "iconv1 iconv1-classes-module",
+        "component": [
+            {
+                "componentName": "Add Room",
+                "route": "/add-room",
+                "componentPath": "AddRoom",
+                "read": false,
+                "write": false
+            },
+            {
+                "componentName": "Add Class",
+                "route": "/add-class",
+                "componentPath": "AddClass",
+                "read": false,
+                "write": false
+            },
+            {
+                "componentName": "Book A Class",
+                "route": "/book-class",
+                "componentPath": "BookAClass",
+                "read": false,
+                "write": false
+            },
+            {
+                "componentName": "Classes",
+                "route": "/classes",
+                "componentPath": "AdminClasses",
+                "read": false,
+                "write": false
+            },
+            {
+                "componentName": "Classes Schedule",
+                "route": "/admin-classes-schedule",
+                "componentPath": "AdminClassSchedule",
+                "read": false,
+                "write": false
+            },
+            {
+                "componentName": "Trainer Classes",
+                "route": "/trainer-classes",
+                "componentPath": "TrainerMyClasses",
+                "read": false,
+                "write": false
+            },
+            {
+                "componentName": "Trainer Classes Schedule",
+                "route": "/trainer-classes-schedule",
+                "componentPath": "TrainerClassSchedule",
+                "read": false,
+                "write": false
+            }
+        ]
+    },
+    {
+        "moduleName": "Human Resources",
+        "icon": "iconv1 iconv1-menu-hr",
+        "component": [
+            {
+                "componentName": "Add Employee",
+                "route": "/employee",
+                "componentPath": "Employees",
+                "read": false,
+                "write": false
+            },
+            {
+                "componentName": "Add Employee Shift",
+                "route": "/add-shift",
+                "componentPath": "AddShift",
+                "read": false,
+                "write": false
+            },
+            {
+                "componentName": "Assign Employee Shift",
+                "route": "/assign-shift",
+                "componentPath": "AssignShift",
+                "read": false,
+                "write": false
+            },
+            {
+                "componentName": "Add Designation",
+                "route": "/add-designation",
+                "componentPath": "CreateDesignation",
+                "read": false,
+                "write": false
+            }
+        ]
+    },
+    {
+        "moduleName": "Assets",
+        "icon": "iconv1 iconv1-assets-module",
+        "component": [
+            {
+                "componentName": "Add Assets",
+                "route": "/asset",
+                "componentPath": "Assets",
+                "read": false,
+                "write": false
+            },
+            {
+                "componentName": "Add Contract",
+                "route": "/contract",
+                "componentPath": "Contract",
+                "read": false,
+                "write": false
+            }
+        ]
+    },
+    {
+        "moduleName": "Finance",
+        "icon": "iconv1 iconv1-finance-module",
+        "component": [
+            {
+                "componentName": "Add Currency",
+                "route": "/add-currency",
+                "componentPath": "Currency",
+                "read": false,
+                "write": false
+            },
+            {
+                "componentName": "Add VAT",
+                "route": "/add-vat",
+                "componentPath": "Vats",
+                "read": false,
+                "write": false
+            },
+            {
+                "componentName": "Add Supplier",
+                "route": "/supplier",
+                "componentPath": "Supplier",
+                "read": false,
+                "write": false
+            },
+            {
+                "componentName": "Trainer Fees",
+                "route": "/trainer-fees",
+                "componentPath": "TrainerFees",
+                "read": false,
+                "write": false
+            }
+        ]
+    },
+    {
+        "moduleName": "Sales",
+        "icon": "iconv1 iconv1-menu-sales",
+        "component": [
+            {
+                "componentName": "Stock",
+                "route": "/stock",
+                "componentPath": "Stock",
+                "read": false,
+                "write": false
+            },
+            {
+                "componentName": "Point of Sales",
+                "route": "/point-of-sales",
+                "componentPath": "PointOfSales",
+                "read": false,
+                "write": false
+            },
+            {
+                "componentName": "Order History",
+                "route": "/order-history",
+                "componentPath": "OrderHistory",
+                "read": false,
+                "write": false
+            },
+            {
+                "componentName": "Add Offer",
+                "route": "/add-offer",
+                "componentPath": "CreateOffers",
+                "read": false,
+                "write": false
+            }
+        ]
+    },
+    {
+        "moduleName": "Reports",
+        "icon": "iconv1 iconv1-menu-reports",
+        "component": [
+            {
+                "componentName": "Reports",
+                "route": "/report",
+                "componentPath": "Reports",
+                "read": false,
+                "write": false
+            }
+        ]
+    },
+    {
+        "moduleName": "System Privileges",
+        "icon": "iconv1 iconv1-menu-Previleges",
+        "component": [
+            {
+                "componentName": "Create System Admin",
+                "route": "/create-system-admin",
+                "componentPath": "CreateSystemAdmin",
+                "read": false,
+                "write": false
+            },
+            {
+                "componentName": "User Privilege",
+                "route": "/user-privilege",
+                "componentPath": "UserPrivileges",
+                "read": false,
+                "write": false
+            }
+        ]
+    },
+    {
+        "moduleName": "Feedback",
+        "icon": "iconv1 iconv1-menu-feedback",
+        "component": [
+            {
+                "componentName": "Feedback",
+                "route": "/feedback",
+                "componentPath": "FeedbackManual",
+                "read": false,
+                "write": false
+            },
+            {
+                "componentName": "Request List",
+                "route": "/feedback-request-list",
+                "componentPath": "FeedbackRequestList",
+                "read": false,
+                "write": false
+            }
+        ]
+    },
+    {
+        "moduleName": "Communication",
+        "icon": "iconv1 iconv1-menu-communication",
+        "component": [
+            {
+                "componentName": "Add Announcement",
+                "route": "/announcement",
+                "componentPath": "Announcements",
+                "read": false,
+                "write": false
+            },
+            {
+                "componentName": "Add Event",
+                "route": "/add-event",
+                "componentPath": "AddEvents",
+                "read": false,
+                "write": false
+            },
+            {
+                "componentName": "Messages",
+                "route": "/message",
+                "componentPath": "Messages",
+                "read": false,
+                "write": false
+            }
+        ]
+    },
+    {
+        "moduleName": "Rewards",
+        "icon": "iconv1 iconv1-menu-rewards",
+        "component": [
+            {
+                "componentName": "Add Giftcard",
+                "route": "/giftcard",
+                "componentPath": "GiftCards",
+                "read": false,
+                "write": false
+            },
+            {
+                "componentName": "Reward Policy",
+                "route": "/reward-policy",
+                "componentPath": "RewardPolicy",
+                "read": false,
+                "write": false
+            },
+            {
+                "componentName": "Reward Transaction History",
+                "route": "/reward-transaction-history",
+                "componentPath": "RewardTransactionHistory",
+                "read": false,
+                "write": false
+            }
+        ]
+    },
+    {
+        "moduleName": "Info",
+        "icon": "iconv1 iconv1-menu-info",
+        "component": [
+            {
+                "componentName": "Add Branch",
+                "route": "/add-branch",
+                "componentPath": "CreateBranch",
+                "read": false,
+                "write": false
+            }
+        ]
+    }
+]

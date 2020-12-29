@@ -1,0 +1,577 @@
+/* Main */
+html {
+  direction: rtl;
+}
+body {
+  font-family: "Tajawal", sans-serif !important;
+}
+
+/* rtl Font Family */
+.SegoeNormal {
+  font-family: "Tajawal", sans-serif !important;
+}
+.SegoeSemiBold {
+  font-family: "Tajawal", sans-serif !important;
+}
+.SegoeBold {
+  font-family: "Tajawal", sans-serif !important;
+}
+
+/* TopBar  */
+.topLogoWrapper {
+  left: unset;
+  right: 0;
+}
+.topLogoWrapper:after {
+  content: "";
+  left: -50px;
+  right: unset;
+  border-top: 37px solid transparent;
+  border-left: 25px solid transparent;
+  border-right: 25px solid #fff;
+  border-bottom: 37px solid #fff;
+}
+
+@media (min-width: 992px) {
+  .notificationMenu {
+    left: 15px;
+    right: unset;
+  }
+}
+@media (max-width: 575.98px) {
+  .topLogoWrapper {
+    left: unset;
+    right: 50%;
+    transform: translate(50%, -50%);
+  }
+}
+#navOpenerBtn {
+  left: unset;
+  right: 20px;
+}
+.notificationSection:before {
+  left: unset;
+  right: 50%;
+}
+@media (max-width: 575.98px) {
+  .notificationMenu {
+    right: auto;
+    left: 0;
+    transform: translate(5px, 10px);
+  }
+}
+.UserMenu {
+  right: unset;
+  left: 15px;
+}
+
+/* LeftBar */
+.secondaryLevelMenu {
+  left: unset;
+  right: 110px;
+}
+
+/* //////////// */
+/* Table */
+/* //////////// */
+
+/* borderRoundSeperateTable */
+.borderRoundSeperateTable td:first-child {
+  border-left: unset;
+  border-right: 1px solid #ebebeb;
+  border-top-left-radius: unset;
+  border-bottom-left-radius: unset;
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+.borderRoundSeperateTable td:last-child {
+  border-right: unset;
+  border-left: 1px solid #ebebeb;
+  border-top-right-radius: unset;
+  border-bottom-right-radius: unset;
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+}
+
+/* arabicFlip */
+.arabicFlip,
+.iconv1-left-arrow,
+.iconv1-right-arrow,
+.iconv1-left-small-arrow,
+.iconv1-right-small-arrow,
+.iconv1-cart,
+.MuiPickersCalendarHeader-iconButton {
+  display: inline-block;
+  -webkit-transform: scaleX(-1);
+  transform: scaleX(-1);
+}
+
+/* Form */
+.inlineFormInputs {
+  padding: 0.375rem 0.75rem 0.375rem 35px !important;
+}
+
+/* inlineFormInputPaddingStartSymbol */
+.inlineFormInputPaddingStartSymbolWrapper {
+  right: unset;
+  left: 0;
+}
+.passwordEye {
+  right: unset;
+  left: 15px;
+}
+.passwordEye.active:after {
+  right: unset;
+  left: 7px;
+}
+.timeBoxIcon,
+.dateBoxIcon,
+.searchBoxIcon,
+.selectBoxIcon {
+  right: unset;
+  left: 20px;
+}
+.form-block .selectBoxIcon {
+  right: unset;
+  left: 16px;
+}
+.form-block .form-control {
+  padding: 0.375rem 0.75rem 0.375rem 35px !important;
+}
+.custom-file-label-gym::before {
+  left: unset;
+  right: 0;
+}
+.custom-file-label-gym {
+  padding: 0.375rem 5.5rem 0.375rem 0.75rem;
+}
+.custom-file-input-gym:lang(ar) ~ .custom-file-label-gym::before {
+  content: "تصفح";
+}
+
+/* .back-To-top  */
+.back-To-top {
+  right: unset;
+  left: 25px;
+}
+
+/* Caledar 7 Days  */
+
+@media (min-width: 1200px) {
+  .calendar-7-date-displayer {
+    overflow: hidden;
+  }
+}
+
+@-moz-document url-prefix() {
+  .arabicFlip,
+  .iconv1-left-arrow,
+  .iconv1-right-arrow,
+  .iconv1-right-left-arrow,
+  .iconv1-right-small-arrow,
+  .iconv1-cart,
+  .iconv1-call,
+  .MuiPickersCalendarHeader-iconButton {
+    display: inline-block;
+    -webkit-transform: scaleX(-1);
+    transform: scaleX(-1);
+  }
+}
+
+/* icomoon */
+.icon-visitrs-plus {
+  position: relative;
+}
+.icon-visitrs-plus .path2,
+.icon-visitrs-plus .path3 {
+  position: absolute;
+  right: 0;
+}
+.icon-visitrs-plus .path2:before,
+.icon-visitrs-plus .path3:before {
+  display: inline-block;
+  transform: translate(0, 5px);
+}
+
+/* ///////////// */
+/* Inner Pages */
+/* ///////////// */
+
+/* PhoneInput */
+.PhoneInputInput {
+  direction: ltr;
+  text-align: right;
+}
+
+.dirltrtar {
+  text-align: right;
+  direction: ltr;
+}
+.dirltrtal {
+  text-align: left;
+  direction: ltr;
+}
+.dirltrtaljcfs {
+  text-align: left;
+  direction: ltr;
+  justify-content: flex-start !important;
+}
+.dirltrtaljcfe {
+  text-align: left;
+  direction: ltr;
+  justify-content: flex-end !important;
+}
+.dirltrtarjcfs {
+  text-align: right;
+  direction: ltr;
+  justify-content: flex-start !important;
+}
+.dirltrtarjcfe {
+  text-align: right;
+  direction: ltr;
+  justify-content: flex-end !important;
+}
+
+.k-input {
+  text-align: right;
+  direction: ltr;
+  padding-right: 7px !important;
+}
+
+/* login Register */
+.loginRegister {
+  justify-content: flex-start;
+}
+.login-lang {
+  justify-content: flex-start !important;
+}
+.register-lang {
+  justify-content: flex-start !important;
+}
+.fake-placeholder-log-reg.reg-only {
+  padding: 0 0 0 36px;
+}
+
+@media (min-width: 992px) {
+  .loginRegister .loginRegisterWhiteBox.register-only {
+    direction: ltr;
+  }
+  .loginRegister .loginRegisterWhiteBox.register-only form {
+    direction: rtl;
+  }
+}
+
+/* addMember */
+@media (min-width: 992px) {
+  .addMembers label.type1 {
+    width: 93px;
+  }
+  .addMembers label.type2 {
+    width: 116px;
+  }
+  .addMembers label.type1 + .inlineFormInputs,
+  .addMembers label.type1 ~ .errorMessageWrapper .errorMessage {
+    max-width: calc(100% - 93px - 2rem);
+  }
+  .addMembers label.type2 + .inlineFormInputs,
+  .addMembers label.type2 ~ .errorMessageWrapper .errorMessage {
+    max-width: calc(100% - 116px - 2rem);
+  }
+}
+
+/* Supplier */
+.Supplier .react-calendar .react-calendar__tile--now {
+  background: unset !important;
+}
+@media (min-width: 992px) {
+  .Supplier label.type1 {
+    width: 165px;
+  }
+  .Supplier label.type1 + .inlineFormInputs,
+  .Supplier label.type1 ~ .errorMessageWrapper .errorMessage {
+    max-width: calc(100% - 165px - 2rem);
+  }
+}
+@media (min-width: 992px) {
+  .Supplier label.type2 {
+    width: 136px;
+  }
+  .Supplier label.type2 + .inlineFormInputs,
+  .Supplier label.type2 ~ .errorMessageWrapper .errorMessage {
+    max-width: calc(100% - 136px - 2rem);
+  }
+}
+
+/* CreatePeriod */
+@media (min-width: 992px) {
+  .CreatePeriod label.type1 {
+    width: 106px;
+  }
+  .CreatePeriod label.type1 + .inlineFormInputs,
+  .CreatePeriod label.type1 ~ .errorMessageWrapper .errorMessage {
+    max-width: calc(100% - 106px - 2rem);
+  }
+}
+
+@media (min-width: 992px) {
+  .Assets .type2 {
+    width: 115px;
+  }
+  .Assets .type2 + .inlineFormInputs,
+  .Assets .type2 ~ .errorMessageWrapper .errorMessage {
+    max-width: calc(100% - 115px - 2rem);
+  }
+}
+
+/* CreateSystemAdmin */
+@media (min-width: 992px) {
+  .createSystemAdmin label.type1 {
+    width: 107px;
+  }
+  .createSystemAdmin label.type2 {
+    width: 122px;
+  }
+  .createSystemAdmin label.type1 + .inlineFormInputs,
+  .createSystemAdmin label.type1 ~ .errorMessageWrapper .errorMessage {
+    max-width: calc(100% - 107px - 2rem);
+  }
+  .createSystemAdmin label.type2 + .inlineFormInputs,
+  .createSystemAdmin label.type2 ~ .errorMessageWrapper .errorMessage {
+    max-width: calc(100% - 122px - 2rem);
+  }
+}
+
+/* AddClass */
+@media (min-width: 992px) {
+  .AddClass label.type3,
+  .AddClass label.type2,
+  .AddClass label.type1 {
+    width: 142px;
+  }
+  .AddClass label.type3 + .inlineFormInputs,
+  .AddClass label.type2 + .inlineFormInputs,
+  .AddClass label.type1 + .inlineFormInputs,
+  .AddClass label.type3 ~ .errorMessageWrapper .errorMessage,
+  .AddClass label.type2 ~ .errorMessageWrapper .errorMessage,
+  .AddClass label.type1 ~ .errorMessageWrapper .errorMessage {
+    max-width: calc(100% - 142px - 2rem);
+  }
+}
+@media (min-width: 1200px) {
+  .AddClass label.type2 {
+    width: 62px;
+  }
+  .AddClass label.type2 + .inlineFormInputs,
+  .AddClass label.type2 ~ .errorMessageWrapper .errorMessage {
+    max-width: calc(100% - 62px - 2rem);
+  }
+  .AddClass label.type3 {
+    width: 92px;
+  }
+  .AddClass label.type3 + .inlineFormInputs,
+  .AddClass label.type3 ~ .errorMessageWrapper .errorMessage {
+    max-width: calc(100% - 92px - 2rem);
+  }
+}
+
+/* AddStock */
+@media (min-width: 992px) {
+  .AddStock .type1 {
+    width: 141px;
+  }
+  .AddStock .type1 + .inlineFormInputs,
+  .AddStock .type1 ~ .errorMessageWrapper .errorMessage {
+    max-width: calc(100% - 141px - 2rem);
+  }
+}
+
+/* Packages */
+@media (min-width: 992px) {
+  .Packages label.type2 {
+    width: 92px;
+  }
+  .Packages label.type2 + .inlineFormInputs,
+  .Packages label.type2 ~ .errorMessageWrapper .errorMessage {
+    max-width: calc(100% - 92px - 2rem);
+  }
+}
+
+/* Workout */
+@media (min-width: 992px) {
+  .Workout label.type1 {
+    width: 101px;
+  }
+  .Workout label.type1 + .inlineFormInputs,
+  .Workout label.type1 ~ .errorMessageWrapper .errorMessage {
+    max-width: calc(100% - 101px - 2rem);
+  }
+}
+
+/* TrainerFees */
+@media (min-width: 992px) {
+  .TrainerFees label.type1 {
+    width: 83px;
+  }
+  .TrainerFees label.type1 + .inlineFormInputs,
+  .TrainerFees label.type1 ~ .errorMessageWrapper .errorMessage,
+  .TrainerFees label.type1 ~ .inlineFormInputPaddingStartSymbolWrapper {
+    max-width: calc(100% - 83px - 2rem);
+  }
+}
+
+/* Diet Food Items */
+@media (min-width: 992px) {
+  .DietFoodItems label.type1 {
+    width: 115px;
+  }
+  .DietFoodItems label.type1 + .inlineFormInputs,
+  .DietFoodItems label.type1 ~ .errorMessageWrapper .errorMessage {
+    max-width: calc(100% - 115px - 2rem);
+  }
+}
+
+/* Diet Food Items */
+@media (min-width: 992px) {
+  .AddDietPlanSessions label.type1 {
+    width: 78px;
+  }
+  .AddDietPlanSessions label.type2 {
+    width: 75px;
+  }
+  .AddDietPlanSessions label.type1 + .inlineFormInputs,
+  .AddDietPlanSessions label.type1 ~ .errorMessageWrapper .errorMessage {
+    max-width: calc(100% - 78px - 2rem);
+  }
+  .AddDietPlanSessions label.type2 + .inlineFormInputs,
+  .AddDietPlanSessions label.type2 ~ .errorMessageWrapper .errorMessage {
+    max-width: calc(100% - 75px - 2rem);
+  }
+}
+
+/* Employees */
+@media (min-width: 992px) {
+  .Employees label.type1 {
+    width: 129px;
+  }
+  .Employees label.type1 + .inlineFormInputs,
+  .Employees label.type1 ~ .errorMessageWrapper .errorMessage {
+    max-width: calc(100% - 129px - 2rem);
+  }
+}
+
+@media (min-width: 992px) {
+  .AddShift label.type1 {
+    width: 106px;
+  }
+  .AddShift label.type1 + .inlineFormInputs,
+  .AddShift label.type1 ~ .errorMessageWrapper .errorMessage {
+    max-width: calc(100% - 106px - 2rem);
+  }
+}
+
+/* Currency Category */
+.Currency .putImageInlineFormField {
+  left: unset;
+  right: 10px;
+}
+@media (min-width: 992px) {
+  .Currency .putImageInlineFormField {
+    left: unset;
+    right: 140px;
+  }
+}
+
+/* Create Branch */
+@media (min-width: 992px) {
+  .CreateBranch label.type1 {
+    width: 116px;
+  }
+  .CreateBranch label.type1 + .inlineFormInputs,
+  .CreateBranch label.type1 ~ .errorMessageWrapper .errorMessage {
+    max-width: calc(100% - 116px - 2rem);
+  }
+}
+
+/* CustomerClassSchedule */
+
+td:last-child .CustomerClassScheduleHoverBox {
+  left: 0;
+  right: unset;
+}
+
+/* Canvas rtl round graph */
+canvas.chartjs-render-monitor {
+  direction: ltr;
+}
+
+/* Scroll Removal */
+.overflow-auto {
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+.iconv1.iconv1-addition-plus {
+  direction: ltr;
+}
+
+.en-100px-ar-150px {
+  width: 150px;
+}
+.form-block .form-control.p-0-en-ar,
+.p-0-en-ar {
+  padding: 0 !important;
+}
+.dirltrjce {
+  direction: ltr;
+  justify-content: flex-end !important;
+}
+.dirltrjcs {
+  direction: ltr;
+  justify-content: flex-start !important;
+}
+.dirltrjcc {
+  direction: ltr;
+  justify-content: center !important;
+}
+.form-block .form-control.dirltr,
+.form-control.dirltr {
+  padding: 0.375rem 35px 0.375rem 0.75rem !important;
+  direction: ltr;
+}
+
+.CFV-en-text {
+  display: inline-flex !important;
+  position: absolute;
+  top: 10px;
+  left: 10px;
+}
+.CFV-ar-text {
+  display: none !important;
+}
+.CFV-iconv1-biomatric-phone {
+  -webkit-transform: scaleX(-1);
+  transform: scaleX(-1);
+}
+.mover-myworkout {
+  margin-left: -15px;
+  margin-right: 15px;
+}
+.cust-dbd-corusels .carousel-control-prev {
+  left: auto !important;
+  right: 0 !important;
+}
+.cust-dbd-corusels .carousel-control-next {
+  left: 0 !important;
+  right: auto !important;
+}
+.r27px {
+  left: 27px;
+}
+.ar-en-px-2,
+.form-block .form-control.ar-en-px-2 {
+  padding-left: 8px !important;
+  padding-right: 8px !important;
+}
+.form-block .MuiFormControl-root.form-control {
+  padding: 0 8px !important;
+}

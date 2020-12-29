@@ -1,0 +1,89 @@
+<html>
+
+<head>
+	<title>BioStar 2</title>
+	<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+	<script src="https://code.jquery.com/jquery-3.2.1.min.js"
+		integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+</head>
+
+<body>
+	<h1>h111</h1>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/moment@2.24.0/moment.min.js"></script>
+	<script>
+		async function addAttendanceLog(memberId) {
+			let header = { 'Content-Type': 'application/json;charset=UTF-8', "Access-Control-Allow-Origin": "*" }
+			let body = { memberId }
+			let { data } = await axios.post(`https://skoolgo.pixelmindit.com:5000/api/attendance/addMemberAttendance`, body, { header });
+			return data;
+		}
+
+		$(document).ready(function () {
+			var API_HOST = 'http://192.168.100.74',
+				WS_HOST = 'ws://192.168.100.74',
+				BIOSTAR2_LOGIN_API_URI = API_HOST + '/api/login',
+				BIOSTAR2_WS_URI = WS_HOST + '/wsapi',
+				BIOSTAR2_WS_EVENT_START_URI = API_HOST + '/api/events/start';
+
+			var loginData = {
+				'User': {
+					'login_id': 'admin',
+					'password': 'pixel1234'
+				}
+			};
+
+			$.ajax({
+				url: BIOSTAR2_LOGIN_API_URI,
+				type: 'POST',
+				dataType: 'json',
+				data: JSON.stringify(loginData),
+				contentType: 'application/json',
+				success: function (data, textStatus, request) {
+					var bsSessionId = request.getResponseHeader('bs-session-id'),
+						ws = new WebSocket(BIOSTAR2_WS_URI);
+					ws.onopen = function () {
+						ws.send('bs-session-id' + "=" + request.getResponseHeader('bs-session-id'));
+						setTimeout(function () { postBioStar2() }, 1000)
+						function postBioStar2() {
+							$.ajax({
+								url: BIOSTAR2_WS_EVENT_START_URI,
+								type: 'POST',
+								dataType: 'json',
+								contentType: 'application/json',
+								beforeSend: function (request) {
+									request.setRequestHeader("bs-session-id", bsSessionId);
+								},
+								success: function (data, textStatus, request) {
+									console.log("");
+								},
+								error: function (err) {
+									console.log(err);
+								},
+							});
+						}
+					};
+
+					ws.onmessage = async function (event) {
+						debugger
+						var status = '';
+						let data = JSON.parse(event.data);
+						console.log(data.Event);
+						if (data.Event && data.Event.event_type_id.code === "4865") {
+							let response = await addAttendanceLog(data.Event.user_id.user_id)
+						}
+					};
+				},
+				error: function (err) {
+					console.log(err);
+				},
+			});
+		});
+	</script>
+</body>
+
+</html>

@@ -1,0 +1,8 @@
+export { default as AddRoom } from './Admin/AddRoom'
+export { default as BookAClass } from './Admin/BookAClass'
+export { default as AddClass } from './Admin/AddClass'
+export { default as AdminClassesDetails } from './Admin/AdminClassesDetails'
+export { default as AdminClasses } from './Admin/AdminClasses'
+export { default as CustomerClassesDeatails } from './Customer/CustomerClassesDeatails'
+export { default as CustomerClasses } from './Customer/CustomerClasses'
+export { default as CustomerClassSchedule } from './Customer/CustomerClassSchedule'

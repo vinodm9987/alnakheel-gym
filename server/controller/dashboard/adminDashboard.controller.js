@@ -1,0 +1,198 @@
+const { logger: { logger }, handler: { successResponseHandler, errorResponseHandler } } = require('../../../config');
+const { Formate: { setTime } } = require('../../utils');
+
+/**  
+ * models.
+*/
+
+
+const { Member, Package, Stocks, Classes, StockSell,
+    Branch, MemberPurchase, MemberClass, MemberAttendance } = require('../../model');
+
+
+
+
+
+exports.getMemberDashBoard = async (req, res) => {
+    try {
+        let queryCond = {}
+        let queryCond1 = {}
+        let queryCond2 = {}
+        let queryCond3 = {}
+        if (req.body.branch && req.body.branch !== 'all') {
+            queryCond["branch"] = req.body.branch
+            queryCond1["branch"] = req.body.branch
+            queryCond2["branch"] = req.body.branch
+            queryCond3["branch"] = req.body.branch
+        }
+        queryCond1["doneFingerAuth"] = false
+        queryCond1["isPackageSelected"] = false
+        queryCond2["doneFingerAuth"] = false
+        queryCond2["isPackageSelected"] = true
+        queryCond3["doneFingerAuth"] = true
+        queryCond3["isPackageSelected"] = true
+        let total = await Member.find(queryCond).count();
+        let pending = await Member.find(queryCond1).count();
+        let newMember = await Member.find(queryCond2).count();
+        let activeMember = await Member.find(queryCond3).count();
+        successResponseHandler(res, { total, pending, newMember, activeMember }, "successfully get all member  !!");
+    } catch (error) {
+        logger.error(error);
+        errorResponseHandler(res, error, "Exception while getting all member  !");
+    }
+};
+
+
+
+
+
+
+exports.getPackageDistribution = async (req, res) => {
+    try {
+        let queryCond = {};
+        if (req.body.branch && req.body.branch !== 'all') queryCond["branch"] = req.body.branch;
+        // queryCond["doneFingerAuth"] = true;
+        queryCond["isPackageSelected"] = true;
+        let packagesResponse = await Package.find({}, 'packageName color').lean();
+        let packages = []
+        packagesResponse.forEach(ele => {
+            packages.push({ ...ele, ...{ count: 0 } })
+        })
+        let activeMember = await Member.find(queryCond).lean();
+        let total = 0;
+        activeMember.forEach(member => {
+            member.packageDetails.forEach(doc => {
+                let packageIndex = packages.findIndex(ele => ele._id.toString() === doc.packages.toString());
+                if (doc.paidStatus === 'Paid' && doc.packages.toString() === packages[packageIndex]._id.toString() && packageIndex !== -1) {
+                    packages[packageIndex].count++;
+                }
+            });
+        })
+        packages.forEach(ele => total += ele.count);
+        successResponseHandler(res, { packages, total }, "successfully get package distribution !");
+    } catch (error) {
+        logger.error(error);
+        errorResponseHandler(res, error, "Exception while getting  package distribution  !");
+    }
+};
+
+
+exports.getMostSellingStock = (req, res) => {
+    let query = {};
+    query["noOfTimeSell"] = { $ne: 0 };
+    if (req.body.branch && req.body.branch !== 'all') query["branch"] = req.body.branch;
+    Stocks.find(query).sort({ noOfTimeSell: -1 }).limit(5).populate('branch')
+        .then(response => {
+            successResponseHandler(res, response, "successfully get package distribution !");
+        }).catch(error => {
+            logger.error(error);
+            errorResponseHandler(res, error, "Exception while selling stock");
+        })
+};
+
+
+
+exports.getAllBranchSales = async (req, res) => {
+    try {
+        let queryCond = {};
+        if (req.body.branch && req.body.branch !== 'all') queryCond["branch"] = req.body.branch;
+        let profits = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        if (req.body.category === "Packages") {
+            let totalAmountOfMember = await Member.find(queryCond).lean();
+            totalAmountOfMember.forEach(doc => {
+                doc.packageDetails
+                    .filter(ele => ele.paidStatus === 'Paid' && (ele.startDate ? ele.startDate.getFullYear() : doc.admissionDate.getFullYear()) === req.body.year)
+                    .forEach(ele => profits[(ele.startDate ? ele.startDate.getMonth() : doc.admissionDate.getMonth())] += +ele.totalAmount)
+            });
+        } else if (req.body.category === "POS") {
+            let totalAmountOfStockSell = await StockSell.find(queryCond).lean()
+            totalAmountOfStockSell
+                .filter(doc => doc.dateOfPurchase.getFullYear() === req.body.year)
+                .forEach(doc => profits[doc.dateOfPurchase.getMonth()] += +doc.totalAmount)
+        } else if (req.body.category === "Classes") {
+            let classes = await Classes.find(queryCond, { _id: 1 }).lean()
+            const classesArray = classes.map(ele => ele._id.toString());
+            const memberClasses = await MemberClass.find({ classId: { $in: classesArray } });
+            memberClasses
+                .filter(doc => doc.dateOfPurchase.getFullYear() === req.body.year)
+                .forEach(doc => profits[doc.dateOfPurchase.getMonth()] += +doc.totalAmount)
+        } else {
+            let totalAmountOfStockSell = await StockSell.find(queryCond).lean()
+            totalAmountOfStockSell
+                .filter(doc => doc.dateOfPurchase.getFullYear() === req.body.year)
+                .forEach(doc => profits[doc.dateOfPurchase.getMonth()] += +doc.totalAmount)
+            let classes = await Classes.find(queryCond, { _id: 1 }).lean()
+            const classesArray = classes.map(ele => ele._id.toString());
+            const memberClasses = await MemberClass.find({ classId: { $in: classesArray } });
+            memberClasses
+                .filter(doc => doc.dateOfPurchase.getFullYear() === req.body.year)
+                .forEach(doc => profits[doc.dateOfPurchase.getMonth()] += +doc.totalAmount)
+            let totalAmountOfMember = await Member.find(queryCond).lean();
+            totalAmountOfMember.forEach(doc => {
+                doc.packageDetails
+                    .filter(ele => ele.paidStatus === 'Paid' && (ele.startDate ? ele.startDate.getFullYear() : doc.admissionDate.getFullYear()) === req.body.year)
+                    .forEach(ele => profits[(ele.startDate ? ele.startDate.getMonth() : doc.admissionDate.getMonth())] += +ele.totalAmount)
+            });
+        }
+        successResponseHandler(res, profits, "successfully get sales by branch !")
+    } catch (error) {
+        logger.error(error);
+        errorResponseHandler(res, error, "Exception while getting  package distribution  !");
+    }
+};
+
+
+exports.getMemberAttendanceDashboard = async (req, res) => {
+    try {
+        let queryCond = {};
+        if (req.body.branch && req.body.branch !== 'all') queryCond["branch"] = req.body.branch
+        queryCond["doneFingerAuth"] = true
+        queryCond["isPackageSelected"] = true
+        if (req.body.trainerId) {
+            queryCond["packageDetails"] = { $elemMatch: { trainer: req.body.trainerId } }
+        }
+        let totalMembers = await Member.find(queryCond, { _id: 1 }).lean();
+        let totalMembersArray = totalMembers.map(ele => ele._id.toString());
+        let totalMembersCount = totalMembersArray.length;
+        let memberAttendances = await MemberAttendance.find({ memberId: { $in: totalMembersArray } }).lean();
+        memberAttendances = memberAttendances.filter(doc => doc.date.getMonth() === req.body.month && doc.date.getFullYear() === new Date().getFullYear())
+        let datesArr = []
+        memberAttendances.forEach(doc => {
+            var dateIndex = datesArr.findIndex(d => setTime(d.date) === setTime(doc.date))
+            if (dateIndex === -1) {
+                datesArr.push({ date: doc.date, memberIds: [doc.memberId] })
+            } else {
+                var memberIdIndex = datesArr[dateIndex].memberIds.findIndex(m => m === doc.memberId)
+                if (memberIdIndex === -1) {
+                    datesArr[dateIndex].memberIds.push(doc.memberId)
+                }
+            }
+        })
+        let present = 0, absent = 0
+        datesArr.forEach(doc => {
+            present += doc.memberIds.length
+            absent += (totalMembersCount - doc.memberIds.length)
+        })
+        let response = [{ name: 'Present', data: present }, { name: 'Absent', data: absent }]
+        successResponseHandler(res, response, "successfully get Attendances !")
+    } catch (error) {
+        logger.error(error);
+        errorResponseHandler(res, error, "Exception while getting Attendances !");
+    }
+};
+
+exports.getIndividualMemberAttendance = async (req, res) => {
+    try {
+        let memberAttendances = await MemberAttendance.find({ branch: req.body.branch }).lean();
+        let individualAttendance = await MemberAttendance.find({ branch: req.body.branch, memberId: req.body.member }).lean();
+        memberAttendances = memberAttendances.filter(doc => doc.date.getMonth() === req.body.month && doc.date.getFullYear() === new Date().getFullYear())
+        individualAttendanceLength = individualAttendance.filter(doc => doc.date.getMonth() === req.body.month && doc.date.getFullYear() === new Date().getFullYear()).length
+        let datesLength = [...new Set(memberAttendances.map(doc => setTime(doc.date)))].length
+        let present = individualAttendanceLength, absent = datesLength - individualAttendanceLength
+        let response = [{ name: 'Present', data: present }, { name: 'Absent', data: absent }]
+        successResponseHandler(res, response, "successfully get Attendances !")
+    } catch (error) {
+        logger.error(error);
+        errorResponseHandler(res, error, "Exception while getting Attendances !");
+    }
+};

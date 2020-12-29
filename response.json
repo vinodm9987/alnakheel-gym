@@ -1,0 +1,467 @@
+[
+  {
+    "English": "successfully add new announcement !",
+    "Arabic": ""
+  },
+  {
+    "English": "failed to creating new announcement",
+    "Arabic": ""
+  },
+  {
+    "English": "successfully update Announcement",
+    "Arabic": ""
+  },
+  {
+    "English": "failed to update Announcement",
+    "Arabic": ""
+  },
+
+  {
+    "English": "successfully add new supplier",
+    "Arabic": ""
+  },
+  {
+    "English": "failed to adding new supplier ",
+    "Arabic": ""
+  },
+  {
+    "English": "successfully added attendance",
+    "Arabic": ""
+  },
+  {
+    "English": "Exception while adding attendance ",
+    "Arabic": ""
+  },
+  {
+    "English": "successfully added member weight ",
+    "Arabic": ""
+  },
+  {
+    "English": "successfully added new Room !!",
+    "Arabic": ""
+  },
+  {
+    "English": "Room name is already exist !",
+    "Arabic": ""
+  },
+  {
+    "English": "Exception occurred !",
+    "Arabic": ""
+  },
+  {
+    "English": "successfully updated Room !!",
+    "Arabic": ""
+  },
+  {
+    "English": "failed to updated Room",
+    "Arabic": ""
+  },
+  {
+    "English": "failed to uploading image error occurred",
+    "Arabic": ""
+  },
+  {
+    "English": "classes name is already exist",
+    "Arabic": ""
+  },
+  {
+    "English": "End time is required",
+    "Arabic": ""
+  },
+  {
+    "English": "Start Time is required",
+    "Arabic": ""
+  },
+  {
+    "English": "capacity is required !",
+    "Arabic": ""
+  },
+  {
+    "English": "Room name is required  !",
+    "Arabic": ""
+  },
+  {
+    "English": "End Date is required !",
+    "Arabic": ""
+  },
+  {
+    "English": "Start Date is required  !",
+    "Arabic": ""
+  },
+  {
+    "English": "failed to add new class",
+    "Arabic": ""
+  },
+  {
+    "English": "successfully updated Class !!",
+    "Arabic": ""
+  },
+  {
+    "English": "failed to update class",
+    "Arabic": ""
+  },
+  {
+    "English": "Email is already exist",
+    "Arabic": ""
+  },
+  {
+    "English": "successfully updated  admin",
+    "Arabic": ""
+  },
+  {
+    "English": "Email does not exist !",
+    "Arabic": ""
+  },
+  {
+    "English": "Your entered password is wrong !",
+    "Arabic": ""
+  },
+  {
+    "English": "You are disable kindly contact to gym for more info",
+    "Arabic": ""
+  },
+  {
+    "English": "your password has been send to registered email",
+    "Arabic": ""
+  },
+  {
+    "English": "password does not match",
+    "Arabic": ""
+  },
+  {
+    "English": "successfully reset password",
+    "Arabic": ""
+  },
+  {
+    "English": "successfully updated employee",
+    "Arabic": ""
+  },
+  {
+    "English": "successfully added new employee",
+    "Arabic": ""
+  },
+  {
+    "English": "successfully updated status of employee",
+    "Arabic": ""
+  },
+  {
+    "English": "successfully given the ratings !",
+    "Arabic": ""
+  },
+  {
+    "English": "successfully add new Event",
+    "Arabic": ""
+  },
+  {
+    "English": "successfully update Event",
+    "Arabic": ""
+  },
+  {
+    "English": "successfully added new feedback",
+    "Arabic": ""
+  },
+  {
+    "English": "successfully update feedback",
+    "Arabic": ""
+  },
+  {
+    "English": "successfully added new Vat",
+    "Arabic": ""
+  },
+  {
+    "English": "Vat name and value is already exist ",
+    "Arabic": ""
+  },
+  {
+    "English": "successfully updated Vat ",
+    "Arabic": ""
+  },
+  {
+    "English": "Vat name and value is already exist",
+    "Arabic": ""
+  },
+  {
+    "English": "Currency name is already exist",
+    "Arabic": ""
+  },
+  {
+    "English": "successfully added new Currency ",
+    "Arabic": ""
+  },
+  {
+    "English": "successfully updated Currency ",
+    "Arabic": ""
+  },
+  {
+    "English": "successfully added new Branch",
+    "Arabic": ""
+  },
+  {
+    "English": "successfully updated Branch",
+    "Arabic": ""
+  },
+  {
+    "English": "Branch name is already exist ",
+    "Arabic": ""
+  },
+  {
+    "English": "successfully added new Designation",
+    "Arabic": ""
+  },
+  {
+    "English": "successfully updated Designation",
+    "Arabic": ""
+  },
+  {
+    "English": "successfully added new trainer fees",
+    "Arabic": ""
+  },
+  {
+    "English": "Trainer name is already exist ",
+    "Arabic": ""
+  },
+  {
+    "English": "successfully updated TrainerFees ",
+    "Arabic": ""
+  },
+  {
+    "English": "successfully added new Period",
+    "Arabic": ""
+  },
+  {
+    "English": "Period name is already exist !",
+    "Arabic": ""
+  },
+  {
+    "English": "successfully updated new Period",
+    "Arabic": ""
+  },
+  {
+    "English": "Successfully added package",
+    "Arabic": ""
+  },
+  {
+    "English": "Package name is already exist",
+    "Arabic": ""
+  },
+  {
+    "English": "successfully update the package",
+    "Arabic": ""
+  },
+  {
+    "English": "successfully deleted package",
+    "Arabic": ""
+  },
+  {
+    "English": "Sorry you can't delete package because it's not expire yet !",
+    "Arabic": ""
+  },
+  {
+    "English": "successfully updated member ",
+    "Arabic": ""
+  },
+  {
+    "English": "referral code is wrong ",
+    "Arabic": ""
+  },
+  {
+    "English": "referral code is expired",
+    "Arabic": ""
+  },
+  {
+    "English": "successfully added new member",
+    "Arabic": ""
+  },
+  {
+    "English": "successfully update member details ",
+    "Arabic": ""
+  },
+  {
+    "English": "successfully save the transaction",
+    "Arabic": ""
+  },
+  {
+    "English": "failed to do transaction",
+    "Arabic": ""
+  },
+  {
+    "English": "successfully done fingerPrint",
+    "Arabic": ""
+  },
+  {
+    "English": "Finger Print is not valid",
+    "Arabic": ""
+  },
+  {
+    "English": "successfully start package",
+    "Arabic": ""
+  },
+  {
+    "English": "successfully blacklist user",
+    "Arabic": ""
+  },
+  {
+    "English": "successfully added water consumption",
+    "Arabic": ""
+  },
+  {
+    "English": "successfully updated  water in take",
+    "Arabic": ""
+  },
+  {
+    "English": "successfully freeze Member",
+    "Arabic": ""
+  },
+  {
+    "English": "failed to freeze Member",
+    "Arabic": ""
+  },
+  {
+    "English": "successfully added reminder",
+    "Arabic": ""
+  },
+  {
+    "English": "",
+    "Arabic": ""
+  },
+  {
+    "English": "",
+    "Arabic": ""
+  },
+  {
+    "English": "",
+    "Arabic": ""
+  },
+  {
+    "English": "",
+    "Arabic": ""
+  },
+  {
+    "English": "",
+    "Arabic": ""
+  },
+  {
+    "English": "",
+    "Arabic": ""
+  },
+  {
+    "English": "",
+    "Arabic": ""
+  },
+  {
+    "English": "",
+    "Arabic": ""
+  },
+  {
+    "English": "",
+    "Arabic": ""
+  },
+  {
+    "English": "",
+    "Arabic": ""
+  },
+  {
+    "English": "",
+    "Arabic": ""
+  },
+  {
+    "English": "",
+    "Arabic": ""
+  },
+  {
+    "English": "",
+    "Arabic": ""
+  },
+  {
+    "English": "",
+    "Arabic": ""
+  },
+  {
+    "English": "",
+    "Arabic": ""
+  },
+  {
+    "English": "",
+    "Arabic": ""
+  },
+  {
+    "English": "",
+    "Arabic": ""
+  },
+  {
+    "English": "",
+    "Arabic": ""
+  },
+  {
+    "English": "",
+    "Arabic": ""
+  },
+  {
+    "English": "",
+    "Arabic": ""
+  },
+  {
+    "English": "",
+    "Arabic": ""
+  },
+  {
+    "English": "",
+    "Arabic": ""
+  },
+  {
+    "English": "",
+    "Arabic": ""
+  },
+  {
+    "English": "",
+    "Arabic": ""
+  },
+  {
+    "English": "",
+    "Arabic": ""
+  },
+  {
+    "English": "",
+    "Arabic": ""
+  },
+  {
+    "English": "",
+    "Arabic": ""
+  },
+  {
+    "English": "",
+    "Arabic": ""
+  },
+  {
+    "English": "",
+    "Arabic": ""
+  },
+  {
+    "English": "",
+    "Arabic": ""
+  },
+  {
+    "English": "",
+    "Arabic": ""
+  },
+  {
+    "English": "",
+    "Arabic": ""
+  },
+  {
+    "English": "",
+    "Arabic": ""
+  },
+  {
+    "English": "",
+    "Arabic": ""
+  },
+  {
+    "English": "",
+    "Arabic": ""
+  },
+  {
+    "English": "",
+    "Arabic": ""
+  }
+]

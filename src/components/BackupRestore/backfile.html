@@ -1,0 +1,488 @@
+<!-- 
+            <div className="mainPage p-3 FreezeMembers">
+                <div className="row">
+                    <div className="col-12 pageBreadCrumbs">
+                        <span className="crumbText">Home</span><span className="mx-2">/</span><span className="crumbText">Backup and Restore</span>
+                    </div>
+                    <div className="col-12">
+                        <div className="row">
+                            <div className="col-12 pageHead">
+                                <h1>Backup and Restore</h1>
+                            </div>
+                        </div>
+                        <div className="pageHeadLine"></div>
+                    </div>
+                    <div className="container-fluid mt-3">
+                        <div className="row">
+                            <div className="col-12">
+                                <nav className="commonNavForTab">
+                                    <div class="nav nav-tabs flex-nowrap overflow-auto" id="nav-tab" role="tablist">
+                                        <a class="nav-item nav-link active" role="tab" data-toggle="tab" href="#menu1">Create Backup</a>
+                                        <a class="nav-item nav-link" role="tab" data-toggle="tab" href="#menu2">Backup History</a>
+                                    </div>
+                                </nav>
+                                <div className="tab-content" id="nav-tabContent">
+                                    <div className="tab-pane fade show active" id="menu1" role="tabpanel">
+                                        <div class="d-flex w-100 my-3">
+                                            <div class="custom-control custom-checkbox roundedGreenRadioCheck mx-2">
+                                                <input type="radio" class="custom-control-input" id="Manual" name="ManualOrAutomatic" checked />
+                                                <label class="custom-control-label" for="Manual">Manual</label>
+                                            </div>
+                                            <div class="custom-control custom-checkbox roundedGreenRadioCheck mx-2">
+                                                <input type="radio" class="custom-control-input" id="Automatic" name="ManualOrAutomatic" />
+                                                <label class="custom-control-label" for="Automatic">Automatic</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
+                                            <div class="form-group position-relative">
+                                                <label for="BackupName">Backup Name</label>
+                                                <input disabled="" type="number" autoComplete="off" class="form-control bg-white" id="BackupName" />
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
+                                            <div class="form-group position-relative">
+                                                <label for="BackupDestination">Backup Destination</label>
+                                                <div class="custom-file-gym form-control">
+                                                    <input type="file" class="custom-file-input-gym" id="customFile" />
+                                                    <label class="rightBrowserLabel" for="customFile">Upload Image</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                            <div class="justify-content-sm-end d-flex pt-3">
+                                                <button type="button" class="btn btn-success mx-1 px-4"><span className="iconv1 iconv1-sync"></span> <span className="px-1">Run Backup</span></button>
+                                                <button type="button" class="btn btn-danger mx-1 px-4">Cancel</button>
+                                            </div>
+                                        </div>
+                                        <div className="p-3">
+                                            <div className="my-4">
+                                                <h6 className="font-weight-bold mb-3">Backup in progres. please wait..</h6>
+                                                <div className="d-flex bg-light p-2">
+                                                    <div className="align-self-center m-1">Here comes the progress bar</div>
+                                                    <h6 className="bg-success action-icon w-30px h-30px rounded-circle d-flex align-items-center
+                                                     justify-content-center m-2 text-white cursor-pointer" data-toggle="modal" data-target="#backupStopModal">
+                                                        <span className="iconv1 iconv1-close"></span>
+                                                    </h6>
+                                                </div>
+                                            </div> -->
+                                            <!-- {/* ---------pop up---------- */} -->
+                                            <!-- <div class="modal" id="backupStopModal">
+                                                <div class="modal-dialog modal-dialog-centered">
+                                                    <div class="modal-content border-0 bg-white">
+                                                        <div class="modal-body text-center p-5">
+                                                            <h6 className=""><b>Do you want to close backup ?</b></h6>
+                                                            <button type="button" class="btn btn-success px-4 py-1 m-1">Yes</button>
+                                                            <button type="button" class="btn btn-danger px-4 py-1 m-1">No</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div> -->
+                                            <!-- {/* ------------pop up End----------- */} -->
+                                        <!-- </div> -->
+                                        <!-- {/* ----------------------Tushar this for Automatic when selected----------------------- */} -->
+
+                                        <!-- <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
+                                            <div class="form-group position-relative">
+                                                <label for="BackupName">Backup Name</label>
+                                                <input disabled="" type="number" autoComplete="off" class="form-control bg-white" id="BackupName" />
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
+                                            <div class="form-group position-relative">
+                                                <label for="BackupDestination">Backup Destination</label>
+                                                <div class="custom-file-gym form-control">
+                                                    <input type="file" class="custom-file-input-gym" id="customFile" />
+                                                    <label class="rightBrowserLabel" for="customFile">Upload Image</label>
+                                                </div>
+                                            </div>
+                                        </div> -->
+
+                                        <!-- {/* ------------This is for Monthly Backup------------- */} -->
+                                        <!-- <div class="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-3">
+                                            <div class="form-group position-relative">
+                                                <label for="Type">Type</label>
+                                                <select class="form-control bg-white" id="Type">
+                                                    <option value="" hidden="">Monthly</option>
+                                                </select>
+                                                <span class="iconv1 iconv1-arrow-down selectBoxIcon"></span>
+                                                <div class="errorMessageWrapper">
+                                                    <small class="text-danger errorMessage"></small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-sm-12 col-md-12 col-lg-5 col-xl-4 py-4">
+                                            Here Comes the calendar
+                                        </div>
+                                        <div class="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-2">
+                                            <div class="form-group position-relative">
+                                                <label for="BackupTime">Backup Start Time</label>
+                                                <input disabled="" type="number" autoComplete="off" class="form-control bg-white" id="BackupTime" />
+                                                <span class="iconv1 iconv1-clock timeBoxIcon"></span>
+                                            </div>
+                                        </div> -->
+                                        <!-- {/* ------------This is for Monthly Backup End------------- */} -->
+
+                                        <!-- {/* ------------This is for Weekly Backup------------- */} -->
+                                        <!-- <div className="row px-3">
+                                            <div class="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-3">
+                                                <div class="form-group position-relative">
+                                                    <label for="Type">Type</label>
+                                                    <select class="form-control bg-white" id="Type">
+                                                        <option value="" hidden="">Daily/Weekly</option>
+                                                    </select>
+                                                    <span class="iconv1 iconv1-arrow-down selectBoxIcon"></span>
+                                                    <div class="errorMessageWrapper">
+                                                        <small class="text-danger errorMessage"></small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-12 col-sm-12 col-md-12 col-lg-3 col-xl-2">
+                                                <div class="form-group position-relative">
+                                                    <label for="FromDate">From Date</label>
+                                                    <input disabled="" type="number" autoComplete="off" class="form-control bg-white" id="FromDate" />
+                                                    <span class="iconv1 iconv1-calendar dateBoxIcon"></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-12 col-sm-12 col-md-12 col-lg-3 col-xl-2">
+                                                <div class="form-group position-relative">
+                                                    <label for="ToDate">To Date</label>
+                                                    <input disabled="" type="number" autoComplete="off" class="form-control bg-white" id="ToDate" />
+                                                    <span class="iconv1 iconv1-calendar dateBoxIcon"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 py-4">
+                                            <label for="DailyWeekly">Daily/Weekly</label>
+                                            <div className="d-flex flex-wrap">
+                                                <div class="custom-control custom-checkbox roundedBlueRadioCheck m-2">
+                                                    <input type="checkbox" class="custom-control-input" id="All" name="All" />
+                                                    <label class="custom-control-label rounded" for="All">All</label></div>
+
+                                                <div class="custom-control custom-checkbox roundedBlueRadioCheck m-2">
+                                                    <input type="checkbox" class="custom-control-input" id="Monday" name="Monday" />
+                                                    <label class="custom-control-label rounded" for="Monday">Monday</label></div>
+
+                                                <div class="custom-control custom-checkbox roundedBlueRadioCheck m-2">
+                                                    <input type="checkbox" class="custom-control-input" id="Tuseday" name="Tuseday" />
+                                                    <label class="custom-control-label rounded" for="Tuseday">Tuseday</label></div>
+
+                                                <div class="custom-control custom-checkbox roundedBlueRadioCheck m-2">
+                                                    <input type="checkbox" class="custom-control-input" id="Wednesday" name="Wednesday" />
+                                                    <label class="custom-control-label rounded" for="Wednesday">Wednesday</label></div>
+
+                                                <div class="custom-control custom-checkbox roundedBlueRadioCheck m-2">
+                                                    <input type="checkbox" class="custom-control-input" id="Thursday" name="Thursday" />
+                                                    <label class="custom-control-label rounded" for="Thursday">Thursday</label></div>
+
+                                                <div class="custom-control custom-checkbox roundedBlueRadioCheck m-2">
+                                                    <input type="checkbox" class="custom-control-input" id="Friday" name="Friday" />
+                                                    <label class="custom-control-label rounded" for="Friday">Friday</label></div>
+
+                                                <div class="custom-control custom-checkbox roundedBlueRadioCheck m-2">
+                                                    <input type="checkbox" class="custom-control-input" id="Saturday" name="Saturday" />
+                                                    <label class="custom-control-label rounded" for="Saturday">Saturday</label></div>
+
+                                                <div class="custom-control custom-checkbox roundedBlueRadioCheck m-2">
+                                                    <input type="checkbox" class="custom-control-input" id="Sunday" name="Sunday" />
+                                                    <label class="custom-control-label rounded" for="Sunday">Sunday</label></div>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-2">
+                                            <div class="form-group position-relative">
+                                                <label for="BackupTime">Backup Start Time</label>
+                                                <input disabled="" type="number" autoComplete="off" class="form-control bg-white" id="BackupTime" />
+                                                <span class="iconv1 iconv1-clock timeBoxIcon"></span>
+                                            </div>
+                                        </div> -->
+                                        <!-- {/* ------------This is for Weekly Backup End------------- */} -->
+<!-- 
+
+                                        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 pb-4">
+                                            <div class="justify-content-sm-end d-flex pt-3">
+                                                <button type="button" class="btn btn-success mx-1 px-4">Save</button>
+                                                <button type="button" class="btn btn-danger mx-1 px-4">Cancel</button>
+                                            </div>
+                                        </div> -->
+                                        <!-- {/* ----------Autobackup Details Table---------------- */} -->
+                                        <!-- <h4 className="font-weight-bold mb-3">Automatic Backup Details</h4>
+                                        <nav className="commonNavForTab mb-5">
+                                            <div class="nav nav-tabs flex-nowrap overflow-auto" id="nav-tab" role="tablist">
+                                                <a class="nav-item nav-link active" role="tab" data-toggle="tab" href="#WDbackup">Create Backup</a>
+                                                <a class="nav-item nav-link" role="tab" data-toggle="tab" href="#MonthBackup">Backup History</a>
+                                            </div>
+                                        </nav>
+                                        <div className="tab-content" id="nav-tabContent">
+                                            <div className="tab-pane fade show active" id="WDbackup" role="tabpanel">
+                                                <div className="table-responsive BckupTable">
+                                                    <table className="table table-striped">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Backup Name</th>
+                                                                <th>Days</th>
+                                                                <th>From Date</th>
+                                                                <th>To Date</th>
+                                                                <th>Backup Start Time</th>
+                                                                <th></th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr>
+                                                                <td>
+                                                                    <div className="m-0 mxw-200px mnw-100px whiteSpaceNormal">Gymnago MAnual backup</div>
+                                                                </td>
+                                                                <td><div className="m-0 mxw-200px mnw-100px whiteSpaceNormal">Tuesday, Friday</div></td>
+                                                                <td>10/02/2020</td>
+                                                                <td>10/02/2020</td>
+                                                                <td>10:00 AM</td>
+                                                                <td>
+                                                                    <div className="d-flex justify-content-center">
+                                                                        <span className="bg-success action-icon w-30px h-30px rounded-circle d-flex align-items-center justify-content-center mx-1 text-white">
+                                                                            <span className="iconv1 iconv1-edit"></span></span>
+                                                                        <a type="button" class="btn btn-primary btn-sm w-100px text-white rounded-50px" data-toggle="modal" data-target="#JobDetails">Details</a>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                            <div className="tab-pane fade" id="MonthBackup" role="tabpanel">
+                                                <div className="table-responsive BckupTable">
+                                                    <table className="table table-striped">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Backup Name</th>
+                                                                <th>Monthly</th>
+                                                                <th>Backup Start Time</th>
+                                                                <th></th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr>
+                                                                <td>
+                                                                    <div className="m-0 mxw-200px mnw-100px whiteSpaceNormal">Gymnago MAnual backup</div>
+                                                                </td>
+                                                                <td><div className="m-0 mxw-200px mnw-100px whiteSpaceNormal">Every Month at, 15</div></td>
+                                                                <td>10:00 AM</td>
+                                                                <td>
+                                                                    <div className="d-flex justify-content-center">
+                                                                        <span className="bg-success action-icon w-30px h-30px rounded-circle d-flex align-items-center justify-content-center mx-1 text-white">
+                                                                            <span className="iconv1 iconv1-edit"></span></span>
+                                                                        <a type="button" class="btn btn-primary btn-sm w-100px text-white rounded-50px" data-toggle="modal" data-target="#JobDetails">Details</a>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div> -->
+                                            <!-- {/* ------------Pop up details------------ */} -->
+<!-- 
+                                            <div className="modal fade commonYellowModal" id="JobDetails">
+                                                <div className="modal-dialog modal-lg modal-dialog-centered">
+                                                    <div className="modal-content">
+                                                        <div className="modal-header">
+                                                            <h4 className="modal-title">Job Details</h4>
+                                                            <button type="button" className="close" data-dismiss="modal"><span className="iconv1 iconv1-close"></span></button>
+                                                        </div>
+                                                        <div className="modal-body px-4">
+                                                            <div className="d-flex flex-wrap justify-content-between p-1">
+                                                                <div className="m-1">
+                                                                    <h6 className="font-weight-bold mb-1">Backup Name</h6>
+                                                                    <h6 className="">Gymnago Manual Backup</h6>
+                                                                </div>
+                                                                <div className="m-1">
+                                                                    <h6 className="font-weight-bold mb-1">Created On</h6>
+                                                                    <h6 className="">02/20/2020, 10:20 AM</h6>
+                                                                </div>
+                                                            </div>
+                                                            <div className="d-flex flex-wrap justify-content-start p-1">
+                                                                <div className="m-1 widBox">
+                                                                    <h6 className="font-weight-bold mb-1">Type</h6>
+                                                                    <h6 className="">Daily/Weekly</h6>
+                                                                </div>
+                                                                <div className="m-1 widBox">
+                                                                    <h6 className="font-weight-bold mb-1">From Date</h6>
+                                                                    <h6 className="">02/20/2020</h6>
+                                                                </div>
+                                                                <div className="m-1 widBox">
+                                                                    <h6 className="font-weight-bold mb-1">To Date</h6>
+                                                                    <h6 className="">02/20/2020</h6>
+                                                                </div>
+                                                                <div className="m-1 widBox">
+                                                                    <h6 className="font-weight-bold mb-1">Backup Start Time</h6>
+                                                                    <h6 className="">11:15 AM</h6>
+                                                                </div>
+                                                                <div className="m-1 widBox">
+                                                                    <h6 className="font-weight-bold mb-1">Days</h6>
+                                                                    <h6 className="">Monday, Tuesday</h6>
+                                                                </div>
+                                                                <div className="m-1 widBox">
+                                                                    <h6 className="font-weight-bold mb-1">Destination</h6>
+                                                                    <h6 className="">C:\program\backup</h6>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div> -->
+                                            <!-- {/* ------------Pop up details Ends------------ */} -->
+                                        <!-- </div> -->
+                                        <!-- {/* ----------------------Tushar this for Automatic when selected Ends----------------------- */} -->
+                                    <!-- </div> -->
+
+
+
+
+
+
+
+<!-- ----------------------------------------------- tabs 2--------------------------------------------------------->
+
+<!-- 
+
+
+
+
+
+
+
+                                    <div className="tab-pane fade" id="menu2" role="tabpanel">
+                                        <div class="d-flex w-100 my-3">
+                                            <div class="custom-control custom-checkbox roundedGreenRadioCheck mx-2">
+                                                <input type="radio" class="custom-control-input" id="ManualHistory" name="ManualOrAutomaticHistory" checked />
+                                                <label class="custom-control-label" for="ManualHistory">Manual</label>
+                                            </div>
+                                            <div class="custom-control custom-checkbox roundedGreenRadioCheck mx-2">
+                                                <input type="radio" class="custom-control-input" id="AutomaticHistory" name="ManualOrAutomaticHistory" />
+                                                <label class="custom-control-label" for="AutomaticHistory">Automatic</label>
+                                            </div>
+                                        </div> -->
+                                        <!-- {/* --------------Manual backup table history------------ */} -->
+                                        <!-- <div className="table-responsive">
+                                            <table className="borderRoundSeperateTable tdGray">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Backup Name</th>
+                                                        <th>Date & Time</th>
+                                                        <th>Destination</th>
+                                                        <th>Elapse Time</th>
+                                                        <th>Size</th>
+                                                        <th>Status</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td>
+                                                            <div className="m-0 mxw-200px mnw-100px whiteSpaceNormal">Gymnago MAnual backup</div>
+                                                        </td>
+                                                        <td><div className="m-0 mxw-85px mnw-85px whiteSpaceNormal">10/20/2020, 10:50 AM</div></td>
+                                                        <td>
+                                                            <div className="m-0 mxw-150px mnw-100px whiteSpaceNormal">c:\backup\files\system-name</div>
+                                                        </td>
+                                                        <td>3:25 Mins</td>
+                                                        <td>619 KB</td>
+                                                        <td className="text-primary">Success</td>
+                                                        <!-- {/* <td className="text-danger">Failed</td> */} -->
+                                                    <!-- </tr>
+                                                </tbody>
+                                            </table>
+                                        </div> -->
+                                        <!-- {/* --------------Manual backup table history Ends------------ */}
+
+                                        {/* --------------Automatic backup table history------------ */} -->
+                                        <!-- <div className="table-responsive">
+                                            <table className="borderRoundSeperateTable tdGray">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Backup Name</th>
+                                                        <th>Type</th>
+                                                        <th>Days</th>
+                                                        <th>Elapse Time</th>
+                                                        <th>Created On</th>
+                                                        <th>Size</th>
+                                                        <th></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td>
+                                                            <div className="m-0 mxw-200px mnw-100px whiteSpaceNormal">Gymnago MAnual backup</div>
+                                                        </td>
+                                                        <td>Daily/Weekly</td>
+                                                        <td><div className="m-0 mxw-150px mnw-100px whiteSpaceNormal">Tuesday, Monday</div></td>
+                                                        <td>3:25 Mins</td>
+                                                        <td><div className="m-0 mxw-85px mnw-85px whiteSpaceNormal">10/02/2020, 10:05 AM</div></td>
+                                                        <td>619 KB</td>
+                                                        <td><a type="button" class="btn btn-primary btn-sm w-100px text-white rounded-50px" data-toggle="modal" data-target="#JobDetailsAutomatic">Details</a>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table> -->
+                                        </div>
+                                        <!-- {/* ------------Pop up Automatic table details------------ */} -->
+
+                                        <!-- <div className="modal fade commonYellowModal" id="JobDetailsAutomatic">
+                                            <div className="modal-dialog modal-lg modal-dialog-centered">
+                                                <div className="modal-content">
+                                                    <div className="modal-header">
+                                                        <h4 className="modal-title">Job Details</h4>
+                                                        <button type="button" className="close" data-dismiss="modal"><span className="iconv1 iconv1-close"></span></button>
+                                                    </div>
+                                                    <div className="modal-body px-4">
+                                                        <div className="d-flex flex-wrap justify-content-between p-1">
+                                                            <div className="m-1">
+                                                                <h6 className="font-weight-bold mb-1">Backup Name</h6>
+                                                                <h6 className="">Gymnago Manual Backup</h6>
+                                                            </div>
+                                                            <div className="m-1">
+                                                                <h6 className="font-weight-bold mb-1">Created On</h6>
+                                                                <h6 className="">02/20/2020, 10:20 AM</h6>
+                                                            </div>
+                                                        </div>
+                                                        <div className="d-flex flex-wrap justify-content-start p-1">
+                                                            <div className="m-1 widBox">
+                                                                <h6 className="font-weight-bold mb-1">Type</h6>
+                                                                <h6 className="">Daily/Weekly</h6>
+                                                            </div>
+                                                            <div className="m-1 widBox">
+                                                                <h6 className="font-weight-bold mb-1">From Date</h6>
+                                                                <h6 className="">02/20/2020</h6>
+                                                            </div>
+                                                            <div className="m-1 widBox">
+                                                                <h6 className="font-weight-bold mb-1">To Date</h6>
+                                                                <h6 className="">02/20/2020</h6>
+                                                            </div>
+                                                            <div className="m-1 widBox">
+                                                                <h6 className="font-weight-bold mb-1">Backup Start Time</h6>
+                                                                <h6 className="">11:15 AM</h6>
+                                                            </div>
+                                                            <div className="m-1 widBox">
+                                                                <h6 className="font-weight-bold mb-1">Days</h6>
+                                                                <h6 className="">Monday, Tuesday</h6>
+                                                            </div>
+                                                            <div className="m-1 widBox">
+                                                                <h6 className="font-weight-bold mb-1">Size</h6>
+                                                                <h6 className="">613 KB</h6>
+                                                            </div>
+                                                            <div className="m-1 widBox">
+                                                                <h6 className="font-weight-bold mb-1">Destination</h6>
+                                                                <h6 className="">C:\program\backup</h6>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div> -->
+                                        <!-- {/* ------------Pop up Automatic table details Ends------------ */} -->
+
+                                        <!-- {/* --------------Automatic backup table history Ends------------ */} -->
+                                    <!-- </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>   -->

@@ -1,0 +1,10 @@
+export const IP = "https://skoolgo.pixelmindit.com:5000/api";  // server
+// export const IP = "http://localhost:5000/api"; // localhost
+export const SOCKETIP = "https://skoolgo.pixelmindit.com:5000";
+export const PRODIP = "https://skoolgo.pixelmindit.com:5000";
+export const BIO_STAR_MACHINE_ID = "546844789";
+export const BIO_STAR_IP = "http://skoolgo.pixelmindit.com:8795/v2";
+export const BIO_STAR_LOGIN = { "name": "testing", "user_id": "1", "password": "pixel1234" };
+export const DSN = "https://eaf9821284f6421bbc13cb55e4c4fe15@sentry.io/2372226"
+export const DESIGNATION = ["Super Admin", "System Admin", "Member", "Employee", "Trainer"];
+export const NAMESPACE = { notification: "notification", attendance: "attendance", appointment: "appointment", entrance: "entrance" }

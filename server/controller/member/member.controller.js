@@ -1,0 +1,960 @@
+/**  
+ * utils.
+*/
+const sharp = require('sharp');
+var fs = require('fs'),
+    xml2js = require('xml2js');
+
+const { logger: { logger }, upload: { uploadAvatar }, handler: { successResponseHandler, errorResponseHandler }, config: { DESIGNATION, } } = require('../../../config')
+
+const { Mailer: { sendMail, sendMailForPassword }, Formate: { setTime, convertToDate }, FireBase: { sendNotification, notificationObject }, IdGenerator: { createId, generateOrderId },
+    Referral: { checkExpiry, addPointOfReferral, pendingPaymentToGetPoint,
+        updateTransaction, addPointOfPolicy, checkExpiryOfPolicy } } = require('../../utils');
+
+const { addMemberInBioStar, updateMemberInBioStar, bioStarToken, updateFingerPrint, disableMember, getFingerPrintTemplate } = require('../../biostar');
+
+const { newMemberAssign } = require('../../notification/helper')
+
+const { memberEntranceStatus } = require('../../socket/emitter')
+
+/**  
+ * models.
+*/
+
+
+const { Credential, Member, Designation, Employee, MemberCode, MemberClass, AdminPassword } = require('../../model');
+
+
+
+
+
+
+exports.updateMemberProfile = (req, res) => {
+    uploadAvatar(req, res, async (error, result) => {
+        if (error) return errorResponseHandler(res, error, "while uploading profile error occurred !");
+        if (req.files.length > 0) await Credential.findByIdAndUpdate(req.params.id, { avatar: req.files[0] })
+        Member.findOneAndUpdate({ credentialId: req.params.id }, JSON.parse(req.body.data))
+            .then(response => {
+                successResponseHandler(res, response, "successfully updated member !!");
+            }).catch(error => {
+                logger.default.error(error);
+                errorResponseHandler(res, error, "Exception while updating member !");
+            });
+    });
+};
+
+
+
+
+
+/**
+ * get all members
+*/
+
+
+exports.getAllMember = async (req, res) => {
+    try {
+        let search = ''
+        if (req.body.search) search = req.body.search.toLowerCase()
+        let queryCond = {};
+        if (req.body.branch) queryCond["branch"] = req.body.branch
+        let response = await Member.find(queryCond).populate('credentialId branch').populate("packageDetails.packages").lean()
+        let newResponse = response.filter((doc) => {
+            if (search) {
+                let temp = doc.credentialId.email.toLowerCase()
+                let temp1 = doc.credentialId.userName.toLowerCase()
+                let temp3 = doc.mobileNo.toString()
+                if (temp.includes(search) || temp1.includes(search) || temp3.includes(search)) {
+                    return doc
+                }
+            } else {
+                return doc;
+            }
+        })
+        successResponseHandler(res, newResponse, "successfully get all member details !!");
+    }
+    catch (error) {
+        logger.error(error);
+        errorResponseHandler(res, error, "Exception while getting all member details !");
+    }
+};
+
+
+
+
+/**
+ * get all actives members
+*/
+
+
+exports.getAllActiveMember = (req, res) => {
+    let queryCond = {}
+    queryCond["status"] = true
+    if (req.body.branch) queryCond["branch"] = req.body.branch;
+    Member.find(queryCond)
+        .populate('credentialId')
+        .then(response => {
+            successResponseHandler(res, response, "successfully get all active user !!");
+        }).catch(error => {
+            logger.default.error(error);
+            errorResponseHandler(res, error, "Exception while getting all active user !");
+        });
+};
+
+
+
+/**
+ * get all actives members of trainer
+*/
+
+exports.getAllActiveMemberOfTrainer = async (req, res) => {
+    Member.find({ status: true, "packageDetails.trainer": req.params.employeeId }).then(response => {
+        successResponseHandler(res, response, "successfully get all member of trainer !!");
+    }).catch(error => {
+        logger.default.error(error);
+        errorResponseHandler(res, error, "Exception while getting all member of trainer !");
+    });
+}
+
+
+
+
+
+
+
+/**
+ *  create new member 
+*/
+
+exports.createNewMember = (req, res) => {
+    uploadAvatar(req, res, async (error, data) => {
+        if (error)
+            return errorResponseHandler(res, error, "while uploading profile error occurred !");
+        try {
+            const memberDesignation = await Designation.findOne({ designationName: DESIGNATION[2] })
+            const { mobileNo, gender, dateOfBirth, nationality, userName, email, password, referralCode,
+                personalId, branch, height, weight, questions, relationship, emergencyNumber, goal } = JSON.parse(req.body.data);
+            if (referralCode) {
+                const isExist = await MemberCode.findOne({ code: referralCode }).count();
+                if (!isExist) return errorResponseHandler(res, 'error', 'referral code is wrong !');
+                let isExpired = await checkExpiry(referralCode);
+                if (!isExpired) return errorResponseHandler(res, error, "referral code is expired !");
+            }
+            const member = new Member({
+                mobileNo, gender, dateOfBirth, nationality, personalId, branch, height, weight, questions,
+                isPackageSelected: false, emergencyNumber, relationship, startWeight: weight, goal
+            });
+            const credential = new Credential({
+                userName, email, designation: memberDesignation._id,
+                userId: member._id, designationName: DESIGNATION[2]
+            });
+            credential["avatar"] = req.files[0];
+            credential.setPassword(password);
+            const newResponse = await credential.save();
+            member["credentialId"] = newResponse._id
+            member["admissionDate"] = setTime(new Date())
+            const response = await member.save();
+            if (referralCode) { await pendingPaymentToGetPoint(referralCode, response._id) }
+            return successResponseHandler(res, response, "successfully added new member !!");
+        } catch (error) {
+            logger.error(error);
+            if (error.message.indexOf('duplicate key error') !== -1)
+                return errorResponseHandler(res, error, "Email is already exist !");
+            else
+                return errorResponseHandler(res, error, "Exception occurred !");
+        };
+    });
+};
+
+
+
+/**
+ *  create new member by admin
+*/
+
+exports.createNewMemberByAdmin = (req, res) => {
+    uploadAvatar(req, res, async (error, data) => {
+        if (error) return errorResponseHandler(res, error, "while uploading profile error occurred !");
+        try {
+            const memberDesignation = await Designation.findOne({ designationName: DESIGNATION[2] })
+            const { mobileNo, gender, dateOfBirth, nationality, userName, email, personalId, branch,
+                height, weight, packageDetails, questions, relationship, emergencyNumber, referralCode, notes } = JSON.parse(req.body.data);
+            if (req.headers.userid) {
+                packageDetails[0]["doneBy"] = req.headers.userid;
+            }
+            packageDetails[0]["orderNo"] = generateOrderId()
+            packageDetails[0]["dateOfPurchase"] = setTime(new Date())
+            packageDetails[0]["timeOfPurchase"] = new Date()
+            if (referralCode) {
+                let isExpired = await checkExpiry(referralCode);
+                if (!isExpired) return errorResponseHandler(res, error, "referral code is expired !")
+            }
+            const { memberCounter } = await createId('memberCounter');
+            const member = new Member({
+                mobileNo, gender, dateOfBirth, nationality, personalId, branch, height, weight,
+                packageDetails, questions, relationship, emergencyNumber, startWeight: weight, notes
+            });
+            const credential = new Credential({
+                userName, email, designation: memberDesignation._id,
+                userId: member._id, designationName: DESIGNATION[2]
+            });
+            const password = Math.random().toString(36).slice(-8);
+            member["admissionDate"] = setTime(new Date());
+            member["memberId"] = memberCounter;
+            credential["avatar"] = req.files[0];
+            credential.setPassword(password);
+            const newResponse = await credential.save();
+            member["credentialId"] = newResponse._id;
+            const response = await member.save();
+            if (referralCode) await addPointOfReferral(referralCode, response._id);
+            const policy = await checkExpiryOfPolicy();
+            if (policy) await addPointOfPolicy(packageDetails[0].totalAmount, response._id);
+            await sendMailForPassword(email, password);
+            return successResponseHandler(res, response, "successfully added new member !!");
+        } catch (error) {
+            logger.error(error);
+            if (error.message.indexOf('duplicate key error') !== -1)
+                return errorResponseHandler(res, error, "Email is already exist !");
+            else
+                return errorResponseHandler(res, error, "Exception occurred !");
+        };
+    });
+};
+
+
+
+
+/**
+ *  purchase new package  
+*/
+
+
+exports.updateMemberDetails = async (req, res) => {
+    let isUsedReferralCode = await MemberCode.findOne({ "joinMember.member": req.params.id, "joinMember.status": "Join" }).lean();
+    if (isUsedReferralCode) req.body["walletPoints"] = await updateTransaction(isUsedReferralCode, req.params.id);
+    let memberAllClassResponse = await MemberClass.find({ member: req.params.id }).populate('classId').lean()
+    if (req.body.packageDetails.length === 1 && memberAllClassResponse.length === 0) {
+        const { memberCounter } = await createId('memberCounter');
+        req.body["memberId"] = memberCounter;
+    }
+    if (req.headers.userid) {
+        req.body.packageDetails[req.body.index]["doneBy"] = req.headers.userid
+    }
+    req.body.packageDetails[req.body.index]["orderNo"] = generateOrderId()
+    req.body.packageDetails[req.body.index]["dateOfPurchase"] = setTime(new Date())
+    req.body.packageDetails[req.body.index]["timeOfPurchase"] = new Date()
+    const amount = req.body.transactionAmount;
+    Member.findByIdAndUpdate(req.params.id, req.body, { new: true })
+        .populate('credentialId branch')
+        .populate('packageDetails.packages packageDetails.trainerFees packageDetails.trainer')
+        .populate({ path: "packageDetails.trainer", populate: { path: "credentialId" } })
+        .populate({ path: "packageDetails.packages", populate: { path: "period" } })
+        .populate({ path: "packageDetails.trainerFees", populate: { path: "period" } })
+        .then(async response => {
+            const policy = await checkExpiryOfPolicy();
+            if (policy) await addPointOfPolicy(amount, response._id);
+            return successResponseHandler(res, response, "successfully update member details !!");
+        }).catch(error => {
+            logger.error(error);
+            errorResponseHandler(res, error, "Exception while updating  member details !");
+        });
+};
+
+
+
+
+
+
+
+/**
+ *  update member info 
+*/
+exports.updateMember = (req, res) => {
+    uploadAvatar(req, res, async (error, data) => {
+        if (error)
+            return errorResponseHandler(res, error, "while uploading profile error occurred !");
+        try {
+            const { mobileNo, gender, dateOfBirth, nationality, userName, email, personalId, branch, height, weight, emergencyNumber, relationship, memberId, credentialId, notes } = JSON.parse(req.body.data);
+            let newObj = { mobileNo, gender, dateOfBirth, nationality, personalId, branch, height, weight, emergencyNumber, relationship, notes };
+            if (userName || email) {
+                let obj = { userName, email }
+                if (req.files.length > 0) obj["avatar"] = req.files[0];
+                await Credential.findByIdAndUpdate(credentialId, obj)
+            }
+            const response = await Member.findByIdAndUpdate(memberId, newObj, { new: true })
+                .populate('credentialId branch')
+                .populate('packageDetails.packages packageDetails.trainerFees packageDetails.trainer')
+                .populate({ path: "packageDetails.trainer", populate: { path: "credentialId" } })
+                .populate({ path: "packageDetails.packages", populate: { path: "period" } });
+            return successResponseHandler(res, response, "successfully updated Member !!");
+        } catch (error) {
+            logger.error(error);
+            if (error.message.indexOf('duplicate key error') !== -1)
+                return errorResponseHandler(res, error, "Email is already exist !");
+            else
+                return errorResponseHandler(res, error, "Exception occurred !");
+        };
+    });
+};
+
+
+
+
+/**
+ *  update member and add package for the first time 
+*/
+exports.updateMemberAndAddPackage = (req, res) => {
+    uploadAvatar(req, res, async (error, data) => {
+        if (error)
+            return errorResponseHandler(res, error, "while uploading profile error occurred !");
+        try {
+            const { mobileNo, gender, dateOfBirth, nationality, userName, email, personalId, branch, height, weight, emergencyNumber,
+                relationship, memberId, credentialId, notes, packageDetails } = JSON.parse(req.body.data);
+            if (req.headers.userid) {
+                packageDetails[0]["doneBy"] = req.headers.userid
+            }
+            packageDetails[0]["orderNo"] = generateOrderId()
+            packageDetails[0]["dateOfPurchase"] = setTime(new Date())
+            packageDetails[0]["timeOfPurchase"] = new Date()
+            let isUsedReferralCode = await MemberCode.findOne({ "joinMember.member": memberId, "joinMember.status": "Join" }).lean();
+            if (isUsedReferralCode) req.body["walletPoints"] = await updateTransaction(isUsedReferralCode, memberId);
+            let memberAllClassResponse = await MemberClass.find({ member: req.params.id }).populate('classId').lean()
+            let newObj = {
+                mobileNo, gender, dateOfBirth, nationality, personalId, branch, height, weight, emergencyNumber, relationship, notes,
+                packageDetails, isPackageSelected: true
+            }
+            if (memberAllClassResponse.length === 0) {
+                const { memberCounter } = await createId('memberCounter');
+                newObj["memberId"] = memberCounter
+            }
+            if (userName || email) {
+                let obj = { userName, email }
+                if (req.files.length > 0) obj["avatar"] = req.files[0];
+                await Credential.findByIdAndUpdate(credentialId, obj)
+            }
+            const response = await Member.findByIdAndUpdate(memberId, newObj, { new: true })
+                .populate('credentialId branch')
+                .populate('packageDetails.packages packageDetails.trainerFees packageDetails.trainer')
+                .populate({ path: "packageDetails.trainer", populate: { path: "credentialId" } })
+                .populate({ path: "packageDetails.packages", populate: { path: "period" } });
+            const policy = await checkExpiryOfPolicy();
+            if (policy) await addPointOfPolicy(packageDetails[0].totalAmount, response._id);
+            return successResponseHandler(res, response, "successfully updated Member !!");
+        } catch (error) {
+            logger.error(error);
+            if (error.message.indexOf('duplicate key error') !== -1)
+                return errorResponseHandler(res, error, "Email is already exist !");
+            else
+                return errorResponseHandler(res, error, "Exception occurred !");
+        };
+    });
+};
+
+
+
+
+
+/**
+ * get member details by credential id
+*/
+
+
+exports.getMemberByCredentialId = (req, res) => {
+    if (req.params.id !== "undefined") {
+        Member.findOne({ credentialId: req.params.id })
+            .populate('credentialId branch packageDetails.trainerFees')
+            .populate({ path: "packageDetails.trainerFees", populate: { path: "period" } })
+            .then(response => {
+                successResponseHandler(res, response, "successfully get all member details !!");
+            }).catch(error => {
+                logger.error(error);
+                errorResponseHandler(res, error, "Exception while getting all member details !");
+            });
+    }
+};
+
+
+
+
+/**
+ * get member details by member id
+*/
+
+
+exports.getMemberById = (req, res) => {
+    Member.findById(req.params.id)
+        .populate('credentialId branch')
+        .populate('packageDetails.packages packageDetails.trainerFees packageDetails.trainer')
+        .populate({ path: "packageDetails.trainer", populate: { path: "credentialId" } })
+        .populate({ path: "packageDetails.packages", populate: { path: "period" } })
+        .populate({ path: "packageDetails.trainerFees", populate: { path: "period" } })
+        .then(response => {
+            successResponseHandler(res, response, "successfully get  member details by id !!");
+        }).catch(error => {
+            logger.error(error);
+            errorResponseHandler(res, error, "Exception while getting  member details by id !");
+        });
+};
+
+
+
+
+
+
+
+
+/**
+ *  get all first registered member  
+*/
+
+exports.getFirstRegisterMembers = async (req, res) => {
+    try {
+        let search = req.body.search.toLowerCase()
+        let queryCond = {};
+        queryCond["doneFingerAuth"] = false;
+        queryCond["isPackageSelected"] = true;
+        if (req.body.branch) queryCond["branch"] = req.body.branch;
+        let response = await Member.find(queryCond)
+            .populate('credentialId branch').populate("packageDetails.packages").lean()
+        let newResponse = response.filter((doc) => {
+            if (search) {
+                let temp = doc.credentialId.email.toLowerCase()
+                let temp1 = doc.credentialId.userName.toLowerCase()
+                let temp2 = doc.memberId ? doc.memberId.toString() : ''
+                let temp3 = doc.mobileNo ? doc.mobileNo.toString() : ''
+                if (temp.includes(search) || temp1.includes(search) || temp2.includes(search) || temp3.includes(search)) {
+                    return doc
+                }
+            } else {
+                return doc;
+            }
+        })
+        successResponseHandler(res, newResponse, "successfully get all member details !!");
+    }
+    catch (error) {
+        logger.error(error);
+        errorResponseHandler(res, error, "Exception while getting all member details !");
+    }
+
+};
+
+
+
+
+/**
+ *  get all pending registration  
+*/
+
+exports.getAllPendingMember = async (req, res) => {
+    try {
+        let search = req.body.search.toLowerCase()
+        let queryCond = {};
+        queryCond["doneFingerAuth"] = false;
+        queryCond["isPackageSelected"] = false;
+        if (req.body.branch) queryCond["branch"] = req.body.branch
+        let response = await Member.find(queryCond).populate('credentialId branch').populate("packageDetails.packages").lean()
+        let newResponse = response.filter(doc => {
+            if (search) {
+                let temp = doc.credentialId.email.toLowerCase()
+                let temp1 = doc.credentialId.userName.toLowerCase()
+                let temp3 = doc.mobileNo.toString()
+                if (temp.includes(search) || temp1.includes(search) || temp3.includes(search)) {
+                    return doc
+                }
+            } else {
+                return doc;
+            }
+        });
+        return successResponseHandler(res, newResponse, "successfully get all member details !!");
+    }
+    catch (error) {
+        logger.error(error);
+        errorResponseHandler(res, error, "Exception while getting all member details !");
+    }
+
+};
+
+
+
+
+
+
+/**
+ *  get all active registered member  
+*/
+
+exports.getActiveRegisterMembers = async (req, res) => {
+    try {
+        let search = req.body.search.toLowerCase()
+        let queryCond = { 'packageDetails.isExpiredPackage': false };
+        queryCond["doneFingerAuth"] = true;
+        if (req.body.branch) queryCond["branch"] = req.body.branch;
+        let response = await Member.find(queryCond).populate('credentialId branch').populate("packageDetails.packages").lean()
+        let newResponse = response.filter(doc => {
+            if (search) {
+                let temp = doc.credentialId.email.toLowerCase()
+                let temp1 = doc.credentialId.userName.toLowerCase()
+                let temp2 = doc.memberId ? doc.memberId.toString() : ''
+                let temp3 = doc.mobileNo ? doc.mobileNo.toString() : ''
+                if (temp.includes(search) || temp1.includes(search) || temp2.includes(search) || temp3.includes(search)) {
+                    return doc
+                }
+            } else {
+                return doc;
+            }
+        })
+        return successResponseHandler(res, newResponse, "successfully get all member details !!");
+    }
+    catch (error) {
+        logger.error(error);
+        errorResponseHandler(res, error, "Exception while getting all member details !");
+    }
+
+};
+
+
+
+
+/**
+ *  get all active registered member with Status flag
+*/
+
+exports.getActiveStatusRegisterMembers = async (req, res) => {
+    try {
+        let search = req.body.search.toLowerCase()
+        let queryCond = {};
+        queryCond["doneFingerAuth"] = true;
+        queryCond["status"] = true;
+        if (req.body.branch) queryCond["branch"] = req.body.branch;
+        let response = await Member.find(queryCond)
+            .populate('credentialId').populate("packageDetails.packages")
+            .populate({ path: 'packageDetails.trainer', populate: { path: "credentialId" } }).lean()
+        let newResponse = response.filter(doc => {
+            if (search) {
+                let temp = doc.credentialId.email.toLowerCase()
+                let temp1 = doc.credentialId.userName.toLowerCase()
+                let temp2 = doc.memberId ? doc.memberId.toString() : ''
+                let temp3 = doc.mobileNo ? doc.mobileNo.toString() : ''
+                if (temp.includes(search) || temp1.includes(search) || temp2.includes(search) || temp3.includes(search)) return doc
+            } else {
+                return doc;
+            }
+        });
+        return successResponseHandler(res, newResponse, "successfully get all member details !!");
+    }
+    catch (error) {
+        logger.error(error);
+        errorResponseHandler(res, error, "Exception while getting all member details !");
+    }
+};
+
+
+
+/**
+ *  get all active registered member with Status flag and  not expired also
+*/
+
+exports.getActiveStatusNotExpiredRegisterMembers = async (req, res) => {
+    try {
+        let search = req.body.search.toLowerCase()
+        let queryCond = { 'packageDetails.isExpiredPackage': false };
+        queryCond['packageDetails.startDate'] = { '$exists': true }
+        queryCond["doneFingerAuth"] = true;
+        queryCond["status"] = true;
+        if (req.body.branch) queryCond["branch"] = req.body.branch;
+        let response = await Member.find(queryCond)
+            .populate('credentialId').populate("packageDetails.packages")
+            .populate({ path: 'packageDetails.trainer', populate: { path: "credentialId" } }).lean()
+        let newResponse = response.filter(doc => {
+            if (search) {
+                let temp = doc.credentialId.email.toLowerCase()
+                let temp1 = doc.credentialId.userName.toLowerCase()
+                let temp2 = doc.memberId ? doc.memberId.toString() : ''
+                let temp3 = doc.mobileNo ? doc.mobileNo.toString() : ''
+                if (temp.includes(search) || temp1.includes(search) || temp2.includes(search) || temp3.includes(search)) return doc
+            } else {
+                return doc;
+            }
+        });
+        return successResponseHandler(res, newResponse, "successfully get all member details !!");
+    }
+    catch (error) {
+        logger.error(error);
+        errorResponseHandler(res, error, "Exception while getting all member details !");
+    }
+};
+
+
+
+/**
+ * generate token for verification
+*/
+
+
+exports.generateToken = async (req, res) => {
+    try {
+        const email = await Credential.findOne({ email: req.body.email }).lean();
+        if (email) errorResponseHandler(res, 'error', 'Email is already in use !')
+        else {
+            const code = Math.floor(1000 + Math.random() * 9000);
+            await sendMail(req.body.email, code)
+            successResponseHandler(res, { code }, "successfully send code !!");
+        }
+    }
+    catch (error) {
+        logger.error(error);
+        errorResponseHandler(res, error, "Exception while send code !");
+    }
+};
+
+
+
+
+
+/** 
+ * paypal apis for payment
+ * 
+*/
+
+exports.payAtGymMobile = async (req, res) => {
+    let queryCond = {}
+    queryCond["isPackageSelected"] = true
+    if (req.body.questions) queryCond["questions"] = req.body.questions;
+    if (req.body.oldPackageId) {
+        await Member.update({ "packageDetails._id": req.body.oldPackageId }, { $set: { "packageDetails.$.packageRenewal": true } })
+    }
+    if (req.headers.userid) {
+        req.body.packageDetails["doneBy"] = req.headers.userid
+    }
+    req.body.packageDetails["orderNo"] = generateOrderId()
+    req.body.packageDetails["dateOfPurchase"] = setTime(new Date())
+    req.body.packageDetails["timeOfPurchase"] = new Date()
+    Member.findByIdAndUpdate(req.params.id, { $push: { packageDetails: req.body.packageDetails }, $set: queryCond })
+        .then(response => {
+            successResponseHandler(res, response, "successfully save the transaction !!");
+        }).catch(error => {
+            logger.error(error);
+            errorResponseHandler(res, error, "Exception while saving the transaction !");
+        });
+};
+
+
+
+
+
+/**
+ * BIOSTAR AUTH APIS
+*/
+
+
+
+exports.getBioStarToken = async (req, res) => {
+    try {
+        let tokenData = await bioStarToken()
+        successResponseHandler(res, tokenData, "successfully save the transaction !!");
+    } catch (error) {
+        logger.error(error);
+        errorResponseHandler(res, error, "Exception while send code !");
+    }
+}
+
+
+
+exports.addMemberFingerPrint = async (req, res) => {
+    try {
+        const { template0, template1 } = await getFingerPrintTemplate()
+        const bioObject = { template0, template1, fingerIndex: req.body.fingerIndex }
+        await Credential.findOneAndUpdate({ userId: req.body.memberId }, { doneFingerAuth: true })
+        await Member.findByIdAndUpdate(req.body.memberId, { doneFingerAuth: true, biometricTemplate: bioObject }, { new: true })
+        const newResponse = await Member.findById(req.body.memberId).populate('credentialId branch')
+            .populate('packageDetails.packages packageDetails.trainerFees packageDetails.trainer')
+            .populate({ path: "packageDetails.trainer", populate: { path: "credentialId" } })
+            .populate({ path: "packageDetails.packages", populate: { path: "period" } }).lean()
+        const userData = await Member.findById(req.body.memberId).populate('credentialId').lean()
+        if (userData.credentialId.reactToken) {
+            let token = userData.credentialId.reactToken
+            let obj = notificationObject(token, 'Finger Authenticated Successfully !', "Please login again to enjoy benefits");
+            await sendNotification(obj);
+        }
+        successResponseHandler(res, newResponse, "successfully save the transaction !!");
+    } catch (error) {
+        logger.error(error);
+        errorResponseHandler(res, error, "Exception while adding fingerprint !");
+    }
+};
+
+
+exports.excludeMemberFingerPrint = async (req, res) => {
+    try {
+        await AdminPassword.findOne({ password: req.body.password }).then(async user => {
+            if (!user) return errorResponseHandler(res, '', "Your entered password is wrong !");
+            else {
+                await Credential.findOneAndUpdate({ userId: req.body.memberId }, { doneFingerAuth: true })
+                await Member.findByIdAndUpdate(req.body.memberId, { doneFingerAuth: true }, { new: true })
+                const newResponse = await Member.findById(req.body.memberId).populate('credentialId branch')
+                    .populate('packageDetails.packages packageDetails.trainerFees packageDetails.trainer')
+                    .populate({ path: "packageDetails.trainer", populate: { path: "credentialId" } })
+                    .populate({ path: "packageDetails.packages", populate: { path: "period" } }).lean()
+                successResponseHandler(res, newResponse, "successfully excluded the member fingerprint !!");
+            }
+        });
+
+    } catch (error) {
+        logger.error(error);
+        errorResponseHandler(res, error, "Exception while adding fingerprint !");
+    }
+};
+
+
+exports.updateFingerPrint = async (req, res) => {
+    try {
+        await AdminPassword.findOne({ password: req.body.password }).then(async user => {
+            if (!user) return errorResponseHandler(res, '', "Your entered password is wrong !");
+            else {
+                const { template0, template1 } = await getFingerPrintTemplate()
+                const userData = await Member.findById(req.body.memberId).lean()
+                const bioObject = { template0, template1, fingerIndex: req.body.fingerIndex, memberId: userData.memberId }
+                await updateFingerPrint(bioObject)
+                await Member.findByIdAndUpdate(req.body.memberId, { doneFingerAuth: true, biometricTemplate: bioObject }, { new: true })
+                const newResponse = await Member.findById(req.body.memberId).populate('credentialId branch')
+                    .populate('packageDetails.packages packageDetails.trainerFees packageDetails.trainer')
+                    .populate({ path: "packageDetails.trainer", populate: { path: "credentialId" } })
+                    .populate({ path: "packageDetails.packages", populate: { path: "period" } }).lean()
+                successResponseHandler(res, newResponse, "successfully save the transaction !!");
+            }
+        });
+
+    } catch (error) {
+        logger.error(error);
+        errorResponseHandler(res, error, "Exception while send code !");
+    }
+}
+
+
+/** 
+ *  start the package of member
+*/
+
+
+exports.startPackage = async (req, res) => {
+    try {
+        req.body["startDate"] = setTime(req.body.startDate);
+        req.body["endDate"] = setTime(req.body.endDate);
+        req.body["trainerStart"] = setTime(req.body.trainerStart);
+        req.body["trainerEnd"] = setTime(req.body.trainerEnd);
+        await Member.update({ 'packageDetails._id': req.body.packageDetailId }, {
+            $set: {
+                'packageDetails.$.startDate': req.body.startDate, 'packageDetails.$.endDate': req.body.endDate,
+                'packageDetails.$.trainerStart': req.body.trainerStart, 'packageDetails.$.trainerEnd': req.body.trainerEnd
+            }
+        });
+        let memberAllClassResponse = await MemberClass.find({ member: req.body.memberId }).populate('classId').lean()
+        const userData = await Member.findById(req.body.memberId).populate('credentialId packageDetails.packages').lean();
+        const photo = sharp(userData.credentialId.avatar.path).rotate().resize(200).toBuffer()
+        let obj = {
+            accessGroupName: userData.packageDetails[0].packages.bioStarInfo.accessGroupName,
+            accessGroupId: userData.packageDetails[0].packages.bioStarInfo.accessGroupId,
+            userGroupId: userData.packageDetails[0].packages.bioStarInfo.userGroupId,
+            endDate: req.body.endDate,
+            memberId: userData.memberId,
+            name: userData.credentialId.userName,
+            email: userData.credentialId.email,
+            newPhoto: photo.toString('base64').replace('data:image/png;base64,', ''),
+            phoneNumber: userData.mobileNo,
+            template0: userData.biometricTemplate.template0,
+            template1: userData.biometricTemplate.template1,
+            startDate: req.body.startDate
+        }
+        // if (memberAllClassResponse.length === 0) {
+        //     if (userData.packageDetails.length )
+        //     new Date(fromTime.setFullYear(2020, 11, 9))
+        //     obj = {
+        //         ...obj, ...{
+        //             accessGroupName: userData.packageDetails[0].packages.bioStarInfo.accessGroupName,
+        //             accessGroupId: userData.packageDetails[0].packages.bioStarInfo.accessGroupId,
+        //             userGroupId: userData.packageDetails[0].packages.bioStarInfo.userGroupId
+        //         }
+        //     }
+        // }
+        userData.packageDetails.forEach(packageDetail => {
+            if (new Date(packageDetail.endDate) > new Date(req.body.endDate)) obj.endDate = packageDetail.endDate
+        })
+        memberAllClassResponse.forEach(memberClass => {
+            if (new Date(memberClass.classId.startDate) < new Date(obj.startDate)) obj.startDate = memberClass.classId.startDate
+            if (new Date(memberClass.classId.endDate) > new Date(obj.endDate)) obj.endDate = memberClass.classId.endDate
+        })
+        if (userData.packageDetails.length > 1) await updateMemberInBioStar(obj);
+        else await addMemberInBioStar(obj);
+        const newResponse = await Member.findById(req.body.memberId).populate('credentialId branch')
+            .populate('packageDetails.packages packageDetails.trainerFees packageDetails.trainer')
+            .populate({ path: "packageDetails.trainer", populate: { path: "credentialId" } })
+            .populate({ path: "packageDetails.packages", populate: { path: "period" } }).lean()
+        if (req.body.trainer) { await newMemberAssign(req.body.trainer); }
+        successResponseHandler(res, newResponse, "successfully save the transaction !!");
+    } catch (error) {
+        logger.error(error);
+        errorResponseHandler(res, error, "Exception while send code !");
+    }
+};
+
+/** 
+ * black list user from account
+*/
+
+
+exports.blackListUser = async (req, res) => {
+    try {
+        if (req.body.memberId) {
+            let status;
+            if (req.body.status) status = "IN"
+            else status = 'AC';
+            await disableMember(req.body.memberId, status)
+            let response = await Member.findByIdAndUpdate(req.params.id, { status: !req.body.status })
+            successResponseHandler(res, response, "successfully operation done on member")
+        } else {
+            let response = await Employee.findByIdAndUpdate(req.params.id, { status: !req.body.status })
+            successResponseHandler(res, response, "successfully operation done on Employee")
+        }
+    } catch (error) {
+        logger.error(error);
+        errorResponseHandler(res, error, "Exception while operation on user !");
+    }
+};
+
+
+
+/**
+ * expire list of member
+*/
+
+exports.getExpiredMembers = async (req, res) => {
+    try {
+        let search = req.body.search.toLowerCase()
+        let response = await Member.find({ 'packageDetails.isExpiredPackage': true })
+            .populate('credentialId').populate("packageDetails.packages branch").lean()
+        let newResponse = response.filter(doc => {
+            if (search) {
+                let temp = doc.credentialId.email.toLowerCase()
+                let temp1 = doc.credentialId.userName.toLowerCase()
+                let temp2 = doc.memberId ? doc.memberId.toString() : ''
+                let temp3 = doc.mobileNo ? doc.mobileNo.toString() : ''
+                if (temp.includes(search) || temp1.includes(search) || temp2.includes(search) || temp3.includes(search)) return doc
+            } else {
+                return doc;
+            }
+        });
+        return successResponseHandler(res, newResponse, "successfully get expired member !!");
+    }
+    catch (error) {
+        logger.error(error);
+        errorResponseHandler(res, error, "Failed to get expired members!");
+    }
+}
+
+
+exports.getAboutToExpireMembers = async (req, res) => {
+    try {
+        let queryCond = {};
+        let search = req.body.search.toLowerCase()
+        if (req.body.trainer) queryCond["packageDetails"] = { $elemMatch: { trainer: req.body.trainer } }
+        const members = await Member.find(queryCond).populate('credentialId packageDetails.packages branch');
+        const expiredMembers = [];
+        for (let i = 0; i < members.length; i++) {
+            let aboutToExpire = false;
+            for (let j = 0; j < members[i].packageDetails.length; j++) {
+                let endDate = members[i].packageDetails[j].endDate
+                let today = new Date(new Date().setHours(0, 0, 0, 0));
+                if (members[i].packageDetails[j].extendDate) {
+                    endDate = members[i].packageDetails[j].extendDate;
+                }
+                if (new Date(convertToDate(endDate)).setDate(new Date(convertToDate(endDate)).getDate() - 7) <= today && today < new Date(convertToDate(endDate))) {
+                    aboutToExpire = true;
+                }
+            }
+            if (aboutToExpire) {
+                expiredMembers.push(members[i])
+            }
+        }
+        let newResponse = expiredMembers.filter(doc => {
+            if (search) {
+                let temp = doc.credentialId.email.toLowerCase()
+                let temp1 = doc.credentialId.userName.toLowerCase()
+                let temp2 = doc.memberId ? doc.memberId.toString() : ''
+                let temp3 = doc.mobileNo ? doc.mobileNo.toString() : ''
+                if (temp.includes(search) || temp1.includes(search) || temp2.includes(search) || temp3.includes(search)) return doc
+            } else {
+                return doc;
+            }
+        });
+        return successResponseHandler(res, newResponse, "sucessfully get members !")
+    } catch (error) {
+        logger.error(error);
+        errorResponseHandler(res, error, "Failed to get expired members!")
+    }
+};
+
+
+exports.getClassesMembers = async (req, res) => {
+    try {
+        let search = req.body.search.toLowerCase()
+        let queryCond = {};
+        queryCond["doneFingerAuth"] = false;
+        queryCond["isPackageSelected"] = false;
+        if (req.body.branch) queryCond["branch"] = req.body.branch
+        let pendingMember = await Member.find(queryCond).populate('credentialId branch').lean()
+        pendingMember = pendingMember.filter(doc => {
+            if (search) {
+                let temp = doc.credentialId.email.toLowerCase()
+                let temp1 = doc.credentialId.userName.toLowerCase()
+                let temp3 = doc.mobileNo.toString()
+                if (temp.includes(search) || temp1.includes(search) || temp3.includes(search)) {
+                    return doc
+                }
+            } else {
+                return doc;
+            }
+        });
+        let pendingMemberClasses = []
+        for (let i = 0; i < pendingMember.length; i++) {
+            let classesDetails = await MemberClass.find({ 'member': pendingMember[i]._id.toString() }).populate('classId').lean()
+            if (classesDetails.length > 0) {
+                pendingMemberClasses.push({ ...pendingMember[i], ...{ classesDetails } })
+            }
+        }
+        return successResponseHandler(res, pendingMemberClasses, "successfully get all member details !!");
+    } catch (error) {
+        logger.error(error);
+        errorResponseHandler(res, error, "Failed to get classes members!")
+    }
+};
+
+
+exports.getCprData = async (req, res) => {
+    try {
+        const myFileURL = new URL('file:///C:/Users/Administrator/AppData/Local/Temp/2/eRevealerGcc.xml');
+        var parser = new xml2js.Parser();
+        fs.readFile(myFileURL, (err, data) => {
+            parser.parseString(data, (err, result) => {
+                res.json(result)
+            });
+        });
+    } catch (error) {
+        logger.error(error);
+        errorResponseHandler(res, error, "Failed to get details from Card!")
+    }
+};
+
+
+exports.getMemberByMemberId = async (req, res) => {
+    try {
+        let memberInfo = await Member.findOne({ memberId: +req.body.memberId })
+            .populate('credentialId')
+            .populate({ path: "packageDetails.packages", populate: { path: "period" } }).lean()
+        memberInfo["fingerScanStatus"] = req.body.fingerScanStatus
+        memberEntranceStatus(memberInfo)
+        successResponseHandler(res, memberInfo, 'successfully get member details !');
+    } catch (error) {
+        logger.error(error);
+        errorResponseHandler(res, error, "Exception while getting member details !");
+    }
+}

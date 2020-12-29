@@ -1,0 +1,495 @@
+[
+  {
+    "reportType": "Members",
+    "reportName": [
+      {
+        "name": "New Members",
+        "headers": [
+          "SNo",
+          "Member ID",
+          "Member Name",
+          "Package",
+          "Admission Date",
+          "Payment Status",
+          "Mobile No",
+          "Email ID"
+        ],
+        "description": "This report will list all New members that selected their package but not enrolled their fingerprint."
+      },
+      {
+        "name": "Active Members",
+        "headers": [
+          "SNo",
+          "Member ID",
+          "Member Name",
+          "Package",
+          "Admission Date",
+          "Mobile No",
+          "Email ID",
+          "Package Start Date",
+          "Package End Date",
+          "Trainer Name",
+          "Paid Amount"
+        ],
+        "description": "This report will list all Active members who enrolled their fingerprint and started their package Successfully."
+      },
+      {
+        "name": "Pending Members",
+        "headers": [
+          "SNo",
+          "Member Name",
+          "Admission Date",
+          "Mobile No",
+          "Email ID"
+        ],
+        "description": "This report will list all Pending members who signup but not selected any packages."
+      },
+      {
+        "name": "Expired Members",
+        "headers": [
+          "SNo",
+          "Member ID",
+          "Member Name",
+          "Admission Date",
+          "Package",
+          "Expired Date",
+          "Trainer Name",
+          "Paid Amount",
+          "Any Valid Package",
+          "Mobile No",
+          "Email ID"
+        ],
+        "description": "This report will list all members who have expired package."
+      },
+      {
+        "name": "Upcoming Expiry",
+        "headers": [
+          "SNo",
+          "Member ID",
+          "Member Name",
+          "Admission Date",
+          "Package",
+          "Expiry Date",
+          "Trainer Name",
+          "Paid Amount",
+          "Mobile No",
+          "Email ID"
+        ],
+        "description": "This report will list all members who have packages that will expire soon."
+      },
+      {
+        "name": "Members Attendance",
+        "headers": [
+          "SNo",
+          "Member ID",
+          "Member Name",
+          "Branch",
+          "Date",
+          "Check-In",
+          "Check-Out",
+          "Total Hrs"
+        ],
+        "description": "This report will provide members' attendance details for specific period."
+      },
+      {
+        "name": "Freezed Members",
+        "headers": [
+          "SNo",
+          "Member ID",
+          "Member Name",
+          "Admission Date",
+          "Mobile No",
+          "Package",
+          "Freezed From",
+          "Freezed To",
+          "Extended Till",
+          "No Of Days",
+          "Reason",
+          "Amount"
+        ],
+        "description": "This report will list all Freezed members for specific period."
+      },
+      {
+        "name": "Package Renewal",
+        "headers": [
+          "SNo",
+          "Receipt No.",
+          "Date & Time",
+          "Member ID",
+          "Member Name",
+          "Admission Date",
+          "Mobile No",
+          "Branch",
+          "Package",
+          "Trainer Name",
+          "Start Date",
+          "End Date",
+          "Paid Amount",
+          "Renewed By"
+        ],
+        "description": "This report will list all members who renewed their Packages for specific period."
+      },
+      {
+        "name": "Package Type",
+        "headers": [
+          "SNo",
+          "Receipt No.",
+          "Date & Time",
+          "Member ID",
+          "Member Name",
+          "Admission Date",
+          "Mobile No",
+          "Branch",
+          "Package",
+          "Start Date",
+          "End Date",
+          "Paid Amount",
+          "Done By"
+        ],
+        "description": "This report will list all members who registered for packages for specific period."
+      },
+      {
+        "name": "Assigned Trainers",
+        "headers": [
+          "SNo",
+          "Receipt No.",
+          "Date & Time",
+          "Member ID",
+          "Member Name",
+          "Branch",
+          "Package",
+          "Trainer Name",
+          "Period",
+          "Start Date",
+          "End Date",
+          "Paid Amount",
+          "Done By"
+        ],
+        "description": "This report will list the assigned trainers for specific period."
+      }
+    ]
+  },
+  {
+    "reportType": "Sales",
+    "reportName": [
+      {
+        "name": "General Sales",
+        "headers": [
+          "SNo",
+          "Receipt No.",
+          "Date & Time",
+          "Member ID",
+          "Member Name",
+          "Admission Date",
+          "Mobile No",
+          "Branch",
+          "Transaction Type",
+          "Paid Amount",
+          "Cash",
+          "Card",
+          "Digital",
+          "Done By"
+        ],
+        "description": "This report will show branches general sales for specific period."
+      },
+      {
+        "name": "Package Sales",
+        "headers": [
+          "SNo",
+          "Receipt No.",
+          "Date & Time",
+          "Member ID",
+          "Member Name",
+          "Admission Date",
+          "Mobile No",
+          "Branch",
+          "Package",
+          "Transaction Type",
+          "Package Amount",
+          "Trainer Amount",
+          "Paid Amount",
+          "Cash",
+          "Card",
+          "Digital",
+          "Done By"
+        ],
+        "description": "This report will show branches Package sales for specific period."
+      },
+      {
+        "name": "Item Sales",
+        "headers": [
+          "SNo",
+          "Receipt No.",
+          "Date & Time",
+          "Member ID",
+          "Member Name",
+          "Admission Date",
+          "Mobile No",
+          "Branch",
+          "Items",
+          "QTY",
+          "Total Amount",
+          "Discount Amount",
+          "Paid Amount",
+          "Cash",
+          "Card",
+          "Digital",
+          "Done By"
+        ],
+        "description": "This report will show branches item sales for specific period."
+      },
+      {
+        "name": "Classes Sales",
+        "headers": [
+          "SNo",
+          "Receipt No.",
+          "Date & Time",
+          "Member ID",
+          "Member Name",
+          "Mobile No",
+          "Branch",
+          "Class Name",
+          "Trainer",
+          "Start Date",
+          "Amount",
+          "Paid Amount",
+          "Cash",
+          "Card",
+          "Digital",
+          "Done By"
+        ],
+        "description": "This report will show branches classes sales for specific period."
+      },
+      {
+        "name": "End of Shift Report",
+        "headers": [
+          "SNo",
+          "Receipt No.",
+          "Date & Time",
+          "Shift Name",
+          "Member ID",
+          "Member Name",
+          "Transaction Type",
+          "Amount",
+          "Discount Amount",
+          "Vat %",
+          "Gift Card",
+          "Paid Amount",
+          "Cash",
+          "Card",
+          "Digital",
+          "Done By"
+        ],
+        "description": "This report will show Staff Sales by their assigned work shift for one day."
+      },
+      {
+        "name": "POS Profit and Loss",
+        "headers": [
+          "SNo",
+          "Item Code",
+          "Item Name",
+          "Transaction Date & Time",
+          "Cost Price",
+          "Selling Price",
+          "Vat Amount",
+          "Discount Amount",
+          "Gift Card",
+          "Paid Amount",
+          "Profit Amount",
+          "Branch",
+          "Source"
+        ],
+        "description": "This report will show POS (Online & Offline) Profit and Loss for specific period."
+      },
+      {
+        "name": "Sales By Payment Method",
+        "headers": [
+          "SNo",
+          "Receipt No.",
+          "Date & Time",
+          "Member ID",
+          "Member Name",
+          "Branch",
+          "Transaction Type",
+          "Payment Method",
+          "Paid Amount",
+          "Done By"
+        ],
+        "description": "This report will show sales by payment method for specific period."
+      }
+    ]
+  },
+  {
+    "reportType": "Stock",
+    "reportName": [
+      {
+        "name": "Current Stock Details",
+        "headers": [
+          "SNo",
+          "Item Name",
+          "Item Code",
+          "Supplier",
+          "QTY on Hand",
+          "Purchase Date",
+          "Expiry Date",
+          "Branch",
+          "Cost Price",
+          "Selling Price",
+          "Vat %"
+        ],
+        "description": "This report will show stock details as of current date."
+      },
+      {
+        "name": "Product Expiry Details",
+        "headers": [
+          "SNo",
+          "Item Name",
+          "Item Code",
+          "Supplier",
+          "QTY on Hand",
+          "Expiry Date",
+          "Remaining Days",
+          "Branch",
+          "Cost Price",
+          "Selling Price",
+          "Vat %"
+        ],
+        "description": "This report will show product expiry details as of current date."
+      },
+      {
+        "name": "Expired Product Details",
+        "headers": [
+          "SNo",
+          "Item Name",
+          "Item Code",
+          "Supplier",
+          "QTY on Hand",
+          "Purchase Date",
+          "Expiry Date",
+          "Days Since Expired",
+          "Branch",
+          "Cost Price",
+          "Selling Price",
+          "Total Cost Price"
+        ],
+        "description": "This report will show expired product details as of current date."
+      }
+    ]
+  },
+  {
+    "reportType": "Classes",
+    "reportName": [
+      {
+        "name": "Classes Registration Details",
+        "headers": [
+          "SNo",
+          "Class Name",
+          "Class Date",
+          "Class Time",
+          "Room",
+          "Branch",
+          "Capacity",
+          "Total Bookings",
+          "Trainer",
+          "Amount",
+          "Total Amount"
+        ],
+        "description": "This report will show classes registration details for specific period."
+      }
+    ]
+  },
+  {
+    "reportType": "HR",
+    "reportName": [
+      {
+        "name": "Employee Details",
+        "headers": [
+          "SNo",
+          "Employee ID",
+          "Employee Name",
+          "Personal ID",
+          "Date of Birth",
+          "Nationality",
+          "Gender",
+          "Date of Join",
+          "Designation",
+          "Branch",
+          "Mobile No.",
+          "Address"
+        ],
+        "description": "This report will show employee details as of current date."
+      },
+      {
+        "name": "Employee Shift Details",
+        "headers": [
+          "SNo",
+          "Employee ID",
+          "Employee Name",
+          "Nationality",
+          "Gender",
+          "Date of Join",
+          "Designation",
+          "Branch",
+          "Mobile No.",
+          "Work Date",
+          "Shift Name",
+          "Shift Timing"
+        ],
+        "description": "This report will show employee shift details for certain period."
+      }
+    ]
+  },
+  {
+    "reportType": "Appointments",
+    "reportName": [
+      {
+        "name": "Booked Appointments By Members",
+        "headers": [
+          "SNo",
+          "Member ID",
+          "Member Name",
+          "Branch",
+          "Mobile Number",
+          "Booking Date",
+          "From Time",
+          "To Time",
+          "Trainer Name",
+          "Booked By"
+        ],
+        "description": "This report will show booked appointments by members for specific period."
+      },
+      {
+        "name": "Booked Appointments Status",
+        "headers": [
+          "SNo",
+          "Member ID",
+          "Member Name",
+          "Branch",
+          "Mobile Number",
+          "Booking Date",
+          "From Time",
+          "To Time",
+          "Trainer Name",
+          "Status",
+          "Booked By"
+        ],
+        "description": "This report will show the status of the booked appointments by members for specific period."
+      },
+      {
+        "name": "Booked Appointments By Visitors",
+        "headers": [
+          "SNo",
+          "Visitor Name",
+          "Mobile Number",
+          "Branch",
+          "Booking Date",
+          "From Time",
+          "To Time",
+          "Purpose of Visit",
+          "Booked By"
+        ],
+        "description": "This report will show the status of the booked appointments by visitors for specific period."
+      }
+    ]
+  }
+]

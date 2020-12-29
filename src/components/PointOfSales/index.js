@@ -1,0 +1,5 @@
+export { default as AddStock } from './Admin/AddStock'
+export { default as PointOfSales } from './Admin/PointOfSales'
+export { default as Shopping } from './Customer/Shopping'
+export { default as ShoppingItem } from './Customer/ShoppingItem'
+export { default as OrderHistory } from './OrderHistory'
