@@ -1,4 +1,5 @@
-const { addVat, updateVat, getAllVatForAdmin, getDefaultVat, updateDefaultVat, getAllVat } = require('../controller/financeReporting')
+const { addVat, updateVat, getAllVatForAdmin,
+    getDefaultVat, updateDefaultVat, getAllVat } = require('../controller/financeReporting')
 
 
 exports.routes = (express, app) => {

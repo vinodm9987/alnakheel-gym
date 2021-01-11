@@ -1,4 +1,5 @@
-const { getAllEvent, getEventById, updateEvent, addEvent, getAllEventForAdmin, getEventsByDate } = require('../controller/event/event.controller')
+const { getAllEvent, getEventById, updateEvent, addEvent,
+    getAllEventForAdmin, getEventsByDate } = require('../controller/event/event.controller')
 
 
 exports.routes = (express, app) => {

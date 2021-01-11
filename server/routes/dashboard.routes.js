@@ -1,4 +1,5 @@
-const { getMemberDashBoard, getPackageDistribution, getMostSellingStock, getAllBranchSales, getMemberAttendanceDashboard, getIndividualMemberAttendance } = require('../controller/dashboard/adminDashboard.controller');
+const { getMemberDashBoard, getPackageDistribution, getMostSellingStock,
+    getAllBranchSales, getMemberAttendanceDashboard, getIndividualMemberAttendance } = require('../controller/dashboard/adminDashboard.controller');
 
 exports.routes = (express, app) => {
 

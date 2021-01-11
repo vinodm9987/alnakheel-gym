@@ -1,4 +1,5 @@
-const { addMemberAttendance, getMemberAttendance, getMemberAttendanceForAdmin, getAttendanceDetails } = require('../controller/attendance/memberAttendance.controller');
+const { addMemberAttendance, getMemberAttendance,
+    getMemberAttendanceForAdmin, getAttendanceDetails } = require('../controller/attendance/memberAttendance.controller');
 
 exports.routes = (express, app) => {
 

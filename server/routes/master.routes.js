@@ -1,16 +1,24 @@
-const { updatePackage, deletePackage, addPackage, getAllPackage, getPackageById, getAllActivePackage } = require('../controller/masterTable/package.controller')
+const { updatePackage, deletePackage, addPackage,
+    getAllPackage, getPackageById, getAllActivePackage } = require('../controller/masterTable/package.controller')
 
-const { updatePeriod, addPeriod, getAllPeriod, getAllPeriodForAdmin } = require('../controller/masterTable/period.controller')
+const { updatePeriod, addPeriod,
+    getAllPeriod, getAllPeriodForAdmin } = require('../controller/masterTable/period.controller')
 
-const { updateDesignation, addDesignation, getAllDesignation, getAllDesignationForAdmin, getDesignationById, getDesignationForFilter } = require('../controller/masterTable/designation.controller')
+const { updateDesignation, addDesignation, getAllDesignation,
+    getAllDesignationForAdmin, getDesignationById, getDesignationForFilter } = require('../controller/masterTable/designation.controller')
 
-const { updateBranch, addBranch, getAllBranch, getAllBranchForAdmin, getBranchById } = require('../controller/masterTable/branch.controller')
+const { updateBranch, addBranch, getAllBranch,
+    getAllBranchForAdmin, getBranchById } = require('../controller/masterTable/branch.controller')
 
-const { getAllTrainerFees, getTrainerFeesById, addTrainerFees, updateTrainerFees, getAllTrainerFeesForAdmin, getUniqueTrainerByBranch, getPeriodOfTrainer } = require('../controller/masterTable/trainerFees.controller')
+const { getAllTrainerFees, getTrainerFeesById, addTrainerFees,
+    updateTrainerFees, getAllTrainerFeesForAdmin, getUniqueTrainerByBranch, getPeriodOfTrainer } = require('../controller/masterTable/trainerFees.controller')
 
-const { updateCurrency, addCurrency, getAllCurrencyForAdmin, getDefaultCurrency, updateDefaultCurrency } = require('../controller/masterTable/currency.controller')
+const { updateCurrency, addCurrency, getAllCurrencyForAdmin,
+    getDefaultCurrency, updateDefaultCurrency } = require('../controller/masterTable/currency.controller')
 
 const { getSystemYear } = require('../controller/masterTable/systemYear.controller')
+
+const { getAuditLogs } = require('../controller/masterTable/auditLog.controller')
 
 
 exports.routes = (express, app) => {
@@ -127,7 +135,7 @@ exports.routes = (express, app) => {
 
     router.get('/getDefaultCurrency', getDefaultCurrency)
 
-    router.put('/updateDefaultCurrency/:id', updateDefaultCurrency)
+    router.put('/updateDefaultCurrency/:id', updateDefaultCurrency);
 
 
     /** 
@@ -135,6 +143,13 @@ exports.routes = (express, app) => {
     */
 
     router.get('/getSystemYear', getSystemYear)
+
+
+    /** 
+     *  AUDIT LOG
+    */
+
+    router.post('/getAuditLogs', getAuditLogs)
 
 
     app.use('/api/master/', router);

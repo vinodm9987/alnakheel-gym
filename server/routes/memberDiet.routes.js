@@ -1,8 +1,11 @@
-const { getAllDietFood, getAllDietFoodForAdmin, getDietFoodById, addDietFood, updateDietFood } = require('../controller/memberDiet/dietFood.controller');
+const { getAllDietFood, getAllDietFoodForAdmin,
+    getDietFoodById, addDietFood, updateDietFood } = require('../controller/memberDiet/dietFood.controller');
 
-const { getAllDietSession, getAllDietSessionForAdmin, getDietSessionById, addDietSession, updateDietSession } = require('../controller/memberDiet/dietSession.controller');
+const { getAllDietSession, getAllDietSessionForAdmin,
+    getDietSessionById, addDietSession, updateDietSession } = require('../controller/memberDiet/dietSession.controller');
 
-const { getMemberDietByMemberId, getMemberDietById, addMemberDiet, updateMemberDietById, getMemberDietByDate } = require('../controller/memberDiet/memberDiet.controller');
+const { getMemberDietByMemberId, getMemberDietById,
+    addMemberDiet, updateMemberDietById, getMemberDietByDate } = require('../controller/memberDiet/memberDiet.controller');
 
 
 exports.routes = (express, app) => {

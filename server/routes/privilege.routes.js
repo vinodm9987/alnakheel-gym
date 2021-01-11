@@ -1,6 +1,6 @@
-const { assignViewForWeb, assignViewForMobile } = require('../controller/privilege/privilege.controller');
+const { assignViewForWeb, assignViewForMobile, assignReport } = require('../controller/privilege/privilege.controller');
 
-const { addAdminPassword, getAdminPassword } = require('../controller/privilege/adminPassword.controller');
+const { addAdminPassword, getAdminPassword, verifyAdminPassword } = require('../controller/privilege/adminPassword.controller');
 
 
 
@@ -18,6 +18,8 @@ exports.routes = (express, app) => {
 
     router.post('/assignViewForMobile', assignViewForMobile);
 
+    router.post('/assignReport', assignReport);
+
 
 
 
@@ -25,6 +27,8 @@ exports.routes = (express, app) => {
     router.post('/addAdminPassword', addAdminPassword);
 
     router.get('/getAdminPassword', getAdminPassword);
+
+    router.post('/verifyAdminPassword', verifyAdminPassword);
 
 
 

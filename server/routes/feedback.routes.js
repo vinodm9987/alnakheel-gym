@@ -1,4 +1,5 @@
-const { addFeedback, getMemberFeedback, getFeedbackById, updateFeedback, getFeedbackList } = require('../controller/feedback/feedback.controller')
+const { addFeedback, getMemberFeedback,
+    getFeedbackById, updateFeedback, getFeedbackList } = require('../controller/feedback/feedback.controller')
 
 
 exports.routes = (express, app) => {

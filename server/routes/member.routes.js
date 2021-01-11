@@ -2,12 +2,17 @@ const {
     getAllMember, createNewMember, generateToken, getMemberByCredentialId,
     updateMember, updateMemberAndAddPackage, createNewMemberByAdmin, getFirstRegisterMembers, payAtGymMobile,
     updateMemberDetails, getAllActiveMember, getAllActiveMemberOfTrainer, getMemberById,
-    getActiveRegisterMembers, getBioStarToken, addMemberFingerPrint, excludeMemberFingerPrint, getAllPendingMember,
+    getActiveRegisterMembers, getBioStarToken, addMemberFingerPrint, excludeMemberFingerPrint, getAllPendingMember, addMemberFaceRecognition,
     updateFingerPrint, startPackage, updateMemberProfile, blackListUser, getActiveStatusRegisterMembers,
     getActiveStatusNotExpiredRegisterMembers,
     getExpiredMembers, getAboutToExpireMembers, getClassesMembers,
-    getCprData, getMemberByMemberId
+    getCprData, getMemberByMemberId, bookTrainer
 } = require('../controller/member/member.controller');
+
+
+
+const { applyFreezeMember, applyFreezeAllMember, getPendingFreezeMember,
+    freezeMember, getFreezeHistory, removeMemberFreeze, cancelFreeze } = require('../controller/member/memberFreeze.controller');
 
 
 const { addWaterInTake, getMemberWaterInTake, updateMemberWaterInTake } = require('../controller/member/waterInTake.controller');
@@ -15,9 +20,6 @@ const { addWaterInTake, getMemberWaterInTake, updateMemberWaterInTake } = requir
 
 const { addMemberReminder, getMemberReminderByDate } = require('../controller/member/memberReminder.controller');
 
-
-const { applyFreezeMember, applyFreezeAllMember, getPendingFreezeMember,
-    freezeMember, getFreezeHistory, removeMemberFreeze } = require('../controller/member/memberFreeze.controller');
 
 
 exports.routes = (express, app) => {
@@ -62,6 +64,8 @@ exports.routes = (express, app) => {
 
     router.post('/payAtGymMobile/:id', payAtGymMobile);
 
+    router.post('/bookTrainer', bookTrainer);
+
     router.post('/createNewMemberByAdmin', createNewMemberByAdmin);
 
     router.post('/updateMemberDetails/:id', updateMemberDetails);
@@ -83,6 +87,8 @@ exports.routes = (express, app) => {
     router.post('/excludeMemberFingerPrint', excludeMemberFingerPrint);
 
     router.post('/updateFingerPrint', updateFingerPrint);
+
+    router.post('/addMemberFaceRecognition', addMemberFaceRecognition);
 
     router.post('/startPackage', startPackage);
 
@@ -129,6 +135,8 @@ exports.routes = (express, app) => {
     router.post('/getFreezeHistory', getFreezeHistory);
 
     router.post('/removeMemberFreeze', removeMemberFreeze);
+
+    router.post('/cancelFreeze', cancelFreeze);
 
 
 

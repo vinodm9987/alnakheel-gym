@@ -25,4 +25,5 @@ exports.routes = (express, app) => {
 
 
     app.use('/api/announcement/', router);
+
 };

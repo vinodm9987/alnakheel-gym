@@ -1,8 +1,11 @@
-const { getAllShiftForAdmin, getAllShift, addShift, updateShift, getAllShiftByBranch } = require('../controller/shift/shift.controller');
+const { getAllShiftForAdmin, getAllShift,
+  addShift, updateShift, getAllShiftByBranch } = require('../controller/shift/shift.controller');
 
 
-const { getAllEmployeeShift, addEmployeeShift, updateEmployeeShift, getAllEmployeeShiftByIdAndBranch,
-  getAllEmployeeShiftByShiftAndBranchAndEmployee } = require('../controller/shift/employeeShift.controller');
+const { getAllEmployeeShift, addEmployeeShift, updateEmployeeShift,
+  getAllEmployeeShiftByIdAndBranch, getAllEmployeeShiftByShiftAndBranchAndEmployee } = require('../controller/shift/employeeShift.controller');
+
+
 
 exports.routes = (express, app) => {
 

@@ -1,11 +1,15 @@
-const { getAllUser, createAdmin, login, forgotPassword, updateSystemAdmin, getAllAdmin, changePassword, updateNotification,
-    addReactToken, getUserById, getAllUserFilterByDesignationAndSearch, resetPassword } = require('../controller/credential/credential.controller')
+const { getAllUser, createAdmin, login, logout, forgotPassword,
+    updateSystemAdmin, getAllAdmin, changePassword, updateNotification,
+    addReactToken, getUserById, getAllUserFilterByDesignationAndSearch,
+    resetPassword } = require('../controller/credential/credential.controller');
 
 exports.routes = (express, app) => {
 
     const router = express.Router();
 
     router.post('/login', login)
+
+    router.post('/logout', logout)
 
     router.get('/getAllUser', getAllUser)
 

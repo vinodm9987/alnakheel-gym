@@ -1,10 +1,13 @@
-const { getAllStocks, getAllStocksForAdmin, getStocksById, addStocks, updateStocks, updateStockStatus } = require('../controller/pointOfSales/stock.controller');
+const { getAllStocks, getAllStocksForAdmin, getStocksById,
+    addStocks, updateStocks, updateStockStatus } = require('../controller/pointOfSales/stock.controller');
 
 
-const { getAllStockSell, getStockSellById, addStockSell, updateStockSell, getOrderHistory, getCustomerOrderHistory } = require('../controller/pointOfSales/stockSells.controller');
+const { getAllStockSell, getStockSellById, addStockSell,
+    updateStockSell, getOrderHistory, getCustomerOrderHistory } = require('../controller/pointOfSales/stockSells.controller');
 
 
-const { addToCart, removeCart, getCartOfMember, updateCart, updateCartQuantity } = require('../controller/pointOfSales/memberPurchase.controller');
+const { addToCart, removeCart, getCartOfMember,
+    updateCart, updateCartQuantity } = require('../controller/pointOfSales/memberPurchase.controller');
 
 
 

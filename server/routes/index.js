@@ -10,4 +10,4 @@ module.exports.mountRoutes = (app) => {
             routes.routes(express, app)
         }
     })
-}
+};

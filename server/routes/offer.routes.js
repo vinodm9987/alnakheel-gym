@@ -1,4 +1,5 @@
-const { getAllOffer, getOfferById, addOffer, updateOffer, getAllOfferForAdmin } = require('../controller/offer/offer.controller')
+const { getAllOffer, getOfferById,
+    addOffer, updateOffer, getAllOfferForAdmin } = require('../controller/offer/offer.controller')
 
 
 exports.routes = (express, app) => {

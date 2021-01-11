@@ -1,4 +1,5 @@
-const { bookAppointment, getAppointmentRequests, getMemberAppointmentHistory, getMemberTraffics } = require('../controller/appointment/appointment.controller')
+const { bookAppointment, getAppointmentRequests,
+  getMemberAppointmentHistory, getMemberTraffics } = require('../controller/appointment/appointment.controller')
 
 
 exports.routes = (express, app) => {
