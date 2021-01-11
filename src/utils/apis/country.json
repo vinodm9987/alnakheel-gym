@@ -1,5 +1,11 @@
 [
     {
+        "code": "OTHER",
+        "unicode": "other",
+        "name": "Other",
+        "emoji": "other"
+    },
+    {
         "code": "AL",
         "unicode": "U+1F1E6 U+1F1F1",
         "name": "Albania",

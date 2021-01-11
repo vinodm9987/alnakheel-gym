@@ -1,8 +1,8 @@
-import { isValidPhoneNumber } from 'react-phone-number-input'
-import { store } from '../../store'
+import { isValidPhoneNumber } from 'react-phone-number-input';
+import { store } from '../../store';
 
 
-export const validator = (e, type, fieldName, error) => {
+export const validator = (e, type, fieldName, error, empty) => {
   var emailVer = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
   var numberVer = /^[0-9]*$/
   var value, valueE, valueD = {}
@@ -10,9 +10,13 @@ export const validator = (e, type, fieldName, error) => {
     value = {
       [type]: e.target.value
     }
-    if (e.target.value === '') {
+    if (e.target.value === '' && !empty) {
       valueE = {
         [type + 'E']: error ? error[0] || 'This field is required' : 'This field is required'
+      }
+    } else if (empty && !e.target.value) {
+      valueE = {
+        [type + 'E']: ''
       }
     } else {
       valueE = {
@@ -23,9 +27,13 @@ export const validator = (e, type, fieldName, error) => {
     value = {
       [type]: e.target.value
     }
-    if (e.target.value === '') {
+    if (e.target.value === '' && !empty) {
       valueE = {
         [type + 'E']: error ? error[0] || 'This field is required' : 'This field is required'
+      }
+    } else if (empty && !e.target.value) {
+      valueE = {
+        [type + 'E']: ''
       }
     } else {
       if (!numberVer.test(e.target.value)) {
@@ -42,9 +50,13 @@ export const validator = (e, type, fieldName, error) => {
     value = {
       [type]: e.target.value ? Math.abs(e.target.value) : e.target.value
     }
-    if (!e.target.value) {
+    if (!e.target.value && !empty) {
       valueE = {
         [type + 'E']: error ? error[0] || 'This field is required' : 'This field is required'
+      }
+    } else if (empty && !e.target.value) {
+      valueE = {
+        [type + 'E']: ''
       }
     } else {
       valueE = {
@@ -62,9 +74,13 @@ export const validator = (e, type, fieldName, error) => {
     value = {
       [type]: e.target.value
     }
-    if (e.target.value === '') {
+    if (e.target.value === '' && !empty) {
       valueE = {
         [type + 'E']: error ? error[0] || 'This field is required' : 'This field is required'
+      }
+    } else if (empty && !e.target.value) {
+      valueE = {
+        [type + 'E']: ''
       }
     } else {
       if (!emailVer.test(e.target.value)) {
@@ -313,4 +329,37 @@ window.dispatchWithDebounce = (fn, delay = 800) => {
     clearTimeout(inDebounce[fn.name]);
     inDebounce[fn.name] = setTimeout(() => store.dispatch(fn(args)), delay);
   }
+}
+
+
+export const minimiseOrderNo = (orderNo) => {
+  if (orderNo) {
+    return parseInt(orderNo.split('-').join('')).toString(36).toUpperCase()
+  } else {
+    return ''
+  }
+}
+
+
+export const getDataUri = (url, tabledData, reportName, fromDate, toDate, branchName, description, language, cb) => {
+  var image = new Image();
+  image.setAttribute('crossOrigin', 'anonymous'); //getting images from external domain
+
+  image.onload = function () {
+    var canvas = document.createElement('canvas');
+    canvas.width = this.naturalWidth;
+    canvas.height = this.naturalHeight;
+
+    //next three lines for white background in case png has a transparent background
+    var ctx = canvas.getContext('2d');
+    ctx.fillStyle = '#fff';  /// set white fill style
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    canvas.getContext('2d').drawImage(this, 0, 0);
+
+    url ? cb(canvas.toDataURL('image/jpeg'), tabledData, reportName, fromDate, toDate, branchName, description, language)
+      : cb(null, tabledData, reportName, fromDate, toDate, branchName, description, language)
+  };
+
+  image.src = url;
 }

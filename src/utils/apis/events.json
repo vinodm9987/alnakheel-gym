@@ -1,0 +1,1260 @@
+{
+  "records": [
+    {
+      "code": 3352,
+      "name": "REC_FINISHED_FAIL",
+      "description": "Recording failed",
+      "alertable": true,
+      "enable_alert": false
+    },
+    {
+      "code": 3354,
+      "name": "REC_FINISHED_FAIL_NO_RETRY",
+      "description": "Recording failed - End of Retry",
+      "alertable": true,
+      "enable_alert": false
+    },
+    {
+      "code": 3462,
+      "name": "SNP_SHOT_FINISHED_FAIL",
+      "description": "Snapshot failed",
+      "alertable": true,
+      "enable_alert": false
+    },
+    {
+      "code": 3464,
+      "name": "SNP_SHOT_FINISHED_FAIL_NO_RETRY",
+      "description": "Snapshot failed - End of Retry",
+      "alertable": true,
+      "enable_alert": false
+    },
+    {
+      "code": 4095,
+      "name": "DEVICE_DISCONNECT",
+      "description": "Device Disconnection Detected",
+      "alertable": true,
+      "enable_alert": false
+    },
+    {
+      "code": 4097,
+      "name": "VERIFY_SUCCESS_ID_PIN",
+      "alertable": false,
+      "enable_alert": false,
+      "description": "1:1 authentication succeeded (ID + PIN)"
+    },
+    {
+      "code": 4098,
+      "name": "VERIFY_SUCCESS_ID_FINGERPRINT",
+      "alertable": false,
+      "enable_alert": false,
+      "description": "1:1 authentication succeeded (ID + Fingerprint)"
+    },
+    {
+      "code": 4099,
+      "name": "VERIFY_SUCCESS_ID_FINGERPRINT_PIN",
+      "alertable": false,
+      "enable_alert": false,
+      "description": "1:1 authentication succeeded (ID + Fingerprint + PIN)"
+    },
+    {
+      "code": 4100,
+      "name": "VERIFY_SUCCESS_ID_FACE",
+      "alertable": false,
+      "enable_alert": false,
+      "description": "1:1 authentication succeeded (ID + Face)"
+    },
+    {
+      "code": 4101,
+      "name": "VERIFY_SUCCESS_ID_FACE_PIN",
+      "alertable": false,
+      "enable_alert": false,
+      "description": "1:1 authentication succeeded (ID + Face + PIN)"
+    },
+    {
+      "code": 4102,
+      "name": "VERIFY_SUCCESS_CARD",
+      "alertable": false,
+      "enable_alert": false,
+      "description": "1:1 authentication succeeded (Card)"
+    },
+    {
+      "code": 4103,
+      "name": "VERIFY_SUCCESS_CARD_PIN",
+      "alertable": false,
+      "enable_alert": false,
+      "description": "1:1 authentication succeeded (Card + PIN)"
+    },
+    {
+      "code": 4104,
+      "name": "VERIFY_SUCCESS_CARD_FINGERPRINT",
+      "alertable": false,
+      "enable_alert": false,
+      "description": "1:1 authentication succeeded (Card + Fingerprint)"
+    },
+    {
+      "code": 4105,
+      "name": "VERIFY_SUCCESS_CARD_FINGERPRINT_PIN",
+      "alertable": false,
+      "enable_alert": false,
+      "description": "1:1 authentication succeeded (Card + Fingerprint + PIN)"
+    },
+    {
+      "code": 4106,
+      "name": "VERIFY_SUCCESS_CARD_FACE",
+      "alertable": false,
+      "enable_alert": false,
+      "description": "1:1 authentication succeeded (Card + Face)"
+    },
+    {
+      "code": 4107,
+      "name": "VERIFY_SUCCESS_CARD_FACE_PIN",
+      "alertable": false,
+      "enable_alert": false,
+      "description": "1:1 authentication succeeded (Card + Face + PIN)"
+    },
+    {
+      "code": 4353,
+      "name": "VERIFY_FAIL_ID",
+      "alertable": true,
+      "enable_alert": false,
+      "description": "1:1 authentication failed (ID)"
+    },
+    {
+      "code": 4354,
+      "name": "VERIFY_FAIL_CARD",
+      "alertable": true,
+      "enable_alert": false,
+      "description": "1:1 authentication failed (Card)"
+    },
+    {
+      "code": 4355,
+      "name": "VERIFY_FAIL_PIN",
+      "alertable": true,
+      "enable_alert": false,
+      "description": "1:1 authentication failed (PIN)"
+    },
+    {
+      "code": 4356,
+      "name": "VERIFY_FAIL_FINGERPRINT",
+      "alertable": true,
+      "enable_alert": false,
+      "description": "1:1 authentication failed (Fingerprint)"
+    },
+    {
+      "code": 4357,
+      "name": "VERIFY_FAIL_FACE",
+      "alertable": true,
+      "enable_alert": false,
+      "description": "1:1 authentication failed (Face)"
+    },
+    {
+      "code": 4609,
+      "name": "VERIFY_DURESS_ID_PIN",
+      "alertable": true,
+      "enable_alert": true,
+      "description": "1:1 duress authentication succeeded (ID + PIN)"
+    },
+    {
+      "code": 4610,
+      "name": "VERIFY_DURESS_ID_FINGERPRINT",
+      "alertable": true,
+      "enable_alert": true,
+      "description": "1:1 duress authentication succeeded (ID + Fingerprint)"
+    },
+    {
+      "code": 4611,
+      "name": "VERIFY_DURESS_ID_FINGERPRINT_PIN",
+      "alertable": true,
+      "enable_alert": true,
+      "description": "1:1 duress authentication succeeded (ID + Fingerprint + PIN)"
+    },
+    {
+      "code": 4612,
+      "name": "VERIFY_DURESS_ID_FACE",
+      "alertable": true,
+      "enable_alert": true,
+      "description": "1:1 duress authentication succeeded (ID + Face)"
+    },
+    {
+      "code": 4613,
+      "name": "VERIFY_DURESS_ID_FACE_PIN",
+      "alertable": true,
+      "enable_alert": true,
+      "description": "1:1 duress authentication succeeded (ID + Face + PIN)"
+    },
+    {
+      "code": 4614,
+      "name": "VERIFY_DURESS_CARD",
+      "alertable": true,
+      "enable_alert": true,
+      "description": "1:1 duress authentication succeeded (Card)"
+    },
+    {
+      "code": 4615,
+      "name": "VERIFY_DURESS_CARD_PIN",
+      "alertable": true,
+      "enable_alert": true,
+      "description": "1:1 duress authentication succeeded (Card + PIN)"
+    },
+    {
+      "code": 4616,
+      "name": "VERIFY_DURESS_CARD_FINGERPRINT",
+      "alertable": true,
+      "enable_alert": true,
+      "description": "1:1 duress authentication succeeded (Card + Fingerprint)"
+    },
+    {
+      "code": 4617,
+      "name": "VERIFY_DURESS_CARD_FINGERPRINT_PIN",
+      "alertable": true,
+      "enable_alert": true,
+      "description": "1:1 duress authentication succeeded (Card + Fingerprint + PIN)"
+    },
+    {
+      "code": 4618,
+      "name": "VERIFY_DURESS_CARD_FACE",
+      "alertable": true,
+      "enable_alert": true,
+      "description": "1:1 duress authentication succeeded (Card + Face)"
+    },
+    {
+      "code": 4619,
+      "name": "VERIFY_DURESS_CARD_FACE_PIN",
+      "alertable": true,
+      "enable_alert": true,
+      "description": "1:1 duress authentication succeeded (Card + Face + PIN)"
+    },
+    {
+      "code": 4865,
+      "name": "IDENTIFY_SUCCESS_FINGERPRINT",
+      "alertable": false,
+      "enable_alert": false,
+      "description": "1:N authentication succeeded (Fingerprint)"
+    },
+    {
+      "code": 4866,
+      "name": "IDENTIFY_SUCCESS_FINGERPRINT_PIN",
+      "alertable": false,
+      "enable_alert": false,
+      "description": "1:N authentication succeeded (Fingerprint + PIN)"
+    },
+    {
+      "code": 4867,
+      "name": "IDENTIFY_SUCCESS_FACE",
+      "alertable": false,
+      "enable_alert": false,
+      "description": "1:N authentication succeeded (Face)"
+    },
+    {
+      "code": 4868,
+      "name": "IDENTIFY_SUCCESS_FACE_PIN",
+      "alertable": false,
+      "enable_alert": false,
+      "description": "1:N authentication succeeded (Face + PIN)"
+    },
+    {
+      "code": 5123,
+      "name": "IDENTIFY_FAIL_PIN",
+      "alertable": true,
+      "enable_alert": false,
+      "description": "1:N authentication failed (PIN)"
+    },
+    {
+      "code": 5124,
+      "name": "IDENTIFY_FAIL_FINGERPRINT",
+      "alertable": true,
+      "enable_alert": false,
+      "description": "1:N authentication failed (Fingerprint)"
+    },
+    {
+      "code": 5125,
+      "name": "IDENTIFY_FAIL_FACE",
+      "alertable": true,
+      "enable_alert": false,
+      "description": "1:N authentication failed (Face)"
+    },
+    {
+      "code": 5377,
+      "name": "IDENTIFY_DURESS_FINGERPRINT",
+      "alertable": true,
+      "enable_alert": true,
+      "description": "1:N duress authentication succeeded (Fingerprint)"
+    },
+    {
+      "code": 5378,
+      "name": "IDENTIFY_DURESS_FINGERPRINT_PIN",
+      "alertable": true,
+      "enable_alert": true,
+      "description": "1:N duress authentication succeeded (Fingerprint + PIN)"
+    },
+    {
+      "code": 5379,
+      "name": "IDENTIFY_DURESS_FACE",
+      "alertable": true,
+      "enable_alert": true,
+      "description": "1:N duress authentication succeeded (Face)"
+    },
+    {
+      "code": 5380,
+      "name": "IDENTIFY_DURESS_FACE_PIN",
+      "alertable": true,
+      "enable_alert": true,
+      "description": "1:N duress authentication succeeded (Face + PIN)"
+    },
+    {
+      "code": 5889,
+      "name": "DUAL_AUTH_FAIL_TIMEOUT",
+      "alertable": false,
+      "enable_alert": false,
+      "description": "Dual authentication failed (Timeout)"
+    },
+    {
+      "code": 5890,
+      "name": "DUAL_AUTH_FAIL_ACCESS_GROUP",
+      "alertable": false,
+      "enable_alert": false,
+      "description": "Dual authentication failed (Invalid access group)"
+    },
+    {
+      "code": 6145,
+      "name": "AUTH_FAILED_INVALID_AUTH_MODE",
+      "description": "Authentication failed (Invalid authentication mode)",
+      "alertable": false,
+      "enable_alert": false
+    },
+    {
+      "code": 6146,
+      "name": "AUTH_FAILED_INVALID_CREDENTIAL",
+      "description": "Authentication failed (Invalid credential)",
+      "alertable": false,
+      "enable_alert": false
+    },
+    {
+      "code": 6147,
+      "name": "AUTH_FAILED_TIMEOUT",
+      "description": "Authentication failed (Timeout)",
+      "alertable": false,
+      "enable_alert": false
+    },
+    {
+      "code": 6148,
+      "name": "AUTH_FAILED_MATCHING_REFUSAL",
+      "description": "Authentication failed. (Server matching is off)",
+      "alertable": false,
+      "enable_alert": false
+    },
+    {
+      "code": 6401,
+      "name": "ACCESS_DENIED_ACCESS_GROUP",
+      "description": "Access denied (Invalid access group)",
+      "alertable": true,
+      "enable_alert": true
+    },
+    {
+      "code": 6402,
+      "name": "ACCESS_DENIED_DISABLED",
+      "description": "Access denied (Disabled user)",
+      "alertable": true,
+      "enable_alert": true
+    },
+    {
+      "code": 6403,
+      "name": "ACCESS_DENIED_EXPIRED",
+      "description": "Access denied(Invalid period)",
+      "alertable": true,
+      "enable_alert": true
+    },
+    {
+      "code": 6404,
+      "name": "ACCESS_DENIED_ON_BLACKLIST",
+      "description": "Access denied (Blacklist)",
+      "alertable": true,
+      "enable_alert": true
+    },
+    {
+      "code": 6405,
+      "name": "ACCESS_DENIED_APB",
+      "description": "Access denied (Hard Anti-passback)",
+      "alertable": true,
+      "enable_alert": true
+    },
+    {
+      "code": 6406,
+      "name": "ACCESS_DENIED_TIMED_APB",
+      "description": "Access denied (Timed anti-passback)",
+      "alertable": false,
+      "enable_alert": false
+    },
+    {
+      "code": 6407,
+      "name": "ACCESS_DENIED_FORCED_LOCK_SCHEDULE",
+      "description": "Access denied (Forced lock schedule)",
+      "alertable": true,
+      "enable_alert": true
+    },
+    {
+      "code": 6408,
+      "name": "ACCESS_EXCUSED_SOFT_APB",
+      "description": "Access denied (Soft anti-passback)",
+      "alertable": true,
+      "enable_alert": true
+    },
+    {
+      "code": 6409,
+      "name": "ACCESS_EXCUSED_SOFT_TIMED_APB",
+      "description": "Access denied (Soft timed anti-passback)",
+      "alertable": false,
+      "enable_alert": false
+    },
+    {
+      "code": 6410,
+      "name": "ACCESS_DEVICE_FAILED_TO_FACE_DETECT",
+      "description": "Access denied (Face detection failure)",
+      "alertable": false,
+      "enable_alert": false
+    },
+    {
+      "code": 6411,
+      "name": "ACCESS_DENIED_FAILED_TO_CAMERA_CAPTURE",
+      "description": "Access denied (Capture failure)",
+      "alertable": false,
+      "enable_alert": false
+    },
+    {
+      "code": 6412,
+      "name": "FAKE_FINGERPRINT_DETECTED",
+      "description": "Fake Fingerprint Detected",
+      "alertable": true,
+      "enable_alert": true
+    },
+    {
+      "code": 6414,
+      "name": "ACCESS_DENIED_INTRUSION_ALARM",
+      "alertable": false,
+      "enable_alert": false,
+      "description": "Intrusion alarm access denied"
+    },
+    {
+      "code": 6415,
+      "name": "ACCESS_DENIED_INTERLOCK_ALARM",
+      "alertable": false,
+      "enable_alert": false,
+      "description": "Access denied (Interlock)"
+    },
+    {
+      "code": 6418,
+      "name": "ACCESS_DENIED_ANTI_TAILGATING_DEVICE",
+      "description": "Access Denied (Anti-tailgating)",
+      "alertable": true,
+      "enable_alert": false
+    },
+    {
+      "code": 8192,
+      "name": "ENROLL_SUCCESS",
+      "description": "User enrollment succeeded",
+      "alertable": false,
+      "enable_alert": false
+    },
+    {
+      "code": 8448,
+      "name": "ENROLL_FAIL",
+      "description": "User enrollment failed",
+      "alertable": false,
+      "enable_alert": false
+    },
+    {
+      "code": 8704,
+      "name": "UPDATE_SUCCESS",
+      "description": "User update succeeded",
+      "alertable": false,
+      "enable_alert": false
+    },
+    {
+      "code": 8960,
+      "name": "UPDATE_FAIL",
+      "description": "User update failed",
+      "alertable": false,
+      "enable_alert": false
+    },
+    {
+      "code": 9216,
+      "name": "DELETE_SUCCESS",
+      "description": "User deletion succeeded",
+      "alertable": false,
+      "enable_alert": false
+    },
+    {
+      "code": 9472,
+      "name": "DELETE_FAIL",
+      "description": "User deletion failed",
+      "alertable": false,
+      "enable_alert": false
+    },
+    {
+      "code": 9728,
+      "name": "DELETE_ALL_SUCCESS",
+      "description": "All user deletion succeeded",
+      "alertable": false,
+      "enable_alert": false
+    },
+    {
+      "code": 10242,
+      "name": "DUPLICATE_CARD",
+      "alertable": false,
+      "enable_alert": false,
+      "description": "Duplicate Card"
+    },
+    {
+      "code": 10244,
+      "name": "DUPLICATE_FINGERPRINT",
+      "alertable": false,
+      "enable_alert": false,
+      "description": "Duplicate Fingerprint"
+    },
+    {
+      "code": 10245,
+      "name": "DUPLICATE_FACE",
+      "alertable": false,
+      "enable_alert": false,
+      "description": "Duplicate Face"
+    },
+    {
+      "code": 12288,
+      "name": "SYSTEM_RESET",
+      "description": "Device restarted",
+      "alertable": true,
+      "enable_alert": false
+    },
+    {
+      "code": 12544,
+      "name": "SYSTEM_STARTED",
+      "description": "Device started",
+      "alertable": false,
+      "enable_alert": false
+    },
+    {
+      "code": 12800,
+      "name": "TIME_SET",
+      "description": "Device time changed",
+      "alertable": false,
+      "enable_alert": false
+    },
+    {
+      "code": 12801,
+      "name": "TIME_SET_TIME_ZONE",
+      "description": "Time-zone changed",
+      "alertable": false,
+      "enable_alert": false
+    },
+    {
+      "code": 12802,
+      "name": "DST_APPLIED",
+      "description": "DST applied",
+      "alertable": false,
+      "enable_alert": false
+    },
+    {
+      "code": 13056,
+      "name": "LINK_CONNECTED",
+      "description": "Network connected",
+      "alertable": false,
+      "enable_alert": false
+    },
+    {
+      "code": 13312,
+      "name": "LINK_DISCONNECTED",
+      "description": "Network disconnected",
+      "alertable": false,
+      "enable_alert": false
+    },
+    {
+      "code": 13568,
+      "name": "DHCP_SUCCESS",
+      "description": "DHCP connected",
+      "alertable": false,
+      "enable_alert": false
+    },
+    {
+      "code": 13824,
+      "name": "ADMIN_MENU",
+      "description": "Administrator menu entered",
+      "alertable": false,
+      "enable_alert": false
+    },
+    {
+      "code": 14080,
+      "name": "UI_LOCKED",
+      "description": "Device locked",
+      "alertable": false,
+      "enable_alert": false
+    },
+    {
+      "code": 14336,
+      "name": "UI_UNLOCKED",
+      "description": "Device unlocked",
+      "alertable": false,
+      "enable_alert": false
+    },
+    {
+      "code": 14592,
+      "name": "COMM_LOCKED",
+      "description": "BioStar communication locked",
+      "alertable": false,
+      "enable_alert": false
+    },
+    {
+      "code": 14848,
+      "name": "COMM_UNLOCKED",
+      "description": "BioStar communication unlocked",
+      "alertable": false,
+      "enable_alert": false
+    },
+    {
+      "code": 15104,
+      "name": "TCP_CONNECTED",
+      "description": "BioStar connected",
+      "alertable": false,
+      "enable_alert": false
+    },
+    {
+      "code": 15360,
+      "name": "TCP_DISCONNECTED",
+      "description": "BioStar disconnected",
+      "alertable": false,
+      "enable_alert": false
+    },
+    {
+      "code": 15616,
+      "name": "RS485_CONNECTED",
+      "description": "RS-485 connected",
+      "alertable": false,
+      "enable_alert": false
+    },
+    {
+      "code": 15872,
+      "name": "RS485_DISCONNECTED",
+      "description": "RS-485 disconnected",
+      "alertable": true,
+      "enable_alert": true
+    },
+    {
+      "code": 16128,
+      "name": "INPUT_DETECTED",
+      "description": "Input detected",
+      "alertable": false,
+      "enable_alert": false
+    },
+    {
+      "code": 16384,
+      "name": "TAMPER_ON",
+      "alertable": true,
+      "enable_alert": true,
+      "description": "Tamper on"
+    },
+    {
+      "code": 16640,
+      "name": "TAMPER_OFF",
+      "alertable": false,
+      "enable_alert": false,
+      "description": "Tamper off"
+    },
+    {
+      "code": 16896,
+      "name": "EVENT_LOG_CLEARED",
+      "description": "Event log cleared",
+      "alertable": false,
+      "enable_alert": false
+    },
+    {
+      "code": 17152,
+      "name": "FIRMWARE_UPGRADED",
+      "alertable": false,
+      "enable_alert": false,
+      "description": "Firmware upgrade succeeded"
+    },
+    {
+      "code": 17408,
+      "name": "RESOURCE_UPGRADED",
+      "alertable": false,
+      "enable_alert": false,
+      "description": "Resource upgrade succeeded"
+    },
+    {
+      "code": 17664,
+      "name": "CONFIG_RESET",
+      "alertable": false,
+      "enable_alert": false,
+      "description": "Device reset"
+    },
+    {
+      "code": 17665,
+      "name": "DATABASE_RESET",
+      "description": "Database Reset",
+      "alertable": false,
+      "enable_alert": false
+    },
+    {
+      "code": 17666,
+      "name": "FACTORY_RESET",
+      "description": "Factory Reset",
+      "alertable": false,
+      "enable_alert": false
+    },
+    {
+      "code": 17920,
+      "name": "SUPERVISED_INPUT_SHORT",
+      "description": "Supervised Input (Short)",
+      "alertable": true,
+      "enable_alert": false
+    },
+    {
+      "code": 18176,
+      "name": "SUPERVISED_INPUT_OPEN",
+      "description": "Supervised Input (Open)",
+      "alertable": true,
+      "enable_alert": false
+    },
+    {
+      "code": 18432,
+      "name": "AC_FAIL",
+      "description": "AC Power Failure",
+      "alertable": true,
+      "enable_alert": true
+    },
+    {
+      "code": 18688,
+      "name": "AC_SUCCESS",
+      "description": "AC Power Success",
+      "alertable": false,
+      "enable_alert": false
+    },
+    {
+      "code": 20480,
+      "name": "UNLOCKED",
+      "description": "Door unlocked",
+      "alertable": false,
+      "enable_alert": false
+    },
+    {
+      "code": 20736,
+      "name": "LOCKED",
+      "description": "Door locked",
+      "alertable": false,
+      "enable_alert": false
+    },
+    {
+      "code": 20992,
+      "name": "OPEN",
+      "description": "Door opened",
+      "alertable": false,
+      "enable_alert": false
+    },
+    {
+      "code": 21248,
+      "name": "CLOSE",
+      "description": "Door closed",
+      "alertable": false,
+      "enable_alert": false
+    },
+    {
+      "code": 21504,
+      "name": "FORCED_OPEN",
+      "description": "Forced door opened",
+      "alertable": true,
+      "enable_alert": true
+    },
+    {
+      "code": 21760,
+      "name": "HELD_OPEN",
+      "description": "Held door opened",
+      "alertable": true,
+      "enable_alert": true
+    },
+    {
+      "code": 22016,
+      "name": "FORCED_OPEN_ALARM",
+      "alertable": true,
+      "enable_alert": false,
+      "description": "Forced door open alarmed"
+    },
+    {
+      "code": 22272,
+      "name": "FORCED_OPEN_ALARM_CLEAR",
+      "alertable": false,
+      "enable_alert": false,
+      "description": "Forced door open cleared"
+    },
+    {
+      "code": 22528,
+      "name": "HELD_OPEN_ALARM",
+      "alertable": true,
+      "enable_alert": false,
+      "description": "Held door open alarmed"
+    },
+    {
+      "code": 22784,
+      "name": "HELD_OPEN_ALARM_CLEAR",
+      "alertable": false,
+      "enable_alert": false,
+      "description": "Held door open cleared"
+    },
+    {
+      "code": 23040,
+      "name": "DOOR_APB_ALARM",
+      "alertable": false,
+      "enable_alert": false,
+      "description": "Anti-passback alarmed"
+    },
+    {
+      "code": 23296,
+      "name": "DOOR_APB_ALARM_CLEAR",
+      "alertable": false,
+      "enable_alert": false,
+      "description": "Anti-passback cleared"
+    },
+    {
+      "code": 23553,
+      "name": "RELEASE_DOOR_BY_SCHEDULE",
+      "description": "Door release request by schedule",
+      "alertable": false,
+      "enable_alert": false
+    },
+    {
+      "code": 23554,
+      "name": "RELEASE_DOOR_BY_EMERGENCY",
+      "description": "Door release request by fire alarm",
+      "alertable": false,
+      "enable_alert": false
+    },
+    {
+      "code": 23556,
+      "name": "RELEASE_DOOR_BY_OPERATOR",
+      "description": "Door release request by operator",
+      "alertable": false,
+      "enable_alert": false
+    },
+    {
+      "code": 23809,
+      "name": "LOCK_DOOR_BY_SCHEDULE",
+      "description": "Door lock request by schedule",
+      "alertable": false,
+      "enable_alert": false
+    },
+    {
+      "code": 23810,
+      "name": "LOCK_DOOR_BY_EMERGENCY",
+      "description": "Door lock request by fire alarm",
+      "alertable": false,
+      "enable_alert": false
+    },
+    {
+      "code": 23812,
+      "name": "LOCK_DOOR_BY_OPERATOR",
+      "description": "Door lock request by operator",
+      "alertable": false,
+      "enable_alert": false
+    },
+    {
+      "code": 24065,
+      "name": "UNLOCK_DOOR_BY_SCHEDULE",
+      "description": "Door unlock request by schedule",
+      "alertable": false,
+      "enable_alert": false
+    },
+    {
+      "code": 24066,
+      "name": "UNLOCK_DOOR_BY_EMERGENCY",
+      "description": "Door unlock request by fire alarm",
+      "alertable": false,
+      "enable_alert": false
+    },
+    {
+      "code": 24068,
+      "name": "UNLOCK_DOOR_BY_OPERATOR",
+      "description": "Door unlock request by operator",
+      "alertable": false,
+      "enable_alert": false
+    },
+    {
+      "code": 24576,
+      "name": "APB_VIOLATION",
+      "description": "Anti-passback violation detected",
+      "alertable": false,
+      "enable_alert": false
+    },
+    {
+      "code": 24577,
+      "name": "APB_VIOLATION_HARD",
+      "description": "Hard anti-passback violation detected",
+      "alertable": false,
+      "enable_alert": false
+    },
+    {
+      "code": 24578,
+      "name": "APB_VIOLATION_SOFT",
+      "description": "Soft anti-passback violation detected",
+      "alertable": false,
+      "enable_alert": false
+    },
+    {
+      "code": 24832,
+      "name": "APB_ALARM",
+      "description": "Anti-passback zone alarm detected",
+      "alertable": true,
+      "enable_alert": true
+    },
+    {
+      "code": 25088,
+      "name": "APB_ALARM_CLEAR",
+      "description": "Anti-passback zone alarm cleared",
+      "alertable": false,
+      "enable_alert": false
+    },
+    {
+      "code": 25344,
+      "name": "TIMED_APB_VIOLATION",
+      "description": "Timed anti-passback violation detected",
+      "alertable": false,
+      "enable_alert": false
+    },
+    {
+      "code": 25600,
+      "name": "TIMED_APB_ALARM",
+      "description": "Timed anti-passback zone alarm detected",
+      "alertable": false,
+      "enable_alert": false
+    },
+    {
+      "code": 25856,
+      "name": "TIMED_APB_ALARM_CLEAR",
+      "description": "Timed anti-passback zone alarm cleared",
+      "alertable": false,
+      "enable_alert": false
+    },
+    {
+      "code": 26112,
+      "name": "FIRE_ALARM_INPUT",
+      "description": "Fire alarm input detected.",
+      "alertable": false,
+      "enable_alert": false
+    },
+    {
+      "code": 26368,
+      "name": "FIRE_ALARM",
+      "description": "Fire alarm zone alarm detected",
+      "alertable": true,
+      "enable_alert": true
+    },
+    {
+      "code": 26624,
+      "name": "FIRE_ALARM_CLEAR",
+      "description": "Fire alarm zone alarm cleared",
+      "alertable": false,
+      "enable_alert": false
+    },
+    {
+      "code": 26880,
+      "name": "FORCED_LOCK_VIOLATION",
+      "description": "Scheduled lock violation detected",
+      "alertable": false,
+      "enable_alert": false
+    },
+    {
+      "code": 27136,
+      "name": "FORCED_LOCK_START",
+      "description": "Scheduled lock zone started",
+      "alertable": false,
+      "enable_alert": false
+    },
+    {
+      "code": 27392,
+      "name": "FORCED_LOCK_END",
+      "description": "Scheduled lock zone ended",
+      "alertable": false,
+      "enable_alert": false
+    },
+    {
+      "code": 27648,
+      "name": "FORCED_UNLOCK_START",
+      "description": "Scheduled unlock zone started",
+      "alertable": false,
+      "enable_alert": false
+    },
+    {
+      "code": 27904,
+      "name": "FORCED_UNLOCK_END",
+      "description": "Scheduled unlock zone ended",
+      "alertable": false,
+      "enable_alert": false
+    },
+    {
+      "code": 28160,
+      "name": "FORCED_LOCK_ALARM",
+      "description": "Scheduled lock zone alarm detected",
+      "alertable": true,
+      "enable_alert": true
+    },
+    {
+      "code": 28416,
+      "name": "FORCED_LOCK_ALARM_CLEAR",
+      "description": "Scheduled lock zone alarm cleared",
+      "alertable": false,
+      "enable_alert": false
+    },
+    {
+      "code": 28672,
+      "name": "ELEVATOR_ACTIVATED",
+      "description": "Elevator activated",
+      "alertable": false,
+      "enable_alert": false
+    },
+    {
+      "code": 28928,
+      "name": "ELEVATOR_DEACTIVATED",
+      "description": "Elevator deactivated",
+      "alertable": false,
+      "enable_alert": false
+    },
+    {
+      "code": 29185,
+      "name": "RELEASE_ELEVATOR_BY_SCHEDULE",
+      "description": "Release by schedule",
+      "alertable": false,
+      "enable_alert": false
+    },
+    {
+      "code": 29186,
+      "name": "RELEASE_ELEVATOR_BY_EMERGENCY",
+      "description": "Release by emergency",
+      "alertable": false,
+      "enable_alert": false
+    },
+    {
+      "code": 29188,
+      "name": "RELEASE_ELEVATOR_BY_OPERATOR",
+      "description": "Release by operator",
+      "alertable": false,
+      "enable_alert": false
+    },
+    {
+      "code": 29441,
+      "name": "ACTIVATE_ELEVATOR_BY_SCHEDULE",
+      "description": "Unlock by operator",
+      "alertable": false,
+      "enable_alert": false
+    },
+    {
+      "code": 29442,
+      "name": "ACTIVATE_ELEVATOR_BY_EMERGENCY",
+      "description": "Unlock by emergency",
+      "alertable": false,
+      "enable_alert": false
+    },
+    {
+      "code": 29444,
+      "name": "ACTIVATE_ELEVATOR_BY_OPERATOR",
+      "description": "Unlock by operator",
+      "alertable": false,
+      "enable_alert": false
+    },
+    {
+      "code": 29697,
+      "name": "DEACTIVATE_ELEVATOR_BY_SCHEDULE",
+      "description": "Lock by schedule",
+      "alertable": false,
+      "enable_alert": false
+    },
+    {
+      "code": 29698,
+      "name": "DEACTIVATE_ELEVATOR_BY_EMERGENCY",
+      "description": "Lock by emergency",
+      "alertable": false,
+      "enable_alert": false
+    },
+    {
+      "code": 29700,
+      "name": "DEACTIVATE_ELEVATOR_BY_OPERATOR",
+      "description": "Lock by operator",
+      "alertable": false,
+      "enable_alert": false
+    },
+    {
+      "code": 29952,
+      "name": "ELEVATOR_ALARM_INPUT",
+      "description": "Elevator alarm input detected",
+      "alertable": false,
+      "enable_alert": false
+    },
+    {
+      "code": 30208,
+      "name": "ELEVATOR_ALARM",
+      "description": "Elevator alarm",
+      "alertable": false,
+      "enable_alert": false
+    },
+    {
+      "code": 30464,
+      "name": "ELEVATOR_ALARM_CLEAR",
+      "description": "Elevator alarm cleared",
+      "alertable": false,
+      "enable_alert": false
+    },
+    {
+      "code": 30720,
+      "name": "ALL_FLOOR_ACTIVATED",
+      "description": "Enable all floor relays",
+      "alertable": true,
+      "enable_alert": true
+    },
+    {
+      "code": 30976,
+      "name": "ALL_FLOOR_DEACTIVATED",
+      "description": "Disable all floor relays",
+      "alertable": false,
+      "enable_alert": false
+    },
+    {
+      "code": 36864,
+      "name": "ZONE_INTRUSION_ALARM_VIOLATION",
+      "alertable": false,
+      "enable_alert": false,
+      "description": "Access denied (Armed status)"
+    },
+    {
+      "code": 37120,
+      "name": "ZONE_INTRUSION_ALARM_ARM_GRANTED",
+      "alertable": false,
+      "enable_alert": false,
+      "description": "Arming auth success"
+    },
+    {
+      "code": 37376,
+      "name": "ZONE_INTRUSION_ALARM_ARM_SUCCESS",
+      "alertable": false,
+      "enable_alert": false,
+      "description": "Armed"
+    },
+    {
+      "code": 37632,
+      "name": "ZONE_INTRUSION_ALARM_ARM_FAIL",
+      "alertable": false,
+      "enable_alert": false,
+      "description": "Arming failed"
+    },
+    {
+      "code": 37888,
+      "name": "ZONE_INTRUSION_ALARM_DISARM_ARM_GRANTED",
+      "alertable": false,
+      "enable_alert": false,
+      "description": "Disarming auth success"
+    },
+    {
+      "code": 38144,
+      "name": "ZONE_INTRUSION_ALARM_DISARM_ARM_SUCCESS",
+      "alertable": false,
+      "enable_alert": false,
+      "description": "Disarmed"
+    },
+    {
+      "code": 38912,
+      "name": "ZONE_INTRUSION_ALARM",
+      "alertable": true,
+      "enable_alert": true,
+      "description": "Intrusion alarm detected"
+    },
+    {
+      "code": 39168,
+      "name": "ZONE_INTRUSION_ALARM_CLEAR",
+      "alertable": false,
+      "enable_alert": false,
+      "description": "Intrusion alarm cleared"
+    },
+    {
+      "code": 39424,
+      "name": "ZONE_INTRUSION_ALARM_ARM_DENIED",
+      "alertable": false,
+      "enable_alert": false,
+      "description": "Arming auth failed"
+    },
+    {
+      "code": 39680,
+      "name": "ZONE_INTRUSION_ALARM_DISARM_DENIED",
+      "alertable": false,
+      "enable_alert": false,
+      "description": "Disarming auth failed"
+    },
+    {
+      "code": 40961,
+      "name": "ZONE_INTERLOCK_VIOLATION_DOOR_OPEN",
+      "alertable": false,
+      "enable_alert": false,
+      "description": "Interlock door open denied"
+    },
+    {
+      "code": 40962,
+      "name": "ZONE_INTERLOCK_VIOLATION_INPUT_DETECT",
+      "alertable": false,
+      "enable_alert": false,
+      "description": "Interlock door open denied (Occupied)"
+    },
+    {
+      "code": 41216,
+      "name": "ZONE_INTERLOCK_ALARM",
+      "alertable": false,
+      "enable_alert": false,
+      "description": "Interlock zone alarm"
+    },
+    {
+      "code": 41472,
+      "name": "ZONE_INTERLOCK_ALARM_DOOR_OPEN_DENIED",
+      "alertable": true,
+      "enable_alert": true,
+      "description": "Interlock door open denied alarm"
+    },
+    {
+      "code": 41728,
+      "name": "ZONE_INTERLOCK_ALARM_INDOOR_DENIED",
+      "alertable": true,
+      "enable_alert": true,
+      "description": "Interlock door open denied alarm (Occupied)"
+    },
+    {
+      "code": 41984,
+      "name": "ZONE_INTERLOCK_ALARM_CLEAR",
+      "alertable": false,
+      "enable_alert": false,
+      "description": "Interlock zone Alarm Clear"
+    },
+    {
+      "code": 45056,
+      "name": "ZONE_MUSTER_VIOLATION",
+      "alertable": false,
+      "enable_alert": false,
+      "description": "Muster zone time limit violation"
+    },
+    {
+      "code": 45312,
+      "name": "ZONE_MUSTER_ALARM",
+      "alertable": true,
+      "enable_alert": true,
+      "description": "Muster zone alarm detected"
+    },
+    {
+      "code": 45568,
+      "name": "ZONE_MUSTER_ALARM_CLEAR",
+      "alertable": false,
+      "enable_alert": false,
+      "description": "Muster zone alarm cleared"
+    },
+    {
+      "code": 49152,
+      "name": "DEVICE_USER_SYNC_TO_SERVER_FAIL",
+      "alertable": false,
+      "enable_alert": false,
+      "description": "Fail to save to the server DB"
+    }
+  ],
+  "total": 179,
+  "message": "Processed Successfully",
+  "status_code": "SUCCESSFUL"
+}

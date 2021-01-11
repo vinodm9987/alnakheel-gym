@@ -316,6 +316,23 @@
           "Done By"
         ],
         "description": "This report will show sales by payment method for specific period."
+      },
+      {
+        "name": "Today Sales By Staff",
+        "headers": [
+          "SNo",
+          "Date & Time",
+          "Receipt No.",
+          "Member ID",
+          "Member Name",
+          "Branch",
+          "Transaction Type",
+          "Digital",
+          "Cash",
+          "Card",
+          "Done By"
+        ],
+        "description": "This report will show today sales by staff name."
       }
     ]
   },
@@ -489,6 +506,29 @@
           "Booked By"
         ],
         "description": "This report will show the status of the booked appointments by visitors for specific period."
+      }
+    ]
+  },
+  {
+    "reportType": "Vat",
+    "reportName": [
+      {
+        "name": "Vat Report",
+        "headers": [
+          "SNo",
+          "Date & Time",
+          "Tax Invoice No",
+          "Member ID",
+          "Member Name",
+          "Transaction Type",
+          "Description",
+          "Excl. VAT",
+          "VAT %",
+          "VAT Amount",
+          "Total Incl. VAT",
+          "Done By"
+        ],
+        "description": "This report will list transactions made including VAT details"
       }
     ]
   }
