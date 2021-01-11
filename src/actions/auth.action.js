@@ -30,6 +30,19 @@ export const login = (postData) => dispatch => {
 };
 
 
+export const logout = () => dispatch => {
+    axios.post(`${IP}/credential/logout`)
+        .then(res => {
+        }).catch(err => {
+            err.response && dispatch({
+                type: GET_ERROR,
+                payload: err.response.data
+            })
+        }
+        )
+}
+
+
 export const setCurrentUser = decoded => {
     return {
         type: SET_CURRENT_USER,

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { GET_MEMBER_BY_ID, GET_ALERT_ERROR, GET_CUSTOMER_CLASSES_DETAILS } from './types'
+import { GET_MEMBER_BY_ID, GET_ALERT_ERROR, GET_CUSTOMER_CLASSES_DETAILS, GET_EMPLOYEE_BY_ID } from './types'
 import { IP } from '../config'
 
 
@@ -7,6 +7,21 @@ import { IP } from '../config'
 
 export const addMemberInBioStar = (postData) => dispatch => {
     axios.post(`${IP}/member/addMemberFingerPrint`, postData)
+        .then(res => {
+            dispatch({
+                type: GET_MEMBER_BY_ID,
+                payload: res.data
+            });
+        }).catch(err => {
+            dispatch({
+                type: GET_ALERT_ERROR,
+                payload: 'Something wrong happened, Kindly try agian..'
+            })
+        })
+};
+
+export const addMemberFaceRecognition = (postData) => dispatch => {
+    axios.post(`${IP}/member/addMemberFaceRecognition`, postData)
         .then(res => {
             dispatch({
                 type: GET_MEMBER_BY_ID,
@@ -50,6 +65,37 @@ export const updateFingerPrint = (postData) => dispatch => {
         })
 };
 
+
+export const updateEmployeeFingerPrint = (postData) => dispatch => {
+    axios.post(`${IP}/employee/updateEmployeeFingerPrint`, postData)
+        .then(res => {
+            dispatch({
+                type: GET_EMPLOYEE_BY_ID,
+                payload: res.data
+            });
+        }).catch(err => {
+            dispatch({
+                type: GET_ALERT_ERROR,
+                payload: err.response.data.message
+            })
+        })
+};
+
+
+export const updateEmployeeFaceRecognition = (postData) => dispatch => {
+    axios.post(`${IP}/employee/updateEmployeeFaceRecognition`, postData)
+        .then(res => {
+            dispatch({
+                type: GET_EMPLOYEE_BY_ID,
+                payload: res.data
+            });
+        }).catch(err => {
+            dispatch({
+                type: GET_ALERT_ERROR,
+                payload: err.response.data.message
+            })
+        })
+};
 
 export const startPackage = (postData) => dispatch => {
     axios.post(`${IP}/member/startPackage`, postData)

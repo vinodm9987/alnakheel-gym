@@ -1,6 +1,6 @@
 import axios from 'axios';
 import {
-  GET_ERROR, CLEAR_ERRORS, USER_BY_DESIGNATION_SEARCH, ADD_ADMIN_PASSWORD, GET_ADMIN_PASSWORD
+  GET_ERROR, CLEAR_ERRORS, USER_BY_DESIGNATION_SEARCH, ADD_ADMIN_PASSWORD, GET_ADMIN_PASSWORD, VERIFY_ADMIN_PASSWORD
 } from './types'
 import { IP } from '../config'
 import { setLoading, removeLoading } from './loader.action'
@@ -9,6 +9,23 @@ import { setLoading, removeLoading } from './loader.action'
 export const assignViewForWeb = (postData) => dispatch => {
   dispatch(setLoading());
   axios.post(`${IP}/privilege/assignViewForWeb`, postData)
+    .then(res => {
+      dispatch(getAllUserFilterByDesignationAndSearch({ designation: '', search: '' }))
+    }).catch(err =>
+      err.response && dispatch({ type: GET_ERROR, payload: err.response.data })
+    ).then(() => setTimeout(() => {
+      dispatch(removeLoading())
+    }, 1000))
+    .then(() => {
+      setTimeout(() => {
+        dispatch({ type: CLEAR_ERRORS })
+      }, 5000)
+    })
+}
+
+export const assignReport = (postData) => dispatch => {
+  dispatch(setLoading());
+  axios.post(`${IP}/privilege/assignReport`, postData)
     .then(res => {
       dispatch(getAllUserFilterByDesignationAndSearch({ designation: '', search: '' }))
     }).catch(err =>
@@ -97,4 +114,17 @@ export const getAdminPassword = () => dispatch => {
     .catch(err =>
       dispatch({ type: GET_ADMIN_PASSWORD, payload: null })
     )
+}
+
+export const verifyAdminPassword = (postData) => dispatch => {
+  axios.post(`${IP}/privilege/verifyAdminPassword`, postData)
+    .then(res => {
+      dispatch({ type: VERIFY_ADMIN_PASSWORD, payload: 'verified' })
+    })
+    .catch(err =>
+      err.response && dispatch({ type: GET_ERROR, payload: err.response.data })
+    )
+    .then(() => setTimeout(() => {
+      dispatch({ type: CLEAR_ERRORS })
+    }, 5000))
 }

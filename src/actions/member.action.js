@@ -182,6 +182,28 @@ export const payAtGym = (id, postData, credentialId) => dispatch => {
 };
 
 
+export const bookTrainer = (postData, credentialId) => dispatch => {
+  dispatch(setLoading());
+  axios
+    .post(`${IP}/member/bookTrainer`, postData)
+    .then(res => {
+      dispatch({ type: GET_ERROR, payload: res.data })
+      credentialId && dispatch(getUserById(credentialId))
+    }
+    )
+    .catch(err =>
+      err.response && dispatch({ type: GET_ERROR, payload: err.response.data })
+    ).then(() => setTimeout(() => {
+      dispatch(removeLoading())
+    }, 1000))
+    .then(() =>
+      setTimeout(() => {
+        dispatch({ type: CLEAR_ERRORS })
+      }, 5000)
+    )
+};
+
+
 export const updateMemberDetails = (id, postData) => dispatch => {                      //package details
   dispatch(setLoading());
   axios

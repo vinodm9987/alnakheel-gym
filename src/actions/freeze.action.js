@@ -97,3 +97,21 @@ export const removeMemberFreeze = (postData) => dispatch => {
       dispatch({ type: CLEAR_ERRORS })
     }, 5000))
 }
+
+export const cancelFreeze = (postData) => dispatch => {
+  dispatch(setLoading());
+  axios
+    .post(`${IP}/member/cancelFreeze`, postData)
+    .then(res => {
+      dispatch(getFreezeHistory({ search: '', date: '' }))
+      dispatch({ type: GET_ERROR, payload: res.data })
+    })
+    .catch(err =>
+      err.response && dispatch({ type: GET_ERROR, payload: err.response.data })
+    ).then(() => setTimeout(() => {
+      dispatch(removeLoading())
+    }, 1000))
+    .then(() => setTimeout(() => {
+      dispatch({ type: CLEAR_ERRORS })
+    }, 5000))
+}
