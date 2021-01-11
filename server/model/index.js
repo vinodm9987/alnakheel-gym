@@ -39,7 +39,7 @@ module.exports = {
   Offer: require('./offer/offer.model'),
   Announcement: require('./announcement/announcement.model'),
   Event: require('./events/event.model'),
-  GiftCard: require('./reward/giftCard.model'),
+  GiftCard: require('./reward/giftcard.model'),
   RewardPolicy: require('./reward/policy.model'),
   MemberTransaction: require('./reward/memberTransaction.model'),
   MemberCode: require('./reward/memberCode.model'),
