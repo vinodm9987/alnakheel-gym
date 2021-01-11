@@ -82,16 +82,17 @@ header.topBar {
   top: 0;
   left: 0;
   height: 100%;
-  padding: 15px 10px;
   z-index: 3;
-  background: #fff;
+  width: 110px;
+  text-align: center;
+  background: #000;
 }
 .topLogo {
   position: relative;
-  width: 240px;
+  width: 74px;
   z-index: 4;
 }
-.topLogoWrapper:after {
+/* .topLogoWrapper:after {
   content: "";
   border-top: 37px solid #fff;
   border-left: 25px solid #fff;
@@ -102,7 +103,7 @@ header.topBar {
   right: -50px;
   top: 0;
   z-index: 2;
-}
+} */
 .notificationSection {
   position: relative;
   padding: 22px;
@@ -209,21 +210,21 @@ ul.notificationMenu li {
 }
 
 @media (max-width: 991.98px) {
-  .topLogoWrapper {
+  /* .topLogoWrapper {
     padding: 20px 10px;
   }
   .topLogo {
     width: 170px;
-  }
+  } */
 }
 
 @media (max-width: 767.98px) {
   .topLogoWrapper:after {
     display: none;
   }
-  .topLogo {
+  /* .topLogo {
     width: 130px;
-  }
+  } */
 }
 @media (max-width: 650px) {
   .userName {
@@ -241,11 +242,15 @@ ul.notificationMenu li {
   }
   .topLogoWrapper {
     height: auto;
-    padding: 5px 10px;
+    /* padding: 5px 10px; */
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+    width: 89px;
   }
+  .topLogo {
+    width: 50px;
+}
   .notificationSection {
     padding: 20px 5px 5px 5px;
     margin: 0 5px;
@@ -1652,7 +1657,7 @@ button.react-calendar__navigation__arrow.react-calendar__navigation__prev2-butto
   right: 0;
   bottom: 0;
   left: 0;
-  background-image: url(../img/loginRegister-bg-new2.jpg);
+  background-image: url(../img/al-login-bg.png);
   background-position: right top;
   background-size: cover;
   display: flex;
@@ -3479,4 +3484,26 @@ input:focus {
 }
 .wordBreakBreakAll {
   word-break: break-all;
+}
+
+.dboard-btn-icon-primary {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: blue;
+  color: #fff;
+  font-size: 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.dboard-btn-icon-primary:hover {
+  cursor: pointer;
+  text-decoration: none;
+  color: #fff;
+}
+.dbd-blueblock {
+  width: 9px;
+  height: 9px;
+  background: skyblue;
 }

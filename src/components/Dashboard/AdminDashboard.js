@@ -384,7 +384,7 @@ class AdminDashboard extends Component {
                   <p className="m-0">{total}</p>
                 </div> */}
               <div className="col-12 px-0">
-                <div className="row pt-5">
+                <div className="row pt-3 pb-2">
                   <div className="col-12 px-0 d-flex flex-wrap">
                     <div className="col overflow-auto mxh-200px full-width-576-down">
                       <div className="row">
@@ -721,15 +721,281 @@ class AdminDashboard extends Component {
 
                   {this.packageDetails()}
 
-                  {this.revenueDetails()}
+                  <div className="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-8 d-flex mt-3">
+                    <div className="row m-0 w-100 mw-100 bg-light rounded d-flex align-items-start h-100">
 
-                  {this.memberAttendance()}
+                      <div className="col-12 d-flex flex-wrap align-items-center justify-content-between py-1 mb-auto">
+                        <h6 className="mx-1 my-2 SegoeBold py-1">Total Sales</h6>
+                        <div className="underline w-100"></div>
+                      </div>
+
+                      <div className="col-12">
+                        <div className="row">
+                          <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-3">
+                            <div className="d-flex flex-wrap align-items-center">
+                              <span className="position-relative mx-1 my-2">
+                                <select className="bg-white border-secondary border-secondary pr-4 pl-1 mw-100" style={{ fontSize: "13px" }}>
+                                  <option>25/04/2020</option>
+                                </select>
+                                <span className="position-absolute d-flex align-items-center justify-content-end w-100 h-100 pointerNone px-2" style={{ top: '0', left: '0' }}>
+                                  <span className="iconv1 iconv1-arrow-down"></span>
+                                </span>
+                              </span>
+                            </div>
+                            <div className="d-flex flex-wrap align-items-center justify-content-center">
+                              Graph
+                            </div>
+                          </div>
+                          <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-9">
+                            <div className="row">
+                              <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-4 pb-2">
+                                <h6>Total Amount</h6>
+                                <h4 className="font-weight-bold dirltrtar text-success">$ 87511</h4>
+                              </div>
+                              <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-8 d-block d-xl-flex align-items-center pb-2">
+                                <h6 className="my-2">Type</h6>
+                                <div className="d-flex flex-wrap align-items-center">
+                                  <span className="position-relative mx-1 my-2 mnw-200px">
+                                    <select className="bg-white border-secondary border-secondary pr-4 pl-1 w-100" style={{ fontSize: "13px" }}>
+                                      <option>All</option>
+                                    </select>
+                                    <span className="position-absolute d-flex align-items-center justify-content-end w-100 h-100 pointerNone px-2" style={{ top: '0', left: '0' }}>
+                                      <span className="iconv1 iconv1-arrow-down"></span>
+                                    </span>
+                                  </span>
+                                </div>
+                              </div>
+                              <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-4 pb-2">
+                                <h6>Packages Amount</h6>
+                                <h4 className="font-weight-bold dirltrtar text-orange">$ 87511</h4>
+                              </div>
+                              <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-4 pb-2">
+                                <h6>POS Amount</h6>
+                                <h4 className="font-weight-bold dirltrtar text-danger">$ 87511</h4>
+                              </div>
+                              <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-4 pb-2">
+                                <h6>Classes Amount</h6>
+                                <h4 className="font-weight-bold dirltrtar text-danger">$ 87511</h4>
+                              </div>
+                              <div className="col-12">
+                                <div className="underline w-100 mt-2 mb-1"></div>
+                              </div>
+                              <div className="col-12">
+                                <p><small className="font-weight-bold">Sales By Branches</small></p>
+                                <div className="d-flex flex-wrap">
+                                  <div className="d-flex align-items-center mr-3">
+                                    <div className="dbd-blueblock"></div>
+                                    <small className="dbd-blueblock-txt mx-1">Hidd Branch</small>
+                                    <div className="dbd-blueblock-amt text-success font-weight-bold">$ 6,54,111</div>
+                                  </div>
+                                  <div className="d-flex align-items-center mr-3">
+                                    <div className="dbd-blueblock"></div>
+                                    <small className="dbd-blueblock-txt mx-1">Hidd Branch</small>
+                                    <div className="dbd-blueblock-amt text-success font-weight-bold">$ 6,54,111</div>
+                                  </div>
+                                  <div className="d-flex align-items-center mr-3">
+                                    <div className="dbd-blueblock"></div>
+                                    <small className="dbd-blueblock-txt mx-1">Hidd Branch</small>
+                                    <div className="dbd-blueblock-amt text-success font-weight-bold">$ 6,54,111</div>
+                                  </div>
+                                  <div className="d-flex align-items-center mr-3">
+                                    <div className="dbd-blueblock"></div>
+                                    <small className="dbd-blueblock-txt mx-1">Hidd Branch</small>
+                                    <div className="dbd-blueblock-amt text-success font-weight-bold">$ 6,54,111</div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="col-12 d-flex flex-wrap align-items-center justify-content-between py-1">
+                        <div className="col-12 px-0">
+                          <div className="row pt-3 pb-2">
+                            <div className="col-12 px-0 d-flex flex-wrap justify-content-end">
+                              <Link to='/admin-attendance' className="linkHoverDecLess">
+                                <div className="col text-right full-width-576-down">
+                                  <button className="btn btn-warning br-50px text-white px-3 btn-sm text-nowrap mt-3 mt-sm-0">{t('View All Attendance')}</button>
+                                </div>
+                              </Link>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                    </div>
+                  </div>
+
+
+
+
+
+
+
+
 
                   {this.mostSelling()}
 
+                  <div className="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-4 d-flex mt-3">
+                    <div className="row m-0 w-100 mw-100 bg-light rounded d-flex align-items-start h-100">
+
+                      <div className="col-12 d-flex flex-wrap align-items-center justify-content-between py-1 mb-auto">
+                        <h6 className="mx-1 my-2 SegoeBold py-1">Pending Installments</h6>
+                        <div className="underline w-100"></div>
+                      </div>
+
+                      <div className="col-12 d-flex flex-wrap align-items-center justify-content-between py-1">
+                        <div className="col-12">
+                          <div className="row">
+                            <div className="col-12">
+                              <div className="row">
+                                <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
+                                  <h6>Total Pending Amount</h6>
+                                  <h6 className="font-weight-bold dirltrtar text-danger">$ 87511</h6>
+                                </div>
+                                <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
+                                  <div class="row d-block d-sm-flex justify-content-end">
+                                    <div class="col w-auto px-1 flexBasis-auto flex-grow-0" >
+                                      {/* <div class="form-group inlineFormGroup">
+                                        <select class="form-control mx-sm-2 inlineFormInputs bg-white">
+                                          <option value=""></option>
+                                        </select>
+                                        <span class="iconv1 iconv1-arrow-down selectBoxIcon"></span>
+                                      </div> */}
+
+                                      <div className="d-flex flex-wrap align-items-center">
+                                        <span className="position-relative mx-1 my-1">
+                                          <select className="bg-white border-secondary border-secondary pr-4 pl-1 w-100" style={{ fontSize: "13px" }}>
+                                            <option>Monthly</option>
+                                          </select>
+                                          <span className="position-absolute d-flex align-items-center justify-content-end w-100 h-100 pointerNone px-2" style={{ top: '0', left: '0' }}>
+                                            <span className="iconv1 iconv1-arrow-down"></span>
+                                          </span>
+                                        </span>
+                                      </div>
+
+                                    </div>
+                                    <div class="col w-auto px-1 flexBasis-auto flex-grow-0">
+                                      {/* <div class="form-group inlineFormGroup">
+                                        <select class="form-control mx-sm-2 inlineFormInputs bg-white">
+                                          <option value="">Jan</option>
+                                          <option value="">Feb</option>
+                                        </select>
+                                        <span class="iconv1 iconv1-arrow-down selectBoxIcon"></span>
+                                      </div> */}
+
+                                      <div className="d-flex flex-wrap align-items-center">
+                                        <span className="position-relative mx-1 my-1">
+                                          <select className="bg-white border-secondary border-secondary pr-4 pl-1 w-100" style={{ fontSize: "13px" }}>
+                                            <option value="">Jan</option>
+                                            <option value="">Feb</option>
+                                          </select>
+                                          <span className="position-absolute d-flex align-items-center justify-content-end w-100 h-100 pointerNone px-2" style={{ top: '0', left: '0' }}>
+                                            <span className="iconv1 iconv1-arrow-down"></span>
+                                          </span>
+                                        </span>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div className="col-12">
+                              <div className="table-responsive">
+                                <table className="borderRoundSeperateTable tdWhite">
+                                  <thead>
+                                    <tr>
+                                      <th><small>Member Name</small></th>
+                                      <th><small>Amount</small></th>
+                                      <th><small>Due Date</small></th>
+                                      <th></th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    <tr>
+                                      <td>
+                                        <div className="d-flex">
+                                          <img alt='' src="https://cdn4.iconfinder.com/data/icons/business-conceptual-part1-1/513/business-man-512.png" className="mx-1 rounded-circle w-40px h-40px" />
+                                          <div className="mx-1">
+                                            <p className="m-0 font-weight-bold">Ansar</p>
+                                            <span class="text-body font-weight-light">a@b.com</span>
+                                          </div>
+                                        </div>
+                                      </td>
+                                      <td><h5 className="text-warning font-weight-bold m-0 dirltrtar">$ 200</h5></td>
+                                      <td>12/02/2020</td>
+                                      <td className="text-center">
+                                        <a href="#" className="dboard-btn-icon-primary">
+                                          <span className="iconv1 iconv1-right-small-arrow"></span>
+                                        </a>
+                                      </td>
+                                    </tr>
+                                    <tr>
+                                      <td>
+                                        <div className="d-flex">
+                                          <img alt='' src="https://cdn4.iconfinder.com/data/icons/business-conceptual-part1-1/513/business-man-512.png" className="mx-1 rounded-circle w-40px h-40px" />
+                                          <div className="mx-1">
+                                            <p className="m-0 font-weight-bold">Ansar</p>
+                                            <span class="text-body font-weight-light">a@b.com</span>
+                                          </div>
+                                        </div>
+                                      </td>
+                                      <td><h5 className="text-warning font-weight-bold m-0 dirltrtar">$ 200</h5></td>
+                                      <td>12/02/2020</td>
+                                      <td className="text-center">
+                                        <a href="#" className="dboard-btn-icon-primary">
+                                          <span className="iconv1 iconv1-right-small-arrow"></span>
+                                        </a>
+                                      </td>
+                                    </tr>
+                                    <tr>
+                                      <td>
+                                        <div className="d-flex">
+                                          <img alt='' src="https://cdn4.iconfinder.com/data/icons/business-conceptual-part1-1/513/business-man-512.png" className="mx-1 rounded-circle w-40px h-40px" />
+                                          <div className="mx-1">
+                                            <p className="m-0 font-weight-bold">Ansar</p>
+                                            <span class="text-body font-weight-light">a@b.com</span>
+                                          </div>
+                                        </div>
+                                      </td>
+                                      <td><h5 className="text-warning font-weight-bold m-0 dirltrtar">$ 200</h5></td>
+                                      <td>12/02/2020</td>
+                                      <td className="text-center">
+                                        <a href="#" className="dboard-btn-icon-primary">
+                                          <span className="iconv1 iconv1-right-small-arrow"></span>
+                                        </a>
+                                      </td>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="col-12 px-0">
+                          <div className="row pt-3 pb-2">
+                            <div className="col-12 px-0 d-flex flex-wrap justify-content-end">
+                              <Link to='/pending-installments' className="linkHoverDecLess">
+                                <div className="col text-right full-width-576-down">
+                                  <button className="btn btn-warning br-50px text-white px-3 btn-sm text-nowrap mt-3 mt-sm-0">View All</button>
+                                </div>
+                              </Link>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                    </div>
+                  </div>
+
+                  {this.memberAttendance()}
+
+                  {/* {this.revenueDetails()}
+
                   {this.branchSale()}
 
-                  {this.calendar()}
+                  {this.calendar()} */}
 
                 </div>
               </div>

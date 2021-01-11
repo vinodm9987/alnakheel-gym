@@ -115,6 +115,7 @@ import Restore from './components/BackupRestore/Restore';
 import AdminPassword from './components/Privileges/AdminPassword';
 import MemberInstallment from './components/Installments/MemberInstallment'
 import MemberInstallmentDetails from './components/Installments/MemberInstallmentDetails'
+import PendingInstallments from './components/Dashboard/PendingInstallments';
 
 
 
@@ -314,6 +315,7 @@ class App extends Component {
           <Route exact path='/' component={AdminDashboard} />
           {/* Dashboard */}
           <Route path='/admin-dashboard' component={AdminDashboard} />
+          <Route path='/pending-installments' component={PendingInstallments} />
 
           {/* Members */}
           <Route path='/add-member' component={AddMembers} />

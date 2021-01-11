@@ -9,6 +9,7 @@ import { logoutUser } from '../../actions/auth.action'
 import { withTranslation } from 'react-i18next';
 import { changeLanguage } from '../../utils/changeLanguage';
 import gymlogo from '../../assets/img/gymnago.png'
+import algymlogo from '../../assets/img/al-main-logo.png'
 import { getUserNotification, getUserNotifications } from '../../actions/notification.action';
 import { timeDiffCalc } from '../../utils/apis/helpers';
 import { socketConnect, emit } from '../../utils/socket';
@@ -102,7 +103,7 @@ class UserTabBar extends Component {
               </button>
             </span>
             <div className="topLogoWrapper">
-              <img src={gymlogo} alt='' className="topLogo" />
+              <img src={algymlogo} alt='' className="topLogo" />
             </div>
             <h4 className="d-none d-xl-block px-3">{t('Welcome to Gymnago')}</h4>
             <span className="cursorPointer d-inline-flex align-items-center m-2" onClick={() => this.changedLanguage()}>

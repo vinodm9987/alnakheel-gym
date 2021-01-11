@@ -9,6 +9,7 @@ import { withTranslation } from 'react-i18next'
 import { changeLanguage } from '../../utils/changeLanguage'
 import { setLoading, removeLoading } from '../../actions/loader.action'
 import gymlogo from '../../assets/img/gymnago.png'
+import algymlogo from '../../assets/img/al-main-logo.png'
 // import curvebg from '../../assets/img/login-curve2.png'
 
 class Login extends Component {
@@ -95,7 +96,7 @@ class Login extends Component {
               </div>
               <div className="col-12">
                 {/* <h3 className="text-center font-weight-bold pb-4">{t('Login')}</h3> */}
-                <img src={gymlogo} alt='' className="w-300px mx-auto d-block mb-3" style={{ maxWidth: '75%' }} />
+                <img src={algymlogo} alt='' className="w-100px mx-auto d-block mb-3" style={{ maxWidth: '75%' }} />
                 <h5 className="mb-0 pb-5 font-weight-bold text-center">Login to your account</h5>
               </div>
               <div className="col-12">
