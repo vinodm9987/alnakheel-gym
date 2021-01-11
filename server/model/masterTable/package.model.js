@@ -23,6 +23,12 @@ const packageSchema = new Schema({
         type: String
     },
 
+    salesBranches: [{ type: Schema.Types.ObjectId,
+        ref: "Branch" }],
+
+    accessBranches: [{type: Schema.Types.ObjectId,
+        ref: "Branch"}],
+
     color: {
         type: String
     },

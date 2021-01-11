@@ -85,8 +85,8 @@ exports.addPackage = async (req, res) => {
         if (error)
             return errorResponseHandler(res, error, "while uploading image error occurred !");
         try {
-            const { packageName, amount, period, startDate, endDate, description, color, fromTime, toTime } = JSON.parse(req.body.data)
-            let newPackage = new Package({ packageName, amount, period, startDate, endDate, description, color, fromTime, toTime });
+            const { packageName, amount, period, startDate, endDate, description, color, fromTime, toTime, salesBranches, accessBranches } = JSON.parse(req.body.data)
+            let newPackage = new Package({ packageName, amount, period, startDate, endDate, description, color, fromTime, toTime, salesBranches, accessBranches });
             newPackage["bioStarInfo"] = await addPackage(packageName, fromTime, toTime);
             newPackage["startDate"] = setTime(startDate);
             newPackage["endDate"] = setTime(endDate);
@@ -134,8 +134,8 @@ exports.updatePackage = async (req, res) => {
         if (error)
             return errorResponseHandler(res, error, "while uploading image error occurred !");
         try {
-            const { packageName, amount, period, startDate, endDate, description, color, fromTime, toTime } = JSON.parse(req.body.data)
-            const data = { packageName, amount, period, startDate, endDate, description, color, fromTime, toTime }
+            const { packageName, amount, period, startDate, endDate, description, salesBranches, accessBranches, color, fromTime, toTime } = JSON.parse(req.body.data)
+            const data = { packageName, amount, period, startDate, endDate, description, color, fromTime, toTime, salesBranches, accessBranches }
             const packageData = await Package.findById(req.params.id).lean()
             data['bioStarInfo'] = await updatePackage(packageName, fromTime, toTime, packageData.bioStarInfo)
             data["startDate"] = setTime(startDate);
