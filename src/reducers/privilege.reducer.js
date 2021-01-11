@@ -1,5 +1,5 @@
 import {
-  USER_BY_DESIGNATION_SEARCH, ADD_ADMIN_PASSWORD, GET_ADMIN_PASSWORD
+  USER_BY_DESIGNATION_SEARCH, ADD_ADMIN_PASSWORD, GET_ADMIN_PASSWORD, VERIFY_ADMIN_PASSWORD
 } from '../actions/types';
 
 
@@ -31,6 +31,13 @@ export default function (state = initialState, action) {
         return {
           ...state,
           ...{ adminPassword: action.payload.response }
+        }
+      }
+
+      case VERIFY_ADMIN_PASSWORD: {
+        return {
+          ...state,
+          ...{ verifyPassword: action.payload }
         }
       }
 
