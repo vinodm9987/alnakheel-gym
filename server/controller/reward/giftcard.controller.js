@@ -11,6 +11,7 @@ const { Formate: { setTime } } = require('../../utils')
 */
 
 const { GiftCard } = require('../../model');
+const { auditLogger } = require('../../middleware/auditlog.middleware');
 
 
 
@@ -26,9 +27,11 @@ exports.addGiftcard = async (req, res) => {
     req.body["endDate"] = setTime(req.body.endDate);
     const newGiftcard = new GiftCard(req.body);
     const response = await newGiftcard.save();
+    auditLogger(req, 'Success')
     successResponseHandler(res, response, "successfully create new giftcard");
   } catch (error) {
     logger.error(error);
+    auditLogger(req, 'Failed')
     errorResponseHandler(res, error, "error ocurred while create giftcard");
   };
 };
@@ -42,11 +45,14 @@ exports.updateGiftcard = async (req, res) => {
   const { startDate, endDate } = req.body
   if (startDate) req.body["startDate"] = setTime(req.body.startDate);
   if (endDate) req.body["endDate"] = setTime(req.body.endDate);
+  req.responseData = await GiftCard.findById(req.params.id).lean()
   GiftCard.findByIdAndUpdate(req.params.id, req.body, { new: true })
     .then((response) => {
+      auditLogger(req, 'Success')
       successResponseHandler(res, response, "successfully update new giftcard");
     }).catch(error => {
       logger.error(error);
+      auditLogger(req, 'Failed')
       errorResponseHandler(res, error, "error ocurred while update giftcard");
     });
 };

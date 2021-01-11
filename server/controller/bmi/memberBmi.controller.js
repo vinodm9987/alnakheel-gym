@@ -12,6 +12,7 @@ const { Formate: { setTime } } = require('../../utils')
 
 
 const { MemberBmi } = require('../../model');
+const { auditLogger } = require('../../middleware/auditlog.middleware');
 
 
 
@@ -32,16 +33,20 @@ exports.addMemberWeight = async (req, res) => {
     let isExists = await MemberBmi.findOne({ date: setTime(req.body.date), memberId: req.body.memberId }).lean()
     if (isExists) {
         req.body["date"] = setTime(req.body.date)
+        req.responseData = await MemberBmi.findById(isExists._id).lean()
         let response = await MemberBmi.findByIdAndUpdate(isExists._id, req.body, { new: true })
+        auditLogger(req, 'Success')
         successResponseHandler(res, response, "successfully added member weight")
     } else {
         let newMemberWeightData = new MemberBmi(req.body);
         newMemberWeightData["date"] = setTime(req.body.date)
         newMemberWeightData.save()
             .then(response => {
+                auditLogger(req, 'Success')
                 successResponseHandler(res, response, "successfully added member weight !");
             }).catch(error => {
                 logger.error(error);
+                auditLogger(req, 'Failed')
                 errorResponseHandler(res, error, "Exception while added member weight !");
             });
     }

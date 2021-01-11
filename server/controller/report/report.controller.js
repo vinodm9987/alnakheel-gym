@@ -335,7 +335,7 @@ const getPackageType = async (body) => {
     branches.push({ ...ele, ...{ count: 0 } })
   })
   let response = await Member.find(queryCond)
-    .populate('credentialId').populate("packageDetails.packages")
+    .populate('credentialId branch').populate("packageDetails.packages")
     .populate({ path: "packageDetails.trainer", populate: { path: "credentialId" } }).lean()
   response = response.filter(member => {
     if (body.fromDate && body.toDate) {
@@ -383,7 +383,7 @@ const getAssignedTrainers = async (body) => {
     periods.push({ ...ele, ...{ amount: 0 } })
   })
   let response = await Member.find(queryCond)
-    .populate('credentialId branch').populate("packageDetails.packages packageDetails.trainerFees")
+    .populate('credentialId branch').populate("packageDetails.packages packageDetails.trainerFees packageDetails.doneBy")
     .populate({ path: "packageDetails.trainer", populate: { path: "credentialId" } })
     .populate({ path: "packageDetails.trainerFees", populate: { path: "period" } }).lean()
   response.forEach(member => {
@@ -810,6 +810,87 @@ const getSalesByPaymentMethod = async (body) => {
   return { response, transactionType, branches }
 }
 
+const getTodaySalesByStaff = async (body) => {
+  let queryCond = {};
+  let transactionType = [{ transactionName: "Packages", amount: 0 }, { transactionName: "POS", amount: 0 }, { transactionName: "Classes", amount: 0 }]
+  let paymentMethod = [{ paymentName: "Digital", amount: 0 }, { paymentName: "Cash", amount: 0 }, { paymentName: "Card", amount: 0 }]
+
+  let totalAmountOfStockSell = [], memberClasses = [], totalAmountOfMember = []
+
+  if (body.transactionType === 'POS' || body.transactionType === '') {
+    if (body.branch) queryCond["branch"] = body.branch
+    if (body.staffName) queryCond["doneBy"] = body.staffName
+    totalAmountOfStockSell = await StockSell.find(queryCond)
+      .populate('branch doneBy')
+      .populate({ path: "customerDetails.member", populate: { path: "credentialId" } }).lean()
+    totalAmountOfStockSell = totalAmountOfStockSell.filter(doc => {
+      if (new Date(setTime(new Date)).getTime() === doc.dateOfPurchase.getTime()) {
+        return doc
+      }
+    })
+    totalAmountOfStockSell.forEach(doc => {
+      transactionType[1].amount += +doc.totalAmount
+      paymentMethod[0].amount += (+doc.digitalAmount ? +doc.digitalAmount : 0)
+      paymentMethod[1].amount += (+doc.cashAmount ? +doc.cashAmount : 0)
+      paymentMethod[2].amount += (+doc.cardAmount ? +doc.cardAmount : 0)
+      doc.transactionType = "POS"
+    })
+  }
+
+  if (body.transactionType === 'Classes' || body.transactionType === '') {
+    queryCond = {}
+    if (body.branch) queryCond["branch"] = body.branch
+    let classes = await Classes.find(queryCond, { _id: 1 }).lean()
+    const classesArray = classes.map(ele => ele._id.toString());
+    queryCond = {}
+    if (body.staffName) queryCond["doneBy"] = body.staffName
+    queryCond["classId"] = { '$in': classesArray }
+    memberClasses = await MemberClass.find({ classId: { $in: classesArray } })
+      .populate('doneBy')
+      .populate({ path: 'member', populate: { path: "credentialId branch" } }).lean()
+    memberClasses = memberClasses.filter(doc => {
+      if (new Date(setTime(new Date)).getTime() === doc.dateOfPurchase.getTime()) {
+        return doc
+      }
+    })
+    memberClasses.forEach(doc => {
+      transactionType[2].amount += +doc.totalAmount
+      paymentMethod[0].amount += (+doc.digitalAmount ? +doc.digitalAmount : 0)
+      paymentMethod[1].amount += (+doc.cashAmount ? +doc.cashAmount : 0)
+      paymentMethod[2].amount += (+doc.cardAmount ? +doc.cardAmount : 0)
+      doc.transactionType = "Classes"
+    })
+  }
+
+  if (body.transactionType === 'Packages' || body.transactionType === '') {
+    queryCond = {}
+    if (body.branch) queryCond["branch"] = body.branch
+    if (body.staffName) queryCond["packageDetails.doneBy"] = body.staffName
+    totalAmountOfMember = await Member.find(queryCond)
+      .populate('credentialId branch').populate("packageDetails.packages packageDetails.doneBy")
+      .populate({ path: "packageDetails.trainer", populate: { path: "credentialId" } }).lean();
+    totalAmountOfMember.forEach(ele => {
+      ele.packageDetails = ele.packageDetails.filter(doc => {
+        if (doc.paidStatus === 'Paid') {
+          if (new Date(setTime(new Date)).getTime() === (doc.startDate ? doc.startDate : ele.admissionDate).getTime()) {
+            return doc
+          }
+        }
+      })
+      ele.transactionType = "Packages"
+      ele.packageDetails.forEach(doc => {
+        transactionType[0].amount += +doc.totalAmount
+        paymentMethod[0].amount += (+doc.digitalAmount ? +doc.digitalAmount : 0)
+        paymentMethod[1].amount += (+doc.cashAmount ? +doc.cashAmount : 0)
+        paymentMethod[2].amount += (+doc.cardAmount ? +doc.cardAmount : 0)
+      })
+    })
+  }
+
+  let response = [...totalAmountOfStockSell, ...memberClasses, ...totalAmountOfMember]
+  return { response, paymentMethod, transactionType }
+}
+
 const getSales = async (body) => {
   if (body.reportName === 'General Sales') {
     const response = await getGeneralSales(body)
@@ -828,6 +909,9 @@ const getSales = async (body) => {
     return response
   } else if (body.reportName === 'Sales By Payment Method') {
     const response = await getSalesByPaymentMethod(body)
+    return response
+  } else if (body.reportName === 'Today Sales By Staff') {
+    const response = await getTodaySalesByStaff(body)
     return response
   }
 }
@@ -1127,6 +1211,90 @@ const getAppointments = async (body) => {
 
 
 
+//Vat //////////////////////////////////////////////////////////////////////////////////////////////////////
+//Vat //////////////////////////////////////////////////////////////////////////////////////////////////////
+//Vat //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+const getVatReport = async (body) => {
+  let queryCond = {};
+  if (body.branch) queryCond["branch"] = body.branch
+
+  let totalAmountOfStockSell = [], memberClasses = [], totalAmountOfMember = []
+
+  if (body.transactionType === 'POS' || body.transactionType === '') {
+    totalAmountOfStockSell = await StockSell.find(queryCond)
+      .populate('branch doneBy')
+      .populate({ path: "customerDetails.member", populate: { path: "credentialId" } }).lean()
+    totalAmountOfStockSell = totalAmountOfStockSell.filter(doc => {
+      if (body.fromDate && body.toDate) {
+        if (new Date(setTime(body.fromDate)) <= doc.dateOfPurchase && new Date(setTime(body.toDate)) >= doc.dateOfPurchase) {
+          return doc
+        }
+      } else {
+        return doc
+      }
+    })
+    totalAmountOfStockSell.forEach(doc => {
+      doc.transactionType = "POS"
+    })
+  }
+
+  if (body.transactionType === 'Classes' || body.transactionType === '') {
+    let classes = await Classes.find(queryCond, { _id: 1 }).lean()
+    const classesArray = classes.map(ele => ele._id.toString());
+    memberClasses = await MemberClass.find({ classId: { $in: classesArray } })
+      .populate('doneBy classId')
+      .populate({ path: 'member', populate: { path: "credentialId branch" } }).lean()
+    memberClasses = memberClasses.filter(doc => {
+      if (body.fromDate && body.toDate) {
+        if (new Date(setTime(body.fromDate)) <= doc.dateOfPurchase && new Date(setTime(body.toDate)) >= doc.dateOfPurchase) {
+          return doc
+        }
+      } else {
+        return doc
+      }
+    })
+    memberClasses.forEach(doc => {
+      doc.transactionType = "Classes"
+    })
+  }
+
+  if (body.transactionType === 'Packages' || body.transactionType === '') {
+    totalAmountOfMember = await Member.find(queryCond)
+      .populate('credentialId branch').populate("packageDetails.packages packageDetails.doneBy")
+      .populate({ path: "packageDetails.trainer", populate: { path: "credentialId" } })
+      .lean();
+    totalAmountOfMember.forEach(ele => {
+      ele.packageDetails = ele.packageDetails.filter(doc => {
+        if (doc.paidStatus === 'Paid') {
+          if (body.fromDate && body.toDate) {
+            if (
+              new Date(setTime(body.fromDate)) <= (doc.startDate ? doc.startDate : ele.admissionDate) &&
+              new Date(setTime(body.toDate)) >= (doc.startDate ? doc.startDate : ele.admissionDate)
+            ) {
+              return doc
+            }
+          } else {
+            return doc
+          }
+        }
+      })
+      ele.transactionType = "Packages"
+    })
+  }
+
+  let response = [...totalAmountOfStockSell, ...memberClasses, ...totalAmountOfMember]
+  return { response }
+}
+
+const getVat = async (body) => {
+  if (body.reportName === 'Vat Report') {
+    const response = await getVatReport(body)
+    return response
+  }
+}
+
+
 
 exports.getReport = async (req, res) => {
   try {
@@ -1148,6 +1316,9 @@ exports.getReport = async (req, res) => {
     } else if (req.body.reportType === 'Appointments') {
       const response = await getAppointments(req.body)
       successResponseHandler(res, response, "successfully get all appointment details !!");
+    } else if (req.body.reportType === 'Vat') {
+      const response = await getVat(req.body)
+      successResponseHandler(res, response, "successfully get all vat details !!");
     }
   }
   catch (error) {

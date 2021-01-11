@@ -10,6 +10,7 @@ const { Formate: { setTime } } = require('../../utils');
 */
 
 const { MemberAppointment, VisitorAppointment, Branch, TrafficStatistics, Shift } = require('../../model');
+const { auditLogger } = require('../../middleware/auditlog.middleware');
 
 
 
@@ -37,9 +38,11 @@ exports.bookAppointment = async (req, res) => {
       const newAppointment = new MemberAppointment(req.body);
       newAppointment.save()
         .then((response) => {
+          auditLogger(req, 'Success')
           successResponseHandler(res, response, "successfully add new appointment");
         }).catch(error => {
           logger.error(error);
+          auditLogger(req, 'Failed')
           if (error.message.indexOf('duplicate key error') !== -1)
             return errorResponseHandler(res, error, "Sorry you have already booked appointment for this schedule !");
           else
@@ -50,9 +53,11 @@ exports.bookAppointment = async (req, res) => {
     const newAppointment = new VisitorAppointment(req.body);
     newAppointment.save()
       .then((response) => {
+        auditLogger(req, 'Success')
         successResponseHandler(res, response, "successfully add new appointment");
       }).catch(error => {
         logger.error(error);
+        auditLogger(req, 'Failed')
         errorResponseHandler(res, error, "error ocurred while creating new appointment");
       });
   }

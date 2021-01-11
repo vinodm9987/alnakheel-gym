@@ -1,29 +1,61 @@
-/**  
+/**
  * utils.
 */
 const sharp = require('sharp');
 var fs = require('fs'),
     xml2js = require('xml2js');
 
-const { logger: { logger }, upload: { uploadAvatar }, handler: { successResponseHandler, errorResponseHandler }, config: { DESIGNATION, } } = require('../../../config')
+const { logger: { logger }, upload: { uploadAvatar },
+    handler: { successResponseHandler, errorResponseHandler },
+    config: { DESIGNATION, } } = require('../../../config')
 
-const { Mailer: { sendMail, sendMailForPassword }, Formate: { setTime, convertToDate }, FireBase: { sendNotification, notificationObject }, IdGenerator: { createId, generateOrderId },
-    Referral: { checkExpiry, addPointOfReferral, pendingPaymentToGetPoint,
-        updateTransaction, addPointOfPolicy, checkExpiryOfPolicy } } = require('../../utils');
 
-const { addMemberInBioStar, updateMemberInBioStar, bioStarToken, updateFingerPrint, disableMember, getFingerPrintTemplate } = require('../../biostar');
+const { Mailer: { sendMail, }, Formate: { setTime, convertToDate }, IdGenerator: { createId, generateOrderId },
+    Referral: { updateTransaction, addPointOfPolicy, checkExpiryOfPolicy } } = require('../../utils');
+
+
+const { updateMemberInBioStar, bioStarToken,
+    updateFingerPrint, disableMember, getFingerPrintTemplate,
+    getFaceRecognitionTemplate } = require('../../biostar');
+
 
 const { newMemberAssign } = require('../../notification/helper')
 
+
 const { memberEntranceStatus } = require('../../socket/emitter')
 
-/**  
+const { registerUserInBioStar, deviceObjectByTypeOfMachine } = require('../../service/branch.service');
+
+
+/**
  * models.
 */
 
 
-const { Credential, Member, Designation, Employee, MemberCode, MemberClass, AdminPassword } = require('../../model');
+const { Credential, Member, Designation, Employee,
+    MemberCode, MemberClass, AdminPassword } = require('../../model');
 
+const { auditLogger } = require('../../middleware/auditlog.middleware');
+
+
+
+const memberSearch = (response, search) => {
+    let newResponse = response.filter((doc) => {
+        if (search) {
+            let temp = doc.credentialId.email ? doc.credentialId.email.toLowerCase() : '';
+            let temp1 = doc.credentialId.userName.toLowerCase();
+            let temp2 = doc.personalId.toLowerCase();
+            let temp3 = doc.mobileNo.toString();
+            if (temp.includes(search) || temp1.includes(search) ||
+                temp2.includes(search) || temp3.includes(search)) {
+                return doc
+            }
+        } else {
+            return doc;
+        }
+    })
+    return newResponse;
+};
 
 
 
@@ -33,11 +65,14 @@ exports.updateMemberProfile = (req, res) => {
     uploadAvatar(req, res, async (error, result) => {
         if (error) return errorResponseHandler(res, error, "while uploading profile error occurred !");
         if (req.files.length > 0) await Credential.findByIdAndUpdate(req.params.id, { avatar: req.files[0] })
+        req.responseData = await Member.findOne({ credentialId: req.params.id }).populate('credentialId').lean()
         Member.findOneAndUpdate({ credentialId: req.params.id }, JSON.parse(req.body.data))
             .then(response => {
+                auditLogger(req, 'Success')
                 successResponseHandler(res, response, "successfully updated member !!");
             }).catch(error => {
                 logger.default.error(error);
+                auditLogger(req, 'Failed')
                 errorResponseHandler(res, error, "Exception while updating member !");
             });
     });
@@ -58,19 +93,9 @@ exports.getAllMember = async (req, res) => {
         if (req.body.search) search = req.body.search.toLowerCase()
         let queryCond = {};
         if (req.body.branch) queryCond["branch"] = req.body.branch
-        let response = await Member.find(queryCond).populate('credentialId branch').populate("packageDetails.packages").lean()
-        let newResponse = response.filter((doc) => {
-            if (search) {
-                let temp = doc.credentialId.email.toLowerCase()
-                let temp1 = doc.credentialId.userName.toLowerCase()
-                let temp3 = doc.mobileNo.toString()
-                if (temp.includes(search) || temp1.includes(search) || temp3.includes(search)) {
-                    return doc
-                }
-            } else {
-                return doc;
-            }
-        })
+        let response = await Member.find(queryCond).populate('credentialId branch')
+            .populate("packageDetails.packages").lean()
+        let newResponse = memberSearch(response, search);
         successResponseHandler(res, newResponse, "successfully get all member details !!");
     }
     catch (error) {
@@ -115,7 +140,6 @@ exports.getAllActiveMemberOfTrainer = async (req, res) => {
         errorResponseHandler(res, error, "Exception while getting all member of trainer !");
     });
 }
-
 
 
 
@@ -182,6 +206,13 @@ exports.createNewMemberByAdmin = (req, res) => {
             if (req.headers.userid) {
                 packageDetails[0]["doneBy"] = req.headers.userid;
             }
+            packageDetails[0]["startDate"] = setTime(packageDetails[0].startDate);
+            packageDetails[0]["endDate"] = setTime(packageDetails[0].endDate);
+            if (packageDetails[0].trainerDetails && packageDetails[0].trainerDetails[0]) {
+                packageDetails[0].trainerDetails[0]["trainerStart"] = setTime(packageDetails[0].trainerDetails[0].trainerStart);
+                packageDetails[0].trainerDetails[0]["trainerEnd"] = setTime(packageDetails[0].trainerDetails[0].trainerEnd);
+                packageDetails[0].trainerDetails[0]["orderNo"] = generateOrderId()
+            }
             packageDetails[0]["orderNo"] = generateOrderId()
             packageDetails[0]["dateOfPurchase"] = setTime(new Date())
             packageDetails[0]["timeOfPurchase"] = new Date()
@@ -210,9 +241,13 @@ exports.createNewMemberByAdmin = (req, res) => {
             const policy = await checkExpiryOfPolicy();
             if (policy) await addPointOfPolicy(packageDetails[0].totalAmount, response._id);
             await sendMailForPassword(email, password);
-            return successResponseHandler(res, response, "successfully added new member !!");
+            const newMemberResponse = await Member.findById(response._id)
+                .populate('credentialId branch').populate('packageDetails.doneBy')
+            await auditLogger(req, 'Success')
+            return successResponseHandler(res, { ...newMemberResponse, ...{ displayReceipt: true } }, "successfully added new member !!");
         } catch (error) {
             logger.error(error);
+            auditLogger(req, 'Failed')
             if (error.message.indexOf('duplicate key error') !== -1)
                 return errorResponseHandler(res, error, "Email is already exist !");
             else
@@ -224,8 +259,127 @@ exports.createNewMemberByAdmin = (req, res) => {
 
 
 
+
+exports.addMemberFingerPrint = async (req, res) => {
+    try {
+        const userData = await Member.findById(req.body.memberId).populate('credentialId packageDetails.packages').lean();
+        const { template0, template1 } = await deviceObjectByTypeOfMachine('BioStation');
+        const bioObject = { template0, template1, fingerIndex: req.body.fingerIndex };
+        await Credential.findOneAndUpdate({ userId: req.body.memberId }, { doneFingerAuth: true })
+        await Member.findByIdAndUpdate(req.body.memberId, { doneFingerAuth: true, biometricTemplate: bioObject })
+        let obj = {
+            accessGroupName: userData.packageDetails[0].packages.bioStarInfo.accessGroupName,
+            accessGroupId: userData.packageDetails[0].packages.bioStarInfo.accessGroupId,
+            userGroupId: userData.packageDetails[0].packages.bioStarInfo.userGroupId,
+            endDate: userData.packageDetails[0].endDate,
+            startDate: userData.packageDetails[0].startDate,
+            memberId: userData.memberId,
+            name: userData.credentialId.userName,
+            email: userData.credentialId.email,
+            phoneNumber: userData.mobileNo,
+            template0, template1,
+        };
+        await registerUserInBioStar(obj);
+        const newResponse = await Member.findById(req.body.memberId).populate('credentialId branch')
+            .populate({ path: "packageDetails.trainerDetails.trainer", populate: { path: "credentialId" } })
+            .populate({ path: "packageDetails.packages", populate: { path: "period" } })
+            .populate({ path: "packageDetails.trainerDetails.trainerFees", populate: { path: "period" } }).lean()
+        return successResponseHandler(res, newResponse, "success !!");
+    } catch (error) {
+        logger.error(error);
+        errorResponseHandler(res, error, "Exception while adding fingerprint !");
+    }
+};
+
+
+exports.excludeMemberFingerPrint = async (req, res) => {
+    try {
+        await AdminPassword.findOne({ password: req.body.password }).then(async user => {
+            if (!user) return errorResponseHandler(res, '', "Your entered password is wrong !");
+            else {
+                req.responseData = await Member.findById(req.body.memberId).populate('credentialId').lean()
+                await Credential.findOneAndUpdate({ userId: req.body.memberId }, { doneFingerAuth: true });
+                await Member.findByIdAndUpdate(req.body.memberId, { doneFingerAuth: true });
+                const newResponse = await Member.findById(req.body.memberId).populate('credentialId branch')
+                    .populate({ path: "packageDetails.trainerDetails.trainer", populate: { path: "credentialId" } })
+                    .populate({ path: "packageDetails.packages", populate: { path: "period" } })
+                    .populate({ path: "packageDetails.trainerDetails.trainerFees", populate: { path: "period" } }).lean()
+                await auditLogger(req, 'Success');
+                successResponseHandler(res, newResponse, "successfully excluded the member fingerprint !!");
+            }
+        });
+    } catch (error) {
+        logger.error(error);
+        auditLogger(req, 'Failed')
+        errorResponseHandler(res, error, "Exception while adding fingerprint !");
+    }
+};
+
+
+exports.updateFingerPrint = async (req, res) => {
+    try {
+        await AdminPassword.findOne({ password: req.body.password }).then(async user => {
+            if (!user) return errorResponseHandler(res, '', "Your entered password is wrong !");
+            else {
+                const { template0, template1 } = await getFingerPrintTemplate()
+                const userData = await Member.findById(req.body.memberId).lean()
+                const bioObject = { template0, template1, fingerIndex: req.body.fingerIndex, memberId: userData.memberId }
+                await updateFingerPrint(bioObject)
+                await Member.findByIdAndUpdate(req.body.memberId, { doneFingerAuth: true, biometricTemplate: bioObject }, { new: true })
+                const newResponse = await Member.findById(req.body.memberId).populate('credentialId branch')
+                    .populate({ path: "packageDetails.trainerDetails.trainer", populate: { path: "credentialId" } })
+                    .populate({ path: "packageDetails.packages", populate: { path: "period" } })
+                    .populate({ path: "packageDetails.trainerDetails.trainerFees", populate: { path: "period" } }).lean()
+                successResponseHandler(res, newResponse, "successfully save the transaction !!");
+            }
+        });
+
+    } catch (error) {
+        logger.error(error);
+        errorResponseHandler(res, error, "Exception while send code !");
+    }
+}
+
+
+exports.addMemberFaceRecognition = async (req, res) => {
+    try {
+        const { raw_image, templates } = await getFaceRecognitionTemplate()
+        const bioObject = { raw_image, templates }
+        await Credential.findOneAndUpdate({ userId: req.body.memberId }, { doneFingerAuth: true })
+        await Member.findByIdAndUpdate(req.body.memberId, { doneFingerAuth: true, biometricTemplate: bioObject }, { new: true })
+        const userData = await Member.findById(req.body.memberId).populate('credentialId packageDetails.packages').lean();
+        const photo = sharp(userData.credentialId.avatar.path).rotate().resize(200).toBuffer()
+        let obj = {
+            accessGroupName: userData.packageDetails[0].packages.bioStarInfo.accessGroupName,
+            accessGroupId: userData.packageDetails[0].packages.bioStarInfo.accessGroupId,
+            userGroupId: userData.packageDetails[0].packages.bioStarInfo.userGroupId,
+            endDate: userData.packageDetails[0].endDate,
+            memberId: userData.memberId,
+            name: userData.credentialId.userName,
+            email: userData.credentialId.email,
+            newPhoto: photo.toString('base64').replace('data:image/png;base64,', ''),
+            phoneNumber: userData.mobileNo,
+            startDate: userData.packageDetails[0].startDate,
+            templates: userData.biometricTemplate.templates,
+            raw_image: userData.biometricTemplate.raw_image
+        }
+        const newResponse = await Member.findById(req.body.memberId).populate('credentialId branch')
+            .populate({ path: "packageDetails.trainerDetails.trainer", populate: { path: "credentialId" } })
+            .populate({ path: "packageDetails.packages", populate: { path: "period" } })
+            .populate({ path: "packageDetails.trainerDetails.trainerFees", populate: { path: "period" } }).lean()
+        successResponseHandler(res, newResponse, "successfully save the transaction !!");
+    } catch (error) {
+        logger.error(error);
+        errorResponseHandler(res, error, "Exception while adding fingerprint !");
+    }
+};
+
+
+
+
+
 /**
- *  purchase new package  
+ *  purchase new package
 */
 
 
@@ -244,6 +398,7 @@ exports.updateMemberDetails = async (req, res) => {
     req.body.packageDetails[req.body.index]["dateOfPurchase"] = setTime(new Date())
     req.body.packageDetails[req.body.index]["timeOfPurchase"] = new Date()
     const amount = req.body.transactionAmount;
+    req.responseData = await Member.findById(req.params.id).populate('credentialId').lean()
     Member.findByIdAndUpdate(req.params.id, req.body, { new: true })
         .populate('credentialId branch')
         .populate('packageDetails.packages packageDetails.trainerFees packageDetails.trainer')
@@ -253,9 +408,11 @@ exports.updateMemberDetails = async (req, res) => {
         .then(async response => {
             const policy = await checkExpiryOfPolicy();
             if (policy) await addPointOfPolicy(amount, response._id);
+            auditLogger(req, 'Success')
             return successResponseHandler(res, response, "successfully update member details !!");
         }).catch(error => {
             logger.error(error);
+            auditLogger(req, 'Failed')
             errorResponseHandler(res, error, "Exception while updating  member details !");
         });
 };
@@ -267,7 +424,7 @@ exports.updateMemberDetails = async (req, res) => {
 
 
 /**
- *  update member info 
+ *  update member info
 */
 exports.updateMember = (req, res) => {
     uploadAvatar(req, res, async (error, data) => {
@@ -276,6 +433,7 @@ exports.updateMember = (req, res) => {
         try {
             const { mobileNo, gender, dateOfBirth, nationality, userName, email, personalId, branch, height, weight, emergencyNumber, relationship, memberId, credentialId, notes } = JSON.parse(req.body.data);
             let newObj = { mobileNo, gender, dateOfBirth, nationality, personalId, branch, height, weight, emergencyNumber, relationship, notes };
+            req.responseData = await Member.findById(memberId).populate('credentialId').lean()
             if (userName || email) {
                 let obj = { userName, email }
                 if (req.files.length > 0) obj["avatar"] = req.files[0];
@@ -286,9 +444,11 @@ exports.updateMember = (req, res) => {
                 .populate('packageDetails.packages packageDetails.trainerFees packageDetails.trainer')
                 .populate({ path: "packageDetails.trainer", populate: { path: "credentialId" } })
                 .populate({ path: "packageDetails.packages", populate: { path: "period" } });
+            auditLogger(req, 'Success')
             return successResponseHandler(res, response, "successfully updated Member !!");
         } catch (error) {
             logger.error(error);
+            auditLogger(req, 'Failed')
             if (error.message.indexOf('duplicate key error') !== -1)
                 return errorResponseHandler(res, error, "Email is already exist !");
             else
@@ -301,7 +461,7 @@ exports.updateMember = (req, res) => {
 
 
 /**
- *  update member and add package for the first time 
+ *  update member and add package for the first time
 */
 exports.updateMemberAndAddPackage = (req, res) => {
     uploadAvatar(req, res, async (error, data) => {
@@ -327,6 +487,7 @@ exports.updateMemberAndAddPackage = (req, res) => {
                 const { memberCounter } = await createId('memberCounter');
                 newObj["memberId"] = memberCounter
             }
+            req.responseData = await Member.findById(memberId).populate('credentialId').lean()
             if (userName || email) {
                 let obj = { userName, email }
                 if (req.files.length > 0) obj["avatar"] = req.files[0];
@@ -334,14 +495,14 @@ exports.updateMemberAndAddPackage = (req, res) => {
             }
             const response = await Member.findByIdAndUpdate(memberId, newObj, { new: true })
                 .populate('credentialId branch')
-                .populate('packageDetails.packages packageDetails.trainerFees packageDetails.trainer')
-                .populate({ path: "packageDetails.trainer", populate: { path: "credentialId" } })
-                .populate({ path: "packageDetails.packages", populate: { path: "period" } });
+                .populate('packageDetails.doneBy')
             const policy = await checkExpiryOfPolicy();
             if (policy) await addPointOfPolicy(packageDetails[0].totalAmount, response._id);
-            return successResponseHandler(res, response, "successfully updated Member !!");
+            auditLogger(req, 'Success')
+            return successResponseHandler(res, { ...response, ...{ displayReceipt: true } }, "successfully updated Member !!");
         } catch (error) {
             logger.error(error);
+            auditLogger(req, 'Failed')
             if (error.message.indexOf('duplicate key error') !== -1)
                 return errorResponseHandler(res, error, "Email is already exist !");
             else
@@ -384,10 +545,10 @@ exports.getMemberByCredentialId = (req, res) => {
 exports.getMemberById = (req, res) => {
     Member.findById(req.params.id)
         .populate('credentialId branch')
-        .populate('packageDetails.packages packageDetails.trainerFees packageDetails.trainer')
-        .populate({ path: "packageDetails.trainer", populate: { path: "credentialId" } })
+        .populate('packageDetails.packages')
+        .populate({ path: "packageDetails.trainerDetails.trainer", populate: { path: "credentialId" } })
         .populate({ path: "packageDetails.packages", populate: { path: "period" } })
-        .populate({ path: "packageDetails.trainerFees", populate: { path: "period" } })
+        .populate({ path: "packageDetails.trainerDetails.trainerFees", populate: { path: "period" } })
         .then(response => {
             successResponseHandler(res, response, "successfully get  member details by id !!");
         }).catch(error => {
@@ -404,7 +565,7 @@ exports.getMemberById = (req, res) => {
 
 
 /**
- *  get all first registered member  
+ *  get all first registered member
 */
 
 exports.getFirstRegisterMembers = async (req, res) => {
@@ -442,7 +603,7 @@ exports.getFirstRegisterMembers = async (req, res) => {
 
 
 /**
- *  get all pending registration  
+ *  get all pending registration
 */
 
 exports.getAllPendingMember = async (req, res) => {
@@ -453,18 +614,7 @@ exports.getAllPendingMember = async (req, res) => {
         queryCond["isPackageSelected"] = false;
         if (req.body.branch) queryCond["branch"] = req.body.branch
         let response = await Member.find(queryCond).populate('credentialId branch').populate("packageDetails.packages").lean()
-        let newResponse = response.filter(doc => {
-            if (search) {
-                let temp = doc.credentialId.email.toLowerCase()
-                let temp1 = doc.credentialId.userName.toLowerCase()
-                let temp3 = doc.mobileNo.toString()
-                if (temp.includes(search) || temp1.includes(search) || temp3.includes(search)) {
-                    return doc
-                }
-            } else {
-                return doc;
-            }
-        });
+        let newResponse = memberSearch(response, search);
         return successResponseHandler(res, newResponse, "successfully get all member details !!");
     }
     catch (error) {
@@ -480,7 +630,7 @@ exports.getAllPendingMember = async (req, res) => {
 
 
 /**
- *  get all active registered member  
+ *  get all active registered member
 */
 
 exports.getActiveRegisterMembers = async (req, res) => {
@@ -490,19 +640,7 @@ exports.getActiveRegisterMembers = async (req, res) => {
         queryCond["doneFingerAuth"] = true;
         if (req.body.branch) queryCond["branch"] = req.body.branch;
         let response = await Member.find(queryCond).populate('credentialId branch').populate("packageDetails.packages").lean()
-        let newResponse = response.filter(doc => {
-            if (search) {
-                let temp = doc.credentialId.email.toLowerCase()
-                let temp1 = doc.credentialId.userName.toLowerCase()
-                let temp2 = doc.memberId ? doc.memberId.toString() : ''
-                let temp3 = doc.mobileNo ? doc.mobileNo.toString() : ''
-                if (temp.includes(search) || temp1.includes(search) || temp2.includes(search) || temp3.includes(search)) {
-                    return doc
-                }
-            } else {
-                return doc;
-            }
-        })
+        let newResponse = memberSearch(response, search);
         return successResponseHandler(res, newResponse, "successfully get all member details !!");
     }
     catch (error) {
@@ -529,17 +667,7 @@ exports.getActiveStatusRegisterMembers = async (req, res) => {
         let response = await Member.find(queryCond)
             .populate('credentialId').populate("packageDetails.packages")
             .populate({ path: 'packageDetails.trainer', populate: { path: "credentialId" } }).lean()
-        let newResponse = response.filter(doc => {
-            if (search) {
-                let temp = doc.credentialId.email.toLowerCase()
-                let temp1 = doc.credentialId.userName.toLowerCase()
-                let temp2 = doc.memberId ? doc.memberId.toString() : ''
-                let temp3 = doc.mobileNo ? doc.mobileNo.toString() : ''
-                if (temp.includes(search) || temp1.includes(search) || temp2.includes(search) || temp3.includes(search)) return doc
-            } else {
-                return doc;
-            }
-        });
+        let newResponse = memberSearch(response, search);
         return successResponseHandler(res, newResponse, "successfully get all member details !!");
     }
     catch (error) {
@@ -565,17 +693,7 @@ exports.getActiveStatusNotExpiredRegisterMembers = async (req, res) => {
         let response = await Member.find(queryCond)
             .populate('credentialId').populate("packageDetails.packages")
             .populate({ path: 'packageDetails.trainer', populate: { path: "credentialId" } }).lean()
-        let newResponse = response.filter(doc => {
-            if (search) {
-                let temp = doc.credentialId.email.toLowerCase()
-                let temp1 = doc.credentialId.userName.toLowerCase()
-                let temp2 = doc.memberId ? doc.memberId.toString() : ''
-                let temp3 = doc.mobileNo ? doc.mobileNo.toString() : ''
-                if (temp.includes(search) || temp1.includes(search) || temp2.includes(search) || temp3.includes(search)) return doc
-            } else {
-                return doc;
-            }
-        });
+        let newResponse = memberSearch(response, search);
         return successResponseHandler(res, newResponse, "successfully get all member details !!");
     }
     catch (error) {
@@ -611,9 +729,9 @@ exports.generateToken = async (req, res) => {
 
 
 
-/** 
+/**
  * paypal apis for payment
- * 
+ *
 */
 
 exports.payAtGymMobile = async (req, res) => {
@@ -626,14 +744,69 @@ exports.payAtGymMobile = async (req, res) => {
     if (req.headers.userid) {
         req.body.packageDetails["doneBy"] = req.headers.userid
     }
+    req.body.packageDetails["startDate"] = setTime(req.body.packageDetails.startDate);
+    req.body.packageDetails["endDate"] = setTime(req.body.packageDetails.endDate);
+    if (req.body.packageDetails.trainerDetails[0]) {
+        req.body.packageDetails.trainerDetails[0]["trainerStart"] = setTime(req.body.packageDetails.trainerDetails[0].trainerStart);
+        req.body.packageDetails.trainerDetails[0]["trainerEnd"] = setTime(req.body.packageDetails.trainerDetails[0].trainerEnd);
+        req.body.packageDetails.trainerDetails[0]["orderNo"] = generateOrderId()
+    }
     req.body.packageDetails["orderNo"] = generateOrderId()
     req.body.packageDetails["dateOfPurchase"] = setTime(new Date())
     req.body.packageDetails["timeOfPurchase"] = new Date()
+    req.responseData = await Member.findById(req.params.id).populate('credentialId').lean()
     Member.findByIdAndUpdate(req.params.id, { $push: { packageDetails: req.body.packageDetails }, $set: queryCond })
+        .populate('credentialId branch')
+        .populate('packageDetails.doneBy')
         .then(response => {
-            successResponseHandler(res, response, "successfully save the transaction !!");
+            auditLogger(req, 'Success')
+            successResponseHandler(res, { ...response, ...{ displayReceipt: true } }, "successfully save the transaction !!");
         }).catch(error => {
             logger.error(error);
+            auditLogger(req, 'Failed')
+            errorResponseHandler(res, error, "Exception while saving the transaction !");
+        });
+};
+
+
+
+
+
+
+/**
+ * add trainer in package for member
+ *
+*/
+
+exports.bookTrainer = async (req, res) => {
+    if (req.body.trainerDetails) {
+        req.body.trainerDetails["trainerStart"] = setTime(req.body.trainerDetails.trainerStart);
+        req.body.trainerDetails["trainerEnd"] = setTime(req.body.trainerDetails.trainerEnd);
+        req.body.trainerDetails["orderNo"] = generateOrderId()
+    }
+    await Member.update({ 'packageDetails._id': req.body.oldPackageId }, {
+        $push: {
+            'packageDetails.$.trainerDetails': req.body.trainerDetails
+        },
+        $inc: {
+            'packageDetails.$.cashAmount': req.body.cashAmount,
+            'packageDetails.$.cardAmount': req.body.cardAmount,
+            'packageDetails.$.digitalAmount': req.body.digitalAmount,
+            'packageDetails.$.actualAmount': req.body.actualAmount,
+            'packageDetails.$.totalAmount': req.body.totalAmount,
+            'packageDetails.$.discount': req.body.discount,
+            'packageDetails.$.tax': req.body.tax,
+        }
+    }, { new: true })
+    Member.findById(req.body.memberId)
+        .populate('credentialId branch')
+        .populate('packageDetails.doneBy')
+        .then(response => {
+            auditLogger(req, 'Success')
+            successResponseHandler(res, { ...response, ...{ displayReceipt: true } }, "successfully save the transaction !!");
+        }).catch(error => {
+            logger.error(error);
+            auditLogger(req, 'Failed')
             errorResponseHandler(res, error, "Exception while saving the transaction !");
         });
 };
@@ -660,78 +833,8 @@ exports.getBioStarToken = async (req, res) => {
 
 
 
-exports.addMemberFingerPrint = async (req, res) => {
-    try {
-        const { template0, template1 } = await getFingerPrintTemplate()
-        const bioObject = { template0, template1, fingerIndex: req.body.fingerIndex }
-        await Credential.findOneAndUpdate({ userId: req.body.memberId }, { doneFingerAuth: true })
-        await Member.findByIdAndUpdate(req.body.memberId, { doneFingerAuth: true, biometricTemplate: bioObject }, { new: true })
-        const newResponse = await Member.findById(req.body.memberId).populate('credentialId branch')
-            .populate('packageDetails.packages packageDetails.trainerFees packageDetails.trainer')
-            .populate({ path: "packageDetails.trainer", populate: { path: "credentialId" } })
-            .populate({ path: "packageDetails.packages", populate: { path: "period" } }).lean()
-        const userData = await Member.findById(req.body.memberId).populate('credentialId').lean()
-        if (userData.credentialId.reactToken) {
-            let token = userData.credentialId.reactToken
-            let obj = notificationObject(token, 'Finger Authenticated Successfully !', "Please login again to enjoy benefits");
-            await sendNotification(obj);
-        }
-        successResponseHandler(res, newResponse, "successfully save the transaction !!");
-    } catch (error) {
-        logger.error(error);
-        errorResponseHandler(res, error, "Exception while adding fingerprint !");
-    }
-};
 
-
-exports.excludeMemberFingerPrint = async (req, res) => {
-    try {
-        await AdminPassword.findOne({ password: req.body.password }).then(async user => {
-            if (!user) return errorResponseHandler(res, '', "Your entered password is wrong !");
-            else {
-                await Credential.findOneAndUpdate({ userId: req.body.memberId }, { doneFingerAuth: true })
-                await Member.findByIdAndUpdate(req.body.memberId, { doneFingerAuth: true }, { new: true })
-                const newResponse = await Member.findById(req.body.memberId).populate('credentialId branch')
-                    .populate('packageDetails.packages packageDetails.trainerFees packageDetails.trainer')
-                    .populate({ path: "packageDetails.trainer", populate: { path: "credentialId" } })
-                    .populate({ path: "packageDetails.packages", populate: { path: "period" } }).lean()
-                successResponseHandler(res, newResponse, "successfully excluded the member fingerprint !!");
-            }
-        });
-
-    } catch (error) {
-        logger.error(error);
-        errorResponseHandler(res, error, "Exception while adding fingerprint !");
-    }
-};
-
-
-exports.updateFingerPrint = async (req, res) => {
-    try {
-        await AdminPassword.findOne({ password: req.body.password }).then(async user => {
-            if (!user) return errorResponseHandler(res, '', "Your entered password is wrong !");
-            else {
-                const { template0, template1 } = await getFingerPrintTemplate()
-                const userData = await Member.findById(req.body.memberId).lean()
-                const bioObject = { template0, template1, fingerIndex: req.body.fingerIndex, memberId: userData.memberId }
-                await updateFingerPrint(bioObject)
-                await Member.findByIdAndUpdate(req.body.memberId, { doneFingerAuth: true, biometricTemplate: bioObject }, { new: true })
-                const newResponse = await Member.findById(req.body.memberId).populate('credentialId branch')
-                    .populate('packageDetails.packages packageDetails.trainerFees packageDetails.trainer')
-                    .populate({ path: "packageDetails.trainer", populate: { path: "credentialId" } })
-                    .populate({ path: "packageDetails.packages", populate: { path: "period" } }).lean()
-                successResponseHandler(res, newResponse, "successfully save the transaction !!");
-            }
-        });
-
-    } catch (error) {
-        logger.error(error);
-        errorResponseHandler(res, error, "Exception while send code !");
-    }
-}
-
-
-/** 
+/**
  *  start the package of member
 */
 
@@ -745,7 +848,7 @@ exports.startPackage = async (req, res) => {
         await Member.update({ 'packageDetails._id': req.body.packageDetailId }, {
             $set: {
                 'packageDetails.$.startDate': req.body.startDate, 'packageDetails.$.endDate': req.body.endDate,
-                'packageDetails.$.trainerStart': req.body.trainerStart, 'packageDetails.$.trainerEnd': req.body.trainerEnd
+                'packageDetails.$.trainerDetails.$.trainerStart': req.body.trainerStart, 'packageDetails.$.trainerDetails.$.trainerEnd': req.body.trainerEnd
             }
         });
         let memberAllClassResponse = await MemberClass.find({ member: req.body.memberId }).populate('classId').lean()
@@ -786,9 +889,9 @@ exports.startPackage = async (req, res) => {
         if (userData.packageDetails.length > 1) await updateMemberInBioStar(obj);
         else await addMemberInBioStar(obj);
         const newResponse = await Member.findById(req.body.memberId).populate('credentialId branch')
-            .populate('packageDetails.packages packageDetails.trainerFees packageDetails.trainer')
-            .populate({ path: "packageDetails.trainer", populate: { path: "credentialId" } })
-            .populate({ path: "packageDetails.packages", populate: { path: "period" } }).lean()
+            .populate({ path: "packageDetails.trainerDetails.trainer", populate: { path: "credentialId" } })
+            .populate({ path: "packageDetails.packages", populate: { path: "period" } })
+            .populate({ path: "packageDetails.trainerDetails.trainerFees", populate: { path: "period" } }).lean()
         if (req.body.trainer) { await newMemberAssign(req.body.trainer); }
         successResponseHandler(res, newResponse, "successfully save the transaction !!");
     } catch (error) {
@@ -797,7 +900,7 @@ exports.startPackage = async (req, res) => {
     }
 };
 
-/** 
+/**
  * black list user from account
 */
 
@@ -809,7 +912,9 @@ exports.blackListUser = async (req, res) => {
             if (req.body.status) status = "IN"
             else status = 'AC';
             await disableMember(req.body.memberId, status)
+            req.responseData = await Member.findById(req.params.id).populate('credentialId').lean()
             let response = await Member.findByIdAndUpdate(req.params.id, { status: !req.body.status })
+            auditLogger(req, 'Success')
             successResponseHandler(res, response, "successfully operation done on member")
         } else {
             let response = await Employee.findByIdAndUpdate(req.params.id, { status: !req.body.status })
@@ -817,6 +922,7 @@ exports.blackListUser = async (req, res) => {
         }
     } catch (error) {
         logger.error(error);
+        auditLogger(req, 'Failed')
         errorResponseHandler(res, error, "Exception while operation on user !");
     }
 };
@@ -829,8 +935,11 @@ exports.blackListUser = async (req, res) => {
 
 exports.getExpiredMembers = async (req, res) => {
     try {
+        let queryCond = {};
+        if (req.body.branch) queryCond["branch"] = req.body.branch;
+        queryCond['packageDetails.isExpiredPackage'] = true;
         let search = req.body.search.toLowerCase()
-        let response = await Member.find({ 'packageDetails.isExpiredPackage': true })
+        let response = await Member.find(queryCond)
             .populate('credentialId').populate("packageDetails.packages branch").lean()
         let newResponse = response.filter(doc => {
             if (search) {
@@ -856,7 +965,8 @@ exports.getAboutToExpireMembers = async (req, res) => {
     try {
         let queryCond = {};
         let search = req.body.search.toLowerCase()
-        if (req.body.trainer) queryCond["packageDetails"] = { $elemMatch: { trainer: req.body.trainer } }
+        if (req.body.trainer) queryCond["packageDetails"] = { $elemMatch: { trainer: req.body.trainer } };
+        if (req.body.branch) queryCond["branch"] = req.body.branch;
         const members = await Member.find(queryCond).populate('credentialId packageDetails.packages branch');
         const expiredMembers = [];
         for (let i = 0; i < members.length; i++) {
@@ -867,7 +977,7 @@ exports.getAboutToExpireMembers = async (req, res) => {
                 if (members[i].packageDetails[j].extendDate) {
                     endDate = members[i].packageDetails[j].extendDate;
                 }
-                if (new Date(convertToDate(endDate)).setDate(new Date(convertToDate(endDate)).getDate() - 7) <= today && today < new Date(convertToDate(endDate))) {
+                if (new Date(convertToDate(endDate)).setDate(new Date(convertToDate(endDate)).getDate() - 2) <= today && today < new Date(convertToDate(endDate))) {
                     aboutToExpire = true;
                 }
             }
@@ -902,18 +1012,7 @@ exports.getClassesMembers = async (req, res) => {
         queryCond["isPackageSelected"] = false;
         if (req.body.branch) queryCond["branch"] = req.body.branch
         let pendingMember = await Member.find(queryCond).populate('credentialId branch').lean()
-        pendingMember = pendingMember.filter(doc => {
-            if (search) {
-                let temp = doc.credentialId.email.toLowerCase()
-                let temp1 = doc.credentialId.userName.toLowerCase()
-                let temp3 = doc.mobileNo.toString()
-                if (temp.includes(search) || temp1.includes(search) || temp3.includes(search)) {
-                    return doc
-                }
-            } else {
-                return doc;
-            }
-        });
+        pendingMember = memberSearch(pendingMember, search);
         let pendingMemberClasses = []
         for (let i = 0; i < pendingMember.length; i++) {
             let classesDetails = await MemberClass.find({ 'member': pendingMember[i]._id.toString() }).populate('classId').lean()
@@ -951,6 +1050,8 @@ exports.getMemberByMemberId = async (req, res) => {
             .populate('credentialId')
             .populate({ path: "packageDetails.packages", populate: { path: "period" } }).lean()
         memberInfo["fingerScanStatus"] = req.body.fingerScanStatus
+        req.headers.userid = memberInfo.credentialId._id
+        auditLogger(req, 'Failed')
         memberEntranceStatus(memberInfo)
         successResponseHandler(res, memberInfo, 'successfully get member details !');
     } catch (error) {

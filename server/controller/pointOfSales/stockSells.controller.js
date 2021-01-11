@@ -12,6 +12,7 @@ const { stockQuantity, stockFinish } = require('../../notification/helper');
 */
 
 const { StockSell, MemberPurchase, Stocks } = require('../../model');
+const { auditLogger } = require('../../middleware/auditlog.middleware');
 
 
 /**
@@ -41,7 +42,8 @@ exports.getAllStockSell = (req, res) => {
 
 
 exports.getStockSellById = (req, res) => {
-    StockSell.findById(req.params.id).populate('purchaseStock.stockId')
+    StockSell.findById(req.params.id).populate('purchaseStock.stockId doneBy branch customerDetails.member')
+        .populate({ path: "customerDetails.member", populate: { path: "credentialId" } })
         .then(response => {
             successResponseHandler(res, response, "successfully get  StockSell by id !!");
         }).catch(error => {
@@ -82,16 +84,18 @@ exports.addStockSell = async (req, res) => {
                 // notification logics
                 const stock = await Stocks.findByIdAndUpdate(stocks[i].stockId, { $inc: { quantity: -stocks[i].quantity, noOfTimeSell: 1 } }, { new: true })
                     .populate('branch').lean();
-                if (+stock.quantity === Math.round(+stock.originalQuantity / 100 * 90)) { await stockQuantity(stock.itemName, stock.branch.branchName) }
+                if (+stock.quantity === stock.originalQuantity - Math.round(+stock.originalQuantity / 100 * 90)) { await stockQuantity(stock.itemName, stock.branch.branchName) }
                 if (+stock.quantity === 0) { await stockFinish(stock.itemName, stock.branch.branchName) }
             }
             // policy logics
             const policy = await checkExpiryOfPolicy();
             if (transactionId) await completeGiftRedeem(transactionId);
             if (policy) await addPointOfPolicy(req.body.totalAmount, req.body.customerDetails.member);
-            return successResponseHandler(res, response, "successfully added new StockSell !!");
+            auditLogger(req, 'Success')
+            return successResponseHandler(res, { ...response, ...{ displayReceipt: true } }, "successfully added new StockSell !!");
         }).catch(error => {
             logger.error(error);
+            auditLogger(req, 'Failed')
             return errorResponseHandler(res, error, "Exception occurred !");
         });
     } else {
@@ -102,9 +106,11 @@ exports.addStockSell = async (req, res) => {
             for (let i = 0; i < stocks.length; i++) {
                 await Stocks.findByIdAndUpdate(stocks[i].stockId, { $inc: { quantity: -stocks[i].quantity, noOfTimeSell: 1 } })
             }
-            return successResponseHandler(res, response, "successfully added new StockSell !!");
+            auditLogger(req, 'Success')
+            return successResponseHandler(res, { ...response, ...{ displayReceipt: true } }, "successfully added new StockSell !!");
         }).catch(error => {
             logger.error(error);
+            auditLogger(req, 'Failed')
             return errorResponseHandler(res, error, "Exception occurred !");
         });
     }
@@ -119,12 +125,15 @@ exports.addStockSell = async (req, res) => {
 */
 
 
-exports.updateStockSell = (req, res) => {
+exports.updateStockSell = async (req, res) => {
+    req.responseData = await StockSell.findById(req.params.id).lean()
     StockSell.findByIdAndUpdate(req.params.id, req.body, { new: true })
         .then(response => {
+            auditLogger(req, 'Success')
             return successResponseHandler(res, response, "successfully updated StockSell !!");
         }).catch(error => {
             logger.error(error);
+            auditLogger(req, 'Failed')
             return errorResponseHandler(res, error, "Exception occurred !");
         });
 };

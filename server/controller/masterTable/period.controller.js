@@ -2,7 +2,8 @@
  * utils.
 */
 
-const { logger: { logger }, handler: { successResponseHandler, errorResponseHandler } } = require('../../../config')
+const { logger: { logger }, handler: { successResponseHandler, errorResponseHandler } } = require('../../../config');
+const { auditLogger } = require('../../middleware/auditlog.middleware');
 
 
 /**
@@ -64,9 +65,11 @@ exports.getAllPeriod = (req, res) => {
 exports.addPeriod = (req, res) => {
     let newPeriod = new Period(req.body);
     newPeriod.save().then(response => {
+        auditLogger(req, 'Success')
         return successResponseHandler(res, response, "successfully added new Period !!");
     }).catch(error => {
         logger.error(error);
+        auditLogger(req, 'Failed')
         if (error.message.indexOf('duplicate key error') !== -1)
             return errorResponseHandler(res, error, "Period name is already exist !");
         else
@@ -83,12 +86,15 @@ exports.addPeriod = (req, res) => {
 */
 
 
-exports.updatePeriod = (req, res) => {
+exports.updatePeriod = async (req, res) => {
+    req.responseData = await Period.findById(req.params.id).lean()
     Period.findByIdAndUpdate(req.params.id, req.body, { new: true })
         .then(response => {
+            auditLogger(req, 'Success')
             return successResponseHandler(res, response, "successfully updated new Period !!");
         }).catch(error => {
             logger.error(error);
+            auditLogger(req, 'Failed')
             if (error.message.indexOf('duplicate key error') !== -1)
                 return errorResponseHandler(res, error, "Period name is already exist !");
             else

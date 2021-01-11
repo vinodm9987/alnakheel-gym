@@ -2,7 +2,8 @@
  * utils.
 */
 
-const { logger: { logger }, upload: { uploadAvatar }, handler: { successResponseHandler, errorResponseHandler }, } = require('../../../config')
+const { logger: { logger }, upload: { uploadAvatar }, handler: { successResponseHandler, errorResponseHandler }, } = require('../../../config');
+const { auditLogger } = require('../../middleware/auditlog.middleware');
 
 
 /**
@@ -121,9 +122,11 @@ exports.addWorkout = (req, res) => {
                 }
             }
             const response = await newWorkout.save();
+            auditLogger(req, 'Success')
             return successResponseHandler(res, response, "successfully added new Workout !!");
         } catch (error) {
             logger.error(error);
+            auditLogger(req, 'Failed')
             if (error.message.indexOf('duplicate key error') !== -1)
                 return errorResponseHandler(res, error, "Workout name is already exist !");
             else
@@ -153,10 +156,13 @@ exports.updateWorkout = (req, res) => {
                     if (req.files[i].fieldname === "workoutsVideo") data["workoutsVideo"] = req.files[i]
                 }
             }
+            req.responseData = await Workout.findById(req.params.id).lean()
             const response = await Workout.findByIdAndUpdate(req.params.id, data, { new: true })
+            auditLogger(req, 'Success')
             return successResponseHandler(res, response, "successfully updated workout !!");
         } catch (error) {
             logger.error(error);
+            auditLogger(req, 'Failed')
             if (error.message.indexOf('duplicate key error') !== -1)
                 return errorResponseHandler(res, error, "Workout name is already exist !");
             else
@@ -171,12 +177,15 @@ exports.updateWorkout = (req, res) => {
 */
 
 
-exports.updateWorkoutStatus = (req, res) => {
+exports.updateWorkoutStatus = async (req, res) => {
+    req.responseData = await Workout.findById(req.params.id).lean()
     Workout.findByIdAndUpdate(req.params.id, req.body, { new: true })
         .then(response => {
+            auditLogger(req, 'Success')
             return successResponseHandler(res, response, "successfully updated workout !!");
         }).catch(error => {
             logger.error(error);
+            auditLogger(req, 'Failed')
             if (error.message.indexOf('duplicate key error') !== -1)
                 return errorResponseHandler(res, error, "Period name is already exist !");
             else

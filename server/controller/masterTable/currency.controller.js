@@ -2,7 +2,8 @@
  * utils.
 */
 
-const { logger: { logger }, handler: { successResponseHandler, errorResponseHandler } } = require('../../../config')
+const { logger: { logger }, handler: { successResponseHandler, errorResponseHandler } } = require('../../../config');
+const { auditLogger } = require('../../middleware/auditlog.middleware');
 
 /**
  * models.
@@ -39,9 +40,11 @@ exports.addCurrency = (req, res) => {
     if (count === 0) {
       let newCurrency = new Currency({ ...req.body, ...{ isDefault: true } });
       newCurrency.save().then(response => {
+        auditLogger(req, 'Success')
         return successResponseHandler(res, response, "successfully added new Currency !!");
       }).catch(error => {
         logger.error(error);
+        auditLogger(req, 'Failed')
         if (error.message.indexOf('duplicate key error') !== -1)
           return errorResponseHandler(res, error, "Currency name is already exist !");
         else
@@ -50,9 +53,11 @@ exports.addCurrency = (req, res) => {
     } else {
       let newCurrency = new Currency(req.body);
       newCurrency.save().then(response => {
+        auditLogger(req, 'Success')
         return successResponseHandler(res, response, "successfully added new Currency !!");
       }).catch(error => {
         logger.error(error);
+        auditLogger(req, 'Failed')
         if (error.message.indexOf('duplicate key error') !== -1)
           return errorResponseHandler(res, error, "Currency name is already exist !");
         else
@@ -69,12 +74,15 @@ exports.addCurrency = (req, res) => {
 */
 
 
-exports.updateCurrency = (req, res) => {
-  Currency.findByIdAndUpdate(req.params.id, req.body, { new: true })
+exports.updateCurrency = async (req, res) => {
+  req.responseData = await Currency.findById(req.params.id).lean()
+  Currency.findByIdAndUpdate(req.params.id, req.body, { new: true }).lean()
     .then(response => {
+      auditLogger(req, 'Success')
       return successResponseHandler(res, response, "successfully updated Currency !!");
     }).catch(error => {
       logger.error(error);
+      auditLogger(req, 'Failed')
       if (error.message.indexOf('duplicate key error') !== -1)
         return errorResponseHandler(res, error, "Currency name is already exist !");
       else
@@ -94,9 +102,11 @@ exports.updateDefaultCurrency = async (req, res) => {
     await Currency.findByIdAndUpdate(req.params.id, { isDefault: true }, { new: true })
     await Currency.updateMany({ _id: { $ne: req.params.id } }, { isDefault: false })
     const response = await Currency.find({})
+    auditLogger(req, 'Success')
     return successResponseHandler(res, response, "successfully updated Currency !!");
   } catch (error) {
     logger.error(error);
+    auditLogger(req, 'Failed')
     if (error.message.indexOf('duplicate key error') !== -1)
       return errorResponseHandler(res, error, "Currency name is already exist !");
     else

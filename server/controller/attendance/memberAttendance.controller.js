@@ -12,6 +12,7 @@ const { createTrafficData, addMemberInTraffic, calculateTraffic } = require('../
 */
 
 const { MemberAttendance, Member, MemberAppointment, TrafficStatistics } = require('../../model');
+const { auditLogger } = require('../../middleware/auditlog.middleware')
 
 
 
@@ -24,6 +25,8 @@ exports.addMemberAttendance = async (req, res) => {
       .populate('credentialId')
       .populate({ path: "packageDetails.packages", populate: { path: "period" } }).lean()
     memberInfo["fingerScanStatus"] = req.body.fingerScanStatus
+    req.headers.userid = memberInfo.credentialId._id
+    auditLogger(req, 'Success')
     memberEntranceStatus(memberInfo)
     const memberId = await Member.findOne({ memberId: +req.body.memberId });
     const isExists = await MemberAttendance.findOne({ memberId: memberId._id, date: setTime(new Date()) });

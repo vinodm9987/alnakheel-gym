@@ -2,7 +2,8 @@
  * utils.
 */
 
-const { logger: { logger }, handler: { successResponseHandler, errorResponseHandler } } = require('../../../config')
+const { logger: { logger }, handler: { successResponseHandler, errorResponseHandler } } = require('../../../config');
+const { auditLogger } = require('../../middleware/auditlog.middleware');
 
 /**
  * models.
@@ -75,9 +76,11 @@ exports.getWorkoutLevelById = (req, res) => {
 exports.addWorkoutLevel = (req, res) => {
     let newWorkoutLevel = new WorkoutLevel(req.body);
     newWorkoutLevel.save().then(response => {
+        auditLogger(req, 'Success')
         return successResponseHandler(res, response, "successfully added new WorkoutLevel !!");
     }).catch(error => {
         logger.error(error);
+        auditLogger(req, 'Failed')
         if (error.message.indexOf('duplicate key error') !== -1)
             return errorResponseHandler(res, error, "WorkoutLevel name is already exist !");
         else
@@ -94,12 +97,15 @@ exports.addWorkoutLevel = (req, res) => {
 */
 
 
-exports.updateWorkoutLevel = (req, res) => {
+exports.updateWorkoutLevel = async (req, res) => {
+    req.responseData = await WorkoutLevel.findById(req.params.id).lean()
     WorkoutLevel.findByIdAndUpdate(req.params.id, req.body, { new: true })
         .then(response => {
+            auditLogger(req, 'Success')
             return successResponseHandler(res, response, "successfully updated WorkoutLevel !!");
         }).catch(error => {
             logger.error(error);
+            auditLogger(req, 'Failed')
             if (error.message.indexOf('duplicate key error') !== -1)
                 return errorResponseHandler(res, error, "WorkoutLevel name is already exist !");
             else

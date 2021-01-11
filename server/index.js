@@ -21,7 +21,7 @@ const cors = require('cors')
 */
 
 const { notificationCronjob } = require('./cronjob/notification')
-const { initialSetupForDesignation, initialSetupForAdmin, initialSetupForSystemYear } = require('./startup/init_server');
+const { initialSetupForDesignation, initialSetupForAdmin, initialSetupForSystemYear } = require('./startup/initServer');
 const { config: { PORT, DB, MODE }, logger: { logger } } = require("../config");
 const { mountRoutes } = require("./routes");
 const { oneDayCronJob } = require('./cronjob/oneDayCronjob')

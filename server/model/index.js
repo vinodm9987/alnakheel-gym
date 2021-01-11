@@ -53,5 +53,10 @@ module.exports = {
   TrafficStatistics: require('./appointment/trafficStatistics.model'),
   AdminPassword: require('./privilege/adminPassword.model'),
   ManualBackup: require('./backupRestore/manualBackup.model'),
-  Restore: require('./backupRestore/restore.model')
+  Restore: require('./backupRestore/restore.model'),
+  MoneyCollection: require('./moneyCollection/moneyCollection.model'),
+  AuditLog: require('./auditLog/auditLog.model'),
+  BranchPassword: require('./branchPassword'),
+  ReportPrivilege: require('./privilege/reportPrivilege.model'),
+  EmployeePackage: require('./biostar/employeePackage.model')
 };

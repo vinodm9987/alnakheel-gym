@@ -31,6 +31,29 @@ const branchSchema = new Schema({
 
     capacity: {
         type: Number
+    },
+
+    vatRegNo: {
+        type: String
+    },
+
+    telephone: {
+        type: Number
+    },
+
+    instaId: {
+        type: String
+    },
+
+    avatar: Object,
+
+    machineId: Number,
+
+    bioStarIp: String,
+
+    typeOfMachine: {
+        type: String,
+        enum: ["FaceStation", "BioStation"]
     }
 
 

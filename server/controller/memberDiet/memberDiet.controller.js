@@ -11,6 +11,7 @@ const { newDietPlan } = require('../../notification/helper')
 */
 
 const { MemberDiet } = require('../../model');
+const { auditLogger } = require('../../middleware/auditlog.middleware');
 
 
 
@@ -63,9 +64,11 @@ exports.addMemberDiet = async (req, res) => {
             response = await MemberDiet.findOneAndUpdate({ member, dateOfDiet, dietPlanSession }, data[i], { upsert: true });
         }
         await newDietPlan(req.body[0].member);
+        auditLogger(req, 'Success')
         return successResponseHandler(res, response, "successfully added new MemberDiet !!");
     } catch (error) {
         logger.error(error);
+        auditLogger(req, 'Failed')
         if (error.message.indexOf('duplicate key error') !== -1)
             return errorResponseHandler(res, error, "WorkoutLevel name is already exist !");
         else
@@ -76,13 +79,16 @@ exports.addMemberDiet = async (req, res) => {
 
 
 
-exports.updateMemberDietById = (req, res) => {
+exports.updateMemberDietById = async (req, res) => {
     req.body.dateOfDiet = setTime(req.body.dateOfDiet)
+    req.responseData = await MemberDiet.findById(req.params.id).lean()
     MemberDiet.findByIdAndUpdate(req.params.id, req.body)
         .then(response => {
+            auditLogger(req, 'Success')
             successResponseHandler(res, response, "successfully update  MemberDiet by id !!");
         }).catch(error => {
             logger.error(error);
+            auditLogger(req, 'Failed')
             errorResponseHandler(res, error, "Exception while updating  MemberDiet by id !");
         });
 };

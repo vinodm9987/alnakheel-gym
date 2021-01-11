@@ -1,8 +1,11 @@
-/**  
+/**
  * utils.
 */
 
-const { logger: { logger }, handler: { successResponseHandler, errorResponseHandler } } = require('../../../config')
+const { logger: { logger }, handler: { successResponseHandler, errorResponseHandler }, upload: { uploadAvatar } } = require('../../../config');
+const { auditLogger } = require('../../middleware/auditlog.middleware');
+const { matchBranchPassword } = require('../../startup/initServer')
+const { checkMachineConfigured } = require('../../service/branch.service');
 
 /**
  * models.
@@ -66,20 +69,31 @@ exports.getBranchById = (req, res) => {
 
 
 /**
- *  create new Branch 
+ *  create new Branch
 */
 
 
 exports.addBranch = (req, res) => {
-    let newBranch = new Branch(req.body);
-    newBranch.save().then(response => {
-        return successResponseHandler(res, response, "successfully added new Branch !!");
-    }).catch(error => {
-        logger.error(error);
-        if (error.message.indexOf('duplicate key error') !== -1)
-            return errorResponseHandler(res, error, "Branch name is already exist !");
-        else
-            return errorResponseHandler(res, error, "Exception occurred !");
+    uploadAvatar(req, res, async (err, result) => {
+        if (err) return errorResponseHandler(res, err, "while uploading photo error occurred !");
+        let data = JSON.parse(req.body.data)
+        const isMatch = await matchBranchPassword(data.password);
+        if (!isMatch) return errorResponseHandler(res, isMatch, "password does not match");
+        const isMachine = await checkMachineConfigured(data.bioStarIp, data.machineId);
+        if (!isMachine) return errorResponseHandler(res, 'error', 'machine is not configured');
+        let newBranch = new Branch(data);
+        newBranch["avatar"] = req.files[0]
+        newBranch.save().then(response => {
+            auditLogger(req, 'Success')
+            return successResponseHandler(res, response, "successfully added new Branch !!");
+        }).catch(error => {
+            logger.error(error);
+            auditLogger(req, 'Failed')
+            if (error.message.indexOf('duplicate key error') !== -1)
+                return errorResponseHandler(res, error, "Branch name is already exist !");
+            else
+                return errorResponseHandler(res, error, "Exception occurred !");
+        });
     });
 };
 
@@ -88,20 +102,28 @@ exports.addBranch = (req, res) => {
 
 
 /**
- *  update Branch 
+ *  update Branch
 */
 
 
-exports.updateBranch = (req, res) => {
-    Branch.findByIdAndUpdate(req.params.id, req.body, { new: true })
-        .then(response => {
-            return successResponseHandler(res, response, "successfully updated Branch !!");
-        }).catch(error => {
-            logger.error(error);
-            if (error.message.indexOf('duplicate key error') !== -1)
-                return errorResponseHandler(res, error, "Branch name is already exist !");
-            else
-                return errorResponseHandler(res, error, "Exception occurred !");
-        });
+exports.updateBranch = async (req, res) => {
+    uploadAvatar(req, res, async (error, result) => {
+        if (error) return errorResponseHandler(res, error, "while uploading photo error occurred !");
+        let data = (req.body && req.body.data) ? JSON.parse(req.body.data) : req.body
+        if (req.files && req.files.length !== 0) data["avatar"] = req.files[0]
+        req.responseData = await Branch.findById(req.params.id).lean()
+        Branch.findByIdAndUpdate(req.params.id, data, { new: true })
+            .then(response => {
+                auditLogger(req, 'Success')
+                return successResponseHandler(res, response, "successfully updated Branch !!");
+            }).catch(error => {
+                logger.error(error);
+                auditLogger(req, 'Failed')
+                if (error.message.indexOf('duplicate key error') !== -1)
+                    return errorResponseHandler(res, error, "Branch name is already exist !");
+                else
+                    return errorResponseHandler(res, error, "Exception occurred !");
+            });
+    });
 };
 

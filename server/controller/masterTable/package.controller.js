@@ -1,4 +1,4 @@
-/**  
+/**
  * utils.
 */
 
@@ -11,7 +11,8 @@ const { Formate: { setTime } } = require('../../utils')
 */
 
 const { Package, Period } = require('../../model');
-const { addPackage, updatePackage } = require('../../biostar');
+const { auditLogger } = require('../../middleware/auditlog.middleware');
+const { addPackageInAllBranch, updatePackageInAllBranches } = require('../../service/branch.service');
 
 
 
@@ -76,7 +77,7 @@ exports.getPackageById = (req, res) => {
 
 
 /**
- *  create new package 
+ *  create new package
 */
 
 
@@ -95,9 +96,11 @@ exports.addPackage = async (req, res) => {
             let newResponse = await Package.findById(response._id).lean()
             let periodData = await Period.findById(response.period).lean()
             newResponse["period"] = periodData
+            auditLogger(req, 'Success')
             return successResponseHandler(res, newResponse, "Successfully added package !");
         } catch (error) {
             logger.error(error);
+            auditLogger(req, 'Failed')
             if (error.message.indexOf('duplicate key error') !== -1)
                 return errorResponseHandler(res, error, "Package name is already exist !");
             if (error.errors['packageName'])
@@ -126,7 +129,7 @@ exports.addPackage = async (req, res) => {
 
 
 /**
- *  update new package 
+ *  update new package
 */
 
 exports.updatePackage = async (req, res) => {
@@ -141,10 +144,13 @@ exports.updatePackage = async (req, res) => {
             data["startDate"] = setTime(startDate);
             data["endDate"] = setTime(endDate);
             if (req.files.length > 0) data["image"] = req.files[0];
+            req.responseData = await Package.findById(req.params.id).lean()
             const response = await Package.findByIdAndUpdate(req.params.id, data, { new: true }).populate('period').lean()
+            auditLogger(req, 'Success')
             return successResponseHandler(res, response, "successfully update the package !!");
         } catch (error) {
             logger.error(error);
+            auditLogger(req, 'Failed')
             if (error.message.indexOf('duplicate key error') !== -1)
                 return errorResponseHandler(res, error, "Package name is already exist !");
             if (error.errors['packageName'])
@@ -169,7 +175,7 @@ exports.updatePackage = async (req, res) => {
 
 
 /**
- *  delete package 
+ *  delete package
 */
 
 exports.deletePackage = async (req, res) => {

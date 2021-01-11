@@ -12,6 +12,7 @@ const { newFeedbackAdmin, feedbackReply } = require('../../notification/helper')
 
 
 const { Feedback } = require('../../model');
+const { auditLogger } = require('../../middleware/auditlog.middleware');
 
 
 
@@ -30,9 +31,11 @@ exports.addFeedback = (req, res) => {
     let newFeedback = new Feedback(req.body);
     newFeedback.save().then(async (response) => {
         await newFeedbackAdmin();
+        auditLogger(req, 'Success')
         successResponseHandler(res, response, "successfully added new feedback !");
     }).catch((error) => {
         logger.error(error);
+        auditLogger(req, 'Failed')
         return errorResponseHandler(res, error, "Exception while adding new feedback!");
     })
 };
@@ -62,14 +65,17 @@ exports.getFeedbackById = (req, res) => {
 
 
 
-exports.updateFeedback = (req, res) => {
+exports.updateFeedback = async (req, res) => {
+    req.responseData = await Feedback.findById(req.params.id).lean()
     Feedback.findByIdAndUpdate(req.params.id, req.body, { new: true }).populate('member')
         .populate({ path: "member", populate: { path: "credentialId" } })
         .then(async (response) => {
             await feedbackReply(response.member);
+            auditLogger(req, 'Success')
             successResponseHandler(res, response, "successfully update feedback !")
         }).catch((error) => {
             logger.error(error);
+            auditLogger(req, 'Failed')
             return errorResponseHandler(res, error, "Exception while update feedback !");
         });
 };

@@ -2,7 +2,8 @@
  * utils.
 */
 
-const { logger: { logger }, upload: { uploadAvatar }, handler: { successResponseHandler, errorResponseHandler } } = require('../../../config')
+const { logger: { logger }, upload: { uploadAvatar }, handler: { successResponseHandler, errorResponseHandler } } = require('../../../config');
+const { auditLogger } = require('../../middleware/auditlog.middleware');
 
 /**
  * models.
@@ -109,9 +110,11 @@ exports.addStocks = (req, res) => {
             newStocks["originalQuantity"] = data["quantity"];
             let response = await newStocks.save()
             let newResponse = await Stocks.findById(response._id).populate('branch supplierName')
+            auditLogger(req, 'Success')
             return successResponseHandler(res, newResponse, "successfully added new stock !")
         } catch (error) {
             logger.error(error);
+            auditLogger(req, 'Failed')
             if (error.message.indexOf('duplicate key error') !== -1)
                 return errorResponseHandler(res, error, "Stocks name is already exist !");
             else
@@ -136,11 +139,14 @@ exports.updateStocks = (req, res) => {
         if (req.files.length !== 0) { data["image"] = req.files[0] }
         let { quantity, originalQuantity } = await Stocks.findById(req.params.id).lean()
         if (data.quantity === 0 || data.quantity) data["originalQuantity"] = data.quantity - quantity + originalQuantity;
+        req.responseData = await Stocks.findById(req.params.id).lean()
         Stocks.findByIdAndUpdate(req.params.id, data, { new: true }).populate('branch supplierName')
             .then(response => {
+                auditLogger(req, 'Success')
                 return successResponseHandler(res, response, "successfully updated Stocks !!");
             }).catch(error => {
                 logger.error(error);
+                auditLogger(req, 'Failed')
                 if (error.message.indexOf('duplicate key error') !== -1)
                     return errorResponseHandler(res, error, "Stocks name is already exist !");
                 else
@@ -156,12 +162,15 @@ exports.updateStocks = (req, res) => {
 */
 
 
-exports.updateStockStatus = (req, res) => {
+exports.updateStockStatus = async (req, res) => {
+    req.responseData = await Stocks.findById(req.params.id).lean()
     Stocks.findByIdAndUpdate(req.params.id, req.body, { new: true }).populate('branch supplierName')
         .then(response => {
+            auditLogger(req, 'Success')
             return successResponseHandler(res, response, "successfully updated Stocks !!");
         }).catch(error => {
             logger.error(error);
+            auditLogger(req, 'Failed')
             if (error.message.indexOf('duplicate key error') !== -1)
                 return errorResponseHandler(res, error, "Stocks name is already exist !");
             else

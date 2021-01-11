@@ -32,6 +32,7 @@
     "express-handlebars": "^3.1.0",
     "fcm-notification": "^2.0.0",
     "file-saver": "^2.0.2",
+    "geoip-lite": "^1.4.2",
     "google-maps-react": "^2.0.6",
     "handbrake-js": "^5.0.0",
     "helmet": "^3.21.2",

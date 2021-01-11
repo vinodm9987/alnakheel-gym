@@ -11,6 +11,7 @@ const { announcementNotification } = require('../../notification/helper')
 */
 
 const { Announcement } = require('../../model');
+const { auditLogger } = require('../../middleware/auditlog.middleware');
 
 
 
@@ -26,10 +27,12 @@ exports.addAnnouncement = (req, res) => {
     const newAnnouncement = new Announcement(req.body);
     newAnnouncement.save()
         .then(async (response) => {
+            auditLogger(req, 'Success')
             successResponseHandler(res, response, "successfully add new announcement");
             await announcementNotification();
         }).catch(error => {
             logger.error(error);
+            auditLogger(req, 'Failed')
             errorResponseHandler(res, error, "error ocurred while creating new announcement");
         });
 };
@@ -43,11 +46,14 @@ exports.updateAnnouncement = async (req, res) => {
     const { startDate, endDate } = req.body
     if (startDate) req.body["startDate"] = setTime(req.body.startDate);
     if (endDate) req.body["endDate"] = setTime(req.body.endDate);
+    req.responseData = await Announcement.findById(req.params.id).lean()
     Announcement.findByIdAndUpdate(req.params.id, req.body, { new: true })
         .then((response) => {
+            auditLogger(req, 'Success')
             successResponseHandler(res, response, "successfully update Announcement");
         }).catch(error => {
             logger.error(error);
+            auditLogger(req, 'Failed')
             errorResponseHandler(res, error, "error ocurred while update Announcement");
         });
 };

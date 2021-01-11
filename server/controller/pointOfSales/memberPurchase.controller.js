@@ -10,6 +10,7 @@ const { logger: { logger }, handler: { successResponseHandler, errorResponseHand
 */
 
 const { MemberCart } = require('../../model');
+const { auditLogger } = require('../../middleware/auditlog.middleware');
 
 
 
@@ -26,9 +27,11 @@ exports.addToCart = async (req, res) => {
         let response = await newStocks.save();
         let newResponse = await MemberCart.findById(response._id).populate('stockId')
             .populate({ path: 'stockId', populate: { path: 'offerDetails.offerDetails vat' } })
+        auditLogger(req, 'Success')
         return successResponseHandler(res, newResponse, "successfully added to cart !")
     } catch (error) {
         logger.error(error);
+        auditLogger(req, 'Failed')
         return errorResponseHandler(res, error, "Exception occurred !");
     }
 };
@@ -51,9 +54,11 @@ exports.removeCart = async (req, res) => {
             queryCond["member"] = req.body.member
             response = await MemberCart.deleteMany(queryCond)
         }
+        auditLogger(req, 'Success')
         return successResponseHandler(res, response, "successfully remove cart !")
     } catch (error) {
         logger.error(error);
+        auditLogger(req, 'Failed')
         return errorResponseHandler(res, error, "Exception occurred !");
     }
 };
@@ -64,13 +69,16 @@ exports.removeCart = async (req, res) => {
  * update cart for member
 */
 
-exports.updateCart = (req, res) => {
+exports.updateCart = async (req, res) => {
+    req.responseData = await MemberCart.findById(req.params.id).lean()
     MemberCart.findByIdAndUpdate(req.params.id, { $inc: { addedQuantity: req.body.addedQuantity } }, { new: true }).populate('stockId')
         .populate({ path: 'stockId', populate: { path: 'offerDetails.offerDetails vat' } })
         .then(response => {
+            auditLogger(req, 'Success')
             return successResponseHandler(res, response, "successfully update cart !")
         }).catch(error => {
             logger.error(error);
+            auditLogger(req, 'Failed')
             return errorResponseHandler(res, error, "Exception occurred !");
         });
 };
@@ -80,13 +88,16 @@ exports.updateCart = (req, res) => {
  * update cart for member from shopping item
 */
 
-exports.updateCartQuantity = (req, res) => {
+exports.updateCartQuantity = async (req, res) => {
+    req.responseData = await MemberCart.findById(req.params.id).lean()
     MemberCart.findByIdAndUpdate(req.params.id, { addedQuantity: req.body.addedQuantity }, { new: true }).populate('stockId')
         .populate({ path: 'stockId', populate: { path: 'offerDetails.offerDetails' } })
         .then(response => {
+            auditLogger(req, 'Success')
             return successResponseHandler(res, response, "successfully update cart !")
         }).catch(error => {
             logger.error(error);
+            auditLogger(req, 'Failed')
             return errorResponseHandler(res, error, "Exception occurred !");
         });
 };

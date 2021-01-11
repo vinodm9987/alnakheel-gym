@@ -2,7 +2,8 @@
  * utils.
 */
 
-const { logger: { logger }, handler: { successResponseHandler, errorResponseHandler } } = require('../../../config')
+const { logger: { logger }, handler: { successResponseHandler, errorResponseHandler } } = require('../../../config');
+const { auditLogger } = require('../../middleware/auditlog.middleware');
 
 /**
  * models.
@@ -23,9 +24,11 @@ exports.addVat = async (req, res) => {
         let newVat = new Vat(req.body);
         let response = await newVat.save();
         let newResponse = await Vat.findById(response._id).populate('branch')
+        auditLogger(req, 'Success')
         return successResponseHandler(res, newResponse, "successfully added new Vat !!");
     } catch (error) {
         logger.error(error);
+        auditLogger(req, 'Failed')
         if (error.message.indexOf('duplicate key error') !== -1)
             return errorResponseHandler(res, error, "Vat name and value is already exist !");
         else
@@ -39,11 +42,14 @@ exports.addVat = async (req, res) => {
 
 
 exports.updateVat = async (req, res) => {
+    req.responseData = await Vat.findById(req.params.id).lean()
     Vat.findByIdAndUpdate(req.params.id, req.body, { new: true }).populate('branch')
         .then(response => {
+            auditLogger(req, 'Success')
             return successResponseHandler(res, response, "successfully updated Vat !!");
         }).catch(error => {
             logger.error(error);
+            auditLogger(req, 'Failed')
             if (error.message.indexOf('duplicate key error') !== -1)
                 return errorResponseHandler(res, error, "Vat name and value is already exist !");
             else

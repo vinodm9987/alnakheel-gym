@@ -10,6 +10,7 @@ const { Formate: { setTime } } = require('../../utils')
 
 
 const { WaterInTake } = require('../../model');
+const { auditLogger } = require('../../middleware/auditlog.middleware');
 
 
 
@@ -19,9 +20,11 @@ exports.addWaterInTake = async (req, res) => {
     let record = { date: req.body.date, consume: req.body.consume }
     if (isExists) {
         if (+req.body.consume + +isExists.consume > +isExists.target) {
+            auditLogger(req, 'Failed')
             errorResponseHandler(res, 'error', 'you already drink sufficient water !')
         } else {
             let response = await WaterInTake.findByIdAndUpdate(isExists._id, { consume: +req.body.consume + +isExists.consume, $push: { record: record } }, { new: true }).lean()
+            auditLogger(req, 'Success')
             successResponseHandler(res, response, 'successfully added water consumption')
         }
     } else {
@@ -29,9 +32,11 @@ exports.addWaterInTake = async (req, res) => {
         newRecord["record"] = record
         newRecord["date"] = setTime(req.body.date)
         newRecord.save().then(response => {
+            auditLogger(req, 'Success')
             successResponseHandler(res, response, 'successfully added water consumption')
         }).catch(error => {
             logger.error(error);
+            auditLogger(req, 'Failed')
             errorResponseHandler(res, error, 'Something went wrong !')
         })
     }
@@ -55,9 +60,11 @@ exports.getMemberWaterInTake = async (req, res) => {
 exports.updateMemberWaterInTake = (req, res) => {
     WaterInTake.findOneAndUpdate({ memberId: req.body.memberId, date: setTime(req.body.date) }, { target: req.body.target })
         .then((response) => {
+            auditLogger(req, 'Success')
             return successResponseHandler(res, response, 'successfully updated  water in take')
         }).catch(error => {
             logger.error(error);
-            return  errorResponseHandler(res, error, 'Something went wrong !')
+            auditLogger(req, 'Failed')
+            return errorResponseHandler(res, error, 'Something went wrong !')
         })
 };

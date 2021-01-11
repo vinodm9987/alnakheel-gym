@@ -1,4 +1,4 @@
-/**  
+/**
  * utils.
 */
 
@@ -7,11 +7,14 @@ const { logger: { logger }, upload: { uploadAvatar }, handler: { successResponse
 const { Mailer: { sendMail } } = require('../../utils')
 
 
+
 /**
  * models.
 */
 
-const { Employee, Credential, Designation, Member } = require('../../model');
+const { Employee, Credential, Designation, Member, EmployeePackage, AdminPassword } = require('../../model');
+const { auditLogger } = require('../../middleware/auditlog.middleware');
+const { deviceObjectByTypeOfMachine, employeeBioStarObject, registerUserInBioStar } = require('../../service/branch.service');
 
 
 
@@ -20,24 +23,29 @@ const { Employee, Credential, Designation, Member } = require('../../model');
 
 
 /**
- * 
+ *
  * EMPLOYEES APIS
- * 
+ *
  */
 
 
-exports.updateEmployeeProfile = (req, res) => {
+exports.updateEmployeeProfile = async (req, res) => {
     uploadAvatar(req, res, async (error, result) => {
-        if (error)
+        if (error) {
+            auditLogger(req, 'Failed')
             return errorResponseHandler(res, error, "while uploading profile error occurred !");
+        }
         if (req.files.length > 0) {
             await Credential.findByIdAndUpdate(req.params.id, { avatar: req.files[0] })
         }
+        req.responseData = await Employee.findById({ credentialId: req.params.id }).populate('credentialId').lean()
         Employee.findOneAndUpdate({ credentialId: req.params.id }, JSON.parse(req.body.data))
             .then(response => {
+                auditLogger(req, 'Success')
                 successResponseHandler(res, response, "successfully updated employee !!");
             }).catch(error => {
                 logger.default.error(error);
+                auditLogger(req, 'Failed')
                 errorResponseHandler(res, error, "Exception while updating employee !");
             });
 
@@ -51,7 +59,7 @@ exports.updateEmployeeProfile = (req, res) => {
 
 
 /**
- *  get all employee employee 
+ *  get all employee employee
 */
 
 
@@ -69,7 +77,7 @@ exports.getAllEmployee = (req, res) => {
 
 
 /**
- *  get all employee by filter 
+ *  get all employee by filter
 */
 
 
@@ -77,10 +85,8 @@ exports.getAllEmployee = (req, res) => {
 exports.getAllEmployeeByFilter = async (req, res) => {
     try {
         let queryCond = {}
-        if (req.body.designation) {
-            queryCond["designation"] = req.body.designation
-        }
-        let response = await Employee.find(queryCond).populate('credentialId').lean()
+        if (req.body.designation) { queryCond["designation"] = req.body.designation }
+        let response = await Employee.find(queryCond).populate('credentialId').lean();
         let search = req.body.search.toLowerCase()
         if (search) {
             let newResponse = response.filter(doc => {
@@ -101,7 +107,7 @@ exports.getAllEmployeeByFilter = async (req, res) => {
 
 
 /**
- *  get all active employee employee 
+ *  get all active employee employee
 */
 
 
@@ -146,27 +152,34 @@ exports.getEmployeeById = (req, res) => {
 
 
 /**
- *  create new employee 
+ *  create new employee
 */
+
 exports.createNewEmployee = (req, res) => {
     uploadAvatar(req, res, async (error, data) => {
         if (error)
             return errorResponseHandler(res, error, "while uploading profile error occurred !");
         try {
-            const { mobileNo, gender, dateOfBirth, userName, email, personalId, branch, designation, trainer, visaDetails, address, employeeType, joiningDate, nationality } = JSON.parse(req.body.data);
-            const employee = new Employee({ mobileNo, gender, dateOfBirth, joiningDate, employeeType, personalId, branch, designation, address, visaDetails, trainer, nationality });
-            const credential = new Credential({ userName, email, designation, userId: employee._id, designationName: DESIGNATION[3] })
+            const { userName, email, designation, selectedAuth, fingerIndex, doneFingerAuth } = JSON.parse(req.body.data);
+            const employee = new Employee(JSON.parse(req.body.data));
+            const response = await deviceObjectByTypeOfMachine(selectedAuth, fingerIndex);
+            selectedAuth === 'BioStation' ? employee['biometricTemplate'] = response : employee['faceRecognitionTemplate'] = response;
+            const credential = new Credential({ userName, email, designation, userId: employee._id, designationName: DESIGNATION[3], doneFingerAuth })
             const password = Math.random().toString(36).slice(-8);
             credential.setPassword(password);
             credential["avatar"] = req.files[0]
             const newResponse = await credential.save();
-            employee["credentialId"] = newResponse._id
-            employee.save().then(response => {
-                sendMail(email, password);
-                return successResponseHandler(res, response, "successfully added new employee !!");
-            }).catch(error => logger.error(error))
+            employee["credentialId"] = newResponse._id;
+            const employeeData = await employee.save();
+            const bioStarInfo = await EmployeePackage.findOne({});
+            const bioStarObject = employeeBioStarObject(selectedAuth, bioStarInfo, employeeData, newResponse);
+            await registerUserInBioStar(bioStarObject)
+            await sendMail(email, password);
+            await auditLogger(req, 'Success')
+            return successResponseHandler(res, response, "successfully added new employee !!");
         } catch (error) {
             logger.error(error);
+            auditLogger(req, 'Failed')
             if (error.message.indexOf('duplicate key error') !== -1)
                 return errorResponseHandler(res, error, "Email is already exist !");
             else
@@ -176,18 +189,59 @@ exports.createNewEmployee = (req, res) => {
 };
 
 
+exports.updateEmployeeFingerPrint = async (req, res) => {
+    try {
+        await AdminPassword.findOne({ password: req.body.password }).then(async user => {
+            if (!user) return errorResponseHandler(res, '', "Your entered password is wrong !");
+            else {
+                const { template0, template1 } = await deviceObjectByTypeOfMachine('BioStation');
+                const userData = await Employee.findById(req.body.employeeId).lean()
+                const bioObject = { template0, template1, fingerIndex: req.body.fingerIndex, memberId: 'e' + userData.employeeId }
+                await updateFingerPrint(bioObject)
+                await Employee.findByIdAndUpdate(req.body.employeeId, { doneFingerAuth: true, biometricTemplate: bioObject }, { new: true })
+                const newResponse = await Employee.findById(req.body.employeeId).populate('credentialId branch designation').lean()
+                successResponseHandler(res, newResponse, "successfully save the transaction !!");
+            }
+        });
+    } catch (error) {
+        logger.error(error);
+        errorResponseHandler(res, error, "Exception while send code !");
+    }
+}
 
+exports.updateEmployeeFaceRecognition = async (req, res) => {
+    try {
+        // await AdminPassword.findOne({ password: req.body.password }).then(async user => {
+        //     if (!user) return errorResponseHandler(res, '', "Your entered password is wrong !");
+        //     else {
 
+        //     }
+        // });
+        const { raw_image, templates } = await getFaceRecognitionTemplate()
+        const userData = await Employee.findById(req.body.employeeId).lean()
+        const bioObject = { raw_image, templates, fingerIndex: req.body.fingerIndex, memberId: 'e' + userData.employeeId }
+        await updateFingerPrint(bioObject)
+        await Employee.findByIdAndUpdate(req.body.employeeId, { doneFingerAuth: true, biometricTemplate: bioObject }, { new: true })
+        const newResponse = await Employee.findById(req.body.employeeId).populate('credentialId branch designation').lean()
+        successResponseHandler(res, newResponse, "successfully save the transaction !!");
+    } catch (error) {
+        logger.error(error);
+        errorResponseHandler(res, error, "Exception while send code !");
+    }
+}
 
 
 
 exports.updateEmployee = (req, res) => {
     uploadAvatar(req, res, async (error, data) => {
-        if (error)
+        if (error) {
+            auditLogger(req, 'Failed')
             return errorResponseHandler(res, error, "while uploading profile error occurred !");
+        }
         try {
             const { mobileNo, gender, dateOfBirth, joiningDate, userName, email, personalId, branch, designation, visaDetails, address, employeeType, employeeId, credentialId, nationality } = JSON.parse(req.body.data);
             let newObj = { mobileNo, gender, dateOfBirth, joiningDate, employeeType, personalId, branch, designation, address, visaDetails, nationality }
+            req.responseData = await Employee.findById(employeeId).populate('credentialId').lean()
             if (userName || email || designation) {
                 let obj = { userName, email, designation }
                 if (req.files.length > 0) {
@@ -196,9 +250,11 @@ exports.updateEmployee = (req, res) => {
                 await Credential.findByIdAndUpdate(credentialId, obj)
             }
             const response = await Employee.findByIdAndUpdate(employeeId, newObj, { new: true });
+            auditLogger(req, 'Success')
             return successResponseHandler(res, response, "successfully updated  employee !!");
         } catch (error) {
             logger.error(error);
+            auditLogger(req, 'Failed')
             if (error.message.indexOf('duplicate key error') !== -1)
                 return errorResponseHandler(res, error, "Email is already exist !");
             else
@@ -211,9 +267,9 @@ exports.updateEmployee = (req, res) => {
 
 
 /**
- * 
+ *
  * TRAINER APIS
- * 
+ *
  */
 
 
@@ -245,11 +301,14 @@ exports.getActiveTrainer = async (req, res) => {
 
 
 
-exports.updateStatusOfEmployee = (req, res) => {
+exports.updateStatusOfEmployee = async (req, res) => {
+    req.responseData = await Employee.findById(req.params.id).lean()
     Employee.findByIdAndUpdate(req.params.id, { status: req.body.status }, { new: true }).then(response => {
+        auditLogger(req, 'Success')
         successResponseHandler(res, response, "successfully updated status of employee  !!");
     }).catch(error => {
         logger.default.error(error);
+        auditLogger(req, 'Failed')
         errorResponseHandler(res, error, "Exception while updating status of employee !");
     });
 }
@@ -262,7 +321,7 @@ exports.getAllMemberOfTrainer = async (req, res) => {
         queryCond["doneFingerAuth"] = true;
         queryCond["status"] = true
         if (req.params.trainerId && req.params.trainerId !== 'undefined') {
-            queryCond["packageDetails"] = { $elemMatch: { trainer: req.params.trainerId } }
+            queryCond["packageDetails"] = { $elemMatch: { trainerDetails: { $elemMatch: { trainer: req.params.trainerId } } } }
         }
         let response = await Member.find(queryCond)
             .populate('credentialId')

@@ -12,6 +12,7 @@ const { Mailer: { sendMailForPassword } } = require('../../utils')
 
 
 const { Credential, Designation, Employee, Member } = require('../../model');
+const { auditLogger } = require('../../middleware/auditlog.middleware');
 
 
 
@@ -48,7 +49,7 @@ exports.getAllUserFilterByDesignationAndSearch = async (req, res) => {
         } else {
             queryCond["designation"] = designationId
         }
-        let response = await Credential.find(queryCond).populate('userId designation webModule mobileModule').lean()
+        let response = await Credential.find(queryCond).populate('userId designation webModule mobileModule report').lean()
         if (req.body.search) {
             let search = req.body.search.toLowerCase()
             response = response.filter(doc => {
@@ -74,7 +75,7 @@ exports.getAllUserFilterByDesignationAndSearch = async (req, res) => {
 
 exports.getUserById = (req, res) => {
     Credential.findById(req.params.id)
-        .populate('userId designation webModule')
+        .populate('userId designation webModule report')
         .populate({ path: 'userId', populate: { path: 'packageDetails.trainer', populate: { path: "credentialId" } } })
         .populate({ path: 'userId', populate: { path: 'branch' } })
         .then(response => {
@@ -191,17 +192,28 @@ exports.login = async (req, res) => {
         if (!user) return errorResponseHandler(res, '', "Email does not exist !");
         const emp = await Employee.findById(user.userId);
         const member = await Member.findById(user.userId)
-        if (!user.validPassword(req.body.password))
+        if (!user.validPassword(req.body.password)) {
+            auditLogger(req, 'Failed')
             return errorResponseHandler(res, '', "Your entered password is wrong !")
-        else if ((emp && !emp.status) || (member && !member.status))
+        }
+        else if ((emp && !emp.status) || (member && !member.status)) {
+            auditLogger(req, 'Failed')
             return errorResponseHandler(res, '', 'You are disable kindly contact to gym for more info !')
-        else
+        }
+        else {
+            auditLogger(req, 'Success')
             return successResponseHandler(res, user.generateToken(), "successfully login !")
+        }
     }).catch(error => {
+        auditLogger(req, 'Failed')
         logger.error(error);
         return errorResponseHandler(res, error, "failed to login !");
     });
 };
+
+exports.logout = (req, res) => {
+    auditLogger(req, 'Success')
+}
 
 
 

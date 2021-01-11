@@ -11,6 +11,7 @@ const { Formate: { setTime } } = require('../../utils');
 */
 
 const { RewardPolicy } = require('../../model');
+const { auditLogger } = require('../../middleware/auditlog.middleware');
 
 
 
@@ -26,13 +27,16 @@ exports.addNewPolicy = async (req, res) => {
     req.body["endDate"] = setTime(req.body.endDate);
     let isExists = await RewardPolicy.findOne({ policyCategory }).lean();
     if (policyCategory === "Referral" && isExists) {
+        auditLogger(req, 'Failed')
         return errorResponseHandler(res, 'error', "Referral is already exists , kindly update that ! ");
     } else {
         let newPolicy = new RewardPolicy(req.body);
         newPolicy.save().then((response) => {
+            auditLogger(req, 'Success')
             return successResponseHandler(res, response, "successfully add new policy")
         }).catch(error => {
             logger.error(error);
+            auditLogger(req, 'Failed')
             errorResponseHandler(res, error, "error ocurred while create new policy");
         });
     }
@@ -50,10 +54,13 @@ exports.updatePolicy = async (req, res) => {
     if (policyCategory === "Referral" && isExists && isExists._id.toString() !== req.params.id) {
         return errorResponseHandler(res, 'error', "Referral is already exists , kindly update that ! ");
     } else {
+        req.responseData = await RewardPolicy.findById(req.params.id).lean()
         RewardPolicy.findByIdAndUpdate(req.params.id, req.body, { new: true }).then((response) => {
+            auditLogger(req, 'Success')
             return successResponseHandler(res, response, "successfully update new policy");
         }).catch(error => {
             logger.error(error);
+            auditLogger(req, 'Failed')
             return errorResponseHandler(res, error, "error ocurred while update policy");
         });
     }

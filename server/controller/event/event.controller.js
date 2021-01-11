@@ -11,6 +11,7 @@ const { eventNotification } = require('../../notification/helper')
 */
 
 const { Event } = require('../../model');
+const { auditLogger } = require('../../middleware/auditlog.middleware');
 
 
 
@@ -26,10 +27,12 @@ exports.addEvent = (req, res) => {
     const newEvent = new Event(req.body);
     newEvent.save()
         .then(async (response) => {
+            auditLogger(req, 'Success')
             successResponseHandler(res, response, "successfully add new Event");
             await eventNotification();
         }).catch(error => {
             logger.error(error);
+            auditLogger(req, 'Failed')
             errorResponseHandler(res, error, "error ocurred while creating new Event");
         });
 };
@@ -43,11 +46,14 @@ exports.updateEvent = async (req, res) => {
     const { startDate, endDate } = req.body
     if (startDate) req.body["startDate"] = setTime(req.body.startDate);
     if (endDate) req.body["endDate"] = setTime(req.body.endDate);
+    req.responseData = await Event.findById(req.params.id).lean()
     Event.findByIdAndUpdate(req.params.id, req.body, { new: true })
         .then((response) => {
+            auditLogger(req, 'Success')
             successResponseHandler(res, response, "successfully update Event");
         }).catch(error => {
             logger.error(error);
+            auditLogger(req, 'Failed')
             errorResponseHandler(res, error, "error ocurred while update Event");
         });
 };

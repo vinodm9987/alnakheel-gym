@@ -2,7 +2,8 @@
  * utils.
 */
 
-const { logger: { logger }, handler: { successResponseHandler, errorResponseHandler } } = require('../../../config')
+const { logger: { logger }, handler: { successResponseHandler, errorResponseHandler } } = require('../../../config');
+const { auditLogger } = require('../../middleware/auditlog.middleware');
 
 /**
  * models.
@@ -84,9 +85,11 @@ exports.addShift = async (req, res) => {
     let newShift = new Shift(req.body);
     let response = await newShift.save();
     let newResponse = await Shift.findById(response._id).populate('branch')
+    auditLogger(req, 'Success')
     successResponseHandler(res, newResponse, "successfully added new Shift !!");
   } catch (error) {
     logger.error(error);
+    auditLogger(req, 'Failed')
     if (error.message.indexOf('duplicate key error') !== -1)
       return errorResponseHandler(res, error, "Shift name for Branch is already exist !");
     else
@@ -103,12 +106,15 @@ exports.addShift = async (req, res) => {
 */
 
 
-exports.updateShift = (req, res) => {
+exports.updateShift = async (req, res) => {
+  req.responseData = await Shift.findById(req.params.id).lean()
   Shift.findByIdAndUpdate(req.params.id, req.body, { new: true }).populate('branch')
     .then(response => {
+      auditLogger(req, 'Success')
       return successResponseHandler(res, response, "successfully updated Shift !!");
     }).catch(error => {
       logger.error(error);
+      auditLogger(req, 'Failed')
       if (error.message.indexOf('duplicate key error') !== -1)
         return errorResponseHandler(res, error, "Shift name is already exist !");
       else

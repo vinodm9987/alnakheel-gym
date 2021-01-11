@@ -15,6 +15,7 @@ const { ManualBackup, Restore } = require('../../model');
 
 var backup = require('mongodb-backup-4x');
 var restore = require('mongodb-restore');
+const { auditLogger } = require('../../middleware/auditlog.middleware');
 
 
 
@@ -33,18 +34,22 @@ exports.processBackup = async (req, res) => {
           req.body["status"] = 'Failed'
           let response = new ManualBackup(req.body)
           response.save().then(response => {
+            auditLogger(req, 'Failed')
             errorResponseHandler(res, 'error', "Backup Failed !");
           }).catch(error => {
             logger.error(error);
+            auditLogger(req, 'Failed')
             errorResponseHandler(res, error, "Exception while Backup !");
           })
         } else {
           req.body["status"] = 'Success'
           let response = new ManualBackup(req.body)
           response.save().then(response => {
+            auditLogger(req, 'Success')
             successResponseHandler(res, response, "Successfully Backup");
           }).catch(error => {
             logger.error(error);
+            auditLogger(req, 'Failed')
             errorResponseHandler(res, error, "Exception while Backup !");
           })
         }
@@ -52,6 +57,7 @@ exports.processBackup = async (req, res) => {
     });
   } catch (error) {
     logger.error(error);
+    auditLogger(req, 'Failed')
     errorResponseHandler(res, error, "Exception while Backup !");
   }
 };
@@ -80,18 +86,22 @@ exports.processRestore = async (req, res) => {
           req.body["status"] = 'Failed'
           let response = new Restore(req.body)
           response.save().then(response => {
+            auditLogger(req, 'Failed')
             errorResponseHandler(res, 'error', "Restore Failed !");
           }).catch(error => {
             logger.error(error);
+            auditLogger(req, 'Failed')
             errorResponseHandler(res, error, "Exception while Restore !");
           })
         } else {
           req.body["status"] = 'Success'
           let response = new Restore(req.body)
           response.save().then(response => {
+            auditLogger(req, 'Success')
             successResponseHandler(res, response, "Successfully Restore");
           }).catch(error => {
             logger.error(error);
+            auditLogger(req, 'Failed')
             errorResponseHandler(res, error, "Exception while Restore !");
           })
         }
@@ -99,6 +109,7 @@ exports.processRestore = async (req, res) => {
     });
   } catch (error) {
     logger.error(error);
+    auditLogger(req, 'Failed')
     errorResponseHandler(res, error, "Exception while Restore !");
   }
 };

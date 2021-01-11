@@ -11,6 +11,7 @@ const { Formate: { setTime } } = require('../../utils')
 */
 
 const { Assets, Contract, Supplier } = require('../../model');
+const { auditLogger } = require('../../middleware/auditlog.middleware');
 
 
 
@@ -83,20 +84,25 @@ exports.getASuppliersById = (req, res) => {
 exports.addNewSupplier = (req, res) => {
   let newSupplier = new Supplier(req.body);
   newSupplier.save().then(response => {
+    auditLogger(req, 'Success')
     successResponseHandler(res, response, "successfully add new supplier");
   }).catch(error => {
     logger.error(error);
+    auditLogger(req, 'Failed')
     errorResponseHandler(res, error, "Exception while adding new supplier !");
   })
 };
 
 
-exports.updateSupplier = (req, res) => {
+exports.updateSupplier = async (req, res) => {
+  req.responseData = await Supplier.findById(req.params.id).lean()
   Supplier.findByIdAndUpdate(req.params.id, req.body, { new: true })
     .then(response => {
+      auditLogger(req, 'Success')
       successResponseHandler(res, response, "successfully updated supplier");
     }).catch(error => {
       logger.error(error);
+      auditLogger(req, 'Failed')
       errorResponseHandler(res, error, "Exception while updating  supplier !");
     });
 };
@@ -198,7 +204,7 @@ exports.getAssetsById = async (req, res) => {
 
 exports.getAssetsBySupplier = async (req, res) => {
   try {
-    let response = await Assets.find({ supplierName: req.body.supplier }).lean();
+    let response = await Assets.find({ supplierName: req.body.supplier, status: true }).lean();
     let newResponse = response.filter(doc => {
       if (req.body.search) {
         let search = req.body.search.toLowerCase()

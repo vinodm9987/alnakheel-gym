@@ -9,6 +9,7 @@ const { Formate: { setTime } } = require('../../utils')
 */
 
 const { EmployeeShift } = require('../../model');
+const { auditLogger } = require('../../middleware/auditlog.middleware');
 
 
 /**
@@ -68,9 +69,11 @@ exports.addEmployeeShift = async (req, res) => {
       .populate('employee branch shift')
       .populate({ path: 'employee', populate: { path: "credentialId" } })
       .populate({ path: 'employee', populate: { path: "branch" } })
+    auditLogger(req, 'Success')
     return successResponseHandler(res, newResponse, "successfully added new EmployeeShift !!")
   } catch (error) {
     logger.error(error);
+    auditLogger(req, 'Failed')
     if (error.message.indexOf('duplicate key error') !== -1)
       return errorResponseHandler(res, error, "EmployeeShift name is already exist !");
     else
@@ -87,17 +90,20 @@ exports.addEmployeeShift = async (req, res) => {
 */
 
 
-exports.updateEmployeeShift = (req, res) => {
+exports.updateEmployeeShift = async (req, res) => {
   req.body['fromDate'] = setTime(req.body.fromDate)
   req.body['toDate'] = setTime(req.body.toDate)
+  req.responseData = await EmployeeShift.findById(req.params.id).lean()
   EmployeeShift.findByIdAndUpdate(req.params.id, req.body, { new: true })
     .populate('employee branch shift')
     .populate({ path: 'employee', populate: { path: "credentialId" } })
     .populate({ path: 'employee', populate: { path: "branch" } })
     .then(response => {
+      auditLogger(req, 'Success')
       return successResponseHandler(res, response, "successfully updated EmployeeShift !!");
     }).catch(error => {
       logger.error(error);
+      auditLogger(req, 'Failed')
       if (error.message.indexOf('duplicate key error') !== -1)
         return errorResponseHandler(res, error, "EmployeeShift name is already exist !");
       else

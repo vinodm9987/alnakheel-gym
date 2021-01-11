@@ -8,6 +8,8 @@ import PhoneInput from 'react-phone-number-input'
 import Pagination from '../Layout/Pagination'
 import { getPageWiseData } from '../../utils/apis/helpers'
 import Maps from '../Layout/Maps'
+import $ from 'jquery'
+import { findDOMNode } from 'react-dom';
 
 class CreateBranch extends Component {
 
@@ -26,7 +28,25 @@ class CreateBranch extends Component {
       numberE: '',
       branchId: '',
       capacity: '',
-      capacityE: ''
+      capacityE: '',
+      userPhoto: null,
+      userPhotoE: '',
+      userPhotoD: '',
+      vatRegNo: '',
+      vatRegNoE: '',
+      telephone: '',
+      telephoneE: '',
+      instaId: '',
+      instaIdE: '',
+      password: '',
+      passwordE: '',
+      machineId: '',
+      machineIdE: '',
+      bioStarIp: '',
+      bioStarIpE: '',
+      typeOfMachine: '',
+      typeOfMachineE: '',
+      showPass: false,
     }
     this.state = this.default
     this.props.dispatch(getAllBranchForAdmin())
@@ -44,11 +64,15 @@ class CreateBranch extends Component {
   }
 
   handleSubmit() {
+    const el = findDOMNode(this.refs.passwordModalClose);
     const { t } = this.props
-    const { name, geocode, address, email, number, branchId, capacity, nameE, geocodeE, addressE, emailE, numberE, capacityE } = this.state
+    const { name, geocode, address, email, number, branchId, capacity, nameE, geocodeE, addressE, emailE, numberE, capacityE, userPhoto, vatRegNo, vatRegNoE,
+      telephone, telephoneE, instaId, instaIdE, password, machineId, machineIdE, bioStarIp, bioStarIpE, typeOfMachine, typeOfMachineE } = this.state
     if (branchId) {
-      if (name !== '' && geocode !== '' && address !== '' && number !== '' && email !== '' && parseInt(capacity) &&
-        !nameE && !geocodeE && !addressE && !numberE && !emailE && !capacityE
+      console.log("🚀 ~ file: CreateBranch.js ~ line 72 ~ CreateBranch ~ handleSubmit ~ branchId", branchId)
+      if (name !== '' && geocode !== '' && address !== '' && number !== '' && email !== '' && parseInt(capacity) && vatRegNo && telephone && instaId &&
+        machineId && bioStarIp && typeOfMachine && !machineIdE && !bioStarIpE && !typeOfMachineE &&
+        !nameE && !geocodeE && !addressE && !numberE && !emailE && !capacityE && !vatRegNoE && !telephoneE && !instaIdE
       ) {
         const branchInfo = {
           branchName: name,
@@ -56,9 +80,17 @@ class CreateBranch extends Component {
           address,
           email,
           mobile: number,
-          capacity
+          capacity,
+          vatRegNo,
+          telephone,
+          machineId, bioStarIp, typeOfMachine,
+          instaId: instaId.toLowerCase()
         }
-        this.props.dispatch(updateBranch(branchId, branchInfo))
+        console.log("🚀 ~ file: CreateBranch.js ~ line 88 ~ CreateBranch ~ handleSubmit ~ branchInfo", branchInfo)
+        let formData = new FormData()
+        formData.append('userPhoto', userPhoto)
+        formData.append('data', JSON.stringify(branchInfo))
+        this.props.dispatch(updateBranch(branchId, formData))
       } else {
         if (name === '') {
           this.setState({
@@ -83,21 +115,59 @@ class CreateBranch extends Component {
         } if (!parseInt(capacity)) {
           this.setState({
             capacityE: t('Enter capacity')
+          })
+        } if (vatRegNo === '') {
+          this.setState({
+            vatRegNoE: t('Enter vat registration number')
+          })
+        } if (telephone === '') {
+          this.setState({
+            telephoneE: t('Enter telephone number')
+          })
+        } if (instaId === '') {
+          this.setState({
+            instaIdE: t('Enter instagram handler')
+          })
+        } if (machineId === '') {
+          this.setState({
+            machineIdE: t('Enter machine id')
+          })
+        } if (bioStarIp === '') {
+          this.setState({
+            bioStarIpE: t('Enter biostar ip')
+          })
+        } if (typeOfMachine === '') {
+          this.setState({
+            typeOfMachineE: t('Enter type of machine')
           })
         }
       }
     } else {
-      if (name !== '' && geocode !== '' && address !== '' && number !== '' && email !== '' && parseInt(capacity) &&
-        !nameE && !geocodeE && !addressE && !numberE && !emailE && !capacityE) {
-        const branchInfo = {
-          branchName: name,
-          geoCode: geocode,
-          address,
-          email,
-          mobile: number,
-          capacity
+      if (name !== '' && geocode !== '' && address !== '' && number !== '' && email !== '' && parseInt(capacity) && vatRegNo && telephone && instaId &&
+        machineId && bioStarIp && typeOfMachine && !machineIdE && !bioStarIpE && !typeOfMachineE &&
+        !nameE && !geocodeE && !addressE && !numberE && !emailE && !capacityE && !vatRegNoE && !telephoneE && !instaIdE && userPhoto) {
+        if (password) {
+          const branchInfo = {
+            branchName: name,
+            geoCode: geocode,
+            address,
+            email,
+            mobile: number,
+            capacity,
+            vatRegNo,
+            telephone,
+            instaId: instaId.toLowerCase(),
+            machineId, bioStarIp, typeOfMachine,
+            password: password
+          }
+          let formData = new FormData()
+          formData.append('userPhoto', userPhoto)
+          formData.append('data', JSON.stringify(branchInfo))
+          this.props.dispatch(addBranch(formData))
+          $(el).click();
+        } else {
+          if (!password) this.setState({ passwordE: t('Enter password') })
         }
-        this.props.dispatch(addBranch(branchInfo))
       } else {
         if (name === '') {
           this.setState({
@@ -119,9 +189,37 @@ class CreateBranch extends Component {
           this.setState({
             numberE: t('Enter number')
           })
+        } if (userPhoto === null) {
+          this.setState({
+            userPhotoE: t('Upload user photo')
+          })
         } if (!parseInt(capacity)) {
           this.setState({
             capacityE: t('Enter capacity')
+          })
+        } if (vatRegNo === '') {
+          this.setState({
+            vatRegNoE: t('Enter vat registration number')
+          })
+        } if (telephone === '') {
+          this.setState({
+            telephoneE: t('Enter telephone number')
+          })
+        } if (instaId === '') {
+          this.setState({
+            instaIdE: t('Enter instagram handler')
+          })
+        } if (machineId === '') {
+          this.setState({
+            machineIdE: t('Enter machine id')
+          })
+        } if (bioStarIp === '') {
+          this.setState({
+            bioStarIpE: t('Enter biostar ip')
+          })
+        } if (typeOfMachine === '') {
+          this.setState({
+            typeOfMachineE: t('Enter type of machine')
           })
         }
       }
@@ -130,6 +228,50 @@ class CreateBranch extends Component {
 
   handleCancel() {
     this.setState(this.default)
+  }
+
+  handleOpenPassword() {
+    const { t } = this.props
+    const { name, geocode, address, email, number, capacity, nameE, geocodeE, addressE, emailE, numberE, capacityE, userPhoto, vatRegNo, vatRegNoE,
+      telephone, telephoneE, instaId, instaIdE, machineId, machineIdE, bioStarIp, bioStarIpE, typeOfMachine, typeOfMachineE, branchId } = this.state
+    if (branchId) {
+      this.handleSubmit()
+    } else {
+      if (name !== '' && geocode !== '' && address !== '' && number !== '' && email !== '' && parseInt(capacity) && vatRegNo && telephone && instaId &&
+        machineId && bioStarIp && typeOfMachine && !machineIdE && !bioStarIpE && !typeOfMachineE &&
+        !nameE && !geocodeE && !addressE && !numberE && !emailE && !capacityE && !vatRegNoE && !telephoneE && !instaIdE && userPhoto) {
+        const el = findDOMNode(this.refs.passwordModalOpen);
+        $(el).click();
+      } else {
+        if (name === '') {
+          this.setState({ nameE: t('Enter branch name') })
+        } if (geocode === '') {
+          this.setState({ geocodeE: t('Enter geocode') })
+        } if (address === '') {
+          this.setState({ addressE: t('Enter address') })
+        } if (email === '') {
+          this.setState({ emailE: t('Enter email') })
+        } if (number === '') {
+          this.setState({ numberE: t('Enter number') })
+        } if (userPhoto === null) {
+          this.setState({ userPhotoE: t('Upload user photo') })
+        } if (!parseInt(capacity)) {
+          this.setState({ capacityE: t('Enter capacity') })
+        } if (vatRegNo === '') {
+          this.setState({ vatRegNoE: t('Enter vat registration number') })
+        } if (telephone === '') {
+          this.setState({ telephoneE: t('Enter telephone number') })
+        } if (instaId === '') {
+          this.setState({ instaIdE: t('Enter instagram handler') })
+        } if (machineId === '') {
+          this.setState({ machineIdE: t('Enter machine id') })
+        } if (bioStarIp === '') {
+          this.setState({ bioStarIpE: t('Enter biostar ip') })
+        } if (typeOfMachine === '') {
+          this.setState({ typeOfMachineE: t('Enter type of machine') })
+        }
+      }
+    }
   }
 
   handleCheckBox(e, branchId) {
@@ -148,12 +290,19 @@ class CreateBranch extends Component {
       email: branch.email,
       number: branch.mobile,
       branchId: branch._id,
-      capacity: branch.capacity
+      capacity: branch.capacity,
+      vatRegNo: branch.vatRegNo,
+      telephone: branch.telephone,
+      instaId: branch.instaId,
+      machineId: branch.machineId ? branch.machineId : '',
+      bioStarIp: branch.bioStarIp ? branch.bioStarIp : '',
+      typeOFMachine: branch.typeOFMachine ? branch.typeOFMachine : '',
+      userPhoto: branch.avatar
     })
   }
 
   renderCreateBranchForm() {
-    const { name, geocode, address, branchId, email, number, capacity } = this.state
+    const { name, geocode, address, branchId, email, number, capacity, vatRegNo, telephone, instaId, machineId, bioStarIp, typeOfMachine } = this.state
     const { t } = this.props
     return (
       <form className="col-12 form-inline mt-5 px-0">
@@ -227,9 +376,91 @@ class CreateBranch extends Component {
                 </div>
               </div>
             </div>
+            <div className="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
+              <div className="form-group inlineFormGroup">
+                <label htmlFor="vatRegNo" className="mx-sm-2 inlineFormLabel type1">{t('Vat Reg Number')}</label>
+                <input type="text" autoComplete="off" className={this.state.vatRegNoE ? "form-control mx-sm-2 inlineFormInputs FormInputsError" : "form-control mx-sm-2 inlineFormInputs"}
+                  id="vatRegNo" value={vatRegNo} onChange={(e) => this.setState(validator(e, 'vatRegNo', 'text', [t('Enter vat registration number')]))} />
+                <div className="errorMessageWrapper">
+                  <small className="text-danger mx-sm-2 errorMessage">{this.state.vatRegNoE}</small>
+                </div>
+              </div>
+            </div>
+            <div className="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
+              <div className="form-group inlineFormGroup">
+                <label htmlFor="instaId" className="mx-sm-2 inlineFormLabel type1">{t('Instagram Id')}</label>
+                <input type="text" autoComplete="off" className={this.state.instaIdE ? "form-control mx-sm-2 inlineFormInputs FormInputsError" : "form-control mx-sm-2 inlineFormInputs"}
+                  id="instaId" value={instaId} onChange={(e) => this.setState(validator(e, 'instaId', 'text', [t('Enter instagram handler')]))} />
+                <div className="errorMessageWrapper">
+                  <small className="text-danger mx-sm-2 errorMessage">{this.state.instaIdE}</small>
+                </div>
+              </div>
+            </div>
+            <div className="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
+              <div className="form-group inlineFormGroup">
+                <label htmlFor="telephone" className="mx-sm-2 inlineFormLabel type1">{t('Telephone')}</label>
+                <input type="number" autoComplete="off" className={this.state.telephoneE ? "form-control mx-sm-2 inlineFormInputs FormInputsError" : "form-control mx-sm-2 inlineFormInputs"}
+                  id="telephone" value={telephone} onChange={(e) => this.setState(validator(e, 'telephone', 'number', [t('Enter telephone number')]))} />
+                <div className="errorMessageWrapper">
+                  <small className="text-danger mx-sm-2 errorMessage">{this.state.telephoneE}</small>
+                </div>
+              </div>
+            </div>
+            <div className="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
+              <div className="form-group inlineFormGroup">
+                <label htmlFor="machineId" className="mx-sm-2 inlineFormLabel type1">{t('Machine ID')}</label>
+                <input type="number" autoComplete="off" className={this.state.machineIdE ? "form-control mx-sm-2 inlineFormInputs FormInputsError" : "form-control mx-sm-2 inlineFormInputs"}
+                  id="machineId" value={machineId} onChange={(e) => this.setState({ machineId: e.target.value })} />
+                <div className="errorMessageWrapper">
+                  <small className="text-danger mx-sm-2 errorMessage">{this.state.machineIdE}</small>
+                </div>
+              </div>
+            </div>
+            <div className="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
+              <div className="form-group inlineFormGroup">
+                <label htmlFor="bioStarIp" className="mx-sm-2 inlineFormLabel type1">{t('Private IP')}</label>
+                <input type="text" autoComplete="off" className={this.state.bioStarIpE ? "form-control mx-sm-2 inlineFormInputs FormInputsError" : "form-control mx-sm-2 inlineFormInputs"}
+                  id="bioStarIp" value={bioStarIp} onChange={(e) => this.setState({ bioStarIp: e.target.value })} />
+                <div className="errorMessageWrapper">
+                  <small className="text-danger mx-sm-2 errorMessage">{this.state.bioStarIpE}</small>
+                </div>
+              </div>
+            </div>
+            <div className="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
+              <div className="form-group inlineFormGroup">
+                <label htmlFor="typeOfMachine" className="mx-sm-2 inlineFormLabel type1">{t('Type of Machine')}</label>
+                <select className={this.state.typeOfMachineE ? "form-control mx-sm-2 inlineFormInputs FormInputsError" : "form-control mx-sm-2 inlineFormInputs"}
+                  value={typeOfMachine} onChange={(e) => this.setState({ typeOfMachine: e.target.value })} id="typeOfMachine">
+                  <option value="" hidden>{t('Please Select')}</option>
+                  <option value="FaceStation">{t('FaceStation')}</option>
+                  <option value="BioStation">{t('BioStation')}</option>
+                </select>
+                <span className="iconv1 iconv1-arrow-down selectBoxIcon"></span>
+                <div className="errorMessageWrapper">
+                  <small className="text-danger mx-sm-2 errorMessage">{this.state.typeOfMachineE}</small>
+                </div>
+              </div>
+            </div>
+            <div className="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
+              <div className="form-group inlineFormGroup">
+                <label htmlFor="confirmPassword" className="mx-sm-2 inlineFormLabel type1">{t('Branch Photo')}</label>
+                <div className="d-inline-block mx-sm-2 flex-grow-1">
+                  <div className="custom-file-gym">
+                    <input type="file" className="custom-file-input-gym" id="customFile" accept="image/*" onChange={(e) => this.setState(validator(e, 'userPhoto', 'photo', ['Please upload valid file']))} />
+                    <label className="custom-file-label-gym" htmlFor="customFile">{this.state.userPhoto ? this.state.userPhoto.name ? this.state.userPhoto.name : this.state.userPhoto.filename : t('Upload Image')}</label>
+                  </div>
+                </div>
+                {/* <div className="uploadedImageWrapper">
+                    {this.state.userPhotoD && <img alt='' src={this.state.userPhotoD} />}
+                  </div> */}
+                <div className="errorMessageWrapper">
+                  <small className="text-danger mx-sm-2 errorMessage">{this.state.userPhotoE}</small>
+                </div>
+              </div>
+            </div>
             <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
               <div className="justify-content-sm-end d-flex">
-                <button disabled={disableSubmit(this.props.loggedUser, 'Info', 'CreateBranch')} type="button" className="btn btn-success mx-1 px-4" onClick={() => this.handleSubmit()}>{branchId ? t('Update') : t('Submit')}</button>
+                <button disabled={disableSubmit(this.props.loggedUser, 'Info', 'CreateBranch')} type="button" className="btn btn-success mx-1 px-4" onClick={() => this.handleOpenPassword()}>{branchId ? t('Update') : t('Submit')}</button>
                 <button type="button" className="btn btn-danger mx-1 px-4" onClick={() => this.handleCancel()}>{t('Cancel')}</button>
               </div>
             </div>
@@ -247,11 +478,18 @@ class CreateBranch extends Component {
           <table className="table table-striped">
             <thead>
               <tr>
+                <th>{t('Photo')}</th>
                 <th>{t('Branch Name')}</th>
                 <th>{t('Geocode')}</th>
                 <th>{t('Capacity')}</th>
+                <th>{t('Vat Reg Number')}</th>
+                <th>{t('Instagram Id')}</th>
                 <th>{t('Address')}</th>
                 <th>{t('Email')}</th>
+                <th>{t('Telephone')}</th>
+                <th>{t('Machine ID')}</th>
+                <th>{t('Private IP')}</th>
+                <th>{t('Type of Machine')}</th>
                 <th>{t('Mobile Number')}</th>
                 <th className="text-center">{t('Status')}</th>
                 <th className="text-center">{t('Action')}</th>
@@ -261,13 +499,22 @@ class CreateBranch extends Component {
               {this.props.branchs.response && getPageWiseData(this.state.pageNumber, this.props.branchs.response, this.state.displayNum).map((branch, i) => {
                 return (
                   <tr key={i}>
+                    <td>
+                      <img alt='' className="w-50px h-50px" src={branch.avatar ? `/${branch.avatar.path}` : ""} />
+                    </td>
                     <td>{branch.branchName}</td>
                     <td>{branch.geoCode}</td>
                     <td>{branch.capacity}</td>
+                    <td>{branch.vatRegNo}</td>
+                    <td>{branch.instaId}</td>
                     <td className="tdAddress">
                       <p className="whiteSpaceNormal m-0">{branch.address}</p>
                     </td>
                     <td>{branch.email}</td>
+                    <td className="dirltrtar">{branch.telephone}</td>
+                    <td className="dirltrtar">{branch.machineId}</td>
+                    <td className="dirltrtar">{branch.bioStarIp}</td>
+                    <td className="dirltrtar">{branch.typeOfMachine}</td>
                     <td className="dirltrtar">{branch.mobile}</td>
                     <td className="text-center">
                       <label className="switch">
@@ -346,6 +593,42 @@ class CreateBranch extends Component {
           </div>
         </div>
 
+        <button type="button" id="passwordAskModalBtn2" className="d-none" data-toggle="modal" data-target="#passwordAskModal" ref="passwordModalOpen">Open modal</button>
+        <div className="modal fade commonYellowModal" id="passwordAskModal">
+          <div className="modal-dialog modal-dialog-centered">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h4 className="modal-title">{t('Password')}</h4>
+                <button type="button" className="close" data-dismiss="modal" ref="passwordModalClose">
+                  <span className="iconv1 iconv1-close"></span>
+                </button>
+              </div>
+              <div className="modal-body px-0">
+                <div className="container-fluid">
+                  <div className="row">
+                    <div className="col-12">
+                      <div className="form-group position-relative fle">
+                        <label htmlFor="password" className="m-0 text-secondary mx-sm-2">{t('Password')}</label>
+                        <input type={this.state.showPass ? "text" : "password"} className={this.state.passwordE ? "form-control inlineFormInputs w-100 mx-sm-2 FormInputsError" : "form-control inlineFormInputs w-100 mx-sm-2"} id="password"
+                          value={this.state.password} onChange={(e) => this.setState(validator(e, 'password', 'text', [t('Enter password')]))}
+                        />
+                        <span className={this.state.showPass ? "iconv1 iconv1-eye passwordEye" : "iconv1 iconv1-eye passwordEye active"} onClick={() => this.setState({ showPass: !this.state.showPass })}></span>
+                        <div className="errorMessageWrapper">
+                          <small className="text-danger mx-sm-2 errorMessage">{this.state.passwordE}</small>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="col-12 pt-3">
+                      <div className="justify-content-sm-end d-flex pt-4 pb-2">
+                        <button type="button" className="btn btn-success mx-1 px-4" onClick={() => this.handleSubmit()}>{t('Submit')}</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
 
       </div>
     )

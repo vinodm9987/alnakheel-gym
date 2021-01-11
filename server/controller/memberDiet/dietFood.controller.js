@@ -2,7 +2,8 @@
  * utils.
 */
 
-const { logger: { logger }, handler: { successResponseHandler, errorResponseHandler } } = require('../../../config')
+const { logger: { logger }, handler: { successResponseHandler, errorResponseHandler } } = require('../../../config');
+const { auditLogger } = require('../../middleware/auditlog.middleware');
 
 /**
  * models.
@@ -73,9 +74,11 @@ exports.getDietFoodById = (req, res) => {
 exports.addDietFood = (req, res) => {
     let newDietFood = new DietFood(req.body);
     newDietFood.save().then(response => {
+        auditLogger(req, 'Success')
         return successResponseHandler(res, response, "successfully added new DietFood !!");
     }).catch(error => {
         logger.error(error);
+        auditLogger(req, 'Failed')
         if (error.message.indexOf('duplicate key error') !== -1)
             return errorResponseHandler(res, error, "DietFood name is already exist !");
         else
@@ -92,12 +95,15 @@ exports.addDietFood = (req, res) => {
 */
 
 
-exports.updateDietFood = (req, res) => {
+exports.updateDietFood = async (req, res) => {
+    req.responseData = await DietFood.findById(req.params.id).lean()
     DietFood.findByIdAndUpdate(req.params.id, req.body, { new: true })
         .then(response => {
+            auditLogger(req, 'Success')
             return successResponseHandler(res, response, "successfully updated DietFood !!");
         }).catch(error => {
             logger.error(error);
+            auditLogger(req, 'Failed')
             if (error.message.indexOf('duplicate key error') !== -1)
                 return errorResponseHandler(res, error, "DietFood name is already exist !");
             else

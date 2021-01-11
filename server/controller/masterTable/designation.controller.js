@@ -2,7 +2,8 @@
  * utils.
 */
 
-const { logger: { logger }, handler: { successResponseHandler, errorResponseHandler }, config: { DESIGNATION } } = require('../../../config')
+const { logger: { logger }, handler: { successResponseHandler, errorResponseHandler }, config: { DESIGNATION } } = require('../../../config');
+const { auditLogger } = require('../../middleware/auditlog.middleware');
 
 /**
  * models.
@@ -92,9 +93,11 @@ exports.getDesignationById = (req, res) => {
 exports.addDesignation = (req, res) => {
     let newDesignation = new Designation(req.body);
     newDesignation.save().then(response => {
+        auditLogger(req, 'Success')
         return successResponseHandler(res, response, "successfully added new Designation !!");
     }).catch(error => {
         logger.error(error);
+        auditLogger(req, 'Failed')
         if (error.message.indexOf('duplicate key error') !== -1)
             return errorResponseHandler(res, error, "Designation name is already exist !");
         else
@@ -111,12 +114,15 @@ exports.addDesignation = (req, res) => {
 */
 
 
-exports.updateDesignation = (req, res) => {
+exports.updateDesignation = async (req, res) => {
+    req.responseData = await Designation.findById(req.params.id).lean()
     Designation.findByIdAndUpdate(req.params.id, req.body, { new: true })
         .then(response => {
+            auditLogger(req, 'Success')
             return successResponseHandler(res, response, "successfully updated Designation !!");
         }).catch(error => {
             logger.error(error);
+            auditLogger(req, 'Failed')
             if (error.message.indexOf('duplicate key error') !== -1)
                 return errorResponseHandler(res, error, "Designation name is already exist !");
             else

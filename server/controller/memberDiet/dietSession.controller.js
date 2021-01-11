@@ -2,7 +2,8 @@
  * utils.
 */
 
-const { logger: { logger }, handler: { successResponseHandler, errorResponseHandler } } = require('../../../config')
+const { logger: { logger }, handler: { successResponseHandler, errorResponseHandler } } = require('../../../config');
+const { auditLogger } = require('../../middleware/auditlog.middleware');
 
 /**
  * models.
@@ -73,9 +74,11 @@ exports.getDietSessionById = (req, res) => {
 exports.addDietSession = (req, res) => {
     let newDietSession = new DietSession(req.body);
     newDietSession.save().then(response => {
+        auditLogger(req, 'Success')
         return successResponseHandler(res, response, "successfully added new DietSession !!");
     }).catch(error => {
         logger.error(error);
+        auditLogger(req, 'Failed')
         if (error.message.indexOf('duplicate key error') !== -1)
             return errorResponseHandler(res, error, "DietSession name is already exist !");
         else
@@ -92,12 +95,15 @@ exports.addDietSession = (req, res) => {
 */
 
 
-exports.updateDietSession = (req, res) => {
+exports.updateDietSession = async (req, res) => {
+    req.responseData = await DietSession.findById(req.params.id).lean()
     DietSession.findByIdAndUpdate(req.params.id, req.body, { new: true })
         .then(response => {
+            auditLogger(req, 'Success')
             return successResponseHandler(res, response, "successfully updated DietSession !!");
         }).catch(error => {
             logger.error(error);
+            auditLogger(req, 'Failed')
             if (error.message.indexOf('duplicate key error') !== -1)
                 return errorResponseHandler(res, error, "DietSession name is already exist !");
             else

@@ -2,9 +2,16 @@
  * utils.
 */
 
-const { logger: { logger }, upload: { uploadAvatar }, handler: { successResponseHandler, errorResponseHandler } } = require('../../../config');
-const { Formate: { setTime }, IdGenerator: { createId, generateOrderId }, Referral: { addPointOfPolicy, checkExpiryOfPolicy, completeGiftRedeem } } = require('../../utils');
+const { logger: { logger }, upload: { uploadAvatar },
+  handler: { successResponseHandler, errorResponseHandler } } = require('../../../config');
+
+
+const { Formate: { setTime }, IdGenerator: { createId, generateOrderId },
+  Referral: { addPointOfPolicy, checkExpiryOfPolicy, completeGiftRedeem } } = require('../../utils');
+
+
 const { classCapacity, classFullBooked } = require('../../notification/helper')
+
 
 const { newClassAssign, newClassCreate } = require('../../notification/helper');
 
@@ -14,8 +21,11 @@ const { newClassAssign, newClassCreate } = require('../../notification/helper');
 
 const { Classes, Room, MemberClass, Member } = require('../../model');
 
-const { addClass, updateClass } = require('../../biostar');
+const { addClass, updateClass, updateMemberInBioStar, addMemberInBioStar } = require('../../biostar');
 
+const { auditLogger } = require('../../middleware/auditlog.middleware');
+
+const sharp = require('sharp');
 
 
 
@@ -73,9 +83,11 @@ exports.addRoom = async (req, res) => {
     let response = await newRoom.save();
     let newResponse = await Room.findById(response._id)
       .populate('branch')
+    auditLogger(req, 'Success')
     return successResponseHandler(res, newResponse, "successfully added new Room !!");
   } catch (error) {
     logger.error(error);
+    auditLogger(req, 'Failed')
     if (error.message.indexOf('duplicate key error') !== -1)
       return errorResponseHandler(res, error, "Room name is already exist !");
     else
@@ -86,13 +98,16 @@ exports.addRoom = async (req, res) => {
 
 
 
-exports.updateRoom = (req, res) => {
+exports.updateRoom = async (req, res) => {
+  req.responseData = await Room.findById(req.params.id).lean()
   Room.findByIdAndUpdate(req.params.id, req.body, { new: true })
     .populate('branch')
     .then(response => {
+      auditLogger(req, 'Success')
       return successResponseHandler(res, response, "successfully updated Room !!");
     }).catch(error => {
       logger.error(error);
+      auditLogger(req, 'Failed')
       if (error.message.indexOf('duplicate key error') !== -1)
         return errorResponseHandler(res, error, "Room name is already exist !");
       else
@@ -188,8 +203,10 @@ exports.getClassById = (req, res) => {
 
 exports.addNewClasses = (req, res) => {
   uploadAvatar(req, res, async (error, result) => {
-    if (error)
+    if (error) {
+      auditLogger(req, 'Failed')
       return errorResponseHandler(res, error, "while uploading image error occurred !");
+    }
     try {
       let data = JSON.parse(req.body.data);
       data["startDate"] = setTime(data.startDate);
@@ -204,9 +221,11 @@ exports.addNewClasses = (req, res) => {
         .populate({ path: 'trainer', populate: { path: "branch" } });
       await newClassAssign(data.trainer);
       await newClassCreate(data.className);
+      auditLogger(req, 'Success')
       successResponseHandler(res, newResponse, "successfully added new classes !!");
     } catch (error) {
       logger.error(error);
+      auditLogger(req, 'Failed')
       if (error.message.indexOf('duplicate key error') !== -1)
         return errorResponseHandler(res, error, "classes name is already exist !");
       if (error.endTime)
@@ -230,8 +249,10 @@ exports.addNewClasses = (req, res) => {
 
 exports.updateClasses = async (req, res) => {
   uploadAvatar(req, res, async (error, result) => {
-    if (error)
+    if (error) {
+      auditLogger(req, 'Failed')
       return errorResponseHandler(res, error, "while uploading image error occurred !");
+    }
     try {
       let data = JSON.parse(req.body.data);
       data["startDate"] = setTime(data.startDate);
@@ -240,14 +261,17 @@ exports.updateClasses = async (req, res) => {
         data["image"] = req.files[0]
       }
       const classData = await Classes.findById(req.params.id).lean()
+      req.responseData = classData
       data['bioStarInfo'] = await updateClass(data.className, classData.bioStarInfo)
       const response = await Classes.findByIdAndUpdate(req.params.id, data, { new: true })
         .populate('branch room')
         .populate({ path: 'trainer', populate: { path: "credentialId" } })
         .populate({ path: 'trainer', populate: { path: "branch" } }).lean()
+      auditLogger(req, 'Success')
       return successResponseHandler(res, response, "successfully update the Class !!");
     } catch (error) {
       logger.error(error);
+      auditLogger(req, 'Failed')
       if (error.message.indexOf('duplicate key error') !== -1)
         return errorResponseHandler(res, error, "classes name is already exist !");
       if (error.endTime)
@@ -331,10 +355,13 @@ exports.purchaseClassByAdmin = async (req, res) => {
       //notification logics here
       if (+occupied === Math.round(+capacity / 100 * 90)) { classCapacity(req.body.userId, branch, className) }
       if (+newResponse.occupied === +newResponse.capacity) { classFullBooked(req.body.userId, branch, className) }
-      return successResponseHandler(res, newResponse, "successfully assign classes to customer !!");
+      let newClassResponse = await MemberClass.findById(response._id)
+      auditLogger(req, 'Success')
+      return successResponseHandler(res, { ...newClassResponse, ...{ displayReceipt: true } }, "successfully assign classes to customer !!");
     }
   } catch (error) {
     logger.error(error);
+    auditLogger(req, 'Failed')
     return errorResponseHandler(res, error, "Exception occurred (Already Assigned) !");
   }
 };
@@ -436,10 +463,12 @@ exports.purchaseClassByMember = async (req, res) => {
       let response = await newClass.save();
       let queryCond = { "$push": { members: response._id } }
       let newResponse = await Classes.findByIdAndUpdate(req.body.classId, queryCond, { new: true })
+      auditLogger(req, 'Success')
       return successResponseHandler(res, newResponse, "successfully assign classes to customer !!");
     }
   } catch (error) {
     logger.error(error);
+    auditLogger(req, 'Failed')
     return errorResponseHandler(res, error, "Exception occurred (Already Assigned) !");
   }
 };
@@ -510,7 +539,7 @@ exports.startClass = async (req, res) => {
       .populate('classId member')
       .populate({ path: 'classId', populate: { path: 'trainer', populate: { path: 'credentialId' } } })
       .lean()
-    successResponseHandler(res, newResponse, "successfull !!");
+    successResponseHandler(res, newResponse, "successfully !!");
   } catch (error) {
     logger.error(error);
     errorResponseHandler(res, error, "Exception while send code !");

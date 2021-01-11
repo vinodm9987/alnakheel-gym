@@ -5,6 +5,7 @@ const { SMS: { sendBulkMessage }, Mailer: { sendBulkMail } } = require('../../ut
 const { logger: { logger }, handler: { successResponseHandler, errorResponseHandler } } = require('../../../config');
 
 const { setTime } = require('../../utils/timeFormate.util');
+const { auditLogger } = require('../../middleware/auditlog.middleware');
 
 
 exports.sendSms = async (req, res) => {
@@ -15,8 +16,15 @@ exports.sendSms = async (req, res) => {
   const newMessage = new Messaging(req.body);
   await sendBulkMessage(message, numbers, newMessage._id);
   newMessage.save()
-    .then(response => successResponseHandler(res, response, "successfully send message"))
-    .catch((error) => { logger.error(error); errorResponseHandler(res, error) });
+    .then(response => {
+      auditLogger(req, 'Success')
+      successResponseHandler(res, response, "successfully send message")
+    })
+    .catch((error) => {
+      logger.error(error);
+      auditLogger(req, 'Failed')
+      errorResponseHandler(res, error)
+    });
 }
 
 
@@ -31,10 +39,12 @@ exports.sendMail = async (req, res) => {
   await sendBulkMail(subject, emailMessage, emails, newMessage._id);
   newMessage.save()
     .then(response => {
+      auditLogger(req, 'Success')
       successResponseHandler(res, response, "successfully send mail")
     })
     .catch((error) => {
       logger.error(error);
+      auditLogger(req, 'Failed')
       errorResponseHandler(res, error)
     })
 }

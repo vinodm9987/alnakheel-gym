@@ -3,6 +3,7 @@
 */
 
 const { logger: { logger }, handler: { successResponseHandler, errorResponseHandler } } = require('../../../config');
+const { auditLogger } = require('../../middleware/auditlog.middleware');
 
 /**
  * models.
@@ -101,9 +102,11 @@ exports.addTrainerFees = async (req, res) => {
         let newResponse = await TrainerFees.findById(response._id).populate('trainerName period branch')
             .populate({ path: "trainerName", populate: { path: "credentialId" } })
             .populate({ path: "trainerName", populate: { path: "branch" } })
+        auditLogger(req, 'Success')
         return successResponseHandler(res, newResponse, "successfully added new fees !")
     } catch (error) {
         logger.error(error);
+        auditLogger(req, 'Failed')
         if (error.message.indexOf('duplicate key error') !== -1)
             return errorResponseHandler(res, error, "Trainer name is already exist !");
         else
@@ -118,15 +121,18 @@ exports.addTrainerFees = async (req, res) => {
 */
 
 
-exports.updateTrainerFees = (req, res) => {
+exports.updateTrainerFees = async (req, res) => {
+    req.responseData = await TrainerFees.findById(req.params.id).lean()
     TrainerFees.findByIdAndUpdate(req.params.id, req.body, { new: true })
         .populate('trainerName period branch')
         .populate({ path: "trainerName", populate: { path: "credentialId" } })
         .populate({ path: "trainerName", populate: { path: "branch" } })
         .then(response => {
+            auditLogger(req, 'Success')
             return successResponseHandler(res, response, "successfully updated TrainerFees !!");
         }).catch(error => {
             logger.error(error);
+            auditLogger(req, 'Failed')
             if (error.message.indexOf('duplicate key error') !== -1)
                 return errorResponseHandler(res, error, "Trainer name is already exist !");
             else
