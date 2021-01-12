@@ -69,7 +69,7 @@ class payrollprocess extends Component {
                                                     <li className="headingLI list-group-item font-weight-bold"><b>Employes</b></li>
                                                     <li className="list-group-item active d-flex justify-content-between">
                                                         <h6 className="">First item </h6>
-                                                        <h6 className="iconv1 iconv1-right-small-arrow"></h6>
+                                                        <h6 className="iconv1 iconv1-right-small-arrow"> </h6>
                                                     </li>
                                                     <li className="list-group-item">Second item</li>
                                                     <li className="list-group-item">Third item</li>
@@ -172,7 +172,7 @@ class payrollprocess extends Component {
                                                                 <div className="tb-img">
                                                                     <div className="tb-img">
                                                                         <img src="https://i.pinimg.com/originals/d1/1a/45/d11a452f5ce6ab534e083cdc11e8035e.png"
-                                                                            className="up-img" alt="image" />
+                                                                            className="up-img" alt="" />
                                                                     </div>
                                                                 </div>
                                                                 <div className="tb-title align-self-center">

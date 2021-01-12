@@ -8,7 +8,6 @@ import { getDefaultCurrency } from '../../actions/currency.action'
 import { withTranslation } from 'react-i18next'
 import { changeLanguage } from '../../utils/changeLanguage'
 import { setLoading, removeLoading } from '../../actions/loader.action'
-import gymlogo from '../../assets/img/gymnago.png'
 import algymlogo from '../../assets/img/al-main-logo.png'
 // import curvebg from '../../assets/img/login-curve2.png'
 
@@ -103,7 +102,7 @@ class Login extends Component {
                 <div className="form-group">
                   <div className={this.state.emailE ? "position-relative d-flex align-items-center border-bottom pl-2 border-danger" : "position-relative d-flex align-items-center border-bottom pl-2"}>
                     {/* <label htmlFor="userName" className="text-secondary flex-shrink-0 flex-grow-0">{t('User Name')}</label> */}
-                    <span className="text-body font-weight-bold iconv1 iconv1-email mr-2" style={{fontSize: "18px"}}></span>
+                    <span className="text-body font-weight-bold iconv1 iconv1-email mr-2" style={{ fontSize: "18px" }}></span>
                     <input
                       type="text" className="form-control pt-0 w-100 border-0 mr-3 bg-white" id="userName" value={email}
                       onChange={(e) => this.setState(validator(e, 'email', 'email', [t('Enter email'), t('Enter valid email')]))}
@@ -121,7 +120,7 @@ class Login extends Component {
                 <div className="form-group">
                   <div className={this.state.passwordE ? "position-relative d-flex align-items-center border-bottom pl-2 border-danger" : "position-relative d-flex align-items-center border-bottom pl-2"}>
                     {/* <span htmlFor="password" className="text-secondary flex-shrink-0 flex-grow-0">{t('Password')}</span> */}
-                    <span className="text-body font-weight-bold iconv1 iconv1-password mr-2" style={{fontSize: "18px"}}></span>
+                    <span className="text-body font-weight-bold iconv1 iconv1-password mr-2" style={{ fontSize: "18px" }}></span>
                     <input type={showPass ? "text" : "password"} className="form-control pt-0 w-100 border-0 pr-4 mr-3 bg-white" id="password" value={password}
                       onChange={(e) => this.setState(validator(e, 'password', 'text', [t('Enter password')]))}
                       onFocus={() => this.setState({ activeElement: document.activeElement.id })}

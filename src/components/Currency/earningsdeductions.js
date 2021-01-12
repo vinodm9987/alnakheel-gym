@@ -244,7 +244,7 @@ class earningsdeductions extends Component {
                                                                 <div class="tb-img">
                                                                     <div class="tb-img">
                                                                         <img src="https://i.pinimg.com/originals/d1/1a/45/d11a452f5ce6ab534e083cdc11e8035e.png"
-                                                                            class="up-img" alt="image" />
+                                                                            class="up-img" alt="" />
                                                                     </div>
                                                                 </div>
                                                                 <div class="tb-title">
@@ -265,7 +265,7 @@ class earningsdeductions extends Component {
                                                         </td>
                                                         <td>
                                                             <div class="d-inline-flex">
-                                                                <a class="linkHoverDecLess">
+                                                                <a href="#abc" class="linkHoverDecLess">
                                                                     <span class="bg-success action-icon w-30px h-30px rounded-circle d-flex align-items-center justify-content-center text-white">
                                                                         <span class="iconv1 iconv1-edit"></span></span></a></div>
                                                         </td>
@@ -297,7 +297,7 @@ class earningsdeductions extends Component {
                                                                 <div class="tb-img">
                                                                     <div class="tb-img">
                                                                         <img src="https://i.pinimg.com/originals/d1/1a/45/d11a452f5ce6ab534e083cdc11e8035e.png"
-                                                                            class="up-img" alt="image" />
+                                                                            class="up-img" alt="" />
                                                                     </div>
                                                                 </div>
                                                                 <div class="tb-title">
@@ -318,7 +318,7 @@ class earningsdeductions extends Component {
                                                         </td>
                                                         <td>
                                                             <div class="d-inline-flex">
-                                                                <a class="linkHoverDecLess">
+                                                                <a href="#abc" class="linkHoverDecLess">
                                                                     <span class="bg-success action-icon w-30px h-30px rounded-circle d-flex align-items-center justify-content-center text-white">
                                                                         <span class="iconv1 iconv1-edit"></span></span></a></div>
                                                         </td>

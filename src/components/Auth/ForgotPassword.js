@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import gymlogo from '../../assets/img/gymnago.png'
 import algymlogo from '../../assets/img/al-main-logo.png'
 import { withTranslation } from 'react-i18next'
 import { setLoading, removeLoading } from '../../actions/loader.action'

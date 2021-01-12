@@ -926,7 +926,7 @@ class AdminDashboard extends Component {
                                       <td><h5 className="text-warning font-weight-bold m-0 dirltrtar">$ 200</h5></td>
                                       <td>12/02/2020</td>
                                       <td className="text-center">
-                                        <a href="#" className="dboard-btn-icon-primary">
+                                        <a href="/#" className="dboard-btn-icon-primary">
                                           <span className="iconv1 iconv1-right-small-arrow"></span>
                                         </a>
                                       </td>
@@ -944,7 +944,7 @@ class AdminDashboard extends Component {
                                       <td><h5 className="text-warning font-weight-bold m-0 dirltrtar">$ 200</h5></td>
                                       <td>12/02/2020</td>
                                       <td className="text-center">
-                                        <a href="#" className="dboard-btn-icon-primary">
+                                        <a href="/#" className="dboard-btn-icon-primary">
                                           <span className="iconv1 iconv1-right-small-arrow"></span>
                                         </a>
                                       </td>
@@ -962,7 +962,7 @@ class AdminDashboard extends Component {
                                       <td><h5 className="text-warning font-weight-bold m-0 dirltrtar">$ 200</h5></td>
                                       <td>12/02/2020</td>
                                       <td className="text-center">
-                                        <a href="#" className="dboard-btn-icon-primary">
+                                        <a href="/#" className="dboard-btn-icon-primary">
                                           <span className="iconv1 iconv1-right-small-arrow"></span>
                                         </a>
                                       </td>

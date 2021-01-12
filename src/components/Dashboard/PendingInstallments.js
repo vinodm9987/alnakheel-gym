@@ -84,7 +84,7 @@ class PendingInstallments extends Component {
                                                         <td><h5 className="text-warning font-weight-bold m-0 dirltrtar">$ 200</h5></td>
                                                         <td>12/02/2020</td>
                                                         <td className="text-center">
-                                                            <a href="#" className="btn btn-primary br-50px btn-sm px-3">Details</a>
+                                                            <a href="/#" className="btn btn-primary br-50px btn-sm px-3">Details</a>
                                                         </td>
                                                     </tr>
                                                     <tr>
@@ -102,7 +102,7 @@ class PendingInstallments extends Component {
                                                         <td><h5 className="text-warning font-weight-bold m-0 dirltrtar">$ 200</h5></td>
                                                         <td>12/02/2020</td>
                                                         <td className="text-center">
-                                                            <a href="#" className="btn btn-primary br-50px btn-sm px-3">Details</a>
+                                                            <a href="/#" className="btn btn-primary br-50px btn-sm px-3">Details</a>
                                                         </td>
                                                     </tr>
                                                 </tbody>

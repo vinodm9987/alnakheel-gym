@@ -11,7 +11,6 @@ import { Link, withRouter } from 'react-router-dom'
 import { AuthToaster } from '../Toaster';
 import { withTranslation } from 'react-i18next';
 import { GET_ALERT_ERROR, VERIFY_CODE, CLEAR_ERRORS } from '../../actions/types';
-import gymlogo from '../../assets/img/gymnago.png'
 import algymlogo from '../../assets/img/al-main-logo.png'
 import { changeLanguage } from '../../utils/changeLanguage'
 import { setLoading, removeLoading } from '../../actions/loader.action'

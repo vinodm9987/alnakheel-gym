@@ -8,7 +8,6 @@ import { getItemFromStorage } from '../../utils/localstorage'
 import { logoutUser } from '../../actions/auth.action'
 import { withTranslation } from 'react-i18next';
 import { changeLanguage } from '../../utils/changeLanguage';
-import gymlogo from '../../assets/img/gymnago.png'
 import algymlogo from '../../assets/img/al-main-logo.png'
 import { getUserNotification, getUserNotifications } from '../../actions/notification.action';
 import { timeDiffCalc } from '../../utils/apis/helpers';

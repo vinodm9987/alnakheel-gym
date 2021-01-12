@@ -25,7 +25,7 @@ class MemberInstallment extends Component {
                                             <div className="col w-auto px-1 flexBasis-auto flex-grow-1"><h4 className="px-3">Members List</h4></div>
                                             <div className="col w-auto px-1 flexBasis-auto flex-grow-0">
                                                 <div className="form-group inlineFormGroup">
-                                                    <input type="text" autoComplete="off" className="form-control mx-sm-2 badge-pill inlineFormInputs" placeholder="Search"/>
+                                                    <input type="text" autoComplete="off" className="form-control mx-sm-2 badge-pill inlineFormInputs" placeholder="Search" />
                                                     <span className="iconv1 iconv1-search searchBoxIcon"></span>
                                                 </div>
                                             </div>
@@ -65,7 +65,7 @@ class MemberInstallment extends Component {
                                                 <td className="text-danger"><h4 className="m-0">$ 300</h4></td>
                                                 <td className="text-danger"><h4 className="m-0">$ 200</h4></td>
                                                 <td className="text-center">
-                                                    <a type="button" className="btn btn-primary btn-sm w-100px rounded-50px" href="#" >Details</a>
+                                                    <a href="/#" type="button" className="btn btn-primary btn-sm w-100px rounded-50px" >Details</a>
                                                 </td>
                                             </tr>
                                         </tbody>

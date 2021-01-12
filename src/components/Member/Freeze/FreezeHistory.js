@@ -1,12 +1,12 @@
-import React, { Component } from 'react'
-import { validator, dateToDDMMYYYY, getPageWiseData } from '../../../utils/apis/helpers'
 import DateFnsUtils from '@date-io/date-fns';
 import { DatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 import 'date-fns';
+import React, { Component } from 'react';
 import { withTranslation } from 'react-i18next';
-import { connect } from 'react-redux'
-import { getFreezeHistory } from '../../../actions/freeze.action';
+import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { getFreezeHistory } from '../../../actions/freeze.action';
+import { dateToDDMMYYYY, getPageWiseData, validator } from '../../../utils/apis/helpers';
 import Pagination from '../../Layout/Pagination';
 
 class FreezeHistory extends Component {
@@ -19,24 +19,24 @@ class FreezeHistory extends Component {
       date: new Date(),
     }
     this.state = this.default
-    this.props.dispatch(getFreezeHistory({ search: this.state.search, date: this.state.date }))
+    this.props.dispatch(getFreezeHistory({ search: this.state.search, date: this.state.date, typeOfFreeze: 'Froze' }))
   }
 
   handleDate(e) {
     this.setState({ ...validator(e, 'date', 'date', []) }, () => {
-      this.props.dispatch(getFreezeHistory({ search: this.state.search, date: this.state.date }))
+      this.props.dispatch(getFreezeHistory({ search: this.state.search, date: this.state.date, typeOfFreeze: 'Froze' }))
     })
   }
 
   resetDate() {
     this.setState({ date: '' }, () => {
-      this.props.dispatch(getFreezeHistory({ search: this.state.search, date: this.state.date }))
+      this.props.dispatch(getFreezeHistory({ search: this.state.search, date: this.state.date, typeOfFreeze: 'Froze' }))
     })
   }
 
   handleSearch(e) {
     this.setState({ search: e.target.value }, () => {
-      window.dispatchWithDebounce(getFreezeHistory)({ search: this.state.search, date: this.state.date })
+      window.dispatchWithDebounce(getFreezeHistory)({ search: this.state.search, date: this.state.date, typeOfFreeze: 'Froze' })
     })
   }
 
@@ -51,7 +51,7 @@ class FreezeHistory extends Component {
                 <div className="row d-block d-sm-flex justify-content-end pt-5">
                   <div className="col w-auto px-1 flexBasis-auto flex-grow-0">
                     <div className="form-group inlineFormGroup flex-nowrap">
-                      <span onClick={() => this.resetDate()} className="btn btn-warning btn-sm text-white my-1">ALL</span>
+                      <span onClick={() => this.resetDate()} className="btn btn-warning btn-sm text-white my-1">{t('ALL')}</span>
                       <MuiPickersUtilsProvider utils={DateFnsUtils}>
                         <DatePicker
                           variant='inline'
@@ -103,7 +103,7 @@ class FreezeHistory extends Component {
                     <tr key={i}>
                       <td>
                         <div className="d-flex">
-                          <img alt='' src={`/${avatar.path}`} className="mx-1 rounded-circle w-50px h-50px" />
+                          <img alt='' src={`http://${avatar.ip}:5600/${avatar.path}`} className="mx-1 rounded-circle w-50px h-50px" />
                           <div className="mx-1">
                             <h5 className="m-0">{userName}</h5>
                             <span className="text-primary d-flex"><span>{t('ID')}</span><span className="mx-1">:</span><span> {memberId}</span></span>

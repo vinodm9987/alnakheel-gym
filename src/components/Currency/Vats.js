@@ -49,7 +49,7 @@ class Vat extends Component {
   handleSubmit() {
     const { t } = this.props
     const { vatName, taxPercent, branch } = this.state
-    if (vatName && taxPercent && branch) {
+    if (vatName && taxPercent !== '' && branch) {
       const vatInfo = {
         vatName, taxPercent, branch
       }
@@ -57,7 +57,7 @@ class Vat extends Component {
     } else {
       if (!branch) this.setState({ branchE: t('Enter branch') })
       if (!vatName) this.setState({ vatNameE: t('Enter VAT name') })
-      if (!taxPercent) this.setState({ taxPercentE: t('Enter value') })
+      if (taxPercent === '') this.setState({ taxPercentE: t('Enter value') })
     }
   }
 

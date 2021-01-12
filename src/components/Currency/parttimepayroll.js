@@ -88,7 +88,7 @@ class parttimepayroll extends Component {
                                                                 <div class="tb-img">
                                                                     <div class="tb-img">
                                                                         <img src="https://i.pinimg.com/originals/d1/1a/45/d11a452f5ce6ab534e083cdc11e8035e.png"
-                                                                            class="up-img" alt="image" />
+                                                                            class="up-img" alt="" />
                                                                     </div>
                                                                 </div>
                                                                 <div class="tb-title align-self-center">
@@ -198,7 +198,7 @@ class parttimepayroll extends Component {
                                                                 <div class="tb-img">
                                                                     <div class="tb-img">
                                                                         <img src="https://i.pinimg.com/originals/d1/1a/45/d11a452f5ce6ab534e083cdc11e8035e.png"
-                                                                            class="up-img" alt="image" />
+                                                                            class="up-img" alt="" />
                                                                     </div>
                                                                 </div>
                                                                 <div class="tb-title">
@@ -272,7 +272,7 @@ class parttimepayroll extends Component {
                                                                 <div class="tb-img">
                                                                     <div class="tb-img">
                                                                         <img src="https://i.pinimg.com/originals/d1/1a/45/d11a452f5ce6ab534e083cdc11e8035e.png"
-                                                                            class="up-img" alt="image" />
+                                                                            class="up-img" alt="" />
                                                                     </div>
                                                                 </div>
                                                                 <div class="tb-title">

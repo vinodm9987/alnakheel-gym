@@ -1,14 +1,14 @@
-import React, { Component } from 'react'
-import { validator, dateToDDMMYYYY, getPageWiseData, setTime } from '../../../utils/apis/helpers'
 import DateFnsUtils from '@date-io/date-fns';
 import { DatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 import 'date-fns';
+import React, { Component } from 'react';
 import { withTranslation } from 'react-i18next';
-import { connect } from 'react-redux'
-import { getPendingFreezeMember, freezeMember, removeMemberFreeze } from '../../../actions/freeze.action';
+import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import Pagination from '../../Layout/Pagination';
+import { freezeMember, getPendingFreezeMember, removeMemberFreeze } from '../../../actions/freeze.action';
+import { dateToDDMMYYYY, getPageWiseData, setTime, validator } from '../../../utils/apis/helpers';
 import { disableSubmit } from '../../../utils/disableButton';
+import Pagination from '../../Layout/Pagination';
 
 class PendingFreeze extends Component {
 
@@ -218,7 +218,7 @@ class PendingFreeze extends Component {
                       </td>
                       <td>
                         <div className="d-flex">
-                          <img alt='' src={`/${avatar.path}`} className="mx-1 rounded-circle w-50px h-50px" />
+                          <img alt='' src={`http://${avatar.ip}:5600/${avatar.path}`} className="mx-1 rounded-circle w-50px h-50px" />
                           <div className="mx-1">
                             <h5 className="m-0">{userName}</h5>
                             <span className="text-primary d-flex"><span>ID</span><span className="mx-1">:</span><span> {memberId}</span></span>
@@ -227,7 +227,7 @@ class PendingFreeze extends Component {
                       </td>
                       <td>{dateToDDMMYYYY(fromDate)}</td>
                       <td>{dateToDDMMYYYY(toDate)}</td>
-                      <td>{noOfDays} Days</td>
+                      <td>{noOfDays} {t('Days')}</td>
                       <td>{dateToDDMMYYYY(reactivationDate)}</td>
                       <td><span className="mx-200-normalwrap">{reason}</span></td>
                       <td>{totalAmount ? `${this.props.defaultCurrency} ${totalAmount.toFixed(3)}` : 'NA'}</td>

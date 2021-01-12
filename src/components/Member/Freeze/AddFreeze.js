@@ -1,17 +1,17 @@
-import React, { Component } from 'react'
-import { connect } from 'react-redux'
-import { withTranslation } from 'react-i18next'
-import { disableSubmit } from '../../../utils/disableButton'
-import Select from 'react-select';
-import { validator, dateToDDMMYYYY, calculateDays } from '../../../utils/apis/helpers';
 import DateFnsUtils from '@date-io/date-fns';
 import { DatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 import 'date-fns';
-import { getActiveStatusNotExpiredRegisterMembers } from '../../../actions/member.action';
-import { applyFreezeMember, applyFreezeAllMember } from '../../../actions/freeze.action';
-import { getAllVat } from '../../../actions/vat.action';
-import $ from 'jquery'
+import $ from 'jquery';
+import React, { Component } from 'react';
 import { findDOMNode } from 'react-dom';
+import { withTranslation } from 'react-i18next';
+import { connect } from 'react-redux';
+import Select from 'react-select';
+import { applyFreezeAllMember, applyFreezeMember } from '../../../actions/freeze.action';
+import { getActiveStatusNotExpiredRegisterMembers } from '../../../actions/member.action';
+import { getAllVat } from '../../../actions/vat.action';
+import { calculateDays, dateToDDMMYYYY, validator } from '../../../utils/apis/helpers';
+import { disableSubmit } from '../../../utils/disableButton';
 
 class AddFreeze extends Component {
 
@@ -219,7 +219,7 @@ class AddFreeze extends Component {
     const formatOptionLabel = ({ credentialId: { userName, avatar, email }, memberId }) => {
       return (
         <div className="d-flex align-items-center">
-          <img alt='' src={`/${avatar.path}`} className="rounded-circle mx-1 w-30px h-30px" />
+          <img alt='' src={`http://${avatar.ip}:5600/${avatar.path}`} className="rounded-circle mx-1 w-30px h-30px" />
           <div className="w-100">
             <small className="whiteSpaceNormal d-block" style={{ lineHeight: '1', fontWeight: 'bold' }}>{userName} ({memberId})</small>
             <small className="whiteSpaceNormal d-block" style={{ lineHeight: '1' }}>{email}</small>
@@ -469,7 +469,7 @@ class AddFreeze extends Component {
                                       <td className="text-right" dir="ltr"><h6 className="mb-0 mt-2">{this.props.defaultCurrency} {subTotal.toFixed(3)}</h6></td>
                                     </tr>
                                     <tr>
-                                      <td className="text-left" dir="ltr"><h6 className="mb-0 mt-2">{t('Tax')} {taxPercent ? `(${taxPercent} %)` : ''}</h6></td>
+                                      <td className="text-left" dir="ltr"><h6 className="mb-0 mt-2">{t('Vat')} {taxPercent ? `(${taxPercent} %)` : ''}</h6></td>
                                       <td className="text-right" dir="ltr"><h6 className="mb-0 mt-2">{this.props.defaultCurrency} {totalVat.toFixed(3)}</h6></td>
                                     </tr>
                                   </tbody>
@@ -483,7 +483,7 @@ class AddFreeze extends Component {
                               </div>
                             </div>
                             <div className="col-12">
-                              <h5 className="font-weight-bold my-4">Payment Method</h5>
+                              <h5 className="font-weight-bold my-4">{t('Payment Method')}</h5>
                             </div>
                             <div className="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
                               <div className="form-group inlineFormGroup">
