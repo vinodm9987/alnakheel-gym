@@ -67,14 +67,15 @@ header.topBar {
   flex: 0 0 100%;
   width: 100%;
   position: relative;
-  border-bottom: 1px solid #cbcbcd;
+  /* border-bottom: 1px solid #cbcbcd; */
   height: 75px;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   justify-content: flex-end;
-  background-color: #075bb5;
-  background-image: linear-gradient(to right, #1085fe, #074db5);
+  /* background-color: #075bb5; */
+  background-color: #000;
+  /* background-image: linear-gradient(to right, #1085fe, #074db5); */
   color: #fff;
 }
 .topLogoWrapper {
@@ -287,7 +288,8 @@ aside.sideNav {
   max-width: 110px;
   flex: 0 0 110px;
   position: relative;
-  background-color: #0b83c2;
+  /* background-color: #0b83c2; */
+  background-color: #000;
 }
 .primaryLevelMenu {
   margin: 0;
