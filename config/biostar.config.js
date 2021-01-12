@@ -175,7 +175,7 @@ exports.getUserObject = (data) => {
 
 
 exports.getUpdateUserObject = (data) => {
-    const { accessGroupName, accessGroupId, endDate, memberId, name, email,
+    const { accessGroupName, accessGroupId, endDate, name, email,
         phoneNumber, template0, template1, newPhoto, startDate, userGroupId
     } = data;
     return {
