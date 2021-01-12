@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import gymlogo from '../../assets/img/gymnago.png'
+import algymlogo from '../../assets/img/al-main-logo.png'
 import { withTranslation } from 'react-i18next'
 import { setLoading, removeLoading } from '../../actions/loader.action'
 import { changeLanguage } from '../../utils/changeLanguage'
@@ -57,7 +58,7 @@ class ForgotPassword extends Component {
                 </div>
               </div>
               <div className="col-12">
-                <img src={gymlogo} alt="" className="w-300px mx-auto d-block mt-5" style={{ maxWidth: '90%' }} />
+                <img src={algymlogo} alt="" className="w-100px mx-auto d-block mt-5" style={{ maxWidth: '90%' }} />
               </div>
               <div className="col-12">
                 <h3 className="text-center font-weight-bold py-4">{t('Forgot Password')}</h3>
