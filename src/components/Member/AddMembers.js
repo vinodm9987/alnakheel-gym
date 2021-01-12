@@ -1223,7 +1223,7 @@ class AddMembers extends Component {
                             </div>
                             <div className="closeHere">
                               <span className="close-btn">
-                                <span className="icon-in-active"><span className="path1"></span><span className="path2"></span><span className="path3"></span></span>
+                                <span className="iconv1 iconv1-close text-white font-weight-bold" style={{fontSize : "11px"}}></span>
                               </span>
                             </div>
                           </div>

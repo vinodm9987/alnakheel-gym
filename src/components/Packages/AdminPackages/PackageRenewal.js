@@ -413,6 +413,124 @@ class PackageRenewal extends Component {
                   </div>
                   <h4 className="text-danger font-weight-bold px-2">{this.props.defaultCurrency} {this.state.amount}</h4>
                 </div>
+
+
+
+
+
+
+
+
+
+                <div class="col-12 d-flex flex-wrap py-4 mb-3 px-2">
+                  <h5 class="mx-3">Do you want to pay as Installment?</h5>
+                  <div class="position-relative mx-3">
+                    <select class="bg-warning rounded w-100px px-3 py-1 border border-warning text-white">
+                      <option value="Yes">Yes</option>
+                      <option value="No">No</option>
+                    </select>
+                    <span class="iconv1 iconv1-arrow-down selectBoxIcon text-white"></span>
+                  </div>
+                </div>
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 px-4 d-flex justify-content-end">
+                  <button type="button" class="btn btn-success displayInlineFlexCls alignItemsCenter my-2 ml-3">
+                    <span style={{ fontSize: "18px" }}>+</span>
+                    <span class="gaper"></span>
+                    <span>Add Installment</span>
+                  </button>
+                </div>
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 px-4">
+                  <div class="row">
+                    <div class="TrainerYesOpen w-100">
+                      <div class="row mx-0">
+                        {/* loop 1 start */}
+                        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 grayBXhere">
+                          <div class="lefthere">
+                            <div class="loopWhitehere">
+                              <h4 class="displayFlexCls"><span>Installment</span><span class="gaper"></span><span class="mnw-20pxhere">1</span></h4>
+                              <div class="vLinehere"></div>
+                              <div class="valuesetHere">
+                                <label class="mt-2 mx-1">Value</label>
+                                <div class="position-relative d-flex flex-grow-1" dir="ltr">
+                                  <span class="OnlyCurrency Uppercase">bhd</span>
+                                  <input type="text" class="form-control inputFieldPaddingCls ar-en-px-2" />
+                                </div>
+                              </div>
+                              <div class="datesetHere">
+                                <label class="mt-2 mx-1 text-nowrap">Due Date</label>
+                                <span class="position-relative">
+                                  {/* please keep calendaer coming box input plugin */}
+                                  <div class="MuiFormControl-root MuiTextField-root form-control pl-2" format="dd/MM/yyyy">
+                                    <div class="MuiInputBase-root MuiInput-root MuiInputBase-formControl MuiInput-formControl">
+                                      <input aria-invalid="false" readonly="" type="text" class="MuiInputBase-input MuiInput-input" value="12/01/2021" />
+                                    </div>
+                                  </div>
+                                  <span class="iconv1 iconv1-calander dateBoxIcon"></span>
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="righthere">
+                            <div class="closeHere">
+                              <span class="close-btn">
+                                <span class="iconv1 iconv1-close text-white font-weight-bold" style={{ fontSize: "11px" }}></span>
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                        {/* loop 1 end */}
+                        {/* loop 2 start */}
+                        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 grayBXhere">
+                          <div class="lefthere">
+                            <div class="loopWhitehere">
+                              <h4 class="displayFlexCls"><span>Installment</span><span class="gaper"></span><span class="mnw-20pxhere">2</span></h4>
+                              <div class="vLinehere"></div>
+                              <div class="valuesetHere">
+                                <label class="mt-2 mx-1">Value</label>
+                                <div class="position-relative d-flex flex-grow-1" dir="ltr">
+                                  <span class="OnlyCurrency Uppercase">bhd</span>
+                                  <input type="text" class="form-control inputFieldPaddingCls ar-en-px-2" />
+                                </div>
+                              </div>
+                              <div class="datesetHere">
+                                <label class="mt-2 mx-1 text-nowrap">Due Date</label>
+                                <span class="position-relative">
+                                  {/* please keep calendaer coming box input plugin */}
+                                  <div class="MuiFormControl-root MuiTextField-root form-control pl-2" format="dd/MM/yyyy">
+                                    <div class="MuiInputBase-root MuiInput-root MuiInputBase-formControl MuiInput-formControl">
+                                      <input aria-invalid="false" readonly="" type="text" class="MuiInputBase-input MuiInput-input" value="12/01/2021" />
+                                    </div>
+                                  </div>
+                                  <span class="iconv1 iconv1-calander dateBoxIcon"></span>
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="righthere">
+                            <div class="closeHere">
+                              <span class="close-btn">
+                                <span class="iconv1 iconv1-close text-white font-weight-bold" style={{ fontSize: "11px" }}></span>
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                        {/* loop 2 end */}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+
+
+
+
+
+
+
+
+
+
+
               </div>
             }
           </div>

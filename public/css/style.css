@@ -74,7 +74,7 @@ header.topBar {
   align-items: center;
   justify-content: flex-end;
   /* background-color: #075bb5; */
-  background-color: #0C0E10;
+  background-color: #0c0e10;
   /* background-image: linear-gradient(to right, #1085fe, #074db5); */
   color: #fff;
 }
@@ -251,7 +251,7 @@ ul.notificationMenu li {
   }
   .topLogo {
     width: 50px;
-}
+  }
   .notificationSection {
     padding: 20px 5px 5px 5px;
     margin: 0 5px;
@@ -289,7 +289,7 @@ aside.sideNav {
   flex: 0 0 110px;
   position: relative;
   /* background-color: #0b83c2; */
-  background-color: #0C0E10;
+  background-color: #0c0e10;
 }
 .primaryLevelMenu {
   margin: 0;
@@ -3511,4 +3511,117 @@ input:focus {
   width: 9px;
   height: 9px;
   background: skyblue;
+}
+
+.BookATrainer .grayBXhere,
+.PackageRenewal .grayBXhere {
+  /* background: #eaeaea; */
+  display: flex;
+  padding: 5px 0;
+  /* border: 1px solid #ccc; */
+  /* border-radius: 4px; */
+}
+.BookATrainer .lefthere,
+.PackageRenewal .lefthere {
+  max-width: calc(100% - 44px);
+  flex: 0 0 calc(100% - 44px);
+  overflow: auto;
+}
+.BookATrainer .loopWhitehere,
+.PackageRenewal .loopWhitehere {
+  /* background: #fff; */
+  display: flex;
+  align-items: stretch;
+  border-radius: 4px;
+  margin-bottom: 5px;
+  /* min-width: 744px; */
+  background: #eaeaea;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+.BookATrainer .loopWhitehere h4,
+.PackageRenewal .loopWhitehere h4 {
+  margin: 20px 0;
+  padding: 0 10px;
+  font-size: 18px;
+}
+.BookATrainer .vLinehere,
+.PackageRenewal .vLinehere {
+  border-left: 1px solid #777;
+  margin: 10px 5px;
+}
+.BookATrainer .gaper,
+.PackageRenewal .gaper {
+  width: 10px;
+}
+.BookATrainer .mnw-20pxhere,
+.PackageRenewal .mnw-20pxhere {
+  min-width: 20px;
+}
+.BookATrainer .valuesetHere,
+.PackageRenewal .valuesetHere {
+  display: flex;
+  align-items: center;
+  margin: 5px 0;
+  padding: 0 5px;
+  flex: 1 1 10px;
+}
+.BookATrainer .OnlyCurrency,
+.PackageRenewal .OnlyCurrency {
+  white-space: nowrap;
+  align-self: center;
+  background: #ee4655;
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid #ee4655;
+  padding: 0 6px;
+  height: 36px;
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
+  color: #fff;
+  font-weight: 500;
+}
+.BookATrainer .OnlyCurrency + input.form-control.inputFieldPaddingCls,
+.PackageRenewal .OnlyCurrency + input.form-control.inputFieldPaddingCls {
+  border-top-left-radius: 0 !important;
+  border-bottom-left-radius: 0 !important;
+  min-width: 49px;
+}
+.BookATrainer .datesetHere,
+.PackageRenewal .datesetHere {
+  display: flex;
+  align-items: center;
+  margin: 5px 0;
+  padding: 0 5px;
+}
+.BookATrainer .MuiFormControl-root,
+.PackageRenewal .MuiFormControl-root {
+  border: 1px solid #ced1d2;
+  border-radius: 4px;
+}
+.BookATrainer .closeHere,
+.PackageRenewal .closeHere {
+  display: flex;
+  align-items: center;
+  margin: 5px 0;
+  padding: 0 5px;
+}
+.BookATrainer .close-btn,
+.PackageRenewal .close-btn {
+  margin-left: 5px;
+  margin-right: 5px;
+  border-radius: 50%;
+  cursor: pointer;
+  overflow: hidden;
+  background: #ef4754;
+  font-size: 18px;
+  width: 23px;
+  height: 23px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.BookATrainer .righthere,
+.PackageRenewal .righthere {
+  padding-top: 15px;
 }
