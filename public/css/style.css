@@ -74,7 +74,7 @@ header.topBar {
   align-items: center;
   justify-content: flex-end;
   /* background-color: #075bb5; */
-  background-color: #000;
+  background-color: #0C0E10;
   /* background-image: linear-gradient(to right, #1085fe, #074db5); */
   color: #fff;
 }
@@ -289,7 +289,7 @@ aside.sideNav {
   flex: 0 0 110px;
   position: relative;
   /* background-color: #0b83c2; */
-  background-color: #000;
+  background-color: #0C0E10;
 }
 .primaryLevelMenu {
   margin: 0;
@@ -310,13 +310,15 @@ aside.sideNav {
   padding: 15px 0;
 }
 .primaryLevelMenuList:hover > a {
-  background-color: #22a8db;
+  /* background-color: #22a8db; */
+  background-color: #e11f2b;
 }
 .primaryLevelMenuList > a:hover {
   text-decoration: none;
 }
 .primaryLevelMenuList.active > a {
-  background-color: #22a8db;
+  /* background-color: #22a8db; */
+  background-color: #e11f2b;
 }
 .primaryLevelMenuList > a > span {
   font-size: 40px;
@@ -337,7 +339,8 @@ aside.sideNav {
   top: 0;
   left: 110px;
   z-index: 99;
-  background-color: #0f9ab9;
+  /* background-color: #0f9ab9; */
+  background-color: #e11f2b;
   white-space: nowrap;
 }
 .primaryLevelMenuList:hover .secondaryLevelMenu {
