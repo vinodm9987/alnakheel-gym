@@ -126,7 +126,7 @@ exports.addMoneyCollection = async (req, res) => {
       auditLogger(req, 'Failed')
       errorResponseHandler(res, error, "Exception while add new money collection !");
     });
-  } catch (err) {
+  } catch (error) {
     logger.error(error);
     auditLogger(req, 'Failed')
     errorResponseHandler(res, error, "error ocurred while add money collection");
@@ -141,7 +141,7 @@ exports.getMoneyCollectionHistory = async (req, res) => {
     if (req.body.branch) queryCond["branch"] = req.body.branch
     let response = await MoneyCollection.find(queryCond).populate('branch').lean();
     successResponseHandler(res, response, "successfully get money collection");
-  } catch (err) {
+  } catch (error) {
     logger.error(error);
     errorResponseHandler(res, error, "Exception while getting money collection!");
   }

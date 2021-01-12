@@ -118,6 +118,7 @@ import AuditLog from './components/AuditLog/AuditLog';
 import BookATrainer from './components/Trainer/BookATrainer';
 import MoneyCollection from './components/MoneyCollection/MoneyCollection';
 import MoneyCollectionDetails from './components/MoneyCollection/MoneyCollectionDetails';
+import PendingInstallments from './components/Dashboard/PendingInstallments';
 
 
 
@@ -317,6 +318,7 @@ class App extends Component {
           <Route exact path='/' component={AdminDashboard} />
           {/* Dashboard */}
           <Route path='/admin-dashboard' component={AdminDashboard} />
+          <Route path='/pending-installments' component={PendingInstallments} />
 
           {/* Members */}
           <Route path='/add-member' component={AddMembers} />

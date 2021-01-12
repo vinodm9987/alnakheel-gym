@@ -12,6 +12,7 @@ import { AuthToaster } from '../Toaster';
 import { withTranslation } from 'react-i18next';
 import { GET_ALERT_ERROR, VERIFY_CODE, CLEAR_ERRORS } from '../../actions/types';
 import gymlogo from '../../assets/img/gymnago.png'
+import algymlogo from '../../assets/img/al-main-logo.png'
 import { changeLanguage } from '../../utils/changeLanguage'
 import { setLoading, removeLoading } from '../../actions/loader.action'
 import { checkReferralCodeValidity } from '../../actions/reward.action'
@@ -173,7 +174,7 @@ class Register extends Component {
                 </div>
 
                 <div className="col-12">
-                  <img src={gymlogo} alt="" className="w-300px mx-auto d-block mt-5" style={{ maxWidth: '75%' }} />
+                  <img src={algymlogo} alt="" className="w-100px mx-auto d-block mt-5" style={{ maxWidth: '75%' }} />
                 </div>
 
                 <div className="col-12">

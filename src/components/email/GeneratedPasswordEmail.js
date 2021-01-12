@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import gymlogo from '../../assets/img/gymnago.png'
+import algymlogo from '../../assets/img/al-main-logo.png'
 
 class GeneratedPasswordEmail extends Component {
 
@@ -14,9 +15,9 @@ class GeneratedPasswordEmail extends Component {
         paddingBottom: "40px",
         fontFamily: "sans-serif"
       }}>
-        <img src={gymlogo} alt="logo"
+        <img src={algymlogo} alt="logo"
           style={{
-            width: "270px",
+            width: "100px",
             maxWidth: "100%",
             margin: "40px auto",
             display: "block"
