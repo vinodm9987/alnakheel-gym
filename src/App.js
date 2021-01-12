@@ -61,7 +61,6 @@ import StockDetails from './components/PointOfSales/Admin/StockDetails';
 import UserPrivileges from './components/Privileges/UserPrivileges';
 import Currency from './components/Currency/Currency';
 import Vats from './components/Currency/Vats';
-import moneyCollection from './components/Currency/money-collection';
 import payroll from './components/Currency/payroll';
 import earningsdeductions from './components/Currency/earningsdeductions';
 import parttimepayroll from './components/Currency/parttimepayroll';
@@ -115,6 +114,10 @@ import Restore from './components/BackupRestore/Restore';
 import AdminPassword from './components/Privileges/AdminPassword';
 import MemberInstallment from './components/Installments/MemberInstallment'
 import MemberInstallmentDetails from './components/Installments/MemberInstallmentDetails'
+import AuditLog from './components/AuditLog/AuditLog';
+import BookATrainer from './components/Trainer/BookATrainer';
+import MoneyCollection from './components/MoneyCollection/MoneyCollection';
+import MoneyCollectionDetails from './components/MoneyCollection/MoneyCollectionDetails';
 
 
 
@@ -186,7 +189,7 @@ class App extends Component {
       }, () => {
         const { credential, userId } = jwt_decode(this.props.authToken)
         this.props.dispatch(getUserById(credential))
-        this.props.dispatch(getCustomerClassesDetails({ member: userId }))
+        userId && this.props.dispatch(getCustomerClassesDetails({ member: userId }))
         axios.defaults.headers.common['userId'] = credential
         document.getElementById('NotTop') && document.getElementById('NotTop').addEventListener('scroll', this.handleScroll)
       })
@@ -321,6 +324,7 @@ class App extends Component {
           <Route path='/members' component={Members} />
           <Route path='/members-details/:id' component={AdminMemberDetails} />
           <Route path='/freeze-members' component={FreezeMembers} />
+          <Route path='/book-trainer' component={BookATrainer} />
           {/* <Route path='/trainer-members' component={TrainerMyMembers} />
           <Route path='/trainer-members-details/:id' component={TrainerMyDetails} /> */}
 
@@ -363,7 +367,10 @@ class App extends Component {
           {/* Finance */}
           <Route path='/add-currency' component={Currency} />
           <Route path='/add-vat' component={Vats} />
-          <Route path='/money-collection' component={moneyCollection} />
+
+          <Route path='/money-collection' component={MoneyCollection} />
+          <Route path='/money-collection-details/:id' component={MoneyCollectionDetails} />
+
           <Route path='/payroll' component={payroll} />
           <Route path='/earningsdeductions' component={earningsdeductions} />
           <Route path='/earningsdeductions' component={earningsdeductions} />
@@ -430,7 +437,9 @@ class App extends Component {
 
           <Route path='/backup' component={Backup} />
 
-          <Route path='/Restore' component={Restore} />
+          <Route path='/restore' component={Restore} />
+
+          <Route path='/audit-log' component={AuditLog} />
 
           <Route path='/member-installment' component={MemberInstallment} />
 

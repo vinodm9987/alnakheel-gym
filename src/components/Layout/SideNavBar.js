@@ -258,6 +258,7 @@ class SideNavBar extends Component {
                 <li className="secondaryLevelMenuList"><NavLink to='/admin-attendance' onClick={() => this.handleActiveSubTab()}>{t(`Member's Attendance`)}</NavLink></li>
                 <li className="secondaryLevelMenuList"><NavLink to='/freeze-members' onClick={() => this.handleActiveSubTab()}>{t(`Freeze Members`)}</NavLink></li>
                 <li className="secondaryLevelMenuList"><NavLink to='/package-renewal' onClick={() => this.handleActiveSubTab()}>{t('Member Renewal')}</NavLink></li>
+                <li className="secondaryLevelMenuList"><NavLink to='/book-trainer' onClick={() => this.handleActiveSubTab()}>{t('Book A Trainer')}</NavLink></li>
                 {/* <li className="secondaryLevelMenuList"><NavLink to='/trainer-members' onClick={() => this.handleActiveSubTab()}>{t(`Trainer Members`)}</NavLink></li> */}
               </ul>
             </li>
@@ -384,6 +385,7 @@ class SideNavBar extends Component {
                 <li className="secondaryLevelMenuList"><NavLink to='/create-system-admin' onClick={() => this.handleActiveSubTab()}>{t('Create System Admin')}</NavLink></li>
                 <li className="secondaryLevelMenuList"><NavLink to='/user-privilege' onClick={() => this.handleActiveSubTab()}>{t('User Privilege')}</NavLink></li>
                 <li className="secondaryLevelMenuList"><NavLink to='/admin-password' onClick={() => this.handleActiveSubTab()}>{t('Finger Enroll Password')}</NavLink></li>
+                <li className="secondaryLevelMenuList"><NavLink to='/audit-log' onClick={() => this.handleActiveSubTab()}>{t('Audit Logs')}</NavLink></li>
               </ul>
             </li>
             <li className="primaryLevelMenuList">
