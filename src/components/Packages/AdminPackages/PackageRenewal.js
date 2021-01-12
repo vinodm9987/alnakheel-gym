@@ -1,15 +1,24 @@
-import React, { Component } from 'react'
+import DateFnsUtils from '@date-io/date-fns';
+import { DatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
+import 'date-fns';
+import $ from 'jquery';
+import QRCode from 'qrcode.react';
+import React, { Component } from 'react';
+import { findDOMNode } from 'react-dom';
+import { withTranslation } from 'react-i18next';
+import { connect } from 'react-redux';
 import Select from 'react-select';
-import { withTranslation } from 'react-i18next'
 import { getAllMemberOfTrainer } from '../../../actions/employee.action';
-import { connect } from 'react-redux'
-import { validator, setTime } from '../../../utils/apis/helpers';
-import { getUniqueTrainerByBranch, getPeriodOfTrainer } from '../../../actions/trainerFees.action';
+import { payAtGym } from '../../../actions/member.action';
+import { getAllActivePackage } from '../../../actions/package.action';
+import { verifyAdminPassword } from '../../../actions/privilege.action';
 // import { disableSubmit } from '../../../utils/disableButton'
 import { getAmountByRedeemCode } from '../../../actions/reward.action';
+import { getPeriodOfTrainer, getUniqueTrainerByBranch } from '../../../actions/trainerFees.action';
 import { GET_ALERT_ERROR } from '../../../actions/types';
 import { getAllVat } from '../../../actions/vat.action';
-import { payAtGym } from '../../../actions/member.action';
+import instaimg from '../../../assets/img/insta.svg.webp';
+import { dateToDDMMYYYY, dateToHHMM, setTime, validator } from '../../../utils/apis/helpers';
 
 class PackageRenewal extends Component {
 
@@ -20,7 +29,7 @@ class PackageRenewal extends Component {
       packages: '',
       memberE: '',
       packagesE: '',
-      wantTrainer: 'Yes',
+      wantTrainer: 'No',
       trainer: null,
       period: '',
       trainerE: '',
@@ -51,16 +60,37 @@ class PackageRenewal extends Component {
       giftCard: '',
       text: '',
       memberTransactionId: '',
-      oldPackageId: ''
+      oldPackageId: '',
+      startDate: new Date(),
+      endDate: new Date(),
+      startDateE: '',
+      endDateE: '',
+      packageReceipt: null,
+      trainerPeriodDays: 0,
+      packageEndDate: new Date(),
+      posReceipt: null,
+      password: '',
+      passwordE: '',
+      showPass: false,
+      trainerId: '',
+      startTrainerDate: new Date(),
     }
     this.state = this.default
-    this.props.dispatch(getAllMemberOfTrainer())
+    this.props.dispatch(getAllActivePackage())
   }
 
   componentDidUpdate(prevProps, prevState) {
     if (this.props.errors !== prevProps.errors) {
       if (Object.keys(this.props.errors).length !== 0 && !this.props.errors.error) {
-        this.setState(this.default)
+        if (this.props.errors.response && this.props.errors.response.displayReceipt) {
+          let packageReceipt = this.props.errors.response._doc
+          this.setState({ ...{ packageReceipt } }, () => {
+            const el = findDOMNode(this.refs.receiptOpenModal);
+            $(el).click();
+          })
+        } else {
+          this.setState(this.defaultCancel)
+        }
       }
     }
     if (this.props.t !== prevProps.t) {
@@ -73,13 +103,49 @@ class PackageRenewal extends Component {
         this.props.dispatch({ type: GET_ALERT_ERROR, payload: 'Sorry gift card is not valid on this transaction' })
       }
     }
+    if (((this.props.verifyPassword && this.props.verifyPassword) !== (prevProps.verifyPassword)) && this.props.verifyPassword === 'verified') {
+      const el = findDOMNode(this.refs.openDiscount);
+      $(el).click();
+    }
+  }
+
+  componentDidMount() {
+    const trainerId = this.props.loggedUser && this.props.loggedUser.userId && this.props.loggedUser.userId._id
+    this.setState({ trainerId }, () => {
+      if (this.state.trainerId) {
+        this.props.dispatch(getAllMemberOfTrainer(this.state.trainerId))
+      } else {
+        this.props.dispatch(getAllMemberOfTrainer())
+      }
+    })
+  }
+
+  handlePrint() {
+    var w = window.open('', 'new div', 'height=400,width=600');
+    var printOne = $('#ReceiptModal2').html();
+    w.document.write('<html><head><title></title>');
+    w.document.write('<link rel="stylesheet" href="css/style.css" type="text/css" />');
+    w.document.write('<link rel="stylesheet" href="css/style2.css" type="text/css" />');
+    w.document.write('<link rel="stylesheet" href="css/bootstrap.min.css" type="text/css" />');
+    w.document.write('<link rel="stylesheet" href="css/bootstrap.min.css" type="text/css" />');
+    w.document.write('</head><body >');
+    w.document.write(printOne)
+    w.document.write('</body></html>');
+    w.window.print();
+    w.document.close();
+    this.setState(this.default)
+    return false;
+  }
+
+  handleReceiptClose() {
+    this.setState(this.default)
   }
 
   setMember(e) {
     const { t } = this.props
     this.setState({ ...this.default, ...validator(e, 'member', 'select', [t('Select member')]) }, () => {
       this.state.member && this.setState({
-        packageDetails: this.state.member.packageDetails.filter(pack => pack.isExpiredPackage && !pack.packageRenewal && setTime(pack.packages.endDate) >= setTime(new Date())),
+        packageDetails: this.state.member.packageDetails.filter(pack => setTime(pack.endDate) >= setTime(new Date())),
         branch: this.state.member.branch
       }, () => {
         this.props.dispatch(getAllVat({ branch: this.state.branch }))
@@ -91,24 +157,53 @@ class PackageRenewal extends Component {
   setPackage(e) {
     const { t } = this.props
     const index = e.nativeEvent.target.selectedIndex
+    const { startDate } = this.state
     var periodDays = 0
     var packageAmount = 0
     var setPackageAmount = 0
     var tax = 0
-    var oldPackageId = ''
+    // var oldPackageId = ''
+    var endDate = startDate
+    var start = startDate
+    var packageEndDate = new Date()
     if (index > 0) {
-      periodDays = this.state.packageDetails[index - 1].packages.period.periodDays
-      packageAmount = this.state.packageDetails[index - 1].packages.amount
-      setPackageAmount = this.state.packageDetails[index - 1].packages.amount
+      // const packageExist = this.state.packageDetails.filter(pack => pack.packages._id === e.target.value)
+      const packageExist = this.state.packageDetails[this.state.packageDetails.length - 1]
+      periodDays = this.props.packages.active[index - 1].period.periodDays
+      packageAmount = this.props.packages.active[index - 1].amount
+      setPackageAmount = this.props.packages.active[index - 1].amount
       tax = this.props.activeVats ? this.props.activeVats.filter(vat => vat.defaultVat)[0] ? this.props.activeVats.filter(vat => vat.defaultVat)[0].taxPercent : 0 : 0
-      oldPackageId = this.state.packageDetails[index - 1]._id
+      // oldPackageId = this.state.packageDetails[index - 1]._id
+      if (packageExist) {
+        start = packageExist.endDate
+        endDate = packageExist.endDate
+        packageEndDate = packageExist.endDate
+        start = new Date(new Date(start).setDate(new Date(start).getDate() + 1))
+        packageEndDate = new Date(new Date(packageEndDate).setDate(new Date(packageEndDate).getDate() + 1))
+        endDate = new Date(new Date(endDate).setDate(start.getDate() + periodDays - 1))
+      } else {
+        endDate = new Date(new Date(endDate).setDate(startDate.getDate() + periodDays - 1))
+      }
     }
-    this.setState({ ...validator(e, 'packages', 'text', [t('Enter package name')]), ...{ tax, periodDays, oldPackageId, packageAmount, setPackageAmount, cash: 0, card: 0, period: '', amount: 0, giftcard: 0, discount: 0, count: 0, trainer: null } })
+    this.setState({
+      ...validator(e, 'packages', 'text', [t('Enter package name')]), ...{
+        tax, periodDays, packageAmount, setPackageAmount, cash: 0, card: 0, digital: 0, period: '',
+        amount: 0, giftcard: 0, discount: 0, count: 0, trainer: null, endDate, startDate: start, startTrainerDate: start, packageEndDate
+      }
+    })
+  }
+
+  setStartDate(e) {
+    this.setState({ ...validator(e, 'startDate', 'date', []), ...validator(e, 'startTrainerDate', 'date', []) }, () => {
+      const { startDate } = this.state
+      const endDate = new Date(new Date(startDate).setDate(e.getDate() + this.state.periodDays - 1))
+      this.setState({ endDate })
+    })
   }
 
   setTrainer(e) {
     const { t } = this.props
-    this.setState({ ...validator(e, 'trainer', 'select', [t('Select trainer name')]), ...{ period: '', amount: 0, packageAmount: this.state.setPackageAmount, giftcard: 0, discount: 0, count: 0, cash: 0, card: 0 } }, () => {
+    this.setState({ ...validator(e, 'trainer', 'select', [t('Select trainer name')]), ...{ period: '', amount: 0, packageAmount: this.state.setPackageAmount, giftcard: 0, discount: 0, count: 0, cash: 0, card: 0, digital: 0, } }, () => {
       const data = {
         branch: this.state.branch,
         trainerName: this.state.trainer
@@ -120,6 +215,7 @@ class PackageRenewal extends Component {
   setPeriod(e, trainerPeriods) {
     const { t } = this.props
     const index = e.nativeEvent.target.selectedIndex
+    var trainerPeriodDays = 0
     var amount = 0
     var trainerFeesId = null
     var packageAmount = this.state.setPackageAmount
@@ -127,8 +223,9 @@ class PackageRenewal extends Component {
       amount = trainerPeriods[index - 1].amount
       trainerFeesId = trainerPeriods[index - 1]._id
       packageAmount = packageAmount + amount
+      trainerPeriodDays = trainerPeriods[index - 1].period.periodDays
     }
-    this.setState({ ...validator(e, 'period', 'text', [t('Select period')]), ...{ amount, trainerFeesId, packageAmount, giftcard: 0, discount: 0, count: 0, cash: 0, card: 0 } })
+    this.setState({ ...validator(e, 'period', 'text', [t('Select period')]), ...{ amount, trainerFeesId, packageAmount, giftcard: 0, discount: 0, count: 0, cash: 0, card: 0, digital: 0, trainerPeriodDays } })
   }
 
   setDigital(e, total) {
@@ -178,10 +275,11 @@ class PackageRenewal extends Component {
 
   handleSubmit(totalAmount) {
     const { t } = this.props
-    const { packages, cardNumber, cash, card, packageAmount, member, discount, tax, giftcard, setPackageAmount, memberTransactionId, oldPackageId, cashE, cardE, digital, digitalE } = this.state
-    if (member && packages && (cash || card || digital) && !cardE && !cashE && !digitalE) {
+    const { packages, cardNumber, cash, card, packageAmount, member, discount, tax, giftcard, memberTransactionId, cashE, cardE, digital, digitalE,
+      startDate, endDate } = this.state
+    if (member && packages && (cash || card || digital) && !cardE && !cashE && !digitalE && startDate <= endDate) {
       const memberInfo = {
-        oldPackageId,
+        // oldPackageId,
         memberId: member._id,
         packageDetails: {
           packages: packages,
@@ -193,9 +291,11 @@ class PackageRenewal extends Component {
           actualAmount: packageAmount,
           totalAmount: totalAmount,
           discount: parseFloat(discount),
-          tax: (setPackageAmount - discount - giftcard) * tax / 100,
+          tax: (packageAmount - discount - giftcard) * tax / 100,
           giftcard: giftcard,
           memberTransactionId: memberTransactionId,
+          startDate,
+          endDate
         }
       }
       this.wantTrainer(memberInfo)
@@ -203,16 +303,21 @@ class PackageRenewal extends Component {
       if (!packages) this.setState({ packagesE: t('Enter package name') })
       if (!member) this.setState({ memberE: t('Select member') })
       if (!cash && !card && !digital) this.setState({ cashE: t('Enter amount') })
+      if (startDate > endDate) this.setState({ endDateE: t('End Date should be greater than Start Date') })
     }
   }
 
   wantTrainer(memberInfo) {
     const { t } = this.props
-    const { trainer, wantTrainer, period, trainerFeesId } = this.state
+    const { trainer, wantTrainer, period, trainerFeesId, trainerPeriodDays, startDate, startTrainerDate } = this.state
     if (wantTrainer === 'Yes') {
       if (trainer && period) {
-        memberInfo.packageDetails.trainerFees = trainerFeesId
-        memberInfo.packageDetails.trainer = trainer._id
+        memberInfo.packageDetails.trainerDetails = [{
+          trainerFees: trainerFeesId,
+          trainer: trainer._id,
+          trainerStart: startDate,
+          trainerEnd: new Date(new Date(startTrainerDate).setDate(startTrainerDate.getDate() + trainerPeriodDays - 1))
+        }]
         this.props.dispatch(payAtGym(memberInfo.memberId, memberInfo))
       } else {
         if (!trainer) this.setState({ trainerE: t('Select trainer name') })
@@ -227,25 +332,39 @@ class PackageRenewal extends Component {
     this.setState(this.default)
   }
 
+  verifyPassword() {
+    const { password } = this.state
+    const { t } = this.props
+    if (password) {
+      const postData = {
+        password: password
+      }
+      this.props.dispatch({ type: 'VERIFY_ADMIN_PASSWORD', payload: 'null' })
+      this.props.dispatch(verifyAdminPassword(postData))
+    } else {
+      if (!password) this.setState({ passwordE: t('Enter password') })
+    }
+  }
+
   addDiscount(subTotal) {
     if (this.state.discountMethod === 'percent') {
       if (this.state.count && this.state.count <= 100) {
-        this.setState({ discount: (parseFloat(this.state.count ? this.state.count : 0) / 100 * subTotal).toFixed(3), cash: 0, card: 0 })
+        this.setState({ discount: (parseFloat(this.state.count ? this.state.count : 0) / 100 * subTotal).toFixed(3), cash: 0, card: 0, digital: 0, })
       } else {
-        this.setState({ discount: 0, count: 0, cash: 0, card: 0 })
+        this.setState({ discount: 0, count: 0, cash: 0, card: 0, digital: 0, })
       }
     } else {
       if (this.state.count && this.state.count <= subTotal) {
-        this.setState({ discount: parseFloat(this.state.count ? this.state.count : 0), cash: 0, card: 0 })
+        this.setState({ discount: parseFloat(this.state.count ? this.state.count : 0), cash: 0, card: 0, digital: 0, })
       } else {
-        this.setState({ discount: 0, count: 0, cash: 0, card: 0 })
+        this.setState({ discount: 0, count: 0, cash: 0, card: 0, digital: 0, })
       }
     }
   }
 
   addGiftcard(subTotalGiftCard) {
     if (this.state.member) {
-      subTotalGiftCard && this.setState({ subTotalGiftCard, cash: 0, card: 0 }, () => {
+      subTotalGiftCard && this.setState({ subTotalGiftCard, cash: 0, card: 0, digital: 0, }, () => {
         if (this.state.text !== this.state.redeemCode) {
           this.setState({ giftcard: 0 })
           this.props.dispatch(getAmountByRedeemCode({ code: this.state.text, memberId: this.state.member._id }))
@@ -274,16 +393,8 @@ class PackageRenewal extends Component {
 
   render() {
     const { t } = this.props
-    const { member, packages, wantTrainer, trainer, period, packageDetails, cash, card, packageAmount, discount, tax, giftcard, discountMethod, count, text, digital } = this.state
-
-    let packageDetailsArr = []
-    let map = new Map();
-    packageDetails.forEach(packages => {
-      if (packages.packages && !map.has(packages.packages._id)) {
-        map.set(packages.packages._id, true);
-        packageDetailsArr.push(packages)
-      }
-    })
+    const { member, packages, wantTrainer, trainer, period, cash, card, packageAmount, discount, tax, giftcard, discountMethod, count, text, digital,
+      startDate, endDate, packageReceipt, packageEndDate } = this.state
 
     const trainerPeriods = this.props.periodOfTrainer ? this.props.periodOfTrainer.filter(trainerFee =>
       trainerFee.period.periodDays <= this.state.periodDays
@@ -299,7 +410,7 @@ class PackageRenewal extends Component {
     const formatOptionLabel = ({ credentialId: { userName, avatar, email }, memberId }) => {
       return (
         <div className="d-flex align-items-center">
-          <img alt='' src={`/${avatar.path}`} className="rounded-circle mx-1 w-30px h-30px" />
+          <img alt='' src={`http://${avatar.ip}:5600/${avatar.path}`} className="rounded-circle mx-1 w-30px h-30px" />
           <div className="w-100">
             <small className="whiteSpaceNormal d-block" style={{ lineHeight: '1', fontWeight: 'bold' }}>{userName} ({memberId})</small>
             <small className="whiteSpaceNormal d-block" style={{ lineHeight: '1' }}>{email}</small>
@@ -352,9 +463,9 @@ class PackageRenewal extends Component {
               <select className={this.state.packagesE ? "form-control mx-sm-2 inlineFormInputs w-100 FormInputsError" : "form-control mx-sm-2 inlineFormInputs w-100"}
                 value={packages} onChange={(e) => this.setPackage(e)} id="package">
                 <option value="" hidden>{t('Please Select')}</option>
-                {packageDetailsArr.map((packageDetail, i) => {
+                {this.props.packages.active && this.props.packages.active.map((pack, i) => {
                   return (
-                    <option key={i} value={packageDetail.packages._id}>{packageDetail.packages.packageName}</option>
+                    <option key={i} value={pack._id}>{pack.packageName}</option>
                   )
                 })}
               </select>
@@ -363,10 +474,55 @@ class PackageRenewal extends Component {
                 <small className="text-danger mx-sm-2 errorMessage">{this.state.packagesE}</small>
               </div>
             </div>
+            <div className="form-group inlineFormGroup">
+              <label htmlFor="startDate" className="mx-sm-2 inlineFormLabel type2">{t('Start Date')}</label>
+              <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                <DatePicker
+                  InputProps={{
+                    disableUnderline: true,
+                  }}
+                  autoOk
+                  invalidDateMessage=''
+                  minDateMessage=''
+                  className={this.state.startDateE ? "form-control mx-sm-2 inlineFormInputs FormInputsError" : "form-control mx-sm-2 inlineFormInputs"}
+                  minDate={packageEndDate}
+                  format="dd/MM/yyyy"
+                  value={startDate}
+                  onChange={(e) => this.setStartDate(e)}
+                />
+              </MuiPickersUtilsProvider>
+              <span className="icon-date dateBoxIcon"></span>
+              <div className="errorMessageWrapper">
+                <small className="text-danger mx-sm-2 errorMessage">{this.state.startDateE}</small>
+              </div>
+            </div>
+            <div className="form-group inlineFormGroup">
+              <label htmlFor="endDate" className="mx-sm-2 inlineFormLabel type2">{t('End Date')}</label>
+              <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                <DatePicker
+                  disabled
+                  InputProps={{
+                    disableUnderline: true,
+                  }}
+                  autoOk
+                  invalidDateMessage=''
+                  minDateMessage=''
+                  className={this.state.endDateE ? "form-control mx-sm-2 inlineFormInputs FormInputsError" : "form-control mx-sm-2 inlineFormInputs"}
+                  minDate={startDate}
+                  format="dd/MM/yyyy"
+                  value={endDate}
+                  onChange={(e) => this.setState(validator(e, 'endDate', 'date', []))}
+                />
+              </MuiPickersUtilsProvider>
+              <span className="icon-date dateBoxIcon"></span>
+              <div className="errorMessageWrapper">
+                <small className="text-danger mx-sm-2 errorMessage">{this.state.endDateE}</small>
+              </div>
+            </div>
             <div className=" d-flex flex-wrap px-2 py-4">
               <h5 className="mx-3">{t('Do you want trainer?')}</h5>
               <div className="position-relative mx-3">
-                <select className="bg-warning rounded w-100px px-3 py-1 border border-warning text-white" value={wantTrainer} onChange={(e) => this.setState({ wantTrainer: e.target.value, packageAmount: this.state.setPackageAmount, cash: 0, card: 0, trainer: null, period: '', amount: 0 })}>
+                <select className="bg-warning rounded w-100px px-3 py-1 border border-warning text-white" value={wantTrainer} onChange={(e) => this.setState({ wantTrainer: e.target.value, packageAmount: this.state.setPackageAmount, cash: 0, card: 0, digital: 0, trainer: null, period: '', amount: 0 })}>
                   <option value="Yes">{t('Yes')}</option>
                   <option value="No">{t('No')}</option>
                 </select>
@@ -413,124 +569,6 @@ class PackageRenewal extends Component {
                   </div>
                   <h4 className="text-danger font-weight-bold px-2">{this.props.defaultCurrency} {this.state.amount}</h4>
                 </div>
-
-
-
-
-
-
-
-
-
-                <div class="col-12 d-flex flex-wrap py-4 mb-3 px-2">
-                  <h5 class="mx-3">Do you want to pay as Installment?</h5>
-                  <div class="position-relative mx-3">
-                    <select class="bg-warning rounded w-100px px-3 py-1 border border-warning text-white">
-                      <option value="Yes">Yes</option>
-                      <option value="No">No</option>
-                    </select>
-                    <span class="iconv1 iconv1-arrow-down selectBoxIcon text-white"></span>
-                  </div>
-                </div>
-                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 px-4 d-flex justify-content-end">
-                  <button type="button" class="btn btn-success displayInlineFlexCls alignItemsCenter my-2 ml-3">
-                    <span style={{ fontSize: "18px" }}>+</span>
-                    <span class="gaper"></span>
-                    <span>Add Installment</span>
-                  </button>
-                </div>
-                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 px-4">
-                  <div class="row">
-                    <div class="TrainerYesOpen w-100">
-                      <div class="row mx-0">
-                        {/* loop 1 start */}
-                        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 grayBXhere">
-                          <div class="lefthere">
-                            <div class="loopWhitehere">
-                              <h4 class="displayFlexCls"><span>Installment</span><span class="gaper"></span><span class="mnw-20pxhere">1</span></h4>
-                              <div class="vLinehere"></div>
-                              <div class="valuesetHere">
-                                <label class="mt-2 mx-1">Value</label>
-                                <div class="position-relative d-flex flex-grow-1" dir="ltr">
-                                  <span class="OnlyCurrency Uppercase">bhd</span>
-                                  <input type="text" class="form-control inputFieldPaddingCls ar-en-px-2" />
-                                </div>
-                              </div>
-                              <div class="datesetHere">
-                                <label class="mt-2 mx-1 text-nowrap">Due Date</label>
-                                <span class="position-relative">
-                                  {/* please keep calendaer coming box input plugin */}
-                                  <div class="MuiFormControl-root MuiTextField-root form-control pl-2" format="dd/MM/yyyy">
-                                    <div class="MuiInputBase-root MuiInput-root MuiInputBase-formControl MuiInput-formControl">
-                                      <input aria-invalid="false" readonly="" type="text" class="MuiInputBase-input MuiInput-input" value="12/01/2021" />
-                                    </div>
-                                  </div>
-                                  <span class="iconv1 iconv1-calander dateBoxIcon"></span>
-                                </span>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="righthere">
-                            <div class="closeHere">
-                              <span class="close-btn">
-                                <span class="iconv1 iconv1-close text-white font-weight-bold" style={{ fontSize: "11px" }}></span>
-                              </span>
-                            </div>
-                          </div>
-                        </div>
-                        {/* loop 1 end */}
-                        {/* loop 2 start */}
-                        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 grayBXhere">
-                          <div class="lefthere">
-                            <div class="loopWhitehere">
-                              <h4 class="displayFlexCls"><span>Installment</span><span class="gaper"></span><span class="mnw-20pxhere">2</span></h4>
-                              <div class="vLinehere"></div>
-                              <div class="valuesetHere">
-                                <label class="mt-2 mx-1">Value</label>
-                                <div class="position-relative d-flex flex-grow-1" dir="ltr">
-                                  <span class="OnlyCurrency Uppercase">bhd</span>
-                                  <input type="text" class="form-control inputFieldPaddingCls ar-en-px-2" />
-                                </div>
-                              </div>
-                              <div class="datesetHere">
-                                <label class="mt-2 mx-1 text-nowrap">Due Date</label>
-                                <span class="position-relative">
-                                  {/* please keep calendaer coming box input plugin */}
-                                  <div class="MuiFormControl-root MuiTextField-root form-control pl-2" format="dd/MM/yyyy">
-                                    <div class="MuiInputBase-root MuiInput-root MuiInputBase-formControl MuiInput-formControl">
-                                      <input aria-invalid="false" readonly="" type="text" class="MuiInputBase-input MuiInput-input" value="12/01/2021" />
-                                    </div>
-                                  </div>
-                                  <span class="iconv1 iconv1-calander dateBoxIcon"></span>
-                                </span>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="righthere">
-                            <div class="closeHere">
-                              <span class="close-btn">
-                                <span class="iconv1 iconv1-close text-white font-weight-bold" style={{ fontSize: "11px" }}></span>
-                              </span>
-                            </div>
-                          </div>
-                        </div>
-                        {/* loop 2 end */}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-
-
-
-
-
-
-
-
-
-
-
               </div>
             }
           </div>
@@ -541,34 +579,34 @@ class PackageRenewal extends Component {
                 <tbody>
                   <tr>
                     <td>
-                      <h5 className="m-0">{t('Sub Total')}</h5>
+                      <h5 className="m-0 text-left">{t('Sub Total')}</h5>
                     </td>
                     <td>
-                      <h5 className="m-0"><small className="d-flex justify-content-end">{this.props.defaultCurrency} {subTotal.toFixed(3)}</small></h5>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <h5 className="m-0">{t('Discount')} {parseFloat(this.state.count) ? `(${this.state.count} ${this.state.discountMethod === 'percent' ? '%' : this.props.defaultCurrency})` : ''}</h5>
-                    </td>
-                    <td>
-                      <h5 className="m-0"><small className="d-flex justify-content-end">{parseFloat(discount).toFixed(3)}</small></h5>
+                      <h5 className="m-0 text-right"><small className="d-flex justify-content-end">{this.props.defaultCurrency} {subTotal.toFixed(3)}</small></h5>
                     </td>
                   </tr>
                   <tr>
                     <td>
-                      <h5 className="m-0">{t('Gift Card')} {this.state.text ? `(${this.state.text})` : ''}</h5>
+                      <h5 className="m-0 text-left">{t('Discount')} {parseFloat(this.state.count) ? `(${this.state.count} ${this.state.discountMethod === 'percent' ? '%' : this.props.defaultCurrency})` : ''}</h5>
                     </td>
                     <td>
-                      <h5 className="m-0"><small className="d-flex justify-content-end">{giftcard.toFixed(3)}</small></h5>
+                      <h5 className="m-0 text-right"><small className="d-flex justify-content-end">{parseFloat(discount).toFixed(3)}</small></h5>
                     </td>
                   </tr>
-                  <tr>
+                  {/* <tr>
                     <td>
-                      <h5 className="m-0">{t('Tax')} {this.state.tax ? `(${this.state.tax} %)` : ''}</h5>
+                      <h5 className="m-0 text-left">{t('Gift Card')} {this.state.text ? `(${this.state.text})` : ''}</h5>
                     </td>
                     <td>
-                      <h5 className="m-0"><small className="d-flex justify-content-end text-primary">{totalVat.toFixed(3)}</small></h5>
+                      <h5 className="m-0 text-right"><small className="d-flex justify-content-end">{giftcard.toFixed(3)}</small></h5>
+                    </td>
+                  </tr> */}
+                  <tr>
+                    <td>
+                      <h5 className="m-0 text-left">{t('Vat')} {this.state.tax ? `(${this.state.tax} %)` : ''}</h5>
+                    </td>
+                    <td>
+                      <h5 className="m-0 text-right"><small className="d-flex justify-content-end text-primary">{totalVat.toFixed(3)}</small></h5>
                     </td>
                   </tr>
                   <tr>
@@ -578,7 +616,7 @@ class PackageRenewal extends Component {
                   </tr>
                   <tr>
                     <td>
-                      <h3 className="m-0">{t('Total')}</h3>
+                      <h3 className="m-0 text-left">{t('Total')}</h3>
                     </td>
                     <td>
                       <h5 className="text-danger d-flex justify-content-end m-0 font-weight-bold dirltrjcs"><span className="mx-1">{this.props.defaultCurrency}</span><span className="mx-1">{total.toFixed(3)}</span></h5>
@@ -592,10 +630,10 @@ class PackageRenewal extends Component {
                 <h5 className="my-2 font-weight-bold px-1">{t('Payment Method')}</h5>
               </div>
               <div className="col-12 col-sm-6 d-flex align-items-center justify-content-end">
-                <button data-toggle="modal" data-target="#Discount" className="d-flex flex-column align-items-center justify-content-center bg-danger w-75px h-75px m-1 linkHoverDecLess rounded-circle text-white cursorPointer border-0">
+                <button data-toggle="modal" data-target="#passwordAskModal" className="d-flex flex-column align-items-center justify-content-center bg-danger w-75px h-75px m-1 linkHoverDecLess rounded-circle text-white cursorPointer border-0">
                   <span className="w-100 text-center"><h4 className="m-0"><span className="iconv1 iconv1-discount text-white"></span></h4><small>{t('Discount')}</small></span></button>
-                <button data-toggle="modal" data-target="#GiftCard" className="d-flex flex-column align-items-center justify-content-center bg-primary w-75px h-75px m-1 linkHoverDecLess rounded-circle text-white cursorPointer border-0">
-                  <span className="w-100 text-center"><h4 className="m-0"><span className="iconv1 iconv1-giftcard text-white"></span></h4><small>{t('Gift Card')}</small></span></button>
+                {/* <button data-toggle="modal" data-target="#GiftCard" className="d-flex flex-column align-items-center justify-content-center bg-primary w-75px h-75px m-1 linkHoverDecLess rounded-circle text-white cursorPointer border-0">
+                  <span className="w-100 text-center"><h4 className="m-0"><span className="iconv1 iconv1-giftcard text-white"></span></h4><small>{t('Gift Card')}</small></span></button> */}
               </div>
             </div>
             <div className="row mt-3">
@@ -651,6 +689,7 @@ class PackageRenewal extends Component {
               </div>
 
               {/* Popup Discount */}
+              <button type="button" id="Discount2" className="d-none" data-toggle="modal" data-target="#Discount" ref="openDiscount">Open modal</button>
               <div className="modal fade commonYellowModal" id="Discount" >
                 <div className="modal-dialog modal-dialog-centered">
                   <div className="modal-content">
@@ -708,18 +747,233 @@ class PackageRenewal extends Component {
             </div>
           </div>
         </div>
+
+
+        {/* --------------Receipt Modal-=--------------- */}
+        <button type="button" className="btn btn-primary d-none" data-toggle="modal" data-target="#ReceiptModal" data-backdrop="static" data-keyboard="false" ref="receiptOpenModal">Receipt</button>
+        {packageReceipt &&
+          <div className="modal fade commonYellowModal" id="ReceiptModal">
+            <div className="modal-dialog modal-lg" id="ReceiptModal2">
+              <div className="modal-content">
+                <div className="modal-header">
+                  <h4 className="modal-title">Receipt</h4>
+                  {/* <Link to={`/members-details/${packageReceipt._id}`}> */}
+                  <button type="button" className="close" data-dismiss="modal" ref="receiptCloseModal" onClick={() => this.handleReceiptClose()}><span className="iconv1 iconv1-close"></span></button>
+                  {/* </Link> */}
+                </div>
+                <div className="modal-body">
+                  <div className="container">
+                    <div className="text-center my-3">
+                      <img alt='' src={packageReceipt.branch.avatar && packageReceipt.branch.avatar.path} className="" width="250" />
+                    </div>
+                    <h4 className="border-bottom border-dark text-center font-weight-bold pb-1">Tax Invoice</h4>
+                    <div className="row px-5 justify-content-between">
+                      <div className="col-free p-3">
+                        <div className="mb-3">
+                          <label className="m-0 font-weight-bold">Address</label>
+                          <p className="whiteSpaceNormal mnw-150px mxw-200px">{packageReceipt.branch.address}</p>
+                        </div>
+                        <div className="">
+                          <label className="m-0 font-weight-bold">VAT Reg Number</label>
+                          <p className="">{packageReceipt.branch.vatRegNo}</p>
+                        </div>
+                      </div>
+                      <div className="col-free p-3">
+                        <div className="mb-3">
+                          <label className="m-0 font-weight-bold">Tax Invoice No</label>
+                          <p className="">{packageReceipt.packageDetails.filter(p => p.packages === packages && !p.isExpiredPackage)[0] &&
+                            packageReceipt.packageDetails.filter(p => p.packages === packages && !p.isExpiredPackage)[0].orderNo}</p>
+                        </div>
+                        <div className="">
+                          <label className="m-0 font-weight-bold">Date & Time</label>
+                          <p className="">{dateToDDMMYYYY(new Date())} {dateToHHMM(new Date())}</p>
+                        </div>
+                      </div>
+                      <div className="col-free p-3">
+                        <div className="">
+                          <label className="m-0 font-weight-bold">Receipt Total</label>
+                          <p className="h4 font-weight-bold">{this.props.defaultCurrency} {parseFloat(total).toFixed(3)}</p>
+                        </div>
+                        <div className="">
+                          <label className="m-0 font-weight-bold">Telephone</label>
+                          <p className="">{packageReceipt.branch.telephone}</p>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="bgGray d-flex flex-wrap px-5 py-4 justify-content-between">
+                      <div className="">
+                        <h6 className="font-weight-bold m-1">
+                          <span className="px-1">ID:</span>
+                          <span className="px-1">{packageReceipt.memberId}</span>
+                        </h6>
+                      </div>
+                      <h6 className="font-weight-bold m-1">{packageReceipt.credentialId.userName}</h6>
+                      <div className="">
+                        <h6 className="font-weight-bold m-1">
+                          <span className="px-1">Mob:</span>
+                          <span className="px-1">{packageReceipt.mobileNo}</span>
+                        </h6>
+                      </div>
+                    </div>
+                    <div className="table-responsive RETable">
+                      <table className="table">
+                        <thead>
+                          <tr>
+                            <th>Package Name</th>
+                            <th>From Date</th>
+                            <th>To Date</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td>{this.props.packages.active && this.props.packages.active.filter(pack => pack._id === packages)[0] &&
+                              this.props.packages.active.filter(pack => pack._id === packages)[0].packageName}</td>
+                            <td>{dateToDDMMYYYY(startDate)}</td>
+                            <td>{dateToDDMMYYYY(endDate)}</td>
+                          </tr>
+                          <tr>
+                            <td colSpan="4">
+                              <div className="text-right my-1">Amount Total :</div>
+                              {parseFloat(discount) ?
+                                <div className="text-right my-1">Discount :</div>
+                                : <div></div>}
+                              {parseFloat(totalVat) ?
+                                <div className="text-right my-1">VAT(5%):</div>
+                                : <div></div>}
+                              {parseFloat(digital) ?
+                                <div className="text-right my-1">Digital :</div>
+                                : <div></div>}
+                              {parseFloat(cash) ?
+                                <div className="text-right my-1">Cash :</div>
+                                : <div></div>}
+                              {parseFloat(card) ?
+                                <div className="text-right my-1">Card :</div>
+                                : <div></div>}
+                              <div className="text-right my-1">Grand Total :</div>
+                              <div className="text-right my-1">Paid Amount :</div>
+                              {this.state.cardNumber ?
+                                <div className="text-right my-1">Card last four digit :</div>
+                                : <div></div>}
+                            </td>
+                            <td className="">
+                              <div className="my-1"><span className="">{this.props.defaultCurrency}</span> <span className="px-1">{parseFloat(subTotal).toFixed(3)}</span></div>
+                              {parseFloat(discount) ?
+                                <div className="my-1"><span className="invisible">{this.props.defaultCurrency}</span> <span className="px-1">{parseFloat(discount).toFixed(3)}</span></div>
+                                : <div></div>}
+                              {parseFloat(totalVat) ?
+                                <div className="my-1"><span className="invisible">{this.props.defaultCurrency}</span> <span className="px-1">{parseFloat(totalVat).toFixed(3)}</span></div>
+                                : <div></div>}
+                              {parseFloat(digital) ?
+                                <div className="my-1"><span className="invisible">{this.props.defaultCurrency}</span> <span className="px-1">{parseFloat(digital).toFixed(3)}</span></div>
+                                : <div></div>}
+                              {parseFloat(cash) ?
+                                <div className="my-1"><span className="invisible">{this.props.defaultCurrency}</span> <span className="px-1">{parseFloat(cash).toFixed(3)}</span></div>
+                                : <div></div>}
+                              {parseFloat(card) ?
+                                <div className="my-1"><span className="invisible">{this.props.defaultCurrency}</span> <span className="px-1">{parseFloat(card).toFixed(3)}</span></div>
+                                : <div></div>}
+                              <div className="my-1"><span className="">{this.props.defaultCurrency}</span> <span className="px-1">{parseFloat(total).toFixed(3)}</span></div>
+                              <div className="my-1"><span className="">{this.props.defaultCurrency}</span> <span className="px-1">{parseFloat(total).toFixed(3)}</span></div>
+                              {this.state.cardNumber ?
+                                <div className="my-1"><span className="invisible">{this.props.defaultCurrency}</span> <span className="px-1">{this.state.cardNumber}</span></div>
+                                : <div></div>}
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                      {/* {this.state.cardNumber ?
+                        <div className="my-1"><span className="px-1">Card last four digit {this.state.cardNumber}</span></div>
+                        : <div></div>} */}
+                    </div>
+                    {/* <div className="d-flex justify-content-center">
+                      <QRCode value={`http://instagram.com/${packageReceipt.branch.instaId}/`} renderAs='svg' />
+                    </div> */}
+                    <div className="d-flex align-items-center flex-wrap justify-content-between my-4">
+                      <div className="d-flex">
+                        <div className="mr-3 text-center">
+                          <img src={instaimg} alt="" className="w-30px" />
+                          <h6 className="font-weight-bold mb-0 mt-1">Follow Us</h6>
+                        </div>
+                        <div className="w-50px mr-3">
+                          <QRCode value={`http://instagram.com/${packageReceipt.branch.instaId}/`} renderAs='svg' width="50" height="50" />
+                        </div>
+                      </div>
+                      {/* <h6 className="font-weight-bold">Paid Amount: {this.props.defaultCurrency} {parseFloat(total).toFixed(3)}</h6> */}
+                      {packageReceipt.packageDetails.filter(p => p.packages === packages && !p.isExpiredPackage)[0] &&
+                        <h6 className="font-weight-bold">Served by: {packageReceipt.packageDetails.filter(p => p.packages === packages && !p.isExpiredPackage)[0].doneBy.userName}</h6>}
+                    </div>
+                    {/* <div className="text-center px-5">
+                      <h5 className="text-muted">Membership cannot be refunded or transferred to others.</h5>
+                      <h5 className="font-weight-bold">Thank You</h5>
+                    </div> */}
+                    <div className="d-flex align-items-center justify-content-center">
+                      <div className="text-center">
+                        <h6 className="font-weight-bold" >Membership cannot be refunded or transferred to others.</h6>
+                        <h6 className="font-weight-bold">Thank You</h6>
+                      </div>
+                    </div>
+                    <div className="text-center">
+                      {/* <Link to={`/members-details/${packageReceipt._id}`}> */}
+                      <button type="button" className="btn btn-success px-4 py-1 my-2" data-dismiss="modal" onClick={() => this.handlePrint(packageReceipt._id)}>Print Receipt</button>
+                      {/* </Link> */}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        }
+        {/* --------------Receipt Modal Ends-=--------------- */}
+
+        <div className="modal fade commonYellowModal" id="passwordAskModal">
+          <div className="modal-dialog modal-dialog-centered">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h4 className="modal-title">{t('Password')}</h4>
+                <button type="button" className="close" data-dismiss="modal" ref="passwordModalClose">
+                  <span className="iconv1 iconv1-close"></span>
+                </button>
+              </div>
+              <div className="modal-body px-0">
+                <div className="container-fluid">
+                  <div className="row">
+                    <div className="col-12">
+                      <div className="form-group position-relative fle">
+                        <label htmlFor="password" className="m-0 text-secondary mx-sm-2">{t('Password')}</label>
+                        <input type={this.state.showPass ? "text" : "password"} className={this.state.passwordE ? "form-control inlineFormInputs w-100 mx-sm-2 FormInputsError" : "form-control inlineFormInputs w-100 mx-sm-2"} id="password"
+                          value={this.state.password} onChange={(e) => this.setState(validator(e, 'password', 'text', [t('Enter password')]))}
+                        />
+                        <span className={this.state.showPass ? "iconv1 iconv1-eye passwordEye" : "iconv1 iconv1-eye passwordEye active"} onClick={() => this.setState({ showPass: !this.state.showPass })}></span>
+                        <div className="errorMessageWrapper">
+                          <small className="text-danger mx-sm-2 errorMessage">{this.state.passwordE}</small>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="col-12 pt-3">
+                      <div className="justify-content-sm-end d-flex pt-4 pb-2">
+                        <button type="button" className="btn btn-success mx-1 px-4" data-dismiss="modal" onClick={() => this.verifyPassword()}>{t('Submit')}</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     )
   }
 }
 
 function mapStateToProps({ employee: { membersOfTrainer }, trainerFee: { uniqueTrainerByBranch, periodOfTrainer },
-  currency: { defaultCurrency }, auth: { loggedUser }, errors, vat: { activeVats } }) {
+  packages, currency: { defaultCurrency }, auth: { loggedUser }, errors, vat: { activeVats }, privilege: { verifyPassword } }) {
   return {
     membersOfTrainer,
+    packages,
     uniqueTrainerByBranch,
     periodOfTrainer,
     defaultCurrency,
+    verifyPassword,
     loggedUser, errors, activeVats
   }
 }
