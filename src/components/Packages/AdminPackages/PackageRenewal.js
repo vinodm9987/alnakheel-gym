@@ -74,6 +74,8 @@ class PackageRenewal extends Component {
       showPass: false,
       trainerId: '',
       startTrainerDate: new Date(),
+      wantInstallment: 'Yes',
+      installments: []
     }
     this.state = this.default
     this.props.dispatch(getAllActivePackage())
@@ -377,6 +379,30 @@ class PackageRenewal extends Component {
     }
   }
 
+  addInstallment() {
+    const { installments } = this.state
+    installments.push({ amount: 0, dueDate: new Date() })
+    this.setState({ installments })
+  }
+
+  removeInstallment(i) {
+    const { installments } = this.state
+    if (i > -1) {
+      installments.splice(i, 1);
+    }
+    this.setState({ installments })
+  }
+
+  setInstallmentAmountDueDate(e, i, type) {
+    const { installments } = this.state
+    if (type === 'amount') {
+      installments[i].amount = e.target.value
+    } else {
+      installments[i].dueDate = e
+    }
+    this.setState({ installments })
+  }
+
   customSearch(options, search) {
     if (
       String(options.data.memberId).toLowerCase().includes(search.toLowerCase()) ||
@@ -394,7 +420,7 @@ class PackageRenewal extends Component {
   render() {
     const { t } = this.props
     const { member, packages, wantTrainer, trainer, period, cash, card, packageAmount, discount, tax, giftcard, discountMethod, count, text, digital,
-      startDate, endDate, packageReceipt, packageEndDate } = this.state
+      startDate, endDate, packageReceipt, packageEndDate, wantInstallment, installments } = this.state
 
     const trainerPeriods = this.props.periodOfTrainer ? this.props.periodOfTrainer.filter(trainerFee =>
       trainerFee.period.periodDays <= this.state.periodDays
@@ -568,6 +594,96 @@ class PackageRenewal extends Component {
                     </div>
                   </div>
                   <h4 className="text-danger font-weight-bold px-2">{this.props.defaultCurrency} {this.state.amount}</h4>
+                </div>
+              </div>
+            }
+            <div className="col-12 d-flex flex-wrap py-4 mb-3 px-2">
+              <h5 className="mx-3">{t('Do you want to pay as Installment?')}</h5>
+              <div className="position-relative mx-3">
+                <select className="bg-warning rounded w-100px px-3 py-1 border border-warning text-white"
+                  value={wantInstallment} onChange={(e) => this.setState({ wantInstallment: e.target.value })}
+                >
+                  <option value="Yes">{t('Yes')}</option>
+                  <option value="No">{t('No')}</option>
+                </select>
+                <span className="iconv1 iconv1-arrow-down selectBoxIcon text-white"></span>
+              </div>
+            </div>
+            {wantInstallment === 'Yes' &&
+              <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 px-4 d-flex justify-content-end">
+                <button type="button" className="btn btn-success displayInlineFlexCls alignItemsCenter my-2 ml-3"
+                  onClick={() => this.addInstallment()}
+                >
+                  <span style={{ fontSize: "18px" }}>+</span>
+                  <span className="gaper"></span>
+                  <span>Add Installment</span>
+                </button>
+              </div>
+            }
+            {wantInstallment === 'Yes' &&
+              <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 px-4">
+                <div className="row">
+                  <div className="TrainerYesOpen w-100">
+                    <div className="row mx-0">
+                      {/* loop 1 start */}
+                      {installments.map((installment, i) => {
+                        return (
+                          <div key={i} className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 grayBXhere">
+                            <div className="lefthere">
+                              <div className="loopWhitehere">
+                                <h4 className="displayFlexCls"><span>Installment</span><span className="gaper"></span><span className="mnw-20pxhere">{i + 1}</span></h4>
+                                <div className="vLinehere"></div>
+                                <div className="valuesetHere">
+                                  <label className="mt-2 mx-1">Value</label>
+                                  <div className="position-relative d-flex flex-grow-1" dir="ltr">
+                                    <span className="OnlyCurrency Uppercase">{this.props.defaultCurrency}</span>
+                                    <input type="text" className="form-control inputFieldPaddingCls ar-en-px-2"
+                                      value={installment.amount} onChange={(e) => this.setInstallmentAmountDueDate(e, i, 'amount')}
+                                    />
+                                  </div>
+                                </div>
+                                <div className="datesetHere">
+                                  <label className="mt-2 mx-1 text-nowrap">Due Date</label>
+                                  <span className="position-relative">
+                                    {/* please keep calendaer coming box input plugin */}
+                                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                                      <DatePicker
+                                        InputProps={{
+                                          disableUnderline: true,
+                                        }}
+                                        autoOk
+                                        invalidDateMessage=''
+                                        minDateMessage=''
+                                        className={"form-control mx-sm-2 inlineFormInputs"}
+                                        minDate={new Date()}
+                                        format="dd/MM/yyyy"
+                                        value={installment.dueDate}
+                                        onChange={(e) => this.setInstallmentAmountDueDate(e, i, 'dueDate')}
+                                      />
+                                    </MuiPickersUtilsProvider>
+                                    {/* <div className="MuiFormControl-root MuiTextField-root form-control pl-2" format="dd/MM/yyyy">
+                                        <div className="MuiInputBase-root MuiInput-root MuiInputBase-formControl MuiInput-formControl">
+                                          <input aria-invalid="false" readonly="" type="text" className="MuiInputBase-input MuiInput-input" value="12/01/2021" />
+                                        </div>
+                                      </div> */}
+                                    <span className="iconv1 iconv1-calander dateBoxIcon"></span>
+                                  </span>
+                                </div>
+                              </div>
+                            </div>
+                            <div className="righthere">
+                              <div className="closeHere">
+                                <span className="close-btn" onClick={() => this.removeInstallment(i)}>
+                                  <span className="iconv1 iconv1-close text-white font-weight-bold" style={{ fontSize: "11px" }}></span>
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                        )
+                      })}
+                      {/* loop 1 end */}
+                    </div>
+                  </div>
                 </div>
               </div>
             }
