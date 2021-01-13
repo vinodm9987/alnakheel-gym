@@ -394,7 +394,7 @@ class BookATrainer extends Component {
 
   render() {
     const { t } = this.props
-    const { member, packages, trainer, period, cash, card, packageAmount, discount, tax, giftcard, discountMethod, count, text, digital,
+    const { member, packages, trainer, period, cash, card, discount, tax, giftcard, discountMethod, count, text, digital,
       trainerReceipt, packageDetails, oldPackageId, startDate, endDate, wantInstallment, installments } = this.state
 
     let packageDetailsArr = []
@@ -410,7 +410,7 @@ class BookATrainer extends Component {
       trainerFee.period.periodDays <= this.state.packageDaysLeft
     ) : []
 
-    let subTotal = packageAmount
+    let subTotal = installments[0] ? installments[0].amount : 0
     let totalVat = (subTotal - discount - giftcard) * tax / 100
 
     let total = subTotal - discount - giftcard + totalVat

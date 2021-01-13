@@ -75,7 +75,8 @@ class PackageRenewal extends Component {
       trainerId: '',
       startTrainerDate: new Date(),
       wantInstallment: 'Yes',
-      installments: []
+      installments: [],
+      installmentsCopy: [],
     }
     this.state = this.default
     this.props.dispatch(getAllActivePackage())
@@ -379,10 +380,15 @@ class PackageRenewal extends Component {
     }
   }
 
-  addInstallment() {
+  addInstallment(packageAmount) {
     const { installments } = this.state
-    installments.push({ amount: 0, dueDate: new Date() })
-    this.setState({ installments })
+    if (installments.length === 0) {
+      installments.push({ amount: packageAmount.toFixed(3), dueDate: new Date() })
+    } else {
+      installments.push({ amount: 0, dueDate: new Date() })
+    }
+    const installmentsCopy = [...installments]
+    this.setState({ installments, installmentsCopy })
   }
 
   removeInstallment(i) {
@@ -394,9 +400,14 @@ class PackageRenewal extends Component {
   }
 
   setInstallmentAmountDueDate(e, i, type) {
-    const { installments } = this.state
+    const { installments, installmentsCopy } = this.state
+    console.log("🚀 ~ file: PackageRenewal.js ~ line 403 ~ PackageRenewal ~ setInstallmentAmountDueDate ~ installmentsCopy", installmentsCopy)
+    console.log("🚀 ~ file: PackageRenewal.js ~ line 406 ~ PackageRenewal ~ setInstallmentAmountDueDate ~ e.target.value", e.target.value)
     if (type === 'amount') {
-      installments[i].amount = e.target.value
+      if (installmentsCopy[i + 1] && installmentsCopy[i].amount >= e.target.value) {
+        installments[i].amount = e.target.value
+        installments[i + 1].amount = installments[i].amount - e.target.value
+      }
     } else {
       installments[i].dueDate = e
     }
@@ -426,7 +437,7 @@ class PackageRenewal extends Component {
       trainerFee.period.periodDays <= this.state.periodDays
     ) : []
 
-    let subTotal = packageAmount
+    let subTotal = installments[0] ? parseFloat(installments[0].amount) : 0
     let totalVat = (subTotal - discount - giftcard) * tax / 100
 
     let total = subTotal - discount - giftcard + totalVat
@@ -612,7 +623,7 @@ class PackageRenewal extends Component {
             {wantInstallment === 'Yes' &&
               <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 px-4 d-flex justify-content-end">
                 <button type="button" className="btn btn-success displayInlineFlexCls alignItemsCenter my-2 ml-3"
-                  onClick={() => this.addInstallment()}
+                  onClick={() => this.addInstallment(packageAmount)}
                 >
                   <span style={{ fontSize: "18px" }}>+</span>
                   <span className="gaper"></span>
@@ -637,8 +648,8 @@ class PackageRenewal extends Component {
                                   <label className="mt-2 mx-1">Value</label>
                                   <div className="position-relative d-flex flex-grow-1" dir="ltr">
                                     <span className="OnlyCurrency Uppercase">{this.props.defaultCurrency}</span>
-                                    <input type="text" className="form-control inputFieldPaddingCls ar-en-px-2"
-                                      value={installment.amount} onChange={(e) => this.setInstallmentAmountDueDate(e, i, 'amount')}
+                                    <input type="number" className="form-control inputFieldPaddingCls ar-en-px-2"
+                                      value={installment.amount} onChange={(e) => this.setInstallmentAmountDueDate(e, i, 'amount', installment)}
                                     />
                                   </div>
                                 </div>
