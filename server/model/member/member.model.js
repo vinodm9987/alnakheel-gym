@@ -50,7 +50,16 @@ const memberSchema = new Schema({
 
         packageRenewal: { type: Boolean, default: false },
 
-        paidStatus: { type: String, enum: ["Paid", "UnPaid"], default: "UnPaid" },
+        paidStatus: { type: String, enum: ["Paid", "UnPaid","Installment"], default: "UnPaid" },
+
+        Installments:[
+            {
+                amount:Number,
+                paidStatus: { type: String, enum: ["Paid", "UnPaid"], default: "UnPaid" },
+                dueDate:Date
+
+            }
+        ],
 
         paidType: { type: String, enum: ["Online", "Offline"] },
 
