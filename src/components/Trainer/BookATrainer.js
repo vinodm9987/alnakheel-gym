@@ -73,7 +73,8 @@ class BookATrainer extends Component {
       passwordE: '',
       showPass: false,
       wantInstallment: 'Yes',
-      installments: []
+      installments: [],
+      installmentsCopy: [],
     }
     this.state = this.default
     this.props.dispatch(getAllMemberOfTrainer())
@@ -354,28 +355,55 @@ class BookATrainer extends Component {
     }
   }
 
-  addInstallment() {
-    const { installments } = this.state
-    installments.push({ amount: 0, dueDate: new Date() })
-    this.setState({ installments })
+  addInstallment(packageAmount) {
+    const { installments, installmentsCopy } = this.state
+    if (installments.length === 0) {
+      installments.push({ amount: packageAmount.toFixed(3), dueDate: new Date() })
+      installmentsCopy.push({ amount: packageAmount.toFixed(3), dueDate: new Date() })
+    } else {
+      installments.push({ amount: 0, dueDate: new Date() })
+      installmentsCopy.push({ amount: 0, dueDate: new Date() })
+    }
+    this.setState({ installments, installmentsCopy })
   }
 
-  removeInstallment(i) {
-    const { installments } = this.state
+  removeInstallment(i, packageAmount) {
+    const { installments, installmentsCopy } = this.state
     if (i > -1) {
       installments.splice(i, 1);
+      installmentsCopy.splice(i, 1);
+      installments.forEach((installment, j) => {
+        if (j === 0) {
+          installment.amount = packageAmount.toFixed(3)
+          installmentsCopy[j].amount = packageAmount.toFixed(3)
+        } else {
+          installment.amount = 0
+          installmentsCopy[j].amount = 0
+        }
+      })
     }
-    this.setState({ installments })
+    this.setState({ installments, installmentsCopy })
   }
 
   setInstallmentAmountDueDate(e, i, type) {
-    const { installments } = this.state
+    const { installments, installmentsCopy } = this.state
     if (type === 'amount') {
-      installments[i].amount = e.target.value
+      if (installmentsCopy[i + 1] && parseFloat(installmentsCopy[i].amount) >= parseFloat(e.target.value ? e.target.value : 0)) {
+        installments[i].amount = e.target.value
+        installments[i + 1].amount = installmentsCopy[i].amount - e.target.value
+        installmentsCopy[i + 1].amount = installmentsCopy[i].amount - e.target.value
+        installments.forEach((installment, j) => {
+          if (j > i + 1) {
+            installment.amount = 0
+            installmentsCopy[j].amount = 0
+          }
+        })
+      }
     } else {
       installments[i].dueDate = e
+      installmentsCopy[i].dueDate = e
     }
-    this.setState({ installments })
+    this.setState({ installments, installmentsCopy })
   }
 
   customSearch(options, search) {
@@ -395,7 +423,7 @@ class BookATrainer extends Component {
   render() {
     const { t } = this.props
     const { member, packages, trainer, period, cash, card, discount, tax, giftcard, discountMethod, count, text, digital,
-      trainerReceipt, packageDetails, oldPackageId, startDate, endDate, wantInstallment, installments } = this.state
+      trainerReceipt, packageDetails, oldPackageId, startDate, endDate, wantInstallment, installments, packageAmount } = this.state
 
     let packageDetailsArr = []
     let map = new Map();
@@ -410,7 +438,7 @@ class BookATrainer extends Component {
       trainerFee.period.periodDays <= this.state.packageDaysLeft
     ) : []
 
-    let subTotal = installments[0] ? installments[0].amount : 0
+    let subTotal = (installments[0] && installments[0].amount) ? parseFloat(installments[0].amount) : 0
     let totalVat = (subTotal - discount - giftcard) * tax / 100
 
     let total = subTotal - discount - giftcard + totalVat
@@ -420,7 +448,7 @@ class BookATrainer extends Component {
     const formatOptionLabel = ({ credentialId: { userName, avatar, email }, memberId }) => {
       return (
         <div className="d-flex align-items-center">
-          <img alt='' src={`http://${avatar.ip}:5600/${avatar.path}`} className="rounded-circle mx-1 w-30px h-30px" />
+          <img alt='' src={`/${avatar.path}`} className="rounded-circle mx-1 w-30px h-30px" />
           <div className="w-100">
             <small className="whiteSpaceNormal d-block" style={{ lineHeight: '1', fontWeight: 'bold' }}>{userName} ({memberId})</small>
             <small className="whiteSpaceNormal d-block" style={{ lineHeight: '1' }}>{email}</small>
@@ -432,7 +460,7 @@ class BookATrainer extends Component {
     const formatOptionLabel1 = ({ credentialId: { userName, avatar, email } }) => {
       return (
         <div className="d-flex align-items-center">
-          <img alt='' src={`http://${avatar.ip}:5600/${avatar.path}`} className="rounded-circle mx-1 w-30px h-30px" />
+          <img alt='' src={`/${avatar.path}`} className="rounded-circle mx-1 w-30px h-30px" />
           <div className="w-100">
             <small className="whiteSpaceNormal d-block" style={{ lineHeight: '1', fontWeight: 'bold' }}>{userName}</small>
             <small className="whiteSpaceNormal d-block" style={{ lineHeight: '1' }}>{email}</small>
@@ -596,7 +624,7 @@ class BookATrainer extends Component {
               {wantInstallment === 'Yes' &&
                 <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 px-4 d-flex justify-content-end">
                   <button type="button" className="btn btn-success displayInlineFlexCls alignItemsCenter my-2 ml-3"
-                    onClick={() => this.addInstallment()}
+                    onClick={() => this.addInstallment(packageAmount)}
                   >
                     <span style={{ fontSize: "18px" }}>+</span>
                     <span className="gaper"></span>
@@ -640,6 +668,7 @@ class BookATrainer extends Component {
                                           minDateMessage=''
                                           className={"form-control mx-sm-2 inlineFormInputs"}
                                           minDate={new Date()}
+                                          maxDate={endDate}
                                           format="dd/MM/yyyy"
                                           value={installment.dueDate}
                                           onChange={(e) => this.setInstallmentAmountDueDate(e, i, 'dueDate')}
@@ -657,7 +686,7 @@ class BookATrainer extends Component {
                               </div>
                               <div className="righthere">
                                 <div className="closeHere">
-                                  <span className="close-btn" onClick={() => this.removeInstallment(i)}>
+                                  <span className="close-btn" onClick={() => this.removeInstallment(i, packageAmount)}>
                                     <span className="iconv1 iconv1-close text-white font-weight-bold" style={{ fontSize: "11px" }}></span>
                                   </span>
                                 </div>

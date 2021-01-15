@@ -219,7 +219,7 @@ class AddFreeze extends Component {
     const formatOptionLabel = ({ credentialId: { userName, avatar, email }, memberId }) => {
       return (
         <div className="d-flex align-items-center">
-          <img alt='' src={`http://${avatar.ip}:5600/${avatar.path}`} className="rounded-circle mx-1 w-30px h-30px" />
+          <img alt='' src={`/${avatar.path}`} className="rounded-circle mx-1 w-30px h-30px" />
           <div className="w-100">
             <small className="whiteSpaceNormal d-block" style={{ lineHeight: '1', fontWeight: 'bold' }}>{userName} ({memberId})</small>
             <small className="whiteSpaceNormal d-block" style={{ lineHeight: '1' }}>{email}</small>

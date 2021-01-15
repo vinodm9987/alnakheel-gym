@@ -178,7 +178,7 @@ class MoneyCollectionDetails extends Component {
                               <div className="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-9">
                                 <label>{t('Collected By')}</label>
                                 <div className="d-flex flex-wrap align-items-center pb-2">
-                                  {take.collectedBy.avatar && <img className="w-50px h-50px rounded-circle m-1" src={`http://${take.collectedBy.avatar.ip}:5600/${take.collectedBy.avatar.path}`} alt="" />}
+                                  {take.collectedBy.avatar && <img className="w-50px h-50px rounded-circle m-1" src={`/${take.collectedBy.avatar.path}`} alt="" />}
                                   <div>
                                     <p className="m-1">{take.collectedBy.userName}</p>
                                   </div>
