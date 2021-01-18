@@ -43,7 +43,7 @@ exports.getAllPackage = (req, res) => {
 
 
 exports.getAllPackageBySalesBranch = (req, res) => {
-    Package.find({salesBranches:req.body.salesBranches})
+    Package.find({ salesBranches: req.body.salesBranches, endDate: { $gte: setTime(new Date()) } })
         .populate('period accessBranches salesBranches')
         .then(response => {
             successResponseHandler(res, response, "successfully get all packages !!");
