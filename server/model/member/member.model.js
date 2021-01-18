@@ -54,9 +54,17 @@ const memberSchema = new Schema({
 
         Installments:[
             {
-                amount:Number,
                 paidStatus: { type: String, enum: ["Paid", "UnPaid"], default: "UnPaid" },
-                dueDate:Date
+                dueDate:Date,
+                dateOfInstallment: Date,
+                timeOfInstallment: Date,
+                paidType: { type: String, enum: ["Online", "Offline"] },
+
+        cardNumber: String, cashAmount: Number, cardAmount: Number, vatAmount: Number, discount: Number,
+
+        digitalAmount: Number,
+
+        totalAmount: Number, actualAmount: Number,
 
             }
         ],
@@ -73,6 +81,8 @@ const memberSchema = new Schema({
          * trainer fields
         */
 
+       trainerDetails: [{
+
         trainerFees: { type: Schema.Types.ObjectId, ref: "TrainerFees" },
 
         trainer: { type: Schema.Types.ObjectId, ref: "Employee" },
@@ -83,13 +93,43 @@ const memberSchema = new Schema({
 
         orderNo: String,
 
-        doneBy: { type: Schema.Types.ObjectId, ref: "Credential" },
+        Installments:[
+            {
+                paidStatus: { type: String, enum: ["Paid", "UnPaid"], default: "UnPaid" },
+                dueDate:Date,
+                dateOfInstallment: Date,
+                timeOfInstallment: Date,
+                paidType: { type: String, enum: ["Online", "Offline"] },
 
-        dateOfPurchase: Date,
+        cardNumber: String, cashAmount: Number, cardAmount: Number, vatAmount: Number, discount: Number,
 
-        timeOfPurchase: Date,
+        digitalAmount: Number,
 
+        totalAmount: Number, actualAmount: Number
+
+            }
+        ],
+
+        paidType: { type: String, enum: ["Online", "Offline"] },
+
+        cardNumber: String, cashAmount: Number, cardAmount: Number, vatAmount: Number, discount: Number,
+
+        digitalAmount: Number,
+
+        totalAmount: Number, actualAmount: Number
+        
     }],
+    
+
+    orderNo: String,
+
+    doneBy: { type: Schema.Types.ObjectId, ref: "Credential" },
+
+    dateOfPurchase: Date,
+
+    timeOfPurchase: Date,
+
+}],
 
     /** 
      * biometric information of member
