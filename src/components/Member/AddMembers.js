@@ -1618,17 +1618,17 @@ class AddMembers extends Component {
                         <div className="row mb-1 mt-4">
                           <div className="col-12 col-sm-6 d-flex align-items-center"><h5 className="my-2 font-weight-bold px-1">Payment Method</h5></div>
                           <div className="col-12 col-sm-6 d-flex align-items-center justify-content-end">
-                            <button onClick={(e) => e.preventDefault()} data-toggle="modal" data-target="#Discount" className="d-flex flex-column align-items-center justify-content-center bg-danger w-75px h-75px m-1 linkHoverDecLess rounded-circle text-white cursorPointer border-0">
+                            <button onClick={(e) => e.preventDefault()} data-toggle="modal" data-target="#Discount" className="d-flex flex-column align-items-center justify-content-center bg-danger w-100px h-100px m-1 linkHoverDecLess rounded-circle text-white cursorPointer border-0">
                               <span className="w-100 text-center">
-                                <h4 className="m-0"><span className="iconv1 iconv1-discount text-white"></span></h4>
-                                <small>{t('Discount')}</small>
+                                <h3 className="m-0"><span className="iconv1 iconv1-discount text-white"></span></h3>
+                                <small className="text-white">{t('Discount')}</small>
                               </span>
                             </button>
                           </div>
                         </div>
                         <div className="row mt-3">
-                          <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6 pb-2">
-                            <div className="form-group inlineFormGroup">
+                          <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
+                            <div className="form-group inlineFormGroup mb-3">
                               <label htmlFor="addDigital" className="mx-sm-2 inlineFormLabel mb-1">{t('Digital')}</label>
                               <div className={this.state.digitalE ? "form-control mx-sm-2 inlineFormInputs FormInputsError w-100 p-0 d-flex align-items-center bg-white dirltr" : "form-control mx-sm-2 inlineFormInputs w-100 p-0 d-flex align-items-center bg-white dirltr"}>
                                 <label htmlFor="addDigital" className="text-danger my-0 mx-1 font-weight-bold">{this.props.defaultCurrency}</label>
@@ -1639,8 +1639,8 @@ class AddMembers extends Component {
                               </div>
                             </div>
                           </div>
-                          <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6 pb-2">
-                            <div className="form-group">
+                          <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
+                            <div className="form-group inlineFormGroup mb-3">
                               <label htmlFor="addCash" className="mx-sm-2 inlineFormLabel mb-1">{t('Cash')}</label>
                               <div className="form-control w-100 p-0 d-flex align-items-center bg-white dirltr">
                                 <label htmlFor="addCash" className="text-danger my-0 mx-1 font-weight-bold">{this.props.defaultCurrency}</label>
@@ -1649,8 +1649,8 @@ class AddMembers extends Component {
                               <div className="errorMessageWrapper"><small className="text-danger mx-sm-2 errorMessage">{this.state.cashE}</small></div>
                             </div>
                           </div>
-                          <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6 pb-2">
-                            <div className="form-group">
+                          <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
+                            <div className="form-group inlineFormGroup mb-3">
                               <label htmlFor="addCard" className="mx-sm-2 inlineFormLabel mb-1">{t('Card')}</label>
                               <div className="form-control w-100 p-0 d-flex align-items-center bg-white dirltr">
                                 <label htmlFor="addCard" className="text-danger my-0 mx-1 font-weight-bold">{this.props.defaultCurrency}</label>
@@ -1659,12 +1659,69 @@ class AddMembers extends Component {
                               <div className="errorMessageWrapper"><small className="text-danger mx-sm-2 errorMessage">{this.state.cardE}</small></div>
                             </div>
                           </div>
-                          <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6 pb-2">
-                            <div className="form-group">
+                          <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
+                            <div className="form-group inlineFormGroup mb-3">
                               <label htmlFor="addCardNumber" className="mx-sm-2 inlineFormLabel mb-1">{t('Card Number (last 4 digits)')}</label>
                               <input type="text" autoComplete="off" className="form-control bg-white" id="addCard4lastno" value={this.state.cardNumber} onChange={(e) => this.setCardNumber(e)} />
                             </div>
                           </div>
+                          <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
+                            <div className="form-group inlineFormGroup mb-3">
+                              <label className="mx-sm-2 inlineFormLabel mb-1"></label>
+                              <div className="d-flex">
+                                <div className="custom-control custom-checkbox roundedGreenRadioCheck mx-2">
+                                  <input type="checkbox" className="custom-control-input" id="check" name="checkorNo" />
+                                  <label className="custom-control-label" htmlFor="check">{t('Cheque')}</label>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          {/* if cheque */}
+                          <div className="col-12">
+                            <div className="row">
+                              <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
+                                <div className="form-group inlineFormGroup mb-3">
+                                  <label htmlFor="bankName" className="mx-sm-2 inlineFormLabel mb-1">{t('Bank Name')}</label>
+                                  <input type="number" autoComplete="off" className="form-control mx-sm-2 inlineFormInputs FormInputsError w-100 p-0 d-flex align-items-center bg-white dirltr" id="bankName" />
+                                  <div className="errorMessageWrapper">
+                                    <small className="text-danger mx-sm-2 errorMessage"></small>
+                                  </div>
+                                </div>
+                              </div>
+                              <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
+                                <div className="form-group inlineFormGroup mb-3">
+                                  <label htmlFor="CheckNumber" className="mx-sm-2 inlineFormLabel mb-1">{t('Check Number')}</label>
+                                  <input type="number" autoComplete="off" className="form-control mx-sm-2 inlineFormInputs FormInputsError w-100 p-0 d-flex align-items-center bg-white dirltr" id="CheckNumber" />
+                                  <div className="errorMessageWrapper">
+                                    <small className="text-danger mx-sm-2 errorMessage"></small>
+                                  </div>
+                                </div>
+                              </div>
+                              <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
+                                <div className="form-group inlineFormGroup mb-3">
+                                  <label htmlFor="CheckDate" className="mx-sm-2 inlineFormLabel mb-1">{t('Check Date')}</label>
+                                  <input type="number" autoComplete="off" className="form-control mx-sm-2 inlineFormInputs FormInputsError w-100 p-0 d-flex align-items-center bg-white dirltr" id="CheckDate" />
+                                  <div className="errorMessageWrapper">
+                                    <small className="text-danger mx-sm-2 errorMessage"></small>
+                                  </div>
+                                </div>
+                              </div>
+                              <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
+                                <div className="form-group inlineFormGroup mb-3">
+                                  <label htmlFor="ChequeAmount" className="mx-sm-2 inlineFormLabel mb-1">{t('Cheque Amount')}</label>
+                                  {/* here currency comes , so change errorclass for div below */}
+                                  <div className="form-control mx-sm-2 inlineFormInputs FormInputsError w-100 p-0 d-flex align-items-center bg-white dirltr">
+                                    <label htmlFor="ChequeAmount" className="text-danger my-0 mx-1 font-weight-bold">{this.props.defaultCurrency}</label>
+                                    <input type="number" autoComplete="off" className="border-0 bg-light w-100 h-100 p-1 bg-white" id="ChequeAmount" />
+                                  </div>
+                                  <div className="errorMessageWrapper">
+                                    <small className="text-danger mx-sm-2 errorMessage"></small>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          {/* if cheque over */}
                           <div className="col-12">
                             <div className="px-sm-1 pt-4 pb-5">
                               <button type="button" className="btn btn-block btn-success btn-lg" onClick={() => this.handlePayment(totalAmount)}>Checkout</button>

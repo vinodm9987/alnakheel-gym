@@ -50,13 +50,16 @@ const memberSchema = new Schema({
 
         packageRenewal: { type: Boolean, default: false },
 
-        paidStatus: { type: String, enum: ["Paid", "UnPaid", "Installment"], default: "UnPaid" },
-
         Installments: [{
+
             paidStatus: { type: String, enum: ["Paid", "UnPaid"], default: "UnPaid" },
+
             dueDate: Date,
+
             dateOfInstallment: Date,
+
             timeOfInstallment: Date,
+            
             paidType: { type: String, enum: ["Online", "Offline"] },
 
             cardNumber: String, cashAmount: Number, cardAmount: Number, vatAmount: Number, discount: Number,
@@ -92,10 +95,15 @@ const memberSchema = new Schema({
             orderNo: String,
 
             Installments: [{
+
                 paidStatus: { type: String, enum: ["Paid", "UnPaid"], default: "UnPaid" },
+
                 dueDate: Date,
+
                 dateOfInstallment: Date,
+
                 timeOfInstallment: Date,
+
                 paidType: { type: String, enum: ["Online", "Offline"] },
 
                 cardNumber: String, cashAmount: Number, cardAmount: Number, vatAmount: Number, discount: Number,
