@@ -438,7 +438,7 @@ class BookATrainer extends Component {
       trainerFee.period.periodDays <= this.state.packageDaysLeft
     ) : []
 
-    let subTotal = (installments[0] && installments[0].amount) ? parseFloat(installments[0].amount) : 0
+    let subTotal = (installments[0] && installments[0].amount) ? parseFloat(installments[0].amount) : packageAmount
     let totalVat = (subTotal - discount - giftcard) * tax / 100
 
     let total = subTotal - discount - giftcard + totalVat

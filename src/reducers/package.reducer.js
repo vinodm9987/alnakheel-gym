@@ -1,4 +1,7 @@
-import { ADD_PACKAGE, GET_PACKAGE, UPDATE_PACKAGE, DELETE_PACKAGE, GET_PACKAGE_BY_ID, GET_ACTIVE_PACKAGE } from '../actions/types';
+import {
+    ADD_PACKAGE, GET_PACKAGE, UPDATE_PACKAGE, DELETE_PACKAGE, GET_PACKAGE_BY_ID, GET_ACTIVE_PACKAGE,
+    GET_PACKAGE_BY_SALES_BRANCH
+} from '../actions/types';
 
 const initialState = {
     response: [],
@@ -55,6 +58,13 @@ export default (state = initialState, action) => {
                 return {
                     ...state,
                     response: state.response.filter(data => data._id !== action.payload.response._id)
+                }
+            }
+
+            case GET_PACKAGE_BY_SALES_BRANCH: {
+                return {
+                    ...state,
+                    ...{ packageBySalesBranch: action.payload.response }
                 }
             }
 

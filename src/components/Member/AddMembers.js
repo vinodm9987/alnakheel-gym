@@ -12,7 +12,7 @@ import Select from "react-select";
 import Webcam from "react-webcam";
 import { getAllBranch } from '../../actions/branch.action';
 import { createNewMemberByAdmin, getCprData, updateMember, updateMemberAndAddPackage } from '../../actions/member.action';
-import { getAllActivePackage } from '../../actions/package.action';
+import { getAllPackageBySalesBranch } from '../../actions/package.action';
 import { verifyAdminPassword } from '../../actions/privilege.action';
 import { checkReferralCodeValidityOnAdmin } from '../../actions/reward.action';
 import { getPeriodOfTrainer, getUniqueTrainerByBranch } from '../../actions/trainerFees.action';
@@ -377,7 +377,7 @@ class AddMembers extends Component {
     }
     this.state = this.default
     this.props.dispatch(getAllBranch())
-    this.props.dispatch(getAllActivePackage())
+    // this.props.dispatch(getAllActivePackage())
     this.props.dispatch({ type: GET_CPR, payload: {} })
   }
 
@@ -489,7 +489,7 @@ class AddMembers extends Component {
     const { name, email, number, personalId, dob, nationality, gender, userPhoto, packageName, branch, cardNumber, setPackageAmount,
       cash, card, height, weight, emergencyNumber, relationship, referralCode, notes, credentialId, memberId, discount, tax,
       trainer, wantTrainer, levelQuestion, exercisingQuestion, goalQuestion, period, trainerFeesId, addPackage, packageAmount,
-      emailE, numberE, emergencyNumberE, cashE, cardE, digital, digitalE, startDate, endDate, trainerPeriodDays } = this.state
+      emailE, numberE, emergencyNumberE, cashE, cardE, digital, digitalE, startDate, endDate, trainerPeriodDays, installments } = this.state
     if (name && email && number && personalId && dob && nationality && gender && userPhoto && packageName && branch && calculateDOB(dob) > 14 && (cash || card || digital) && !cardE && !cashE
       && !digitalE && !emailE && !numberE && !emergencyNumberE && startDate <= endDate
     ) {
@@ -511,21 +511,32 @@ class AddMembers extends Component {
         notes,
         credentialId,
         memberId,
-        paidStatus: 'Paid',
         packageDetails: [{
           packages: packageName,
-          paidStatus: 'Paid',
-          cashAmount: cash ? parseFloat(cash) : 0,
-          cardAmount: card ? parseFloat(card) : 0,
-          digitalAmount: digital ? digital : 0,
-          cardNumber: cardNumber,
-          actualAmount: packageAmount,
-          totalAmount: totalAmount,
-          discount: parseFloat(discount),
-          vatAmount: (setPackageAmount - discount) * tax / 100,
           startDate,
-          endDate,
+          endDate
         }]
+      }
+      if (installments.length > 0) {
+        memberInfo.packageDetails[0].Installments = installments.map((installment, k) => {
+          if (k === 0) {
+            return {
+              ...installment, ...{
+                paidStatus: 'Paid', cashAmount: cash ? parseFloat(cash) : 0, cardAmount: card ? parseFloat(card) : 0, digitalAmount: digital ? digital : 0,
+                cardNumber: cardNumber, actualAmount: installment.amount, totalAmount: totalAmount, discount: parseFloat(discount), vatAmount: (setPackageAmount - discount) * tax / 100,
+              }
+            }
+          } else { return installment }
+        })
+        memberInfo.packageDetails[0].paidStatus = 'Installment'
+      } else {
+        memberInfo.packageDetails[0] = {
+          ...memberInfo.packageDetails[0], ...{
+            paidStatus: 'Paid', cashAmount: cash ? parseFloat(cash) : 0, cardAmount: card ? parseFloat(card) : 0, digitalAmount: digital ? digital : 0,
+            cardNumber: cardNumber, actualAmount: packageAmount, totalAmount: totalAmount, discount: parseFloat(discount), vatAmount: (setPackageAmount - discount) * tax / 100,
+          }
+        }
+
       }
       if (wantTrainer === 'Yes') {
         if (trainer && levelQuestion && exercisingQuestion && goalQuestion && period) {
@@ -574,7 +585,8 @@ class AddMembers extends Component {
             this.props.dispatch(updateMemberAndAddPackage(formData))
             $(el).click();
           } else {
-            this.props.dispatch(createNewMemberByAdmin(formData))
+            console.log("🚀 ~ file: AddMembers.js ~ line 531 ~ AddMembers ~ handlePayment ~ memberInfo", memberInfo)
+            // this.props.dispatch(createNewMemberByAdmin(formData))
             $(el).click();
           }
         }
@@ -592,7 +604,6 @@ class AddMembers extends Component {
       if (!branch) this.setState({ branchE: t('Enter branch') })
       if (calculateDOB(dob) <= 14) this.props.dispatch({ type: GET_ALERT_ERROR, payload: t('You are little small to join the Gym') })
       if (!cash && !digital) this.setState({ cashE: t('Enter amount') })
-      if (!card) this.setState({ cardE: t('Enter amount') })
       if (!cardNumber) this.setState({ cardNumberE: t('Enter card number') })
       if (startDate > endDate) this.setState({ endDateE: t('End Date should be greater than Start Date') })
     }
@@ -608,11 +619,12 @@ class AddMembers extends Component {
     this.setState({
       ...validator(e, 'branch', 'text', [t('Enter branch')]), ...{
         packageName: '', trainer: null, installments: [], installmentsCopy: [],
-        period: '', amount: 0, periodDays: 0, packageAmount: 0, setPackageAmount: 0, cash: 0, card: 0, discount: 0, count: 0, vatId: '', vat: 0
+        period: '', amount: 0, periodDays: 0, packageAmount: 0, setPackageAmount: 0, cash: 0, card: 0, digital: 0, discount: 0, count: 0, vatId: '', vat: 0
       }
     }, () => {
       this.state.branch && this.props.dispatch(getAllVat({ branch: this.state.branch }))
       this.state.branch && this.props.dispatch(getUniqueTrainerByBranch(this.state.branch))
+      this.state.branch && this.props.dispatch(getAllPackageBySalesBranch({ salesBranches: this.state.branch }))
     })
   }
 
@@ -621,7 +633,7 @@ class AddMembers extends Component {
     this.setState({
       ...validator(e, 'trainer', 'select', [t('Select trainer name')]), ...{
         period: '', installments: [], installmentsCopy: [],
-        amount: 0, packageAmount: this.state.setPackageAmount, cash: 0, card: 0, discount: 0, count: 0
+        amount: 0, packageAmount: this.state.setPackageAmount, cash: 0, card: 0, digital: 0, discount: 0, count: 0
       }
     }, () => {
       const data = {
@@ -648,7 +660,7 @@ class AddMembers extends Component {
     this.setState({
       ...validator(e, 'period', 'text', [t('Select period')]), ...{
         amount, installments: [], installmentsCopy: [], trainerPeriodDays,
-        trainerFeesId, packageAmount, cash: 0, card: 0, discount: 0, count: 0,
+        trainerFeesId, packageAmount, cash: 0, card: 0, digital: 0, discount: 0, count: 0,
       }
     })
   }
@@ -663,16 +675,16 @@ class AddMembers extends Component {
     var tax = 0
     var endDate = startDate
     if (index > 0) {
-      periodDays = this.props.packages.active[index - 1].period.periodDays
-      packageAmount = this.props.packages.active[index - 1].amount
-      setPackageAmount = this.props.packages.active[index - 1].amount
+      periodDays = this.props.packages.packageBySalesBranch[index - 1].period.periodDays
+      packageAmount = this.props.packages.packageBySalesBranch[index - 1].amount
+      setPackageAmount = this.props.packages.packageBySalesBranch[index - 1].amount
       tax = this.props.activeVats ? this.props.activeVats.filter(vat => vat.defaultVat)[0] ? this.props.activeVats.filter(vat => vat.defaultVat)[0].taxPercent : 0 : 0
       endDate = new Date(new Date(endDate).setDate(startDate.getDate() + periodDays - 1))
     }
     this.setState({
       ...validator(e, 'packageName', 'text', [t('Enter package name')]), ...{
         tax, trainer: null, period: '', installments: [], installmentsCopy: [], endDate,
-        amount: 0, cash: 0, card: 0, discount: 0, count: 0, periodDays, packageAmount, setPackageAmount
+        amount: 0, cash: 0, card: 0, digital: 0, discount: 0, count: 0, periodDays, packageAmount, setPackageAmount
       }
     })
   }
@@ -772,11 +784,11 @@ class AddMembers extends Component {
   addInstallment(packageAmount) {
     const { installments, installmentsCopy } = this.state
     if (installments.length === 0) {
-      installments.push({ amount: packageAmount.toFixed(3), dueDate: new Date() })
-      installmentsCopy.push({ amount: packageAmount.toFixed(3), dueDate: new Date() })
+      installments.push({ actualAmount: packageAmount.toFixed(3), dueDate: new Date(), paidStatus: 'UnPaid' })
+      installmentsCopy.push({ actualAmount: packageAmount.toFixed(3), dueDate: new Date(), paidStatus: 'UnPaid' })
     } else {
-      installments.push({ amount: 0, dueDate: new Date() })
-      installmentsCopy.push({ amount: 0, dueDate: new Date() })
+      installments.push({ actualAmount: 0, dueDate: new Date(), paidStatus: 'UnPaid' })
+      installmentsCopy.push({ actualAmount: 0, dueDate: new Date(), paidStatus: 'UnPaid' })
     }
     this.setState({ installments, installmentsCopy })
   }
@@ -788,11 +800,11 @@ class AddMembers extends Component {
       installmentsCopy.splice(i, 1);
       installments.forEach((installment, j) => {
         if (j === 0) {
-          installment.amount = packageAmount.toFixed(3)
-          installmentsCopy[j].amount = packageAmount.toFixed(3)
+          installment.actualAmount = packageAmount.toFixed(3)
+          installmentsCopy[j].actualAmount = packageAmount.toFixed(3)
         } else {
-          installment.amount = 0
-          installmentsCopy[j].amount = 0
+          installment.actualAmount = 0
+          installmentsCopy[j].actualAmount = 0
         }
       })
     }
@@ -802,14 +814,14 @@ class AddMembers extends Component {
   setInstallmentAmountDueDate(e, i, type) {
     const { installments, installmentsCopy } = this.state
     if (type === 'amount') {
-      if (installmentsCopy[i + 1] && parseFloat(installmentsCopy[i].amount) >= parseFloat(e.target.value ? e.target.value : 0)) {
-        installments[i].amount = e.target.value
-        installments[i + 1].amount = installmentsCopy[i].amount - e.target.value
-        installmentsCopy[i + 1].amount = installmentsCopy[i].amount - e.target.value
+      if (installmentsCopy[i + 1] && parseFloat(installmentsCopy[i].actualAmount) >= parseFloat(e.target.value ? e.target.value : 0)) {
+        installments[i].actualAmount = e.target.value
+        installments[i + 1].actualAmount = installmentsCopy[i].actualAmount - e.target.value
+        installmentsCopy[i + 1].actualAmount = installmentsCopy[i].actualAmount - e.target.value
         installments.forEach((installment, j) => {
           if (j > i + 1) {
-            installment.amount = 0
-            installmentsCopy[j].amount = 0
+            installment.actualAmount = 0
+            installmentsCopy[j].actualAmount = 0
           }
         })
       }
@@ -943,7 +955,7 @@ class AddMembers extends Component {
       trainerFee.period.periodDays <= this.state.periodDays
     ) : []
 
-    let subTotal = (installments[0] && installments[0].amount) ? parseFloat(installments[0].amount) : 0
+    let subTotal = (installments[0] && installments[0].amount) ? parseFloat(installments[0].amount) : packageAmount
     let totalVat = (subTotal - discount) * tax / 100
     const totalAmount = subTotal - discount + totalVat
 
@@ -1086,7 +1098,7 @@ class AddMembers extends Component {
                   </div>
                   <div className="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
                     <div className="form-group position-relative">
-                      <label htmlFor="branch">{t('Branch')}</label>
+                      <label htmlFor="branch">{t('Sales Branch')}</label>
                       <select className={this.state.branchE ? "form-control bg-white FormInputsError" : "form-control bg-white"}
                         value={branch} onChange={(e) => this.setBranch(e)} id="branch">
                         <option value="" hidden>{t('Please Select')}</option>
@@ -1251,7 +1263,7 @@ class AddMembers extends Component {
                         <select className={this.state.packageNameE ? "form-control bg-white FormInputsError" : "form-control bg-white"}
                           value={packageName} onChange={(e) => this.setPackage(e)} id="packageName">
                           <option value="" hidden>{t('Please Select')}</option>
-                          {this.props.packages.active && this.props.packages.active.map((packages, i) => {
+                          {this.props.packages.packageBySalesBranch && this.props.packages.packageBySalesBranch.map((packages, i) => {
                             return (
                               <option key={i} value={packages._id}>{packages.packageName}</option>
                             )
@@ -1320,7 +1332,7 @@ class AddMembers extends Component {
                 <div className="col-12 d-flex flex-wrap py-4 mb-3 px-2">
                   <h5 className="mx-3">{t('Do you want trainer?')}</h5>
                   <div className="position-relative mx-3">
-                    <select className="bg-warning rounded w-100px px-3 py-1 border border-warning text-white" value={wantTrainer} onChange={(e) => this.setState({ wantTrainer: e.target.value, packageAmount: this.state.setPackageAmount, cash: 0, card: 0, trainer: null, period: '', amount: 0 })}>
+                    <select className="bg-warning rounded w-100px px-3 py-1 border border-warning text-white" value={wantTrainer} onChange={(e) => this.setState({ wantTrainer: e.target.value, packageAmount: this.state.setPackageAmount, cash: 0, card: 0, digital: 0, trainer: null, period: '', amount: 0 })}>
                       <option value="Yes">{t('Yes')}</option>
                       <option value="No">{t('No')}</option>
                     </select>
@@ -1481,7 +1493,7 @@ class AddMembers extends Component {
                                     <div className="position-relative d-flex flex-grow-1" dir="ltr">
                                       <span className="OnlyCurrency Uppercase">{this.props.defaultCurrency}</span>
                                       <input type="text" className="form-control inputFieldPaddingCls ar-en-px-2"
-                                        value={installment.amount} onChange={(e) => this.setInstallmentAmountDueDate(e, i, 'amount')}
+                                        value={installment.actualAmount} onChange={(e) => this.setInstallmentAmountDueDate(e, i, 'amount')}
                                       />
                                     </div>
                                   </div>
@@ -1498,7 +1510,7 @@ class AddMembers extends Component {
                                           invalidDateMessage=''
                                           minDateMessage=''
                                           className={"form-control mx-sm-2 inlineFormInputs"}
-                                          minDate={new Date()}
+                                          minDate={installments[i - 1] ? installments[i - 1].dueDate : new Date()}
                                           maxDate={endDate}
                                           format="dd/MM/yyyy"
                                           value={installment.dueDate}
@@ -1555,7 +1567,7 @@ class AddMembers extends Component {
                         <div className="modal-header">
                           <h4 className="modal-title">{t('Payment')}</h4>
                           {/* on click this button remove active from top that div */}
-                          <button type="button" className="close" onClick={() => this.setState({ showPay: false })}><span className="iconv1 iconv1-close"></span></button>
+                          <button type="button" className="close" onClick={() => this.setState({ showPay: false, digital: 0, cash: 0, card: 0 })}><span className="iconv1 iconv1-close"></span></button>
                           {/* / - on click this button remove active from top that div over */}
                         </div>
                       </div>
@@ -1777,8 +1789,8 @@ class AddMembers extends Component {
                         </thead>
                         <tbody>
                           <tr>
-                            <td>{this.props.packages.active && this.props.packages.active.filter(pack => pack._id === packageName)[0] &&
-                              this.props.packages.active.filter(pack => pack._id === packageName)[0].packageName}</td>
+                            <td>{this.props.packages.packageBySalesBranch && this.props.packages.packageBySalesBranch.filter(pack => pack._id === packageName)[0] &&
+                              this.props.packages.packageBySalesBranch.filter(pack => pack._id === packageName)[0].packageName}</td>
                             <td>{dateToDDMMYYYY(startDate)}</td>
                             <td>{dateToDDMMYYYY(endDate)}</td>
                           </tr>
