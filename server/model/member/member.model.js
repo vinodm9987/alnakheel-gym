@@ -61,7 +61,7 @@ const memberSchema = new Schema({
 
             cardNumber: String, cashAmount: Number, cardAmount: Number, vatAmount: Number, discount: Number,
 
-            digitalAmount: Number,
+            digitalAmount: Number, chequeAmount: Number, chequeNumber:String, bankName: String, chequeDate: Date,
 
             totalAmount: Number, actualAmount: Number,
 
@@ -71,7 +71,7 @@ const memberSchema = new Schema({
 
         cardNumber: String, cashAmount: Number, cardAmount: Number, vatAmount: Number, discount: Number,
 
-        digitalAmount: Number,
+        digitalAmount: Number, chequeAmount: Number, chequeNumber:String, bankName: String, chequeDate: Date,
 
         totalAmount: Number, actualAmount: Number, paypalObject: Object, freezeDate: Date, reactivationDate: Date,
 
@@ -100,7 +100,7 @@ const memberSchema = new Schema({
 
                 cardNumber: String, cashAmount: Number, cardAmount: Number, vatAmount: Number, discount: Number,
 
-                digitalAmount: Number,
+                digitalAmount: Number, chequeAmount: Number, chequeNumber:String, bankName: String, chequeDate: Date,
 
                 totalAmount: Number, actualAmount: Number
 
@@ -110,7 +110,7 @@ const memberSchema = new Schema({
 
             cardNumber: String, cashAmount: Number, cardAmount: Number, vatAmount: Number, discount: Number,
 
-            digitalAmount: Number,
+            digitalAmount: Number, chequeAmount: Number, chequeNumber:String, bankName: String, chequeDate: Date,
 
             totalAmount: Number, actualAmount: Number
 
