@@ -50,24 +50,22 @@ const memberSchema = new Schema({
 
         packageRenewal: { type: Boolean, default: false },
 
-        paidStatus: { type: String, enum: ["Paid", "UnPaid","Installment"], default: "UnPaid" },
+        paidStatus: { type: String, enum: ["Paid", "UnPaid", "Installment"], default: "UnPaid" },
 
-        Installments:[
-            {
-                paidStatus: { type: String, enum: ["Paid", "UnPaid"], default: "UnPaid" },
-                dueDate:Date,
-                dateOfInstallment: Date,
-                timeOfInstallment: Date,
-                paidType: { type: String, enum: ["Online", "Offline"] },
+        Installments: [{
+            paidStatus: { type: String, enum: ["Paid", "UnPaid"], default: "UnPaid" },
+            dueDate: Date,
+            dateOfInstallment: Date,
+            timeOfInstallment: Date,
+            paidType: { type: String, enum: ["Online", "Offline"] },
 
-        cardNumber: String, cashAmount: Number, cardAmount: Number, vatAmount: Number, discount: Number,
+            cardNumber: String, cashAmount: Number, cardAmount: Number, vatAmount: Number, discount: Number,
 
-        digitalAmount: Number,
+            digitalAmount: Number,
 
-        totalAmount: Number, actualAmount: Number,
+            totalAmount: Number, actualAmount: Number,
 
-            }
-        ],
+        }],
 
         paidType: { type: String, enum: ["Online", "Offline"] },
 
@@ -81,55 +79,53 @@ const memberSchema = new Schema({
          * trainer fields
         */
 
-       trainerDetails: [{
+        trainerDetails: [{
 
-        trainerFees: { type: Schema.Types.ObjectId, ref: "TrainerFees" },
+            trainerFees: { type: Schema.Types.ObjectId, ref: "TrainerFees" },
 
-        trainer: { type: Schema.Types.ObjectId, ref: "Employee" },
+            trainer: { type: Schema.Types.ObjectId, ref: "Employee" },
 
-        isExpiredTrainer: { type: Boolean, default: false },
+            isExpiredTrainer: { type: Boolean, default: false },
 
-        trainerStart: Date, trainerEnd: Date, trainerExtend: Date,
+            trainerStart: Date, trainerEnd: Date, trainerExtend: Date,
 
-        orderNo: String,
+            orderNo: String,
 
-        Installments:[
-            {
+            Installments: [{
                 paidStatus: { type: String, enum: ["Paid", "UnPaid"], default: "UnPaid" },
-                dueDate:Date,
+                dueDate: Date,
                 dateOfInstallment: Date,
                 timeOfInstallment: Date,
                 paidType: { type: String, enum: ["Online", "Offline"] },
 
-        cardNumber: String, cashAmount: Number, cardAmount: Number, vatAmount: Number, discount: Number,
+                cardNumber: String, cashAmount: Number, cardAmount: Number, vatAmount: Number, discount: Number,
 
-        digitalAmount: Number,
+                digitalAmount: Number,
 
-        totalAmount: Number, actualAmount: Number
+                totalAmount: Number, actualAmount: Number
 
-            }
-        ],
+            }],
 
-        paidType: { type: String, enum: ["Online", "Offline"] },
+            paidType: { type: String, enum: ["Online", "Offline"] },
 
-        cardNumber: String, cashAmount: Number, cardAmount: Number, vatAmount: Number, discount: Number,
+            cardNumber: String, cashAmount: Number, cardAmount: Number, vatAmount: Number, discount: Number,
 
-        digitalAmount: Number,
+            digitalAmount: Number,
 
-        totalAmount: Number, actualAmount: Number
-        
+            totalAmount: Number, actualAmount: Number
+
+        }],
+
+
+        orderNo: String,
+
+        doneBy: { type: Schema.Types.ObjectId, ref: "Credential" },
+
+        dateOfPurchase: Date,
+
+        timeOfPurchase: Date,
+
     }],
-    
-
-    orderNo: String,
-
-    doneBy: { type: Schema.Types.ObjectId, ref: "Credential" },
-
-    dateOfPurchase: Date,
-
-    timeOfPurchase: Date,
-
-}],
 
     /** 
      * biometric information of member
