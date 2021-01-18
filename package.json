@@ -57,7 +57,7 @@
     "nodemon": "^2.0.2",
     "paypal-rest-sdk": "^1.8.1",
     "prop-types": "15.7.2",
-    "qrcode.react": "^1.0.0",
+    "qrcode.react": "^1.0.1",
     "react": "^16.12.0",
     "react-calendar": "^2.19.2",
     "react-chartjs-2": "^2.9.0",
