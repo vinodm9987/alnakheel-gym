@@ -1,5 +1,5 @@
 const { updatePackage, deletePackage, addPackage,
-    getAllPackage, getPackageById, getAllActivePackage } = require('../controller/masterTable/package.controller')
+    getAllPackage, getPackageById, getAllActivePackage,getAllPackageBySalesBranch } = require('../controller/masterTable/package.controller')
 
 const { updatePeriod, addPeriod,
     getAllPeriod, getAllPeriodForAdmin } = require('../controller/masterTable/period.controller')
@@ -32,6 +32,8 @@ exports.routes = (express, app) => {
 
 
     router.get('/getAllPackage', getAllPackage);
+
+    router.post('/getAllPackageBySalesBranch', getAllPackageBySalesBranch);
 
     router.get('/getAllActivePackage', getAllActivePackage);
 

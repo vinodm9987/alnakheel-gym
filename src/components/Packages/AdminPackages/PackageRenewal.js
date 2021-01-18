@@ -190,7 +190,7 @@ class PackageRenewal extends Component {
     }
     this.setState({
       ...validator(e, 'packages', 'text', [t('Enter package name')]), ...{
-        tax, periodDays, packageAmount, setPackageAmount, cash: 0, card: 0, digital: 0, period: '',
+        tax, periodDays, packageAmount, setPackageAmount, cash: 0, card: 0, digital: 0, period: '', installments: [], installmentsCopy: [],
         amount: 0, giftcard: 0, discount: 0, count: 0, trainer: null, endDate, startDate: start, startTrainerDate: start, packageEndDate
       }
     })
@@ -206,7 +206,12 @@ class PackageRenewal extends Component {
 
   setTrainer(e) {
     const { t } = this.props
-    this.setState({ ...validator(e, 'trainer', 'select', [t('Select trainer name')]), ...{ period: '', amount: 0, packageAmount: this.state.setPackageAmount, giftcard: 0, discount: 0, count: 0, cash: 0, card: 0, digital: 0, } }, () => {
+    this.setState({
+      ...validator(e, 'trainer', 'select', [t('Select trainer name')]), ...{
+        period: '', amount: 0, installments: [], installmentsCopy: [],
+        packageAmount: this.state.setPackageAmount, giftcard: 0, discount: 0, count: 0, cash: 0, card: 0, digital: 0,
+      }
+    }, () => {
       const data = {
         branch: this.state.branch,
         trainerName: this.state.trainer
@@ -228,7 +233,12 @@ class PackageRenewal extends Component {
       packageAmount = packageAmount + amount
       trainerPeriodDays = trainerPeriods[index - 1].period.periodDays
     }
-    this.setState({ ...validator(e, 'period', 'text', [t('Select period')]), ...{ amount, trainerFeesId, packageAmount, giftcard: 0, discount: 0, count: 0, cash: 0, card: 0, digital: 0, trainerPeriodDays } })
+    this.setState({
+      ...validator(e, 'period', 'text', [t('Select period')]), ...{
+        amount, trainerFeesId, packageAmount, installments: [], installmentsCopy: [],
+        giftcard: 0, discount: 0, count: 0, cash: 0, card: 0, digital: 0, trainerPeriodDays
+      }
+    })
   }
 
   setDigital(e, total) {
@@ -381,37 +391,54 @@ class PackageRenewal extends Component {
   }
 
   addInstallment(packageAmount) {
-    const { installments } = this.state
+    const { installments, installmentsCopy } = this.state
     if (installments.length === 0) {
       installments.push({ amount: packageAmount.toFixed(3), dueDate: new Date() })
+      installmentsCopy.push({ amount: packageAmount.toFixed(3), dueDate: new Date() })
     } else {
       installments.push({ amount: 0, dueDate: new Date() })
+      installmentsCopy.push({ amount: 0, dueDate: new Date() })
     }
-    const installmentsCopy = [...installments]
     this.setState({ installments, installmentsCopy })
   }
 
-  removeInstallment(i) {
-    const { installments } = this.state
+  removeInstallment(i, packageAmount) {
+    const { installments, installmentsCopy } = this.state
     if (i > -1) {
       installments.splice(i, 1);
+      installmentsCopy.splice(i, 1);
+      installments.forEach((installment, j) => {
+        if (j === 0) {
+          installment.amount = packageAmount.toFixed(3)
+          installmentsCopy[j].amount = packageAmount.toFixed(3)
+        } else {
+          installment.amount = 0
+          installmentsCopy[j].amount = 0
+        }
+      })
     }
-    this.setState({ installments })
+    this.setState({ installments, installmentsCopy })
   }
 
   setInstallmentAmountDueDate(e, i, type) {
     const { installments, installmentsCopy } = this.state
-    console.log("🚀 ~ file: PackageRenewal.js ~ line 403 ~ PackageRenewal ~ setInstallmentAmountDueDate ~ installmentsCopy", installmentsCopy)
-    console.log("🚀 ~ file: PackageRenewal.js ~ line 406 ~ PackageRenewal ~ setInstallmentAmountDueDate ~ e.target.value", e.target.value)
     if (type === 'amount') {
-      if (installmentsCopy[i + 1] && installmentsCopy[i].amount >= e.target.value) {
+      if (installmentsCopy[i + 1] && parseFloat(installmentsCopy[i].amount) >= parseFloat(e.target.value ? e.target.value : 0)) {
         installments[i].amount = e.target.value
-        installments[i + 1].amount = installments[i].amount - e.target.value
+        installments[i + 1].amount = installmentsCopy[i].amount - e.target.value
+        installmentsCopy[i + 1].amount = installmentsCopy[i].amount - e.target.value
+        installments.forEach((installment, j) => {
+          if (j > i + 1) {
+            installment.amount = 0
+            installmentsCopy[j].amount = 0
+          }
+        })
       }
     } else {
       installments[i].dueDate = e
+      installmentsCopy[i].dueDate = e
     }
-    this.setState({ installments })
+    this.setState({ installments, installmentsCopy })
   }
 
   customSearch(options, search) {
@@ -437,7 +464,7 @@ class PackageRenewal extends Component {
       trainerFee.period.periodDays <= this.state.periodDays
     ) : []
 
-    let subTotal = installments[0] ? parseFloat(installments[0].amount) : 0
+    let subTotal = (installments[0] && installments[0].amount) ? parseFloat(installments[0].amount) : 0
     let totalVat = (subTotal - discount - giftcard) * tax / 100
 
     let total = subTotal - discount - giftcard + totalVat
@@ -447,7 +474,7 @@ class PackageRenewal extends Component {
     const formatOptionLabel = ({ credentialId: { userName, avatar, email }, memberId }) => {
       return (
         <div className="d-flex align-items-center">
-          <img alt='' src={`http://${avatar.ip}:5600/${avatar.path}`} className="rounded-circle mx-1 w-30px h-30px" />
+          <img alt='' src={`/${avatar.path}`} className="rounded-circle mx-1 w-30px h-30px" />
           <div className="w-100">
             <small className="whiteSpaceNormal d-block" style={{ lineHeight: '1', fontWeight: 'bold' }}>{userName} ({memberId})</small>
             <small className="whiteSpaceNormal d-block" style={{ lineHeight: '1' }}>{email}</small>
@@ -667,6 +694,7 @@ class PackageRenewal extends Component {
                                         minDateMessage=''
                                         className={"form-control mx-sm-2 inlineFormInputs"}
                                         minDate={new Date()}
+                                        maxDate={endDate}
                                         format="dd/MM/yyyy"
                                         value={installment.dueDate}
                                         onChange={(e) => this.setInstallmentAmountDueDate(e, i, 'dueDate')}
@@ -684,7 +712,7 @@ class PackageRenewal extends Component {
                             </div>
                             <div className="righthere">
                               <div className="closeHere">
-                                <span className="close-btn" onClick={() => this.removeInstallment(i)}>
+                                <span className="close-btn" onClick={() => this.removeInstallment(i, packageAmount)}>
                                   <span className="iconv1 iconv1-close text-white font-weight-bold" style={{ fontSize: "11px" }}></span>
                                 </span>
                               </div>
@@ -757,10 +785,10 @@ class PackageRenewal extends Component {
                 <h5 className="my-2 font-weight-bold px-1">{t('Payment Method')}</h5>
               </div>
               <div className="col-12 col-sm-6 d-flex align-items-center justify-content-end">
-                <button data-toggle="modal" data-target="#passwordAskModal" className="d-flex flex-column align-items-center justify-content-center bg-danger w-75px h-75px m-1 linkHoverDecLess rounded-circle text-white cursorPointer border-0">
-                  <span className="w-100 text-center"><h4 className="m-0"><span className="iconv1 iconv1-discount text-white"></span></h4><small>{t('Discount')}</small></span></button>
-                {/* <button data-toggle="modal" data-target="#GiftCard" className="d-flex flex-column align-items-center justify-content-center bg-primary w-75px h-75px m-1 linkHoverDecLess rounded-circle text-white cursorPointer border-0">
-                  <span className="w-100 text-center"><h4 className="m-0"><span className="iconv1 iconv1-giftcard text-white"></span></h4><small>{t('Gift Card')}</small></span></button> */}
+                <button data-toggle="modal" data-target="#passwordAskModal" className="d-flex flex-column align-items-center justify-content-center bg-danger w-100px h-100px m-1 linkHoverDecLess rounded-circle text-white cursorPointer border-0">
+                  <span className="w-100 text-center"><h3 className="m-0"><span className="iconv1 iconv1-discount text-white"></span></h3><small className="text-white">{t('Discount')}</small></span></button>
+                {/* <button data-toggle="modal" data-target="#GiftCard" className="d-flex flex-column align-items-center justify-content-center bg-primary w-100px h-100px m-1 linkHoverDecLess rounded-circle text-white cursorPointer border-0">
+                  <span className="w-100 text-center"><h3 className="m-0"><span className="iconv1 iconv1-giftcard text-white"></span></h3><small className="text-white">{t('Gift Card')}</small></span></button> */}
               </div>
             </div>
             <div className="row mt-3">
@@ -811,6 +839,63 @@ class PackageRenewal extends Component {
                 </div>
                 : null
               }
+              <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
+                <div className="form-group inlineFormGroup">
+                  <label className="mx-sm-2 inlineFormLabel mb-1"></label>
+                  <div className="d-flex">
+                    <div className="custom-control custom-checkbox roundedGreenRadioCheck mx-2">
+                      <input type="checkbox" className="custom-control-input" id="check" name="checkorNo" />
+                      <label className="custom-control-label" htmlFor="check">{t('Cheque')}</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              {/* if cheque */}
+              <div className="col-12">
+                <div className="row">
+                  <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
+                    <div className="form-group inlineFormGroup">
+                      <label htmlFor="bankName" className="mx-sm-2 inlineFormLabel mb-1">{t('Bank Name')}</label>
+                      <input type="number" autoComplete="off" className="form-control mx-sm-2 inlineFormInputs FormInputsError w-100 p-0 d-flex align-items-center bg-white dirltr" id="bankName" />
+                      <div className="errorMessageWrapper">
+                        <small className="text-danger mx-sm-2 errorMessage"></small>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
+                    <div className="form-group inlineFormGroup">
+                      <label htmlFor="CheckNumber" className="mx-sm-2 inlineFormLabel mb-1">{t('Check Number')}</label>
+                      <input type="number" autoComplete="off" className="form-control mx-sm-2 inlineFormInputs FormInputsError w-100 p-0 d-flex align-items-center bg-white dirltr" id="CheckNumber" />
+                      <div className="errorMessageWrapper">
+                        <small className="text-danger mx-sm-2 errorMessage"></small>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
+                    <div className="form-group inlineFormGroup">
+                      <label htmlFor="CheckDate" className="mx-sm-2 inlineFormLabel mb-1">{t('Check Date')}</label>
+                      <input type="number" autoComplete="off" className="form-control mx-sm-2 inlineFormInputs FormInputsError w-100 p-0 d-flex align-items-center bg-white dirltr" id="CheckDate" />
+                      <div className="errorMessageWrapper">
+                        <small className="text-danger mx-sm-2 errorMessage"></small>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
+                    <div className="form-group inlineFormGroup">
+                      <label htmlFor="ChequeAmount" className="mx-sm-2 inlineFormLabel mb-1">{t('Cheque Amount')}</label>
+                      {/* here currency comes , so change errorclass for div below */}
+                      <div className="form-control mx-sm-2 inlineFormInputs FormInputsError w-100 p-0 d-flex align-items-center bg-white dirltr">
+                        <label htmlFor="ChequeAmount" className="text-danger my-0 mx-1 font-weight-bold">{this.props.defaultCurrency}</label>
+                        <input type="number" autoComplete="off" className="border-0 bg-light w-100 h-100 p-1 bg-white" id="ChequeAmount" />
+                      </div>
+                      <div className="errorMessageWrapper">
+                        <small className="text-danger mx-sm-2 errorMessage"></small>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              {/* if cheque over */}
               <div className="col-12">
                 <div className="px-sm-1 pt-4 pb-5"><button type="button" className="btn btn-block btn-success btn-lg" onClick={() => this.handleSubmit(total)}>{t('Checkout')}</button></div>
               </div>

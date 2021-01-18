@@ -73,7 +73,8 @@ class BookATrainer extends Component {
       passwordE: '',
       showPass: false,
       wantInstallment: 'Yes',
-      installments: []
+      installments: [],
+      installmentsCopy: [],
     }
     this.state = this.default
     this.props.dispatch(getAllMemberOfTrainer())
@@ -354,28 +355,55 @@ class BookATrainer extends Component {
     }
   }
 
-  addInstallment() {
-    const { installments } = this.state
-    installments.push({ amount: 0, dueDate: new Date() })
-    this.setState({ installments })
+  addInstallment(packageAmount) {
+    const { installments, installmentsCopy } = this.state
+    if (installments.length === 0) {
+      installments.push({ amount: packageAmount.toFixed(3), dueDate: new Date() })
+      installmentsCopy.push({ amount: packageAmount.toFixed(3), dueDate: new Date() })
+    } else {
+      installments.push({ amount: 0, dueDate: new Date() })
+      installmentsCopy.push({ amount: 0, dueDate: new Date() })
+    }
+    this.setState({ installments, installmentsCopy })
   }
 
-  removeInstallment(i) {
-    const { installments } = this.state
+  removeInstallment(i, packageAmount) {
+    const { installments, installmentsCopy } = this.state
     if (i > -1) {
       installments.splice(i, 1);
+      installmentsCopy.splice(i, 1);
+      installments.forEach((installment, j) => {
+        if (j === 0) {
+          installment.amount = packageAmount.toFixed(3)
+          installmentsCopy[j].amount = packageAmount.toFixed(3)
+        } else {
+          installment.amount = 0
+          installmentsCopy[j].amount = 0
+        }
+      })
     }
-    this.setState({ installments })
+    this.setState({ installments, installmentsCopy })
   }
 
   setInstallmentAmountDueDate(e, i, type) {
-    const { installments } = this.state
+    const { installments, installmentsCopy } = this.state
     if (type === 'amount') {
-      installments[i].amount = e.target.value
+      if (installmentsCopy[i + 1] && parseFloat(installmentsCopy[i].amount) >= parseFloat(e.target.value ? e.target.value : 0)) {
+        installments[i].amount = e.target.value
+        installments[i + 1].amount = installmentsCopy[i].amount - e.target.value
+        installmentsCopy[i + 1].amount = installmentsCopy[i].amount - e.target.value
+        installments.forEach((installment, j) => {
+          if (j > i + 1) {
+            installment.amount = 0
+            installmentsCopy[j].amount = 0
+          }
+        })
+      }
     } else {
       installments[i].dueDate = e
+      installmentsCopy[i].dueDate = e
     }
-    this.setState({ installments })
+    this.setState({ installments, installmentsCopy })
   }
 
   customSearch(options, search) {
@@ -395,7 +423,7 @@ class BookATrainer extends Component {
   render() {
     const { t } = this.props
     const { member, packages, trainer, period, cash, card, discount, tax, giftcard, discountMethod, count, text, digital,
-      trainerReceipt, packageDetails, oldPackageId, startDate, endDate, wantInstallment, installments } = this.state
+      trainerReceipt, packageDetails, oldPackageId, startDate, endDate, wantInstallment, installments, packageAmount } = this.state
 
     let packageDetailsArr = []
     let map = new Map();
@@ -410,7 +438,7 @@ class BookATrainer extends Component {
       trainerFee.period.periodDays <= this.state.packageDaysLeft
     ) : []
 
-    let subTotal = installments[0] ? installments[0].amount : 0
+    let subTotal = (installments[0] && installments[0].amount) ? parseFloat(installments[0].amount) : 0
     let totalVat = (subTotal - discount - giftcard) * tax / 100
 
     let total = subTotal - discount - giftcard + totalVat
@@ -420,7 +448,7 @@ class BookATrainer extends Component {
     const formatOptionLabel = ({ credentialId: { userName, avatar, email }, memberId }) => {
       return (
         <div className="d-flex align-items-center">
-          <img alt='' src={`http://${avatar.ip}:5600/${avatar.path}`} className="rounded-circle mx-1 w-30px h-30px" />
+          <img alt='' src={`/${avatar.path}`} className="rounded-circle mx-1 w-30px h-30px" />
           <div className="w-100">
             <small className="whiteSpaceNormal d-block" style={{ lineHeight: '1', fontWeight: 'bold' }}>{userName} ({memberId})</small>
             <small className="whiteSpaceNormal d-block" style={{ lineHeight: '1' }}>{email}</small>
@@ -432,7 +460,7 @@ class BookATrainer extends Component {
     const formatOptionLabel1 = ({ credentialId: { userName, avatar, email } }) => {
       return (
         <div className="d-flex align-items-center">
-          <img alt='' src={`http://${avatar.ip}:5600/${avatar.path}`} className="rounded-circle mx-1 w-30px h-30px" />
+          <img alt='' src={`/${avatar.path}`} className="rounded-circle mx-1 w-30px h-30px" />
           <div className="w-100">
             <small className="whiteSpaceNormal d-block" style={{ lineHeight: '1', fontWeight: 'bold' }}>{userName}</small>
             <small className="whiteSpaceNormal d-block" style={{ lineHeight: '1' }}>{email}</small>
@@ -596,7 +624,7 @@ class BookATrainer extends Component {
               {wantInstallment === 'Yes' &&
                 <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 px-4 d-flex justify-content-end">
                   <button type="button" className="btn btn-success displayInlineFlexCls alignItemsCenter my-2 ml-3"
-                    onClick={() => this.addInstallment()}
+                    onClick={() => this.addInstallment(packageAmount)}
                   >
                     <span style={{ fontSize: "18px" }}>+</span>
                     <span className="gaper"></span>
@@ -640,6 +668,7 @@ class BookATrainer extends Component {
                                           minDateMessage=''
                                           className={"form-control mx-sm-2 inlineFormInputs"}
                                           minDate={new Date()}
+                                          maxDate={endDate}
                                           format="dd/MM/yyyy"
                                           value={installment.dueDate}
                                           onChange={(e) => this.setInstallmentAmountDueDate(e, i, 'dueDate')}
@@ -657,7 +686,7 @@ class BookATrainer extends Component {
                               </div>
                               <div className="righthere">
                                 <div className="closeHere">
-                                  <span className="close-btn" onClick={() => this.removeInstallment(i)}>
+                                  <span className="close-btn" onClick={() => this.removeInstallment(i, packageAmount)}>
                                     <span className="iconv1 iconv1-close text-white font-weight-bold" style={{ fontSize: "11px" }}></span>
                                   </span>
                                 </div>
@@ -724,13 +753,17 @@ class BookATrainer extends Component {
                 <h5 className="my-2 font-weight-bold px-1">{t('Payment Method')}</h5>
               </div>
               <div className="col-12 col-sm-6 d-flex align-items-center justify-content-end">
-                <button data-toggle="modal" data-target="#passwordAskModal" className="d-flex flex-column align-items-center justify-content-center bg-danger w-75px h-75px m-1 linkHoverDecLess rounded-circle text-white cursorPointer border-0">
-                  <span className="w-100 text-center"><h4 className="m-0"><span className="iconv1 iconv1-discount text-white"></span></h4><small>{t('Discount')}</small></span></button>
+                <button data-toggle="modal" data-target="#passwordAskModal" className="d-flex flex-column align-items-center justify-content-center bg-danger w-100px h-100px m-1 linkHoverDecLess rounded-circle text-white cursorPointer border-0">
+                  <span className="w-100 text-center">
+                    <h3 className="m-0"><span className="iconv1 iconv1-discount text-white"></span></h3>
+                    <small className="text-white">{t('Discount')}</small>
+                  </span>
+                </button>
               </div>
             </div>
             <div className="row mt-3">
-              <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6 pb-2">
-                <div className="form-group inlineFormGroup">
+              <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
+                <div className="form-group inlineFormGroup mb-3">
                   <label htmlFor="addDigital" className="mx-sm-2 inlineFormLabel mb-1">{t('Digital')}</label>
                   <div className={this.state.digitalE ? "form-control mx-sm-2 inlineFormInputs FormInputsError w-100 p-0 d-flex align-items-center bg-white dirltr" : "form-control mx-sm-2 inlineFormInputs w-100 p-0 d-flex align-items-center bg-white dirltr"}>
                     <label htmlFor="addDigital" className="text-danger my-0 mx-1 font-weight-bold">{this.props.defaultCurrency}</label>
@@ -741,8 +774,8 @@ class BookATrainer extends Component {
                   </div>
                 </div>
               </div>
-              <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6 pb-2">
-                <div className="form-group inlineFormGroup">
+              <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
+                <div className="form-group inlineFormGroup mb-3">
                   <label htmlFor="addCash" className="mx-sm-2 inlineFormLabel mb-1">{t('Cash')}</label>
                   <div className={this.state.cashE ? "form-control mx-sm-2 inlineFormInputs FormInputsError w-100 p-0 d-flex align-items-center bg-white dirltr" : "form-control mx-sm-2 inlineFormInputs w-100 p-0 d-flex align-items-center bg-white dirltr"}>
                     <label htmlFor="addCash" className="text-danger my-0 mx-1 font-weight-bold">{this.props.defaultCurrency}</label>
@@ -753,8 +786,8 @@ class BookATrainer extends Component {
                   </div>
                 </div>
               </div>
-              <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6 pb-2">
-                <div className="form-group inlineFormGroup">
+              <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
+                <div className="form-group inlineFormGroup mb-3">
                   <label htmlFor="addCard" className="mx-sm-2 inlineFormLabel mb-1">{t('Card')}</label>
                   <div className={this.state.cardE ? "form-control mx-sm-2 inlineFormInputs FormInputsError w-100 p-0 d-flex align-items-center bg-white dirltr" : "form-control mx-sm-2 inlineFormInputs w-100 p-0 d-flex align-items-center bg-white dirltr"}>
                     <label htmlFor="addCard" className="text-danger my-0 mx-1 font-weight-bold">{this.props.defaultCurrency}</label>
@@ -765,6 +798,64 @@ class BookATrainer extends Component {
                   </div>
                 </div>
               </div>
+              {/* remember here not asking last 4 digit */}
+              <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
+                <div className="form-group inlineFormGroup mb-3">
+                  <label className="mx-sm-2 inlineFormLabel mb-1"></label>
+                  <div className="d-flex">
+                    <div className="custom-control custom-checkbox roundedGreenRadioCheck mx-2">
+                      <input type="checkbox" className="custom-control-input" id="check" name="checkorNo" />
+                      <label className="custom-control-label" htmlFor="check">{t('Cheque')}</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              {/* if cheque */}
+              <div className="col-12">
+                <div className="row">
+                  <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
+                    <div className="form-group inlineFormGroup mb-3">
+                      <label htmlFor="bankName" className="mx-sm-2 inlineFormLabel mb-1">{t('Bank Name')}</label>
+                      <input type="number" autoComplete="off" className="form-control mx-sm-2 inlineFormInputs FormInputsError w-100 p-0 d-flex align-items-center bg-white dirltr" id="bankName" />
+                      <div className="errorMessageWrapper">
+                        <small className="text-danger mx-sm-2 errorMessage"></small>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
+                    <div className="form-group inlineFormGroup mb-3">
+                      <label htmlFor="CheckNumber" className="mx-sm-2 inlineFormLabel mb-1">{t('Check Number')}</label>
+                      <input type="number" autoComplete="off" className="form-control mx-sm-2 inlineFormInputs FormInputsError w-100 p-0 d-flex align-items-center bg-white dirltr" id="CheckNumber" />
+                      <div className="errorMessageWrapper">
+                        <small className="text-danger mx-sm-2 errorMessage"></small>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
+                    <div className="form-group inlineFormGroup mb-3">
+                      <label htmlFor="CheckDate" className="mx-sm-2 inlineFormLabel mb-1">{t('Check Date')}</label>
+                      <input type="number" autoComplete="off" className="form-control mx-sm-2 inlineFormInputs FormInputsError w-100 p-0 d-flex align-items-center bg-white dirltr" id="CheckDate" />
+                      <div className="errorMessageWrapper">
+                        <small className="text-danger mx-sm-2 errorMessage"></small>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
+                    <div className="form-group inlineFormGroup mb-3">
+                      <label htmlFor="ChequeAmount" className="mx-sm-2 inlineFormLabel mb-1">{t('Cheque Amount')}</label>
+                      {/* here currency comes , so change errorclass for div below */}
+                      <div className="form-control mx-sm-2 inlineFormInputs FormInputsError w-100 p-0 d-flex align-items-center bg-white dirltr">
+                        <label htmlFor="ChequeAmount" className="text-danger my-0 mx-1 font-weight-bold">{this.props.defaultCurrency}</label>
+                        <input type="number" autoComplete="off" className="border-0 bg-light w-100 h-100 p-1 bg-white" id="ChequeAmount" />
+                      </div>
+                      <div className="errorMessageWrapper">
+                        <small className="text-danger mx-sm-2 errorMessage"></small>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              {/* if cheque over */}
               <div className="col-12">
                 <div className="px-sm-1 pt-4 pb-5"><button type="button" className="btn btn-block btn-success btn-lg" onClick={() => this.handleSubmit(total)}>{t('Checkout')}</button></div>
               </div>

@@ -13,6 +13,7 @@ const { Formate: { setTime } } = require('../../utils')
 const { Package, Period } = require('../../model');
 const { auditLogger } = require('../../middleware/auditlog.middleware');
 const { addPackageInAllBranch, updatePackageInAllBranches } = require('../../service/branch.service');
+const { addPackage, updatePackage } = require('../../biostar');
 
 
 
@@ -25,7 +26,7 @@ const { addPackageInAllBranch, updatePackageInAllBranches } = require('../../ser
 
 exports.getAllPackage = (req, res) => {
     Package.find({})
-        .populate('period')
+        .populate('period accessBranches salesBranches')
         .then(response => {
             successResponseHandler(res, response, "successfully get all packages !!");
         }).catch(error => {
@@ -36,6 +37,22 @@ exports.getAllPackage = (req, res) => {
 
 
 
+/**
+ * get all packages by sales Branch
+*/
+
+
+exports.getAllPackageBySalesBranch = (req, res) => {
+    Package.find({salesBranches:req.body.salesBranches})
+        .populate('period accessBranches salesBranches')
+        .then(response => {
+            successResponseHandler(res, response, "successfully get all packages !!");
+        }).catch(error => {
+            logger.error(error);
+            errorResponseHandler(res, error, "Exception while getting all packages !");
+        });
+};
+
 
 
 /**
@@ -45,7 +62,7 @@ exports.getAllPackage = (req, res) => {
 
 exports.getAllActivePackage = (req, res) => {
     Package.find({ endDate: { $gte: setTime(new Date()) } })
-        .populate('period')
+        .populate('period accessBranches salesBranches')
         .then(response => {
             successResponseHandler(res, response, "successfully get all active packages !!");
         }).catch(error => {
@@ -64,7 +81,7 @@ exports.getAllActivePackage = (req, res) => {
 
 exports.getPackageById = (req, res) => {
     Package.findById(req.params.id)
-        .populate('period')
+        .populate('period accessBranches salesBranches')
         .then(response => {
             successResponseHandler(res, response, "successfully  packages by id !!");
         }).catch(error => {
@@ -93,7 +110,7 @@ exports.addPackage = async (req, res) => {
             newPackage["endDate"] = setTime(endDate);
             newPackage["image"] = req.files[0];
             let response = await newPackage.save()
-            let newResponse = await Package.findById(response._id).lean()
+            let newResponse = await Package.findById(response._id).populate('accessBranches salesBranches').lean()
             let periodData = await Period.findById(response.period).lean()
             newResponse["period"] = periodData
             auditLogger(req, 'Success')
@@ -145,7 +162,7 @@ exports.updatePackage = async (req, res) => {
             data["endDate"] = setTime(endDate);
             if (req.files.length > 0) data["image"] = req.files[0];
             req.responseData = await Package.findById(req.params.id).lean()
-            const response = await Package.findByIdAndUpdate(req.params.id, data, { new: true }).populate('period').lean()
+            const response = await Package.findByIdAndUpdate(req.params.id, data, { new: true }).populate('period accessBranches salesBranches').lean()
             auditLogger(req, 'Success')
             return successResponseHandler(res, response, "successfully update the package !!");
         } catch (error) {

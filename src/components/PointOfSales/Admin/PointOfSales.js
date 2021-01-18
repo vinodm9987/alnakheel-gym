@@ -1,13 +1,18 @@
-import React, { Component } from 'react'
+import $ from 'jquery';
+import QRCode from 'qrcode.react';
+import React, { Component } from 'react';
+import { findDOMNode } from 'react-dom';
+import { withTranslation } from 'react-i18next';
+import { connect } from "react-redux";
 import Select from "react-select";
-import { connect } from "react-redux"
-import { validator, setTime } from '../../../utils/apis/helpers';
-import { getAllStocks, addStockSell } from '../../../actions/pos.action';
-import { getActiveStatusRegisterMembers } from '../../../actions/member.action';
-import { withTranslation } from 'react-i18next'
-import { getAmountByRedeemCode } from '../../../actions/reward.action';
-import { GET_ALERT_ERROR, GET_ACTIVE_STOCK } from '../../../actions/types';
 import { getAllBranch } from '../../../actions/branch.action';
+import { getActiveStatusRegisterMembers } from '../../../actions/member.action';
+import { addStockSell, getAllStocks } from '../../../actions/pos.action';
+import { verifyAdminPassword } from '../../../actions/privilege.action';
+import { getAmountByRedeemCode } from '../../../actions/reward.action';
+import { GET_ACTIVE_STOCK, GET_ALERT_ERROR } from '../../../actions/types';
+import instaimg from '../../../assets/img/insta.svg.webp';
+import { dateToDDMMYYYY, dateToHHMM, setTime, validator } from '../../../utils/apis/helpers';
 
 class PointOfSales extends Component {
 
@@ -25,6 +30,8 @@ class PointOfSales extends Component {
       cardE: '',
       digital: 0,
       digitalE: '',
+      cardNumber: '',
+      cardNumberE: '',
       subTotalGiftCard: 0,
       redeemCode: '',
       discount: 0,
@@ -36,7 +43,13 @@ class PointOfSales extends Component {
       text: '',
       memberTransactionId: '',
       branch: '',
-      branchE: ''
+      branchE: '',
+      posReceipt: null,
+      password: '',
+      passwordE: '',
+      showPass: false,
+      branches: [],
+      staffName: ''
     }
     this.state = this.default
     this.props.dispatch(getAllBranch())
@@ -57,6 +70,50 @@ class PointOfSales extends Component {
         this.props.dispatch({ type: GET_ALERT_ERROR, payload: 'Sorry gift card is not valid on this transaction' })
       }
     }
+    if (this.props.errors !== prevProps.errors) {
+      if (Object.keys(this.props.errors).length !== 0 && !this.props.errors.error) {
+        if (this.props.errors.response && this.props.errors.response.displayReceipt) {
+          let posReceipt = this.props.errors.response._doc
+          this.setState({ ...{ posReceipt } }, () => {
+            const el = findDOMNode(this.refs.receiptOpenModal);
+            $(el).click();
+          })
+        } else {
+          this.setState({ ...this.default, ...{ addedStocks: [], customerStatus: 'Member' } })
+        }
+      }
+    }
+    if (((this.props.verifyPassword && this.props.verifyPassword) !== (prevProps.verifyPassword)) && this.props.verifyPassword === 'verified') {
+      const el = findDOMNode(this.refs.openDiscount);
+      $(el).click();
+    }
+  }
+
+  componentDidMount() {
+    const branches = this.props.loggedUser && this.props.loggedUser.userId && this.props.loggedUser.userId.branch
+    const staffName = this.props.loggedUser && this.props.loggedUser.userId && this.props.loggedUser.userId._id
+    this.setState({ branches, staffName })
+  }
+
+  handlePrint() {
+    var w = window.open('', 'new div', 'height=400,width=600');
+    var printOne = $('#ReceiptModal2').html();
+    w.document.write('<html><head><title></title>');
+    w.document.write('<link rel="stylesheet" href="css/style.css" type="text/css" />');
+    w.document.write('<link rel="stylesheet" href="css/style2.css" type="text/css" />');
+    w.document.write('<link rel="stylesheet" href="css/bootstrap.min.css" type="text/css" />');
+    w.document.write('<link rel="stylesheet" href="css/bootstrap.min.css" type="text/css" />');
+    w.document.write('</head><body >');
+    w.document.write(printOne)
+    w.document.write('</body></html>');
+    w.window.print();
+    w.document.close();
+    this.setState({ ...this.default, ...{ addedStocks: [], customerStatus: 'Member' } })
+    return false;
+  }
+
+  handleReceiptClose() {
+    this.setState({ ...this.default, ...{ addedStocks: [], customerStatus: 'Member' } })
   }
 
   handleSearch(e) {
@@ -79,7 +136,7 @@ class PointOfSales extends Component {
             : stock.sellingPrice
         }
       })
-      this.setState({ addedStocks, cash: 0, card: 0, giftcard: 0, discount: 0, count: 0, redeemCode: '', text: '' }, () => {
+      this.setState({ addedStocks, cash: 0, card: 0, digital: 0, giftcard: 0, discount: 0, count: 0, redeemCode: '', text: '' }, () => {
         this.props.dispatch(getAmountByRedeemCode({ code: this.state.text }))
       })
     } else {
@@ -92,7 +149,7 @@ class PointOfSales extends Component {
     if (index > -1) {
       this.props.activeStocks.filter(stock => stock._id === addedStocks[index]._id)[0].isAdded = false
       addedStocks.splice(index, 1)
-      this.setState({ addedStocks: this.state.addedStocks, cash: 0, card: 0, giftcard: 0, discount: 0, count: 0, redeemCode: '', text: '' }, () => {
+      this.setState({ addedStocks: this.state.addedStocks, cash: 0, card: 0, digital: 0, giftcard: 0, discount: 0, count: 0, redeemCode: '', text: '' }, () => {
         this.props.dispatch(getAmountByRedeemCode({ code: this.state.text }))
       })
     }
@@ -106,7 +163,7 @@ class PointOfSales extends Component {
       stock.addedPrice = (stock.offerDetails && stock.offerDetails.isOffer && stock.offerDetails.offerDetails.status && setTime(stock.offerDetails.offerDetails.endDate) >= setTime(new Date()))
         ? stock.addedQuantity * stock.sellingPrice * (1 - stock.offerDetails.offerDetails.offerPercentage / 100)
         : stock.addedQuantity * stock.sellingPrice
-      this.setState({ addedStocks: this.state.addedStocks, cash: 0, card: 0, giftcard: 0, discount: 0, count: 0, redeemCode: '', text: '' }, () => {
+      this.setState({ addedStocks: this.state.addedStocks, cash: 0, card: 0, digital: 0, giftcard: 0, discount: 0, count: 0, redeemCode: '', text: '' }, () => {
         this.props.dispatch(getAmountByRedeemCode({ code: this.state.text }))
       })
     } else {
@@ -122,7 +179,7 @@ class PointOfSales extends Component {
       stock.addedPrice = (stock.offerDetails && stock.offerDetails.isOffer && stock.offerDetails.offerDetails.status && setTime(stock.offerDetails.offerDetails.endDate) >= setTime(new Date()))
         ? stock.addedQuantity * stock.sellingPrice * (1 - stock.offerDetails.offerDetails.offerPercentage / 100)
         : stock.addedQuantity * stock.sellingPrice
-      this.setState({ addedStocks: this.state.addedStocks, cash: 0, card: 0, giftcard: 0, discount: 0, count: 0, redeemCode: '', text: '' }, () => {
+      this.setState({ addedStocks: this.state.addedStocks, cash: 0, card: 0, digital: 0, giftcard: 0, discount: 0, count: 0, redeemCode: '', text: '' }, () => {
         this.props.dispatch(getAmountByRedeemCode({ code: this.state.text }))
       })
     } else {
@@ -168,25 +225,39 @@ class PointOfSales extends Component {
     })
   }
 
+  verifyPassword() {
+    const { password } = this.state
+    const { t } = this.props
+    if (password) {
+      const postData = {
+        password: password
+      }
+      this.props.dispatch({ type: 'VERIFY_ADMIN_PASSWORD', payload: 'null' })
+      this.props.dispatch(verifyAdminPassword(postData))
+    } else {
+      if (!password) this.setState({ passwordE: t('Enter password') })
+    }
+  }
+
   addDiscount(subTotal) {
     if (this.state.discountMethod === 'percent') {
       if (this.state.count && this.state.count <= 100) {
-        this.setState({ discount: (parseFloat(this.state.count ? this.state.count : 0) / 100 * subTotal).toFixed(3), cash: 0, card: 0 })
+        this.setState({ discount: (parseFloat(this.state.count ? this.state.count : 0) / 100 * subTotal).toFixed(3), cash: 0, card: 0, digital: 0 })
       } else {
-        this.setState({ discount: 0, count: 0, cash: 0, card: 0 })
+        this.setState({ discount: 0, count: 0, cash: 0, card: 0, digital: 0 })
       }
     } else {
       if (this.state.count && this.state.count <= subTotal) {
-        this.setState({ discount: parseFloat(this.state.count ? this.state.count : 0), cash: 0, card: 0 })
+        this.setState({ discount: parseFloat(this.state.count ? this.state.count : 0), cash: 0, card: 0, digital: 0 })
       } else {
-        this.setState({ discount: 0, count: 0, cash: 0, card: 0 })
+        this.setState({ discount: 0, count: 0, cash: 0, card: 0, digital: 0 })
       }
     }
   }
 
   addGiftcard(subTotalGiftCard) {
     if (this.state.member) {
-      subTotalGiftCard && this.setState({ subTotalGiftCard, cash: 0, card: 0 }, () => {
+      subTotalGiftCard && this.setState({ subTotalGiftCard, cash: 0, card: 0, digital: 0 }, () => {
         if (this.state.text !== this.state.redeemCode) {
           this.setState({ giftcard: 0 })
           this.props.dispatch(getAmountByRedeemCode({ code: this.state.text, memberId: this.state.member._id }))
@@ -201,7 +272,7 @@ class PointOfSales extends Component {
 
   handleSubmit() {
     const { t } = this.props
-    const { cash, card, digital, addedStocks, customerStatus, member, discount, giftcard, memberTransactionId, branch, cashE, cardE, digitalE } = this.state
+    const { cash, card, digital, addedStocks, customerStatus, member, discount, giftcard, memberTransactionId, branch, cashE, cardE, digitalE, cardNumber } = this.state
     if (customerStatus === 'Member') {
       if ((cash || card || digital) && addedStocks.length > 0 && member && branch && !cardE && !cashE && !digitalE) {
         let purchaseStock = []
@@ -227,11 +298,11 @@ class PointOfSales extends Component {
           cashAmount: cash ? cash : 0,
           cardAmount: card ? card : 0,
           digitalAmount: digital ? digital : 0,
+          cardNumber,
           memberTransactionId
         }
         this.props.dispatch(addStockSell(stockSellsInfo))
         this.props.activeStocks.forEach(stock => stock.isAdded = false)
-        this.setState({ ...this.default, ...{ addedStocks: [], customerStatus: 'Member' } })
       } else {
         if ((!cash || !digital)) this.setState({ cashE: t('Enter amount') })
         if (!member) this.setState({ memberE: t('Select member') })
@@ -263,11 +334,11 @@ class PointOfSales extends Component {
           cashAmount: cash ? cash : 0,
           cardAmount: card ? card : 0,
           digitalAmount: digital ? digital : 0,
+          cardNumber,
           paymentType: 'POS'
         }
         this.props.dispatch(addStockSell(stockSellsInfo))
         this.props.activeStocks.forEach(stock => stock.isAdded = false)
-        this.setState({ ...this.default, ...{ addedStocks: [], customerStatus: 'Member' } })
       } else {
         if ((!cash && !digital)) this.setState({ cashE: t('Enter amount') })
         if (!branch) this.setState({ branchE: t('Select branch') })
@@ -301,6 +372,13 @@ class PointOfSales extends Component {
     })
   }
 
+  setCardNumber(e) {
+    const { t } = this.props
+    if (e.target.value.length <= 4) {
+      this.setState(validator(e, 'cardNumber', 'number', [t('Enter card number'), t('Enter valid card number')]))
+    }
+  }
+
   render() {
     const { t } = this.props
     const formatOptionLabel = ({ credentialId: { userName, avatar, email }, memberId }) => {
@@ -319,7 +397,17 @@ class PointOfSales extends Component {
       option: (styles, { isFocused, isSelected }) => ({ ...styles, backgroundColor: isSelected ? 'white' : isFocused ? 'lightblue' : null, color: 'black' }),
     }
 
-    const { customerStatus, member, search, addedStocks, discount, giftcard, discountMethod, count, text, cash, card, branch, digital } = this.state
+    const { customerStatus, member, search, addedStocks, discount, giftcard, discountMethod, count, text, cash, card, branch, digital, posReceipt, branches, staffName } = this.state
+
+    let filteredBranches = []
+    if (staffName) {
+      filteredBranches = branches
+    } else {
+      filteredBranches = this.props.activeResponse
+    }
+
+    let avatarPath = filteredBranches && filteredBranches.filter(b => b._id === branch)[0] &&
+      filteredBranches.filter(b => b._id === branch)[0].avatar && filteredBranches.filter(b => b._id === branch)[0].avatar.path
 
     let subTotal = 0
     let totalVat = 0
@@ -349,22 +437,20 @@ class PointOfSales extends Component {
             <div className="row">
               <div className="col-12">
                 <div className="row pt-4">
-                  <div className="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-3">
-                    <div className="form-group inlineFormGroup d-flex flex-wrap">
-                      <div className="custom-control custom-checkbox roundedGreenRadioCheck mx-2">
-                        <input type="radio" className="custom-control-input" id="posRgeneral" name="posRgeneralMembers"
-                          checked={customerStatus === 'General'} onChange={() => this.setState({ customerStatus: 'General' })} />
-                        <label className="custom-control-label" htmlFor="posRgeneral">{t('General')}</label>
-                      </div>
-                      <div className="custom-control custom-checkbox roundedGreenRadioCheck mx-2">
-                        <input type="radio" className="custom-control-input" id="posRmembers" name="posRgeneralMembers"
-                          checked={customerStatus === 'Member'} onChange={() => this.setState({ customerStatus: 'Member' })} />
-                        <label className="custom-control-label" htmlFor="posRmembers">{t('Member')}</label>
-                      </div>
+                  {/* instead of above col use below col */}
+                  <div className="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-4">
+                    <div className="form-group inlineFormGroup d-flex flex-wrap justify-content-start">
+                      {/* Normal */}
+                      <button type="button" className={customerStatus === 'General' ? "btn btn-warning btn-orange mr-4 px-3 active text-white" : "btn btn-warning btn-orange mr-4 px-3 text-white"}
+                        onClick={() => this.setState({ customerStatus: 'General', member: '' })}
+                      >{t('General')}</button>
+                      <button type="button" className={customerStatus === 'Member' ? "btn btn-success px-3 active" : "btn btn-success px-3"}
+                        onClick={() => this.setState({ customerStatus: 'Member', member: '' })}
+                      >{t('Member')}</button>
                     </div>
                   </div>
                   {customerStatus === 'Member' &&
-                    <div className="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-5">
+                    <div className="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-4">
                       <div className="form-group inlineFormGroup">
                         <Select
                           formatOptionLabel={formatOptionLabel}
@@ -384,13 +470,34 @@ class PointOfSales extends Component {
                       </div>
                     </div>
                   }
-                  <div className="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-5">
+                  <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-4 d-flex flex-wrap justify-content-end align-items-start align-content-start">
+                    <span className="position-relative mw-100 mx-sm-2">
+                      <select className="bg-warning border-0 px-5 py-2 text-white rounded w-300px mw-100" value={branch} onChange={(e) => this.selectBranch(e)}>
+                        <option value="" hidden>{t('Please Select')}</option>
+                        {filteredBranches && filteredBranches.map((branch, i) => {
+                          return (
+                            <option key={i} value={branch._id}>{branch.branchName}</option>
+                          )
+                        })}
+                      </select>
+                      <span className="position-absolute d-flex align-items-center justify-content-between w-100 h-100 text-white pointerNone px-3" style={{ top: '0', left: '0' }}>
+                        <span className="iconv1 iconv1-fill-navigation"></span>
+                        <span className="iconv1 iconv1-arrow-down"></span>
+                      </span>
+                    </span>
+                    <div className="d-flex justify-content-end w-100 mw-100 mb-4 position-relative">
+                      <div className="errorMessageWrapper">
+                        <small className="text-danger mx-sm-2 errorMessage">{this.state.branchE}</small>
+                      </div>
+                    </div>
+                  </div>
+                  {/* <div className="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-5">
                     <div className="form-group inlineFormGroup">
                       <label className="mx-sm-2 inlineFormLabel">{t('Branch')}</label>
                       <select className={this.state.branchE ? "form-control mx-sm-2 inlineFormInputs FormInputsError" : "form-control mx-sm-2 inlineFormInputs"}
                         value={branch} onChange={(e) => this.selectBranch(e)}>
                         <option value="" hidden>{t('Please Select')}</option>
-                        {this.props.activeResponse && this.props.activeResponse.map((branch, i) => {
+                        {filteredBranches && filteredBranches.map((branch, i) => {
                           return (
                             <option key={i} value={branch._id}>{branch.branchName}</option>
                           )
@@ -401,7 +508,7 @@ class PointOfSales extends Component {
                         <small className="text-danger mx-sm-2 errorMessage">{this.state.branchE}</small>
                       </div>
                     </div>
-                  </div>
+                  </div> */}
                 </div>
                 <div className="pageHeadLine"></div>
               </div>
@@ -492,8 +599,8 @@ class PointOfSales extends Component {
                     {/* /- looped end */}
 
                     {/* {addedStocks.length > 0 && */}
-                    <div className="col-12 mt-3 mt-sm-5 pt-md-5">
-                      <div className="card px-2 bgGray w-100 border-light mt-lg-5">
+                    <div className="col-12 mt-3">
+                      <div className="card px-2 bgGray w-100 border-light">
                         <div className="table-responsive">
                           <table className="table table-borderless table-sm">
                             <thead>
@@ -505,36 +612,36 @@ class PointOfSales extends Component {
                             <tbody>
                               <tr>
                                 <td>
-                                  <h5 className="m-0">{t('Sub Total')}</h5>
+                                  <h5 className="m-0 text-left">{t('Sub Total')}</h5>
                                 </td>
                                 <td>
-                                  <h5 className="m-0"><small className="d-flex justify-content-end">{this.props.defaultCurrency} {subTotal.toFixed(3)}</small></h5>
+                                  <h5 className="m-0 text-right"><small className="d-flex justify-content-end">{this.props.defaultCurrency} {subTotal.toFixed(3)}</small></h5>
                                 </td>
                               </tr>
                               <tr>
                                 <td>
-                                  <h5 className="m-0">{t('Discount')} {parseFloat(this.state.count) ? `(${this.state.count} ${this.state.discountMethod === 'percent' ? '%' : this.props.defaultCurrency})` : ''}</h5>
+                                  <h5 className="m-0 text-left">{t('Discount')} {parseFloat(this.state.count) ? `(${this.state.count} ${this.state.discountMethod === 'percent' ? '%' : this.props.defaultCurrency})` : ''}</h5>
                                 </td>
                                 <td>
-                                  <h5 className="m-0"><small className="d-flex justify-content-end">{parseFloat(discount).toFixed(3)}</small></h5>
+                                  <h5 className="m-0 text-right"><small className="d-flex justify-content-end">{parseFloat(discount).toFixed(3)}</small></h5>
                                 </td>
                               </tr>
-                              {customerStatus === 'Member' &&
-                                <tr>
+                              {/* {customerStatus === 'Member' &&
+                              <tr>
                                   <td>
-                                    <h5 className="m-0">{t('Gift Card')} {this.state.text ? `(${this.state.text})` : ''}</h5>
+                                    <h5 className="m-0 text-left">{t('Gift Card')} {this.state.text ? `(${this.state.text})` : ''}</h5>
                                   </td>
                                   <td>
-                                    <h5 className="m-0"><small className="d-flex justify-content-end">{giftcard.toFixed(3)}</small></h5>
+                                    <h5 className="m-0 text-right"><small className="d-flex justify-content-end">{giftcard.toFixed(3)}</small></h5>
                                   </td>
                                 </tr>
-                              }
+                              } */}
                               <tr>
                                 <td>
-                                  <h5 className="m-0">{t('Tax')}</h5>
+                                  <h5 className="m-0 text-left">{t('Vat')}</h5>
                                 </td>
                                 <td>
-                                  <h5 className="m-0"><small className="d-flex justify-content-end text-primary">{totalVat.toFixed(3)}</small></h5>
+                                  <h5 className="m-0 text-right"><small className="d-flex justify-content-end text-primary">{totalVat.toFixed(3)}</small></h5>
                                 </td>
                               </tr>
                               <tr>
@@ -544,7 +651,7 @@ class PointOfSales extends Component {
                               </tr>
                               <tr>
                                 <td>
-                                  <h3 className="m-0">{t('Total')}</h3>
+                                  <h3 className="m-0 text-left">{t('Total')}</h3>
                                 </td>
                                 <td>
                                   <h5 className="text-danger d-flex justify-content-end m-0 font-weight-bold dirltrjcs"><span className="mx-1">{this.props.defaultCurrency}</span><span className="mx-1">{total.toFixed(3)}</span></h5>
@@ -564,25 +671,26 @@ class PointOfSales extends Component {
                           <h5 className="my-2 font-weight-bold px-1">{t('Payment Method')}</h5>
                         </div>
                         <div className="col-12 col-sm-6 d-flex align-items-center justify-content-end">
-                          <a href="/#" data-toggle="modal" data-target="#Discount"
-                            className="d-flex flex-column align-items-center justify-content-center bg-danger w-75px h-75px m-1 linkHoverDecLess rounded-circle text-white cursorPointer border-0">
-                            <span className="iconv1 iconv1-discount"></span>
-                            <span className="w-100 text-center"><small>{t('Discount')}</small></span>
+                          <a href="/#" data-toggle="modal" data-target="#passwordAskModal"
+                            className="d-flex flex-column align-items-center justify-content-center bg-danger w-100px h-100px m-1 linkHoverDecLess rounded-circle text-white cursorPointer border-0">
+                            <h3 className="iconv1 iconv1-discount m-0 text-white"></h3>
+                            <span className="w-100 text-center"><small className="text-white">{t('Discount')}</small></span>
                           </a>
-                          {customerStatus === 'Member' &&
+                          {/* {customerStatus === 'Member' &&
                             <a href="/#" data-toggle="modal" data-target="#GiftCard"
                               className="d-flex flex-column align-items-center justify-content-center bg-primary w-75px h-75px m-1 linkHoverDecLess rounded-circle text-white cursorPointer border-0">
                               <span className="iconv1 iconv1-giftcard"></span>
                               <span className="w-100 text-center"><small>{t('Gift Card')}</small></span>
                             </a>
-                          }
+                          } */}
                         </div>
                       </div>
                     </div>
                     {/* } */}
 
                     {/* Popup Discount */}
-                    <div className="modal fade commonYellowModal" id="Discount" >
+                    <button type="button" id="Discount2" className="d-none" data-toggle="modal" data-target="#Discount" ref="openDiscount">Open modal</button>
+                    <div className="modal fade commonYellowModal" id="Discount">
                       <div className="modal-dialog modal-dialog-centered">
                         <div className="modal-content">
                           <div className="modal-header">
@@ -641,7 +749,7 @@ class PointOfSales extends Component {
                     <div className="col-12">
                       <div className="row">
                         <div className="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6">
-                          <div className="form-group inlineFormGroup">
+                          <div className="form-group inlineFormGroup mb-3">
                             <label htmlFor="addDigital" className="mx-sm-2 inlineFormLabel mb-1">{t('Digital')}</label>
                             <div className={this.state.digitalE ? "form-control mx-sm-2 inlineFormInputs FormInputsError w-100 p-0 d-flex align-items-center bg-white dirltr" : "form-control mx-sm-2 inlineFormInputs w-100 p-0 d-flex align-items-center bg-white dirltr"}>
                               <label htmlFor="addDigital" className="text-danger my-0 mx-1 font-weight-bold">{this.props.defaultCurrency}</label>
@@ -653,7 +761,7 @@ class PointOfSales extends Component {
                           </div>
                         </div>
                         <div className="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6">
-                          <div className="form-group inlineFormGroup">
+                          <div className="form-group inlineFormGroup mb-3">
                             <label htmlFor="addCash" className="mx-sm-2 inlineFormLabel mb-1">{t('Cash')}</label>
                             <div className={this.state.cashE ? "form-control mx-sm-2 inlineFormInputs FormInputsError w-100 p-0 d-flex align-items-center bg-white dirltr" : "form-control mx-sm-2 inlineFormInputs w-100 p-0 d-flex align-items-center bg-white dirltr"}>
                               <label htmlFor="addCash" className="text-danger my-0 mx-1 font-weight-bold">{this.props.defaultCurrency}</label>
@@ -665,7 +773,7 @@ class PointOfSales extends Component {
                           </div>
                         </div>
                         <div className="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6">
-                          <div className="form-group inlineFormGroup">
+                          <div className="form-group inlineFormGroup mb-3">
                             <label htmlFor="addCard" className="mx-sm-2 inlineFormLabel mb-1">{t('Card')}</label>
                             <div className={this.state.cardE ? "form-control mx-sm-2 inlineFormInputs FormInputsError w-100 p-0 d-flex align-items-center bg-white dirltr" : "form-control mx-sm-2 inlineFormInputs w-100 p-0 d-flex align-items-center bg-white dirltr"}>
                               <label htmlFor="addCard" className="text-danger my-0 mx-1 font-weight-bold">{this.props.defaultCurrency}</label>
@@ -676,6 +784,71 @@ class PointOfSales extends Component {
                             </div>
                           </div>
                         </div>
+                        <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6 pb-2">
+                          <div className="form-group inlineFormGroup mb-3">
+                            <label htmlFor="addCardNumber" className="mx-sm-2 inlineFormLabel mb-1">{t('Card Number (last 4 digits)')}</label>
+                            <input type="number" autoComplete="off" className="form-control mx-sm-2 inlineFormInputs bg-white" id="addCard4lastno"
+                              value={this.state.cardNumber} onChange={(e) => this.setCardNumber(e)}
+                            />
+                          </div>
+                        </div>
+                        <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
+                          <div className="form-group inlineFormGroup mb-3">
+                            <label className="mx-sm-2 inlineFormLabel mb-1"></label>
+                            <div className="d-flex">
+                              <div className="custom-control custom-checkbox roundedGreenRadioCheck mx-2">
+                                <input type="checkbox" className="custom-control-input" id="check" name="checkorNo" />
+                                <label className="custom-control-label" htmlFor="check">{t('Cheque')}</label>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        {/* if cheque */}
+                        <div className="col-12">
+                          <div className="row">
+                            <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
+                              <div className="form-group inlineFormGroup mb-3">
+                                <label htmlFor="bankName" className="mx-sm-2 inlineFormLabel mb-1">{t('Bank Name')}</label>
+                                <input type="number" autoComplete="off" className="form-control mx-sm-2 inlineFormInputs FormInputsError w-100 p-0 d-flex align-items-center bg-white dirltr" id="bankName" />
+                                <div className="errorMessageWrapper">
+                                  <small className="text-danger mx-sm-2 errorMessage"></small>
+                                </div>
+                              </div>
+                            </div>
+                            <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
+                              <div className="form-group inlineFormGroup mb-3">
+                                <label htmlFor="CheckNumber" className="mx-sm-2 inlineFormLabel mb-1">{t('Check Number')}</label>
+                                <input type="number" autoComplete="off" className="form-control mx-sm-2 inlineFormInputs FormInputsError w-100 p-0 d-flex align-items-center bg-white dirltr" id="CheckNumber" />
+                                <div className="errorMessageWrapper">
+                                  <small className="text-danger mx-sm-2 errorMessage"></small>
+                                </div>
+                              </div>
+                            </div>
+                            <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
+                              <div className="form-group inlineFormGroup mb-3">
+                                <label htmlFor="CheckDate" className="mx-sm-2 inlineFormLabel mb-1">{t('Check Date')}</label>
+                                <input type="number" autoComplete="off" className="form-control mx-sm-2 inlineFormInputs FormInputsError w-100 p-0 d-flex align-items-center bg-white dirltr" id="CheckDate" />
+                                <div className="errorMessageWrapper">
+                                  <small className="text-danger mx-sm-2 errorMessage"></small>
+                                </div>
+                              </div>
+                            </div>
+                            <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
+                              <div className="form-group inlineFormGroup mb-3">
+                                <label htmlFor="ChequeAmount" className="mx-sm-2 inlineFormLabel mb-1">{t('Cheque Amount')}</label>
+                                {/* here currency comes , so change errorclass for div below */}
+                                <div className="form-control mx-sm-2 inlineFormInputs FormInputsError w-100 p-0 d-flex align-items-center bg-white dirltr">
+                                  <label htmlFor="ChequeAmount" className="text-danger my-0 mx-1 font-weight-bold">{this.props.defaultCurrency}</label>
+                                  <input type="number" autoComplete="off" className="border-0 bg-light w-100 h-100 p-1 bg-white" id="ChequeAmount" />
+                                </div>
+                                <div className="errorMessageWrapper">
+                                  <small className="text-danger mx-sm-2 errorMessage"></small>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        {/* if cheque over */}
                         <div className="col-12">
                           <div className="px-sm-1 pt-4 pb-5">
                             <button type="button" className="btn btn-block btn-success btn-lg" onClick={() => this.handleSubmit()}>{t('SUBMIT')}</button>
@@ -693,20 +866,249 @@ class PointOfSales extends Component {
           {/* <AddStock /> */}
 
         </div>
+        {/* --------------Receipt Modal-=--------------- */}
+        <button type="button" className="btn btn-primary d-none" data-toggle="modal" data-target="#ReceiptModal" data-backdrop="static" data-keyboard="false" ref="receiptOpenModal">Receipt</button>
+        {posReceipt &&
+          <div className="modal fade commonYellowModal" id="ReceiptModal">
+            <div className="modal-dialog modal-lg" id="ReceiptModal2">
+              <div className="modal-content">
+                <div className="modal-header">
+                  <h4 className="modal-title">Receipt</h4>
+                  <button type="button" className="close" data-dismiss="modal" ref="receiptCloseModal" onClick={() => this.handleReceiptClose()}><span className="iconv1 iconv1-close"></span></button>
+                </div>
+                <div className="modal-body">
+                  <div className="container">
+                    <div className="text-center my-3">
+                      <img alt='' src={`/${avatarPath}`} className="" width="250" />
+                    </div>
+                    <h4 class="border-bottom border-dark text-center font-weight-bold pb-1">Tax Invoice</h4>
+                    <div className="row px-5 justify-content-between">
+                      <div className="col-free p-3">
+                        <div className="mb-3">
+                          <label className="m-0 font-weight-bold">Address</label>
+                          <p className="whiteSpaceNormal mnw-150px mxw-200px">{filteredBranches && filteredBranches.filter(b => b._id === branch)[0] &&
+                            filteredBranches.filter(b => b._id === branch)[0].address}</p>
+                        </div>
+                        <div className="">
+                          <label className="m-0 font-weight-bold">VAT Reg Number</label>
+                          <p className="">{filteredBranches && filteredBranches.filter(b => b._id === branch)[0] &&
+                            filteredBranches.filter(b => b._id === branch)[0].vatRegNo}</p>
+                        </div>
+                      </div>
+                      <div className="col-free p-3">
+                        <div className="mb-3">
+                          <label className="m-0 font-weight-bold">Tax Invoice No</label>
+                          <p className="">{posReceipt.orderNo}</p>
+                        </div>
+                        <div className="">
+                          <label className="m-0 font-weight-bold">Date & Time</label>
+                          <p className="dirltrtar">{dateToDDMMYYYY(posReceipt.dateOfPurchase)} {dateToHHMM(posReceipt.created_at)}</p>
+                        </div>
+                      </div>
+                      <div className="col-free p-3">
+                        <div className="">
+                          <label className="m-0 font-weight-bold">Receipt Total</label>
+                          <p className="h4 font-weight-bold">{this.props.defaultCurrency} {parseFloat(posReceipt.totalAmount).toFixed(3)}</p>
+                        </div>
+                        <div className="">
+                          <label className="m-0 font-weight-bold">Telephone</label>
+                          <p className="">{filteredBranches && filteredBranches.filter(b => b._id === branch)[0] &&
+                            filteredBranches.filter(b => b._id === branch)[0].telephone}</p>
+                        </div>
+                      </div>
+                    </div>
+                    {member &&
+                      <div className="bgGray d-flex flex-wrap px-5 py-4 justify-content-between">
+                        <div className="">
+                          <h6 className="font-weight-bold m-1">
+                            <span className="px-1">ID:</span>
+                            <span className="px-1">{member.memberId}</span>
+                          </h6>
+                        </div>
+                        <h6 className="font-weight-bold m-1">{member.credentialId.userName}</h6>
+                        <div className="">
+                          <h6 className="font-weight-bold m-1">
+                            <span className="px-1">Mob:</span>
+                            <span className="px-1">{member.mobileNo}</span>
+                          </h6>
+                        </div>
+                      </div>
+                    }
+                    <div className="table-responsive RETable">
+                      <table className="table">
+                        <thead>
+                          <tr>
+                            <th>No</th>
+                            <th>Description</th>
+                            <th>Price</th>
+                            <th>Qty</th>
+                            <th>Total</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {addedStocks && addedStocks.map((addedStock, i) => {
+                            const { itemName, addedQuantity, addedPrice } = addedStock
+                            return (
+                              <tr key={i}>
+                                <td>{i + 1}</td>
+                                <td>{itemName}</td>
+                                <td>{this.props.defaultCurrency} {(parseFloat(addedPrice) / addedQuantity).toFixed(3)}</td>
+                                <td>{addedQuantity}</td>
+                                <td>{this.props.defaultCurrency} {parseFloat(addedPrice).toFixed(3)}</td>
+                              </tr>
+                            )
+                          })}
+                          <tr>
+                            <td colSpan="4">
+                              <div className="text-right my-1">Amount Total :</div>
+                              {parseFloat(posReceipt.discount) ?
+                                <div className="text-right my-1">Discount :</div>
+                                : <div></div>}
+                              {parseFloat(posReceipt.giftcard) ?
+                                <div className="text-right my-1">Gift Card :</div>
+                                : <div></div>}
+                              {parseFloat(posReceipt.vatAmount) ?
+                                <div className="text-right my-1">VAT(5%):</div>
+                                : <div></div>}
+                              {parseFloat(posReceipt.digitalAmount) ?
+                                <div className="text-right my-1">Digital :</div>
+                                : <div></div>}
+                              {parseFloat(posReceipt.cashAmount) ?
+                                <div className="text-right my-1">Cash :</div>
+                                : <div></div>}
+                              {parseFloat(posReceipt.cardAmount) ?
+                                <div className="text-right my-1">Card :</div>
+                                : <div></div>}
+                              <div className="text-right my-1">Grand Total :</div>
+                              <div className="text-right my-1">Paid Amount :</div>
+                              {posReceipt.cardNumber ?
+                                <div className="text-right my-1">Card last four digit :</div>
+                                : <div></div>}
+                            </td>
+                            <td className="">
+                              <div className="my-1"><span className="">{this.props.defaultCurrency}</span> <span className="px-1">{parseFloat(posReceipt.actualAmount).toFixed(3)}</span></div>
+                              {parseFloat(posReceipt.discount) ?
+                                <div className="my-1"><span className="invisible">{this.props.defaultCurrency}</span> <span className="px-1">{parseFloat(posReceipt.discount).toFixed(3)}</span></div>
+                                : <div></div>}
+                              {parseFloat(posReceipt.giftcard) ?
+                                <div className="my-1"><span className="invisible">{this.props.defaultCurrency}</span> <span className="px-1">{parseFloat(posReceipt.giftcard).toFixed(3)}</span></div>
+                                : <div></div>}
+                              {parseFloat(posReceipt.vatAmount) ?
+                                <div className="my-1"><span className="invisible">{this.props.defaultCurrency}</span> <span className="px-1">{parseFloat(posReceipt.vatAmount).toFixed(3)}</span></div>
+                                : <div></div>}
+                              {parseFloat(posReceipt.digitalAmount) ?
+                                <div className="my-1"><span className="invisible">{this.props.defaultCurrency}</span> <span className="px-1">{parseFloat(posReceipt.digitalAmount).toFixed(3)}</span></div>
+                                : <div></div>}
+                              {parseFloat(posReceipt.cashAmount) ?
+                                <div className="my-1"><span className="invisible">{this.props.defaultCurrency}</span> <span className="px-1">{parseFloat(posReceipt.cashAmount).toFixed(3)}</span></div>
+                                : <div></div>}
+                              {parseFloat(posReceipt.cardAmount) ?
+                                <div className="my-1"><span className="invisible">{this.props.defaultCurrency}</span> <span className="px-1">{parseFloat(posReceipt.cardAmount).toFixed(3)}</span></div>
+                                : <div></div>}
+                              <div className="my-1"><span className="">{this.props.defaultCurrency}</span> <span className="px-1">{parseFloat(posReceipt.totalAmount).toFixed(3)}</span></div>
+                              <div className="my-1"><span className="">{this.props.defaultCurrency}</span> <span className="px-1">{parseFloat(posReceipt.totalAmount).toFixed(3)}</span></div>
+                              {posReceipt.cardNumber ?
+                                <div className="my-1"><span className="invisible">{this.props.defaultCurrency}</span> <span className="px-1">{posReceipt.cardNumber}</span></div>
+                                : <div></div>}
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                      {/* {posReceipt.cardNumber ?
+                        <div className="my-1"><span className="px-1">Card last four digit {posReceipt.cardNumber}</span></div>
+                        : <div></div>} */}
+                    </div>
+                    {/* <div className="d-flex justify-content-center">
+                      <QRCode value={`http://instagram.com/${filteredBranches && filteredBranches.filter(b => b._id === branch)[0] &&
+                        filteredBranches.filter(b => b._id === branch)[0].instaId}/`} renderAs='svg' />
+                    </div> */}
+                    <div className="d-flex flex-wrap justify-content-between align-items-center my-4">
+                      <div className="d-flex">
+                        <div className="mr-3 text-center">
+                          <img src={instaimg} alt="" className="w-30px" />
+                          <h6 className="font-weight-bold mb-0 mt-1">Follow Us</h6>
+                        </div>
+                        <div className="w-50px mr-3">
+                          <QRCode value={`http://instagram.com/${filteredBranches && filteredBranches.filter(b => b._id === branch)[0] &&
+                            filteredBranches.filter(b => b._id === branch)[0].instaId}/`} renderAs='svg' width="50" height="50" />
+                        </div>
+                      </div>
+                      {/* <h6 className="font-weight-bold">Paid Amount: {this.props.defaultCurrency} {parseFloat(posReceipt.totalAmount).toFixed(3)}</h6> */}
+                      {this.props.loggedUser && <h6 className="font-weight-bold">Served by: {this.props.loggedUser.userName}</h6>}
+                    </div>
+                    {/* <div className="text-center px-5">
+                      <h5 className="text-muted">Membership cannot be refunded or transferred to others.</h5>
+                      <h5 className="font-weight-bold">Thank You</h5>
+                    </div> */}
+                    <div className="d-flex align-items-center justify-content-center">
+                      <div className="text-center">
+                        <h6 className="font-weight-bold" >Membership cannot be refunded or transferred to others.</h6>
+                        <h6 className="font-weight-bold">Thank You</h6>
+                      </div>
+                    </div>
+                    <div className="text-center">
+                      <button type="button" className="btn btn-success px-4 py-1 my-2" data-dismiss="modal" onClick={() => this.handlePrint()}>Print Receipt</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        }
+        {/* --------------Receipt Modal Ends-=--------------- */}
+
+        <div className="modal fade commonYellowModal" id="passwordAskModal">
+          <div className="modal-dialog modal-dialog-centered">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h4 className="modal-title">{t('Password')}</h4>
+                <button type="button" className="close" data-dismiss="modal" ref="passwordModalClose">
+                  <span className="iconv1 iconv1-close"></span>
+                </button>
+              </div>
+              <div className="modal-body px-0">
+                <div className="container-fluid">
+                  <div className="row">
+                    <div className="col-12">
+                      <div className="form-group position-relative fle">
+                        <label htmlFor="password" className="m-0 text-secondary mx-sm-2">{t('Password')}</label>
+                        <input type={this.state.showPass ? "text" : "password"} className={this.state.passwordE ? "form-control inlineFormInputs w-100 mx-sm-2 FormInputsError" : "form-control inlineFormInputs w-100 mx-sm-2"} id="password"
+                          value={this.state.password} onChange={(e) => this.setState(validator(e, 'password', 'text', [t('Enter password')]))}
+                        />
+                        <span className={this.state.showPass ? "iconv1 iconv1-eye passwordEye" : "iconv1 iconv1-eye passwordEye active"} onClick={() => this.setState({ showPass: !this.state.showPass })}></span>
+                        <div className="errorMessageWrapper">
+                          <small className="text-danger mx-sm-2 errorMessage">{this.state.passwordE}</small>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="col-12 pt-3">
+                      <div className="justify-content-sm-end d-flex pt-4 pb-2">
+                        <button type="button" className="btn btn-success mx-1 px-4" data-dismiss="modal" onClick={() => this.verifyPassword()}>{t('Submit')}</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     )
   }
 }
 
 function mapStateToProps({ pos: { activeStocks }, currency: { defaultCurrency }, member: { activeStatusRegisterMember },
-  reward: { amountByRedeemCode }, branch: { activeResponse }
+  reward: { amountByRedeemCode }, branch: { activeResponse }, errors, auth: { loggedUser }, privilege: { verifyPassword }
 }) {
   return {
     activeStocks,
     defaultCurrency,
     activeStatusRegisterMember,
     amountByRedeemCode,
-    activeResponse
+    activeResponse,
+    errors,
+    loggedUser,
+    verifyPassword
   }
 }
 

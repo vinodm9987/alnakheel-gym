@@ -243,7 +243,7 @@ class AuditLog extends Component {
                               <td>
                                 <div className="tb">
                                   <div className="tb-img">
-                                    <img src={`http://${avatar ? avatar.ip : ''}:5600/${avatar ? avatar.path : ''}`} alt="" className="up-img" />
+                                    <img src={`/${avatar ? avatar.path : ''}`} alt="" className="up-img" />
                                   </div>
                                   <div className="tb-title dirltrtar">
                                     <span className="stud-name noID">{userName}</span>

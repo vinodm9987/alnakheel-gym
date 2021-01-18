@@ -50,13 +50,33 @@ const memberSchema = new Schema({
 
         packageRenewal: { type: Boolean, default: false },
 
-        paidStatus: { type: String, enum: ["Paid", "UnPaid"], default: "UnPaid" },
+        paidStatus: { type: String, enum: ["Paid", "UnPaid", "Installment"], default: "UnPaid" },
+
+        Installments: [{
+
+            paidStatus: { type: String, enum: ["Paid", "UnPaid"], default: "UnPaid" },
+
+            dueDate: Date,
+
+            dateOfInstallment: Date,
+
+            timeOfInstallment: Date,
+            
+            paidType: { type: String, enum: ["Online", "Offline"] },
+
+            cardNumber: String, cashAmount: Number, cardAmount: Number, vatAmount: Number, discount: Number,
+
+            digitalAmount: Number, chequeAmount: Number, chequeNumber:String, bankName: String, chequeDate: Date,
+
+            totalAmount: Number, actualAmount: Number,
+
+        }],
 
         paidType: { type: String, enum: ["Online", "Offline"] },
 
         cardNumber: String, cashAmount: Number, cardAmount: Number, vatAmount: Number, discount: Number,
 
-        digitalAmount: Number,
+        digitalAmount: Number, chequeAmount: Number, chequeNumber:String, bankName: String, chequeDate: Date,
 
         totalAmount: Number, actualAmount: Number, paypalObject: Object, freezeDate: Date, reactivationDate: Date,
 
@@ -64,13 +84,48 @@ const memberSchema = new Schema({
          * trainer fields
         */
 
-        trainerFees: { type: Schema.Types.ObjectId, ref: "TrainerFees" },
+        trainerDetails: [{
 
-        trainer: { type: Schema.Types.ObjectId, ref: "Employee" },
+            trainerFees: { type: Schema.Types.ObjectId, ref: "TrainerFees" },
 
-        isExpiredTrainer: { type: Boolean, default: false },
+            trainer: { type: Schema.Types.ObjectId, ref: "Employee" },
 
-        trainerStart: Date, trainerEnd: Date, trainerExtend: Date,
+            isExpiredTrainer: { type: Boolean, default: false },
+
+            trainerStart: Date, trainerEnd: Date, trainerExtend: Date,
+
+            orderNo: String,
+
+            Installments: [{
+
+                paidStatus: { type: String, enum: ["Paid", "UnPaid"], default: "UnPaid" },
+
+                dueDate: Date,
+
+                dateOfInstallment: Date,
+
+                timeOfInstallment: Date,
+
+                paidType: { type: String, enum: ["Online", "Offline"] },
+
+                cardNumber: String, cashAmount: Number, cardAmount: Number, vatAmount: Number, discount: Number,
+
+                digitalAmount: Number, chequeAmount: Number, chequeNumber:String, bankName: String, chequeDate: Date,
+
+                totalAmount: Number, actualAmount: Number
+
+            }],
+
+            paidType: { type: String, enum: ["Online", "Offline"] },
+
+            cardNumber: String, cashAmount: Number, cardAmount: Number, vatAmount: Number, discount: Number,
+
+            digitalAmount: Number, chequeAmount: Number, chequeNumber:String, bankName: String, chequeDate: Date,
+
+            totalAmount: Number, actualAmount: Number
+
+        }],
+
 
         orderNo: String,
 

@@ -219,7 +219,7 @@ class AddFreeze extends Component {
     const formatOptionLabel = ({ credentialId: { userName, avatar, email }, memberId }) => {
       return (
         <div className="d-flex align-items-center">
-          <img alt='' src={`http://${avatar.ip}:5600/${avatar.path}`} className="rounded-circle mx-1 w-30px h-30px" />
+          <img alt='' src={`/${avatar.path}`} className="rounded-circle mx-1 w-30px h-30px" />
           <div className="w-100">
             <small className="whiteSpaceNormal d-block" style={{ lineHeight: '1', fontWeight: 'bold' }}>{userName} ({memberId})</small>
             <small className="whiteSpaceNormal d-block" style={{ lineHeight: '1' }}>{email}</small>
@@ -529,6 +529,63 @@ class AddFreeze extends Component {
                                 <input type="text" autoComplete="off" className="form-control bg-white" id="addCard4lastno" value={this.state.cardNumber.toString()} onChange={(e) => this.setCardNumber(e)} />
                               </div>
                             </div>
+                            <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
+                              <div className="form-group inlineFormGroup">
+                                <label className="mx-sm-2 inlineFormLabel mb-1"></label>
+                                <div className="d-flex">
+                                  <div className="custom-control custom-checkbox roundedGreenRadioCheck mx-2">
+                                    <input type="checkbox" className="custom-control-input" id="check" name="checkorNo" />
+                                    <label className="custom-control-label" htmlFor="check">{t('Cheque')}</label>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            {/* if cheque */}
+                            <div className="col-12">
+                              <div className="row">
+                                <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
+                                  <div className="form-group inlineFormGroup">
+                                    <label htmlFor="bankName" className="mx-sm-2 inlineFormLabel mb-1">{t('Bank Name')}</label>
+                                    <input type="number" autoComplete="off" className="form-control mx-sm-2 inlineFormInputs FormInputsError w-100 p-0 d-flex align-items-center bg-white dirltr" id="bankName" />
+                                    <div className="errorMessageWrapper">
+                                      <small className="text-danger mx-sm-2 errorMessage"></small>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
+                                  <div className="form-group inlineFormGroup">
+                                    <label htmlFor="CheckNumber" className="mx-sm-2 inlineFormLabel mb-1">{t('Check Number')}</label>
+                                    <input type="number" autoComplete="off" className="form-control mx-sm-2 inlineFormInputs FormInputsError w-100 p-0 d-flex align-items-center bg-white dirltr" id="CheckNumber" />
+                                    <div className="errorMessageWrapper">
+                                      <small className="text-danger mx-sm-2 errorMessage"></small>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
+                                  <div className="form-group inlineFormGroup">
+                                    <label htmlFor="CheckDate" className="mx-sm-2 inlineFormLabel mb-1">{t('Check Date')}</label>
+                                    <input type="number" autoComplete="off" className="form-control mx-sm-2 inlineFormInputs FormInputsError w-100 p-0 d-flex align-items-center bg-white dirltr" id="CheckDate" />
+                                    <div className="errorMessageWrapper">
+                                      <small className="text-danger mx-sm-2 errorMessage"></small>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
+                                  <div className="form-group inlineFormGroup">
+                                    <label htmlFor="ChequeAmount" className="mx-sm-2 inlineFormLabel mb-1">{t('Cheque Amount')}</label>
+                                    {/* here currency comes , so change errorclass for div below */}
+                                    <div className="form-control mx-sm-2 inlineFormInputs FormInputsError w-100 p-0 d-flex align-items-center bg-white dirltr">
+                                      <label htmlFor="ChequeAmount" className="text-danger my-0 mx-1 font-weight-bold">{this.props.defaultCurrency}</label>
+                                      <input type="number" autoComplete="off" className="border-0 bg-light w-100 h-100 p-1 bg-white" id="ChequeAmount" />
+                                    </div>
+                                    <div className="errorMessageWrapper">
+                                      <small className="text-danger mx-sm-2 errorMessage"></small>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            {/* if cheque over */}
                           </div>
                         </div>
                       </div>

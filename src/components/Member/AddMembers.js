@@ -1,22 +1,27 @@
-import React, { Component } from 'react'
-import { validator, calculateDOB, scrollToTop } from '../../utils/apis/helpers'
 import DateFnsUtils from '@date-io/date-fns';
 import { DatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 import 'date-fns';
-import PhoneInput from 'react-phone-number-input'
-import Nationality from '../../utils/apis/country.json'
-import { getAllBranch } from '../../actions/branch.action'
-import { createNewMemberByAdmin, getCprData, updateMember, updateMemberAndAddPackage } from '../../actions/member.action'
-import { getAllActivePackage } from '../../actions/package.action'
-import { getUniqueTrainerByBranch, getPeriodOfTrainer } from '../../actions/trainerFees.action'
-import { withTranslation } from 'react-i18next'
-import Webcam from "react-webcam"
+import $ from 'jquery';
+import QRCode from 'qrcode.react';
+import React, { Component } from 'react';
+import { findDOMNode } from 'react-dom';
+import { withTranslation } from 'react-i18next';
+import PhoneInput from 'react-phone-number-input';
+import { connect } from 'react-redux';
 import Select from "react-select";
-import { connect } from 'react-redux'
-import { GET_ALERT_ERROR, GET_CPR, GET_UNIQUE_TRAINER_BY_BRANCH } from '../../actions/types';
-import { disableSubmit } from '../../utils/disableButton'
-import { getAllVat } from '../../actions/vat.action';
+import Webcam from "react-webcam";
+import { getAllBranch } from '../../actions/branch.action';
+import { createNewMemberByAdmin, getCprData, updateMember, updateMemberAndAddPackage } from '../../actions/member.action';
+import { getAllActivePackage } from '../../actions/package.action';
+import { verifyAdminPassword } from '../../actions/privilege.action';
 import { checkReferralCodeValidityOnAdmin } from '../../actions/reward.action';
+import { getPeriodOfTrainer, getUniqueTrainerByBranch } from '../../actions/trainerFees.action';
+import { GET_ALERT_ERROR, GET_CPR, GET_UNIQUE_TRAINER_BY_BRANCH } from '../../actions/types';
+import { getAllVat } from '../../actions/vat.action';
+import instaimg from '../../assets/img/insta.svg.webp';
+import Nationality from '../../utils/apis/country.json';
+import { calculateDOB, dateToDDMMYYYY, dateToHHMM, scrollToTop, validator } from '../../utils/apis/helpers';
+import { disableSubmit } from '../../utils/disableButton';
 
 class AddMembers extends Component {
 
@@ -92,8 +97,20 @@ class AddMembers extends Component {
       discountMethod: 'percent',
       isCaptured: false,
       cprloading: false,
+      startDate: new Date(),
+      endDate: new Date(),
+      startDateE: '',
+      endDateE: '',
+      packageReceipt: null,
+      trainerPeriodDays: 0,
+      password: '',
+      passwordE: '',
+      showPass: false,
+      branches: [],
+      staffName: '',
       wantInstallment: 'Yes',
-      installments: []
+      installments: [],
+      installmentsCopy: [],
     }
     if (this.props.location.memberProps && this.props.memberById) {
       const { _id, mobileNo, personalId, dateOfBirth, nationality, gender, height, weight, branch,
@@ -167,8 +184,20 @@ class AddMembers extends Component {
         discountMethod: 'percent',
         isCaptured: false,
         cprloading: false,
+        startDate: new Date(),
+        endDate: new Date(),
+        startDateE: '',
+        endDateE: '',
+        packageReceipt: null,
+        trainerPeriodDays: 0,
+        password: '',
+        passwordE: '',
+        showPass: false,
+        branches: [],
+        staffName: '',
         wantInstallment: 'Yes',
-        installments: []
+        installments: [],
+        installmentsCopy: [],
       }
       scrollToTop()
     } else if (this.props.location.addPackageProps) {
@@ -243,8 +272,20 @@ class AddMembers extends Component {
         discountMethod: 'percent',
         isCaptured: false,
         cprloading: false,
+        startDate: new Date(),
+        endDate: new Date(),
+        startDateE: '',
+        endDateE: '',
+        packageReceipt: null,
+        trainerPeriodDays: 0,
+        password: '',
+        passwordE: '',
+        showPass: false,
+        branches: [],
+        staffName: '',
         wantInstallment: 'Yes',
-        installments: []
+        installments: [],
+        installmentsCopy: [],
       }
       this.props.dispatch(getAllVat({ branch: branch._id }))
       this.props.dispatch(getUniqueTrainerByBranch(branch._id))
@@ -318,8 +359,20 @@ class AddMembers extends Component {
         discountMethod: 'percent',
         isCaptured: false,
         cprloading: false,
+        startDate: new Date(),
+        endDate: new Date(),
+        startDateE: '',
+        endDateE: '',
+        packageReceipt: null,
+        trainerPeriodDays: 0,
+        password: '',
+        passwordE: '',
+        showPass: false,
+        branches: [],
+        staffName: '',
         wantInstallment: 'Yes',
-        installments: []
+        installments: [],
+        installmentsCopy: [],
       }
     }
     this.state = this.default
@@ -331,8 +384,17 @@ class AddMembers extends Component {
   componentDidUpdate(prevProps) {
     if (this.props.errors !== prevProps.errors) {
       if (Object.keys(this.props.errors).length !== 0 && !this.props.errors.error) {
-        this.setState(this.defaultCancel)
-        this.props.dispatch({ type: GET_UNIQUE_TRAINER_BY_BRANCH, payload: null })
+        if (this.props.errors.response && this.props.errors.response.displayReceipt) {
+          let packageReceipt = this.props.errors.response._doc
+          this.setState({ ...{ packageReceipt } }, () => {
+            const el = findDOMNode(this.refs.receiptOpenModal);
+            $(el).click();
+          })
+          this.props.dispatch({ type: GET_UNIQUE_TRAINER_BY_BRANCH, payload: null })
+        } else {
+          this.setState(this.defaultCancel)
+          this.props.dispatch({ type: GET_UNIQUE_TRAINER_BY_BRANCH, payload: null })
+        }
       }
     }
     if (this.props.t !== prevProps.t) {
@@ -360,6 +422,10 @@ class AddMembers extends Component {
         }
       })
     }
+    if (((this.props.verifyPassword && this.props.verifyPassword) !== (prevProps.verifyPassword)) && this.props.verifyPassword === 'verified') {
+      const el = findDOMNode(this.refs.openDiscount);
+      $(el).click();
+    }
   }
 
   componentDidMount() {
@@ -368,6 +434,9 @@ class AddMembers extends Component {
         this.setState(this.defaultCancel)
       }
     });
+    const branches = this.props.loggedUser && this.props.loggedUser.userId && this.props.loggedUser.userId.branch
+    const staffName = this.props.loggedUser && this.props.loggedUser.userId && this.props.loggedUser.userId._id
+    this.setState({ branches, staffName })
   }
 
   componentWillUnmount() {
@@ -387,7 +456,7 @@ class AddMembers extends Component {
   }
 
   takePhoto() {
-    const imageSrc = this.webcamRef.current.getScreenshot();
+    const imageSrc = this.webcamRef.current && this.webcamRef.current.getScreenshot();
     const file = this.dataURLtoFile(imageSrc, `Captured_${this.state.name ? this.state.name : 'User_Photo'}.jpeg`)
     this.setState({
       userPhoto: file,
@@ -397,14 +466,32 @@ class AddMembers extends Component {
     })
   }
 
+  handlePrint(id) {
+    this.props.history.push(`/members-details/${id}/biometrics`)
+    var w = window.open('', 'new div', 'height=400,width=600');
+    var printOne = $('#ReceiptModal2').html();
+    w.document.write('<html><head><title></title>');
+    w.document.write('<link rel="stylesheet" href="css/style.css" type="text/css" />');
+    w.document.write('<link rel="stylesheet" href="css/style2.css" type="text/css" />');
+    w.document.write('<link rel="stylesheet" href="css/bootstrap.min.css" type="text/css" />');
+    w.document.write('<link rel="stylesheet" href="css/bootstrap.min.css" type="text/css" />');
+    w.document.write('</head><body >');
+    w.document.write(printOne)
+    w.document.write('</body></html>');
+    w.window.print();
+    w.document.close();
+    return false;
+  }
+
   handlePayment(totalAmount) {
+    const el = findDOMNode(this.refs.checkoutCloseModal);
     const { t } = this.props
     const { name, email, number, personalId, dob, nationality, gender, userPhoto, packageName, branch, cardNumber, setPackageAmount,
       cash, card, height, weight, emergencyNumber, relationship, referralCode, notes, credentialId, memberId, discount, tax,
       trainer, wantTrainer, levelQuestion, exercisingQuestion, goalQuestion, period, trainerFeesId, addPackage, packageAmount,
-      emailE, numberE, emergencyNumberE, cashE, cardE, digital, digitalE } = this.state
+      emailE, numberE, emergencyNumberE, cashE, cardE, digital, digitalE, startDate, endDate, trainerPeriodDays } = this.state
     if (name && email && number && personalId && dob && nationality && gender && userPhoto && packageName && branch && calculateDOB(dob) > 14 && (cash || card || digital) && !cardE && !cashE
-      && !digitalE && !emailE && !numberE && !emergencyNumberE
+      && !digitalE && !emailE && !numberE && !emergencyNumberE && startDate <= endDate
     ) {
       const memberInfo = {
         userName: name,
@@ -435,13 +522,19 @@ class AddMembers extends Component {
           actualAmount: packageAmount,
           totalAmount: totalAmount,
           discount: parseFloat(discount),
-          vatAmount: (setPackageAmount - discount) * tax / 100
+          vatAmount: (setPackageAmount - discount) * tax / 100,
+          startDate,
+          endDate,
         }]
       }
       if (wantTrainer === 'Yes') {
         if (trainer && levelQuestion && exercisingQuestion && goalQuestion && period) {
-          memberInfo.packageDetails[0].trainerFees = trainerFeesId
-          memberInfo.packageDetails[0].trainer = trainer._id
+          memberInfo.packageDetails[0].trainerDetails = [{
+            trainerFees: trainerFeesId,
+            trainer: trainer._id,
+            trainerStart: startDate,
+            trainerEnd: new Date(new Date(startDate).setDate(startDate.getDate() + trainerPeriodDays - 1))
+          }]
           memberInfo.questions = {
             levelQuestion,
             exercisingQuestion,
@@ -452,11 +545,14 @@ class AddMembers extends Component {
           formData.append('data', JSON.stringify(memberInfo))
           if (referralCode) {
             this.props.dispatch(checkReferralCodeValidityOnAdmin({ code: referralCode }, formData, addPackage))
+            $(el).click();
           } else {
             if (addPackage) {
               this.props.dispatch(updateMemberAndAddPackage(formData))
+              $(el).click();
             } else {
               this.props.dispatch(createNewMemberByAdmin(formData))
+              $(el).click();
             }
           }
         } else {
@@ -472,11 +568,14 @@ class AddMembers extends Component {
         formData.append('data', JSON.stringify(memberInfo))
         if (referralCode) {
           this.props.dispatch(checkReferralCodeValidityOnAdmin({ code: referralCode }, formData, addPackage))
+          $(el).click();
         } else {
           if (addPackage) {
             this.props.dispatch(updateMemberAndAddPackage(formData))
+            $(el).click();
           } else {
             this.props.dispatch(createNewMemberByAdmin(formData))
+            $(el).click();
           }
         }
       }
@@ -495,6 +594,7 @@ class AddMembers extends Component {
       if (!cash && !digital) this.setState({ cashE: t('Enter amount') })
       if (!card) this.setState({ cardE: t('Enter amount') })
       if (!cardNumber) this.setState({ cardNumberE: t('Enter card number') })
+      if (startDate > endDate) this.setState({ endDateE: t('End Date should be greater than Start Date') })
     }
   }
 
@@ -505,7 +605,12 @@ class AddMembers extends Component {
 
   setBranch(e) {
     const { t } = this.props
-    this.setState({ ...validator(e, 'branch', 'text', [t('Enter branch')]), ...{ packageName: '', trainer: null, period: '', amount: 0, periodDays: 0, packageAmount: 0, setPackageAmount: 0, cash: 0, card: 0, discount: 0, count: 0, vatId: '', vat: 0 } }, () => {
+    this.setState({
+      ...validator(e, 'branch', 'text', [t('Enter branch')]), ...{
+        packageName: '', trainer: null, installments: [], installmentsCopy: [],
+        period: '', amount: 0, periodDays: 0, packageAmount: 0, setPackageAmount: 0, cash: 0, card: 0, discount: 0, count: 0, vatId: '', vat: 0
+      }
+    }, () => {
       this.state.branch && this.props.dispatch(getAllVat({ branch: this.state.branch }))
       this.state.branch && this.props.dispatch(getUniqueTrainerByBranch(this.state.branch))
     })
@@ -513,7 +618,12 @@ class AddMembers extends Component {
 
   setTrainer(e) {
     const { t } = this.props
-    this.setState({ ...validator(e, 'trainer', 'select', [t('Select trainer name')]), ...{ period: '', amount: 0, packageAmount: this.state.setPackageAmount, cash: 0, card: 0, discount: 0, count: 0 } }, () => {
+    this.setState({
+      ...validator(e, 'trainer', 'select', [t('Select trainer name')]), ...{
+        period: '', installments: [], installmentsCopy: [],
+        amount: 0, packageAmount: this.state.setPackageAmount, cash: 0, card: 0, discount: 0, count: 0
+      }
+    }, () => {
       const data = {
         branch: this.state.branch,
         trainerName: this.state.trainer
@@ -525,6 +635,7 @@ class AddMembers extends Component {
   setPeriod(e, trainerPeriods) {
     const { t } = this.props
     const index = e.nativeEvent.target.selectedIndex
+    var trainerPeriodDays = 0
     var amount = 0
     var trainerFeesId = null
     var packageAmount = this.state.setPackageAmount
@@ -532,24 +643,38 @@ class AddMembers extends Component {
       amount = trainerPeriods[index - 1].amount
       trainerFeesId = trainerPeriods[index - 1]._id
       packageAmount = packageAmount + amount
+      trainerPeriodDays = trainerPeriods[index - 1].period.periodDays
     }
-    this.setState({ ...validator(e, 'period', 'text', [t('Select period')]), ...{ amount, trainerFeesId, packageAmount, cash: 0, card: 0, discount: 0, count: 0, } })
+    this.setState({
+      ...validator(e, 'period', 'text', [t('Select period')]), ...{
+        amount, installments: [], installmentsCopy: [], trainerPeriodDays,
+        trainerFeesId, packageAmount, cash: 0, card: 0, discount: 0, count: 0,
+      }
+    })
   }
 
   setPackage(e) {
     const { t } = this.props
     const index = e.nativeEvent.target.selectedIndex
+    const { startDate } = this.state
     var periodDays = 0
     var packageAmount = 0
     var setPackageAmount = 0
     var tax = 0
+    var endDate = startDate
     if (index > 0) {
       periodDays = this.props.packages.active[index - 1].period.periodDays
       packageAmount = this.props.packages.active[index - 1].amount
       setPackageAmount = this.props.packages.active[index - 1].amount
       tax = this.props.activeVats ? this.props.activeVats.filter(vat => vat.defaultVat)[0] ? this.props.activeVats.filter(vat => vat.defaultVat)[0].taxPercent : 0 : 0
+      endDate = new Date(new Date(endDate).setDate(startDate.getDate() + periodDays - 1))
     }
-    this.setState({ ...validator(e, 'packageName', 'text', [t('Enter package name')]), ...{ tax, trainer: null, period: '', amount: 0, cash: 0, card: 0, discount: 0, count: 0, periodDays, packageAmount, setPackageAmount } })
+    this.setState({
+      ...validator(e, 'packageName', 'text', [t('Enter package name')]), ...{
+        tax, trainer: null, period: '', installments: [], installmentsCopy: [], endDate,
+        amount: 0, cash: 0, card: 0, discount: 0, count: 0, periodDays, packageAmount, setPackageAmount
+      }
+    })
   }
 
   setDigital(e, total) {
@@ -606,6 +731,28 @@ class AddMembers extends Component {
     }
   }
 
+  setStartDate(e) {
+    this.setState({ ...validator(e, 'startDate', 'date', []) }, () => {
+      const { startDate } = this.state
+      const endDate = new Date(new Date(startDate).setDate(e.getDate() + this.state.periodDays - 1))
+      this.setState({ endDate })
+    })
+  }
+
+  verifyPassword() {
+    const { password } = this.state
+    const { t } = this.props
+    if (password) {
+      const postData = {
+        password: password
+      }
+      this.props.dispatch({ type: 'VERIFY_ADMIN_PASSWORD', payload: 'null' })
+      this.props.dispatch(verifyAdminPassword(postData))
+    } else {
+      if (!password) this.setState({ passwordE: t('Enter password') })
+    }
+  }
+
   addDiscount(subTotal) {
     if (this.state.discountMethod === 'percent') {
       if (this.state.count && this.state.count <= 100) {
@@ -622,28 +769,55 @@ class AddMembers extends Component {
     }
   }
 
-  addInstallment() {
-    const { installments } = this.state
-    installments.push({ amount: 0, dueDate: new Date() })
-    this.setState({ installments })
+  addInstallment(packageAmount) {
+    const { installments, installmentsCopy } = this.state
+    if (installments.length === 0) {
+      installments.push({ amount: packageAmount.toFixed(3), dueDate: new Date() })
+      installmentsCopy.push({ amount: packageAmount.toFixed(3), dueDate: new Date() })
+    } else {
+      installments.push({ amount: 0, dueDate: new Date() })
+      installmentsCopy.push({ amount: 0, dueDate: new Date() })
+    }
+    this.setState({ installments, installmentsCopy })
   }
 
-  removeInstallment(i) {
-    const { installments } = this.state
+  removeInstallment(i, packageAmount) {
+    const { installments, installmentsCopy } = this.state
     if (i > -1) {
       installments.splice(i, 1);
+      installmentsCopy.splice(i, 1);
+      installments.forEach((installment, j) => {
+        if (j === 0) {
+          installment.amount = packageAmount.toFixed(3)
+          installmentsCopy[j].amount = packageAmount.toFixed(3)
+        } else {
+          installment.amount = 0
+          installmentsCopy[j].amount = 0
+        }
+      })
     }
-    this.setState({ installments })
+    this.setState({ installments, installmentsCopy })
   }
 
   setInstallmentAmountDueDate(e, i, type) {
-    const { installments } = this.state
+    const { installments, installmentsCopy } = this.state
     if (type === 'amount') {
-      installments[i].amount = e.target.value
+      if (installmentsCopy[i + 1] && parseFloat(installmentsCopy[i].amount) >= parseFloat(e.target.value ? e.target.value : 0)) {
+        installments[i].amount = e.target.value
+        installments[i + 1].amount = installmentsCopy[i].amount - e.target.value
+        installmentsCopy[i + 1].amount = installmentsCopy[i].amount - e.target.value
+        installments.forEach((installment, j) => {
+          if (j > i + 1) {
+            installment.amount = 0
+            installmentsCopy[j].amount = 0
+          }
+        })
+      }
     } else {
       installments[i].dueDate = e
+      installmentsCopy[i].dueDate = e
     }
-    this.setState({ installments })
+    this.setState({ installments, installmentsCopy })
   }
 
   handleUpdate() {
@@ -688,9 +862,10 @@ class AddMembers extends Component {
 
   showPayment() {
     const { t } = this.props
-    const { name, email, number, personalId, dob, nationality, gender, userPhoto, packageName, branch,
+    const { name, email, number, personalId, dob, nationality, gender, userPhoto, packageName, branch, startDate, endDate,
       trainer, wantTrainer, levelQuestion, exercisingQuestion, goalQuestion, period, emailE, numberE, emergencyNumberE } = this.state
-    if (name && email && number && personalId && dob && nationality && gender && userPhoto && packageName && branch && calculateDOB(dob) > 14 && !emailE && !numberE && !emergencyNumberE) {
+    if (name && email && number && personalId && dob && nationality && gender && userPhoto && packageName && branch && calculateDOB(dob) > 14 && !emailE
+      && !numberE && !emergencyNumberE && startDate <= endDate) {
       if (wantTrainer === 'Yes') {
         if (trainer && levelQuestion && exercisingQuestion && goalQuestion && period) {
           this.setState({ showPay: true })
@@ -716,7 +891,12 @@ class AddMembers extends Component {
       if (!packageName) this.setState({ packageNameE: t('Enter package name') })
       if (!branch) this.setState({ branchE: t('Enter branch') })
       if (calculateDOB(dob) <= 14) this.props.dispatch({ type: GET_ALERT_ERROR, payload: t('You are little small to join the Gym') })
+      if (startDate > endDate) this.setState({ endDateE: t('End Date should be greater than Start Date') })
     }
+  }
+
+  handleReceiptClose(id) {
+    this.props.history.push(`/members-details/${id}/biometrics`)
   }
 
   syncData() {
@@ -746,13 +926,24 @@ class AddMembers extends Component {
     };
     const { name, email, number, personalId, dob, nationality, gender, packageName, height, weight, wantTrainer,
       trainer, levelQuestion, exercisingQuestion, goalQuestion, memberId, branch, period, discountMethod, count,
-      cash, card, packageAmount, emergencyNumber, relationship, referralCode, notes, addPackage, discount, tax, digital, wantInstallment, installments } = this.state
+      cash, card, packageAmount, emergencyNumber, relationship, referralCode, notes, addPackage, discount, tax, digital, startDate, endDate,
+      wantInstallment, installments, packageReceipt, trainerPeriodDays, branches, staffName } = this.state
+
+    let filteredBranches = []
+    if (staffName) {
+      filteredBranches = branches
+    } else {
+      filteredBranches = this.props.branchs.activeResponse
+    }
+
+    let avatarPath = filteredBranches && filteredBranches.filter(b => b._id === branch)[0] &&
+      filteredBranches.filter(b => b._id === branch)[0].avatar && filteredBranches.filter(b => b._id === branch)[0].avatar.path
 
     const trainerPeriods = this.props.periodOfTrainers ? this.props.periodOfTrainers.filter(trainerFee =>
       trainerFee.period.periodDays <= this.state.periodDays
     ) : []
 
-    let subTotal = packageAmount
+    let subTotal = (installments[0] && installments[0].amount) ? parseFloat(installments[0].amount) : 0
     let totalVat = (subTotal - discount) * tax / 100
     const totalAmount = subTotal - discount + totalVat
 
@@ -899,7 +1090,7 @@ class AddMembers extends Component {
                       <select className={this.state.branchE ? "form-control bg-white FormInputsError" : "form-control bg-white"}
                         value={branch} onChange={(e) => this.setBranch(e)} id="branch">
                         <option value="" hidden>{t('Please Select')}</option>
-                        {this.props.branchs.activeResponse && this.props.branchs.activeResponse.map((branch, i) => {
+                        {filteredBranches && filteredBranches.map((branch, i) => {
                           return (
                             <option key={i} value={branch._id}>{branch.branchName}</option>
                           )
@@ -1072,6 +1263,55 @@ class AddMembers extends Component {
                         </div>
                       </div>
                     </div>
+                    <div className="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-3">
+                      <div className="form-group inlineFormGroup">
+                        <label htmlFor="startDate" className="">{t('Start Date')}</label>
+                        <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                          <DatePicker
+                            InputProps={{
+                              disableUnderline: true,
+                            }}
+                            autoOk
+                            invalidDateMessage=''
+                            minDateMessage=''
+                            className={this.state.startDateE ? "form-control FormInputsError pl-2 bg-white" : "form-control pl-2 bg-white"}
+                            minDate={Date.now()}
+                            format="dd/MM/yyyy"
+                            value={startDate}
+                            onChange={(e) => this.setStartDate(e)}
+                          />
+                        </MuiPickersUtilsProvider>
+                        <span className="iconv1 iconv1-calendar dateBoxIcon"></span>
+                        <div className="errorMessageWrapper">
+                          <small className="text-danger errorMessage">{this.state.startDateE}</small>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-3">
+                      <div className="form-group inlineFormGroup">
+                        <label htmlFor="endDate" className="">{t('End Date')}</label>
+                        <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                          <DatePicker
+                            disabled
+                            InputProps={{
+                              disableUnderline: true,
+                            }}
+                            autoOk
+                            invalidDateMessage=''
+                            minDateMessage=''
+                            className={this.state.endDateE ? "form-control FormInputsError pl-2 bg-white" : "form-control pl-2 bg-white"}
+                            minDate={startDate}
+                            format="dd/MM/yyyy"
+                            value={endDate}
+                            onChange={(e) => this.setState(validator(e, 'endDate', 'date', []))}
+                          />
+                        </MuiPickersUtilsProvider>
+                        <span className="iconv1 iconv1-calendar dateBoxIcon"></span>
+                        <div className="errorMessageWrapper">
+                          <small className="text-danger errorMessage">{this.state.endDateE}</small>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               }
@@ -1197,7 +1437,7 @@ class AddMembers extends Component {
 
               <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
                 <label className="pt-4 mb-1">Total Amount</label>
-                <h3 className="text-danger"><span className="mr-1">{this.props.defaultCurrency}</span><span className="font-weight-bold">{totalAmount}</span></h3>
+                <h3 className="text-danger"><span className="mr-1">{this.props.defaultCurrency}</span><span className="font-weight-bold">{packageAmount}</span></h3>
               </div>
 
               <div className="col-12 d-flex flex-wrap py-4 mb-3 px-2">
@@ -1215,7 +1455,7 @@ class AddMembers extends Component {
               {wantInstallment === 'Yes' &&
                 <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 px-4 d-flex justify-content-end">
                   <button type="button" className="btn btn-success displayInlineFlexCls alignItemsCenter my-2 ml-3"
-                    onClick={() => this.addInstallment()}
+                    onClick={() => this.addInstallment(packageAmount)}
                   >
                     <span style={{ fontSize: "18px" }}>+</span>
                     <span className="gaper"></span>
@@ -1259,6 +1499,7 @@ class AddMembers extends Component {
                                           minDateMessage=''
                                           className={"form-control mx-sm-2 inlineFormInputs"}
                                           minDate={new Date()}
+                                          maxDate={endDate}
                                           format="dd/MM/yyyy"
                                           value={installment.dueDate}
                                           onChange={(e) => this.setInstallmentAmountDueDate(e, i, 'dueDate')}
@@ -1276,7 +1517,7 @@ class AddMembers extends Component {
                               </div>
                               <div className="righthere">
                                 <div className="closeHere">
-                                  <span className="close-btn" onClick={() => this.removeInstallment(i)}>
+                                  <span className="close-btn" onClick={() => this.removeInstallment(i, packageAmount)}>
                                     <span className="iconv1 iconv1-close text-white font-weight-bold" style={{ fontSize: "11px" }}></span>
                                   </span>
                                 </div>
@@ -1365,17 +1606,17 @@ class AddMembers extends Component {
                         <div className="row mb-1 mt-4">
                           <div className="col-12 col-sm-6 d-flex align-items-center"><h5 className="my-2 font-weight-bold px-1">Payment Method</h5></div>
                           <div className="col-12 col-sm-6 d-flex align-items-center justify-content-end">
-                            <button onClick={(e) => e.preventDefault()} data-toggle="modal" data-target="#Discount" className="d-flex flex-column align-items-center justify-content-center bg-danger w-75px h-75px m-1 linkHoverDecLess rounded-circle text-white cursorPointer border-0">
+                            <button onClick={(e) => e.preventDefault()} data-toggle="modal" data-target="#Discount" className="d-flex flex-column align-items-center justify-content-center bg-danger w-100px h-100px m-1 linkHoverDecLess rounded-circle text-white cursorPointer border-0">
                               <span className="w-100 text-center">
-                                <h4 className="m-0"><span className="iconv1 iconv1-discount text-white"></span></h4>
-                                <small>{t('Discount')}</small>
+                                <h3 className="m-0"><span className="iconv1 iconv1-discount text-white"></span></h3>
+                                <small className="text-white">{t('Discount')}</small>
                               </span>
                             </button>
                           </div>
                         </div>
                         <div className="row mt-3">
-                          <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6 pb-2">
-                            <div className="form-group inlineFormGroup">
+                          <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
+                            <div className="form-group inlineFormGroup mb-3">
                               <label htmlFor="addDigital" className="mx-sm-2 inlineFormLabel mb-1">{t('Digital')}</label>
                               <div className={this.state.digitalE ? "form-control mx-sm-2 inlineFormInputs FormInputsError w-100 p-0 d-flex align-items-center bg-white dirltr" : "form-control mx-sm-2 inlineFormInputs w-100 p-0 d-flex align-items-center bg-white dirltr"}>
                                 <label htmlFor="addDigital" className="text-danger my-0 mx-1 font-weight-bold">{this.props.defaultCurrency}</label>
@@ -1386,8 +1627,8 @@ class AddMembers extends Component {
                               </div>
                             </div>
                           </div>
-                          <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6 pb-2">
-                            <div className="form-group">
+                          <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
+                            <div className="form-group inlineFormGroup mb-3">
                               <label htmlFor="addCash" className="mx-sm-2 inlineFormLabel mb-1">{t('Cash')}</label>
                               <div className="form-control w-100 p-0 d-flex align-items-center bg-white dirltr">
                                 <label htmlFor="addCash" className="text-danger my-0 mx-1 font-weight-bold">{this.props.defaultCurrency}</label>
@@ -1396,8 +1637,8 @@ class AddMembers extends Component {
                               <div className="errorMessageWrapper"><small className="text-danger mx-sm-2 errorMessage">{this.state.cashE}</small></div>
                             </div>
                           </div>
-                          <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6 pb-2">
-                            <div className="form-group">
+                          <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
+                            <div className="form-group inlineFormGroup mb-3">
                               <label htmlFor="addCard" className="mx-sm-2 inlineFormLabel mb-1">{t('Card')}</label>
                               <div className="form-control w-100 p-0 d-flex align-items-center bg-white dirltr">
                                 <label htmlFor="addCard" className="text-danger my-0 mx-1 font-weight-bold">{this.props.defaultCurrency}</label>
@@ -1406,12 +1647,69 @@ class AddMembers extends Component {
                               <div className="errorMessageWrapper"><small className="text-danger mx-sm-2 errorMessage">{this.state.cardE}</small></div>
                             </div>
                           </div>
-                          <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6 pb-2">
-                            <div className="form-group">
+                          <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
+                            <div className="form-group inlineFormGroup mb-3">
                               <label htmlFor="addCardNumber" className="mx-sm-2 inlineFormLabel mb-1">{t('Card Number (last 4 digits)')}</label>
                               <input type="text" autoComplete="off" className="form-control bg-white" id="addCard4lastno" value={this.state.cardNumber} onChange={(e) => this.setCardNumber(e)} />
                             </div>
                           </div>
+                          <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
+                            <div className="form-group inlineFormGroup mb-3">
+                              <label className="mx-sm-2 inlineFormLabel mb-1"></label>
+                              <div className="d-flex">
+                                <div className="custom-control custom-checkbox roundedGreenRadioCheck mx-2">
+                                  <input type="checkbox" className="custom-control-input" id="check" name="checkorNo" />
+                                  <label className="custom-control-label" htmlFor="check">{t('Cheque')}</label>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          {/* if cheque */}
+                          <div className="col-12">
+                            <div className="row">
+                              <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
+                                <div className="form-group inlineFormGroup mb-3">
+                                  <label htmlFor="bankName" className="mx-sm-2 inlineFormLabel mb-1">{t('Bank Name')}</label>
+                                  <input type="number" autoComplete="off" className="form-control mx-sm-2 inlineFormInputs FormInputsError w-100 p-0 d-flex align-items-center bg-white dirltr" id="bankName" />
+                                  <div className="errorMessageWrapper">
+                                    <small className="text-danger mx-sm-2 errorMessage"></small>
+                                  </div>
+                                </div>
+                              </div>
+                              <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
+                                <div className="form-group inlineFormGroup mb-3">
+                                  <label htmlFor="CheckNumber" className="mx-sm-2 inlineFormLabel mb-1">{t('Check Number')}</label>
+                                  <input type="number" autoComplete="off" className="form-control mx-sm-2 inlineFormInputs FormInputsError w-100 p-0 d-flex align-items-center bg-white dirltr" id="CheckNumber" />
+                                  <div className="errorMessageWrapper">
+                                    <small className="text-danger mx-sm-2 errorMessage"></small>
+                                  </div>
+                                </div>
+                              </div>
+                              <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
+                                <div className="form-group inlineFormGroup mb-3">
+                                  <label htmlFor="CheckDate" className="mx-sm-2 inlineFormLabel mb-1">{t('Check Date')}</label>
+                                  <input type="number" autoComplete="off" className="form-control mx-sm-2 inlineFormInputs FormInputsError w-100 p-0 d-flex align-items-center bg-white dirltr" id="CheckDate" />
+                                  <div className="errorMessageWrapper">
+                                    <small className="text-danger mx-sm-2 errorMessage"></small>
+                                  </div>
+                                </div>
+                              </div>
+                              <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
+                                <div className="form-group inlineFormGroup mb-3">
+                                  <label htmlFor="ChequeAmount" className="mx-sm-2 inlineFormLabel mb-1">{t('Cheque Amount')}</label>
+                                  {/* here currency comes , so change errorclass for div below */}
+                                  <div className="form-control mx-sm-2 inlineFormInputs FormInputsError w-100 p-0 d-flex align-items-center bg-white dirltr">
+                                    <label htmlFor="ChequeAmount" className="text-danger my-0 mx-1 font-weight-bold">{this.props.defaultCurrency}</label>
+                                    <input type="number" autoComplete="off" className="border-0 bg-light w-100 h-100 p-1 bg-white" id="ChequeAmount" />
+                                  </div>
+                                  <div className="errorMessageWrapper">
+                                    <small className="text-danger mx-sm-2 errorMessage"></small>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          {/* if cheque over */}
                           <div className="col-12">
                             <div className="px-sm-1 pt-4 pb-5">
                               <button type="button" className="btn btn-block btn-success btn-lg" onClick={() => this.handlePayment(totalAmount)}>Checkout</button>
@@ -1455,12 +1753,248 @@ class AddMembers extends Component {
             </div>
           </form>
         </div>
+
+        {/* --------------Receipt Modal-=--------------- */}
+        <button type="button" className="btn btn-primary d-none" data-toggle="modal" data-target="#ReceiptModal" data-backdrop="static" data-keyboard="false" ref="receiptOpenModal">Receipt</button>
+        {packageReceipt &&
+          <div className="modal fade commonYellowModal" id="ReceiptModal">
+            <div className="modal-dialog modal-lg" id="ReceiptModal2">
+              <div className="modal-content">
+                <div className="modal-header">
+                  <h4 className="modal-title">Receipt</h4>
+                  {/* <Link to={`/members-details/${packageReceipt._id}`}> */}
+                  <button type="button" className="close" data-dismiss="modal" ref="receiptCloseModal" onClick={() => this.handleReceiptClose(packageReceipt._id)}><span className="iconv1 iconv1-close"></span></button>
+                  {/* </Link> */}
+                </div>
+                <div className="modal-body">
+                  <div className="container">
+                    <div className="text-center my-3">
+                      <img alt='' src={`/${avatarPath}`} className="" width="250" />
+                    </div>
+                    <h4 class="border-bottom border-dark text-center font-weight-bold pb-1">Tax Invoice</h4>
+                    <div className="row px-5 justify-content-between">
+                      <div className="col-free p-3">
+                        <div className="mb-3">
+                          <label className="m-0 font-weight-bold">Address</label>
+                          <p className="whiteSpaceNormal mnw-150px mxw-200px">{filteredBranches &&
+                            filteredBranches.filter(b => b._id === branch)[0] && filteredBranches.filter(b => b._id === branch)[0].address}</p>
+                        </div>
+                        <div className="">
+                          <label className="m-0 font-weight-bold">VAT Reg Number</label>
+                          <p className="">{filteredBranches &&
+                            filteredBranches.filter(b => b._id === branch)[0] && filteredBranches.filter(b => b._id === branch)[0].vatRegNo}</p>
+                        </div>
+                      </div>
+                      <div className="col-free p-3">
+                        <div className="mb-3">
+                          <label className="m-0 font-weight-bold">Tax Invoice No</label>
+                          <p className="">{packageReceipt.packageDetails.filter(p => p.packages === packageName && !p.isExpiredPackage)[0] &&
+                            packageReceipt.packageDetails.filter(p => p.packages === packageName && !p.isExpiredPackage)[0].orderNo}</p>
+                        </div>
+                        <div className="">
+                          <label className="m-0 font-weight-bold">Date & Time</label>
+                          <p className="">{dateToDDMMYYYY(new Date())} {dateToHHMM(new Date())}</p>
+                        </div>
+                      </div>
+                      <div className="col-free p-3">
+                        <div className="">
+                          <label className="m-0 font-weight-bold">Receipt Total</label>
+                          <p className="h4 font-weight-bold">{this.props.defaultCurrency} {parseFloat(totalAmount).toFixed(3)}</p>
+                        </div>
+                        <div className="">
+                          <label className="m-0 font-weight-bold">Telephone</label>
+                          <p className="">{filteredBranches &&
+                            filteredBranches.filter(b => b._id === branch)[0] && filteredBranches.filter(b => b._id === branch)[0].telephone}</p>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="bgGray d-flex flex-wrap px-5 py-4 justify-content-between">
+                      <div className="">
+                        <h6 className="font-weight-bold m-1">
+                          <span className="px-1">ID:</span>
+                          <span className="px-1">{packageReceipt.memberId}</span>
+                        </h6>
+                      </div>
+                      <h6 className="font-weight-bold m-1">{name}</h6>
+                      <div className="">
+                        <h6 className="font-weight-bold m-1">
+                          <span className="px-1">Mob:</span>
+                          <span className="px-1">{number}</span>
+                        </h6>
+                      </div>
+                    </div>
+                    <div className="table-responsive RETable">
+                      <table className="table">
+                        <thead>
+                          <tr>
+                            <th>Package Name</th>
+                            <th>From Date</th>
+                            <th>To Date</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td>{this.props.packages.active && this.props.packages.active.filter(pack => pack._id === packageName)[0] &&
+                              this.props.packages.active.filter(pack => pack._id === packageName)[0].packageName}</td>
+                            <td>{dateToDDMMYYYY(startDate)}</td>
+                            <td>{dateToDDMMYYYY(endDate)}</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                      {trainer &&
+                        <table className="table">
+                          <thead>
+                            <tr>
+                              <th>Trainer Name</th>
+                              <th>From Date</th>
+                              <th>To Date</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr>
+                              <td>{this.props.uniqueTrainerByBranches && this.props.uniqueTrainerByBranches.filter(t => t._id === trainer._id)[0] &&
+                                this.props.uniqueTrainerByBranches.filter(t => t._id === trainer._id)[0].credentialId.userName}</td>
+                              <td>{dateToDDMMYYYY(startDate)}</td>
+                              <td>{dateToDDMMYYYY(new Date(new Date().setDate(new Date().getDate() + trainerPeriodDays - 1)))}</td>
+                            </tr>
+                            <tr>
+                              <td colSpan="4">
+                                <div className="text-right my-1">Amount Total :</div>
+                                {parseFloat(discount) ?
+                                  <div className="text-right my-1">Discount :</div>
+                                  : <div></div>}
+                                {parseFloat(totalVat) ?
+                                  <div className="text-right my-1">VAT(5%):</div>
+                                  : <div></div>}
+                                {parseFloat(digital) ?
+                                  <div className="text-right my-1">Digital :</div>
+                                  : <div></div>}
+                                {parseFloat(cash) ?
+                                  <div className="text-right my-1">Cash :</div>
+                                  : <div></div>}
+                                {parseFloat(card) ?
+                                  <div className="text-right my-1">Card :</div>
+                                  : <div></div>}
+                                <div className="text-right my-1">Grand Total :</div>
+                                <div className="text-right my-1">Paid Amount :</div>
+                                {this.state.cardNumber ?
+                                  <div className="text-right my-1">Card last four digit :</div>
+                                  : <div></div>}
+                              </td>
+                              <td className="">
+                                <div className="my-1"><span className="">{this.props.defaultCurrency}</span> <span className="px-1">{parseFloat(subTotal).toFixed(3)}</span></div>
+                                {parseFloat(discount) ?
+                                  <div className="my-1"><span className="invisible">{this.props.defaultCurrency}</span> <span className="px-1">{parseFloat(discount).toFixed(3)}</span></div>
+                                  : <div></div>}
+                                {parseFloat(totalVat) ?
+                                  <div className="my-1"><span className="invisible">{this.props.defaultCurrency}</span> <span className="px-1">{parseFloat(totalVat).toFixed(3)}</span></div>
+                                  : <div></div>}
+                                {parseFloat(digital) ?
+                                  <div className="my-1"><span className="invisible">{this.props.defaultCurrency}</span> <span className="px-1">{parseFloat(digital).toFixed(3)}</span></div>
+                                  : <div></div>}
+                                {parseFloat(cash) ?
+                                  <div className="my-1"><span className="invisible">{this.props.defaultCurrency}</span> <span className="px-1">{parseFloat(cash).toFixed(3)}</span></div>
+                                  : <div></div>}
+                                {parseFloat(card) ?
+                                  <div className="my-1"><span className="invisible">{this.props.defaultCurrency}</span> <span className="px-1">{parseFloat(card).toFixed(3)}</span></div>
+                                  : <div></div>}
+                                <div className="my-1"><span className="">{this.props.defaultCurrency}</span> <span className="px-1">{parseFloat(totalAmount).toFixed(3)}</span></div>
+                                <div className="my-1"><span className="">{this.props.defaultCurrency}</span> <span className="px-1">{parseFloat(totalAmount).toFixed(3)}</span></div>
+                                {this.state.cardNumber ?
+                                  <div className="my-1"><span className="invisible">{this.props.defaultCurrency}</span> <span className="px-1">{this.state.cardNumber}</span></div>
+                                  : <div></div>}
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      }
+                      {/* {this.state.cardNumber ?
+                        <div className="my-1"><span className="px-1">Card last four digit {this.state.cardNumber}</span></div>
+                        : <div></div>} */}
+                    </div>
+                    {/* <div className="d-flex justify-content-center">
+                      <QRCode value={`http://instagram.com/${filteredBranches &&
+                        filteredBranches.filter(b => b._id === branch)[0] && filteredBranches.filter(b => b._id === branch)[0].instaId}/`} renderAs='svg' />
+                    </div> */}
+                    <div className="d-flex flex-wrap  align-items-cenetr justify-content-between my-4">
+                      <div className="d-flex">
+                        <div className="mr-3 text-center">
+                          <img src={instaimg} alt="" className="w-30px" />
+                          <h6 className="font-weight-bold mb-0 mt-1">Follow Us</h6>
+                        </div>
+                        <div className="w-50px mr-3">
+                          <QRCode value={`http://instagram.com/${filteredBranches &&
+                            filteredBranches.filter(b => b._id === branch)[0] && filteredBranches.filter(b => b._id === branch)[0].instaId}/`} renderAs='svg' width="50" height="50" />
+                        </div>
+                      </div>
+                      {/* <h6 className="font-weight-bold">Paid Amount: {this.props.defaultCurrency} {parseFloat(totalAmount).toFixed(3)}</h6> */}
+                      {packageReceipt.packageDetails.filter(p => p.packages === packageName && !p.isExpiredPackage)[0] &&
+                        <h6 className="font-weight-bold">Served by: {packageReceipt.packageDetails.filter(p => p.packages === packageName && !p.isExpiredPackage)[0].doneBy.userName}</h6>}
+                    </div>
+                    {/* <div className="text-center px-5">
+                      <h5 className="text-muted">Membership cannot be refunded or transferred to others.</h5>
+                      <h5 className="font-weight-bold">Thank You</h5>
+                    </div> */}
+                    <div className="d-flex align-items-cenetr justify-content-center">
+                      <div className="text-center">
+                        <h6 className="font-weight-bold" >Membership cannot be refunded or transferred to others.</h6>
+                        <h6 className="font-weight-bold">Thank You</h6>
+                      </div>
+                    </div>
+                    <div className="text-center">
+                      {/* <Link to={`/members-details/${packageReceipt._id}`}> */}
+                      <button type="button" className="btn btn-success px-4 py-1 my-2" data-dismiss="modal" onClick={() => this.handlePrint(packageReceipt._id)}>Print Receipt</button>
+                      {/* </Link> */}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        }
+        {/* --------------Receipt Modal Ends-=--------------- */}
+
+        <div className="modal fade commonYellowModal" id="passwordAskModal">
+          <div className="modal-dialog modal-dialog-centered">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h4 className="modal-title">{t('Password')}</h4>
+                <button type="button" className="close" data-dismiss="modal" ref="passwordModalClose">
+                  <span className="iconv1 iconv1-close"></span>
+                </button>
+              </div>
+              <div className="modal-body px-0">
+                <div className="container-fluid">
+                  <div className="row">
+                    <div className="col-12">
+                      <div className="form-group position-relative fle">
+                        <label htmlFor="password" className="m-0 text-secondary mx-sm-2">{t('Password')}</label>
+                        <input type={this.state.showPass ? "text" : "password"} className={this.state.passwordE ? "form-control inlineFormInputs w-100 mx-sm-2 FormInputsError" : "form-control inlineFormInputs w-100 mx-sm-2"} id="password"
+                          value={this.state.password} onChange={(e) => this.setState(validator(e, 'password', 'text', [t('Enter password')]))}
+                        />
+                        <span className={this.state.showPass ? "iconv1 iconv1-eye passwordEye" : "iconv1 iconv1-eye passwordEye active"} onClick={() => this.setState({ showPass: !this.state.showPass })}></span>
+                        <div className="errorMessageWrapper">
+                          <small className="text-danger mx-sm-2 errorMessage">{this.state.passwordE}</small>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="col-12 pt-3">
+                      <div className="justify-content-sm-end d-flex pt-4 pb-2">
+                        <button type="button" className="btn btn-success mx-1 px-4" data-dismiss="modal" onClick={() => this.verifyPassword()}>{t('Submit')}</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     )
   }
 }
 
-function mapStateToProps({ branch, packages, trainerFee, currency, errors, auth: { loggedUser }, member, vat: { activeVats }, }) {
+function mapStateToProps({ branch, packages, trainerFee, currency, errors, auth: { loggedUser }, member, vat: { activeVats }, privilege: { verifyPassword } }) {
   return {
     branchs: branch,
     packages,
@@ -1471,6 +2005,7 @@ function mapStateToProps({ branch, packages, trainerFee, currency, errors, auth:
     errors,
     loggedUser,
     activeVats,
+    verifyPassword,
     cprData: member.cpr
   }
 }

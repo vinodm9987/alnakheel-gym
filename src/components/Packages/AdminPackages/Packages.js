@@ -88,7 +88,10 @@ class Packages extends Component {
     const { name, amount, period, startDate, endDate, packageId, description, color, image, fromTime, toTime, salesBranches, accessBranches } = this.state
     if (packageId) {
       if (name && amount && period && startDate && endDate && description && color && startDate <= endDate && fromTime && toTime && fromTime < toTime && salesBranches.length && accessBranches.length) {
-        const packageInfo = { packageName: name, amount, period, startDate, endDate, description, color, fromTime, toTime, salesBranches, accessBranches }
+        const packageInfo = {
+          packageName: name, amount, period, startDate, endDate, description, color, fromTime, toTime,
+          salesBranches: salesBranches.map(a => a.value), accessBranches: accessBranches.map(a => a.value)
+        }
         let formData = new FormData()
         image && formData.append('image', image)
         formData.append('data', JSON.stringify(packageInfo))
@@ -108,7 +111,10 @@ class Packages extends Component {
       }
     } else {
       if (name && amount && period && startDate && endDate && description && color && startDate <= endDate && image && fromTime && toTime && fromTime < toTime && salesBranches.length && accessBranches.length) {
-        const packageInfo = { packageName: name, amount, period, startDate, endDate, description, color, fromTime, toTime, salesBranches, accessBranches }
+        const packageInfo = {
+          packageName: name, amount, period, startDate, endDate, description, color, fromTime, toTime,
+          salesBranches: salesBranches.map(a => a.value), accessBranches: accessBranches.map(a => a.value)
+        }
         let formData = new FormData()
         formData.append('image', image)
         formData.append('data', JSON.stringify(packageInfo))

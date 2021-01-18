@@ -103,7 +103,7 @@ class FreezeHistory extends Component {
                     <tr key={i}>
                       <td>
                         <div className="d-flex">
-                          <img alt='' src={`http://${avatar.ip}:5600/${avatar.path}`} className="mx-1 rounded-circle w-50px h-50px" />
+                          <img alt='' src={`/${avatar.path}`} className="mx-1 rounded-circle w-50px h-50px" />
                           <div className="mx-1">
                             <h5 className="m-0">{userName}</h5>
                             <span className="text-primary d-flex"><span>{t('ID')}</span><span className="mx-1">:</span><span> {memberId}</span></span>
