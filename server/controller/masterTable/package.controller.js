@@ -37,6 +37,22 @@ exports.getAllPackage = (req, res) => {
 
 
 
+/**
+ * get all packages by sales Branch
+*/
+
+
+exports.getAllPackageBySalesBranch = (req, res) => {
+    Package.find({salesBranches:req.body.salesBranches})
+        .populate('period accessBranches salesBranches')
+        .then(response => {
+            successResponseHandler(res, response, "successfully get all packages !!");
+        }).catch(error => {
+            logger.error(error);
+            errorResponseHandler(res, error, "Exception while getting all packages !");
+        });
+};
+
 
 
 /**
