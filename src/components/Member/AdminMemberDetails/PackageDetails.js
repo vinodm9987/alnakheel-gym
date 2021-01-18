@@ -466,6 +466,63 @@ class PackageDetails extends Component {
                             </div>
                           </div>
                         } */}
+              <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                <div className="form-group inlineFormGroup">
+                  <label className="mx-sm-2 inlineFormLabel mb-1"></label>
+                  <div className="d-flex">
+                    <div className="custom-control custom-checkbox roundedGreenRadioCheck mx-2">
+                      <input type="checkbox" className="custom-control-input" id="check" name="checkorNo" />
+                      <label className="custom-control-label" htmlFor="check">{t('Cheque')}</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              {/* if cheque */}
+              <div className="col-12">
+                <div className="row">
+                  <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                    <div className="form-group inlineFormGroup">
+                      <label htmlFor="bankName" className="mx-sm-2 inlineFormLabel mb-1">{t('Bank Name')}</label>
+                      <input type="number" autoComplete="off" className="form-control mx-sm-2 inlineFormInputs FormInputsError w-100 p-0 d-flex align-items-center bg-white dirltr" id="bankName" />
+                      <div className="errorMessageWrapper">
+                        <small className="text-danger mx-sm-2 errorMessage"></small>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                    <div className="form-group inlineFormGroup">
+                      <label htmlFor="CheckNumber" className="mx-sm-2 inlineFormLabel mb-1">{t('Check Number')}</label>
+                      <input type="number" autoComplete="off" className="form-control mx-sm-2 inlineFormInputs FormInputsError w-100 p-0 d-flex align-items-center bg-white dirltr" id="CheckNumber" />
+                      <div className="errorMessageWrapper">
+                        <small className="text-danger mx-sm-2 errorMessage"></small>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                    <div className="form-group inlineFormGroup">
+                      <label htmlFor="CheckDate" className="mx-sm-2 inlineFormLabel mb-1">{t('Check Date')}</label>
+                      <input type="number" autoComplete="off" className="form-control mx-sm-2 inlineFormInputs FormInputsError w-100 p-0 d-flex align-items-center bg-white dirltr" id="CheckDate" />
+                      <div className="errorMessageWrapper">
+                        <small className="text-danger mx-sm-2 errorMessage"></small>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                    <div className="form-group inlineFormGroup">
+                      <label htmlFor="ChequeAmount" className="mx-sm-2 inlineFormLabel mb-1">{t('Cheque Amount')}</label>
+                      {/* here currency comes , so change errorclass for div below */}
+                      <div className="form-control mx-sm-2 inlineFormInputs FormInputsError w-100 p-0 d-flex align-items-center bg-white dirltr">
+                        <label htmlFor="ChequeAmount" className="text-danger my-0 mx-1 font-weight-bold">{this.props.defaultCurrency}</label>
+                        <input type="number" autoComplete="off" className="border-0 bg-light w-100 h-100 p-1 bg-white" id="ChequeAmount" />
+                      </div>
+                      <div className="errorMessageWrapper">
+                        <small className="text-danger mx-sm-2 errorMessage"></small>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              {/* if cheque over */}
                         <div className="col-12 pt-3">
                           <div className="justify-content-sm-end d-flex pt-3 pb-2">
                             <button type="button" className="btn btn-success mx-1 px-4" onClick={() => this.handlePay()}>{t('Pay')}</button>
