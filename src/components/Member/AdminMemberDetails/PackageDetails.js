@@ -466,63 +466,63 @@ class PackageDetails extends Component {
                             </div>
                           </div>
                         } */}
-              <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                <div className="form-group inlineFormGroup">
-                  <label className="mx-sm-2 inlineFormLabel mb-1"></label>
-                  <div className="d-flex">
-                    <div className="custom-control custom-checkbox roundedGreenRadioCheck mx-2">
-                      <input type="checkbox" className="custom-control-input" id="check" name="checkorNo" />
-                      <label className="custom-control-label" htmlFor="check">{t('Cheque')}</label>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              {/* if cheque */}
-              <div className="col-12">
-                <div className="row">
-                  <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                    <div className="form-group inlineFormGroup">
-                      <label htmlFor="bankName" className="mx-sm-2 inlineFormLabel mb-1">{t('Bank Name')}</label>
-                      <input type="number" autoComplete="off" className="form-control mx-sm-2 inlineFormInputs FormInputsError w-100 p-0 d-flex align-items-center bg-white dirltr" id="bankName" />
-                      <div className="errorMessageWrapper">
-                        <small className="text-danger mx-sm-2 errorMessage"></small>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                    <div className="form-group inlineFormGroup">
-                      <label htmlFor="CheckNumber" className="mx-sm-2 inlineFormLabel mb-1">{t('Check Number')}</label>
-                      <input type="number" autoComplete="off" className="form-control mx-sm-2 inlineFormInputs FormInputsError w-100 p-0 d-flex align-items-center bg-white dirltr" id="CheckNumber" />
-                      <div className="errorMessageWrapper">
-                        <small className="text-danger mx-sm-2 errorMessage"></small>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                    <div className="form-group inlineFormGroup">
-                      <label htmlFor="CheckDate" className="mx-sm-2 inlineFormLabel mb-1">{t('Check Date')}</label>
-                      <input type="number" autoComplete="off" className="form-control mx-sm-2 inlineFormInputs FormInputsError w-100 p-0 d-flex align-items-center bg-white dirltr" id="CheckDate" />
-                      <div className="errorMessageWrapper">
-                        <small className="text-danger mx-sm-2 errorMessage"></small>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                    <div className="form-group inlineFormGroup">
-                      <label htmlFor="ChequeAmount" className="mx-sm-2 inlineFormLabel mb-1">{t('Cheque Amount')}</label>
-                      {/* here currency comes , so change errorclass for div below */}
-                      <div className="form-control mx-sm-2 inlineFormInputs FormInputsError w-100 p-0 d-flex align-items-center bg-white dirltr">
-                        <label htmlFor="ChequeAmount" className="text-danger my-0 mx-1 font-weight-bold">{this.props.defaultCurrency}</label>
-                        <input type="number" autoComplete="off" className="border-0 bg-light w-100 h-100 p-1 bg-white" id="ChequeAmount" />
-                      </div>
-                      <div className="errorMessageWrapper">
-                        <small className="text-danger mx-sm-2 errorMessage"></small>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              {/* if cheque over */}
+                        <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                          <div className="form-group inlineFormGroup">
+                            <label className="mx-sm-2 inlineFormLabel mb-1"></label>
+                            <div className="d-flex">
+                              <div className="custom-control custom-checkbox roundedGreenRadioCheck mx-2">
+                                <input type="checkbox" className="custom-control-input" id="check" name="checkorNo" />
+                                <label className="custom-control-label" htmlFor="check">{t('Cheque')}</label>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        {/* if cheque */}
+                        <div className="col-12">
+                          <div className="row">
+                            <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                              <div className="form-group inlineFormGroup">
+                                <label htmlFor="bankName" className="mx-sm-2 inlineFormLabel mb-1">{t('Bank Name')}</label>
+                                <input type="number" autoComplete="off" className="form-control mx-sm-2 inlineFormInputs FormInputsError w-100 p-0 d-flex align-items-center bg-white dirltr" id="bankName" />
+                                <div className="errorMessageWrapper">
+                                  <small className="text-danger mx-sm-2 errorMessage"></small>
+                                </div>
+                              </div>
+                            </div>
+                            <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                              <div className="form-group inlineFormGroup">
+                                <label htmlFor="CheckNumber" className="mx-sm-2 inlineFormLabel mb-1">{t('Check Number')}</label>
+                                <input type="number" autoComplete="off" className="form-control mx-sm-2 inlineFormInputs FormInputsError w-100 p-0 d-flex align-items-center bg-white dirltr" id="CheckNumber" />
+                                <div className="errorMessageWrapper">
+                                  <small className="text-danger mx-sm-2 errorMessage"></small>
+                                </div>
+                              </div>
+                            </div>
+                            <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                              <div className="form-group inlineFormGroup">
+                                <label htmlFor="CheckDate" className="mx-sm-2 inlineFormLabel mb-1">{t('Check Date')}</label>
+                                <input type="number" autoComplete="off" className="form-control mx-sm-2 inlineFormInputs FormInputsError w-100 p-0 d-flex align-items-center bg-white dirltr" id="CheckDate" />
+                                <div className="errorMessageWrapper">
+                                  <small className="text-danger mx-sm-2 errorMessage"></small>
+                                </div>
+                              </div>
+                            </div>
+                            <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                              <div className="form-group inlineFormGroup">
+                                <label htmlFor="ChequeAmount" className="mx-sm-2 inlineFormLabel mb-1">{t('Cheque Amount')}</label>
+                                {/* here currency comes , so change errorclass for div below */}
+                                <div className="form-control mx-sm-2 inlineFormInputs FormInputsError w-100 p-0 d-flex align-items-center bg-white dirltr">
+                                  <label htmlFor="ChequeAmount" className="text-danger my-0 mx-1 font-weight-bold">{this.props.defaultCurrency}</label>
+                                  <input type="number" autoComplete="off" className="border-0 bg-light w-100 h-100 p-1 bg-white" id="ChequeAmount" />
+                                </div>
+                                <div className="errorMessageWrapper">
+                                  <small className="text-danger mx-sm-2 errorMessage"></small>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        {/* if cheque over */}
                         <div className="col-12 pt-3">
                           <div className="justify-content-sm-end d-flex pt-3 pb-2">
                             <button type="button" className="btn btn-success mx-1 px-4" onClick={() => this.handlePay()}>{t('Pay')}</button>
@@ -536,114 +536,175 @@ class PackageDetails extends Component {
             </div>
 
           </div>
-          <div className="col-12">
-            <h5 className="text-secondary">{t('Package History')}</h5>
+          <div className="col-12 px-0">
+            <h5 className="text-secondary">{t('History')}</h5>
           </div>
-          <div className="col-12 tableTypeStriped">
-            <div className="table-responsive">
-              <table className="table table-striped">
-                <thead>
-                  <tr>
-                    <th>{t('Package Name')}</th>
-                    <th>{t('From Date')}</th>
-                    <th>{t('To Date')}</th>
-                    <th>{t('Amount')}</th>
-                    <th>{t('Trainer')}</th>
-                    <th className="text-center">Installments</th>
-                    <th className="text-center">Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {packageDetails && packageDetails.map((pack, i) => {
-                    const { startDate, endDate, packages: { packageName }, totalAmount, trainer } = pack
+          <div className="col-12 px-0">
+            <nav className="commonNavForTab">
+              <div className="nav nav-tabs flex-nowrap overflow-auto" id="nav-tab1001" role="tablist">
+                <a className="nav-link active" data-toggle="tab" href="#submenu1" role="tab" >{t('Package History')}</a>
+                <a className="nav-link" data-toggle="tab" href="#submenu2" role="tab" >{t('Trainer History')}</a>
+              </div>
+            </nav>
+          </div>
+          <div className="tab-content" >
+            <div className="tab-pane fade show active" id="submenu1" role="tabpanel" >
+              <div className="col-12 tableTypeStriped">
+                <div className="table-responsive">
+                  <table className="table table-striped">
+                    <thead>
+                      <tr>
+                        <th>{t('Package Name')}</th>
+                        <th>{t('From Date')}</th>
+                        <th>{t('To Date')}</th>
+                        <th>{t('Amount')}</th>
+                        <th>{t('Trainer')}</th>
+                        <th className="text-center">Installments</th>
+                        <th className="text-center">Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {packageDetails && packageDetails.map((pack, i) => {
+                        const { startDate, endDate, packages: { packageName }, totalAmount, trainer } = pack
 
-                    return (
-                      <tr key={i}>
-                        <td>{packageName}</td>
-                        <td>{dateToDDMMYYYY(startDate)}</td>
-                        <td>{dateToDDMMYYYY(endDate)}</td>
-                        <td className="text-danger font-weight-bold"><span>{this.props.defaultCurrency}</span><span className="pl-1"></span><span>{totalAmount.toFixed(3)}</span></td>
-                        <td>{trainer ? trainer.credentialId.userName : 'NA'}</td>
-                        {/* <td className="text-center">
+                        return (
+                          <tr key={i}>
+                            <td>{packageName}</td>
+                            <td>{dateToDDMMYYYY(startDate)}</td>
+                            <td>{dateToDDMMYYYY(endDate)}</td>
+                            <td className="text-danger font-weight-bold"><span>{this.props.defaultCurrency}</span><span className="pl-1"></span><span>{totalAmount.toFixed(3)}</span></td>
+                            <td>{trainer ? trainer.credentialId.userName : 'NA'}</td>
+                            {/* <td className="text-center">
                           <span className="bg-warning action-icon"><span className="iconv1 iconv1-download"></span></span>
                         </td> */}
-                        <td className="text-center">No</td>
-                        <td className="text-center">
-                          <span class="badge badge-pill badge-primary px-3 py-2 cursorPointer" data-toggle="modal" data-target="#InstallmentDetails">Details</span>
-                        </td>
-                      </tr>
-                    )
-                  })}
-                </tbody>
-              </table>
+                            <td className="text-center">No</td>
+                            <td className="text-center">
+                              <span class="badge badge-pill badge-primary px-3 py-2 cursorPointer" data-toggle="modal" data-target="#InstallmentDetails">Installment Details</span>
+                            </td>
+                          </tr>
+                        )
+                      })}
+                    </tbody>
+                  </table>
+                </div>
+                {/* <div className="col-12">Paginate</div> */}
+              </div>
             </div>
 
-            {/* ------------Pop up Installments table details------------ */}
+            <div className="tab-pane fade" id="submenu2" role="tabpanel" >
+              <div className="col-12">
+                <div className="table-responsive">
+                  <table className="borderRoundSeperateTable tdGray">
+                    <thead>
+                      <tr>
+                        <th>{t('Trainer Name')}</th>
+                        <th>{t('Package Name')}</th>
+                        <th>{t('Start Date')}</th>
+                        <th>{t('End Date')}</th>
+                        <th>{t('Amount')}</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {packageDetails && packageDetails.map((pack) => {
+                        const { packages: { packageName }, trainerDetails } = pack
+                        return (
+                          trainerDetails && trainerDetails.map((t, j) => {
+                            const { trainerStart, trainerEnd, trainer: { credentialId: { userName, avatar } }, trainerFees: { amount } } = t
+                            return (
+                              <tr key={j}>
+                                <td>
+                                  <div className="d-flex align-items-center">
+                                    <img src={`http://${avatar.ip}:5600/${avatar.path}`} alt="" className="w-30px h-30px br-50 mr-2" />
+                                    <h5 className="my-2">{userName}</h5>
+                                  </div>
+                                </td>
+                                <td>{packageName}</td>
+                                <td className="dirltrtar">{dateToDDMMYYYY(trainerStart)}</td>
+                                <td className="dirltrtar">{dateToDDMMYYYY(trainerEnd)}</td>
+                                <td className="text-danger font-weight-bold"><span>{this.props.defaultCurrency}</span><span className="pl-1"></span><span>{amount}</span></td>
+                                <td className="text-center">
+                                  <span class="badge badge-pill badge-primary px-3 py-2 cursorPointer" data-toggle="modal" data-target="#InstallmentDetails">Installment Details</span>
+                                </td>
+                              </tr>
+                            )
+                          })
+                        )
+                      })}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              {/* <div className="col-12">Paginate</div> */}
+            </div>
 
-            <div className="modal fade commonYellowModal" id="InstallmentDetails">
-              <div className="modal-dialog modal-lg modal-dialog-centered">
-                <div className="modal-content">
-                  <div className="modal-header">
-                    <h4 className="modal-title">Installments</h4>
-                    <button type="button" className="close align-self-center" data-dismiss="modal"><span className="iconv1 iconv1-close"></span></button>
+          </div>
+
+          {/* ------------Pop up Installments details------------ */}
+
+          <div className="modal fade commonYellowModal" id="InstallmentDetails">
+            <div className="modal-dialog modal-lg modal-dialog-centered">
+              <div className="modal-content">
+                <div className="modal-header">
+                  <h4 className="modal-title">Installments</h4>
+                  <button type="button" className="close align-self-center" data-dismiss="modal"><span className="iconv1 iconv1-close"></span></button>
+                </div>
+                <div className="modal-body px-4">
+                  <div className="d-flex flex-wrap justify-content-between p-1">
+                    <div className="m-1">
+                      <h6 className="font-weight-bold mb-1">package Name</h6>
+                      <h6 className="text-danger">One month gold package</h6>
+                    </div>
+                    <div className="m-1">
+                      <h6 className="font-weight-bold mb-1">Total Amount</h6>
+                      <h6 className="text-danger"><b>$500</b></h6>
+                    </div>
+                    <div className="m-1">
+                      <h6 className="font-weight-bold mb-1">Paid Amount</h6>
+                      <h6 className="text-danger"><b>$200</b></h6>
+                    </div>
+                    <div className="m-1">
+                      <h6 className="font-weight-bold mb-1">Remaining Amount</h6>
+                      <h6 className="text-danger"><b>$300</b></h6>
+                    </div>
                   </div>
-                  <div className="modal-body px-4">
-                    <div className="d-flex flex-wrap justify-content-between p-1">
-                      <div className="m-1">
-                        <h6 className="font-weight-bold mb-1">package Name</h6>
-                        <h6 className="text-danger">One month gold package</h6>
-                      </div>
-                      <div className="m-1">
-                        <h6 className="font-weight-bold mb-1">Total Amount</h6>
-                        <h6 className="text-danger"><b>$500</b></h6>
-                      </div>
-                      <div className="m-1">
-                        <h6 className="font-weight-bold mb-1">Paid Amount</h6>
-                        <h6 className="text-danger"><b>$200</b></h6>
-                      </div>
-                      <div className="m-1">
-                        <h6 className="font-weight-bold mb-1">Remaining Amount</h6>
-                        <h6 className="text-danger"><b>$300</b></h6>
-                      </div>
-                    </div>
-                    <h5 className="m-1 py-3"><b>Installment History</b></h5>
-                    <div className="table-responsive">
-                      <table className="table table-striped InstallmentTable">
-                        <thead>
-                          <tr className="border">
-                            <th>Installment Type</th>
-                            <th>Amount</th>
-                            <th>Due Date</th>
-                            <th>Paid Date</th>
-                            <th>Status</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr>
-                            <td>Installment 1</td>
-                            <td className="text-danger font-weight-bold">$ 300</td>
-                            <td>22/02/2020</td>
-                            <td>22/02/2020</td>
-                            {/* <td className="text-danger font-weight-bold">Pending</td> */}
-                            <td className="text-success font-weight-bold">Paid</td>
-                          </tr>
-                          <tr>
-                            <td>Installment 1</td>
-                            <td className="text-danger font-weight-bold">$ 300</td>
-                            <td>22/02/2020</td>
-                            <td>22/02/2020</td>
-                            <td className="text-danger font-weight-bold">Pending</td>
-                            {/* <td className="text-success font-weight-bold">Paid</td> */}
-                          </tr>
-                        </tbody>
-                      </table>
-                    </div>
+                  <h5 className="m-1 py-3"><b>Installment History</b></h5>
+                  <div className="table-responsive">
+                    <table className="table table-striped InstallmentTable">
+                      <thead>
+                        <tr className="border">
+                          <th>Installment Type</th>
+                          <th>Amount</th>
+                          <th>Due Date</th>
+                          <th>Paid Date</th>
+                          <th>Status</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>Installment 1</td>
+                          <td className="text-danger font-weight-bold">$ 300</td>
+                          <td>22/02/2020</td>
+                          <td>22/02/2020</td>
+                          {/* <td className="text-danger font-weight-bold">Pending</td> */}
+                          <td className="text-success font-weight-bold">Paid</td>
+                        </tr>
+                        <tr>
+                          <td>Installment 1</td>
+                          <td className="text-danger font-weight-bold">$ 300</td>
+                          <td>22/02/2020</td>
+                          <td>22/02/2020</td>
+                          <td className="text-danger font-weight-bold">Pending</td>
+                          {/* <td className="text-success font-weight-bold">Paid</td> */}
+                        </tr>
+                      </tbody>
+                    </table>
                   </div>
                 </div>
               </div>
             </div>
-            {/* ------------Pop up Installments table details Ends------------ */}
           </div>
+          {/* ------------Pop up Installments details Ends------------ */}
+
         </div>
       )
     } else {
