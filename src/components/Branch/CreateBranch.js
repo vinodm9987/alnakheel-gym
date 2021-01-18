@@ -69,9 +69,8 @@ class CreateBranch extends Component {
     const { name, geocode, address, email, number, branchId, capacity, nameE, geocodeE, addressE, emailE, numberE, capacityE, userPhoto, vatRegNo, vatRegNoE,
       telephone, telephoneE, instaId, instaIdE, password, machineId, machineIdE, bioStarIp, bioStarIpE, typeOfMachine, typeOfMachineE } = this.state
     if (branchId) {
-      console.log("🚀 ~ file: CreateBranch.js ~ line 72 ~ CreateBranch ~ handleSubmit ~ branchId", branchId)
       if (name !== '' && geocode !== '' && address !== '' && number !== '' && email !== '' && parseInt(capacity) && vatRegNo && telephone && instaId &&
-        machineId && bioStarIp && typeOfMachine && !machineIdE && !bioStarIpE && !typeOfMachineE &&
+        // machineId && bioStarIp && typeOfMachine && !machineIdE && !bioStarIpE && !typeOfMachineE &&
         !nameE && !geocodeE && !addressE && !numberE && !emailE && !capacityE && !vatRegNoE && !telephoneE && !instaIdE
       ) {
         const branchInfo = {
@@ -83,7 +82,7 @@ class CreateBranch extends Component {
           capacity,
           vatRegNo,
           telephone,
-          machineId, bioStarIp, typeOfMachine,
+          // machineId, bioStarIp, typeOfMachine,
           instaId: instaId.toLowerCase()
         }
         console.log("🚀 ~ file: CreateBranch.js ~ line 88 ~ CreateBranch ~ handleSubmit ~ branchInfo", branchInfo)
@@ -144,7 +143,7 @@ class CreateBranch extends Component {
       }
     } else {
       if (name !== '' && geocode !== '' && address !== '' && number !== '' && email !== '' && parseInt(capacity) && vatRegNo && telephone && instaId &&
-        machineId && bioStarIp && typeOfMachine && !machineIdE && !bioStarIpE && !typeOfMachineE &&
+        // machineId && bioStarIp && typeOfMachine && !machineIdE && !bioStarIpE && !typeOfMachineE &&
         !nameE && !geocodeE && !addressE && !numberE && !emailE && !capacityE && !vatRegNoE && !telephoneE && !instaIdE && userPhoto) {
         if (password) {
           const branchInfo = {
@@ -157,7 +156,7 @@ class CreateBranch extends Component {
             vatRegNo,
             telephone,
             instaId: instaId.toLowerCase(),
-            machineId, bioStarIp, typeOfMachine,
+            // machineId, bioStarIp, typeOfMachine,
             password: password
           }
           let formData = new FormData()
@@ -238,7 +237,7 @@ class CreateBranch extends Component {
       this.handleSubmit()
     } else {
       if (name !== '' && geocode !== '' && address !== '' && number !== '' && email !== '' && parseInt(capacity) && vatRegNo && telephone && instaId &&
-        machineId && bioStarIp && typeOfMachine && !machineIdE && !bioStarIpE && !typeOfMachineE &&
+        // machineId && bioStarIp && typeOfMachine && !machineIdE && !bioStarIpE && !typeOfMachineE &&
         !nameE && !geocodeE && !addressE && !numberE && !emailE && !capacityE && !vatRegNoE && !telephoneE && !instaIdE && userPhoto) {
         const el = findDOMNode(this.refs.passwordModalOpen);
         $(el).click();
@@ -294,15 +293,17 @@ class CreateBranch extends Component {
       vatRegNo: branch.vatRegNo,
       telephone: branch.telephone,
       instaId: branch.instaId,
-      machineId: branch.machineId ? branch.machineId : '',
-      bioStarIp: branch.bioStarIp ? branch.bioStarIp : '',
-      typeOFMachine: branch.typeOFMachine ? branch.typeOFMachine : '',
+      // machineId: branch.machineId ? branch.machineId : '',
+      // bioStarIp: branch.bioStarIp ? branch.bioStarIp : '',
+      // typeOFMachine: branch.typeOFMachine ? branch.typeOFMachine : '',
       userPhoto: branch.avatar
     })
   }
 
   renderCreateBranchForm() {
-    const { name, geocode, address, branchId, email, number, capacity, vatRegNo, telephone, instaId, machineId, bioStarIp, typeOfMachine } = this.state
+    const { name, geocode, address, branchId, email, number, capacity, vatRegNo, telephone, instaId,
+      // machineId, bioStarIp, typeOfMachine 
+    } = this.state
     const { t } = this.props
     return (
       <form className="col-12 form-inline mt-5 px-0">
@@ -406,7 +407,7 @@ class CreateBranch extends Component {
                 </div>
               </div>
             </div>
-            <div className="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
+            {/* <div className="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
               <div className="form-group inlineFormGroup">
                 <label htmlFor="machineId" className="mx-sm-2 inlineFormLabel type1">{t('Machine ID')}</label>
                 <input type="number" autoComplete="off" className={this.state.machineIdE ? "form-control mx-sm-2 inlineFormInputs FormInputsError" : "form-control mx-sm-2 inlineFormInputs"}
@@ -440,7 +441,7 @@ class CreateBranch extends Component {
                   <small className="text-danger mx-sm-2 errorMessage">{this.state.typeOfMachineE}</small>
                 </div>
               </div>
-            </div>
+            </div> */}
             <div className="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
               <div className="form-group inlineFormGroup">
                 <label htmlFor="confirmPassword" className="mx-sm-2 inlineFormLabel type1">{t('Branch Photo')}</label>
