@@ -67,7 +67,9 @@ class CreateBranch extends Component {
     const el = findDOMNode(this.refs.passwordModalClose);
     const { t } = this.props
     const { name, geocode, address, email, number, branchId, capacity, nameE, geocodeE, addressE, emailE, numberE, capacityE, userPhoto, vatRegNo, vatRegNoE,
-      telephone, telephoneE, instaId, instaIdE, password, machineId, machineIdE, bioStarIp, bioStarIpE, typeOfMachine, typeOfMachineE } = this.state
+      telephone, telephoneE, instaId, instaIdE, password, machineId, bioStarIp, typeOfMachine,
+      // machineIdE, bioStarIpE, typeOfMachineE
+    } = this.state
     if (branchId) {
       if (name !== '' && geocode !== '' && address !== '' && number !== '' && email !== '' && parseInt(capacity) && vatRegNo && telephone && instaId &&
         // machineId && bioStarIp && typeOfMachine && !machineIdE && !bioStarIpE && !typeOfMachineE &&
@@ -232,7 +234,9 @@ class CreateBranch extends Component {
   handleOpenPassword() {
     const { t } = this.props
     const { name, geocode, address, email, number, capacity, nameE, geocodeE, addressE, emailE, numberE, capacityE, userPhoto, vatRegNo, vatRegNoE,
-      telephone, telephoneE, instaId, instaIdE, machineId, machineIdE, bioStarIp, bioStarIpE, typeOfMachine, typeOfMachineE, branchId } = this.state
+      telephone, telephoneE, instaId, instaIdE, machineId, bioStarIp, typeOfMachine, branchId
+      // machineIdE, bioStarIpE, typeOfMachineE
+    } = this.state
     if (branchId) {
       this.handleSubmit()
     } else {

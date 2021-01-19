@@ -8,7 +8,7 @@ import { findDOMNode } from 'react-dom';
 import { withTranslation } from 'react-i18next';
 import PhoneInput from 'react-phone-number-input';
 import { connect } from 'react-redux';
-import Select from "react-select";
+// import Select from "react-select";
 import Webcam from "react-webcam";
 import { getAllBranch } from '../../actions/branch.action';
 import { createNewMemberByAdmin, getCprData, updateMember, updateMemberAndAddPackage } from '../../actions/member.action';
@@ -48,7 +48,7 @@ class AddMembers extends Component {
       userPhotoE: '',
       packageNameE: '',
       userPhotoD: '',
-      wantTrainer: 'Yes',
+      wantTrainer: 'No',
       trainer: null,
       trainerE: '',
       levelQuestion: '',
@@ -134,7 +134,7 @@ class AddMembers extends Component {
         genderE: '',
         userPhotoE: '',
         packageNameE: '',
-        wantTrainer: 'Yes',
+        wantTrainer: 'No',
         trainer: null,
         userPhoto: avatar,
         trainerE: '',
@@ -222,7 +222,7 @@ class AddMembers extends Component {
         genderE: '',
         userPhotoE: '',
         packageNameE: '',
-        wantTrainer: 'Yes',
+        wantTrainer: 'No',
         trainer: null,
         userPhoto: avatar,
         trainerE: '',
@@ -311,7 +311,7 @@ class AddMembers extends Component {
         userPhotoE: '',
         packageNameE: '',
         userPhotoD: '',
-        wantTrainer: 'Yes',
+        wantTrainer: 'No',
         trainer: null,
         trainerE: '',
         levelQuestion: '',
@@ -920,23 +920,24 @@ class AddMembers extends Component {
 
   render() {
     const { t } = this.props
-    const formatOptionLabel = ({ credentialId: { userName, avatar, email } }) => {
-      return (
-        <div className="d-flex align-items-center">
-          <img alt='' src={`/${avatar.path}`} className="rounded-circle mx-1 w-30px h-30px" />
-          <div className="w-100">
-            <small className="whiteSpaceNormal d-block" style={{ lineHeight: '1', fontWeight: 'bold' }}>{userName}</small>
-            <small className="whiteSpaceNormal d-block" style={{ lineHeight: '1' }}>{email}</small>
-          </div>
-        </div>
-      )
-    }
-    const colourStyles = {
-      control: styles => ({ ...styles, backgroundColor: 'white' }),
-      option: (styles, { isFocused, isSelected }) => ({ ...styles, backgroundColor: isSelected ? 'white' : isFocused ? 'lightblue' : null, color: 'black' }),
-    };
-    const { name, email, number, personalId, dob, nationality, gender, packageName, height, weight, wantTrainer,
-      trainer, levelQuestion, exercisingQuestion, goalQuestion, memberId, branch, period, discountMethod, count,
+    // const formatOptionLabel = ({ credentialId: { userName, avatar, email } }) => {
+    //   return (
+    //     <div className="d-flex align-items-center">
+    //       <img alt='' src={`/${avatar.path}`} className="rounded-circle mx-1 w-30px h-30px" />
+    //       <div className="w-100">
+    //         <small className="whiteSpaceNormal d-block" style={{ lineHeight: '1', fontWeight: 'bold' }}>{userName}</small>
+    //         <small className="whiteSpaceNormal d-block" style={{ lineHeight: '1' }}>{email}</small>
+    //       </div>
+    //     </div>
+    //   )
+    // }
+    // const colourStyles = {
+    //   control: styles => ({ ...styles, backgroundColor: 'white' }),
+    //   option: (styles, { isFocused, isSelected }) => ({ ...styles, backgroundColor: isSelected ? 'white' : isFocused ? 'lightblue' : null, color: 'black' }),
+    // };
+    const { name, email, number, personalId, dob, nationality, gender, packageName, height, weight,
+      // wantTrainer, levelQuestion, exercisingQuestion, goalQuestion, period,
+      memberId, branch, discountMethod, count, trainer,
       cash, card, packageAmount, emergencyNumber, relationship, referralCode, notes, addPackage, discount, tax, digital, startDate, endDate,
       wantInstallment, installments, packageReceipt, trainerPeriodDays, branches, staffName } = this.state
 
@@ -950,9 +951,9 @@ class AddMembers extends Component {
     let avatarPath = filteredBranches && filteredBranches.filter(b => b._id === branch)[0] &&
       filteredBranches.filter(b => b._id === branch)[0].avatar && filteredBranches.filter(b => b._id === branch)[0].avatar.path
 
-    const trainerPeriods = this.props.periodOfTrainers ? this.props.periodOfTrainers.filter(trainerFee =>
-      trainerFee.period.periodDays <= this.state.periodDays
-    ) : []
+    // const trainerPeriods = this.props.periodOfTrainers ? this.props.periodOfTrainers.filter(trainerFee =>
+    //   trainerFee.period.periodDays <= this.state.periodDays
+    // ) : []
 
     let subTotal = (installments[0] && installments[0].amount) ? parseFloat(installments[0].amount) : packageAmount
     let totalVat = (subTotal - discount) * tax / 100
@@ -1327,7 +1328,7 @@ class AddMembers extends Component {
                 </div>
               }
 
-              {(!memberId || addPackage) &&
+              {/* {(!memberId || addPackage) &&
                 <div className="col-12 d-flex flex-wrap py-4 mb-3 px-2">
                   <h5 className="mx-3">{t('Do you want trainer?')}</h5>
                   <div className="position-relative mx-3">
@@ -1444,7 +1445,7 @@ class AddMembers extends Component {
                     </div>
                   </div>
                 </div>
-              }
+              } */}
 
               <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
                 <label className="pt-4 mb-1">Total Amount</label>
@@ -1465,10 +1466,10 @@ class AddMembers extends Component {
               </div>
               {wantInstallment === 'Yes' &&
                 <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 px-4 d-flex justify-content-end">
-                  <button type="button" className="btn btn-success displayInlineFlexCls alignItemsCenter my-2 ml-3"
+                  <button type="button" className="btn btn-success d-inline-flex alignItemsCenter my-2 ml-3"
                     onClick={() => this.addInstallment(packageAmount)}
                   >
-                    <span style={{ fontSize: "18px" }}>+</span>
+                    <span style={{ fontSize: "26px", lineHeight: "0.8" }}>+</span>
                     <span className="gaper"></span>
                     <span>Add Installment</span>
                   </button>
@@ -1508,7 +1509,7 @@ class AddMembers extends Component {
                                           autoOk
                                           invalidDateMessage=''
                                           minDateMessage=''
-                                          className={"form-control mx-sm-2 inlineFormInputs"}
+                                          className={"form-control pl-2"}
                                           minDate={installments[i - 1] ? installments[i - 1].dueDate : new Date()}
                                           maxDate={endDate}
                                           format="dd/MM/yyyy"
