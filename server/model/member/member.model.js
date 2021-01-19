@@ -62,11 +62,13 @@ const memberSchema = new Schema({
 
             timeOfInstallment: Date,
             
+            paidType: { type: String, enum: ["Online", "Offline"] },
+
             cardNumber: String, cashAmount: Number, cardAmount: Number, vatAmount: Number, discount: Number,
 
             digitalAmount: Number, chequeAmount: Number, chequeNumber:String, bankName: String, chequeDate: Date,
 
-            actualAmount: Number,
+            totalAmount: Number, actualAmount: Number,
 
         }],
 
