@@ -111,6 +111,15 @@ class AddMembers extends Component {
       wantInstallment: 'Yes',
       installments: [],
       installmentsCopy: [],
+      showCheque: false,
+      bankName: '',
+      chequeNumber: '',
+      chequeDate: '',
+      cheque: 0,
+      bankNameE: '',
+      chequeNumberE: '',
+      chequeDateE: '',
+      chequeE: ''
     }
     if (this.props.location.memberProps && this.props.memberById) {
       const { _id, mobileNo, personalId, dateOfBirth, nationality, gender, height, weight, branch,
@@ -198,6 +207,15 @@ class AddMembers extends Component {
         wantInstallment: 'Yes',
         installments: [],
         installmentsCopy: [],
+        showCheque: false,
+        bankName: '',
+        chequeNumber: '',
+        chequeDate: '',
+        cheque: 0,
+        bankNameE: '',
+        chequeNumberE: '',
+        chequeDateE: '',
+        chequeE: ''
       }
       scrollToTop()
     } else if (this.props.location.addPackageProps) {
@@ -286,6 +304,15 @@ class AddMembers extends Component {
         wantInstallment: 'Yes',
         installments: [],
         installmentsCopy: [],
+        showCheque: false,
+        bankName: '',
+        chequeNumber: '',
+        chequeDate: '',
+        cheque: 0,
+        bankNameE: '',
+        chequeNumberE: '',
+        chequeDateE: '',
+        chequeE: ''
       }
       this.props.dispatch(getAllVat({ branch: branch._id }))
       this.props.dispatch(getUniqueTrainerByBranch(branch._id))
@@ -373,6 +400,15 @@ class AddMembers extends Component {
         wantInstallment: 'Yes',
         installments: [],
         installmentsCopy: [],
+        showCheque: false,
+        bankName: '',
+        chequeNumber: '',
+        chequeDate: '',
+        cheque: 0,
+        bankNameE: '',
+        chequeNumberE: '',
+        chequeDateE: '',
+        chequeE: ''
       }
     }
     this.state = this.default
@@ -489,8 +525,9 @@ class AddMembers extends Component {
     const { name, email, number, personalId, dob, nationality, gender, userPhoto, packageName, branch, cardNumber, setPackageAmount,
       cash, card, height, weight, emergencyNumber, relationship, referralCode, notes, credentialId, memberId, discount, tax,
       trainer, wantTrainer, levelQuestion, exercisingQuestion, goalQuestion, period, trainerFeesId, addPackage, packageAmount,
-      emailE, numberE, emergencyNumberE, cashE, cardE, digital, digitalE, startDate, endDate, trainerPeriodDays, installments } = this.state
-    if (name && email && number && personalId && dob && nationality && gender && userPhoto && packageName && branch && calculateDOB(dob) > 14 && (cash || card || digital) && !cardE && !cashE
+      emailE, numberE, emergencyNumberE, cashE, cardE, digital, digitalE, startDate, endDate, trainerPeriodDays, installments,
+      cheque, bankName, chequeNumber, chequeDate, showCheque } = this.state
+    if (name && email && number && personalId && dob && nationality && gender && userPhoto && packageName && branch && calculateDOB(dob) > 14 && (cash || card || digital || cheque) && !cardE && !cashE
       && !digitalE && !emailE && !numberE && !emergencyNumberE && startDate <= endDate
     ) {
       const memberInfo = {
@@ -520,20 +557,40 @@ class AddMembers extends Component {
       if (installments.length > 0) {
         memberInfo.packageDetails[0].Installments = installments.map((installment, k) => {
           if (k === 0) {
-            return {
-              ...installment, ...{
-                paidStatus: 'Paid', cashAmount: cash ? parseFloat(cash) : 0, cardAmount: card ? parseFloat(card) : 0, digitalAmount: digital ? digital : 0,
-                cardNumber: cardNumber, actualAmount: installment.amount, totalAmount: totalAmount, discount: parseFloat(discount), vatAmount: (setPackageAmount - discount) * tax / 100,
+            if (showCheque) {
+              return {
+                ...installment, ...{
+                  paidStatus: 'Paid', cashAmount: cash ? parseFloat(cash) : 0, cardAmount: card ? parseFloat(card) : 0, digitalAmount: digital ? digital : 0,
+                  cardNumber: cardNumber, actualAmount: installment.amount, totalAmount: totalAmount, discount: parseFloat(discount), vatAmount: (setPackageAmount - discount) * tax / 100,
+                  chequeAmount: cheque ? parseFloat(cheque) : 0, bankName, chequeNumber, chequeDate
+                }
+              }
+            } else {
+              return {
+                ...installment, ...{
+                  paidStatus: 'Paid', cashAmount: cash ? parseFloat(cash) : 0, cardAmount: card ? parseFloat(card) : 0, digitalAmount: digital ? digital : 0,
+                  cardNumber: cardNumber, actualAmount: installment.amount, totalAmount: totalAmount, discount: parseFloat(discount), vatAmount: (setPackageAmount - discount) * tax / 100,
+                }
               }
             }
           } else { return installment }
         })
         memberInfo.packageDetails[0].paidStatus = 'Installment'
       } else {
-        memberInfo.packageDetails[0] = {
-          ...memberInfo.packageDetails[0], ...{
-            paidStatus: 'Paid', cashAmount: cash ? parseFloat(cash) : 0, cardAmount: card ? parseFloat(card) : 0, digitalAmount: digital ? digital : 0,
-            cardNumber: cardNumber, actualAmount: packageAmount, totalAmount: totalAmount, discount: parseFloat(discount), vatAmount: (setPackageAmount - discount) * tax / 100,
+        if (showCheque) {
+          memberInfo.packageDetails[0] = {
+            ...memberInfo.packageDetails[0], ...{
+              paidStatus: 'Paid', cashAmount: cash ? parseFloat(cash) : 0, cardAmount: card ? parseFloat(card) : 0, digitalAmount: digital ? digital : 0,
+              cardNumber: cardNumber, actualAmount: packageAmount, totalAmount: totalAmount, discount: parseFloat(discount), vatAmount: (setPackageAmount - discount) * tax / 100,
+              chequeAmount: cheque ? parseFloat(cheque) : 0, bankName, chequeNumber, chequeDate
+            }
+          }
+        } else {
+          memberInfo.packageDetails[0] = {
+            ...memberInfo.packageDetails[0], ...{
+              paidStatus: 'Paid', cashAmount: cash ? parseFloat(cash) : 0, cardAmount: card ? parseFloat(card) : 0, digitalAmount: digital ? digital : 0,
+              cardNumber: cardNumber, actualAmount: packageAmount, totalAmount: totalAmount, discount: parseFloat(discount), vatAmount: (setPackageAmount - discount) * tax / 100,
+            }
           }
         }
 
@@ -618,7 +675,7 @@ class AddMembers extends Component {
     this.setState({
       ...validator(e, 'branch', 'text', [t('Enter branch')]), ...{
         packageName: '', trainer: null, installments: [], installmentsCopy: [],
-        period: '', amount: 0, periodDays: 0, packageAmount: 0, setPackageAmount: 0, cash: 0, card: 0, digital: 0, discount: 0, count: 0, vatId: '', vat: 0
+        period: '', amount: 0, periodDays: 0, packageAmount: 0, setPackageAmount: 0, cash: 0, card: 0, digital: 0, cheque: 0, discount: 0, count: 0, vatId: '', vat: 0
       }
     }, () => {
       this.state.branch && this.props.dispatch(getAllVat({ branch: this.state.branch }))
@@ -632,7 +689,7 @@ class AddMembers extends Component {
     this.setState({
       ...validator(e, 'trainer', 'select', [t('Select trainer name')]), ...{
         period: '', installments: [], installmentsCopy: [],
-        amount: 0, packageAmount: this.state.setPackageAmount, cash: 0, card: 0, digital: 0, discount: 0, count: 0
+        amount: 0, packageAmount: this.state.setPackageAmount, cash: 0, card: 0, digital: 0, cheque: 0, discount: 0, count: 0
       }
     }, () => {
       const data = {
@@ -659,7 +716,7 @@ class AddMembers extends Component {
     this.setState({
       ...validator(e, 'period', 'text', [t('Select period')]), ...{
         amount, installments: [], installmentsCopy: [], trainerPeriodDays,
-        trainerFeesId, packageAmount, cash: 0, card: 0, digital: 0, discount: 0, count: 0,
+        trainerFeesId, packageAmount, cash: 0, card: 0, digital: 0, cheque: 0, discount: 0, count: 0,
       }
     })
   }
@@ -683,7 +740,7 @@ class AddMembers extends Component {
     this.setState({
       ...validator(e, 'packageName', 'text', [t('Enter package name')]), ...{
         tax, trainer: null, period: '', installments: [], installmentsCopy: [], endDate,
-        amount: 0, cash: 0, card: 0, digital: 0, discount: 0, count: 0, periodDays, packageAmount, setPackageAmount
+        amount: 0, cash: 0, card: 0, digital: 0, cheque: 0, discount: 0, count: 0, periodDays, packageAmount, setPackageAmount
       }
     })
   }
@@ -724,6 +781,26 @@ class AddMembers extends Component {
         })
       }
     })
+  }
+
+  setCard(e, total) {
+    const { t } = this.props
+    if (this.state.showCheque) {
+      this.setState(validator(e, 'card', 'numberText', [t('Enter amount'), t('Enter valid amount')]), () => {
+        if (this.state.card <= total.toFixed(3) && this.state.card >= 0) {
+          const cheque = (total.toFixed(3) - this.state.card).toFixed(3)
+          this.setState({
+            cheque,
+            chequeE: ''
+          })
+        } else {
+          this.setState({
+            chequeE: t('Enter valid amount'),
+            cheque: 0
+          })
+        }
+      })
+    }
   }
 
   setCardNumber(e) {
@@ -767,15 +844,15 @@ class AddMembers extends Component {
   addDiscount(subTotal) {
     if (this.state.discountMethod === 'percent') {
       if (this.state.count && this.state.count <= 100) {
-        this.setState({ discount: (parseFloat(this.state.count ? this.state.count : 0) / 100 * subTotal).toFixed(3), cash: 0, card: 0 })
+        this.setState({ discount: (parseFloat(this.state.count ? this.state.count : 0) / 100 * subTotal).toFixed(3), cash: 0, card: 0, digital: 0, cheque: 0, })
       } else {
-        this.setState({ discount: 0, count: 0, cash: 0, card: 0 })
+        this.setState({ discount: 0, count: 0, cash: 0, card: 0, digital: 0, cheque: 0, })
       }
     } else {
       if (this.state.count && this.state.count <= subTotal) {
-        this.setState({ discount: parseFloat(this.state.count ? this.state.count : 0), cash: 0, card: 0 })
+        this.setState({ discount: parseFloat(this.state.count ? this.state.count : 0), cash: 0, card: 0, digital: 0, cheque: 0, })
       } else {
-        this.setState({ discount: 0, count: 0, cash: 0, card: 0 })
+        this.setState({ discount: 0, count: 0, cash: 0, card: 0, digital: 0, cheque: 0, })
       }
     }
   }
@@ -960,6 +1037,7 @@ class AddMembers extends Component {
     const totalAmount = subTotal - discount + totalVat
 
     let totalLeftAfterDigital = totalAmount - digital
+    let totalLeftAfterCash = totalAmount - digital - cash
 
     return (
       <div className="mainPage p-3 addMembers">
@@ -1332,7 +1410,7 @@ class AddMembers extends Component {
                 <div className="col-12 d-flex flex-wrap py-4 mb-3 px-2">
                   <h5 className="mx-3">{t('Do you want trainer?')}</h5>
                   <div className="position-relative mx-3">
-                    <select className="bg-warning rounded w-100px px-3 py-1 border border-warning text-white" value={wantTrainer} onChange={(e) => this.setState({ wantTrainer: e.target.value, packageAmount: this.state.setPackageAmount, cash: 0, card: 0, digital: 0, trainer: null, period: '', amount: 0 })}>
+                    <select className="bg-warning rounded w-100px px-3 py-1 border border-warning text-white" value={wantTrainer} onChange={(e) => this.setState({ wantTrainer: e.target.value, packageAmount: this.state.setPackageAmount, cash: 0, card: 0, digital: 0, cheque: 0, trainer: null, period: '', amount: 0 })}>
                       <option value="Yes">{t('Yes')}</option>
                       <option value="No">{t('No')}</option>
                     </select>
@@ -1654,7 +1732,7 @@ class AddMembers extends Component {
                               <label htmlFor="addCard" className="mx-sm-2 inlineFormLabel mb-1">{t('Card')}</label>
                               <div className="form-control w-100 p-0 d-flex align-items-center bg-white dirltr">
                                 <label htmlFor="addCard" className="text-danger my-0 mx-1 font-weight-bold">{this.props.defaultCurrency}</label>
-                                <input disabled type="number" autoComplete="off" className="border-0 bg-light w-100 h-100 p-1 bg-white" id="addCard" value={card} />
+                                <input type="number" autoComplete="off" className="border-0 bg-light w-100 h-100 p-1 bg-white" id="addCard" value={card} onChange={(e) => this.setCard(e, totalLeftAfterCash)} />
                               </div>
                               <div className="errorMessageWrapper"><small className="text-danger mx-sm-2 errorMessage">{this.state.cardE}</small></div>
                             </div>
@@ -1666,61 +1744,74 @@ class AddMembers extends Component {
                             </div>
                           </div>
                           <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
-                            <div className="form-group inlineFormGroup mb-3">
+                            <div className="form-group inlineFormGroup">
                               <label className="mx-sm-2 inlineFormLabel mb-1"></label>
                               <div className="d-flex">
                                 <div className="custom-control custom-checkbox roundedGreenRadioCheck mx-2">
-                                  <input type="checkbox" className="custom-control-input" id="check" name="checkorNo" />
+                                  <input type="checkbox" className="custom-control-input" id="check" name="checkorNo"
+                                    checked={this.state.showCheque} onChange={() => this.setState({ showCheque: !this.state.showCheque, cash: 0, card: 0, digital: 0, cheque: 0 })}
+                                  />
                                   <label className="custom-control-label" htmlFor="check">{t('Cheque')}</label>
                                 </div>
                               </div>
                             </div>
                           </div>
                           {/* if cheque */}
-                          <div className="col-12">
-                            <div className="row">
-                              <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
-                                <div className="form-group inlineFormGroup mb-3">
-                                  <label htmlFor="bankName" className="mx-sm-2 inlineFormLabel mb-1">{t('Bank Name')}</label>
-                                  <input type="number" autoComplete="off" className="form-control mx-sm-2 inlineFormInputs FormInputsError w-100 p-0 d-flex align-items-center bg-white dirltr" id="bankName" />
-                                  <div className="errorMessageWrapper">
-                                    <small className="text-danger mx-sm-2 errorMessage"></small>
+                          {this.state.showCheque &&
+                            <div className="col-12">
+                              <div className="row">
+                                <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
+                                  <div className="form-group inlineFormGroup">
+                                    <label htmlFor="bankName" className="mx-sm-2 inlineFormLabel mb-1">{t('Bank Name')}</label>
+                                    <input type="text" autoComplete="off" className={this.state.bankNameE ? "form-control mx-sm-2 inlineFormInputs FormInputsError w-100 p-0 d-flex align-items-center bg-white dirltr" : "form-control mx-sm-2 inlineFormInputs w-100 p-0 d-flex align-items-center bg-white dirltr"}
+                                      id="bankName"
+                                      value={this.state.bankName} onChange={(e) => this.setState({ bankName: e.target.value })}
+                                    />
+                                    <div className="errorMessageWrapper">
+                                      <small className="text-danger mx-sm-2 errorMessage"></small>
+                                    </div>
                                   </div>
                                 </div>
-                              </div>
-                              <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
-                                <div className="form-group inlineFormGroup mb-3">
-                                  <label htmlFor="CheckNumber" className="mx-sm-2 inlineFormLabel mb-1">{t('Check Number')}</label>
-                                  <input type="number" autoComplete="off" className="form-control mx-sm-2 inlineFormInputs FormInputsError w-100 p-0 d-flex align-items-center bg-white dirltr" id="CheckNumber" />
-                                  <div className="errorMessageWrapper">
-                                    <small className="text-danger mx-sm-2 errorMessage"></small>
+                                <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
+                                  <div className="form-group inlineFormGroup">
+                                    <label htmlFor="CheckNumber" className="mx-sm-2 inlineFormLabel mb-1">{t('Check Number')}</label>
+                                    <input type="text" autoComplete="off" className={this.state.chequeNumberE ? "form-control mx-sm-2 inlineFormInputs FormInputsError w-100 p-0 d-flex align-items-center bg-white dirltr" : "form-control mx-sm-2 inlineFormInputs w-100 p-0 d-flex align-items-center bg-white dirltr"}
+                                      id="CheckNumber"
+                                      value={this.state.chequeNumber} onChange={(e) => this.setState({ chequeNumber: e.target.value })}
+                                    />
+                                    <div className="errorMessageWrapper">
+                                      <small className="text-danger mx-sm-2 errorMessage"></small>
+                                    </div>
                                   </div>
                                 </div>
-                              </div>
-                              <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
-                                <div className="form-group inlineFormGroup mb-3">
-                                  <label htmlFor="CheckDate" className="mx-sm-2 inlineFormLabel mb-1">{t('Check Date')}</label>
-                                  <input type="number" autoComplete="off" className="form-control mx-sm-2 inlineFormInputs FormInputsError w-100 p-0 d-flex align-items-center bg-white dirltr" id="CheckDate" />
-                                  <div className="errorMessageWrapper">
-                                    <small className="text-danger mx-sm-2 errorMessage"></small>
+                                <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
+                                  <div className="form-group inlineFormGroup">
+                                    <label htmlFor="CheckDate" className="mx-sm-2 inlineFormLabel mb-1">{t('Check Date')}</label>
+                                    <input type="text" autoComplete="off" className={this.state.chequeDateE ? "form-control mx-sm-2 inlineFormInputs FormInputsError w-100 p-0 d-flex align-items-center bg-white dirltr" : "form-control mx-sm-2 inlineFormInputs w-100 p-0 d-flex align-items-center bg-white dirltr"}
+                                      id="CheckDate"
+                                      value={this.state.chequeDate} onChange={(e) => this.setState({ chequeDate: e.target.value })}
+                                    />
+                                    <div className="errorMessageWrapper">
+                                      <small className="text-danger mx-sm-2 errorMessage"></small>
+                                    </div>
                                   </div>
                                 </div>
-                              </div>
-                              <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
-                                <div className="form-group inlineFormGroup mb-3">
-                                  <label htmlFor="ChequeAmount" className="mx-sm-2 inlineFormLabel mb-1">{t('Cheque Amount')}</label>
-                                  {/* here currency comes , so change errorclass for div below */}
-                                  <div className="form-control mx-sm-2 inlineFormInputs FormInputsError w-100 p-0 d-flex align-items-center bg-white dirltr">
-                                    <label htmlFor="ChequeAmount" className="text-danger my-0 mx-1 font-weight-bold">{this.props.defaultCurrency}</label>
-                                    <input type="number" autoComplete="off" className="border-0 bg-light w-100 h-100 p-1 bg-white" id="ChequeAmount" />
-                                  </div>
-                                  <div className="errorMessageWrapper">
-                                    <small className="text-danger mx-sm-2 errorMessage"></small>
+                                <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
+                                  <div className="form-group inlineFormGroup">
+                                    <label htmlFor="ChequeAmount" className="mx-sm-2 inlineFormLabel mb-1">{t('Cheque Amount')}</label>
+                                    {/* here currency comes , so change errorclass for div below */}
+                                    <div className={this.state.chequeE ? "form-control mx-sm-2 inlineFormInputs FormInputsError w-100 p-0 d-flex align-items-center bg-white dirltr" : "form-control mx-sm-2 inlineFormInputs w-100 p-0 d-flex align-items-center bg-white dirltr"}>
+                                      <label htmlFor="ChequeAmount" className="text-danger my-0 mx-1 font-weight-bold">{this.props.defaultCurrency}</label>
+                                      <input disabled type="number" autoComplete="off" className="border-0 bg-light w-100 h-100 p-1 bg-white" id="ChequeAmount" value={this.state.cheque} />
+                                    </div>
+                                    <div className="errorMessageWrapper">
+                                      <small className="text-danger mx-sm-2 errorMessage"></small>
+                                    </div>
                                   </div>
                                 </div>
                               </div>
                             </div>
-                          </div>
+                          }
                           {/* if cheque over */}
                           <div className="col-12">
                             <div className="px-sm-1 pt-4 pb-5">
