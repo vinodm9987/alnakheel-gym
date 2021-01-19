@@ -399,11 +399,11 @@ class AdminDashboard extends Component {
                       </div>
                     </div>
                     {/* tusar button */}
-                    <Link to='/admin-attendance' className="linkHoverDecLess">
+                    {/* <Link to='/admin-attendance' className="linkHoverDecLess">
                       <div className="col text-right full-width-576-down">
                         <button className="btn btn-warning br-50px text-white px-3 btn-sm text-nowrap mt-3 mt-sm-0">{t('View All Attendance')}</button>
                       </div>
-                    </Link>
+                    </Link> */}
                   </div>
                 </div>
               </div>
@@ -648,7 +648,7 @@ class AdminDashboard extends Component {
                     })}
                   </tbody>
                 </table>
-                <div className="col-12 ViewallBtm d-flex flex-wrap align-items-center justify-content-end mt-auto"><Link to='/announcement/announcement-list' className="text-success mx-1 my-3 SegoeBold linkHoverDecLess cursorPointer"><small>View All</small></Link></div>
+                {/* <div className="col-12 ViewallBtm d-flex flex-wrap align-items-center justify-content-end mt-auto"><Link to='/announcement/announcement-list' className="text-success mx-1 my-3 SegoeBold linkHoverDecLess cursorPointer"><small>View All</small></Link></div> */}
 
               </div>
 
@@ -746,18 +746,34 @@ class AdminDashboard extends Component {
                               Graph
                             </div>
                           </div>
-                          <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-9">
+                          <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-9 pt-2">
                             <div className="row">
                               <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-4 pb-2">
                                 <h6>Total Amount</h6>
                                 <h4 className="font-weight-bold dirltrtar text-success">$ 87511</h4>
                               </div>
-                              <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-8 d-block d-xl-flex align-items-center pb-2">
-                                <h6 className="my-2">Type</h6>
+                              <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-4 pb-2">
+                                <h6>Type</h6>
                                 <div className="d-flex flex-wrap align-items-center">
-                                  <span className="position-relative mx-1 my-2 mnw-200px">
+                                  <span className="position-relative w-100">
                                     <select className="bg-white border-secondary border-secondary pr-4 pl-1 w-100" style={{ fontSize: "13px" }}>
                                       <option>All</option>
+                                    </select>
+                                    <span className="position-absolute d-flex align-items-center justify-content-end w-100 h-100 pointerNone px-2" style={{ top: '0', left: '0' }}>
+                                      <span className="iconv1 iconv1-arrow-down"></span>
+                                    </span>
+                                  </span>
+                                </div>
+                              </div>
+                              <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-4 pb-2">
+                                <h6>Amount</h6>
+                                <div className="d-flex flex-wrap align-items-center">
+                                  <span className="position-relative w-100">
+                                    <select className="bg-white border-secondary border-secondary pr-4 pl-1 w-100" style={{ fontSize: "13px" }}>
+                                      <option>All</option>
+                                      <option>Cash</option>
+                                      <option>Card</option>
+                                      <option>Cheque</option>
                                     </select>
                                     <span className="position-absolute d-flex align-items-center justify-content-end w-100 h-100 pointerNone px-2" style={{ top: '0', left: '0' }}>
                                       <span className="iconv1 iconv1-arrow-down"></span>
@@ -782,7 +798,7 @@ class AdminDashboard extends Component {
                               </div>
                               <div className="col-12">
                                 <p><small className="font-weight-bold">Sales By Branches</small></p>
-                                <div className="d-flex flex-wrap">
+                                <div className="d-flex flex-wrap pb-3">
                                   <div className="d-flex align-items-center mr-3">
                                     <div className="dbd-blueblock"></div>
                                     <small className="dbd-blueblock-txt mx-1">Hidd Branch</small>
@@ -810,7 +826,7 @@ class AdminDashboard extends Component {
                         </div>
                       </div>
 
-                      <div className="col-12 d-flex flex-wrap align-items-center justify-content-between py-1">
+                      {/* <div className="col-12 d-flex flex-wrap align-items-center justify-content-between py-1">
                         <div className="col-12 px-0">
                           <div className="row pt-3 pb-2">
                             <div className="col-12 px-0 d-flex flex-wrap justify-content-end">
@@ -822,7 +838,7 @@ class AdminDashboard extends Component {
                             </div>
                           </div>
                         </div>
-                      </div>
+                      </div> */}
 
                     </div>
                   </div>
@@ -973,7 +989,7 @@ class AdminDashboard extends Component {
                             </div>
                           </div>
                         </div>
-                        <div className="col-12 px-0">
+                        {/* <div className="col-12 px-0">
                           <div className="row pt-3 pb-2">
                             <div className="col-12 px-0 d-flex flex-wrap justify-content-end">
                               <Link to='/pending-installments' className="linkHoverDecLess">
@@ -983,7 +999,7 @@ class AdminDashboard extends Component {
                               </Link>
                             </div>
                           </div>
-                        </div>
+                        </div> */}
                       </div>
 
                     </div>

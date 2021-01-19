@@ -1105,8 +1105,9 @@ input[type="number"] {
   position: absolute;
   right: 20px;
   bottom: 10px;
-  font-size: 15px;
+  font-size: 16px;
   pointer-events: none;
+  font-weight: bold;
 }
 .form-block .selectBoxIcon {
   right: 16px;
@@ -3389,8 +3390,8 @@ input:focus {
   border-radius: 4px;
 }
 .addMembers .lefthere {
-  max-width: calc(100% - 170px);
-  flex: 0 0 calc(100% - 170px);
+  max-width: calc(100% - 43px);
+  flex: 0 0 calc(100% - 43px);
   overflow: auto;
 }
 .addMembers .loopWhitehere {
@@ -3449,7 +3450,7 @@ input:focus {
 .addMembers .closeHere {
   display: flex;
   align-items: center;
-  margin: 5px 0;
+  margin: 24px 0;
   padding: 0 5px;
 }
 .addMembers .close-btn {
@@ -3478,7 +3479,7 @@ input:focus {
   padding-right: 8px !important;
 }
 
-@media (max-width: 575.98px) {
+/* @media (max-width: 575.98px) {
   .addMembers .grayBXhere {
     flex-wrap: wrap;
   }
@@ -3486,7 +3487,7 @@ input:focus {
     max-width: 100%;
     flex: 100%;
   }
-}
+} */
 .wordBreakBreakAll {
   word-break: break-all;
 }
@@ -3626,5 +3627,27 @@ input:focus {
   padding-top: 15px;
 }
 .inlineFormGroup.mb-3 {
-  margin-bottom: 1rem!important;
+  margin-bottom: 1rem !important;
+}
+.displayInlineFlexCls {
+  display: inline-flex;
+}
+.py-05,
+.pt-05 {
+  padding-top: 2px !important;
+}
+.py-05,
+.pb-05 {
+  padding-bottom: 2px !important;
+}
+.px-05,
+.pl-05 {
+  padding-left: 2px !important;
+}
+.px-05,
+.pr-05 {
+  padding-right: 2px !important;
+}
+.nav-tabs .nav-item {
+  margin-bottom: 0;
 }

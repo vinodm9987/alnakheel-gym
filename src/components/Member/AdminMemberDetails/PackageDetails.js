@@ -185,10 +185,10 @@ class PackageDetails extends Component {
                     <li key={i} className="d-block col-12 px-0">
                       <div className="row">
                         <div className="col-12 d-flex justify-content-end align-items-center pb-2">
-                          <small className="text-secondary">{t('Payment Status')}</small>
+                          <span className="text-secondary">{t('Payment Status')}</span>
                           {paidStatus === 'Paid'
-                            ? <button className="btn btn-success badge-pill btn-sm px-3 mx-1 py-0 w-100px" data-toggle="modal" data-target="#allreadyPaid"><small className="mx-1">{t(`${paidStatus}`)}</small><small className="iconv1 iconv1-arrow-down mx-1"></small></button>
-                            : <button className="btn btn-danger badge-pill btn-sm px-3 mx-1 py-0 w-100px" data-toggle="modal" data-target="#notYetPaid" onClick={() => this.onClickPayButton(packageName, totalAmount, _id, i)}><small className="mx-1">{t(`${paidStatus}`)}</small><small className="iconv1 iconv1-arrow-down mx-1"></small></button>
+                            ? <button className="btn btn-success badge-pill btn-sm px-3 py-05 d-inline-flex justify-content-between align-items-center mx-1 py-0 w-100px text-nowrap" data-toggle="modal" data-target="#allreadyPaid"><span className="mx-1">{t(`${paidStatus}`)}</span><span className="iconv1 iconv1-arrow-down mx-1"></span></button>
+                            : <button className="btn btn-danger badge-pill btn-sm px-3 py-05 d-inline-flex justify-content-between align-items-center mx-1 py-0 w-100px text-nowrap"  data-toggle="modal" data-target="#notYetPaid" onClick={() => this.onClickPayButton(packageName, totalAmount, _id, i)}><span className="mx-1">{t(`${paidStatus}`)}</span><span className="iconv1 iconv1-arrow-down mx-1"></span></button>
                           }
                         </div>
                         <div className="col-12 col-lg-5">
@@ -274,10 +274,10 @@ class PackageDetails extends Component {
                     <li key={i} className="d-block col-12 px-0">
                       <div className="row">
                         <div className="col-12 d-flex justify-content-end align-items-center pb-2">
-                          <small className="text-secondary">{t('Payment Status')}</small>
+                          <span className="text-secondary">{t('Payment Status')}</span>
                           {paidStatus === 'Paid'
-                            ? <button className="btn btn-success badge-pill btn-sm px-3 mx-1 py-0 w-100px" data-toggle="modal" data-target="#allreadyPaid"><small className="mx-1">{t(`${paidStatus}`)}</small><small className="iconv1 iconv1-arrow-down mx-1"></small></button>
-                            : <button className="btn btn-danger badge-pill btn-sm px-3 mx-1 py-0 w-100px" data-toggle="modal" data-target="#notYetPaid" onClick={() => this.onClickPayButton(packageName, totalAmount, _id, i)}><small className="mx-1">{t(`${paidStatus}`)}</small><small className="iconv1 iconv1-arrow-down mx-1"></small></button>
+                            ? <button className="btn btn-success badge-pill btn-sm px-3 py-05 d-inline-flex justify-content-between align-items-center mx-1 py-0 w-100px text-nowrap" data-toggle="modal" data-target="#allreadyPaid"><span className="mx-1">{t(`${paidStatus}`)}</span><span className="iconv1 iconv1-arrow-down mx-1"></span></button>
+                            : <button className="btn btn-danger badge-pill btn-sm px-3 py-05 d-inline-flex justify-content-between align-items-center mx-1 py-0 w-100px text-nowrap" data-toggle="modal" data-target="#notYetPaid" onClick={() => this.onClickPayButton(packageName, totalAmount, _id, i)}><span className="mx-1">{t(`${paidStatus}`)}</span><span className="iconv1 iconv1-arrow-down mx-1"></span></button>
                           }
                         </div>
                         <div className="col-12 col-lg-5">
@@ -579,7 +579,7 @@ class PackageDetails extends Component {
                         </td> */}
                             <td className="text-center">No</td>
                             <td className="text-center">
-                              <span class="badge badge-pill badge-primary px-3 py-2 cursorPointer" data-toggle="modal" data-target="#InstallmentDetails">Installment Details</span>
+                              <span class="badge badge-pill badge-primary px-3 py-2 cursorPointer" data-toggle="modal" data-target="#InstallmentDetails">Payment Details</span>
                             </td>
                           </tr>
                         )
@@ -623,7 +623,7 @@ class PackageDetails extends Component {
                                 <td className="dirltrtar">{dateToDDMMYYYY(trainerEnd)}</td>
                                 <td className="text-danger font-weight-bold"><span>{this.props.defaultCurrency}</span><span className="pl-1"></span><span>{amount}</span></td>
                                 <td className="text-center">
-                                  <span class="badge badge-pill badge-primary px-3 py-2 cursorPointer" data-toggle="modal" data-target="#InstallmentDetails">Installment Details</span>
+                                  <span class="badge badge-pill badge-primary px-3 py-2 cursorPointer" data-toggle="modal" data-target="#InstallmentDetails">Payment Details</span>
                                 </td>
                               </tr>
                             )
@@ -651,7 +651,7 @@ class PackageDetails extends Component {
                 <div className="modal-body px-4">
                   <div className="d-flex flex-wrap justify-content-between p-1">
                     <div className="m-1">
-                      <h6 className="font-weight-bold mb-1">package Name</h6>
+                      <h6 className="font-weight-bold mb-1">Package Name</h6>
                       <h6 className="text-danger">One month gold package</h6>
                     </div>
                     <div className="m-1">
