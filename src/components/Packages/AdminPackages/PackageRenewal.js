@@ -649,10 +649,10 @@ class PackageRenewal extends Component {
             </div>
             {wantInstallment === 'Yes' &&
               <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 px-4 d-flex justify-content-end">
-                <button type="button" className="btn btn-success displayInlineFlexCls alignItemsCenter my-2 ml-3"
+                <button type="button" className="btn btn-success d-inline-flex alignItemsCenter my-2 ml-3"
                   onClick={() => this.addInstallment(packageAmount)}
                 >
-                  <span style={{ fontSize: "18px" }}>+</span>
+                  <span style={{ fontSize: "26px", lineHeight: "0.8" }}>+</span>
                   <span className="gaper"></span>
                   <span>Add Installment</span>
                 </button>
