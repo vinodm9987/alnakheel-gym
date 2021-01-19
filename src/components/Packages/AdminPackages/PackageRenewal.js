@@ -457,12 +457,14 @@ class PackageRenewal extends Component {
 
   render() {
     const { t } = this.props
-    const { member, packages, wantTrainer, trainer, period, cash, card, packageAmount, discount, tax, giftcard, discountMethod, count, text, digital,
-      startDate, endDate, packageReceipt, packageEndDate, wantInstallment, installments } = this.state
+    const { member, packages, cash, card, packageAmount, discount, tax, giftcard, discountMethod, count, text, digital,
+      startDate, endDate, packageReceipt, packageEndDate, wantInstallment, installments,
+      // wantTrainer, trainer, period,
+    } = this.state
 
-    const trainerPeriods = this.props.periodOfTrainer ? this.props.periodOfTrainer.filter(trainerFee =>
-      trainerFee.period.periodDays <= this.state.periodDays
-    ) : []
+    // const trainerPeriods = this.props.periodOfTrainer ? this.props.periodOfTrainer.filter(trainerFee =>
+    //   trainerFee.period.periodDays <= this.state.periodDays
+    // ) : []
 
     let subTotal = (installments[0] && installments[0].amount) ? parseFloat(installments[0].amount) : packageAmount
     let totalVat = (subTotal - discount - giftcard) * tax / 100
@@ -583,7 +585,7 @@ class PackageRenewal extends Component {
                 <small className="text-danger mx-sm-2 errorMessage">{this.state.endDateE}</small>
               </div>
             </div>
-            <div className=" d-flex flex-wrap px-2 py-4">
+            {/* <div className=" d-flex flex-wrap px-2 py-4">
               <h5 className="mx-3">{t('Do you want trainer?')}</h5>
               <div className="position-relative mx-3">
                 <select className="bg-warning rounded w-100px px-3 py-1 border border-warning text-white" value={wantTrainer} onChange={(e) => this.setState({ wantTrainer: e.target.value, packageAmount: this.state.setPackageAmount, cash: 0, card: 0, digital: 0, trainer: null, period: '', amount: 0 })}>
@@ -634,7 +636,7 @@ class PackageRenewal extends Component {
                   <h4 className="text-danger font-weight-bold px-2">{this.props.defaultCurrency} {this.state.amount}</h4>
                 </div>
               </div>
-            }
+            } */}
             <div className="col-12 d-flex flex-wrap py-4 mb-3 px-2">
               <h5 className="mx-3">{t('Do you want to pay as Installment?')}</h5>
               <div className="position-relative mx-3">
