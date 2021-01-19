@@ -214,8 +214,8 @@ class MemberInstallmentDetails extends Component {
                                                     </div>
                                                 </div>
                                                 <div className="row mt-3">
-                                                    <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6 pb-2">
-                                                        <div className="form-group inlineFormGroup">
+                                                    <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
+                                                        <div className="form-group inlineFormGroup mb-3">
                                                             <label htmlFor="addDigital" className="mx-sm-2 inlineFormLabel mb-1">Digital</label>
                                                             <div className="form-control mx-sm-2 inlineFormInputs FormInputsError w-100 p-0 d-flex align-items-center bg-white dirltr">
                                                                 <label htmlFor="addDigital" className="text-danger my-0 mx-1 font-weight-bold">$</label>
@@ -226,8 +226,8 @@ class MemberInstallmentDetails extends Component {
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6 pb-2">
-                                                        <div className="form-group inlineFormGroup">
+                                                    <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
+                                                        <div className="form-group inlineFormGroup mb-3">
                                                             <label htmlFor="addCash" className="mx-sm-2 inlineFormLabel mb-1">Cash</label>
                                                             <div className="form-control mx-sm-2 inlineFormInputs FormInputsError w-100 p-0 d-flex align-items-center bg-white dirltr">
                                                                 <label htmlFor="addCash" className="text-danger my-0 mx-1 font-weight-bold">$</label>
@@ -238,8 +238,8 @@ class MemberInstallmentDetails extends Component {
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6 pb-2">
-                                                        <div className="form-group inlineFormGroup">
+                                                    <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
+                                                        <div className="form-group inlineFormGroup mb-3">
                                                             <label htmlFor="addCard" className="mx-sm-2 inlineFormLabel mb-1">Card</label>
                                                             <div className="form-control mx-sm-2 inlineFormInputs FormInputsError w-100 p-0 d-flex align-items-center bg-white dirltr">
                                                                 <label htmlFor="addCard" className="text-danger my-0 mx-1 font-weight-bold">$</label>
@@ -250,8 +250,8 @@ class MemberInstallmentDetails extends Component {
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6 pb-2">
-                                                        <div className="form-group inlineFormGroup">
+                                                    <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
+                                                        <div className="form-group inlineFormGroup mb-3">
                                                             <label htmlFor="addCardNumber" className="mx-sm-2 inlineFormLabel mb-1">Card Number (last 4 digits)</label>
                                                             <input type="text" autoComplete="off" className="form-control mx-sm-2 inlineFormInputs FormInputsError w-100 p-0 d-flex align-items-center bg-white dirltr" id="addCard4lastno" />
                                                             <div className="errorMessageWrapper">
@@ -259,6 +259,63 @@ class MemberInstallmentDetails extends Component {
                                                             </div>
                                                         </div>
                                                     </div>
+                                                    <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
+                            <div className="form-group inlineFormGroup mb-3">
+                              <label className="mx-sm-2 inlineFormLabel mb-1"></label>
+                              <div className="d-flex">
+                                <div className="custom-control custom-checkbox roundedGreenRadioCheck mx-2">
+                                  <input type="checkbox" className="custom-control-input" id="check" name="checkorNo" />
+                                  <label className="custom-control-label" htmlFor="check">Cheque</label>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          {/* if cheque */}
+                          <div className="col-12">
+                            <div className="row">
+                              <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
+                                <div className="form-group inlineFormGroup mb-3">
+                                  <label htmlFor="bankName" className="mx-sm-2 inlineFormLabel mb-1">Bank Name</label>
+                                  <input type="number" autoComplete="off" className="form-control mx-sm-2 inlineFormInputs FormInputsError w-100 p-0 d-flex align-items-center bg-white dirltr" id="bankName" />
+                                  <div className="errorMessageWrapper">
+                                    <small className="text-danger mx-sm-2 errorMessage"></small>
+                                  </div>
+                                </div>
+                              </div>
+                              <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
+                                <div className="form-group inlineFormGroup mb-3">
+                                  <label htmlFor="CheckNumber" className="mx-sm-2 inlineFormLabel mb-1">Check Number</label>
+                                  <input type="number" autoComplete="off" className="form-control mx-sm-2 inlineFormInputs FormInputsError w-100 p-0 d-flex align-items-center bg-white dirltr" id="CheckNumber" />
+                                  <div className="errorMessageWrapper">
+                                    <small className="text-danger mx-sm-2 errorMessage"></small>
+                                  </div>
+                                </div>
+                              </div>
+                              <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
+                                <div className="form-group inlineFormGroup mb-3">
+                                  <label htmlFor="CheckDate" className="mx-sm-2 inlineFormLabel mb-1">Check Date</label>
+                                  <input type="number" autoComplete="off" className="form-control mx-sm-2 inlineFormInputs FormInputsError w-100 p-0 d-flex align-items-center bg-white dirltr" id="CheckDate" />
+                                  <div className="errorMessageWrapper">
+                                    <small className="text-danger mx-sm-2 errorMessage"></small>
+                                  </div>
+                                </div>
+                              </div>
+                              <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
+                                <div className="form-group inlineFormGroup mb-3">
+                                  <label htmlFor="ChequeAmount" className="mx-sm-2 inlineFormLabel mb-1">Cheque Amount</label>
+                                  {/* here currency comes , so change errorclass for div below */}
+                                  <div className="form-control mx-sm-2 inlineFormInputs FormInputsError w-100 p-0 d-flex align-items-center bg-white dirltr">
+                                    <label htmlFor="ChequeAmount" className="text-danger my-0 mx-1 font-weight-bold">$</label>
+                                    <input type="number" autoComplete="off" className="border-0 bg-light w-100 h-100 p-1 bg-white" id="ChequeAmount" />
+                                  </div>
+                                  <div className="errorMessageWrapper">
+                                    <small className="text-danger mx-sm-2 errorMessage"></small>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          {/* if cheque over */}
                                                     <div className="col-12">
                                                         <div className="px-sm-1 pt-4 pb-5">
                                                             <button type="button" className="btn btn-block btn-success btn-lg" >Checkout</button>

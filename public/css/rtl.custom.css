@@ -575,3 +575,10 @@ canvas.chartjs-render-monitor {
 .form-block .MuiFormControl-root.form-control {
   padding: 0 8px !important;
 }
+
+.pl-05 {
+  padding-right: 2px !important;
+}
+.pr-05 {
+  padding-left: 2px !important;
+}
