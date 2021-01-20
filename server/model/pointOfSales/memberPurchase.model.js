@@ -39,7 +39,43 @@ const memberPurchaseSchema = new Schema({
     paymentType: {
         type: String,
         enum: ["Online", "POS"]
-    }
+    },
+
+    branch: {
+        type: Schema.Types.ObjectId,
+        ref: "Branch"
+    },
+
+    discount: {
+        type: Number,
+    },
+
+    giftcard: {
+        type: Number,
+    },
+
+    vatAmount: {
+        type: Number,
+    },
+
+    actualAmount: {
+        type: Number,
+    },
+
+    cashAmount: {
+        type: Number,
+        default: 0,
+    },
+
+    cardAmount: {
+        type: Number,
+        default: 0,
+    },
+
+    digitalAmount: {
+        type: Number,
+        default: 0,
+    },
 
 }, { timestamps: { createdAt: "created_at", updatedAt: "updated_at" } }, { strict: false });
 
