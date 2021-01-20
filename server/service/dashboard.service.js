@@ -72,8 +72,4 @@ module.exports = {
         return totalAmount;
     },
 
-    getStockSellsByBranch: (branch) => {
-
-    },
-
 };

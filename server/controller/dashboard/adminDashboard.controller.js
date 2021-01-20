@@ -6,19 +6,15 @@ const { Formate: { setTime } } = require('../../utils');
 */
 
 
-const { Member, Package, Stocks, Classes, StockSell,
-    MemberPurchase, MemberClass, MemberAttendance } = require('../../model');
+const { Member, Package, Stocks, Classes, StockSell, MemberPurchase, MemberClass, MemberAttendance } = require('../../model');
+
 
 const { getStockSellTotalAmount, getClassesSellTotalAmount, getPackageSellTotalAmount } = require('../../service/dashboard.service');
 
 
-
 exports.getMemberDashBoard = async (req, res) => {
     try {
-        let queryCond = {}
-        let queryCond1 = {}
-        let queryCond2 = {}
-        let queryCond3 = {}
+        let queryCond = {}, queryCond1 = {}, queryCond2 = {}, queryCond3 = {};
         if (req.body.branch && req.body.branch !== 'all') {
             queryCond["branch"] = req.body.branch
             queryCond1["branch"] = req.body.branch
@@ -185,8 +181,10 @@ exports.getIndividualMemberAttendance = async (req, res) => {
     try {
         let memberAttendances = await MemberAttendance.find({ branch: req.body.branch }).lean();
         let individualAttendance = await MemberAttendance.find({ branch: req.body.branch, memberId: req.body.member }).lean();
-        memberAttendances = memberAttendances.filter(doc => doc.date.getMonth() === req.body.month && doc.date.getFullYear() === new Date().getFullYear())
-        let individualAttendanceLength = individualAttendance.filter(doc => doc.date.getMonth() === req.body.month && doc.date.getFullYear() === new Date().getFullYear()).length
+        memberAttendances = memberAttendances
+            .filter(doc => doc.date.getMonth() === req.body.month && doc.date.getFullYear() === new Date().getFullYear())
+        let individualAttendanceLength = individualAttendance
+            .filter(doc => doc.date.getMonth() === req.body.month && doc.date.getFullYear() === new Date().getFullYear()).length
         let datesLength = [...new Set(memberAttendances.map(doc => setTime(doc.date)))].length
         let present = individualAttendanceLength, absent = datesLength - individualAttendanceLength
         let response = [{ name: 'Present', data: present }, { name: 'Absent', data: absent }]
@@ -200,8 +198,7 @@ exports.getIndividualMemberAttendance = async (req, res) => {
 
 exports.getDashboardTotalSales = async (req, res) => {
     try {
-        let conditions = { dateOfPurchase: setTime(req.body.date) };
-        let response = {};
+        let conditions = { dateOfPurchase: setTime(req.body.date) }, response = {};
         const memberSells = await MemberPurchase.find(conditions).lean();
         const stockSells = await StockSell.find(conditions).lean();
         const classSells = await MemberClass.find(conditions).lean();
