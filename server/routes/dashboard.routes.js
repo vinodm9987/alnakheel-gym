@@ -21,9 +21,6 @@ exports.routes = (express, app) => {
 
     router.post('/getPendingInstallments', getPendingInstallments);
 
-
-
-
     app.use('/api/dashboard/', router);
 
 };

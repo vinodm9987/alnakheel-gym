@@ -6,10 +6,11 @@ const { Formate: { setTime } } = require('../../utils');
 */
 
 
-const { Member, Package, Stocks, Classes, StockSell, MemberPurchase, MemberClass, MemberAttendance } = require('../../model');
+const { Member, Package, Stocks, Classes, StockSell, MemberPurchase, MemberClass, MemberAttendance, Branch } = require('../../model');
 
 
-const { getStockSellTotalAmount, getClassesSellTotalAmount, getPackageSellTotalAmount } = require('../../service/dashboard.service');
+const { getStockSellTotalAmount, getClassesSellTotalAmount,
+    getPackageSellTotalAmount, getBranchPackageSells, getBranchStockSells } = require('../../service/dashboard.service');
 
 
 exports.getMemberDashBoard = async (req, res) => {
@@ -203,27 +204,32 @@ exports.getIndividualMemberAttendance = async (req, res) => {
 exports.getDashboardTotalSales = async (req, res) => {
     try {
         let conditions = { dateOfPurchase: setTime(req.body.date) }, response = {};
-        const memberSells = await MemberPurchase.find(conditions).lean();
         const stockSells = await StockSell.find(conditions).lean();
         const classSells = await MemberClass.find(conditions).lean();
         const members = await Member.find({ updated_at: { $gte: setTime(req.body.date) } }).lean();
+        const branches = await Branch.find({}, { branchName: 1 }).lean();
         if (req.body.category === 'all') {
-            const totalStockSells = getStockSellTotalAmount(memberSells, stockSells, req.body.type);
+            const totalStockSells = getStockSellTotalAmount(stockSells, req.body.type);
             const totalClassSells = getClassesSellTotalAmount(classSells, req.body.type);
             const totalPackageSells = getPackageSellTotalAmount(members, setTime(req.body.date), req.body.type);
+            getBranchStockSells(branches, stockSells, req.body.type)
+            getBranchPackageSells(branches, members, setTime(req.body.date), req.body.type);
             response['totalStockSells'] = totalStockSells;
             response['totalClassSells'] = totalClassSells;
             response['totalPackageSells'] = totalPackageSells;
         } else if (req.body.category === 'StockSell') {
-            const totalStockSells = getStockSellTotalAmount(memberSells, stockSells, req.body.type);
+            getBranchStockSells(branches, stockSells, req.body.type)
+            const totalStockSells = getStockSellTotalAmount(stockSells, req.body.type);
             response['totalStockSells'] = totalStockSells;
         } else if (req.body.category === 'ClassSell') {
             const totalClassSells = getClassesSellTotalAmount(classSells, req.body.type);
             response['totalClassSells'] = totalClassSells;
         } else if (req.body.category === 'PackageSells') {
+            getBranchPackageSells(branches, members, setTime(req.body.date), req.body.type);
             const totalPackageSells = getPackageSellTotalAmount(members, setTime(req.body.date), req.body.type);
             response['totalPackageSells'] = totalPackageSells;
         }
+        response['branches'] = branches;
         return successResponseHandler(res, response, "success");
     } catch (error) {
         logger.error(error);
