@@ -108,7 +108,7 @@ class AddMembers extends Component {
       showPass: false,
       branches: [],
       staffName: '',
-      wantInstallment: 'Yes',
+      wantInstallment: 'No',
       installments: [],
       installmentsCopy: [],
       showCheque: false,
@@ -204,7 +204,7 @@ class AddMembers extends Component {
         showPass: false,
         branches: [],
         staffName: '',
-        wantInstallment: 'Yes',
+        wantInstallment: 'No',
         installments: [],
         installmentsCopy: [],
         showCheque: false,
@@ -301,7 +301,7 @@ class AddMembers extends Component {
         showPass: false,
         branches: [],
         staffName: '',
-        wantInstallment: 'Yes',
+        wantInstallment: 'No',
         installments: [],
         installmentsCopy: [],
         showCheque: false,
@@ -397,7 +397,7 @@ class AddMembers extends Component {
         showPass: false,
         branches: [],
         staffName: '',
-        wantInstallment: 'Yes',
+        wantInstallment: 'No',
         installments: [],
         installmentsCopy: [],
         showCheque: false,
@@ -1530,18 +1530,20 @@ class AddMembers extends Component {
                 <h3 className="text-danger"><span className="mr-1">{this.props.defaultCurrency}</span><span className="font-weight-bold">{packageAmount}</span></h3>
               </div>
 
-              <div className="col-12 d-flex flex-wrap py-4 mb-3 px-2">
-                <h5 className="mx-3">{t('Do you want to pay as Installment?')}</h5>
-                <div className="position-relative mx-3">
-                  <select className="bg-warning rounded w-100px px-3 py-1 border border-warning text-white"
-                    value={wantInstallment} onChange={(e) => this.setState({ wantInstallment: e.target.value })}
-                  >
-                    <option value="Yes">{t('Yes')}</option>
-                    <option value="No">{t('No')}</option>
-                  </select>
-                  <span className="iconv1 iconv1-arrow-down selectBoxIcon text-white"></span>
+              {(!memberId || addPackage) &&
+                <div className="col-12 d-flex flex-wrap py-4 mb-3 px-2">
+                  <h5 className="mx-3">{t('Do you want to pay as Installment?')}</h5>
+                  <div className="position-relative mx-3">
+                    <select className="bg-warning rounded w-100px px-3 py-1 border border-warning text-white"
+                      value={wantInstallment} onChange={(e) => this.setState({ wantInstallment: e.target.value })}
+                    >
+                      <option value="Yes">{t('Yes')}</option>
+                      <option value="No">{t('No')}</option>
+                    </select>
+                    <span className="iconv1 iconv1-arrow-down selectBoxIcon text-white"></span>
+                  </div>
                 </div>
-              </div>
+              }
               {wantInstallment === 'Yes' &&
                 <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 px-4 d-flex justify-content-end">
                   <button type="button" className="btn btn-success d-inline-flex alignItemsCenter my-2 ml-3"
