@@ -642,7 +642,8 @@ class AddMembers extends Component {
             this.props.dispatch(updateMemberAndAddPackage(formData))
             $(el).click();
           } else {
-            this.props.dispatch(createNewMemberByAdmin(formData))
+            console.log("🚀 ~ file: AddMembers.js ~ line 607 ~ AddMembers ~ handlePayment ~ memberInfo", memberInfo)
+            // this.props.dispatch(createNewMemberByAdmin(formData))
             $(el).click();
           }
         }
@@ -1032,7 +1033,7 @@ class AddMembers extends Component {
     //   trainerFee.period.periodDays <= this.state.periodDays
     // ) : []
 
-    let subTotal = (installments[0] && installments[0].amount) ? parseFloat(installments[0].amount) : packageAmount
+    let subTotal = (installments[0] && installments[0].actualAmount) ? parseFloat(installments[0].actualAmount) : packageAmount
     let totalVat = (subTotal - discount) * tax / 100
     const totalAmount = subTotal - discount + totalVat
 
