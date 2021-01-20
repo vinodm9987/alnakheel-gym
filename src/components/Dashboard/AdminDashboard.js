@@ -465,7 +465,7 @@ class AdminDashboard extends Component {
                   <div className="row">
                     <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-4 pb-2">
                       <h6>Total Amount</h6>
-                      <h4 className="font-weight-bold dirltrtar text-success">{this.props.defaultCurrency} {totalSells}</h4>
+                      <h4 className="font-weight-bold dirltrtar text-success">{this.props.defaultCurrency} {totalSells.toFixed(2)}</h4>
                     </div>
                     <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-4 pb-2">
                       <h6>Payment Type</h6>
@@ -504,11 +504,11 @@ class AdminDashboard extends Component {
                     </div>
                     <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-4 pb-2">
                       <h6>Packages Amount</h6>
-                      <h4 className="font-weight-bold dirltrtar text-orange">{this.props.defaultCurrency} {totalPackageSells ? totalPackageSells : 0}</h4>
+                      <h4 className="font-weight-bold dirltrtar text-orange">{this.props.defaultCurrency} {totalPackageSells ? totalPackageSells.toFixed(2) : 0}</h4>
                     </div>
                     <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-4 pb-2">
                       <h6>POS Amount</h6>
-                      <h4 className="font-weight-bold dirltrtar text-danger">{this.props.defaultCurrency} {totalStockSells ? totalStockSells : 0}</h4>
+                      <h4 className="font-weight-bold dirltrtar text-danger">{this.props.defaultCurrency} {totalStockSells ? totalStockSells.toFixed(2) : 0}</h4>
                     </div>
                     {/* <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-4 pb-2">
                                 <h6>Classes Amount</h6>
@@ -525,7 +525,7 @@ class AdminDashboard extends Component {
                             <div key={i} className="d-flex align-items-center mr-3">
                               <div className="dbd-blueblock"></div>
                               <small className="dbd-blueblock-txt mx-1">{branch.branchName}</small>
-                              <div className="dbd-blueblock-amt text-success font-weight-bold">{this.props.defaultCurrency} {branch.amount ? branch.amount : 0}</div>
+                              <div className="dbd-blueblock-amt text-success font-weight-bold">{this.props.defaultCurrency} {branch.amount ? branch.amount.toFixed(2) : 0}</div>
                             </div>
                           )
                         })}
