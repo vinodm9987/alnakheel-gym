@@ -1,6 +1,6 @@
 import {
   GET_MEMBER_DASHBOARD, GET_PACKAGE_DISTRIBUTION, GET_MOST_SELLING_STOCK, GET_BRANCH_SALES, GET_SYSTEM_YEAR, GET_DASHBOARD_ATTENDANCE,
-  GET_REVENUE, GET_DASHBOARD_TOTALSALES
+  GET_REVENUE, GET_DASHBOARD_TOTALSALES, GET_PENDING_INSTALLMENTS
 } from '../actions/types';
 
 const initialState = {};
@@ -65,6 +65,14 @@ export default (state = initialState, action) => {
         return {
           ...state,
           ...{ dashboardTotalSales: action.payload.response }
+        }
+      }
+
+
+      case GET_PENDING_INSTALLMENTS: {
+        return {
+          ...state,
+          ...{ pendingInstallments: action.payload.response }
         }
       }
 
