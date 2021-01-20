@@ -713,7 +713,7 @@ class PackageDetails extends Component {
                                 <td>Installment {k + 1}</td>
                                 <td className="text-danger font-weight-bold">{this.props.defaultCurrency} {installment.actualAmount}</td>
                                 <td>{dateToDDMMYYYY(installment.dueDate)}</td>
-                                <td>{dateToDDMMYYYY(installment.dateOfInstallment)}</td>
+                                <td>{dateToDDMMYYYY(installment.dateOfPaid)}</td>
                                 {installment.paidStatus === 'Paid' ? <td className="text-success font-weight-bold">Paid</td> : <td className="text-danger font-weight-bold">Pending</td>}
                               </tr>
                             )
