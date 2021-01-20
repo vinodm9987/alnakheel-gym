@@ -77,7 +77,7 @@ class restorebackup extends Component {
                                                 <tbody>
                                                     <tr>
                                                         <td>
-                                                            <div className="m-0 mxw-200px mnw-100px whiteSpaceNormal">Gymnago MAnual backup</div>
+                                                            <div className="m-0 mxw-200px mnw-100px whiteSpaceNormal">Alnakheel MAnual backup</div>
                                                         </td>
                                                         <td><div className="m-0 mxw-85px mnw-85px whiteSpaceNormal">10/20/2020, 10:50 AM</div></td>
                                                         <td>
@@ -90,7 +90,7 @@ class restorebackup extends Component {
                                                     </tr>
                                                     <tr>
                                                         <td>
-                                                            <div className="m-0 mxw-200px mnw-100px whiteSpaceNormal">Gymnago MAnual backup</div>
+                                                            <div className="m-0 mxw-200px mnw-100px whiteSpaceNormal">Alnakheel MAnual backup</div>
                                                         </td>
                                                         <td><div className="m-0 mxw-85px mnw-85px whiteSpaceNormal">10/20/2020, 10:50 AM</div></td>
                                                         <td>
