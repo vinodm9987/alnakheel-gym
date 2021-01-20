@@ -2,7 +2,7 @@ import axios from 'axios';
 import {
   // GET_ERROR, CLEAR_ERRORS, 
   GET_MEMBER_DASHBOARD, GET_PACKAGE_DISTRIBUTION, GET_MOST_SELLING_STOCK, GET_BRANCH_SALES, GET_SYSTEM_YEAR, GET_DASHBOARD_ATTENDANCE,
-  GET_REVENUE, GET_DASHBOARD_TOTALSALES
+  GET_REVENUE, GET_DASHBOARD_TOTALSALES, GET_PENDING_INSTALLMENTS
 } from './types'
 import { IP } from '../config'
 // import { setLoading, removeLoading } from './loader.action'
@@ -108,5 +108,16 @@ export const getDashboardTotalSales = (postData) => dispatch => {
     )
     .catch(err =>
       dispatch({ type: GET_DASHBOARD_TOTALSALES, payload: null })
+    )
+}
+
+export const getPendingInstallments = (postData) => dispatch => {
+  axios
+    .post(`${IP}/dashboard/getPendingInstallments`, postData)
+    .then(res =>
+      dispatch({ type: GET_PENDING_INSTALLMENTS, payload: res.data })
+    )
+    .catch(err =>
+      dispatch({ type: GET_PENDING_INSTALLMENTS, payload: null })
     )
 }

@@ -6,7 +6,7 @@ import { getAllBranch } from '../../actions/branch.action'
 import { withTranslation } from 'react-i18next'
 // import { getEventsByDate, getAllAnnouncement } from '../../actions/communication.action';
 import {
-  getMemberDashBoard, getMostSellingStock, getPackageDistribution, getSystemYear, getMemberAttendanceDashboard, getDashboardTotalSales,
+  getMemberDashBoard, getMostSellingStock, getPackageDistribution, getSystemYear, getMemberAttendanceDashboard, getDashboardTotalSales, getPendingInstallments
   // getAllBranchSales,   getRevenueDetails 
 } from '../../actions/dashboard.action';
 import { monthFullNames } from '../../utils/apis/helpers';
@@ -44,6 +44,7 @@ class AdminDashboard extends Component {
     // this.props.dispatch(getAllBranchSales({ year: parseInt(this.state.yearSales) }))
     // this.props.dispatch(getRevenueDetails({ year: parseInt(this.state.yearRevenue), category: this.state.category }))
     this.props.dispatch(getDashboardTotalSales({ date: new Date(), type: 'all', category: 'all' }))
+    this.props.dispatch(getPendingInstallments())
   }
 
   onChangeCalendarDate = date => this.setState({ date }, () => {
@@ -416,9 +417,303 @@ class AdminDashboard extends Component {
     })
   }
 
+  totalSales = () => {
+    const { t } = this.props
+    if (this.props.dashboardTotalSales) {
+      const { salesDate, paymentType, transactionType } = this.state
+      const { totalStockSells, totalClassSells, totalPackageSells, branches } = this.props.dashboardTotalSales
+      const totalSells = (totalStockSells ? totalStockSells : 0) + (totalClassSells ? totalClassSells : 0) + (totalPackageSells ? totalPackageSells : 0)
+      return (
+        <div className="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-8 d-flex mt-3">
+          <div className="row m-0 w-100 mw-100 bg-light rounded d-flex align-items-start h-100">
+
+            <div className="col-12 d-flex flex-wrap align-items-center justify-content-between py-1 mb-auto">
+              <h6 className="mx-1 my-2 SegoeBold py-1">Total Sales</h6>
+              <div className="underline w-100"></div>
+            </div>
+
+            <div className="col-12">
+              <div className="row">
+                <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-3">
+                  <div className="d-flex flex-wrap align-items-center">
+                    <span className="position-relative mx-1 my-2">
+                      <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                        <DatePicker
+                          InputProps={{
+                            disableUnderline: true,
+                          }}
+                          autoOk
+                          invalidDateMessage=''
+                          minDateMessage=''
+                          className="bg-white border-secondary border-secondary pr-4 pl-1 mw-100"
+                          format="dd/MM/yyyy"
+                          value={salesDate}
+                          onChange={(e) => this.setDatePaymentTransaction(e, paymentType, transactionType)}
+                          style={{ fontSize: "13px" }}
+                        />
+                      </MuiPickersUtilsProvider>
+                      <span className="position-absolute d-flex align-items-center justify-content-end w-100 h-100 pointerNone px-2" style={{ top: '0', left: '0' }}>
+                        <span className="iconv1 iconv1-arrow-down"></span>
+                      </span>
+                    </span>
+                  </div>
+                  <div className="d-flex flex-wrap align-items-center justify-content-center">
+                    Graph
+                            </div>
+                </div>
+                <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-9 pt-2">
+                  <div className="row">
+                    <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-4 pb-2">
+                      <h6>Total Amount</h6>
+                      <h4 className="font-weight-bold dirltrtar text-success">{this.props.defaultCurrency} {totalSells}</h4>
+                    </div>
+                    <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-4 pb-2">
+                      <h6>Payment Type</h6>
+                      <div className="d-flex flex-wrap align-items-center">
+                        <span className="position-relative w-100">
+                          <select className="bg-white border-secondary border-secondary pr-4 pl-1 w-100" style={{ fontSize: "13px" }}
+                            value={paymentType} onChange={(e) => this.setDatePaymentTransaction(salesDate, e.target.value, transactionType)}>
+                            <option value="all">{t('All')}</option>
+                            <option value="digital">{t('Digital')}</option>
+                            <option value="cash">{t('Cash')}</option>
+                            <option value="card">{t('Card')}</option>
+                            <option value="cheque">{t('Cheque')}</option>
+                          </select>
+                          <span className="position-absolute d-flex align-items-center justify-content-end w-100 h-100 pointerNone px-2" style={{ top: '0', left: '0' }}>
+                            <span className="iconv1 iconv1-arrow-down"></span>
+                          </span>
+                        </span>
+                      </div>
+                    </div>
+                    <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-4 pb-2">
+                      <h6>Transaction Type</h6>
+                      <div className="d-flex flex-wrap align-items-center">
+                        <span className="position-relative w-100">
+                          <select className="bg-white border-secondary border-secondary pr-4 pl-1 w-100" style={{ fontSize: "13px" }}
+                            value={transactionType} onChange={(e) => this.setDatePaymentTransaction(salesDate, paymentType, e.target.value)}>
+                            <option value="all">{t('All')}</option>
+                            <option value="PackageSells">{t('Packages')}</option>
+                            <option value="ClassSell">{t('Classes')}</option>
+                            <option value="StockSell">{t('POS')}</option>
+                          </select>
+                          <span className="position-absolute d-flex align-items-center justify-content-end w-100 h-100 pointerNone px-2" style={{ top: '0', left: '0' }}>
+                            <span className="iconv1 iconv1-arrow-down"></span>
+                          </span>
+                        </span>
+                      </div>
+                    </div>
+                    <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-4 pb-2">
+                      <h6>Packages Amount</h6>
+                      <h4 className="font-weight-bold dirltrtar text-orange">{this.props.defaultCurrency} {totalPackageSells ? totalPackageSells : 0}</h4>
+                    </div>
+                    <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-4 pb-2">
+                      <h6>POS Amount</h6>
+                      <h4 className="font-weight-bold dirltrtar text-danger">{this.props.defaultCurrency} {totalStockSells ? totalStockSells : 0}</h4>
+                    </div>
+                    {/* <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-4 pb-2">
+                                <h6>Classes Amount</h6>
+                                <h4 className="font-weight-bold dirltrtar text-danger">{this.props.defaultCurrency} 87511</h4>
+                              </div> */}
+                    <div className="col-12">
+                      <div className="underline w-100 mt-2 mb-1"></div>
+                    </div>
+                    <div className="col-12">
+                      <p><small className="font-weight-bold">Sales By Branches</small></p>
+                      <div className="d-flex flex-wrap pb-3">
+                        {branches.map((branch, i) => {
+                          return (
+                            <div key={i} className="d-flex align-items-center mr-3">
+                              <div className="dbd-blueblock"></div>
+                              <small className="dbd-blueblock-txt mx-1">{branch.branchName}</small>
+                              <div className="dbd-blueblock-amt text-success font-weight-bold">{this.props.defaultCurrency} {branch.amount ? branch.amount : 0}</div>
+                            </div>
+                          )
+                        })}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* <div className="col-12 d-flex flex-wrap align-items-center justify-content-between py-1">
+                        <div className="col-12 px-0">
+                          <div className="row pt-3 pb-2">
+                            <div className="col-12 px-0 d-flex flex-wrap justify-content-end">
+                              <Link to='/admin-attendance' className="linkHoverDecLess">
+                                <div className="col text-right full-width-576-down">
+                                  <button className="btn btn-warning br-50px text-white px-3 btn-sm text-nowrap mt-3 mt-sm-0">{t('View All Attendance')}</button>
+                                </div>
+                              </Link>
+                            </div>
+                          </div>
+                        </div>
+                      </div> */}
+
+          </div>
+        </div>
+      )
+    }
+  }
+
+  pendingInstallments = () => {
+    return (
+      <div className="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-4 d-flex mt-3">
+        <div className="row m-0 w-100 mw-100 bg-light rounded d-flex align-items-start h-100">
+
+          <div className="col-12 d-flex flex-wrap align-items-center justify-content-between py-1 mb-auto">
+            <h6 className="mx-1 my-2 SegoeBold py-1">Pending Installments</h6>
+            <div className="underline w-100"></div>
+          </div>
+
+          <div className="col-12 d-flex flex-wrap align-items-center justify-content-between py-1">
+            <div className="col-12">
+              <div className="row">
+                <div className="col-12">
+                  <div className="row">
+                    <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
+                      <h6>Total Pending Amount</h6>
+                      <h6 className="font-weight-bold dirltrtar text-danger">$ 87511</h6>
+                    </div>
+                    <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
+                      <div className="row d-block d-sm-flex justify-content-end">
+                        <div className="col w-auto px-1 flexBasis-auto flex-grow-0" >
+                          {/* <div className="form-group inlineFormGroup">
+                                        <select className="form-control mx-sm-2 inlineFormInputs bg-white">
+                                          <option value=""></option>
+                                        </select>
+                                        <span className="iconv1 iconv1-arrow-down selectBoxIcon"></span>
+                                      </div> */}
+
+                          <div className="d-flex flex-wrap align-items-center">
+                            <span className="position-relative mx-1 my-1">
+                              <select className="bg-white border-secondary border-secondary pr-4 pl-1 w-100" style={{ fontSize: "13px" }}>
+                                <option>Monthly</option>
+                              </select>
+                              <span className="position-absolute d-flex align-items-center justify-content-end w-100 h-100 pointerNone px-2" style={{ top: '0', left: '0' }}>
+                                <span className="iconv1 iconv1-arrow-down"></span>
+                              </span>
+                            </span>
+                          </div>
+
+                        </div>
+                        <div className="col w-auto px-1 flexBasis-auto flex-grow-0">
+                          {/* <div className="form-group inlineFormGroup">
+                                        <select className="form-control mx-sm-2 inlineFormInputs bg-white">
+                                          <option value="">Jan</option>
+                                          <option value="">Feb</option>
+                                        </select>
+                                        <span className="iconv1 iconv1-arrow-down selectBoxIcon"></span>
+                                      </div> */}
+
+                          <div className="d-flex flex-wrap align-items-center">
+                            <span className="position-relative mx-1 my-1">
+                              <select className="bg-white border-secondary border-secondary pr-4 pl-1 w-100" style={{ fontSize: "13px" }}>
+                                <option value="">Jan</option>
+                                <option value="">Feb</option>
+                              </select>
+                              <span className="position-absolute d-flex align-items-center justify-content-end w-100 h-100 pointerNone px-2" style={{ top: '0', left: '0' }}>
+                                <span className="iconv1 iconv1-arrow-down"></span>
+                              </span>
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="col-12">
+                  <div className="table-responsive">
+                    <table className="borderRoundSeperateTable tdWhite">
+                      <thead>
+                        <tr>
+                          <th><small>Member Name</small></th>
+                          <th><small>Amount</small></th>
+                          <th><small>Due Date</small></th>
+                          <th></th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>
+                            <div className="d-flex">
+                              <img alt='' src="https://cdn4.iconfinder.com/data/icons/business-conceptual-part1-1/513/business-man-512.png" className="mx-1 rounded-circle w-40px h-40px" />
+                              <div className="mx-1">
+                                <p className="m-0 font-weight-bold">Ansar</p>
+                                <span className="text-body font-weight-light">a@b.com</span>
+                              </div>
+                            </div>
+                          </td>
+                          <td><h5 className="text-warning font-weight-bold m-0 dirltrtar">$ 200</h5></td>
+                          <td>12/02/2020</td>
+                          <td className="text-center">
+                            <a href="/#" className="dboard-btn-icon-primary">
+                              <span className="iconv1 iconv1-right-small-arrow"></span>
+                            </a>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <div className="d-flex">
+                              <img alt='' src="https://cdn4.iconfinder.com/data/icons/business-conceptual-part1-1/513/business-man-512.png" className="mx-1 rounded-circle w-40px h-40px" />
+                              <div className="mx-1">
+                                <p className="m-0 font-weight-bold">Ansar</p>
+                                <span className="text-body font-weight-light">a@b.com</span>
+                              </div>
+                            </div>
+                          </td>
+                          <td><h5 className="text-warning font-weight-bold m-0 dirltrtar">$ 200</h5></td>
+                          <td>12/02/2020</td>
+                          <td className="text-center">
+                            <a href="/#" className="dboard-btn-icon-primary">
+                              <span className="iconv1 iconv1-right-small-arrow"></span>
+                            </a>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <div className="d-flex">
+                              <img alt='' src="https://cdn4.iconfinder.com/data/icons/business-conceptual-part1-1/513/business-man-512.png" className="mx-1 rounded-circle w-40px h-40px" />
+                              <div className="mx-1">
+                                <p className="m-0 font-weight-bold">Ansar</p>
+                                <span className="text-body font-weight-light">a@b.com</span>
+                              </div>
+                            </div>
+                          </td>
+                          <td><h5 className="text-warning font-weight-bold m-0 dirltrtar">$ 200</h5></td>
+                          <td>12/02/2020</td>
+                          <td className="text-center">
+                            <a href="/#" className="dboard-btn-icon-primary">
+                              <span className="iconv1 iconv1-right-small-arrow"></span>
+                            </a>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+            {/* <div className="col-12 px-0">
+                          <div className="row pt-3 pb-2">
+                            <div className="col-12 px-0 d-flex flex-wrap justify-content-end">
+                              <Link to='/pending-installments' className="linkHoverDecLess">
+                                <div className="col text-right full-width-576-down">
+                                  <button className="btn btn-warning br-50px text-white px-3 btn-sm text-nowrap mt-3 mt-sm-0">View All</button>
+                                </div>
+                              </Link>
+                            </div>
+                          </div>
+                        </div> */}
+          </div>
+
+        </div>
+      </div>
+    )
+  }
+
   render() {
     const { t } = this.props
-    const { salesDate, paymentType, transactionType } = this.state
     return (
       <div className="mainPage p-3 AdminDashboard">
         <div className="row">
@@ -478,299 +773,11 @@ class AdminDashboard extends Component {
 
                   {this.packageDetails()}
 
-                  <div className="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-8 d-flex mt-3">
-                    <div className="row m-0 w-100 mw-100 bg-light rounded d-flex align-items-start h-100">
-
-                      <div className="col-12 d-flex flex-wrap align-items-center justify-content-between py-1 mb-auto">
-                        <h6 className="mx-1 my-2 SegoeBold py-1">Total Sales</h6>
-                        <div className="underline w-100"></div>
-                      </div>
-
-                      <div className="col-12">
-                        <div className="row">
-                          <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-3">
-                            <div className="d-flex flex-wrap align-items-center">
-                              <span className="position-relative mx-1 my-2">
-                                <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                                  <DatePicker
-                                    InputProps={{
-                                      disableUnderline: true,
-                                    }}
-                                    autoOk
-                                    invalidDateMessage=''
-                                    minDateMessage=''
-                                    className="bg-white border-secondary border-secondary pr-4 pl-1 mw-100"
-                                    format="dd/MM/yyyy"
-                                    value={salesDate}
-                                    onChange={(e) => this.setDatePaymentTransaction(e, paymentType, transactionType)}
-                                    style={{ fontSize: "13px" }}
-                                  />
-                                </MuiPickersUtilsProvider>
-                                <span className="position-absolute d-flex align-items-center justify-content-end w-100 h-100 pointerNone px-2" style={{ top: '0', left: '0' }}>
-                                  <span className="iconv1 iconv1-arrow-down"></span>
-                                </span>
-                              </span>
-                            </div>
-                            <div className="d-flex flex-wrap align-items-center justify-content-center">
-                              Graph
-                            </div>
-                          </div>
-                          <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-9 pt-2">
-                            <div className="row">
-                              <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-4 pb-2">
-                                <h6>Total Amount</h6>
-                                <h4 className="font-weight-bold dirltrtar text-success">{this.props.defaultCurrency} 87511</h4>
-                              </div>
-                              <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-4 pb-2">
-                                <h6>Payment Type</h6>
-                                <div className="d-flex flex-wrap align-items-center">
-                                  <span className="position-relative w-100">
-                                    <select className="bg-white border-secondary border-secondary pr-4 pl-1 w-100" style={{ fontSize: "13px" }}
-                                      value={paymentType} onChange={(e) => this.setDatePaymentTransaction(salesDate, e.target.value, transactionType)}>
-                                      <option value="all">{t('All')}</option>
-                                      <option value="digital">{t('Digital')}</option>
-                                      <option value="cash">{t('Cash')}</option>
-                                      <option value="card">{t('Card')}</option>
-                                      <option value="cheque">{t('Cheque')}</option>
-                                    </select>
-                                    <span className="position-absolute d-flex align-items-center justify-content-end w-100 h-100 pointerNone px-2" style={{ top: '0', left: '0' }}>
-                                      <span className="iconv1 iconv1-arrow-down"></span>
-                                    </span>
-                                  </span>
-                                </div>
-                              </div>
-                              <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-4 pb-2">
-                                <h6>Transaction Type</h6>
-                                <div className="d-flex flex-wrap align-items-center">
-                                  <span className="position-relative w-100">
-                                    <select className="bg-white border-secondary border-secondary pr-4 pl-1 w-100" style={{ fontSize: "13px" }}
-                                      value={transactionType} onChange={(e) => this.setDatePaymentTransaction(salesDate, paymentType, e.target.value)}>
-                                      <option value="all">{t('All')}</option>
-                                      <option value="PackageSells">{t('Packages')}</option>
-                                      <option value="ClassSell">{t('Classes')}</option>
-                                      <option value="StockSell">{t('POS')}</option>
-                                    </select>
-                                    <span className="position-absolute d-flex align-items-center justify-content-end w-100 h-100 pointerNone px-2" style={{ top: '0', left: '0' }}>
-                                      <span className="iconv1 iconv1-arrow-down"></span>
-                                    </span>
-                                  </span>
-                                </div>
-                              </div>
-                              <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-4 pb-2">
-                                <h6>Packages Amount</h6>
-                                <h4 className="font-weight-bold dirltrtar text-orange">{this.props.defaultCurrency} 87511</h4>
-                              </div>
-                              <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-4 pb-2">
-                                <h6>POS Amount</h6>
-                                <h4 className="font-weight-bold dirltrtar text-danger">{this.props.defaultCurrency} 87511</h4>
-                              </div>
-                              {/* <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-4 pb-2">
-                                <h6>Classes Amount</h6>
-                                <h4 className="font-weight-bold dirltrtar text-danger">{this.props.defaultCurrency} 87511</h4>
-                              </div> */}
-                              <div className="col-12">
-                                <div className="underline w-100 mt-2 mb-1"></div>
-                              </div>
-                              <div className="col-12">
-                                <p><small className="font-weight-bold">Sales By Branches</small></p>
-                                <div className="d-flex flex-wrap pb-3">
-                                  <div className="d-flex align-items-center mr-3">
-                                    <div className="dbd-blueblock"></div>
-                                    <small className="dbd-blueblock-txt mx-1">Hidd Branch</small>
-                                    <div className="dbd-blueblock-amt text-success font-weight-bold">{this.props.defaultCurrency} 6,54,111</div>
-                                  </div>
-                                  <div className="d-flex align-items-center mr-3">
-                                    <div className="dbd-blueblock"></div>
-                                    <small className="dbd-blueblock-txt mx-1">Hidd Branch</small>
-                                    <div className="dbd-blueblock-amt text-success font-weight-bold">{this.props.defaultCurrency} 6,54,111</div>
-                                  </div>
-                                  <div className="d-flex align-items-center mr-3">
-                                    <div className="dbd-blueblock"></div>
-                                    <small className="dbd-blueblock-txt mx-1">Hidd Branch</small>
-                                    <div className="dbd-blueblock-amt text-success font-weight-bold">{this.props.defaultCurrency} 6,54,111</div>
-                                  </div>
-                                  <div className="d-flex align-items-center mr-3">
-                                    <div className="dbd-blueblock"></div>
-                                    <small className="dbd-blueblock-txt mx-1">Hidd Branch</small>
-                                    <div className="dbd-blueblock-amt text-success font-weight-bold">{this.props.defaultCurrency} 6,54,111</div>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* <div className="col-12 d-flex flex-wrap align-items-center justify-content-between py-1">
-                        <div className="col-12 px-0">
-                          <div className="row pt-3 pb-2">
-                            <div className="col-12 px-0 d-flex flex-wrap justify-content-end">
-                              <Link to='/admin-attendance' className="linkHoverDecLess">
-                                <div className="col text-right full-width-576-down">
-                                  <button className="btn btn-warning br-50px text-white px-3 btn-sm text-nowrap mt-3 mt-sm-0">{t('View All Attendance')}</button>
-                                </div>
-                              </Link>
-                            </div>
-                          </div>
-                        </div>
-                      </div> */}
-
-                    </div>
-                  </div>
+                  {this.totalSales()}
 
                   {this.mostSelling()}
 
-                  <div className="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-4 d-flex mt-3">
-                    <div className="row m-0 w-100 mw-100 bg-light rounded d-flex align-items-start h-100">
-
-                      <div className="col-12 d-flex flex-wrap align-items-center justify-content-between py-1 mb-auto">
-                        <h6 className="mx-1 my-2 SegoeBold py-1">Pending Installments</h6>
-                        <div className="underline w-100"></div>
-                      </div>
-
-                      <div className="col-12 d-flex flex-wrap align-items-center justify-content-between py-1">
-                        <div className="col-12">
-                          <div className="row">
-                            <div className="col-12">
-                              <div className="row">
-                                <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
-                                  <h6>Total Pending Amount</h6>
-                                  <h6 className="font-weight-bold dirltrtar text-danger">$ 87511</h6>
-                                </div>
-                                <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
-                                  <div className="row d-block d-sm-flex justify-content-end">
-                                    <div className="col w-auto px-1 flexBasis-auto flex-grow-0" >
-                                      {/* <div className="form-group inlineFormGroup">
-                                        <select className="form-control mx-sm-2 inlineFormInputs bg-white">
-                                          <option value=""></option>
-                                        </select>
-                                        <span className="iconv1 iconv1-arrow-down selectBoxIcon"></span>
-                                      </div> */}
-
-                                      <div className="d-flex flex-wrap align-items-center">
-                                        <span className="position-relative mx-1 my-1">
-                                          <select className="bg-white border-secondary border-secondary pr-4 pl-1 w-100" style={{ fontSize: "13px" }}>
-                                            <option>Monthly</option>
-                                          </select>
-                                          <span className="position-absolute d-flex align-items-center justify-content-end w-100 h-100 pointerNone px-2" style={{ top: '0', left: '0' }}>
-                                            <span className="iconv1 iconv1-arrow-down"></span>
-                                          </span>
-                                        </span>
-                                      </div>
-
-                                    </div>
-                                    <div className="col w-auto px-1 flexBasis-auto flex-grow-0">
-                                      {/* <div className="form-group inlineFormGroup">
-                                        <select className="form-control mx-sm-2 inlineFormInputs bg-white">
-                                          <option value="">Jan</option>
-                                          <option value="">Feb</option>
-                                        </select>
-                                        <span className="iconv1 iconv1-arrow-down selectBoxIcon"></span>
-                                      </div> */}
-
-                                      <div className="d-flex flex-wrap align-items-center">
-                                        <span className="position-relative mx-1 my-1">
-                                          <select className="bg-white border-secondary border-secondary pr-4 pl-1 w-100" style={{ fontSize: "13px" }}>
-                                            <option value="">Jan</option>
-                                            <option value="">Feb</option>
-                                          </select>
-                                          <span className="position-absolute d-flex align-items-center justify-content-end w-100 h-100 pointerNone px-2" style={{ top: '0', left: '0' }}>
-                                            <span className="iconv1 iconv1-arrow-down"></span>
-                                          </span>
-                                        </span>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                            <div className="col-12">
-                              <div className="table-responsive">
-                                <table className="borderRoundSeperateTable tdWhite">
-                                  <thead>
-                                    <tr>
-                                      <th><small>Member Name</small></th>
-                                      <th><small>Amount</small></th>
-                                      <th><small>Due Date</small></th>
-                                      <th></th>
-                                    </tr>
-                                  </thead>
-                                  <tbody>
-                                    <tr>
-                                      <td>
-                                        <div className="d-flex">
-                                          <img alt='' src="https://cdn4.iconfinder.com/data/icons/business-conceptual-part1-1/513/business-man-512.png" className="mx-1 rounded-circle w-40px h-40px" />
-                                          <div className="mx-1">
-                                            <p className="m-0 font-weight-bold">Ansar</p>
-                                            <span className="text-body font-weight-light">a@b.com</span>
-                                          </div>
-                                        </div>
-                                      </td>
-                                      <td><h5 className="text-warning font-weight-bold m-0 dirltrtar">$ 200</h5></td>
-                                      <td>12/02/2020</td>
-                                      <td className="text-center">
-                                        <a href="/#" className="dboard-btn-icon-primary">
-                                          <span className="iconv1 iconv1-right-small-arrow"></span>
-                                        </a>
-                                      </td>
-                                    </tr>
-                                    <tr>
-                                      <td>
-                                        <div className="d-flex">
-                                          <img alt='' src="https://cdn4.iconfinder.com/data/icons/business-conceptual-part1-1/513/business-man-512.png" className="mx-1 rounded-circle w-40px h-40px" />
-                                          <div className="mx-1">
-                                            <p className="m-0 font-weight-bold">Ansar</p>
-                                            <span className="text-body font-weight-light">a@b.com</span>
-                                          </div>
-                                        </div>
-                                      </td>
-                                      <td><h5 className="text-warning font-weight-bold m-0 dirltrtar">$ 200</h5></td>
-                                      <td>12/02/2020</td>
-                                      <td className="text-center">
-                                        <a href="/#" className="dboard-btn-icon-primary">
-                                          <span className="iconv1 iconv1-right-small-arrow"></span>
-                                        </a>
-                                      </td>
-                                    </tr>
-                                    <tr>
-                                      <td>
-                                        <div className="d-flex">
-                                          <img alt='' src="https://cdn4.iconfinder.com/data/icons/business-conceptual-part1-1/513/business-man-512.png" className="mx-1 rounded-circle w-40px h-40px" />
-                                          <div className="mx-1">
-                                            <p className="m-0 font-weight-bold">Ansar</p>
-                                            <span className="text-body font-weight-light">a@b.com</span>
-                                          </div>
-                                        </div>
-                                      </td>
-                                      <td><h5 className="text-warning font-weight-bold m-0 dirltrtar">$ 200</h5></td>
-                                      <td>12/02/2020</td>
-                                      <td className="text-center">
-                                        <a href="/#" className="dboard-btn-icon-primary">
-                                          <span className="iconv1 iconv1-right-small-arrow"></span>
-                                        </a>
-                                      </td>
-                                    </tr>
-                                  </tbody>
-                                </table>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        {/* <div className="col-12 px-0">
-                          <div className="row pt-3 pb-2">
-                            <div className="col-12 px-0 d-flex flex-wrap justify-content-end">
-                              <Link to='/pending-installments' className="linkHoverDecLess">
-                                <div className="col text-right full-width-576-down">
-                                  <button className="btn btn-warning br-50px text-white px-3 btn-sm text-nowrap mt-3 mt-sm-0">View All</button>
-                                </div>
-                              </Link>
-                            </div>
-                          </div>
-                        </div> */}
-                      </div>
-
-                    </div>
-                  </div>
+                  {this.pendingInstallments()}
 
                   {this.memberAttendance()}
 
@@ -797,7 +804,7 @@ class AdminDashboard extends Component {
 
 function mapStateToProps({
   branch, communication: { eventsByDate, activeAnnouncements },
-  dashboard: { memberDashboard, mostSellingStock, packageDistribution, branchSales, systemYear, dashboardAttendance, revenueDetails, dashboardTotalSales },
+  dashboard: { memberDashboard, mostSellingStock, packageDistribution, branchSales, systemYear, dashboardAttendance, revenueDetails, dashboardTotalSales, pendingInstallments },
   currency: { defaultCurrency }
 }) {
   return {
@@ -805,7 +812,7 @@ function mapStateToProps({
     eventsByDate: eventsByDate && eventsByDate.sort((a, b) => new Date(a.startDate) - new Date(b.startDate)),
     activeAnnouncements: activeAnnouncements && activeAnnouncements.sort((a, b) => new Date(a.startDate) - new Date(b.startDate)),
     memberDashboard, mostSellingStock,
-    defaultCurrency, packageDistribution, branchSales, systemYear, dashboardAttendance, revenueDetails, dashboardTotalSales
+    defaultCurrency, packageDistribution, branchSales, systemYear, dashboardAttendance, revenueDetails, dashboardTotalSales, pendingInstallments
   }
 }
 
