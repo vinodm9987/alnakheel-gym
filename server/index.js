@@ -21,7 +21,7 @@ const cors = require('cors')
 */
 
 const { notificationCronjob } = require('./cronjob/notification')
-const { initialSetupForDesignation, initialSetupForAdmin, initialSetupForSystemYear } = require('./startup/initServer');
+const { initialSetupForDesignation, initialSetupForAdmin, initialSetupForSystemYear, createPasswordForBranch } = require('./startup/initServer');
 const { config: { PORT, DB, MODE }, logger: { logger } } = require("../config");
 const { mountRoutes } = require("./routes");
 const { oneDayCronJob } = require('./cronjob/oneDayCronjob')
@@ -70,13 +70,6 @@ app.get('/policy', (req, res, next) => {
   res.render('policy', { layout: false });
 });
 
-/*
-* mongodb logs
-*/
-
-if (MODE === 'DEV') {
-  mongoose.set("debug", true);
-}
 
 
 /**
@@ -185,6 +178,12 @@ initialSetupForDesignation()
         console.log(err);
       });
     StartBioStarServer()
+      .then(() => {
+        console.log('successfully start Bio Star Server 🚀');
+      }).catch(err => {
+        console.log(err);
+      });
+    createPasswordForBranch()
       .then(() => {
         console.log('successfully start Bio Star Server 🚀');
       }).catch(err => {

@@ -941,5 +941,8 @@
   "Sales Branch": "Sales Branch",
   "Access Branch": "Access Branch",
   "Do you want to pay as Installment?": "Do you want to pay as Installment?",
-  "Installment": "Installment"
+  "Installment": "Installment",
+  "Cheque": "Cheque",
+  "Cheque Number": "Cheque Number",
+  "Cheque Date": "Cheque Date"
 }

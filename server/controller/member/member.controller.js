@@ -11,7 +11,7 @@ const { logger: { logger }, upload: { uploadAvatar },
 
 
 const { Mailer: { sendMail, }, Formate: { setTime, convertToDate }, IdGenerator: { createId, generateOrderId },
-    Referral: { updateTransaction, addPointOfPolicy, checkExpiryOfPolicy } } = require('../../utils');
+    Referral: { updateTransaction, addPointOfPolicy, checkExpiry, pendingPaymentToGetPoint, checkExpiryOfPolicy } } = require('../../utils');
 
 
 const { updateMemberInBioStar, bioStarToken,
@@ -19,10 +19,9 @@ const { updateMemberInBioStar, bioStarToken,
     getFaceRecognitionTemplate } = require('../../biostar');
 
 
-const { newMemberAssign } = require('../../notification/helper')
+const { newMemberAssign } = require('../../notification/helper');
 
-
-const { memberEntranceStatus } = require('../../socket/emitter')
+const { memberEntranceStatus } = require('../../socket/emitter');
 
 const { registerUserInBioStar, deviceObjectByTypeOfMachine } = require('../../service/branch.service');
 
@@ -206,15 +205,14 @@ exports.createNewMemberByAdmin = (req, res) => {
             if (req.headers.userid) {
                 packageDetails[0]["doneBy"] = req.headers.userid;
             }
+            if (packageDetails[0].Installments && packageDetails[0].Installments.length) {
+                packageDetails[0].Installments[0].dateOfPaid = setTime(new Date())
+            } else {
+                packageDetails[0]["dateOfPaid"] = setTime(new Date())
+            }
             packageDetails[0]["startDate"] = setTime(packageDetails[0].startDate);
             packageDetails[0]["endDate"] = setTime(packageDetails[0].endDate);
-            if (packageDetails[0].trainerDetails && packageDetails[0].trainerDetails[0]) {
-                packageDetails[0].trainerDetails[0]["trainerStart"] = setTime(packageDetails[0].trainerDetails[0].trainerStart);
-                packageDetails[0].trainerDetails[0]["trainerEnd"] = setTime(packageDetails[0].trainerDetails[0].trainerEnd);
-                packageDetails[0].trainerDetails[0]["orderNo"] = generateOrderId()
-            }
             packageDetails[0]["orderNo"] = generateOrderId()
-            packageDetails[0]["dateOfPurchase"] = setTime(new Date())
             packageDetails[0]["timeOfPurchase"] = new Date()
             if (referralCode) {
                 let isExpired = await checkExpiry(referralCode);
@@ -362,7 +360,7 @@ exports.addMemberFaceRecognition = async (req, res) => {
             startDate: userData.packageDetails[0].startDate,
             templates: userData.biometricTemplate.templates,
             raw_image: userData.biometricTemplate.raw_image
-        }
+        };
         const newResponse = await Member.findById(req.body.memberId).populate('credentialId branch')
             .populate({ path: "packageDetails.trainerDetails.trainer", populate: { path: "credentialId" } })
             .populate({ path: "packageDetails.packages", populate: { path: "period" } })

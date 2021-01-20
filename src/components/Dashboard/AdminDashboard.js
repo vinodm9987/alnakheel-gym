@@ -1,17 +1,22 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Doughnut, Bar } from 'react-chartjs-2';
+import { Doughnut } from 'react-chartjs-2';
 import { getAllBranch } from '../../actions/branch.action'
-import Calendar from 'react-calendar';
+// import Calendar from 'react-calendar';
 import { withTranslation } from 'react-i18next'
-import { getEventsByDate, getAllAnnouncement } from '../../actions/communication.action';
-import { getMemberDashBoard, getMostSellingStock, getPackageDistribution, getAllBranchSales, getSystemYear, getMemberAttendanceDashboard, getRevenueDetails } from '../../actions/dashboard.action';
-import { dateToDDMMYYYY, monthFullNames } from '../../utils/apis/helpers';
+// import { getEventsByDate, getAllAnnouncement } from '../../actions/communication.action';
+import {
+  getMemberDashBoard, getMostSellingStock, getPackageDistribution, getSystemYear, getMemberAttendanceDashboard, getDashboardTotalSales,
+  // getAllBranchSales,   getRevenueDetails 
+} from '../../actions/dashboard.action';
+import { monthFullNames } from '../../utils/apis/helpers';
 // import { CSVLink } from "react-csv";
 import jsPDF from 'jspdf'
 import 'jspdf-autotable'
-import { Link } from 'react-router-dom';
-
+// import { Link } from 'react-router-dom';
+import DateFnsUtils from '@date-io/date-fns';
+import { DatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
+import 'date-fns';
 
 class AdminDashboard extends Component {
 
@@ -24,31 +29,35 @@ class AdminDashboard extends Component {
       yearRevenue: new Date().getFullYear(),
       month: new Date().getMonth(),
       category: '',
+      salesDate: new Date(),
+      paymentType: 'all',
+      transactionType: 'all'
     }
     this.props.dispatch(getSystemYear())
     this.props.dispatch(getAllBranch())
-    this.props.dispatch(getEventsByDate({ month: this.state.date }))
-    this.props.dispatch(getAllAnnouncement())
+    // this.props.dispatch(getEventsByDate({ month: this.state.date }))
+    // this.props.dispatch(getAllAnnouncement())
     this.props.dispatch(getMemberDashBoard({}))
     this.props.dispatch(getMostSellingStock({}))
     this.props.dispatch(getPackageDistribution({}))
     this.props.dispatch(getMemberAttendanceDashboard({ month: this.state.month }))
-    this.props.dispatch(getAllBranchSales({ year: parseInt(this.state.yearSales) }))
-    this.props.dispatch(getRevenueDetails({ year: parseInt(this.state.yearRevenue), category: this.state.category }))
+    // this.props.dispatch(getAllBranchSales({ year: parseInt(this.state.yearSales) }))
+    // this.props.dispatch(getRevenueDetails({ year: parseInt(this.state.yearRevenue), category: this.state.category }))
+    this.props.dispatch(getDashboardTotalSales({ date: new Date(), type: 'all', category: 'all' }))
   }
 
   onChangeCalendarDate = date => this.setState({ date }, () => {
-    const getDate = new Date(this.state.date)
-    this.props.dispatch(getEventsByDate({ date: new Date(new Date().setFullYear(getDate.getFullYear(), getDate.getMonth(), getDate.getDate())) }))
+    // const getDate = new Date(this.state.date)
+    // this.props.dispatch(getEventsByDate({ date: new Date(new Date().setFullYear(getDate.getFullYear(), getDate.getMonth(), getDate.getDate())) }))
   })
 
   onChangeCalendarMonth = date => {
     if (this.state.date.getMonth() === date.activeStartDate.getMonth() && this.state.date.getFullYear() === date.activeStartDate.getFullYear()) {
-      const getDate = new Date(this.state.date)
-      this.props.dispatch(getEventsByDate({ date: new Date(new Date().setFullYear(getDate.getFullYear(), getDate.getMonth(), getDate.getDate())) }))
+      // const getDate = new Date(this.state.date)
+      // this.props.dispatch(getEventsByDate({ date: new Date(new Date().setFullYear(getDate.getFullYear(), getDate.getMonth(), getDate.getDate())) }))
     } else {
-      const getDate = new Date(date.activeStartDate)
-      this.props.dispatch(getEventsByDate({ month: new Date(new Date().setFullYear(getDate.getFullYear(), getDate.getMonth(), getDate.getDate())) }))
+      // const getDate = new Date(date.activeStartDate)
+      // this.props.dispatch(getEventsByDate({ month: new Date(new Date().setFullYear(getDate.getFullYear(), getDate.getMonth(), getDate.getDate())) }))
     }
   }
 
@@ -58,8 +67,8 @@ class AdminDashboard extends Component {
       this.props.dispatch(getMemberDashBoard({ branch: this.state.branch }))
       this.props.dispatch(getPackageDistribution({ branch: this.state.branch }))
       this.props.dispatch(getMostSellingStock({ branch: this.state.branch }))
-      this.props.dispatch(getAllBranchSales({ year: parseInt(this.state.yearSales), branch: this.state.branch }))
-      this.props.dispatch(getRevenueDetails({ year: parseInt(this.state.yearRevenue), category: this.state.category, branch: this.state.branch }))
+      // this.props.dispatch(getAllBranchSales({ year: parseInt(this.state.yearSales), branch: this.state.branch }))
+      // this.props.dispatch(getRevenueDetails({ year: parseInt(this.state.yearRevenue), category: this.state.category, branch: this.state.branch }))
       this.props.dispatch(getMemberAttendanceDashboard({ branch: this.state.branch, month: parseInt(this.state.month) }))
     })
   }
@@ -231,104 +240,15 @@ class AdminDashboard extends Component {
 
   setYearRevenue(e) {
     this.setState({ yearRevenue: e.target.value }, () => {
-      this.props.dispatch(getRevenueDetails({ year: parseInt(this.state.yearRevenue), category: this.state.category, branch: this.state.branch }))
+      // this.props.dispatch(getRevenueDetails({ year: parseInt(this.state.yearRevenue), category: this.state.category, branch: this.state.branch }))
     })
   }
 
   setRevenueCategory(e) {
     this.setState({ category: e.target.value }, () => {
-      this.props.dispatch(getRevenueDetails({ year: parseInt(this.state.yearRevenue), category: this.state.category, branch: this.state.branch }))
+      // this.props.dispatch(getRevenueDetails({ year: parseInt(this.state.yearRevenue), category: this.state.category, branch: this.state.branch }))
     })
   }
-
-  revenueDetails = () => {
-    if (this.props.revenueDetails) {
-      const { t } = this.props
-      const initialData = {
-        labels: [t('January'), t('February'), t('March'), t('April'), t('May'), t('June'), t('July'), t('August'), t('September'), t('October'), t('November'), t('December')],
-        datasets: [
-          {
-            label: `Sales in ${this.props.defaultCurrency}`,
-            backgroundColor: 'rgba(254, 209, 141, 1)',
-            borderColor: 'rgba(254, 209, 141, 1)',
-            borderWidth: 0.5,
-            hoverBackgroundColor: 'rgba(244, 149, 31, 1)',
-            hoverBorderColor: 'rgba(244, 149, 31, 1)',
-            data: this.props.revenueDetails.map(d => d ? d.toFixed(3) : 0)
-          }
-        ]
-      };
-      let total = 0
-      this.props.revenueDetails.forEach(sale => total += sale)
-      let systemYears = [], categories = ["All", "Packages", "POS", "Classes"]
-      if (this.props.systemYear) {
-        for (let i = new Date(this.props.systemYear.year).getFullYear(); i <= new Date().getFullYear(); i++) {
-          systemYears.push(i)
-        }
-      }
-      return (
-        <div className="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-4 d-flex mt-3">
-          <div className="row m-0 w-100 mw-100 bg-light rounded d-flex align-items-start h-100">
-            <div className="col-12 d-flex flex-wrap align-items-center justify-content-between py-1 mb-auto">
-              <h6 className="mx-1 my-2 SegoeBold py-1">{t('Revenue Details')}</h6>
-              <div className="d-flex flex-wrap align-items-center">
-                <span className="position-relative mx-1 my-2">
-                  <select className="bg-white border-secondary border-secondary pr-4 pl-1 mw-100" style={{ fontSize: "13px" }} value={this.state.yearRevenue} onChange={(e) => this.setYearRevenue(e)}>
-                    {systemYears.map(year => {
-                      return (<option key={year} value={year}>{year}</option>)
-                    })}
-                  </select>
-                  <span className="position-absolute d-flex align-items-center justify-content-end w-100 h-100 pointerNone px-2" style={{ top: '0', left: '0' }}>
-                    <span className="iconv1 iconv1-arrow-down"></span>
-                  </span>
-                </span>
-                <span className="position-relative mx-1 my-2">
-                  <select className="bg-white border-secondary border-secondary pr-4 pl-1 mw-100" style={{ fontSize: "13px" }} value={this.state.category} onChange={(e) => this.setRevenueCategory(e)}>
-                    {categories.map(category => {
-                      return (<option key={category} value={category}>{category}</option>)
-                    })}
-                  </select>
-                  <span className="position-absolute d-flex align-items-center justify-content-end w-100 h-100 pointerNone px-2" style={{ top: '0', left: '0' }}>
-                    <span className="iconv1 iconv1-arrow-down"></span>
-                  </span>
-                </span>
-              </div>
-              <div className="underline w-100"></div>
-            </div>
-            <div className="col-12 d-flex flex-wrap align-items-center justify-content-between py-1">
-              <Bar width={200} data={initialData} options={{
-                scales: {
-                  xAxes: [{
-                    gridLines: {
-                      drawOnChartArea: false
-                    }
-                  }],
-                  yAxes: [{
-                    gridLines: {
-                      drawOnChartArea: false
-                    }
-                  }]
-                }
-              }} />
-            </div>
-
-            {/* <div className="col-12 d-flex flex-wrap align-items-center justify-content-end mt-auto">
-              <h5 className="d-flex align-items-center mx-3 my-3">
-                <small><small>Export</small></small>
-                <small><small>:</small></small>
-                <span className="mx-1"></span>
-                <a href="/#" className="iconv1 iconv1-excel linkHoverDecLess cursorPointer"><span className="path1"></span><span className="path2"></span><span className="path5"></span><span className="path4"></span><span className="path5"></span><span className="path6"></span><span className="path7"></span><span className="path8"></span><span className="path9"></span><span className="path10"></span></a>
-                <span className="mx-1"></span>
-                <a href="/#" className="iconv1 iconv1-pdf linkHoverDecLess cursorPointer"><span className="path1"></span><span className="path2"></span><span className="path3"></span><span className="path4"></span><span className="path5"></span><span className="path6"></span><span className="path7"></span></a>
-              </h5>
-              <a href="/#" className="text-success mx-1 my-3 SegoeBold linkHoverDecLess cursorPointer" download><small className="iconv1 iconv1-download font-weight-bold"></small><small className="mx-1"></small><small>View Report</small></a>
-            </div> */}
-          </div>
-        </div>
-      )
-    }
-  }
-
 
   setMonth(e) {
     this.setState({ month: e.target.value }, () => {
@@ -430,97 +350,9 @@ class AdminDashboard extends Component {
 
   setYearSales(e) {
     this.setState({ yearSales: e.target.value }, () => {
-      this.props.dispatch(getAllBranchSales({ year: parseInt(this.state.yearSales), branch: this.state.branch }))
+      // this.props.dispatch(getAllBranchSales({ year: parseInt(this.state.yearSales), branch: this.state.branch }))
     })
   }
-
-
-  branchSale = () => {
-    if (this.props.branchSales) {
-      const { t } = this.props
-      const initialData = {
-        labels: [t('January'), t('February'), t('March'), t('April'), t('May'), t('June'), t('July'), t('August'), t('September'), t('October'), t('November'), t('December')],
-        datasets: [
-          {
-            label: `Sales in ${this.props.defaultCurrency}`,
-            backgroundColor: 'rgba(254, 209, 141, 1)',
-            borderColor: 'rgba(254, 209, 141, 1)',
-            borderWidth: 0.5,
-            hoverBackgroundColor: 'rgba(244, 149, 31, 1)',
-            hoverBorderColor: 'rgba(244, 149, 31, 1)',
-            data: this.props.branchSales.map(d => d ? d.toFixed(3) : 0)
-          }
-        ]
-      };
-      let total = 0
-      this.props.branchSales.forEach(sale => total += sale)
-      let systemYears = []
-      if (this.props.systemYear) {
-        for (let i = new Date(this.props.systemYear.year).getFullYear(); i <= new Date().getFullYear(); i++) {
-          systemYears.push(i)
-        }
-      }
-      return (
-        <div className="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-4 d-flex mt-3">
-          <div className="row m-0 w-100 mw-100 bg-light rounded d-block align-items-start h-100">
-
-            <div className="col-12 d-flex flex-wrap align-items-center justify-content-between py-1 mb-auto">
-              <h6 className="mx-1 my-2 SegoeBold py-1">{t('Branch Sales')}</h6>
-              <div className="d-flex flex-wrap align-items-center">
-                <span className="position-relative mx-1 my-2">
-                  <select className="bg-white border-secondary border-secondary pr-4 pl-1 mw-100" style={{ fontSize: "13px" }} value={this.state.yearSales} onChange={(e) => this.setYearSales(e)}>
-                    {systemYears.map(year => {
-                      return (<option key={year} value={year}>{year}</option>)
-                    })}
-                  </select>
-                  <span className="position-absolute d-flex align-items-center justify-content-end w-100 h-100 pointerNone px-2" style={{ top: '0', left: '0' }}>
-                    <span className="iconv1 iconv1-arrow-down"></span>
-                  </span>
-                </span>
-              </div>
-              <div className="underline w-100"></div>
-            </div>
-            <div className="hScrollCnt">
-              <div className="col-12 py-1">
-                <small className="text-muted">{t('Total Sales')}</small>
-                <h3 className="text-danger SegoeBold">{this.props.defaultCurrency} {total.toFixed(3)}</h3>
-              </div>
-
-              <div className="col-12 d-flex flex-wrap align-items-center justify-content-between py-1">
-                <Bar width={200} data={initialData} options={{
-                  scales: {
-                    xAxes: [{
-                      gridLines: {
-                        drawOnChartArea: false
-                      }
-                    }],
-                    yAxes: [{
-                      gridLines: {
-                        drawOnChartArea: false
-                      }
-                    }]
-                  }
-                }} />
-              </div>
-            </div>
-            {/* <div className="col-12 d-flex flex-wrap align-items-center justify-content-end mt-auto ViewallBtm px-4">
-              <h5 className="d-flex align-items-center mx-3 my-3">
-                <small><small>Export</small></small>
-                <small><small>:</small></small>
-                <span className="mx-1"></span>
-                <a href="/#" className="iconv1 iconv1-excel linkHoverDecLess cursorPointer"><span className="path1"></span><span className="path2"></span><span className="path5"></span><span className="path4"></span><span className="path5"></span><span className="path6"></span><span className="path7"></span><span className="path8"></span><span className="path9"></span><span className="path10"></span></a>
-                <span className="mx-1"></span>
-                <a href="/#" className="iconv1 iconv1-pdf linkHoverDecLess cursorPointer"><span className="path1"></span><span className="path2"></span><span className="path3"></span><span className="path4"></span><span className="path5"></span><span className="path6"></span><span className="path7"></span></a>
-              </h5>
-              <a href="/#" className="text-success mx-1 my-3 SegoeBold linkHoverDecLess cursorPointer" download><small className="iconv1 iconv1-download font-weight-bold"></small><small className="mx-1"></small><small>View Report</small></a>
-            </div> */}
-
-          </div>
-        </div>
-      )
-    }
-  }
-
 
   mostSelling = () => {
     if (this.props.mostSellingStock) {
@@ -578,90 +410,15 @@ class AdminDashboard extends Component {
     }
   }
 
-  calendar = () => {
-    const { t } = this.props
-    return (
-      <div className="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-4 d-flex mt-3">
-        <div className="row m-0 w-100 mw-100 bg-light rounded d-block align-items-start h-100">
-
-          <div className="col-12 d-flex flex-wrap align-items-center justify-content-between py-1 mb-auto">
-            <ul className="nav commonNavForTab" role="tablist">
-              <li className="nav-item">
-                <a className="nav-link active" data-toggle="tab" href="#cal1">{t('Calendar')}</a>
-              </li>
-              <li className="nav-item">
-                <a className="nav-link" data-toggle="tab" href="#cal2">{t('Announcement')}</a>
-              </li>
-
-            </ul>
-            <div className="underline w-100"></div>
-          </div>
-          {/* <!-- Tab panes --> */}
-          <div className="tab-content">
-            <div id="cal1" className="container tab-pane active">
-              <div className="col-12 d-flex flex-wrap align-items-center justify-content-center py-3 fullDayCalendar">
-                <Calendar
-                  locale={localStorage.getItem('i18nextLng')}
-                  calendarType='US'
-                  onActiveDateChange={this.onChangeCalendarMonth}
-                  onChange={this.onChangeCalendarDate}
-                  value={this.state.date}
-                />
-              </div>
-              {this.props.eventsByDate && this.props.eventsByDate.map((event, i) => {
-                if (dateToDDMMYYYY(event.startDate) === dateToDDMMYYYY(event.endDate)) {
-                  return (
-                    <div key={i} className="px-4 pb-2">
-                      <span className="text-warning font-weight-bold">{dateToDDMMYYYY(event.startDate).slice(0, 5)}</span><span> - {event.eventTitle}</span>
-                    </div>
-                  )
-                } else {
-                  return (
-                    <div key={i} className="px-4 pb-2">
-                      <span className="text-warning font-weight-bold">{dateToDDMMYYYY(event.startDate).slice(0, 5)} - {dateToDDMMYYYY(event.endDate).slice(0, 5)}</span><span> - {event.eventTitle}</span>
-                    </div>
-                  )
-                }
-              })}
-            </div>
-            <div id="cal2" className="container tab-pane fade mb-auto"><br />
-              <div className="hScrollCnt">
-                <table className="borderRoundSeperateTable tdWhite">
-                  {/* ----show only three rows----- */}
-                  <tbody>
-                    {this.props.activeAnnouncements && this.props.activeAnnouncements.map((announcement, i) => {
-                      const { title, startDate } = announcement
-                      if (i < 3) {
-                        return (
-                          <tr key={i}>
-                            <td><small className="mnw-50px whiteSpaceNormal d-inline-block">{title}</small> <div><button type="button" className="btn btnaccred">{dateToDDMMYYYY(startDate)}</button></div></td>
-                            <td>
-                              <Link to='/announcement/announcement-list' className="linkHoverDecLess">
-                                <span className="iconv1 iconv1-right-arrow text-warning float-right border border-warning rounded-circle p-1"></span>
-                              </Link>
-                            </td>
-                          </tr>
-                        )
-                      } else {
-                        return null
-                      }
-                    })}
-                  </tbody>
-                </table>
-                {/* <div className="col-12 ViewallBtm d-flex flex-wrap align-items-center justify-content-end mt-auto"><Link to='/announcement/announcement-list' className="text-success mx-1 my-3 SegoeBold linkHoverDecLess cursorPointer"><small>View All</small></Link></div> */}
-
-              </div>
-
-            </div>
-          </div>
-        </div>
-      </div>
-    )
+  setDatePaymentTransaction(salesDate, paymentType, transactionType) {
+    this.setState({ salesDate, paymentType, transactionType }, () => {
+      this.props.dispatch(getDashboardTotalSales({ date: salesDate, type: paymentType, category: transactionType }))
+    })
   }
-
 
   render() {
     const { t } = this.props
+    const { salesDate, paymentType, transactionType } = this.state
     return (
       <div className="mainPage p-3 AdminDashboard">
         <div className="row">
@@ -734,9 +491,21 @@ class AdminDashboard extends Component {
                           <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-3">
                             <div className="d-flex flex-wrap align-items-center">
                               <span className="position-relative mx-1 my-2">
-                                <select className="bg-white border-secondary border-secondary pr-4 pl-1 mw-100" style={{ fontSize: "13px" }}>
-                                  <option>25/04/2020</option>
-                                </select>
+                                <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                                  <DatePicker
+                                    InputProps={{
+                                      disableUnderline: true,
+                                    }}
+                                    autoOk
+                                    invalidDateMessage=''
+                                    minDateMessage=''
+                                    className="bg-white border-secondary border-secondary pr-4 pl-1 mw-100"
+                                    format="dd/MM/yyyy"
+                                    value={salesDate}
+                                    onChange={(e) => this.setDatePaymentTransaction(e, paymentType, transactionType)}
+                                    style={{ fontSize: "13px" }}
+                                  />
+                                </MuiPickersUtilsProvider>
                                 <span className="position-absolute d-flex align-items-center justify-content-end w-100 h-100 pointerNone px-2" style={{ top: '0', left: '0' }}>
                                   <span className="iconv1 iconv1-arrow-down"></span>
                                 </span>
@@ -750,14 +519,19 @@ class AdminDashboard extends Component {
                             <div className="row">
                               <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-4 pb-2">
                                 <h6>Total Amount</h6>
-                                <h4 className="font-weight-bold dirltrtar text-success">$ 87511</h4>
+                                <h4 className="font-weight-bold dirltrtar text-success">{this.props.defaultCurrency} 87511</h4>
                               </div>
                               <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-4 pb-2">
-                                <h6>Type</h6>
+                                <h6>Payment Type</h6>
                                 <div className="d-flex flex-wrap align-items-center">
                                   <span className="position-relative w-100">
-                                    <select className="bg-white border-secondary border-secondary pr-4 pl-1 w-100" style={{ fontSize: "13px" }}>
-                                      <option>All</option>
+                                    <select className="bg-white border-secondary border-secondary pr-4 pl-1 w-100" style={{ fontSize: "13px" }}
+                                      value={paymentType} onChange={(e) => this.setDatePaymentTransaction(salesDate, e.target.value, transactionType)}>
+                                      <option value="all">{t('All')}</option>
+                                      <option value="digital">{t('Digital')}</option>
+                                      <option value="cash">{t('Cash')}</option>
+                                      <option value="card">{t('Card')}</option>
+                                      <option value="cheque">{t('Cheque')}</option>
                                     </select>
                                     <span className="position-absolute d-flex align-items-center justify-content-end w-100 h-100 pointerNone px-2" style={{ top: '0', left: '0' }}>
                                       <span className="iconv1 iconv1-arrow-down"></span>
@@ -766,14 +540,15 @@ class AdminDashboard extends Component {
                                 </div>
                               </div>
                               <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-4 pb-2">
-                                <h6>Amount</h6>
+                                <h6>Transaction Type</h6>
                                 <div className="d-flex flex-wrap align-items-center">
                                   <span className="position-relative w-100">
-                                    <select className="bg-white border-secondary border-secondary pr-4 pl-1 w-100" style={{ fontSize: "13px" }}>
-                                      <option>All</option>
-                                      <option>Cash</option>
-                                      <option>Card</option>
-                                      <option>Cheque</option>
+                                    <select className="bg-white border-secondary border-secondary pr-4 pl-1 w-100" style={{ fontSize: "13px" }}
+                                      value={transactionType} onChange={(e) => this.setDatePaymentTransaction(salesDate, paymentType, e.target.value)}>
+                                      <option value="all">{t('All')}</option>
+                                      <option value="PackageSells">{t('Packages')}</option>
+                                      <option value="ClassSell">{t('Classes')}</option>
+                                      <option value="StockSell">{t('POS')}</option>
                                     </select>
                                     <span className="position-absolute d-flex align-items-center justify-content-end w-100 h-100 pointerNone px-2" style={{ top: '0', left: '0' }}>
                                       <span className="iconv1 iconv1-arrow-down"></span>
@@ -783,16 +558,16 @@ class AdminDashboard extends Component {
                               </div>
                               <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-4 pb-2">
                                 <h6>Packages Amount</h6>
-                                <h4 className="font-weight-bold dirltrtar text-orange">$ 87511</h4>
+                                <h4 className="font-weight-bold dirltrtar text-orange">{this.props.defaultCurrency} 87511</h4>
                               </div>
                               <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-4 pb-2">
                                 <h6>POS Amount</h6>
-                                <h4 className="font-weight-bold dirltrtar text-danger">$ 87511</h4>
+                                <h4 className="font-weight-bold dirltrtar text-danger">{this.props.defaultCurrency} 87511</h4>
                               </div>
-                              <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-4 pb-2">
+                              {/* <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-4 pb-2">
                                 <h6>Classes Amount</h6>
-                                <h4 className="font-weight-bold dirltrtar text-danger">$ 87511</h4>
-                              </div>
+                                <h4 className="font-weight-bold dirltrtar text-danger">{this.props.defaultCurrency} 87511</h4>
+                              </div> */}
                               <div className="col-12">
                                 <div className="underline w-100 mt-2 mb-1"></div>
                               </div>
@@ -802,22 +577,22 @@ class AdminDashboard extends Component {
                                   <div className="d-flex align-items-center mr-3">
                                     <div className="dbd-blueblock"></div>
                                     <small className="dbd-blueblock-txt mx-1">Hidd Branch</small>
-                                    <div className="dbd-blueblock-amt text-success font-weight-bold">$ 6,54,111</div>
+                                    <div className="dbd-blueblock-amt text-success font-weight-bold">{this.props.defaultCurrency} 6,54,111</div>
                                   </div>
                                   <div className="d-flex align-items-center mr-3">
                                     <div className="dbd-blueblock"></div>
                                     <small className="dbd-blueblock-txt mx-1">Hidd Branch</small>
-                                    <div className="dbd-blueblock-amt text-success font-weight-bold">$ 6,54,111</div>
+                                    <div className="dbd-blueblock-amt text-success font-weight-bold">{this.props.defaultCurrency} 6,54,111</div>
                                   </div>
                                   <div className="d-flex align-items-center mr-3">
                                     <div className="dbd-blueblock"></div>
                                     <small className="dbd-blueblock-txt mx-1">Hidd Branch</small>
-                                    <div className="dbd-blueblock-amt text-success font-weight-bold">$ 6,54,111</div>
+                                    <div className="dbd-blueblock-amt text-success font-weight-bold">{this.props.defaultCurrency} 6,54,111</div>
                                   </div>
                                   <div className="d-flex align-items-center mr-3">
                                     <div className="dbd-blueblock"></div>
                                     <small className="dbd-blueblock-txt mx-1">Hidd Branch</small>
-                                    <div className="dbd-blueblock-amt text-success font-weight-bold">$ 6,54,111</div>
+                                    <div className="dbd-blueblock-amt text-success font-weight-bold">{this.props.defaultCurrency} 6,54,111</div>
                                   </div>
                                 </div>
                               </div>
@@ -843,14 +618,6 @@ class AdminDashboard extends Component {
                     </div>
                   </div>
 
-
-
-
-
-
-
-
-
                   {this.mostSelling()}
 
                   <div className="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-4 d-flex mt-3">
@@ -871,13 +638,13 @@ class AdminDashboard extends Component {
                                   <h6 className="font-weight-bold dirltrtar text-danger">$ 87511</h6>
                                 </div>
                                 <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
-                                  <div class="row d-block d-sm-flex justify-content-end">
-                                    <div class="col w-auto px-1 flexBasis-auto flex-grow-0" >
-                                      {/* <div class="form-group inlineFormGroup">
-                                        <select class="form-control mx-sm-2 inlineFormInputs bg-white">
+                                  <div className="row d-block d-sm-flex justify-content-end">
+                                    <div className="col w-auto px-1 flexBasis-auto flex-grow-0" >
+                                      {/* <div className="form-group inlineFormGroup">
+                                        <select className="form-control mx-sm-2 inlineFormInputs bg-white">
                                           <option value=""></option>
                                         </select>
-                                        <span class="iconv1 iconv1-arrow-down selectBoxIcon"></span>
+                                        <span className="iconv1 iconv1-arrow-down selectBoxIcon"></span>
                                       </div> */}
 
                                       <div className="d-flex flex-wrap align-items-center">
@@ -892,13 +659,13 @@ class AdminDashboard extends Component {
                                       </div>
 
                                     </div>
-                                    <div class="col w-auto px-1 flexBasis-auto flex-grow-0">
-                                      {/* <div class="form-group inlineFormGroup">
-                                        <select class="form-control mx-sm-2 inlineFormInputs bg-white">
+                                    <div className="col w-auto px-1 flexBasis-auto flex-grow-0">
+                                      {/* <div className="form-group inlineFormGroup">
+                                        <select className="form-control mx-sm-2 inlineFormInputs bg-white">
                                           <option value="">Jan</option>
                                           <option value="">Feb</option>
                                         </select>
-                                        <span class="iconv1 iconv1-arrow-down selectBoxIcon"></span>
+                                        <span className="iconv1 iconv1-arrow-down selectBoxIcon"></span>
                                       </div> */}
 
                                       <div className="d-flex flex-wrap align-items-center">
@@ -935,7 +702,7 @@ class AdminDashboard extends Component {
                                           <img alt='' src="https://cdn4.iconfinder.com/data/icons/business-conceptual-part1-1/513/business-man-512.png" className="mx-1 rounded-circle w-40px h-40px" />
                                           <div className="mx-1">
                                             <p className="m-0 font-weight-bold">Ansar</p>
-                                            <span class="text-body font-weight-light">a@b.com</span>
+                                            <span className="text-body font-weight-light">a@b.com</span>
                                           </div>
                                         </div>
                                       </td>
@@ -953,7 +720,7 @@ class AdminDashboard extends Component {
                                           <img alt='' src="https://cdn4.iconfinder.com/data/icons/business-conceptual-part1-1/513/business-man-512.png" className="mx-1 rounded-circle w-40px h-40px" />
                                           <div className="mx-1">
                                             <p className="m-0 font-weight-bold">Ansar</p>
-                                            <span class="text-body font-weight-light">a@b.com</span>
+                                            <span className="text-body font-weight-light">a@b.com</span>
                                           </div>
                                         </div>
                                       </td>
@@ -971,7 +738,7 @@ class AdminDashboard extends Component {
                                           <img alt='' src="https://cdn4.iconfinder.com/data/icons/business-conceptual-part1-1/513/business-man-512.png" className="mx-1 rounded-circle w-40px h-40px" />
                                           <div className="mx-1">
                                             <p className="m-0 font-weight-bold">Ansar</p>
-                                            <span class="text-body font-weight-light">a@b.com</span>
+                                            <span className="text-body font-weight-light">a@b.com</span>
                                           </div>
                                         </div>
                                       </td>
@@ -1030,7 +797,7 @@ class AdminDashboard extends Component {
 
 function mapStateToProps({
   branch, communication: { eventsByDate, activeAnnouncements },
-  dashboard: { memberDashboard, mostSellingStock, packageDistribution, branchSales, systemYear, dashboardAttendance, revenueDetails },
+  dashboard: { memberDashboard, mostSellingStock, packageDistribution, branchSales, systemYear, dashboardAttendance, revenueDetails, dashboardTotalSales },
   currency: { defaultCurrency }
 }) {
   return {
@@ -1038,7 +805,7 @@ function mapStateToProps({
     eventsByDate: eventsByDate && eventsByDate.sort((a, b) => new Date(a.startDate) - new Date(b.startDate)),
     activeAnnouncements: activeAnnouncements && activeAnnouncements.sort((a, b) => new Date(a.startDate) - new Date(b.startDate)),
     memberDashboard, mostSellingStock,
-    defaultCurrency, packageDistribution, branchSales, systemYear, dashboardAttendance, revenueDetails
+    defaultCurrency, packageDistribution, branchSales, systemYear, dashboardAttendance, revenueDetails, dashboardTotalSales
   }
 }
 

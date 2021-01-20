@@ -12,7 +12,6 @@ const { Formate: { setTime } } = require('../../utils')
 
 const { Package, Period } = require('../../model');
 const { auditLogger } = require('../../middleware/auditlog.middleware');
-const { addPackageInAllBranch, updatePackageInAllBranches } = require('../../service/branch.service');
 const { addPackage, updatePackage } = require('../../biostar');
 
 
