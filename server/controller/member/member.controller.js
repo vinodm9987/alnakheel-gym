@@ -205,15 +205,14 @@ exports.createNewMemberByAdmin = (req, res) => {
             if (req.headers.userid) {
                 packageDetails[0]["doneBy"] = req.headers.userid;
             }
+            if (packageDetails[0].Installments && packageDetails[0].Installments.length) {
+                packageDetails[0].Installments[0].dateOfPaid = setTime(new Date())
+            } else {
+                packageDetails[0]["dateOfPaid"] = setTime(new Date())
+            }
             packageDetails[0]["startDate"] = setTime(packageDetails[0].startDate);
             packageDetails[0]["endDate"] = setTime(packageDetails[0].endDate);
-            if (packageDetails[0].trainerDetails && packageDetails[0].trainerDetails[0]) {
-                packageDetails[0].trainerDetails[0]["trainerStart"] = setTime(packageDetails[0].trainerDetails[0].trainerStart);
-                packageDetails[0].trainerDetails[0]["trainerEnd"] = setTime(packageDetails[0].trainerDetails[0].trainerEnd);
-                packageDetails[0].trainerDetails[0]["orderNo"] = generateOrderId()
-            }
             packageDetails[0]["orderNo"] = generateOrderId()
-            packageDetails[0]["dateOfPaid"] = setTime(new Date())
             packageDetails[0]["timeOfPurchase"] = new Date()
             if (referralCode) {
                 let isExpired = await checkExpiry(referralCode);
