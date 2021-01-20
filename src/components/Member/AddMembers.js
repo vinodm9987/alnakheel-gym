@@ -642,8 +642,7 @@ class AddMembers extends Component {
             this.props.dispatch(updateMemberAndAddPackage(formData))
             $(el).click();
           } else {
-            console.log("🚀 ~ file: AddMembers.js ~ line 607 ~ AddMembers ~ handlePayment ~ memberInfo", memberInfo)
-            // this.props.dispatch(createNewMemberByAdmin(formData))
+            this.props.dispatch(createNewMemberByAdmin(formData))
             $(el).click();
           }
         }
