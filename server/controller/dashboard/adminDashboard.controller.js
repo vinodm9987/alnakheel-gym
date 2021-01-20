@@ -275,7 +275,7 @@ exports.getPendingInstallments = async (req, res) => {
                                 const memberObj = Object.assign({}, member);
                                 memberObj['trainerAmount'] = installment.actualAmount;
                                 memberObj['dueDate'] = installment.dueDate;
-                                memberObj['type'] = 'Package';
+                                memberObj['type'] = 'Trainer';
                                 response.push(memberObj);
                             }
                         }
