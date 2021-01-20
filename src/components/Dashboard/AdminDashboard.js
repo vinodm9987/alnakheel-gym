@@ -9,7 +9,7 @@ import {
   getMemberDashBoard, getMostSellingStock, getPackageDistribution, getSystemYear, getMemberAttendanceDashboard, getDashboardTotalSales, getPendingInstallments
   // getAllBranchSales,   getRevenueDetails 
 } from '../../actions/dashboard.action';
-import { monthFullNames } from '../../utils/apis/helpers';
+import { monthFullNames, monthSmallNamesCaps, weekDaysSmall } from '../../utils/apis/helpers';
 // import { CSVLink } from "react-csv";
 import jsPDF from 'jspdf'
 import 'jspdf-autotable'
@@ -31,7 +31,9 @@ class AdminDashboard extends Component {
       category: '',
       salesDate: new Date(),
       paymentType: 'all',
-      transactionType: 'all'
+      transactionType: 'all',
+      pendingMonth: new Date().getMonth(),
+      pendingDay: new Date().getDay()
     }
     this.props.dispatch(getSystemYear())
     this.props.dispatch(getAllBranch())
@@ -44,7 +46,7 @@ class AdminDashboard extends Component {
     // this.props.dispatch(getAllBranchSales({ year: parseInt(this.state.yearSales) }))
     // this.props.dispatch(getRevenueDetails({ year: parseInt(this.state.yearRevenue), category: this.state.category }))
     this.props.dispatch(getDashboardTotalSales({ date: new Date(), type: 'all', category: 'all' }))
-    this.props.dispatch(getPendingInstallments())
+    this.props.dispatch(getPendingInstallments({ month: this.state.pendingMonth, day: this.state.pendingDay }))
   }
 
   onChangeCalendarDate = date => this.setState({ date }, () => {
@@ -465,7 +467,7 @@ class AdminDashboard extends Component {
                   <div className="row">
                     <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-4 pb-2">
                       <h6>Total Amount</h6>
-                      <h4 className="font-weight-bold dirltrtar text-success">{this.props.defaultCurrency} {totalSells}</h4>
+                      <h4 className="font-weight-bold dirltrtar text-success">{this.props.defaultCurrency} {totalSells.toFixed(2)}</h4>
                     </div>
                     <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-4 pb-2">
                       <h6>Payment Type</h6>
@@ -504,11 +506,11 @@ class AdminDashboard extends Component {
                     </div>
                     <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-4 pb-2">
                       <h6>Packages Amount</h6>
-                      <h4 className="font-weight-bold dirltrtar text-orange">{this.props.defaultCurrency} {totalPackageSells ? totalPackageSells : 0}</h4>
+                      <h4 className="font-weight-bold dirltrtar text-orange">{this.props.defaultCurrency} {totalPackageSells ? totalPackageSells.toFixed(2) : 0}</h4>
                     </div>
                     <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-4 pb-2">
                       <h6>POS Amount</h6>
-                      <h4 className="font-weight-bold dirltrtar text-danger">{this.props.defaultCurrency} {totalStockSells ? totalStockSells : 0}</h4>
+                      <h4 className="font-weight-bold dirltrtar text-danger">{this.props.defaultCurrency} {totalStockSells ? totalStockSells.toFixed(2) : 0}</h4>
                     </div>
                     {/* <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-4 pb-2">
                                 <h6>Classes Amount</h6>
@@ -525,7 +527,7 @@ class AdminDashboard extends Component {
                             <div key={i} className="d-flex align-items-center mr-3">
                               <div className="dbd-blueblock"></div>
                               <small className="dbd-blueblock-txt mx-1">{branch.branchName}</small>
-                              <div className="dbd-blueblock-amt text-success font-weight-bold">{this.props.defaultCurrency} {branch.amount ? branch.amount : 0}</div>
+                              <div className="dbd-blueblock-amt text-success font-weight-bold">{this.props.defaultCurrency} {branch.amount ? branch.amount.toFixed(2) : 0}</div>
                             </div>
                           )
                         })}
@@ -556,7 +558,15 @@ class AdminDashboard extends Component {
     }
   }
 
+  setMonthDay(pendingMonth, pendingDay) {
+    this.setState({ pendingMonth, pendingDay }, () => {
+      this.props.dispatch(getPendingInstallments({ month: this.state.pendingMonth, day: this.state.pendingDay }))
+    })
+  }
+
   pendingInstallments = () => {
+    const { t } = this.props
+    const { pendingMonth, pendingDay } = this.state
     return (
       <div className="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-4 d-flex mt-3">
         <div className="row m-0 w-100 mw-100 bg-light rounded d-flex align-items-start h-100">
@@ -587,8 +597,14 @@ class AdminDashboard extends Component {
 
                           <div className="d-flex flex-wrap align-items-center">
                             <span className="position-relative mx-1 my-1">
-                              <select className="bg-white border-secondary border-secondary pr-4 pl-1 w-100" style={{ fontSize: "13px" }}>
-                                <option>Monthly</option>
+                              <select className="bg-white border-secondary border-secondary pr-4 pl-1 w-100" style={{ fontSize: "13px" }}
+                                value={pendingMonth} onChange={(e) => this.setMonthDay(e.target.value, pendingDay)}
+                              >
+                                {monthSmallNamesCaps.map((month, i) => {
+                                  return (
+                                    <option value={i}>{t(month)}</option>
+                                  )
+                                })}
                               </select>
                               <span className="position-absolute d-flex align-items-center justify-content-end w-100 h-100 pointerNone px-2" style={{ top: '0', left: '0' }}>
                                 <span className="iconv1 iconv1-arrow-down"></span>
@@ -608,9 +624,14 @@ class AdminDashboard extends Component {
 
                           <div className="d-flex flex-wrap align-items-center">
                             <span className="position-relative mx-1 my-1">
-                              <select className="bg-white border-secondary border-secondary pr-4 pl-1 w-100" style={{ fontSize: "13px" }}>
-                                <option value="">Jan</option>
-                                <option value="">Feb</option>
+                              <select className="bg-white border-secondary border-secondary pr-4 pl-1 w-100" style={{ fontSize: "13px" }}
+                                value={pendingDay} onChange={(e) => this.setMonthDay(pendingDay, e.target.value)}
+                              >
+                                {weekDaysSmall.map((week, i) => {
+                                  return (
+                                    <option value={i}>{t(week)}</option>
+                                  )
+                                })}
                               </select>
                               <span className="position-absolute d-flex align-items-center justify-content-end w-100 h-100 pointerNone px-2" style={{ top: '0', left: '0' }}>
                                 <span className="iconv1 iconv1-arrow-down"></span>
