@@ -310,7 +310,7 @@ class CreateBackup extends Component {
                 <tbody>
                   <tr>
                     <td>
-                      <div className="m-0 mxw-200px mnw-100px whiteSpaceNormal">Gymnago MAnual backup</div>
+                      <div className="m-0 mxw-200px mnw-100px whiteSpaceNormal">Alnakheel MAnual backup</div>
                     </td>
                     <td><div className="m-0 mxw-200px mnw-100px whiteSpaceNormal">Tuesday, Friday</div></td>
                     <td>10/02/2020</td>
@@ -342,7 +342,7 @@ class CreateBackup extends Component {
                 <tbody>
                   <tr>
                     <td>
-                      <div className="m-0 mxw-200px mnw-100px whiteSpaceNormal">Gymnago MAnual backup</div>
+                      <div className="m-0 mxw-200px mnw-100px whiteSpaceNormal">Alnakheel MAnual backup</div>
                     </td>
                     <td><div className="m-0 mxw-200px mnw-100px whiteSpaceNormal">Every Month at, 15</div></td>
                     <td>10:00 AM</td>
@@ -371,7 +371,7 @@ class CreateBackup extends Component {
                   <div className="d-flex flex-wrap justify-content-between p-1">
                     <div className="m-1">
                       <h6 className="font-weight-bold mb-1">Backup Name</h6>
-                      <h6 className="">Gymnago Manual Backup</h6>
+                      <h6 className="">Alnakheel Manual Backup</h6>
                     </div>
                     <div className="m-1">
                       <h6 className="font-weight-bold mb-1">Created On</h6>

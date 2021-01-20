@@ -64,7 +64,7 @@ module.exports = {
               </p>
               <a href="#"
                 style="" color: "#007bff", margin: "0", textDecoration: "none" "">
-                The GymNaGo Team
+                The Alnakheel Team
               </a>
             </div>
           </div>`
@@ -135,7 +135,7 @@ module.exports = {
                   </p>
                   <a href="#"
                     style="" color: "#007bff", margin: "0", textDecoration: "none" "">
-                    The Gymnago Team
+                    The Alnakheel Team
                   </a>
                 </div>
               </div>`

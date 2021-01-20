@@ -2,7 +2,7 @@ version: "3"
 services:
   web:
     build: .
-    container_name: gymNaGo
+    container_name: Alnakheel
     ports:
       - "5000:5000"
     depends_on:
