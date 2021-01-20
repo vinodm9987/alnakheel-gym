@@ -104,7 +104,7 @@ class UserTabBar extends Component {
             <div className="topLogoWrapper">
               <img src={algymlogo} alt='' className="topLogo" />
             </div>
-            <h4 className="d-none d-xl-block px-3">{t('Welcome to Alnakheel')}</h4>
+            <h4 className="d-none d-xl-block px-3">{t('Welcome to AlNakheel')}</h4>
             <span className="cursorPointer d-inline-flex align-items-center m-2" onClick={() => this.changedLanguage()}>
               <span className="iconv1 iconv1-globe language-icon px-1" style={{ fontSize: '20px', textShadow: '0 0 0 #000' }}></span>
               <span className="px-1 SegoeSemiBold">{t('TopBarLanguage')}</span>
