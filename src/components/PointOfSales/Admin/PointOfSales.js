@@ -673,7 +673,7 @@ class PointOfSales extends Component {
                         <div className="col-12 col-sm-6 d-flex align-items-center justify-content-end">
                           <a href="/#" data-toggle="modal" data-target="#passwordAskModal"
                             className="d-flex flex-column align-items-center justify-content-center bg-danger w-100px h-100px m-1 linkHoverDecLess rounded-circle text-white cursorPointer border-0">
-                            <h3 className="iconv1 iconv1-discount m-0 text-white"></h3>
+                            <h3 className="iconv1 iconv1-discount m-0 text-white"> </h3>
                             <span className="w-100 text-center"><small className="text-white">{t('Discount')}</small></span>
                           </a>
                           {/* {customerStatus === 'Member' &&

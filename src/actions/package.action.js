@@ -1,6 +1,9 @@
 import axios from 'axios';
 
-import { ADD_PACKAGE, UPDATE_PACKAGE, GET_ERROR, GET_PACKAGE, CLEAR_ERRORS, GET_PACKAGE_BY_ID, GET_ACTIVE_PACKAGE } from './types'
+import {
+    ADD_PACKAGE, UPDATE_PACKAGE, GET_ERROR, GET_PACKAGE, CLEAR_ERRORS, GET_PACKAGE_BY_ID, GET_ACTIVE_PACKAGE,
+    GET_PACKAGE_BY_SALES_BRANCH
+} from './types'
 import { IP } from '../config'
 import { setLoading, removeLoading } from './loader.action'
 
@@ -151,6 +154,25 @@ export const getPackageById = (id) => dispatch => {
         .catch(err =>
             dispatch({
                 type: GET_PACKAGE_BY_ID,
+                payload: null
+            })
+        )
+};
+
+
+
+export const getAllPackageBySalesBranch = (postData) => dispatch => {
+    axios
+        .post(`${IP}/master/getAllPackageBySalesBranch`, postData)
+        .then(res =>
+            dispatch({
+                type: GET_PACKAGE_BY_SALES_BRANCH,
+                payload: res.data
+            })
+        )
+        .catch(err =>
+            dispatch({
+                type: GET_PACKAGE_BY_SALES_BRANCH,
                 payload: null
             })
         )

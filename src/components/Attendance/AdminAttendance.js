@@ -51,7 +51,7 @@ class AdminAttendance extends Component {
     return (
       <div className="col-12">
         <div className="d-flex flex-column flex-lg-row align-items-center justify-content-end">
-          <div className="mx-1 mt-4 mt-lg-0">
+          <div className="ml-1 mr-4 mt-4 mt-lg-0">
             <span className="position-relative mw-100">
               <select className="bg-warning border-0 px-5 py-2 text-white rounded w-300px mw-100" value={branch} onChange={(e) => this.handleFilter(e.target.value, this.state.date, this.state.search)}>
                 <option value="all">{t('All Branch')}</option>
@@ -69,7 +69,7 @@ class AdminAttendance extends Component {
           </div>
           <div className="col w-auto px-1 flexBasis-auto flex-grow-0">
             <div className="form-group inlineFormGroup flex-nowrap mt-4 pt-2 d-flex">
-              <span onClick={() => this.handleFilter(this.state.branch, '', this.state.search)} className="btn btn-warning btn-sm text-white my-1">ALL</span>
+              <span onClick={() => this.handleFilter(this.state.branch, '', this.state.search)} className="btn btn-warning btn-sm text-white d-inline-flex align-items-center">ALL</span>
               <MuiPickersUtilsProvider utils={DateFnsUtils}>
                 <DatePicker
                   variant='inline'
@@ -77,7 +77,7 @@ class AdminAttendance extends Component {
                   autoOk
                   invalidDateMessage=''
                   maxDate={new Date()}
-                  className={"form-control mx-sm-2 inlineFormInputs"}
+                  className={"form-control mx-sm-2 inlineFormInputs w-150px"}
                   minDateMessage=''
                   format="dd/MM/yyyy"
                   value={this.state.date}

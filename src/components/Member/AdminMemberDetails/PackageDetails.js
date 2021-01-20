@@ -27,6 +27,11 @@ class PackageDetails extends Component {
     multipleE: '',
     cardNumber: '',
     cardNumberE: '',
+    Installments: [],
+    installmentTotalAmount: 0,
+    installmentPaidAmount: 0,
+    installmentRemainAmount: 0,
+    installmentPackageName: ''
   }
 
   onClickPayButton(packageName, totalAmount, packageId, index) {
@@ -36,6 +41,12 @@ class PackageDetails extends Component {
       packageId,
       index
     })
+  }
+
+  setInstallments(Installments, installmentTotalAmount, installmentPaidAmount, installmentRemainAmount, installmentPackageName) {
+    if (Installments && Installments.length) {
+      this.setState({ Installments, installmentTotalAmount, installmentPaidAmount, installmentRemainAmount, installmentPackageName })
+    }
   }
 
   setPaidType(type) {
@@ -179,16 +190,20 @@ class PackageDetails extends Component {
             <ul className="row px-0">
               {packageDetails && packageDetails.map((pack, i) => {
                 const { startDate, endDate, extendDate, reactivationDate, packages: { packageName, _id, period: { periodDays } },
-                  paidStatus, totalAmount, trainer, trainerFees, trainerStart, trainerEnd, trainerExtend } = pack
+                  paidStatus, trainerDetails } = pack
+                let trainer = null
+                if (trainerDetails && trainerDetails.length) {
+                  trainer = trainerDetails[trainerDetails.length - 1]
+                }
                 if ((extendDate && reactivationDate) ? new Date().setHours(0, 0, 0, 0) <= new Date(extendDate).setHours(0, 0, 0, 0) : new Date().setHours(0, 0, 0, 0) <= new Date(endDate).setHours(0, 0, 0, 0)) {
                   return (
                     <li key={i} className="d-block col-12 px-0">
                       <div className="row">
                         <div className="col-12 d-flex justify-content-end align-items-center pb-2">
-                          <small className="text-secondary">{t('Payment Status')}</small>
-                          {paidStatus === 'Paid'
-                            ? <button className="btn btn-success badge-pill btn-sm px-3 mx-1 py-0 w-100px" data-toggle="modal" data-target="#allreadyPaid"><small className="mx-1">{t(`${paidStatus}`)}</small><small className="iconv1 iconv1-arrow-down mx-1"></small></button>
-                            : <button className="btn btn-danger badge-pill btn-sm px-3 mx-1 py-0 w-100px" data-toggle="modal" data-target="#notYetPaid" onClick={() => this.onClickPayButton(packageName, totalAmount, _id, i)}><small className="mx-1">{t(`${paidStatus}`)}</small><small className="iconv1 iconv1-arrow-down mx-1"></small></button>
+                          <span className="text-secondary">{t('Payment Status')}</span>
+                          {(paidStatus === 'Paid' || paidStatus === 'Installment')
+                            ? <button className="btn btn-success badge-pill btn-sm px-3 py-05 d-inline-flex justify-content-between align-items-center mx-1 py-0 w-100px text-nowrap" data-toggle="modal" data-target="#allreadyPaid"><span className="mx-1">{t(`${paidStatus}`)}</span><span className="iconv1 iconv1-arrow-down mx-1"></span></button>
+                            : <button className="btn btn-danger badge-pill btn-sm px-3 py-05 d-inline-flex justify-content-between align-items-center mx-1 py-0 w-100px text-nowrap" data-toggle="modal" data-target="#notYetPaid" onClick={() => this.onClickPayButton(packageName, totalAmount, _id, i)}><span className="mx-1">{t(`${paidStatus}`)}</span><span className="iconv1 iconv1-arrow-down mx-1"></span></button>
                           }
                         </div>
                         <div className="col-12 col-lg-5">
@@ -229,33 +244,33 @@ class PackageDetails extends Component {
                             />
                           }
                         </div>
-                        {trainer &&
+                        {trainer && trainer.trainer.credentialId &&
                           <div className="col-12 col-lg-5 d-flex align-items-stretch">
                             <div className="border border-info rounded alert-primary w-100 d-flex align-items-center">
                               <div className="d-flex p-2 w-100 flex-wrap">
                                 <div className="d-flex justify-content-between pb-1 w-100 align-items-start">
                                   <h6 className="font-weight-bold text-black">{t('Trainer Details')}</h6>
-                                  {(trainerExtend ? (new Date(trainerExtend).setHours(0, 0, 0, 0) < new Date().setHours(0, 0, 0, 0)) : (new Date(trainerEnd).setHours(0, 0, 0, 0) < new Date().setHours(0, 0, 0, 0)))
+                                  {(trainer.trainerExtend ? (new Date(trainer.trainerExtend).setHours(0, 0, 0, 0) < new Date().setHours(0, 0, 0, 0)) : (new Date(trainer.trainerEnd).setHours(0, 0, 0, 0) < new Date().setHours(0, 0, 0, 0)))
                                     ? <h5 className="m-0 btn btn-danger px-3 py-0 btn-sm br-50px cursorDefault">{t('Expired')}</h5>
                                     : <span className="d-none"></span>
                                   }
                                 </div>
                                 <div className="d-flex align-items-start w-100">
-                                  <img alt='' src={`${trainer.credentialId.avatar.path}`} className="mx-1 rounded-circle w-50px h-50px" />
+                                  <img alt='' src={`http://${trainer.trainer.credentialId.avatar.ip}:5600/${trainer.trainer.credentialId.avatar.path}`} className="mx-1 rounded-circle w-50px h-50px" />
                                   <div className="mx-1">
-                                    <p className="m-0 text-black">{trainer.credentialId.userName}</p>
+                                    <p className="m-0 text-black">{trainer.trainer.credentialId.userName}</p>
                                     {/* <span className="wordBreakBreakAll text-black">{trainer.credentialId.email}</span> */}
                                     {/* Tusar phone added */}
-                                    <small className="dirltrtar d-inline-block text-black">{trainer.mobileNo}</small>
-                                    {(trainerExtend ? (new Date(trainerExtend).setHours(0, 0, 0, 0) < new Date().setHours(0, 0, 0, 0)) : (new Date(trainerEnd).setHours(0, 0, 0, 0) < new Date().setHours(0, 0, 0, 0)))
+                                    <small className="dirltrtar d-inline-block text-black">{trainer.trainer.mobileNo}</small>
+                                    {(trainer.trainerExtend ? (new Date(trainer.trainerExtend).setHours(0, 0, 0, 0) < new Date().setHours(0, 0, 0, 0)) : (new Date(trainer.trainerEnd).setHours(0, 0, 0, 0) < new Date().setHours(0, 0, 0, 0)))
                                       ? <h5 className="m-0 text-orange d-none">{t('Expired')}</h5>
-                                      : <div className="d-flex justify-content-between align-items-start flex-wrap">
+                                      : <div className="d-flex justify-content-between align-items-center flex-wrap">
                                         <div className="d-flex justify-content-end flex-wrap flexBasis-0">
-                                          <small className="w-100 text-black">{dateToDDMMYYYY(trainerStart)}</small>
+                                          <small className="w-100 text-black">{dateToDDMMYYYY(trainer.trainerStart)}</small>
                                         </div>
-                                    -
-                                    <div className="d-flex justify-content-end flex-wrap flexBasis-0">
-                                          <small className="w-100 text-right text-black">{dateToDDMMYYYY(trainerEnd)}</small>
+                                        <span className="px-1">-</span>
+                                        <div className="d-flex justify-content-end flex-wrap flexBasis-0">
+                                          <small className="w-100 text-right text-black">{dateToDDMMYYYY(trainer.trainerEnd)}</small>
                                         </div>
                                       </div>
                                     }
@@ -274,15 +289,15 @@ class PackageDetails extends Component {
                     <li key={i} className="d-block col-12 px-0">
                       <div className="row">
                         <div className="col-12 d-flex justify-content-end align-items-center pb-2">
-                          <small className="text-secondary">{t('Payment Status')}</small>
+                          <span className="text-secondary">{t('Payment Status')}</span>
                           {paidStatus === 'Paid'
-                            ? <button className="btn btn-success badge-pill btn-sm px-3 mx-1 py-0 w-100px" data-toggle="modal" data-target="#allreadyPaid"><small className="mx-1">{t(`${paidStatus}`)}</small><small className="iconv1 iconv1-arrow-down mx-1"></small></button>
-                            : <button className="btn btn-danger badge-pill btn-sm px-3 mx-1 py-0 w-100px" data-toggle="modal" data-target="#notYetPaid" onClick={() => this.onClickPayButton(packageName, totalAmount, _id, i)}><small className="mx-1">{t(`${paidStatus}`)}</small><small className="iconv1 iconv1-arrow-down mx-1"></small></button>
+                            ? <button className="btn btn-success badge-pill btn-sm px-3 py-05 d-inline-flex justify-content-between align-items-center mx-1 py-0 w-100px text-nowrap" data-toggle="modal" data-target="#allreadyPaid"><span className="mx-1">{t(`${paidStatus}`)}</span><span className="iconv1 iconv1-arrow-down mx-1"></span></button>
+                            : <button className="btn btn-danger badge-pill btn-sm px-3 py-05 d-inline-flex justify-content-between align-items-center mx-1 py-0 w-100px text-nowrap" data-toggle="modal" data-target="#notYetPaid" onClick={() => this.onClickPayButton(packageName, totalAmount, _id, i)}><span className="mx-1">{t(`${paidStatus}`)}</span><span className="iconv1 iconv1-arrow-down mx-1"></span></button>
                           }
                         </div>
                         <div className="col-12 col-lg-5">
                           <h5 className="">{packageName}</h5>
-                          <button disabled={paidStatus === 'UnPaid'} className="btn btn-success btn-sm px-3 m-1" onClick={() => this.handleStartPackage(this.props.memberById._id, pack._id, periodDays, trainerFees, paidStatus, doneFingerAuth)}>Start Package</button>
+                          <button disabled={paidStatus === 'UnPaid'} className="btn btn-success btn-sm px-3 m-1" onClick={() => this.handleStartPackage(this.props.memberById._id, pack._id, periodDays, paidStatus, doneFingerAuth)}>Start Package</button>
                         </div>
                         <div className="col-12 col-lg-2 d-flex align-items-center justify-content-center flex-column py-3">
 
@@ -466,63 +481,63 @@ class PackageDetails extends Component {
                             </div>
                           </div>
                         } */}
-              <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                <div className="form-group inlineFormGroup">
-                  <label className="mx-sm-2 inlineFormLabel mb-1"></label>
-                  <div className="d-flex">
-                    <div className="custom-control custom-checkbox roundedGreenRadioCheck mx-2">
-                      <input type="checkbox" className="custom-control-input" id="check" name="checkorNo" />
-                      <label className="custom-control-label" htmlFor="check">{t('Cheque')}</label>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              {/* if cheque */}
-              <div className="col-12">
-                <div className="row">
-                  <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                    <div className="form-group inlineFormGroup">
-                      <label htmlFor="bankName" className="mx-sm-2 inlineFormLabel mb-1">{t('Bank Name')}</label>
-                      <input type="number" autoComplete="off" className="form-control mx-sm-2 inlineFormInputs FormInputsError w-100 p-0 d-flex align-items-center bg-white dirltr" id="bankName" />
-                      <div className="errorMessageWrapper">
-                        <small className="text-danger mx-sm-2 errorMessage"></small>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                    <div className="form-group inlineFormGroup">
-                      <label htmlFor="CheckNumber" className="mx-sm-2 inlineFormLabel mb-1">{t('Check Number')}</label>
-                      <input type="number" autoComplete="off" className="form-control mx-sm-2 inlineFormInputs FormInputsError w-100 p-0 d-flex align-items-center bg-white dirltr" id="CheckNumber" />
-                      <div className="errorMessageWrapper">
-                        <small className="text-danger mx-sm-2 errorMessage"></small>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                    <div className="form-group inlineFormGroup">
-                      <label htmlFor="CheckDate" className="mx-sm-2 inlineFormLabel mb-1">{t('Check Date')}</label>
-                      <input type="number" autoComplete="off" className="form-control mx-sm-2 inlineFormInputs FormInputsError w-100 p-0 d-flex align-items-center bg-white dirltr" id="CheckDate" />
-                      <div className="errorMessageWrapper">
-                        <small className="text-danger mx-sm-2 errorMessage"></small>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                    <div className="form-group inlineFormGroup">
-                      <label htmlFor="ChequeAmount" className="mx-sm-2 inlineFormLabel mb-1">{t('Cheque Amount')}</label>
-                      {/* here currency comes , so change errorclass for div below */}
-                      <div className="form-control mx-sm-2 inlineFormInputs FormInputsError w-100 p-0 d-flex align-items-center bg-white dirltr">
-                        <label htmlFor="ChequeAmount" className="text-danger my-0 mx-1 font-weight-bold">{this.props.defaultCurrency}</label>
-                        <input type="number" autoComplete="off" className="border-0 bg-light w-100 h-100 p-1 bg-white" id="ChequeAmount" />
-                      </div>
-                      <div className="errorMessageWrapper">
-                        <small className="text-danger mx-sm-2 errorMessage"></small>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              {/* if cheque over */}
+                        <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                          <div className="form-group inlineFormGroup">
+                            <label className="mx-sm-2 inlineFormLabel mb-1"></label>
+                            <div className="d-flex">
+                              <div className="custom-control custom-checkbox roundedGreenRadioCheck mx-2">
+                                <input type="checkbox" className="custom-control-input" id="check" name="checkorNo" />
+                                <label className="custom-control-label" htmlFor="check">{t('Cheque')}</label>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        {/* if cheque */}
+                        <div className="col-12">
+                          <div className="row">
+                            <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                              <div className="form-group inlineFormGroup">
+                                <label htmlFor="bankName" className="mx-sm-2 inlineFormLabel mb-1">{t('Bank Name')}</label>
+                                <input type="number" autoComplete="off" className="form-control mx-sm-2 inlineFormInputs FormInputsError w-100 p-0 d-flex align-items-center bg-white dirltr" id="bankName" />
+                                <div className="errorMessageWrapper">
+                                  <small className="text-danger mx-sm-2 errorMessage"></small>
+                                </div>
+                              </div>
+                            </div>
+                            <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                              <div className="form-group inlineFormGroup">
+                                <label htmlFor="CheckNumber" className="mx-sm-2 inlineFormLabel mb-1">{t('Check Number')}</label>
+                                <input type="number" autoComplete="off" className="form-control mx-sm-2 inlineFormInputs FormInputsError w-100 p-0 d-flex align-items-center bg-white dirltr" id="CheckNumber" />
+                                <div className="errorMessageWrapper">
+                                  <small className="text-danger mx-sm-2 errorMessage"></small>
+                                </div>
+                              </div>
+                            </div>
+                            <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                              <div className="form-group inlineFormGroup">
+                                <label htmlFor="CheckDate" className="mx-sm-2 inlineFormLabel mb-1">{t('Check Date')}</label>
+                                <input type="number" autoComplete="off" className="form-control mx-sm-2 inlineFormInputs FormInputsError w-100 p-0 d-flex align-items-center bg-white dirltr" id="CheckDate" />
+                                <div className="errorMessageWrapper">
+                                  <small className="text-danger mx-sm-2 errorMessage"></small>
+                                </div>
+                              </div>
+                            </div>
+                            <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                              <div className="form-group inlineFormGroup">
+                                <label htmlFor="ChequeAmount" className="mx-sm-2 inlineFormLabel mb-1">{t('Cheque Amount')}</label>
+                                {/* here currency comes , so change errorclass for div below */}
+                                <div className="form-control mx-sm-2 inlineFormInputs FormInputsError w-100 p-0 d-flex align-items-center bg-white dirltr">
+                                  <label htmlFor="ChequeAmount" className="text-danger my-0 mx-1 font-weight-bold">{this.props.defaultCurrency}</label>
+                                  <input type="number" autoComplete="off" className="border-0 bg-light w-100 h-100 p-1 bg-white" id="ChequeAmount" />
+                                </div>
+                                <div className="errorMessageWrapper">
+                                  <small className="text-danger mx-sm-2 errorMessage"></small>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        {/* if cheque over */}
                         <div className="col-12 pt-3">
                           <div className="justify-content-sm-end d-flex pt-3 pb-2">
                             <button type="button" className="btn btn-success mx-1 px-4" onClick={() => this.handlePay()}>{t('Pay')}</button>
@@ -536,50 +551,123 @@ class PackageDetails extends Component {
             </div>
 
           </div>
-          <div className="col-12">
-            <h5 className="text-secondary">{t('Package History')}</h5>
+          <div className="col-12 px-0">
+            <h5 className="text-secondary">{t('History')}</h5>
           </div>
-          <div className="col-12 tableTypeStriped">
-            <div className="table-responsive">
-              <table className="table table-striped">
-                <thead>
-                  <tr>
-                    <th>{t('Package Name')}</th>
-                    <th>{t('From Date')}</th>
-                    <th>{t('To Date')}</th>
-                    <th>{t('Amount')}</th>
-                    <th>{t('Trainer')}</th>
-                    <th className="text-center">Installments</th>
-                    <th className="text-center">Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {packageDetails && packageDetails.map((pack, i) => {
-                    const { startDate, endDate, packages: { packageName }, totalAmount, trainer } = pack
-
-                    return (
-                      <tr key={i}>
-                        <td>{packageName}</td>
-                        <td>{dateToDDMMYYYY(startDate)}</td>
-                        <td>{dateToDDMMYYYY(endDate)}</td>
-                        <td className="text-danger font-weight-bold"><span>{this.props.defaultCurrency}</span><span className="pl-1"></span><span>{totalAmount.toFixed(3)}</span></td>
-                        <td>{trainer ? trainer.credentialId.userName : 'NA'}</td>
-                        {/* <td className="text-center">
+          <div className="col-12 px-0">
+            <nav className="commonNavForTab">
+              <div className="nav nav-tabs flex-nowrap overflow-auto" id="nav-tab1001" role="tablist">
+                <a className="nav-link active" data-toggle="tab" href="#submenu1" role="tab" >{t('Package History')}</a>
+                <a className="nav-link" data-toggle="tab" href="#submenu2" role="tab" >{t('Trainer History')}</a>
+              </div>
+            </nav>
+          </div>
+          <div className="tab-content" >
+            <div className="tab-pane fade show active" id="submenu1" role="tabpanel" >
+              <div className="col-12 tableTypeStriped">
+                <div className="table-responsive">
+                  <table className="table table-striped">
+                    <thead>
+                      <tr>
+                        <th>{t('Package Name')}</th>
+                        <th>{t('From Date')}</th>
+                        <th>{t('To Date')}</th>
+                        <th>{t('Amount')}</th>
+                        {/* <th>{t('Trainer')}</th> */}
+                        <th className="text-center">Installments</th>
+                        <th className="text-center">Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {packageDetails && packageDetails.map((pack, i) => {
+                        const { startDate, endDate, packages: { packageName, amount }, totalAmount, paidStatus, Installments } = pack
+                        let paidAmount = 0
+                        if (Installments && Installments.length) {
+                          Installments.forEach((installment) => {
+                            if (installment.paidStatus === 'Paid') {
+                              paidAmount += installment.actualAmount
+                            }
+                          })
+                        }
+                        let remainAmount = parseFloat(amount) - parseFloat(paidAmount)
+                        return (
+                          <tr key={i}>
+                            <td>{packageName}</td>
+                            <td>{dateToDDMMYYYY(startDate)}</td>
+                            <td>{dateToDDMMYYYY(endDate)}</td>
+                            {totalAmount ? <td className="text-danger font-weight-bold"><span>{this.props.defaultCurrency}</span><span className="pl-1"></span><span>{totalAmount.toFixed(3)}</span></td> : <td>NA</td>}
+                            {/* <td>{trainer ? trainer.credentialId.userName : 'NA'}</td> */}
+                            {/* <td className="text-center">
                           <span className="bg-warning action-icon"><span className="iconv1 iconv1-download"></span></span>
                         </td> */}
-                        <td className="text-center">No</td>
-                        <td className="text-center">
-                          <span class="badge badge-pill badge-primary px-3 py-2 cursorPointer" data-toggle="modal" data-target="#InstallmentDetails">Details</span>
-                        </td>
-                      </tr>
-                    )
-                  })}
-                </tbody>
-              </table>
+                            <td className="text-center">{paidStatus === 'Installment' ? t('Yes') : t('No')}</td>
+                            {paidStatus === 'Installment'
+                              ? <td className="text-center">
+                                <span class="badge badge-pill badge-primary px-3 py-2 cursorPointer" data-toggle="modal" data-target="#InstallmentDetails"
+                                  onClick={() => this.setInstallments(Installments, amount, paidAmount, remainAmount, packageName)}>Payment Details</span>
+                              </td>
+                              : <td className="text-center">NA</td>
+                            }
+                          </tr>
+                        )
+                      })}
+                    </tbody>
+                  </table>
+                </div>
+                {/* <div className="col-12">Paginate</div> */}
+              </div>
             </div>
 
-            {/* ------------Pop up Installments table details------------ */}
+            <div className="tab-pane fade" id="submenu2" role="tabpanel" >
+              <div className="col-12">
+                <div className="table-responsive">
+                  <table className="borderRoundSeperateTable tdGray">
+                    <thead>
+                      <tr>
+                        <th>{t('Trainer Name')}</th>
+                        <th>{t('Package Name')}</th>
+                        <th>{t('Start Date')}</th>
+                        <th>{t('End Date')}</th>
+                        <th>{t('Amount')}</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {packageDetails && packageDetails.map((pack) => {
+                        const { packages: { packageName }, trainerDetails } = pack
+                        return (
+                          trainerDetails && trainerDetails.map((t, j) => {
+                            const { trainerStart, trainerEnd, trainer: { credentialId: { userName, avatar } }, trainerFees: { amount } } = t
+                            return (
+                              <tr key={j}>
+                                <td>
+                                  <div className="d-flex align-items-center">
+                                    <img src={`http://${avatar.ip}:5600/${avatar.path}`} alt="" className="w-30px h-30px br-50 mr-2" />
+                                    <h5 className="my-2">{userName}</h5>
+                                  </div>
+                                </td>
+                                <td>{packageName}</td>
+                                <td className="dirltrtar">{dateToDDMMYYYY(trainerStart)}</td>
+                                <td className="dirltrtar">{dateToDDMMYYYY(trainerEnd)}</td>
+                                <td className="text-danger font-weight-bold"><span>{this.props.defaultCurrency}</span><span className="pl-1"></span><span>{amount}</span></td>
+                                <td className="text-center">
+                                  <span class="badge badge-pill badge-primary px-3 py-2 cursorPointer" data-toggle="modal" data-target="#InstallmentDetails">Payment Details</span>
+                                </td>
+                              </tr>
+                            )
+                          })
+                        )
+                      })}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              {/* <div className="col-12">Paginate</div> */}
+            </div>
 
+          </div>
+
+          {/* ------------Pop up Installments details------------ */}
+          {this.state.Installments && this.state.Installments.length &&
             <div className="modal fade commonYellowModal" id="InstallmentDetails">
               <div className="modal-dialog modal-lg modal-dialog-centered">
                 <div className="modal-content">
@@ -590,20 +678,20 @@ class PackageDetails extends Component {
                   <div className="modal-body px-4">
                     <div className="d-flex flex-wrap justify-content-between p-1">
                       <div className="m-1">
-                        <h6 className="font-weight-bold mb-1">package Name</h6>
-                        <h6 className="text-danger">One month gold package</h6>
+                        <h6 className="font-weight-bold mb-1">Package Name</h6>
+                        <h6 className="text-danger">{this.state.installmentPackageName}</h6>
                       </div>
                       <div className="m-1">
                         <h6 className="font-weight-bold mb-1">Total Amount</h6>
-                        <h6 className="text-danger"><b>$500</b></h6>
+                        <h6 className="text-danger"><b>{this.props.defaultCurrency} {this.state.installmentTotalAmount}</b></h6>
                       </div>
                       <div className="m-1">
                         <h6 className="font-weight-bold mb-1">Paid Amount</h6>
-                        <h6 className="text-danger"><b>$200</b></h6>
+                        <h6 className="text-danger"><b>{this.props.defaultCurrency} {this.state.installmentPaidAmount}</b></h6>
                       </div>
                       <div className="m-1">
                         <h6 className="font-weight-bold mb-1">Remaining Amount</h6>
-                        <h6 className="text-danger"><b>$300</b></h6>
+                        <h6 className="text-danger"><b>{this.props.defaultCurrency} {this.state.installmentRemainAmount}</b></h6>
                       </div>
                     </div>
                     <h5 className="m-1 py-3"><b>Installment History</b></h5>
@@ -619,22 +707,17 @@ class PackageDetails extends Component {
                           </tr>
                         </thead>
                         <tbody>
-                          <tr>
-                            <td>Installment 1</td>
-                            <td className="text-danger font-weight-bold">$ 300</td>
-                            <td>22/02/2020</td>
-                            <td>22/02/2020</td>
-                            {/* <td className="text-danger font-weight-bold">Pending</td> */}
-                            <td className="text-success font-weight-bold">Paid</td>
-                          </tr>
-                          <tr>
-                            <td>Installment 1</td>
-                            <td className="text-danger font-weight-bold">$ 300</td>
-                            <td>22/02/2020</td>
-                            <td>22/02/2020</td>
-                            <td className="text-danger font-weight-bold">Pending</td>
-                            {/* <td className="text-success font-weight-bold">Paid</td> */}
-                          </tr>
+                          {this.state.Installments.map((installment, k) => {
+                            return (
+                              <tr>
+                                <td>Installment {k + 1}</td>
+                                <td className="text-danger font-weight-bold">{this.props.defaultCurrency} {installment.actualAmount}</td>
+                                <td>{dateToDDMMYYYY(installment.dueDate)}</td>
+                                <td>{dateToDDMMYYYY(installment.dateOfInstallment)}</td>
+                                {installment.paidStatus === 'Paid' ? <td className="text-success font-weight-bold">Paid</td> : <td className="text-danger font-weight-bold">Pending</td>}
+                              </tr>
+                            )
+                          })}
                         </tbody>
                       </table>
                     </div>
@@ -642,8 +725,9 @@ class PackageDetails extends Component {
                 </div>
               </div>
             </div>
-            {/* ------------Pop up Installments table details Ends------------ */}
-          </div>
+          }
+          {/* ------------Pop up Installments details Ends------------ */}
+
         </div>
       )
     } else {

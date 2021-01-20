@@ -89,8 +89,8 @@ class Register extends Component {
 
   handleSubmit = () => {
     const { t } = this.props
-    const { name, email, mobile, personal, dob, password, confirm, nationality, gender, branch, upload, referralCode, emailE, mobileE } = this.state
-    if (name && email && mobile && personal && dob && password && confirm && nationality && gender && branch && upload && calculateDOB(dob) > 14 && confirm === password
+    const { name, email, mobile, personal, dob, password, confirm, nationality, gender, upload, referralCode, emailE, mobileE } = this.state
+    if (name && email && mobile && personal && dob && password && confirm && nationality && gender && upload && calculateDOB(dob) > 14 && confirm === password
       && !emailE && !mobileE
     ) {
       if (referralCode) {
@@ -106,7 +106,7 @@ class Register extends Component {
       if (!dob) this.setState({ dobE: t('Enter DOB') })
       if (!nationality) this.setState({ nationalityE: t('Enter nationality') })
       if (!gender) this.setState({ genderE: t('Enter gender') })
-      if (!branch) this.setState({ branchE: t('Enter branch') })
+      // if (!branch) this.setState({ branchE: t('Enter branch') })
       if (!upload) this.setState({ uploadE: t('Select file') })
       if (!password) this.setState({ passwordE: t('Enter password') })
       if (!confirm) this.setState({ confirmE: t('Enter confirm password') })
@@ -147,7 +147,7 @@ class Register extends Component {
   }
 
   render() {
-    const { activeElement, name, email, mobile, personal, dob, password, confirm, height, weight, emergencyNumber, relationship, referralCode, showPass, showConfirmPass, nationality, gender, branch } = this.state
+    const { activeElement, name, email, mobile, personal, dob, password, confirm, height, weight, emergencyNumber, relationship, referralCode, showPass, showConfirmPass, nationality, gender } = this.state
     const { t } = this.props
     return (
       <div className="loginRegister">
@@ -346,11 +346,9 @@ class Register extends Component {
                     <small className="d-flex justify-content-end text-danger">{this.state.genderE}</small>
                   </div>
                 </div>
-                <div className="col-12">
+                {/* <div className="col-12">
                   <div className="form-group">
                     <div className={this.state.branchE ? "d-flex align-items-center border-bottom border-danger position-relative" : "d-flex align-items-center border-bottom position-relative"}>
-                      {/* <label htmlFor="branch" className="text-secondary flex-shrink-0 flex-grow-0">{t('Branch')}</label> */}
-                      {/* <span className="text-body font-weight-bold iconv1 iconv1-eye mr-2"></span> */}
                       <select className="form-control pt-0 w-100 border-0 bg-white" id="branch" onChange={(e) => this.setState(validator(e, 'branch', 'text', [t('Enter branch')]))}>
                         <option value='' hidden></option>
                         {this.props.branchs.activeResponse && this.props.branchs.activeResponse.map((branch, i) => {
@@ -368,7 +366,7 @@ class Register extends Component {
                     </div>
                     <small className="d-flex justify-content-end text-danger">{this.state.branchE}</small>
                   </div>
-                </div>
+                </div> */}
                 <div className="col-12">
                   <div className="form-group">
                     <div className="d-flex align-items-center border-bottom position-relative">

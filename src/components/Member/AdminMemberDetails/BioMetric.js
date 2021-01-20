@@ -149,7 +149,7 @@ class BioMetric extends Component {
             </div>
 
             {(this.props.memberById && this.props.memberById.doneFingerAuth && !this.props.memberById.biometricTemplate)
-              ? <div>FingerPrint has been excluded</div>
+              ? <div class="px-4 text-danger">FingerPrint has been excluded</div>
               : <div className="col-12 d-flex justify-content-center">
                 <div className="enroll-box-wrapper" dir="ltr">
                   <div className="enroll-box enroll-box-left">
