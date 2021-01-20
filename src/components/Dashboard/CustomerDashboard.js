@@ -677,7 +677,7 @@ class CustomerDashboard extends Component {
                                               <span className="d-inline-flex mt-1">
                                                 <FacebookShareButton
                                                   url={`https://skoolgo.pixelmindit.com:5000/#/sign-up`}
-                                                  quote={`GymnaGo sign in with my referral code "${this.props.referCode.code}"`}
+                                                  quote={`Alnakheel sign in with my referral code "${this.props.referCode.code}"`}
                                                 >
                                                   <FacebookIcon size={32} round />
                                                 </FacebookShareButton>
