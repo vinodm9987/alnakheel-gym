@@ -74,9 +74,10 @@ header.topBar {
   align-items: center;
   justify-content: flex-end;
   /* background-color: #075bb5; */
-  background-color: #0c0e10;
+  /* background-color: #0c0e10; */
   /* background-image: linear-gradient(to right, #1085fe, #074db5); */
   color: #fff;
+  background-image: linear-gradient(to right, #3B3E3F, #0C0E10);
 }
 .topLogoWrapper {
   position: absolute;
@@ -289,7 +290,8 @@ aside.sideNav {
   flex: 0 0 110px;
   position: relative;
   /* background-color: #0b83c2; */
-  background-color: #0c0e10;
+  /* background-color: #0c0e10; */
+  background-image: linear-gradient(to bottom, #282B2D, #0C0E10);
 }
 .primaryLevelMenu {
   margin: 0;
