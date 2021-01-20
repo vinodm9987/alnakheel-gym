@@ -177,6 +177,8 @@ exports.getMemberAttendanceDashboard = async (req, res) => {
     }
 };
 
+
+
 exports.getIndividualMemberAttendance = async (req, res) => {
     try {
         let memberAttendances = await MemberAttendance.find({ branch: req.body.branch }).lean();
@@ -196,17 +198,19 @@ exports.getIndividualMemberAttendance = async (req, res) => {
 };
 
 
+
+
 exports.getDashboardTotalSales = async (req, res) => {
     try {
         let conditions = { dateOfPurchase: setTime(req.body.date) }, response = {};
         const memberSells = await MemberPurchase.find(conditions).lean();
         const stockSells = await StockSell.find(conditions).lean();
         const classSells = await MemberClass.find(conditions).lean();
-        const members = await Member.find({ $gte: { updatedAt: setTime(req.body.date) } }).lean();
+        const members = await Member.find({ updated_at: { $gte: setTime(req.body.date) } }).lean();
         if (req.body.category === 'all') {
             const totalStockSells = getStockSellTotalAmount(memberSells, stockSells, req.body.type);
             const totalClassSells = getClassesSellTotalAmount(classSells, req.body.type);
-            const totalPackageSells = getPackageSellTotalAmount(members, setTime(req.body.date));
+            const totalPackageSells = getPackageSellTotalAmount(members, setTime(req.body.date), req.body.type);
             response['totalStockSells'] = totalStockSells;
             response['totalClassSells'] = totalClassSells;
             response['totalPackageSells'] = totalPackageSells;
@@ -217,7 +221,7 @@ exports.getDashboardTotalSales = async (req, res) => {
             const totalClassSells = getClassesSellTotalAmount(classSells, req.body.type);
             response['totalClassSells'] = totalClassSells;
         } else if (req.body.category === 'PackageSells') {
-            const totalPackageSells = getPackageSellTotalAmount(members, setTime(req.body.date));
+            const totalPackageSells = getPackageSellTotalAmount(members, setTime(req.body.date), req.body.type);
             response['totalPackageSells'] = totalPackageSells;
         }
         return successResponseHandler(res, response, "success");
@@ -226,3 +230,53 @@ exports.getDashboardTotalSales = async (req, res) => {
         errorResponseHandler(res, error, "failed  !");
     }
 };
+
+
+exports.getPendingInstallments = async (req, res) => {
+    try {
+        const members = await Member.find({}).populate('credentialId').lean();
+        const todayMonth = new Date().getMonth();
+        const todayDay = new Date().getDay();
+        let response = [];
+        for (const member of members) {
+            for (const packages of member.packageDetails) {
+                if (packages.Installments && packages.Installments.length) {
+                    for (const installment of packages.Installments) {
+                        const dueDate = new Date(setTime(installment.dueDate));
+                        const monthConditions = req.body.month ? req.body.month === todayMonth : true;
+                        const dayConditions = req.body.day ? req.body.day === todayDay : true;
+                        const conditions = (new Date() > dueDate) && monthConditions && dayConditions;
+                        if (new Date() > dueDate && conditions) {
+                            const memberObj = Object.assign({}, member);
+                            memberObj['packageAmount'] = installment.actualAmount;
+                            memberObj['packageAmount'] = installment.dueDate;
+                            memberObj['type'] = 'Package';
+                            response.push(memberObj);
+                        }
+                    }
+                }
+                if (packages.trainerDetails && packages.trainerDetails.length) {
+                    for (const trainer of packages.trainerDetails) {
+                        for (const installment of trainer.Installments) {
+                            const dueDate = new Date(setTime(installment.dueDate));
+                            const monthConditions = req.body.month ? req.body.month === todayMonth : true;
+                            const dayConditions = req.body.day ? req.body.day === todayDay : true;
+                            const conditions = (new Date() > dueDate) && monthConditions && dayConditions;
+                            if (new Date() > dueDate && conditions) {
+                                const memberObj = Object.assign({}, member);
+                                memberObj['trainerAmount'] = installment.actualAmount;
+                                memberObj['trainerAmount'] = installment.dueDate;
+                                memberObj['type'] = 'Package';
+                                response.push(memberObj);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    } catch (error) {
+        logger.error(error);
+        errorResponseHandler(res, error, "failed  !");
+    }
+};
+

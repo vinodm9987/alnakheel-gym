@@ -60,7 +60,7 @@ module.exports = {
     },
 
     handleInstallmentAmount: (installment, type, totalAmount, date) => {
-        if (installment.paidStatus === 'paid') {
+        if (installment.paidStatus === 'Paid') {
             const dateOfPaid = new Date(setTime(installment.dateOfPaid))
             if (new Date(date) === dateOfPaid) {
                 if (type === 'all') totalAmount += (+installment.totalAmount);

@@ -11,7 +11,7 @@ const { logger: { logger }, upload: { uploadAvatar },
 
 
 const { Mailer: { sendMail, }, Formate: { setTime, convertToDate }, IdGenerator: { createId, generateOrderId },
-    Referral: { updateTransaction, addPointOfPolicy, checkExpiryOfPolicy } } = require('../../utils');
+    Referral: { updateTransaction, addPointOfPolicy, checkExpiry, pendingPaymentToGetPoint, checkExpiryOfPolicy } } = require('../../utils');
 
 
 const { updateMemberInBioStar, bioStarToken,
@@ -213,7 +213,7 @@ exports.createNewMemberByAdmin = (req, res) => {
                 packageDetails[0].trainerDetails[0]["orderNo"] = generateOrderId()
             }
             packageDetails[0]["orderNo"] = generateOrderId()
-            packageDetails[0]["dateOfPurchase"] = setTime(new Date())
+            packageDetails[0]["dateOfPaid"] = setTime(new Date())
             packageDetails[0]["timeOfPurchase"] = new Date()
             if (referralCode) {
                 let isExpired = await checkExpiry(referralCode);
@@ -361,7 +361,7 @@ exports.addMemberFaceRecognition = async (req, res) => {
             startDate: userData.packageDetails[0].startDate,
             templates: userData.biometricTemplate.templates,
             raw_image: userData.biometricTemplate.raw_image
-        }
+        };
         const newResponse = await Member.findById(req.body.memberId).populate('credentialId branch')
             .populate({ path: "packageDetails.trainerDetails.trainer", populate: { path: "credentialId" } })
             .populate({ path: "packageDetails.packages", populate: { path: "period" } })

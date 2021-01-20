@@ -72,7 +72,7 @@ const memberSchema = new Schema({
 
         }],
 
-        paidType: { type: String, enum: ["Online", "Offline"] }, dateOfPaid: Date,
+        paidType: { type: String, enum: ["Online", "Offline"] }, dateOfPaid: Date, timeOfPaid: Date,
 
         cardNumber: String, cashAmount: Number, cardAmount: Number, vatAmount: Number, discount: Number,
 
@@ -126,10 +126,6 @@ const memberSchema = new Schema({
         orderNo: String,
 
         doneBy: { type: Schema.Types.ObjectId, ref: "Credential" },
-
-        dateOfPurchase: Date,
-
-        timeOfPurchase: Date,
 
     }],
 
