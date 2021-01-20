@@ -104,7 +104,7 @@ class UserTabBar extends Component {
             <div className="topLogoWrapper">
               <img src={algymlogo} alt='' className="topLogo" />
             </div>
-            <h4 className="d-none d-xl-block px-3">{t('Welcome to Gymnago')}</h4>
+            <h4 className="d-none d-xl-block px-3">{t('Welcome to Alnakheel')}</h4>
             <span className="cursorPointer d-inline-flex align-items-center m-2" onClick={() => this.changedLanguage()}>
               <span className="iconv1 iconv1-globe language-icon px-1" style={{ fontSize: '20px', textShadow: '0 0 0 #000' }}></span>
               <span className="px-1 SegoeSemiBold">{t('TopBarLanguage')}</span>
@@ -115,7 +115,7 @@ class UserTabBar extends Component {
             <div className={unreadLength > 0 ? "notificationSection active" : "notificationSection inactive"}>
               <span className="iconv1 iconv1-notifications"></span>
               <ul className="notificationMenu">
-                <div className="bg-primary w-100 h-50px d-flex align-items-center">
+                <div className="bg-al-red w-100 h-50px d-flex align-items-center">
                   <h6 className="d-flex justify-content-between text-white w-100 m-0">
                     <span className="px-3 font-weight-bold">{t('Notifications')}</span><span className="px-3 font-weight-bold">{unreadLength}</span>
                   </h6>
@@ -147,7 +147,7 @@ class UserTabBar extends Component {
                 {/* <li className="w-100 border-bottom"> */}
                 <div onClick={(e) => this.handleRead(e)} className="bg-white w-100 h-50px d-flex align-items-center justify-content-center">
                   <Link to={'/user-notification'} className="text-primary linkHoverDecLess">
-                    <h6 className="text-primary m-0 font-weight-bold linkHoverDecLess">{t('View All Notifications')}</h6>
+                    <h6 className="text-al-red m-0 font-weight-bold linkHoverDecLess">{t('View All Notifications')}</h6>
                   </Link>
                 </div>
               </ul>

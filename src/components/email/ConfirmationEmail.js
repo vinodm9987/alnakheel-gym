@@ -45,7 +45,7 @@ class ConfirmationEmail extends Component {
           </p>
           <p
             style={{ margin: "0" }} >
-            Welcome to Gymnago, Here is the confirmation code for your sign in
+            Welcome to Alnakheel, Here is the confirmation code for your sign in
           </p>
           <h2
             style={{

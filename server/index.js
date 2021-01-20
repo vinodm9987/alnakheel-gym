@@ -129,7 +129,7 @@ if (MODE === 'PROD') {
   httpsServer = https.createServer(credentials, app);
   const io = require('./socket')(httpsServer, true);
   exports.io = io;
-  httpsServer.listen(port, () => console.info(`welcome to pixel gymNgo :)  visit https://skoolgo.pixelmindit.com:${port}`)).on("error", (e) => {
+  httpsServer.listen(port, () => console.info(`welcome to Alnakheel :)  visit https://skoolgo.pixelmindit.com:${port}`)).on("error", (e) => {
     if (e.code === 'EADDRINUSE') {
       console.log();
       console.error('Address ' + port + ' already in use! You need to pick a different host and/or port.');
@@ -144,7 +144,7 @@ if (MODE === 'PROD') {
   httpServer = http.createServer(app);
   const io = require('./socket')(httpServer, false);
   exports.io = io;
-  httpServer.listen(port, () => console.info(`welcome to pixel gymNgo :)  visit http://localhost:${port}`)).on("error", (e) => {
+  httpServer.listen(port, () => console.info(`welcome to Alnakheel :)  visit http://localhost:${port}`)).on("error", (e) => {
     if (e.code === 'EADDRINUSE') {
       console.log();
       console.error('Address ' + port + ' already in use! You need to pick a different host and/or port.');

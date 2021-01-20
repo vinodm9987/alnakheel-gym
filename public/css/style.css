@@ -77,7 +77,7 @@ header.topBar {
   /* background-color: #0c0e10; */
   /* background-image: linear-gradient(to right, #1085fe, #074db5); */
   color: #fff;
-  background-image: linear-gradient(to right, #3B3E3F, #0C0E10);
+  background-image: linear-gradient(to right, #3b3e3f, #0c0e10);
 }
 .topLogoWrapper {
   position: absolute;
@@ -291,7 +291,7 @@ aside.sideNav {
   position: relative;
   /* background-color: #0b83c2; */
   /* background-color: #0c0e10; */
-  background-image: linear-gradient(to bottom, #282B2D, #0C0E10);
+  background-image: linear-gradient(to bottom, #282b2d, #0c0e10);
 }
 .primaryLevelMenu {
   margin: 0;
@@ -1665,7 +1665,7 @@ button.react-calendar__navigation__arrow.react-calendar__navigation__prev2-butto
   right: 0;
   bottom: 0;
   left: 0;
-  background-image: url(../img/al-login-bg.png);
+  background-image: url(../img/al-login-bg.jpg);
   background-position: right top;
   background-size: cover;
   display: flex;
@@ -3652,4 +3652,15 @@ input:focus {
 }
 .nav-tabs .nav-item {
   margin-bottom: 0;
+}
+.bg-al-red {
+  background-color: #e11f2b !important;
+}
+.color-al-red,
+.text-al-red {
+  color: #e11f2b !important;
+}
+.color-al-red:hover,
+.text-al-red:hover {
+  color: #e11f2b !important;
 }
