@@ -74,7 +74,7 @@ class BioMetric extends Component {
     const fingerIndex = this.props.memberById && this.props.memberById.biometricTemplate && this.props.memberById.biometricTemplate.fingerIndex
     return (
       <div className="tab-pane fade" id="menu2" role="tabpanel">
-        {(this.props.memberById && this.props.memberById.packageDetails[0] && this.props.memberById.packageDetails[0].paidStatus === 'Paid') ||
+        {(this.props.memberById && this.props.memberById.packageDetails[0] && (this.props.memberById.packageDetails[0].paidStatus === 'Paid' || this.props.memberById.packageDetails[0].paidStatus === 'Installment')) ||
           (customerClassesDetails && customerClassesDetails.length > 0)
           ?
           <form className="row form-inline">

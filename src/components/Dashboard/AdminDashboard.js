@@ -9,7 +9,7 @@ import {
   getMemberDashBoard, getMostSellingStock, getPackageDistribution, getSystemYear, getMemberAttendanceDashboard, getDashboardTotalSales, getPendingInstallments
   // getAllBranchSales,   getRevenueDetails 
 } from '../../actions/dashboard.action';
-import { monthFullNames, monthSmallNamesCaps, weekDaysSmall } from '../../utils/apis/helpers';
+import { monthFullNames, monthSmallNamesCaps, weekDaysSmall, dateToDDMMYYYY } from '../../utils/apis/helpers';
 // import { CSVLink } from "react-csv";
 import jsPDF from 'jspdf'
 import 'jspdf-autotable'
@@ -425,6 +425,11 @@ class AdminDashboard extends Component {
       const { salesDate, paymentType, transactionType } = this.state
       const { totalStockSells, totalClassSells, totalPackageSells, branches } = this.props.dashboardTotalSales
       const totalSells = (totalStockSells ? totalStockSells : 0) + (totalClassSells ? totalClassSells : 0) + (totalPackageSells ? totalPackageSells : 0)
+      const data = {
+        labels: ['POS', 'Classes', 'Packages'],
+        datasets: [{ data: [(totalStockSells ? totalStockSells : 0), (totalClassSells ? totalClassSells : 0), (totalPackageSells ? totalPackageSells : 0)], backgroundColor: ['orange', 'red', 'blue'], hoverBackgroundColor: ['orange', 'red', 'blue'] }],
+        text: `${t('Total')} ${totalSells}`
+      };
       return (
         <div className="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-8 d-flex mt-3">
           <div className="row m-0 w-100 mw-100 bg-light rounded d-flex align-items-start h-100">
@@ -460,8 +465,17 @@ class AdminDashboard extends Component {
                     </span>
                   </div>
                   <div className="d-flex flex-wrap align-items-center justify-content-center">
-                    Graph
-                            </div>
+                    <Doughnut
+                      data={data}
+                      options={{
+                        legend: {
+                          display: false,
+                          position: 'right',
+                          align: 'start'
+                        }
+                      }}
+                    />
+                  </div>
                 </div>
                 <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-9 pt-2">
                   <div className="row">
@@ -566,55 +580,57 @@ class AdminDashboard extends Component {
 
   pendingInstallments = () => {
     const { t } = this.props
-    const { pendingMonth, pendingDay } = this.state
-    return (
-      <div className="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-4 d-flex mt-3">
-        <div className="row m-0 w-100 mw-100 bg-light rounded d-flex align-items-start h-100">
+    if (this.props.pendingInstallments) {
+      const { pendingMonth, pendingDay } = this.state
 
-          <div className="col-12 d-flex flex-wrap align-items-center justify-content-between py-1 mb-auto">
-            <h6 className="mx-1 my-2 SegoeBold py-1">Pending Installments</h6>
-            <div className="underline w-100"></div>
-          </div>
+      return (
+        <div className="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-4 d-flex mt-3">
+          <div className="row m-0 w-100 mw-100 bg-light rounded d-flex align-items-start h-100">
 
-          <div className="col-12 d-flex flex-wrap align-items-center justify-content-between py-1">
-            <div className="col-12">
-              <div className="row">
-                <div className="col-12">
-                  <div className="row">
-                    <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
-                      <h6>Total Pending Amount</h6>
-                      <h6 className="font-weight-bold dirltrtar text-danger">$ 87511</h6>
-                    </div>
-                    <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
-                      <div className="row d-block d-sm-flex justify-content-end">
-                        <div className="col w-auto px-1 flexBasis-auto flex-grow-0" >
-                          {/* <div className="form-group inlineFormGroup">
+            <div className="col-12 d-flex flex-wrap align-items-center justify-content-between py-1 mb-auto">
+              <h6 className="mx-1 my-2 SegoeBold py-1">Pending Installments</h6>
+              <div className="underline w-100"></div>
+            </div>
+
+            <div className="col-12 d-flex flex-wrap align-items-center justify-content-between py-1">
+              <div className="col-12">
+                <div className="row">
+                  <div className="col-12">
+                    <div className="row">
+                      {/* <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
+                        <h6>Total Pending Amount</h6>
+                        <h6 className="font-weight-bold dirltrtar text-danger">$ 87511</h6>
+                      </div> */}
+                      <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
+                        <div className="row d-block d-sm-flex justify-content-end">
+                          <div className="col w-auto px-1 flexBasis-auto flex-grow-0" >
+                            {/* <div className="form-group inlineFormGroup">
                                         <select className="form-control mx-sm-2 inlineFormInputs bg-white">
                                           <option value=""></option>
                                         </select>
                                         <span className="iconv1 iconv1-arrow-down selectBoxIcon"></span>
                                       </div> */}
 
-                          <div className="d-flex flex-wrap align-items-center">
-                            <span className="position-relative mx-1 my-1">
-                              <select className="bg-white border-secondary border-secondary pr-4 pl-1 w-100" style={{ fontSize: "13px" }}
-                                value={pendingMonth} onChange={(e) => this.setMonthDay(e.target.value, pendingDay)}
-                              >
-                                {monthSmallNamesCaps.map((month, i) => {
-                                  return (
-                                    <option value={i}>{t(month)}</option>
-                                  )
-                                })}
-                              </select>
-                              <span className="position-absolute d-flex align-items-center justify-content-end w-100 h-100 pointerNone px-2" style={{ top: '0', left: '0' }}>
-                                <span className="iconv1 iconv1-arrow-down"></span>
+                            <div className="d-flex flex-wrap align-items-center">
+                              <span className="position-relative mx-1 my-1">
+                                <select className="bg-white border-secondary border-secondary pr-4 pl-1 w-100" style={{ fontSize: "13px" }}
+                                  value={pendingMonth} onChange={(e) => this.setMonthDay(e.target.value, pendingDay)}
+                                >
+                                  {monthSmallNamesCaps.map((month, i) => {
+                                    return (
+                                      <option value={i}>{t(month)}</option>
+                                    )
+                                  })}
+                                </select>
+                                <span className="position-absolute d-flex align-items-center justify-content-end w-100 h-100 pointerNone px-2" style={{ top: '0', left: '0' }}>
+                                  <span className="iconv1 iconv1-arrow-down"></span>
+                                </span>
                               </span>
-                            </span>
-                          </div>
+                            </div>
 
-                        </div>
-                        <div className="col w-auto px-1 flexBasis-auto flex-grow-0">
-                          {/* <div className="form-group inlineFormGroup">
+                          </div>
+                          <div className="col w-auto px-1 flexBasis-auto flex-grow-0">
+                            {/* <div className="form-group inlineFormGroup">
                                         <select className="form-control mx-sm-2 inlineFormInputs bg-white">
                                           <option value="">Jan</option>
                                           <option value="">Feb</option>
@@ -622,100 +638,69 @@ class AdminDashboard extends Component {
                                         <span className="iconv1 iconv1-arrow-down selectBoxIcon"></span>
                                       </div> */}
 
-                          <div className="d-flex flex-wrap align-items-center">
-                            <span className="position-relative mx-1 my-1">
-                              <select className="bg-white border-secondary border-secondary pr-4 pl-1 w-100" style={{ fontSize: "13px" }}
-                                value={pendingDay} onChange={(e) => this.setMonthDay(pendingDay, e.target.value)}
-                              >
-                                {weekDaysSmall.map((week, i) => {
-                                  return (
-                                    <option value={i}>{t(week)}</option>
-                                  )
-                                })}
-                              </select>
-                              <span className="position-absolute d-flex align-items-center justify-content-end w-100 h-100 pointerNone px-2" style={{ top: '0', left: '0' }}>
-                                <span className="iconv1 iconv1-arrow-down"></span>
+                            <div className="d-flex flex-wrap align-items-center">
+                              <span className="position-relative mx-1 my-1">
+                                <select className="bg-white border-secondary border-secondary pr-4 pl-1 w-100" style={{ fontSize: "13px" }}
+                                  value={pendingDay} onChange={(e) => this.setMonthDay(pendingMonth, e.target.value)}
+                                >
+                                  {weekDaysSmall.map((week, i) => {
+                                    return (
+                                      <option value={i}>{t(week)}</option>
+                                    )
+                                  })}
+                                </select>
+                                <span className="position-absolute d-flex align-items-center justify-content-end w-100 h-100 pointerNone px-2" style={{ top: '0', left: '0' }}>
+                                  <span className="iconv1 iconv1-arrow-down"></span>
+                                </span>
                               </span>
-                            </span>
+                            </div>
                           </div>
                         </div>
                       </div>
                     </div>
                   </div>
-                </div>
-                <div className="col-12">
-                  <div className="table-responsive">
-                    <table className="borderRoundSeperateTable tdWhite">
-                      <thead>
-                        <tr>
-                          <th><small>Member Name</small></th>
-                          <th><small>Amount</small></th>
-                          <th><small>Due Date</small></th>
-                          <th></th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr>
-                          <td>
-                            <div className="d-flex">
-                              <img alt='' src="https://cdn4.iconfinder.com/data/icons/business-conceptual-part1-1/513/business-man-512.png" className="mx-1 rounded-circle w-40px h-40px" />
-                              <div className="mx-1">
-                                <p className="m-0 font-weight-bold">Ansar</p>
-                                <span className="text-body font-weight-light">a@b.com</span>
-                              </div>
-                            </div>
-                          </td>
-                          <td><h5 className="text-warning font-weight-bold m-0 dirltrtar">$ 200</h5></td>
-                          <td>12/02/2020</td>
-                          <td className="text-center">
-                            <a href="/#" className="dboard-btn-icon-primary">
-                              <span className="iconv1 iconv1-right-small-arrow"></span>
-                            </a>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>
-                            <div className="d-flex">
-                              <img alt='' src="https://cdn4.iconfinder.com/data/icons/business-conceptual-part1-1/513/business-man-512.png" className="mx-1 rounded-circle w-40px h-40px" />
-                              <div className="mx-1">
-                                <p className="m-0 font-weight-bold">Ansar</p>
-                                <span className="text-body font-weight-light">a@b.com</span>
-                              </div>
-                            </div>
-                          </td>
-                          <td><h5 className="text-warning font-weight-bold m-0 dirltrtar">$ 200</h5></td>
-                          <td>12/02/2020</td>
-                          <td className="text-center">
-                            <a href="/#" className="dboard-btn-icon-primary">
-                              <span className="iconv1 iconv1-right-small-arrow"></span>
-                            </a>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>
-                            <div className="d-flex">
-                              <img alt='' src="https://cdn4.iconfinder.com/data/icons/business-conceptual-part1-1/513/business-man-512.png" className="mx-1 rounded-circle w-40px h-40px" />
-                              <div className="mx-1">
-                                <p className="m-0 font-weight-bold">Ansar</p>
-                                <span className="text-body font-weight-light">a@b.com</span>
-                              </div>
-                            </div>
-                          </td>
-                          <td><h5 className="text-warning font-weight-bold m-0 dirltrtar">$ 200</h5></td>
-                          <td>12/02/2020</td>
-                          <td className="text-center">
-                            <a href="/#" className="dboard-btn-icon-primary">
-                              <span className="iconv1 iconv1-right-small-arrow"></span>
-                            </a>
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
+                  <div className="col-12">
+                    <div className="table-responsive">
+                      <table className="borderRoundSeperateTable tdWhite">
+                        <thead>
+                          <tr>
+                            <th><small>Member Name</small></th>
+                            <th><small>Amount</small></th>
+                            <th><small>Due Date</small></th>
+                            <th></th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {this.props.pendingInstallments.map((pendingInstallment, i) => {
+                            const { credentialId: { avatar, userName, email }, packageAmount, dueDate } = pendingInstallment
+                            return (
+                              <tr key={i}>
+                                <td>
+                                  <div className="d-flex">
+                                    <img alt='' src={`/${avatar.path}`} className="mx-1 rounded-circle w-40px h-40px" />
+                                    <div className="mx-1">
+                                      <p className="m-0 font-weight-bold">{userName}</p>
+                                      <span className="text-body font-weight-light">{email}</span>
+                                    </div>
+                                  </div>
+                                </td>
+                                <td><h5 className="text-warning font-weight-bold m-0 dirltrtar">{this.props.defaultCurrency} {packageAmount}</h5></td>
+                                <td>{dateToDDMMYYYY(dueDate)}</td>
+                                {/* <td className="text-center">
+                              <a href="/#" className="dboard-btn-icon-primary">
+                                <span className="iconv1 iconv1-right-small-arrow"></span>
+                              </a>
+                            </td> */}
+                              </tr>
+                            )
+                          })}
+                        </tbody>
+                      </table>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-            {/* <div className="col-12 px-0">
+              {/* <div className="col-12 px-0">
                           <div className="row pt-3 pb-2">
                             <div className="col-12 px-0 d-flex flex-wrap justify-content-end">
                               <Link to='/pending-installments' className="linkHoverDecLess">
@@ -726,11 +711,12 @@ class AdminDashboard extends Component {
                             </div>
                           </div>
                         </div> */}
-          </div>
+            </div>
 
+          </div>
         </div>
-      </div>
-    )
+      )
+    }
   }
 
   render() {
