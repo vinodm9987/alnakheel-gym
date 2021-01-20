@@ -79,8 +79,6 @@ exports.addBranch = (req, res) => {
         let data = JSON.parse(req.body.data)
         const isMatch = await matchBranchPassword(data.password);
         if (!isMatch) return errorResponseHandler(res, isMatch, "password does not match");
-        const isMachine = await checkMachineConfigured(data.bioStarIp, data.machineId);
-        if (!isMachine) return errorResponseHandler(res, 'error', 'machine is not configured');
         let newBranch = new Branch(data);
         newBranch["avatar"] = req.files[0]
         newBranch.save().then(response => {

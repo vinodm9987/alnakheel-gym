@@ -19,10 +19,9 @@ const { updateMemberInBioStar, bioStarToken,
     getFaceRecognitionTemplate } = require('../../biostar');
 
 
-const { newMemberAssign } = require('../../notification/helper')
+const { newMemberAssign } = require('../../notification/helper');
 
-
-const { memberEntranceStatus } = require('../../socket/emitter')
+const { memberEntranceStatus } = require('../../socket/emitter');
 
 const { registerUserInBioStar, deviceObjectByTypeOfMachine } = require('../../service/branch.service');
 
@@ -240,7 +239,7 @@ exports.createNewMemberByAdmin = (req, res) => {
             if (referralCode) await addPointOfReferral(referralCode, response._id);
             const policy = await checkExpiryOfPolicy();
             if (policy) await addPointOfPolicy(packageDetails[0].totalAmount, response._id);
-            await sendMailForPassword(email, password);
+            await sendMail(email, password);
             const newMemberResponse = await Member.findById(response._id)
                 .populate('credentialId branch').populate('packageDetails.doneBy')
             await auditLogger(req, 'Success')

@@ -7,9 +7,9 @@ const { Formate: { setTime } } = require('../../utils');
 
 
 const { Member, Package, Stocks, Classes, StockSell,
-    Branch, MemberPurchase, MemberClass, MemberAttendance } = require('../../model');
+    MemberPurchase, MemberClass, MemberAttendance } = require('../../model');
 
-
+const { getStockSellTotalAmount, getClassesSellTotalAmount, getPackageSellTotalAmount } = require('../../service/dashboard.service');
 
 
 
@@ -186,7 +186,7 @@ exports.getIndividualMemberAttendance = async (req, res) => {
         let memberAttendances = await MemberAttendance.find({ branch: req.body.branch }).lean();
         let individualAttendance = await MemberAttendance.find({ branch: req.body.branch, memberId: req.body.member }).lean();
         memberAttendances = memberAttendances.filter(doc => doc.date.getMonth() === req.body.month && doc.date.getFullYear() === new Date().getFullYear())
-        individualAttendanceLength = individualAttendance.filter(doc => doc.date.getMonth() === req.body.month && doc.date.getFullYear() === new Date().getFullYear()).length
+        let individualAttendanceLength = individualAttendance.filter(doc => doc.date.getMonth() === req.body.month && doc.date.getFullYear() === new Date().getFullYear()).length
         let datesLength = [...new Set(memberAttendances.map(doc => setTime(doc.date)))].length
         let present = individualAttendanceLength, absent = datesLength - individualAttendanceLength
         let response = [{ name: 'Present', data: present }, { name: 'Absent', data: absent }]
@@ -194,5 +194,38 @@ exports.getIndividualMemberAttendance = async (req, res) => {
     } catch (error) {
         logger.error(error);
         errorResponseHandler(res, error, "Exception while getting Attendances !");
+    }
+};
+
+
+exports.getDashboardTotalSales = async (req, res) => {
+    try {
+        let conditions = { dateOfPurchase: setTime(req.body.date) };
+        let response = {};
+        const memberSells = await MemberPurchase.find(conditions).lean();
+        const stockSells = await StockSell.find(conditions).lean();
+        const classSells = await MemberClass.find(conditions).lean();
+        const members = await Member.find({ $gte: { updatedAt: setTime(req.body.date) } }).lean();
+        if (req.body.category === 'all') {
+            const totalStockSells = getStockSellTotalAmount(memberSells, stockSells, req.body.type);
+            const totalClassSells = getClassesSellTotalAmount(classSells, req.body.type);
+            const totalPackageSells = getPackageSellTotalAmount(members, setTime(req.body.date));
+            response['totalStockSells'] = totalStockSells;
+            response['totalClassSells'] = totalClassSells;
+            response['totalPackageSells'] = totalPackageSells;
+        } else if (req.body.category === 'StockSell') {
+            const totalStockSells = getStockSellTotalAmount(memberSells, stockSells, req.body.type);
+            response['totalStockSells'] = totalStockSells;
+        } else if (req.body.category === 'ClassSell') {
+            const totalClassSells = getClassesSellTotalAmount(classSells, req.body.type);
+            response['totalClassSells'] = totalClassSells;
+        } else if (req.body.category === 'PackageSells') {
+            const totalPackageSells = getPackageSellTotalAmount(members, setTime(req.body.date));
+            response['totalPackageSells'] = totalPackageSells;
+        }
+        return successResponseHandler(res, response, "success");
+    } catch (error) {
+        logger.error(error);
+        errorResponseHandler(res, error, "failed  !");
     }
 };

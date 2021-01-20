@@ -47,14 +47,6 @@ const branchSchema = new Schema({
 
     avatar: Object,
 
-    machineId: Number,
-
-    bioStarIp: String,
-
-    typeOfMachine: {
-        type: String,
-        enum: ["FaceStation", "BioStation"]
-    }
 
 
 }, { timestamps: { createdAt: "created_at", updatedAt: "updated_at" } }, { strict: false });
