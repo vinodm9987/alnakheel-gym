@@ -91,7 +91,7 @@ class AppointmentRequest extends Component {
                 <div className="col w-auto px-1 flexBasis-auto flex-grow-0 d-flex flex-wrap">
                   <div className="col w-auto px-1 flexBasis-auto flex-grow-0">
                     <div className="form-group inlineFormGroup">
-                      <span onClick={() => this.handleFilter(branch, '', search, appointmentFor)} className="btn btn-warning btn-sm text-white my-1">{t('ALL')}</span>
+                      <span onClick={() => this.handleFilter(branch, '', search, appointmentFor)} className="btn btn-warning btn-sm text-white all-btn">{t('ALL')}</span>
                       <MuiPickersUtilsProvider utils={DateFnsUtils}>
                         <DatePicker
                           variant='inline'

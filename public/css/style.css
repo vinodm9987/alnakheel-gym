@@ -1795,7 +1795,7 @@ button:focus {
     width: 106px;
   }
   .Packages label.type2 {
-    width: 83px;
+    width: 102px;
   }
   .Packages label.type1 + .inlineFormInputs,
   .Packages label.type1 ~ .errorMessageWrapper .errorMessage {
@@ -1803,7 +1803,7 @@ button:focus {
   }
   .Packages label.type2 + .inlineFormInputs,
   .Packages label.type2 ~ .errorMessageWrapper .errorMessage {
-    max-width: calc(100% - 83px - 2rem);
+    max-width: calc(100% - 102px - 2rem);
   }
 }
 .Packages .colorCol .errorMessageWrapper {
