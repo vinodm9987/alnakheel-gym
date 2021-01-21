@@ -176,7 +176,7 @@ class FeedbackRequestList extends Component {
         <div className="pageHeadLine"></div>
         {this.props.feedbacks &&
           <div className="row my-4">
-            <div className="col-12 col-sm-12 col-md-6 col-lg-6 text-center">
+            <div className="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-4 offset-xl-1 text-center">
               <p>{t('Complaints')}</p>
               <Doughnut
                 data={complaintData}
@@ -208,7 +208,7 @@ class FeedbackRequestList extends Component {
               </div>
               {/* <p>{t('Total')} {this.props.feedbacks.complaint.pending + this.props.feedbacks.complaint.completed}</p> */}
             </div>
-            <div className="col-12 col-sm-12 col-md-6 col-lg-6 text-center">
+            <div className="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-4 offset-xl-2 text-center">
               <p>{t('Suggestions')}</p>
               <Doughnut
                 data={suggestionData}
@@ -244,10 +244,10 @@ class FeedbackRequestList extends Component {
         }
         <div className="d-flex flex-wrap justify-content-between align-items-center my-3">
           <div className="px-4"><h3 className="font-weight-bold">{t('Requests List')}</h3></div>
-          <div className="d-flex flex-wrap justify-content-between flex-grow-1 my-3">
-            <div className="px-4 pt-4 d-flex flex-nowrap align-items-center pb-3">
+          <div className="d-flex flex-wrap justify-content-end flex-grow-1 my-3">
+            <div className="px-2 pt-4 d-flex flex-nowrap align-items-center pb-3">
               <span onClick={() => this.resetDate()} className="btn btn-warning btn-sm text-white my-1">ALL</span>
-              <div className="position-relative w-200px mw-100 pr-15px">
+              <div className="position-relative w-200px mw-100">
                 <div className="form-group m-2 position-relative">
                   <MuiPickersUtilsProvider utils={DateFnsUtils}>
                     <DatePicker
@@ -265,7 +265,7 @@ class FeedbackRequestList extends Component {
                 </div>
               </div>
             </div>
-            <div className="px-4">
+            <div className="px-2">
               <div className="form-group inlineFormGroup">
                 <p className="mx-sm-2 inlineFormLabel">{t('Type')}</p>
                 <select className="form-control inlineFormInputs mnw-150px"
@@ -277,7 +277,7 @@ class FeedbackRequestList extends Component {
                 <span className="iconv1 iconv1-arrow-down selectBoxIcon"></span>
               </div>
             </div>
-            <div className="px-4">
+            <div className="px-2">
               <div className="form-group inlineFormGroup">
                 <p className="mx-sm-2 inlineFormLabel">{t('Mode')}</p>
                 <select className="form-control inlineFormInputs mnw-150px"
@@ -289,7 +289,7 @@ class FeedbackRequestList extends Component {
                 <span className="iconv1 iconv1-arrow-down selectBoxIcon"></span>
               </div></div>
 
-            <div className="px-4">
+            <div className="px-2">
               <br />
               <div className="form-group inlineFormGroup">
                 <input type="text" autoComplete="off" className="form-control mx-sm-2 badge-pill inlineFormInputs mt-3" placeholder={t("Search ID, Name Here")}

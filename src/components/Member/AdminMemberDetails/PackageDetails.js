@@ -405,7 +405,7 @@ class PackageDetails extends Component {
                         </div>
                         {(paidType === 'Multiple') &&
                           <div className="col-12">
-                            <div className="form-group inlineFormGroup">
+                            <div className="form-group inlineFormGroup  mb-3">
                               <label htmlFor="addDigital" className="mx-sm-2 inlineFormLabel mb-1">{t('Digital')}</label>
                               <div className={this.state.digitalE ? "form-control mx-sm-2 inlineFormInputs FormInputsError w-100 p-0 d-flex align-items-center" : "form-control mx-sm-2 inlineFormInputs w-100 p-0 d-flex align-items-center"}>
                                 <label htmlFor="addDigital" className="text-danger my-0 mx-1">{this.props.defaultCurrency}</label>
@@ -419,7 +419,7 @@ class PackageDetails extends Component {
                         }
                         {(paidType === 'Multiple') &&
                           <div className="col-12">
-                            <div className="form-group inlineFormGroup">
+                            <div className="form-group inlineFormGroup  mb-3">
                               <label htmlFor="addCash" className="mx-sm-2 inlineFormLabel mb-1">{t('Cash')}</label>
                               <div className={this.state.cashE ? "form-control mx-sm-2 inlineFormInputs FormInputsError w-100 p-0 d-flex align-items-center" : "form-control mx-sm-2 inlineFormInputs w-100 p-0 d-flex align-items-center"}>
                                 <label htmlFor="addCash" className="text-danger my-0 mx-1">{this.props.defaultCurrency}</label>
@@ -433,7 +433,7 @@ class PackageDetails extends Component {
                         }
                         {(paidType === 'Multiple') &&
                           <div className="col-12">
-                            <div className="form-group inlineFormGroup">
+                            <div className="form-group inlineFormGroup  mb-3">
                               <label htmlFor="addCard" className="mx-sm-2 inlineFormLabel mb-1">{t('Card')}</label>
                               <div className="form-control mx-sm-2 inlineFormInputs w-100 p-0 d-flex align-items-center">
                                 <label htmlFor="addCard" className="text-danger my-0 mx-1">{this.props.defaultCurrency}</label>
@@ -447,7 +447,7 @@ class PackageDetails extends Component {
                         }
                         {(paidType === 'Cash' || paidType === 'Card') &&
                           <div className="col-12">
-                            <div className="form-group inlineFormGroup">
+                            <div className="form-group inlineFormGroup  mb-3">
                               <label htmlFor="addCard" className="mx-sm-2 inlineFormLabel mb-1">{t('Amount')}</label>
                               <div className={this.state.multipleE ? "form-control mx-sm-2 inlineFormInputs FormInputsError w-100 p-0 d-flex align-items-center" : "form-control mx-sm-2 inlineFormInputs w-100 p-0 d-flex align-items-center"}>
                                 <label htmlFor="addCard" className="text-danger my-0 mx-1">{this.props.defaultCurrency}</label>
@@ -461,7 +461,7 @@ class PackageDetails extends Component {
                         }
                         {(paidType === 'Card' || paidType === 'Multiple') &&
                           <div className="col-12">
-                            <div className="form-group inlineFormGroup">
+                            <div className="form-group inlineFormGroup  mb-3">
                               <label htmlFor="addCardNumber" className="mx-sm-2 inlineFormLabel mb-1">{t('Card Number (last 4 digits)')}</label>
                               <div className={this.state.cardNumberE ? "form-control mx-sm-2 inlineFormInputs FormInputsError w-100 p-0 d-flex align-items-center" : "form-control mx-sm-2 inlineFormInputs w-100 p-0 d-flex align-items-center"}>
                                 <input type="number" autoComplete="off" className="border-0 bg-light w-100 h-100 p-1" id="addCardNumber" value={this.state.cardNumber} onChange={(e) => this.setCardNumber(e)} />
@@ -482,7 +482,7 @@ class PackageDetails extends Component {
                           </div>
                         } */}
                         <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                          <div className="form-group inlineFormGroup">
+                          <div className="form-group inlineFormGroup  mb-3">
                             <label className="mx-sm-2 inlineFormLabel mb-1"></label>
                             <div className="d-flex">
                               <div className="custom-control custom-checkbox roundedGreenRadioCheck mx-2">
@@ -496,26 +496,26 @@ class PackageDetails extends Component {
                         <div className="col-12">
                           <div className="row">
                             <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                              <div className="form-group inlineFormGroup">
+                              <div className="form-group inlineFormGroup  mb-3">
                                 <label htmlFor="bankName" className="mx-sm-2 inlineFormLabel mb-1">{t('Bank Name')}</label>
-                                <input type="number" autoComplete="off" className="form-control mx-sm-2 inlineFormInputs FormInputsError w-100 p-0 d-flex align-items-center bg-white dirltr" id="bankName" />
+                                <input type="number" autoComplete="off" className="form-control mx-sm-2 inlineFormInputs FormInputsError w-100 py-0 px-2 d-flex align-items-center bg-white dirltr" id="bankName" />
                                 <div className="errorMessageWrapper">
                                   <small className="text-danger mx-sm-2 errorMessage"></small>
                                 </div>
                               </div>
                             </div>
                             <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                              <div className="form-group inlineFormGroup">
-                                <label htmlFor="CheckNumber" className="mx-sm-2 inlineFormLabel mb-1">{t('Check Number')}</label>
-                                <input type="number" autoComplete="off" className="form-control mx-sm-2 inlineFormInputs FormInputsError w-100 p-0 d-flex align-items-center bg-white dirltr" id="CheckNumber" />
+                              <div className="form-group inlineFormGroup  mb-3">
+                                <label htmlFor="CheckNumber" className="mx-sm-2 inlineFormLabel mb-1">{t('Cheque Number')}</label>
+                                <input type="number" autoComplete="off" className="form-control mx-sm-2 inlineFormInputs FormInputsError w-100 py-0 px-2 d-flex align-items-center bg-white dirltr" id="CheckNumber" />
                                 <div className="errorMessageWrapper">
                                   <small className="text-danger mx-sm-2 errorMessage"></small>
                                 </div>
                               </div>
                             </div>
                             <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                              <div className="form-group inlineFormGroup">
-                                <label htmlFor="CheckDate" className="mx-sm-2 inlineFormLabel mb-1">{t('Check Date')}</label>
+                              <div className="form-group inlineFormGroup  mb-3">
+                                <label htmlFor="CheckDate" className="mx-sm-2 inlineFormLabel mb-1">{t('Cheque Date')}</label>
                                 <input type="number" autoComplete="off" className="form-control mx-sm-2 inlineFormInputs FormInputsError w-100 p-0 d-flex align-items-center bg-white dirltr" id="CheckDate" />
                                 <div className="errorMessageWrapper">
                                   <small className="text-danger mx-sm-2 errorMessage"></small>
@@ -523,7 +523,7 @@ class PackageDetails extends Component {
                               </div>
                             </div>
                             <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                              <div className="form-group inlineFormGroup">
+                              <div className="form-group inlineFormGroup mb-3">
                                 <label htmlFor="ChequeAmount" className="mx-sm-2 inlineFormLabel mb-1">{t('Cheque Amount')}</label>
                                 {/* here currency comes , so change errorclass for div below */}
                                 <div className="form-control mx-sm-2 inlineFormInputs FormInputsError w-100 p-0 d-flex align-items-center bg-white dirltr">

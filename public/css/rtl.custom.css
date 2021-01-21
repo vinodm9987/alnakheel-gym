@@ -582,3 +582,12 @@ canvas.chartjs-render-monitor {
 .pr-05 {
   padding-left: 2px !important;
 }
+
+
+#ModernTableResponsive thead,
+#ModernTableResponsive1 thead,
+#ModernTableResponsive2 thead,
+#ModernTableResponsive3 thead {
+  left: unset;
+  right: 0;
+}

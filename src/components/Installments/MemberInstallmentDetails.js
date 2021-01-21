@@ -276,7 +276,7 @@ class MemberInstallmentDetails extends Component {
                               <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
                                 <div className="form-group inlineFormGroup mb-3">
                                   <label htmlFor="bankName" className="mx-sm-2 inlineFormLabel mb-1">Bank Name</label>
-                                  <input type="number" autoComplete="off" className="form-control mx-sm-2 inlineFormInputs FormInputsError w-100 p-0 d-flex align-items-center bg-white dirltr" id="bankName" />
+                                  <input type="number" autoComplete="off" className="form-control mx-sm-2 inlineFormInputs FormInputsError w-100 py-0 px-2 d-flex align-items-center bg-white dirltr" id="bankName" />
                                   <div className="errorMessageWrapper">
                                     <small className="text-danger mx-sm-2 errorMessage"></small>
                                   </div>
@@ -284,8 +284,8 @@ class MemberInstallmentDetails extends Component {
                               </div>
                               <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
                                 <div className="form-group inlineFormGroup mb-3">
-                                  <label htmlFor="CheckNumber" className="mx-sm-2 inlineFormLabel mb-1">Check Number</label>
-                                  <input type="number" autoComplete="off" className="form-control mx-sm-2 inlineFormInputs FormInputsError w-100 p-0 d-flex align-items-center bg-white dirltr" id="CheckNumber" />
+                                  <label htmlFor="CheckNumber" className="mx-sm-2 inlineFormLabel mb-1">Cheque Number</label>
+                                  <input type="number" autoComplete="off" className="form-control mx-sm-2 inlineFormInputs FormInputsError w-100 py-0 px-2 d-flex align-items-center bg-white dirltr" id="CheckNumber" />
                                   <div className="errorMessageWrapper">
                                     <small className="text-danger mx-sm-2 errorMessage"></small>
                                   </div>
@@ -293,7 +293,7 @@ class MemberInstallmentDetails extends Component {
                               </div>
                               <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
                                 <div className="form-group inlineFormGroup mb-3">
-                                  <label htmlFor="CheckDate" className="mx-sm-2 inlineFormLabel mb-1">Check Date</label>
+                                  <label htmlFor="CheckDate" className="mx-sm-2 inlineFormLabel mb-1">Cheque Date</label>
                                   <input type="number" autoComplete="off" className="form-control mx-sm-2 inlineFormInputs FormInputsError w-100 p-0 d-flex align-items-center bg-white dirltr" id="CheckDate" />
                                   <div className="errorMessageWrapper">
                                     <small className="text-danger mx-sm-2 errorMessage"></small>

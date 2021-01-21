@@ -816,15 +816,15 @@ class PackageRenewal extends Component {
                 <h5 className="my-2 font-weight-bold px-1">{t('Payment Method')}</h5>
               </div>
               <div className="col-12 col-sm-6 d-flex align-items-center justify-content-end">
-                <button data-toggle="modal" data-target="#passwordAskModal" className="d-flex flex-column align-items-center justify-content-center bg-danger w-100px h-100px m-1 linkHoverDecLess rounded-circle text-white cursorPointer border-0">
-                  <span className="w-100 text-center"><h3 className="m-0"><span className="iconv1 iconv1-discount text-white"></span></h3><small className="text-white">{t('Discount')}</small></span></button>
-                {/* <button data-toggle="modal" data-target="#GiftCard" className="d-flex flex-column align-items-center justify-content-center bg-primary w-100px h-100px m-1 linkHoverDecLess rounded-circle text-white cursorPointer border-0">
-                  <span className="w-100 text-center"><h3 className="m-0"><span className="iconv1 iconv1-giftcard text-white"></span></h3><small className="text-white">{t('Gift Card')}</small></span></button> */}
+                <button data-toggle="modal" data-target="#passwordAskModal" className="d-flex flex-column align-items-center justify-content-center bg-danger discount-class m-1 linkHoverDecLess rounded-circle text-white cursorPointer border-0">
+                  <span className="w-100 text-center"><h3><span className="iconv1 iconv1-discount text-white"></span></h3><span className="text-white">{t('Discount')}</span></span></button>
+                {/* <button data-toggle="modal" data-target="#GiftCard" className="d-flex flex-column align-items-center justify-content-center bg-primary giftcard-class m-1 linkHoverDecLess rounded-circle text-white cursorPointer border-0">
+                  <span className="w-100 text-center"><h3><span className="iconv1 iconv1-giftcard text-white"></span></h3><span className="text-white">{t('Gift Card')}</span></span></button> */}
               </div>
             </div>
             <div className="row mt-3">
               <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6 pb-2">
-                <div className="form-group inlineFormGroup">
+                <div className="form-group inlineFormGroup mb-3">
                   <label htmlFor="addDigital" className="mx-sm-2 inlineFormLabel mb-1">{t('Digital')}</label>
                   <div className={this.state.digitalE ? "form-control mx-sm-2 inlineFormInputs FormInputsError w-100 p-0 d-flex align-items-center bg-white dirltr" : "form-control mx-sm-2 inlineFormInputs w-100 p-0 d-flex align-items-center bg-white dirltr"}>
                     <label htmlFor="addDigital" className="text-danger my-0 mx-1 font-weight-bold">{this.props.defaultCurrency}</label>
@@ -836,7 +836,7 @@ class PackageRenewal extends Component {
                 </div>
               </div>
               <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6 pb-2">
-                <div className="form-group inlineFormGroup">
+                <div className="form-group inlineFormGroup mb-3">
                   <label htmlFor="addCash" className="mx-sm-2 inlineFormLabel mb-1">{t('Cash')}</label>
                   <div className={this.state.cashE ? "form-control mx-sm-2 inlineFormInputs FormInputsError w-100 p-0 d-flex align-items-center bg-white dirltr" : "form-control mx-sm-2 inlineFormInputs w-100 p-0 d-flex align-items-center bg-white dirltr"}>
                     <label htmlFor="addCash" className="text-danger my-0 mx-1 font-weight-bold">{this.props.defaultCurrency}</label>
@@ -848,7 +848,7 @@ class PackageRenewal extends Component {
                 </div>
               </div>
               <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6 pb-2">
-                <div className="form-group inlineFormGroup">
+                <div className="form-group inlineFormGroup mb-3">
                   <label htmlFor="addCard" className="mx-sm-2 inlineFormLabel mb-1">{t('Card')}</label>
                   <div className={this.state.cardE ? "form-control mx-sm-2 inlineFormInputs FormInputsError w-100 p-0 d-flex align-items-center bg-white dirltr" : "form-control mx-sm-2 inlineFormInputs w-100 p-0 d-flex align-items-center bg-white dirltr"}>
                     <label htmlFor="addCard" className="text-danger my-0 mx-1 font-weight-bold">{this.props.defaultCurrency}</label>
@@ -861,7 +861,7 @@ class PackageRenewal extends Component {
               </div>
               {parseFloat(card) ?
                 <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6 pb-2">
-                  <div className="form-group inlineFormGroup">
+                  <div className="form-group inlineFormGroup mb-3">
                     <label htmlFor="addCardNumber" className="mx-sm-2 inlineFormLabel mb-1">{t('Card Number (last 4 digits)')}</label>
                     <input type="text" autoComplete="off" className={this.state.cardNumberE ? "form-control mx-sm-2 inlineFormInputs FormInputsError bg-white" : "form-control mx-sm-2 inlineFormInputs bg-white"} id="addCard4lastno"
                       value={this.state.cardNumber} onChange={(e) => this.setCardNumber(e)}
@@ -871,7 +871,7 @@ class PackageRenewal extends Component {
                 : null
               }
               <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
-                <div className="form-group inlineFormGroup">
+                <div className="form-group inlineFormGroup mb-3">
                   <label className="mx-sm-2 inlineFormLabel mb-1"></label>
                   <div className="d-flex">
                     <div className="custom-control custom-checkbox roundedGreenRadioCheck mx-2">
@@ -888,9 +888,9 @@ class PackageRenewal extends Component {
                 <div className="col-12">
                   <div className="row">
                     <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
-                      <div className="form-group inlineFormGroup">
+                      <div className="form-group inlineFormGroup mb-3">
                         <label htmlFor="bankName" className="mx-sm-2 inlineFormLabel mb-1">{t('Bank Name')}</label>
-                        <input type="text" autoComplete="off" className={this.state.bankNameE ? "form-control mx-sm-2 inlineFormInputs FormInputsError w-100 p-0 d-flex align-items-center bg-white dirltr" : "form-control mx-sm-2 inlineFormInputs w-100 p-0 d-flex align-items-center bg-white dirltr"}
+                        <input type="text" autoComplete="off" className={this.state.bankNameE ? "form-control mx-sm-2 inlineFormInputs FormInputsError w-100 py-0 px-2 d-flex align-items-center bg-white dirltr" : "form-control mx-sm-2 inlineFormInputs w-100 py-0 px-2 d-flex align-items-center bg-white dirltr"}
                           id="bankName"
                           value={this.state.bankName} onChange={(e) => this.setState({ bankName: e.target.value })}
                         />
@@ -900,9 +900,9 @@ class PackageRenewal extends Component {
                       </div>
                     </div>
                     <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
-                      <div className="form-group inlineFormGroup">
-                        <label htmlFor="CheckNumber" className="mx-sm-2 inlineFormLabel mb-1">{t('Check Number')}</label>
-                        <input type="text" autoComplete="off" className={this.state.chequeNumberE ? "form-control mx-sm-2 inlineFormInputs FormInputsError w-100 p-0 d-flex align-items-center bg-white dirltr" : "form-control mx-sm-2 inlineFormInputs w-100 p-0 d-flex align-items-center bg-white dirltr"}
+                      <div className="form-group inlineFormGroup mb-3">
+                        <label htmlFor="CheckNumber" className="mx-sm-2 inlineFormLabel mb-1">{t('Cheque Number')}</label>
+                        <input type="text" autoComplete="off" className={this.state.chequeNumberE ? "form-control mx-sm-2 inlineFormInputs FormInputsError w-100 py-0 px-2 d-flex align-items-center bg-white dirltr" : "form-control mx-sm-2 inlineFormInputs w-100 py-0 px-2 d-flex align-items-center bg-white dirltr"}
                           id="CheckNumber"
                           value={this.state.chequeNumber} onChange={(e) => this.setState({ chequeNumber: e.target.value })}
                         />
@@ -912,8 +912,8 @@ class PackageRenewal extends Component {
                       </div>
                     </div>
                     <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
-                      <div className="form-group inlineFormGroup">
-                        <label htmlFor="CheckDate" className="mx-sm-2 inlineFormLabel mb-1">{t('Check Date')}</label>
+                      <div className="form-group inlineFormGroup mb-3">
+                        <label htmlFor="CheckDate" className="mx-sm-2 inlineFormLabel mb-1">{t('Cheque Date')}</label>
                         <input type="text" autoComplete="off" className={this.state.chequeDateE ? "form-control mx-sm-2 inlineFormInputs FormInputsError w-100 p-0 d-flex align-items-center bg-white dirltr" : "form-control mx-sm-2 inlineFormInputs w-100 p-0 d-flex align-items-center bg-white dirltr"}
                           id="CheckDate"
                           value={this.state.chequeDate} onChange={(e) => this.setState({ chequeDate: e.target.value })}
@@ -924,7 +924,7 @@ class PackageRenewal extends Component {
                       </div>
                     </div>
                     <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
-                      <div className="form-group inlineFormGroup">
+                      <div className="form-group inlineFormGroup mb-3">
                         <label htmlFor="ChequeAmount" className="mx-sm-2 inlineFormLabel mb-1">{t('Cheque Amount')}</label>
                         {/* here currency comes , so change errorclass for div below */}
                         <div className={this.state.chequeE ? "form-control mx-sm-2 inlineFormInputs FormInputsError w-100 p-0 d-flex align-items-center bg-white dirltr" : "form-control mx-sm-2 inlineFormInputs w-100 p-0 d-flex align-items-center bg-white dirltr"}>

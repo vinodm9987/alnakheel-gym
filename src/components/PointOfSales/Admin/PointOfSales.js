@@ -672,9 +672,9 @@ class PointOfSales extends Component {
                         </div>
                         <div className="col-12 col-sm-6 d-flex align-items-center justify-content-end">
                           <a href="/#" data-toggle="modal" data-target="#passwordAskModal"
-                            className="d-flex flex-column align-items-center justify-content-center bg-danger w-100px h-100px m-1 linkHoverDecLess rounded-circle text-white cursorPointer border-0">
-                            <h3 className="iconv1 iconv1-discount m-0 text-white"> </h3>
-                            <span className="w-100 text-center"><small className="text-white">{t('Discount')}</small></span>
+                            className="d-flex flex-column align-items-center justify-content-center bg-danger discount-class m-1 linkHoverDecLess rounded-circle text-white cursorPointer border-0">
+                            <h3><span className="iconv1 iconv1-discount m-0 text-white"></span></h3>
+                            <span className="w-100 text-center text-white">{t('Discount')}</span>
                           </a>
                           {/* {customerStatus === 'Member' &&
                             <a href="/#" data-toggle="modal" data-target="#GiftCard"
@@ -809,7 +809,7 @@ class PointOfSales extends Component {
                             <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
                               <div className="form-group inlineFormGroup mb-3">
                                 <label htmlFor="bankName" className="mx-sm-2 inlineFormLabel mb-1">{t('Bank Name')}</label>
-                                <input type="number" autoComplete="off" className="form-control mx-sm-2 inlineFormInputs FormInputsError w-100 p-0 d-flex align-items-center bg-white dirltr" id="bankName" />
+                                <input type="number" autoComplete="off" className="form-control mx-sm-2 inlineFormInputs FormInputsError w-100 py-0 px-2 d-flex align-items-center bg-white dirltr" id="bankName" />
                                 <div className="errorMessageWrapper">
                                   <small className="text-danger mx-sm-2 errorMessage"></small>
                                 </div>
@@ -817,8 +817,8 @@ class PointOfSales extends Component {
                             </div>
                             <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
                               <div className="form-group inlineFormGroup mb-3">
-                                <label htmlFor="CheckNumber" className="mx-sm-2 inlineFormLabel mb-1">{t('Check Number')}</label>
-                                <input type="number" autoComplete="off" className="form-control mx-sm-2 inlineFormInputs FormInputsError w-100 p-0 d-flex align-items-center bg-white dirltr" id="CheckNumber" />
+                                <label htmlFor="CheckNumber" className="mx-sm-2 inlineFormLabel mb-1">{t('Cheque Number')}</label>
+                                <input type="number" autoComplete="off" className="form-control mx-sm-2 inlineFormInputs FormInputsError w-100 py-0 px-2 d-flex align-items-center bg-white dirltr" id="CheckNumber" />
                                 <div className="errorMessageWrapper">
                                   <small className="text-danger mx-sm-2 errorMessage"></small>
                                 </div>
@@ -826,7 +826,7 @@ class PointOfSales extends Component {
                             </div>
                             <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
                               <div className="form-group inlineFormGroup mb-3">
-                                <label htmlFor="CheckDate" className="mx-sm-2 inlineFormLabel mb-1">{t('Check Date')}</label>
+                                <label htmlFor="CheckDate" className="mx-sm-2 inlineFormLabel mb-1">{t('Cheque Date')}</label>
                                 <input type="number" autoComplete="off" className="form-control mx-sm-2 inlineFormInputs FormInputsError w-100 p-0 d-flex align-items-center bg-white dirltr" id="CheckDate" />
                                 <div className="errorMessageWrapper">
                                   <small className="text-danger mx-sm-2 errorMessage"></small>
