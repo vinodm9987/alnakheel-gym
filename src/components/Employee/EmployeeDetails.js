@@ -16,7 +16,6 @@ class EmployeeDetails extends Component {
     if (visaDetails) {
       const { visaNumber, issueDate, expiryDate, passportNo } = visaDetails
       return (
-        <div>
           <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6 pt-3">
             <div className="table-responsive">
               <table className="table">
@@ -46,7 +45,6 @@ class EmployeeDetails extends Component {
               </table>
             </div>
           </div>
-        </div>
       )
     }
   }
