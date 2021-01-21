@@ -7,7 +7,7 @@ import { logout, logoutUser } from '../../actions/auth.action';
 import { removeLoading, setLoading } from '../../actions/loader.action';
 import { getUserNotification, getUserNotifications } from '../../actions/notification.action';
 import { toggleAction } from '../../actions/toggle.action';
-import gymlogo from '../../assets/img/main-logo.jpg';
+import algymlogo from '../../assets/img/al-main-logo.png'
 import { NAMESPACE } from '../../config';
 import { timeDiffCalc } from '../../utils/apis/helpers';
 import { changeLanguage } from '../../utils/changeLanguage';
