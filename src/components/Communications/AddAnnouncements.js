@@ -148,7 +148,7 @@ class AddAnnouncements extends Component {
                           disableUnderline: true,
                         }}
                         autoOk
-                        className={this.state.startDateE ? "form-control mx-sm-2 inlineFormInputs FormInputsError w-100" : "form-control mx-sm-2 inlineFormInputs w-100"}
+                        className={this.state.startDateE ? "form-control mx-sm-2 FormInputsError w-100 pl-2 border pt-1" : "form-control mx-sm-2 w-100 pl-2 border pt-1"}
                         invalidDateMessage=''
                         minDateMessage=''
                         minDate={new Date()}
@@ -173,7 +173,7 @@ class AddAnnouncements extends Component {
                           disableUnderline: true,
                         }}
                         autoOk
-                        className={this.state.endDateE ? "form-control mx-sm-2 inlineFormInputs FormInputsError w-100" : "form-control mx-sm-2 inlineFormInputs w-100"}
+                        className={this.state.endDateE ? "form-control mx-sm-2 FormInputsError w-100 pl-2 border pt-1" : "form-control mx-sm-2 w-100 pl-2 border pt-1"}
                         invalidDateMessage=''
                         minDateMessage=''
                         minDate={startDate}
@@ -202,7 +202,7 @@ class AddAnnouncements extends Component {
                 <div className="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 colorCol">
                   <div className="form-group inlineFormGroup">
                     <label htmlFor="packageColor" className="mx-sm-2 inlineFormLabel mb-1">{t('Announcement Color')}</label>
-                    <div className="form-control mx-sm-2 inlineFormInputs p-0 border-0 bg-white">
+                    <div className="form-control mx-sm-2 inlineFormInputs p-0 border-0 bg-white w-100">
                       <div className="d-flex align-items-center h-100">
                         <div style={styles.swatch} onClick={this.handleClick}>
                           <div style={styles.colors} className="d-flex align-items-center justify-content-end" ><span class="iconv1 iconv1-arrow-down font-weight-bold"></span></div>
