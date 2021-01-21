@@ -481,7 +481,9 @@ class AdminDashboard extends Component {
                           display: false,
                           position: 'right',
                           align: 'start'
-                        }
+                        },
+                        responsive: true,
+                        maintainAspectRatio: false,
                       }}
                     />
                   </div>
