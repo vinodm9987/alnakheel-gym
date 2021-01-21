@@ -142,7 +142,7 @@ class PendingFreeze extends Component {
                 <div className="row d-block d-sm-flex justify-content-end pt-5">
                   <div className="col w-auto px-1 flexBasis-auto flex-grow-0">
                     <div className="form-group inlineFormGroup">
-                      <span onClick={() => this.resetDate()} className="btn btn-sm btn-warning px-3 my-1 text-white">{t('All')}</span>
+                      <span onClick={() => this.resetDate()} className="btn btn-sm btn-warning px-3 text-white all-btn">{t('All')}</span>
                     </div>
                   </div>
                   <div className="col w-auto px-1 flexBasis-auto flex-grow-0">
