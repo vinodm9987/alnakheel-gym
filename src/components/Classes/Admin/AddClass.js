@@ -108,7 +108,7 @@ class AddClass extends Component {
       }
     })
     if (classId) {
-      if (className && trainer && amount && branch && room && parseInt(capacity) && description && color && startDate && endDate && startTime <= endTime && classDayLength && startDate <= endDate && !capacityE) {
+      if (className && trainer && amount !== '' && branch && room && parseInt(capacity) && description && color && startDate && endDate && startTime <= endTime && classDayLength && startDate <= endDate && !capacityE) {
         if (setTime(startDate) === setTime(new Date()) && setTime(endDate) === setTime(new Date())) {
           if (startTime.setSeconds(0, 0) < endTime.setSeconds(0, 0) && startTime.setSeconds(0, 0) >= new Date().setSeconds(0, 0)) {
             const classInfo = {
@@ -138,7 +138,7 @@ class AddClass extends Component {
       } else {
         if (!className) this.setState({ classNameE: t('Enter class name') })
         if (!trainer) this.setState({ trainerE: t('Select trainer') })
-        if (!amount) this.setState({ amountE: t('Enter amount') })
+        if (amount === '') this.setState({ amountE: t('Enter amount') })
         if (!branch) this.setState({ branchE: t('Enter branch') })
         if (!room) this.setState({ roomE: t('Enter room') })
         if (!parseInt(capacity)) this.setState({ capacityE: t('Enter capacity') })
@@ -153,7 +153,7 @@ class AddClass extends Component {
         if (startTime > endTime) this.setState({ endTimeE: t('To Time should be greater than From Time') })
       }
     } else {
-      if (className && trainer && amount && branch && room && parseInt(capacity) && description && image && color && startDate && endDate && startTime && endTime && classDayLength && startDate <= endDate && !capacityE) {
+      if (className && trainer && amount !== '' && branch && room && parseInt(capacity) && description && image && color && startDate && endDate && startTime && endTime && classDayLength && startDate <= endDate && !capacityE) {
         if (setTime(startDate) === setTime(new Date()) && setTime(endDate) === setTime(new Date())) {
           if (startTime.setSeconds(0, 0) < endTime.setSeconds(0, 0) && startTime.setSeconds(0, 0) >= new Date().setSeconds(0, 0)) {
             const classInfo = {
@@ -183,7 +183,7 @@ class AddClass extends Component {
       } else {
         if (!className) this.setState({ classNameE: t('Enter class name') })
         if (!trainer) this.setState({ trainerE: t('Select trainer') })
-        if (!amount) this.setState({ amountE: t('Enter amount') })
+        if (amount === '') this.setState({ amountE: t('Enter amount') })
         if (!branch) this.setState({ branchE: t('Enter branch') })
         if (!room) this.setState({ roomE: t('Enter room') })
         if (!parseInt(capacity)) this.setState({ capacityE: t('Enter capacity') })
