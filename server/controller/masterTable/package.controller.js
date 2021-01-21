@@ -45,7 +45,7 @@ exports.getAllPackageBySalesBranch = async (req, res) => {
 try {
     let queryCond = {};
     if (req.body.salesBranches && req.body.salesBranches !== 'all') queryCond["salesBranches"] = req.body.salesBranches
-    let response = await Package.find(queryCond,{ endDate: { $gte: setTime(new Date()) } })
+    let response = await Package.find(queryCond)
     .populate('period accessBranches salesBranches')
     successResponseHandler(res, response, "successfully get all packages !!");
 }
