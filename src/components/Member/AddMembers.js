@@ -1525,10 +1525,12 @@ class AddMembers extends Component {
                 </div>
               } */}
 
-              <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                <label className="pt-4 mb-1">Total Amount</label>
-                <h3 className="text-danger"><span className="mr-1">{this.props.defaultCurrency}</span><span className="font-weight-bold">{packageAmount}</span></h3>
-              </div>
+              {(!memberId || addPackage) &&
+                <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                  <label className="pt-4 mb-1">Total Amount</label>
+                  <h3 className="text-danger"><span className="mr-1">{this.props.defaultCurrency}</span><span className="font-weight-bold">{packageAmount}</span></h3>
+                </div>
+              }
 
               {(!memberId || addPackage) &&
                 <div className="col-12 d-flex flex-wrap py-4 mb-3 px-2">
