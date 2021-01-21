@@ -1525,10 +1525,12 @@ class AddMembers extends Component {
                 </div>
               } */}
 
-              <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                <label className="pt-4 mb-1">Total Amount</label>
-                <h3 className="text-danger"><span className="mr-1">{this.props.defaultCurrency}</span><span className="font-weight-bold">{packageAmount}</span></h3>
-              </div>
+              {(!memberId || addPackage) &&
+                <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                  <label className="pt-4 mb-1">Total Amount</label>
+                  <h3 className="text-danger"><span className="mr-1">{this.props.defaultCurrency}</span><span className="font-weight-bold">{packageAmount}</span></h3>
+                </div>
+              }
 
               {(!memberId || addPackage) &&
                 <div className="col-12 d-flex flex-wrap py-4 mb-3 px-2">
@@ -1698,7 +1700,8 @@ class AddMembers extends Component {
                         <div className="row mb-1 mt-4">
                           <div className="col-12 col-sm-6 d-flex align-items-center"><h5 className="my-2 font-weight-bold px-1">Payment Method</h5></div>
                           <div className="col-12 col-sm-6 d-flex align-items-center justify-content-end">
-                            <button onClick={(e) => e.preventDefault()} data-toggle="modal" data-target="#Discount" className="d-flex flex-column align-items-center justify-content-center bg-danger discount-class m-1 linkHoverDecLess rounded-circle text-white cursorPointer border-0">
+                            <button onClick={(e) => e.preventDefault()} data-toggle="modal" data-target="#passwordAskModal" className="d-flex flex-column align-items-center justify-content-center bg-danger discount-class m-1 linkHoverDecLess rounded-circle text-white cursorPointer border-0">
+
                               <span className="w-100 text-center">
                                 <h3><span className="iconv1 iconv1-discount text-white"></span></h3>
                                 <span className="text-white">{t('Discount')}</span>

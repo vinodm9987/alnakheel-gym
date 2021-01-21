@@ -1,11 +1,12 @@
 
 import React, { Component } from 'react'
 import { withTranslation } from 'react-i18next'
-import { generateReport } from '../../utils/pdf'
 import { generateExcel } from '../../utils/excel'
-import { dateToDDMMYYYY, dateToHHMM, countHours, getPageWiseData, setTime, calculateDays } from '../../utils/apis/helpers'
+import { dateToDDMMYYYY, dateToHHMM, countHours, getPageWiseData, setTime, calculateDays, getDataUri } from '../../utils/apis/helpers'
 import Pagination from './Pagination'
 import { connect } from 'react-redux'
+import { generateReport } from '../../utils/pdf'
+import gymlogo from '../../assets/img/main-logo.jpg'
 
 class TableExport extends Component {
 
@@ -50,6 +51,8 @@ class TableExport extends Component {
       return this.tableForPOSProfitAndLoss(datas)
     } else if (reportName === 'Sales By Payment Method') {
       return this.tableForSalesByPaymentMethod(datas)
+    } else if (reportName === 'Today Sales By Staff') {
+      return this.tableForTodaySalesByStaff(datas)
     } else if (reportName === 'Expired Product Details') {
       return this.tableForExpiredProductDetails(datas)
     } else if (reportName === 'Classes Registration Details') {
@@ -64,17 +67,18 @@ class TableExport extends Component {
       return this.tableForBookedAppointmentsStatus(datas)
     } else if (reportName === 'Booked Appointments By Visitors') {
       return this.tableForBookedAppointmentsByVisitors(datas)
+    } else if (reportName === 'Vat Report') {
+      return this.tableForVatReport(datas)
     }
   }
 
   generatePdfReport(tabledData) {
-    const { reportName, fromDate, toDate, branchName, description } = this.props
+    const { reportName, fromDate, toDate, branchName, description, branchImage } = this.props
     const language = this.props.i18n.language
-    console.log("TableExport -> generatePdfReport -> language", language)
     if (reportName === 'Current Stock Details' || reportName === 'Upcoming Expiry') {
-      generateReport(tabledData, reportName, null, null, branchName, description, language)
+      getDataUri(branchImage ? branchImage : gymlogo, tabledData, reportName, null, null, branchName, description, language, generateReport)
     } else {
-      generateReport(tabledData, reportName, fromDate, toDate, branchName, description, language)
+      getDataUri(branchImage ? branchImage : gymlogo, tabledData, reportName, fromDate, toDate, branchName, description, language, generateReport)
     }
   }
 
@@ -319,7 +323,7 @@ class TableExport extends Component {
         if (doc.packageRenewal) {
           tabledData.push({
             "SNo": count,
-            "Receipt No.": '',
+            "Receipt No.": doc.orderNo,
             "Date & Time": `${dateToDDMMYYYY(doc.dateOfPurchase)} ${dateToHHMM(doc.timeOfPurchase)}`,
             "Member ID": memberId,
             "Member Name": userName,
@@ -332,7 +336,7 @@ class TableExport extends Component {
             "Start Date": dateToDDMMYYYY(doc.startDate),
             "End Date": doc.extendDate ? dateToDDMMYYYY(doc.extendDate) : dateToDDMMYYYY(doc.endDate),
             "Paid Amount": doc.totalAmount.toFixed(3),
-            "Renewed By": ''
+            "Renewed By": doc.doneBy ? doc.doneBy.userName : 'NA'
           })
           count = count + 1
         }
@@ -353,7 +357,7 @@ class TableExport extends Component {
       filteredPackageDetails.forEach(doc => {
         tabledData.push({
           "SNo": count,
-          "Receipt No.": '',
+          "Receipt No.": doc.orderNo,
           "Date & Time": `${dateToDDMMYYYY(doc.dateOfPurchase)} ${dateToHHMM(doc.timeOfPurchase)}`,
           "Member ID": memberId,
           "Member Name": credentialId.userName,
@@ -365,7 +369,7 @@ class TableExport extends Component {
           "Start Date": doc.startDate ? dateToDDMMYYYY(doc.startDate) : 'Not Started Yet',
           "End Date": doc.endDate ? doc.extendDate ? dateToDDMMYYYY(doc.extendDate) : dateToDDMMYYYY(doc.endDate) : 'Not Started Yet',
           "Paid Amount": doc.totalAmount.toFixed(3),
-          "Renewed By": ''
+          "Renewed By": doc.doneBy ? doc.doneBy.userName : 'NA'
         })
         count = count + 1
       })
@@ -387,7 +391,7 @@ class TableExport extends Component {
           totalPaidAmount += (doc.trainerFees.amount ? +doc.trainerFees.amount : 0)
           tabledData.push({
             "SNo": count,
-            "Receipt No.": '',
+            "Receipt No.": doc.orderNo,
             "Date & Time": `${dateToDDMMYYYY(doc.dateOfPurchase)} ${dateToHHMM(doc.timeOfPurchase)}`,
             "Member ID": memberId,
             "Member Name": credentialId.userName,
@@ -398,7 +402,7 @@ class TableExport extends Component {
             "Start Date": doc.startDate ? dateToDDMMYYYY(doc.startDate) : 'Not Started Yet',
             "End Date": doc.endDate ? doc.extendDate ? dateToDDMMYYYY(doc.extendDate) : dateToDDMMYYYY(doc.endDate) : 'Not Started Yet',
             "Paid Amount": doc.trainerFees.amount.toFixed(3),
-            "Done By": ''
+            "Done By": doc.doneBy ? doc.doneBy.userName : 'NA'
           })
         }
         count = count + 1
@@ -437,8 +441,8 @@ class TableExport extends Component {
 
           tabledData.push({
             "SNo": count,
-            "Receipt No.": '',
-            "Date & Time": `${dateToDDMMYYYY(doc.startDate ? doc.startDate : admissionDate)} ${dateToHHMM(doc.startDate ? doc.startDate : admissionDate)}`,
+            "Receipt No.": doc.orderNo,
+            "Date & Time": `${dateToDDMMYYYY(doc.dateOfPurchase)} ${dateToHHMM(doc.timeOfPurchase)}`,
             "Member ID": memberId,
             "Member Name": userName,
             "Admission Date": dateToDDMMYYYY(admissionDate),
@@ -450,7 +454,7 @@ class TableExport extends Component {
             "Cash": doc.cashAmount ? `${this.props.defaultCurrency} ${doc.cashAmount.toFixed(3)}` : `${this.props.defaultCurrency} 0.000`,
             "Card": doc.cardAmount ? `${this.props.defaultCurrency} ${doc.cardAmount.toFixed(3)}` : `${this.props.defaultCurrency} 0.000`,
             "Digital": doc.digitalAmount ? `${this.props.defaultCurrency} ${doc.digitalAmount.toFixed(3)}` : `${this.props.defaultCurrency} 0.000`,
-            "Done By": ''
+            "Done By": doc.doneBy ? doc.doneBy.userName : 'NA'
           })
           count = count + 1
         })
@@ -465,7 +469,7 @@ class TableExport extends Component {
           const { memberId, credentialId: { userName }, admissionDate, mobileNo } = member
           tabledData.push({
             "SNo": count,
-            "Receipt No.": '',
+            "Receipt No.": data.orderNo,
             "Date & Time": `${dateToDDMMYYYY(dateOfPurchase)} ${dateToHHMM(created_at)}`,
             "Member ID": memberId ? memberId : 'NA',
             "Member Name": userName ? userName : 'NA',
@@ -478,12 +482,12 @@ class TableExport extends Component {
             "Cash": `${this.props.defaultCurrency} ${cashAmount.toFixed(3)}`,
             "Card": `${this.props.defaultCurrency} ${cardAmount.toFixed(3)}`,
             "Digital": digitalAmount ? `${this.props.defaultCurrency} ${digitalAmount.toFixed(3)}` : `${this.props.defaultCurrency} 0.000`,
-            "Done By": ''
+            "Done By": data.doneBy ? data.doneBy.userName : 'NA'
           })
         } else {
           tabledData.push({
             "SNo": count,
-            "Receipt No.": '',
+            "Receipt No.": data.orderNo,
             "Date & Time": `${dateToDDMMYYYY(dateOfPurchase)} ${dateToHHMM(created_at)}`,
             "Member ID": 'NA',
             "Member Name": 'NA',
@@ -496,7 +500,7 @@ class TableExport extends Component {
             "Cash": `${this.props.defaultCurrency} ${cashAmount.toFixed(3)}`,
             "Card": `${this.props.defaultCurrency} ${cardAmount.toFixed(3)}`,
             "Digital": digitalAmount ? `${this.props.defaultCurrency} ${digitalAmount.toFixed(3)}` : `${this.props.defaultCurrency} 0.000`,
-            "Done By": ''
+            "Done By": data.doneBy ? data.doneBy.userName : 'NA'
           })
         }
         count = count + 1
@@ -508,7 +512,7 @@ class TableExport extends Component {
         totalDigital += (digitalAmount ? +digitalAmount : 0)
         tabledData.push({
           "SNo": count,
-          "Receipt No.": '',
+          "Receipt No.": data.orderNo,
           "Date & Time": `${dateToDDMMYYYY(dateOfPurchase)} ${dateToHHMM(created_at)}`,
           "Member ID": memberId,
           "Member Name": userName,
@@ -521,7 +525,7 @@ class TableExport extends Component {
           "Cash": `${this.props.defaultCurrency} ${cashAmount.toFixed(3)}`,
           "Card": `${this.props.defaultCurrency} ${cardAmount.toFixed(3)}`,
           "Digital": digitalAmount ? `${this.props.defaultCurrency} ${digitalAmount.toFixed(3)}` : `${this.props.defaultCurrency} 0.000`,
-          "Done By": ''
+          "Done By": data.doneBy ? data.doneBy.userName : 'NA'
         })
         count = count + 1
       }
@@ -555,7 +559,7 @@ class TableExport extends Component {
       packageDetails.forEach(doc => {
 
         totalPackageAmount += (doc.packages.amount ? +doc.packages.amount : 0)
-        totalTrainerAmount += (doc.trainerFees ? +doc.trainerFees.amount : 0)
+        totalTrainerAmount += ((doc.actualAmount - doc.packages.amount) ? +(doc.actualAmount - doc.packages.amount) : 0)
         totalPaidAmount += (doc.totalAmount ? +doc.totalAmount : 0)
         totalCash += (doc.cashAmount ? +doc.cashAmount : 0)
         totalCard += (doc.cardAmount ? +doc.cardAmount : 0)
@@ -563,8 +567,8 @@ class TableExport extends Component {
 
         tabledData.push({
           "SNo": count,
-          "Receipt No.": '',
-          "Date & Time": `${dateToDDMMYYYY(doc.startDate ? doc.startDate : admissionDate)} ${dateToHHMM(doc.startDate ? doc.startDate : admissionDate)}`,
+          "Receipt No.": doc.orderNo,
+          "Date & Time": `${dateToDDMMYYYY(doc.dateOfPurchase)} ${dateToHHMM(doc.timeOfPurchase)}`,
           "Member ID": memberId,
           "Member Name": userName,
           "Admission Date": dateToDDMMYYYY(admissionDate),
@@ -574,12 +578,12 @@ class TableExport extends Component {
           "Package": doc.packages.packageName,
           "Transaction Type": transactionType,
           "Package Amount": `${this.props.defaultCurrency} ${doc.packages.amount.toFixed(3)}`,
-          "Trainer Amount": doc.trainerFees ? `${this.props.defaultCurrency} ${doc.trainerFees.amount.toFixed(3)}` : 'NA',
+          "Trainer Amount": `${this.props.defaultCurrency} ${(doc.actualAmount - doc.packages.amount).toFixed(3)}`,
           "Paid Amount": `${this.props.defaultCurrency} ${doc.totalAmount.toFixed(3)}`,
           "Cash": doc.cashAmount ? `${this.props.defaultCurrency} ${doc.cashAmount.toFixed(3)}` : `${this.props.defaultCurrency} 0.000`,
           "Card": doc.cardAmount ? `${this.props.defaultCurrency} ${doc.cardAmount.toFixed(3)}` : `${this.props.defaultCurrency} 0.000`,
           "Digital": doc.digitalAmount ? `${this.props.defaultCurrency} ${doc.digitalAmount.toFixed(3)}` : `${this.props.defaultCurrency} 0.000`,
-          "Done By": ''
+          "Done By": doc.doneBy ? doc.doneBy.userName : 'NA'
         })
         count = count + 1
       })
@@ -627,7 +631,7 @@ class TableExport extends Component {
         const { memberId, credentialId: { userName }, admissionDate, mobileNo } = member
         tabledData.push({
           "SNo": count,
-          "Receipt No.": '',
+          "Receipt No.": data.orderNo,
           "Date & Time": `${dateToDDMMYYYY(dateOfPurchase)} ${dateToHHMM(created_at)}`,
           "Member ID": memberId ? memberId : 'NA',
           "Member Name": userName ? userName : 'NA',
@@ -643,12 +647,12 @@ class TableExport extends Component {
           "Cash": `${this.props.defaultCurrency} ${cashAmount.toFixed(3)}`,
           "Card": `${this.props.defaultCurrency} ${cardAmount.toFixed(3)}`,
           "Digital": digitalAmount ? `${this.props.defaultCurrency} ${digitalAmount.toFixed(3)}` : `${this.props.defaultCurrency} 0.000`,
-          "Done By": ''
+          "Done By": data.doneBy ? data.doneBy.userName : 'NA'
         })
       } else {
         tabledData.push({
           "SNo": count,
-          "Receipt No.": '',
+          "Receipt No.": data.orderNo,
           "Date & Time": `${dateToDDMMYYYY(dateOfPurchase)} ${dateToHHMM(created_at)}`,
           "Member ID": 'NA',
           "Member Name": 'NA',
@@ -664,7 +668,7 @@ class TableExport extends Component {
           "Cash": `${this.props.defaultCurrency} ${cashAmount.toFixed(3)}`,
           "Card": `${this.props.defaultCurrency} ${cardAmount.toFixed(3)}`,
           "Digital": digitalAmount ? `${this.props.defaultCurrency} ${digitalAmount.toFixed(3)}` : `${this.props.defaultCurrency} 0.000`,
-          "Done By": ''
+          "Done By": data.doneBy ? data.doneBy.userName : 'NA'
         })
       }
       count = count + 1
@@ -708,7 +712,7 @@ class TableExport extends Component {
 
       tabledData.push({
         "SNo": count,
-        "Receipt No.": '',
+        "Receipt No.": data.orderNo,
         "Date & Time": `${dateToDDMMYYYY(dateOfPurchase)} ${dateToHHMM(created_at)}`,
         "Member ID": memberId,
         "Member Name": userName,
@@ -723,7 +727,7 @@ class TableExport extends Component {
         "Cash": `${this.props.defaultCurrency} ${cashAmount.toFixed(3)}`,
         "Card": `${this.props.defaultCurrency} ${cardAmount.toFixed(3)}`,
         "Digital": digitalAmount ? `${this.props.defaultCurrency} ${digitalAmount.toFixed(3)}` : `${this.props.defaultCurrency} 0.000`,
-        "Done By": ''
+        "Done By": data.doneBy ? data.doneBy.userName : 'NA'
       })
       count = count + 1
     })
@@ -854,7 +858,7 @@ class TableExport extends Component {
     let totalPaidAmount = 0
     datas && datas.forEach(data => {
       if (data.transactionType === 'Packages') {
-        const { memberId, credentialId: { userName }, branch, packageDetails, admissionDate, mobileNo, transactionType, paymentMethod } = data
+        const { memberId, credentialId: { userName }, branch, packageDetails, mobileNo, transactionType, paymentMethod } = data
         packageDetails.forEach(doc => {
           let displayAmount = 0
           if (paymentMethod === 'Cash') {
@@ -870,8 +874,8 @@ class TableExport extends Component {
 
           tabledData.push({
             "SNo": count,
-            "Receipt No.": '',
-            "Date & Time": `${dateToDDMMYYYY(doc.startDate ? doc.startDate : admissionDate)} ${dateToHHMM(doc.startDate ? doc.startDate : admissionDate)}`,
+            "Receipt No.": doc.orderNo,
+            "Date & Time": `${dateToDDMMYYYY(doc.dateOfPurchase)} ${dateToHHMM(doc.timeOfPurchase)}`,
             "Member ID": memberId,
             "Member Name": userName,
             "Mobile No": mobileNo,
@@ -880,7 +884,7 @@ class TableExport extends Component {
             "Transaction Type": transactionType,
             "Payment Method": paymentMethod,
             "Paid Amount": `${this.props.defaultCurrency} ${displayAmount.toFixed(3)}`,
-            "Done By": ''
+            "Done By": doc.doneBy ? doc.doneBy.userName : 'NA'
           })
           count = count + 1
         })
@@ -901,7 +905,7 @@ class TableExport extends Component {
           const { memberId, credentialId: { userName }, mobileNo } = member
           tabledData.push({
             "SNo": count,
-            "Receipt No.": '',
+            "Receipt No.": data.orderNo,
             "Date & Time": `${dateToDDMMYYYY(dateOfPurchase)} ${dateToHHMM(created_at)}`,
             "Member ID": memberId ? memberId : 'NA',
             "Member Name": userName ? userName : 'NA',
@@ -911,12 +915,12 @@ class TableExport extends Component {
             "Transaction Type": transactionType,
             "Payment Method": paymentMethod,
             "Paid Amount": `${this.props.defaultCurrency} ${displayAmount.toFixed(3)}`,
-            "Done By": ''
+            "Done By": data.doneBy ? data.doneBy.userName : 'NA'
           })
         } else {
           tabledData.push({
             "SNo": count,
-            "Receipt No.": '',
+            "Receipt No.": data.orderNo,
             "Date & Time": `${dateToDDMMYYYY(dateOfPurchase)} ${dateToHHMM(created_at)}`,
             "Member ID": 'NA',
             "Member Name": 'NA',
@@ -926,7 +930,7 @@ class TableExport extends Component {
             "Transaction Type": transactionType,
             "Payment Method": paymentMethod,
             "Paid Amount": `${this.props.defaultCurrency} ${displayAmount.toFixed(3)}`,
-            "Done By": ''
+            "Done By": data.doneBy ? data.doneBy.userName : 'NA'
           })
         }
         count = count + 1
@@ -945,7 +949,7 @@ class TableExport extends Component {
         }
         tabledData.push({
           "SNo": count,
-          "Receipt No.": '',
+          "Receipt No.": data.orderNo,
           "Date & Time": `${dateToDDMMYYYY(dateOfPurchase)} ${dateToHHMM(created_at)}`,
           "Member ID": memberId,
           "Member Name": userName,
@@ -955,7 +959,7 @@ class TableExport extends Component {
           "Transaction Type": transactionType,
           "Payment Method": paymentMethod,
           "Paid Amount": `${this.props.defaultCurrency} ${displayAmount.toFixed(3)}`,
-          "Done By": ''
+          "Done By": data.doneBy ? data.doneBy.userName : 'NA'
         })
         count = count + 1
       }
@@ -972,6 +976,111 @@ class TableExport extends Component {
       "Transaction Type": '',
       "Payment Method": 'Grand Total',
       "Paid Amount": `${this.props.defaultCurrency} ${totalPaidAmount.toFixed(3)}`,
+      "Done By": ''
+    })
+    return tabledData
+  }
+
+  tableForTodaySalesByStaff(datas) {
+    let tabledData = []
+    let count = 1
+    let totalCash = 0, totalCard = 0, totalDigital = 0
+    datas && datas.forEach(data => {
+      if (data.transactionType === 'Packages') {
+        const { memberId, credentialId: { userName }, branch, packageDetails, transactionType } = data
+        packageDetails.forEach(doc => {
+          totalCash += (doc.cashAmount ? +doc.cashAmount : 0)
+          totalCard += (doc.cardAmount ? +doc.cardAmount : 0)
+          totalDigital += (doc.digitalAmount ? +doc.digitalAmount : 0)
+
+          tabledData.push({
+            "SNo": count,
+            "Date & Time": `${dateToDDMMYYYY(doc.dateOfPurchase)} ${dateToHHMM(doc.timeOfPurchase)}`,
+            "Receipt No.": doc.orderNo,
+            "Member ID": memberId,
+            "Member Name": userName,
+            // "Email ID": email,
+            "Branch": branch.branchName,
+            "Transaction Type": transactionType,
+            "Digital": doc.digitalAmount ? `${this.props.defaultCurrency} ${doc.digitalAmount.toFixed(3)}` : `${this.props.defaultCurrency} 0.000`,
+            "Cash": doc.cashAmount ? `${this.props.defaultCurrency} ${doc.cashAmount.toFixed(3)}` : `${this.props.defaultCurrency} 0.000`,
+            "Card": doc.cardAmount ? `${this.props.defaultCurrency} ${doc.cardAmount.toFixed(3)}` : `${this.props.defaultCurrency} 0.000`,
+            "Done By": doc.doneBy ? doc.doneBy.userName : 'NA'
+          })
+          count = count + 1
+        })
+      } else if (data.transactionType === 'POS') {
+        const { customerDetails: { member }, transactionType, branch, cashAmount, cardAmount, digitalAmount, dateOfPurchase, created_at } = data
+        totalCash += (cashAmount ? +cashAmount : 0)
+        totalCard += (cardAmount ? +cardAmount : 0)
+        totalDigital += (digitalAmount ? +digitalAmount : 0)
+        if (member) {
+          const { memberId, credentialId: { userName } } = member
+          tabledData.push({
+            "SNo": count,
+            "Date & Time": `${dateToDDMMYYYY(dateOfPurchase)} ${dateToHHMM(created_at)}`,
+            "Receipt No.": data.orderNo,
+            "Member ID": memberId ? memberId : 'NA',
+            "Member Name": userName ? userName : 'NA',
+            // "Email ID": email ? email : 'NA',
+            "Branch": branch.branchName,
+            "Transaction Type": transactionType,
+            "Cash": `${this.props.defaultCurrency} ${cashAmount.toFixed(3)}`,
+            "Card": `${this.props.defaultCurrency} ${cardAmount.toFixed(3)}`,
+            "Digital": digitalAmount ? `${this.props.defaultCurrency} ${digitalAmount.toFixed(3)}` : `${this.props.defaultCurrency} 0.000`,
+            "Done By": data.doneBy ? data.doneBy.userName : 'NA'
+          })
+        } else {
+          tabledData.push({
+            "SNo": count,
+            "Date & Time": `${dateToDDMMYYYY(dateOfPurchase)} ${dateToHHMM(created_at)}`,
+            "Receipt No.": data.orderNo,
+            "Member ID": 'NA',
+            "Member Name": 'NA',
+            // "Email ID": 'NA',
+            "Branch": branch.branchName,
+            "Transaction Type": transactionType,
+            "Cash": `${this.props.defaultCurrency} ${cashAmount.toFixed(3)}`,
+            "Card": `${this.props.defaultCurrency} ${cardAmount.toFixed(3)}`,
+            "Digital": digitalAmount ? `${this.props.defaultCurrency} ${digitalAmount.toFixed(3)}` : `${this.props.defaultCurrency} 0.000`,
+            "Done By": data.doneBy ? data.doneBy.userName : 'NA'
+          })
+        }
+        count = count + 1
+      } else if (data.transactionType === 'Classes') {
+        const { member: { memberId, credentialId: { userName }, branch }, transactionType, cashAmount, cardAmount, digitalAmount, dateOfPurchase, created_at } = data
+        totalCash += (cashAmount ? +cashAmount : 0)
+        totalCard += (cardAmount ? +cardAmount : 0)
+        totalDigital += (digitalAmount ? +digitalAmount : 0)
+        tabledData.push({
+          "SNo": count,
+          "Date & Time": `${dateToDDMMYYYY(dateOfPurchase)} ${dateToHHMM(created_at)}`,
+          "Receipt No.": data.orderNo,
+          "Member ID": memberId,
+          "Member Name": userName,
+          // "Email ID": email,
+          "Branch": branch.branchName,
+          "Transaction Type": transactionType,
+          "Cash": `${this.props.defaultCurrency} ${cashAmount.toFixed(3)}`,
+          "Card": `${this.props.defaultCurrency} ${cardAmount.toFixed(3)}`,
+          "Digital": digitalAmount ? `${this.props.defaultCurrency} ${digitalAmount.toFixed(3)}` : `${this.props.defaultCurrency} 0.000`,
+          "Done By": data.doneBy ? data.doneBy.userName : 'NA'
+        })
+        count = count + 1
+      }
+    })
+    tabledData.push({
+      "SNo": '',
+      "Date & Time": ``,
+      "Receipt No.": '',
+      "Member ID": '',
+      "Member Name": '',
+      // "Email ID": email,
+      "Branch": '',
+      "Transaction Type": '',
+      "Cash": `${this.props.defaultCurrency} ${totalCash.toFixed(3)}`,
+      "Card": `${this.props.defaultCurrency} ${totalCard.toFixed(3)}`,
+      "Digital": `${this.props.defaultCurrency} ${totalDigital.toFixed(3)}`,
       "Done By": ''
     })
     return tabledData
@@ -1177,6 +1286,117 @@ class TableExport extends Component {
         "Booked By": userName
       })
       count = count + 1
+    })
+    return tabledData
+  }
+
+  tableForVatReport(datas) {
+    let tabledData = []
+    let count = 1
+    let totalExclVatAmount = 0, totalVatAmount = 0, totalInclVatAmount = 0
+    datas && datas.forEach(data => {
+      if (data.transactionType === 'Packages') {
+        const { memberId, credentialId: { userName }, packageDetails, transactionType } = data
+        packageDetails.forEach(doc => {
+          const exclVat = doc.vatAmount ? (doc.totalAmount - doc.vatAmount) : doc.totalAmount
+          const vatPer = doc.vatAmount ? (doc.vatAmount / (doc.totalAmount - doc.vatAmount) * 100) : 0
+          totalExclVatAmount += (exclVat ? +exclVat : 0)
+          totalVatAmount += (doc.vatAmount ? +doc.vatAmount : 0)
+          totalInclVatAmount += (doc.totalAmount ? +doc.totalAmount : 0)
+          tabledData.push({
+            "SNo": count,
+            "Date & Time": `${dateToDDMMYYYY(doc.dateOfPurchase)} ${dateToHHMM(doc.timeOfPurchase)}`,
+            "Tax Invoice No": doc.orderNo,
+            "Member ID": memberId,
+            "Member Name": userName,
+            "Transaction Type": transactionType,
+            "Description": doc.packages.packageName,
+            "Excl. VAT": `${this.props.defaultCurrency} ${exclVat.toFixed(3)}`,
+            "VAT %": `${vatPer} %`,
+            "VAT Amount": doc.vatAmount ? `${this.props.defaultCurrency} ${doc.vatAmount.toFixed(3)}` : `${this.props.defaultCurrency} 0.000`,
+            "Total Incl. VAT": `${this.props.defaultCurrency} ${doc.totalAmount.toFixed(3)}`,
+            "Done By": doc.doneBy ? doc.doneBy.userName : 'NA'
+          })
+          count = count + 1
+        })
+      } else if (data.transactionType === 'POS') {
+        const { customerDetails: { member }, transactionType, vatAmount, totalAmount, dateOfPurchase, created_at } = data
+        const exclVat = vatAmount ? (totalAmount - vatAmount) : totalAmount
+        const vatPer = vatAmount ? (vatAmount / (totalAmount - vatAmount) * 100) : 0
+        totalExclVatAmount += (exclVat ? +exclVat : 0)
+        totalVatAmount += (vatAmount ? +vatAmount : 0)
+        totalInclVatAmount += (totalAmount ? +totalAmount : 0)
+        if (member) {
+          const { memberId, credentialId: { userName } } = member
+          tabledData.push({
+            "SNo": count,
+            "Date & Time": `${dateToDDMMYYYY(dateOfPurchase)} ${dateToHHMM(created_at)}`,
+            "Tax Invoice No": data.orderNo,
+            "Member ID": memberId ? memberId : 'NA',
+            "Member Name": userName ? userName : 'NA',
+            "Transaction Type": transactionType,
+            "Description": 'NA',
+            "Excl. VAT": `${this.props.defaultCurrency} ${exclVat.toFixed(3)}`,
+            "VAT %": `${vatPer} %`,
+            "VAT Amount": vatAmount ? `${this.props.defaultCurrency} ${vatAmount.toFixed(3)}` : `${this.props.defaultCurrency} 0.000`,
+            "Total Incl. VAT": `${this.props.defaultCurrency} ${totalAmount.toFixed(3)}`,
+            "Done By": data.doneBy ? data.doneBy.userName : 'NA'
+          })
+        } else {
+          tabledData.push({
+            "SNo": count,
+            "Date & Time": `${dateToDDMMYYYY(dateOfPurchase)} ${dateToHHMM(created_at)}`,
+            "Tax Invoice No": data.orderNo,
+            "Member ID": 'NA',
+            "Member Name": 'NA',
+            "Transaction Type": transactionType,
+            "Description": 'NA',
+            "Excl. VAT": `${this.props.defaultCurrency} ${exclVat.toFixed(3)}`,
+            "VAT %": `${vatPer} %`,
+            "VAT Amount": vatAmount ? `${this.props.defaultCurrency} ${vatAmount.toFixed(3)}` : `${this.props.defaultCurrency} 0.000`,
+            "Total Incl. VAT": `${this.props.defaultCurrency} ${totalAmount.toFixed(3)}`,
+            "Done By": data.doneBy ? data.doneBy.userName : 'NA'
+          })
+        }
+        count = count + 1
+      } else if (data.transactionType === 'Classes') {
+        const { member: { memberId, credentialId: { userName } }, transactionType, vatAmount, totalAmount, dateOfPurchase, created_at,
+          classId: { className } } = data
+        const exclVat = vatAmount ? (totalAmount - vatAmount) : totalAmount
+        const vatPer = vatAmount ? (vatAmount / (totalAmount - vatAmount) * 100) : 0
+        totalExclVatAmount += (exclVat ? +exclVat : 0)
+        totalVatAmount += (vatAmount ? +vatAmount : 0)
+        totalInclVatAmount += (totalAmount ? +totalAmount : 0)
+        tabledData.push({
+          "SNo": count,
+          "Date & Time": `${dateToDDMMYYYY(dateOfPurchase)} ${dateToHHMM(created_at)}`,
+          "Tax Invoice No": data.orderNo,
+          "Member ID": memberId,
+          "Member Name": userName,
+          "Transaction Type": transactionType,
+          "Description": className,
+          "Excl. VAT": `${this.props.defaultCurrency} ${exclVat.toFixed(3)}`,
+          "VAT %": `${vatPer} %`,
+          "VAT Amount": vatAmount ? `${this.props.defaultCurrency} ${vatAmount.toFixed(3)}` : `${this.props.defaultCurrency} 0.000`,
+          "Total Incl. VAT": `${this.props.defaultCurrency} ${totalAmount.toFixed(3)}`,
+          "Done By": data.doneBy ? data.doneBy.userName : 'NA'
+        })
+        count = count + 1
+      }
+    })
+    tabledData.push({
+      "SNo": '',
+      "Date & Time": ``,
+      "Tax Invoice No": '',
+      "Member ID": '',
+      "Member Name": '',
+      "Transaction Type": '',
+      "Description": '',
+      "Excl. VAT": `${this.props.defaultCurrency} ${totalExclVatAmount.toFixed(3)}`,
+      "VAT %": '',
+      "VAT Amount": `${this.props.defaultCurrency} ${totalVatAmount.toFixed(3)}`,
+      "Total Incl. VAT": `${this.props.defaultCurrency} ${totalInclVatAmount.toFixed(3)}`,
+      "Done By": ''
     })
     return tabledData
   }

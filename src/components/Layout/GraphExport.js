@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
-import { withTranslation } from 'react-i18next'
 import { Doughnut } from 'react-chartjs-2'
-import { calculateDays, countHoursGraph, dateToDDMMYYYY, setTime } from '../../utils/apis/helpers'
+import { withTranslation } from 'react-i18next'
 import { connect } from 'react-redux'
+import { calculateDays, countHoursGraph, dateToDDMMYYYY, setTime } from '../../utils/apis/helpers'
 
 class GraphExport extends Component {
 
@@ -45,6 +45,8 @@ class GraphExport extends Component {
       return this.graphForPOSProfitAndLoss(datas)
     } else if (reportName === 'Sales By Payment Method') {
       return this.graphForSalesByPaymentMethod(datas)
+    } else if (reportName === 'Today Sales By Staff') {
+      return this.graphForTodaySalesByStaff(datas)
     } else if (reportName === 'Expired Product Details') {
       return this.graphForExpiredProductDetails(datas)
     } else if (reportName === 'Classes Registration Details') {
@@ -89,7 +91,7 @@ class GraphExport extends Component {
                     return (
                       <div key={`exportGraph${i}-${j}`} className="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6 d-flex">
                         <span className="h-15px w-15px mr-1 my-1 flex-0-0-15px" style={{ backgroundColor: graphData.datasets[0].backgroundColor[j] }}></span>
-                        <label className="my-0 dirltrtar">{label}</label>
+                        <label className="my-0 dirltrtar">{`${label} (${graphData.datasets[0].data[j]})`}</label>
                       </div>
                     )
                   })}
@@ -139,8 +141,8 @@ class GraphExport extends Component {
       datasets: [{ data: [paidCount, unPaidCount], backgroundColor: ['#28a745', '#dc3545'], hoverBackgroundColor: ['#28a745', '#dc3545'] }],
       text: `${t('Total')} ${response.length}`
     }
-    graphDatas.push({ name: 'Names Choice', type: 'doughnut', data: data1, total: response.length })
-    graphDatas.push({ name: 'Names Choice', type: 'doughnut', data: data2, total: response.length })
+    graphDatas.push({ name: 'New Members by Package', type: 'doughnut', data: data1, total: response.length })
+    graphDatas.push({ name: 'New Members by Payment Status', type: 'doughnut', data: data2, total: response.length })
     return graphDatas
   }
 
@@ -163,8 +165,8 @@ class GraphExport extends Component {
       text: `${t('Total')}`,
       text2: `${total.toFixed(3)}`
     }
-    graphDatas.push({ name: 'Names Choice', type: 'doughnut', data: data1, total: response.length })
-    graphDatas.push({ name: 'Names Choice', type: 'doughnut', data: data2, total })
+    graphDatas.push({ name: 'Active Members by Package', type: 'doughnut', data: data1, total: response.length })
+    graphDatas.push({ name: 'Amounts Paid Per Branch', type: 'doughnut', data: data2, total })
     return graphDatas
   }
 
@@ -195,8 +197,8 @@ class GraphExport extends Component {
       datasets: [{ data: [week, month, moreMonth], backgroundColor: ['#28a745', '#dc3545', 'yellow'], hoverBackgroundColor: ['#28a745', '#dc3545', 'yellow'] }],
       text: `${t('Total')} ${response.length}`
     }
-    graphDatas.push({ name: 'Names Choice', type: 'doughnut', data: data1, total: response.length })
-    graphDatas.push({ name: 'Names Choice', type: 'doughnut', data: data2, total: response.length })
+    graphDatas.push({ name: 'Pending Members by Branch', type: 'doughnut', data: data1, total: response.length })
+    graphDatas.push({ name: 'Pending Members by Sign-Up Period', type: 'doughnut', data: data2, total: response.length })
     return graphDatas
   }
 
@@ -229,8 +231,8 @@ class GraphExport extends Component {
       datasets: [{ data: [week], backgroundColor: ['#28a745'], hoverBackgroundColor: ['#28a745'] }],
       text: `${t('Total')} ${response.length}`
     }
-    graphDatas.push({ name: 'Names Choice', type: 'doughnut', data: data1, total: response.length })
-    graphDatas.push({ name: 'Names Choice', type: 'doughnut', data: data2, total: response.length })
+    graphDatas.push({ name: 'Upcoming Expiry by Packages', type: 'doughnut', data: data1, total: response.length })
+    graphDatas.push({ name: 'Upcoming Expiry by Remaining Period', type: 'doughnut', data: data2, total: response.length })
     return graphDatas
   }
 
@@ -261,8 +263,8 @@ class GraphExport extends Component {
       datasets: [{ data: [week, month, moreMonth], backgroundColor: ['#28a745', '#dc3545', 'yellow'], hoverBackgroundColor: ['#28a745', '#dc3545', 'yellow'] }],
       text: `${t('Total')} ${response.length}`
     }
-    graphDatas.push({ name: 'Names Choice', type: 'doughnut', data: data1, total: response.length })
-    graphDatas.push({ name: 'Names Choice', type: 'doughnut', data: data2, total: response.length })
+    graphDatas.push({ name: 'Expired Members by Packages', type: 'doughnut', data: data1, total: response.length })
+    graphDatas.push({ name: 'Period Since Expired', type: 'doughnut', data: data2, total: response.length })
     return graphDatas
   }
 
@@ -307,8 +309,8 @@ class GraphExport extends Component {
       datasets: [{ data: formatedDataSplit2.map(f => Math.ceil(f.totalHrs * 60)), backgroundColor: colors.map(color => color), hoverBackgroundColor: colors.map(color => color) }],
       text: `${t('Total')} ${formatedData2.length}`
     }
-    graphDatas.push({ name: 'Names Choice', type: 'doughnut', data: data1, total: response.length })
-    graphDatas.push({ name: 'Names Choice', type: 'doughnut', data: data2, total: response.length })
+    graphDatas.push({ name: 'Top Peak Days Attendance', type: 'doughnut', data: data1, total: response.length })
+    graphDatas.push({ name: 'Top Five Members Attendance', type: 'doughnut', data: data2, total: response.length })
     return graphDatas
   }
 
@@ -329,8 +331,8 @@ class GraphExport extends Component {
       datasets: [{ data: days.map(d => d.count), backgroundColor: daysColors.map(color => color), hoverBackgroundColor: daysColors.map(color => color) }],
       text: `${t('Total')} ${response.length}`
     }
-    graphDatas.push({ name: 'Names Choice', type: 'doughnut', data: data1 })
-    graphDatas.push({ name: 'Names Choice', type: 'doughnut', data: data2 })
+    graphDatas.push({ name: 'Freezed Members by Package', type: 'doughnut', data: data1 })
+    graphDatas.push({ name: 'Number of Freezed Days', type: 'doughnut', data: data2 })
     return graphDatas
   }
 
@@ -351,8 +353,8 @@ class GraphExport extends Component {
       datasets: [{ data: branches.map(branch => branch.count), backgroundColor: colors.map(color => color), hoverBackgroundColor: colors.map(color => color) }],
       text: `${t('Total')} ${response.length}`
     }
-    graphDatas.push({ name: 'Names Choice', type: 'doughnut', data: data1, total: response.length })
-    graphDatas.push({ name: 'Names Choice', type: 'doughnut', data: data2, total: response.length })
+    graphDatas.push({ name: 'Renewal Members by Packages', type: 'doughnut', data: data1, total: response.length })
+    graphDatas.push({ name: 'Renewal Members by Branches', type: 'doughnut', data: data2, total: response.length })
     return graphDatas
   }
 
@@ -373,8 +375,8 @@ class GraphExport extends Component {
       datasets: [{ data: branches.map(branch => branch.count), backgroundColor: colors.map(color => color), hoverBackgroundColor: colors.map(color => color) }],
       text: `${t('Total')} ${response.length}`
     }
-    graphDatas.push({ name: 'Names Choice', type: 'doughnut', data: data1, total: response.length })
-    graphDatas.push({ name: 'Names Choice', type: 'doughnut', data: data2, total: response.length })
+    graphDatas.push({ name: 'Members by Registered Packages', type: 'doughnut', data: data1, total: response.length })
+    graphDatas.push({ name: 'Members by Branch', type: 'doughnut', data: data2, total: response.length })
     return graphDatas
   }
 
@@ -400,8 +402,8 @@ class GraphExport extends Component {
       datasets: [{ data: periods.map(p => p.amount), backgroundColor: periodColors.map(color => color), hoverBackgroundColor: periodColors.map(color => color) }],
       text: `${this.props.defaultCurrency} ${totalPeriod.toFixed(3)}`
     }
-    graphDatas.push({ name: 'Names Choice', type: 'doughnut', data: data1, total: response.length })
-    graphDatas.push({ name: 'Names Choice', type: 'doughnut', data: data2, total: response.length })
+    graphDatas.push({ name: 'Trainer Sales by Trainers', type: 'doughnut', data: data1, total: response.length })
+    graphDatas.push({ name: 'Trainer Sales by Period', type: 'doughnut', data: data2, total: response.length })
     return graphDatas
   }
 
@@ -427,8 +429,8 @@ class GraphExport extends Component {
       text: `${t('Total')}`,
       text2: `${this.props.defaultCurrency} ${totalBranch.toFixed(3)}`
     }
-    graphDatas.push({ name: 'Names Choice', type: 'doughnut', data: data1, total: response.length })
-    graphDatas.push({ name: 'Names Choice', type: 'doughnut', data: data2, total: response.length })
+    graphDatas.push({ name: 'Sales by Transaction Type', type: 'doughnut', data: data1, total: response.length })
+    graphDatas.push({ name: 'Sales by Branch', type: 'doughnut', data: data2, total: response.length })
     return graphDatas
   }
 
@@ -454,8 +456,8 @@ class GraphExport extends Component {
       text: `${t('Total')}`,
       text2: `${this.props.defaultCurrency} ${totalBranch.toFixed(3)}`
     }
-    graphDatas.push({ name: 'Names Choice', type: 'doughnut', data: data1, total: response.length })
-    graphDatas.push({ name: 'Names Choice', type: 'doughnut', data: data2, total: response.length })
+    graphDatas.push({ name: 'Received Amount Per Packages', type: 'doughnut', data: data1, total: response.length })
+    graphDatas.push({ name: 'Received Amount Per Branch', type: 'doughnut', data: data2, total: response.length })
     return graphDatas
   }
 
@@ -481,8 +483,8 @@ class GraphExport extends Component {
       text: `${t('Total')}`,
       text2: `${this.props.defaultCurrency} ${totalPayment.toFixed(3)}`
     }
-    graphDatas.push({ name: 'Names Choice', type: 'doughnut', data: data1, total: response.length })
-    graphDatas.push({ name: 'Names Choice', type: 'doughnut', data: data2, total: response.length })
+    graphDatas.push({ name: 'Item Sales Per Branch', type: 'doughnut', data: data1, total: response.length })
+    graphDatas.push({ name: 'Amount Received Per Channel', type: 'doughnut', data: data2, total: response.length })
     return graphDatas
   }
 
@@ -508,8 +510,8 @@ class GraphExport extends Component {
       text: `${t('Total')}`,
       text2: `${this.props.defaultCurrency} ${totalBranch.toFixed(3)}`
     }
-    graphDatas.push({ name: 'Names Choice', type: 'doughnut', data: data1, total: response.length })
-    graphDatas.push({ name: 'Names Choice', type: 'doughnut', data: data2, total: response.length })
+    graphDatas.push({ name: 'Amount Received Per Classes', type: 'doughnut', data: data1, total: response.length })
+    graphDatas.push({ name: 'Amount Received Per Branches', type: 'doughnut', data: data2, total: response.length })
     return graphDatas
   }
 
@@ -536,8 +538,8 @@ class GraphExport extends Component {
       datasets: [{ data: formatedData2.map(f => f.quantity), backgroundColor: colors.map(color => color), hoverBackgroundColor: colors.map(color => color) }],
       text: `${t('Total')} ${response.length}`
     }
-    graphDatas.push({ name: 'Names Choice', type: 'doughnut', data: data1, total: response.length })
-    graphDatas.push({ name: 'Names Choice', type: 'doughnut', data: data2, total: response.length })
+    graphDatas.push({ name: 'Top Five Stock Items by QTY', type: 'doughnut', data: data1, total: response.length })
+    graphDatas.push({ name: 'Top Five Suppliers', type: 'doughnut', data: data2, total: response.length })
     return graphDatas
   }
 
@@ -564,8 +566,8 @@ class GraphExport extends Component {
       datasets: [{ data: formatedData2.map(f => f.quantity), backgroundColor: colors.map(color => color), hoverBackgroundColor: colors.map(color => color) }],
       text: `${t('Total')} ${response.length}`
     }
-    graphDatas.push({ name: 'Names Choice', type: 'doughnut', data: data1, total: response.length })
-    graphDatas.push({ name: 'Names Choice', type: 'doughnut', data: data2, total: response.length })
+    graphDatas.push({ name: 'Top Five Items Upcoming Expiry', type: 'doughnut', data: data1, total: response.length })
+    graphDatas.push({ name: 'Items Upcoming Expiry by QTY', type: 'doughnut', data: data2, total: response.length })
     return graphDatas
   }
 
@@ -591,8 +593,8 @@ class GraphExport extends Component {
       text: `${t('Total')}`,
       text2: `${this.props.defaultCurrency} ${totalPayment.toFixed(3)}`
     }
-    graphDatas.push({ name: 'Names Choice', type: 'doughnut', data: data1, total: response.length })
-    graphDatas.push({ name: 'Names Choice', type: 'doughnut', data: data2, total: response.length })
+    graphDatas.push({ name: 'P&L by Sales Channel', type: 'doughnut', data: data1, total: response.length })
+    graphDatas.push({ name: 'P&L by Branch', type: 'doughnut', data: data2, total: response.length })
     return graphDatas
   }
 
@@ -618,8 +620,32 @@ class GraphExport extends Component {
       text: `${t('Total')}`,
       text2: `${this.props.defaultCurrency} ${totalBranch.toFixed(3)}`
     }
-    graphDatas.push({ name: 'Names Choice', type: 'doughnut', data: data1, total: response.length })
-    graphDatas.push({ name: 'Names Choice', type: 'doughnut', data: data2, total: response.length })
+    graphDatas.push({ name: 'Sales by Transaction Type', type: 'doughnut', data: data1, total: response.length })
+    graphDatas.push({ name: 'Sales by Branch', type: 'doughnut', data: data2, total: response.length })
+    return graphDatas
+  }
+
+  graphForTodaySalesByStaff(datas) {
+    const { t } = this.props
+    let { response, transactionType, paymentMethod } = datas
+    let graphDatas = []
+    let totalTransaction = 0, totalPayment = 0
+    transactionType.forEach(t => totalTransaction += t.amount)
+    paymentMethod.forEach(t => totalPayment += t.amount)
+    const data2 = {
+      labels: transactionType.map(transaction => transaction.transactionName),
+      datasets: [{ data: transactionType.map(transaction => transaction.amount.toFixed(3)), backgroundColor: ['#28a745', '#dc3545', 'yellow'], hoverBackgroundColor: ['#28a745', '#dc3545', 'yellow'] }],
+      text: `${t('Total')}`,
+      text2: `${this.props.defaultCurrency} ${totalTransaction.toFixed(3)}`
+    }
+    const data1 = {
+      labels: paymentMethod.map(pay => pay.paymentName),
+      datasets: [{ data: paymentMethod.map(pay => pay.amount.toFixed(3)), backgroundColor: ['#28a745', '#dc3545', 'yellow'], hoverBackgroundColor: ['#28a745', '#dc3545', 'yellow'] }],
+      text: `${t('Total')}`,
+      text2: `${this.props.defaultCurrency} ${totalPayment.toFixed(3)}`
+    }
+    graphDatas.push({ name: 'Today Sales by Payment Method', type: 'doughnut', data: data1, total: response.length })
+    graphDatas.push({ name: 'Today Sales by Transaction Type', type: 'doughnut', data: data2, total: response.length })
     return graphDatas
   }
 
@@ -648,8 +674,8 @@ class GraphExport extends Component {
       datasets: [{ data: formatedData2.map(f => f.costPerUnit * f.quantity), backgroundColor: colors.map(color => color), hoverBackgroundColor: colors.map(color => color) }],
       text: `${t('Total')} ${totalCostPrice.toFixed(3)}`
     }
-    graphDatas.push({ name: 'Names Choice', type: 'doughnut', data: data1, total: response.length })
-    graphDatas.push({ name: 'Names Choice', type: 'doughnut', data: data2, total: response.length })
+    graphDatas.push({ name: 'Expired Items by QTY', type: 'doughnut', data: data1, total: response.length })
+    graphDatas.push({ name: 'Expired Items by Amount', type: 'doughnut', data: data2, total: response.length })
     return graphDatas
   }
 
@@ -677,8 +703,8 @@ class GraphExport extends Component {
       datasets: [{ data: formatedData2.map(f => f.amount * f.occupied), backgroundColor: colors.map(color => color), hoverBackgroundColor: colors.map(color => color) }],
       text: `${t('Total')} ${totalFullAmount.toFixed(3)}`
     }
-    graphDatas.push({ name: 'Names Choice', type: 'doughnut', data: data1, total: response.length })
-    graphDatas.push({ name: 'Names Choice', type: 'doughnut', data: data2, total: response.length })
+    graphDatas.push({ name: 'Top Five Classes by Members', type: 'doughnut', data: data1, total: response.length })
+    graphDatas.push({ name: 'Top Five Classes by Amount', type: 'doughnut', data: data2, total: response.length })
     return graphDatas
   }
 
@@ -702,8 +728,8 @@ class GraphExport extends Component {
       datasets: [{ data: designations.map(d => d.count), backgroundColor: designationColors.map(color => color), hoverBackgroundColor: designationColors.map(color => color) }],
       text: `${t('Total')} ${response.length}`
     }
-    graphDatas.push({ name: 'Names Choice', type: 'doughnut', data: data1, total: response.length })
-    graphDatas.push({ name: 'Names Choice', type: 'doughnut', data: data2, total })
+    graphDatas.push({ name: 'Employee by Branch', type: 'doughnut', data: data1, total: response.length })
+    graphDatas.push({ name: 'Employee by Designation', type: 'doughnut', data: data2, total })
     return graphDatas
   }
 
@@ -724,8 +750,8 @@ class GraphExport extends Component {
       datasets: [{ data: shifts.map(d => d.count), backgroundColor: shifts.map(d => d.color), hoverBackgroundColor: shifts.map(d => d.color) }],
       text: `${t('Total')} ${employeeResponse.length}`
     }
-    graphDatas.push({ name: 'Names Choice', type: 'doughnut', data: data1, total: response.length })
-    graphDatas.push({ name: 'Names Choice', type: 'doughnut', data: data2, total })
+    graphDatas.push({ name: 'Employee Shift by Branch', type: 'doughnut', data: data1, total: response.length })
+    graphDatas.push({ name: 'Employee by Shift Name', type: 'doughnut', data: data2, total })
     return graphDatas
   }
 
@@ -749,8 +775,8 @@ class GraphExport extends Component {
       datasets: [{ data: dates.map(d => d.count), backgroundColor: datesColors.map(color => color), hoverBackgroundColor: datesColors.map(color => color) }],
       text: `${t('Total')} ${response.length}`
     }
-    graphDatas.push({ name: 'Names Choice', type: 'doughnut', data: data1 })
-    graphDatas.push({ name: 'Names Choice', type: 'doughnut', data: data2 })
+    graphDatas.push({ name: 'Appointments by Branch', type: 'doughnut', data: data1 })
+    graphDatas.push({ name: 'Appointments by Date', type: 'doughnut', data: data2 })
     return graphDatas
   }
 
@@ -774,8 +800,8 @@ class GraphExport extends Component {
       datasets: [{ data: statuses.map(d => d.count), backgroundColor: statusesColors.map(color => color), hoverBackgroundColor: statusesColors.map(color => color) }],
       text: `${t('Total')} ${response.length}`
     }
-    graphDatas.push({ name: 'Names Choice', type: 'doughnut', data: data1 })
-    graphDatas.push({ name: 'Names Choice', type: 'doughnut', data: data2 })
+    graphDatas.push({ name: 'Total Booking by Branch', type: 'doughnut', data: data1 })
+    graphDatas.push({ name: 'Total Booking by Status', type: 'doughnut', data: data2 })
     return graphDatas
   }
 
@@ -799,8 +825,8 @@ class GraphExport extends Component {
       datasets: [{ data: dates.map(d => d.count), backgroundColor: datesColors.map(color => color), hoverBackgroundColor: datesColors.map(color => color) }],
       text: `${t('Total')} ${response.length}`
     }
-    graphDatas.push({ name: 'Names Choice', type: 'doughnut', data: data1 })
-    graphDatas.push({ name: 'Names Choice', type: 'doughnut', data: data2 })
+    graphDatas.push({ name: 'Visitors Appointments by Branch', type: 'doughnut', data: data1 })
+    graphDatas.push({ name: 'Visitors Appointments by Date', type: 'doughnut', data: data2 })
     return graphDatas
   }
 
