@@ -769,7 +769,7 @@ class TableExport extends Component {
         "Branch": branchName,
         "Cost Price": `${this.props.defaultCurrency} ${costPerUnit.toFixed(3)}`,
         "Selling Price": `${this.props.defaultCurrency} ${sellingPrice.toFixed(3)}`,
-        "Vat %": taxPercent
+        "VAT %": taxPercent
       })
       count = count + 1
     })
@@ -792,7 +792,7 @@ class TableExport extends Component {
         "Branch": branchName,
         "Cost Price": `${this.props.defaultCurrency} ${costPerUnit.toFixed(3)}`,
         "Selling Price": `${this.props.defaultCurrency} ${sellingPrice.toFixed(3)}`,
-        "Vat %": taxPercent
+        "VAT %": taxPercent
       })
       count = count + 1
     })
@@ -824,7 +824,7 @@ class TableExport extends Component {
         "Transaction Date & Time": `${dateToDDMMYYYY(dateOfPurchase)} ${dateToHHMM(created_at)}`,
         "Cost Price": `${this.props.defaultCurrency} ${costPrice.toFixed(3)}`,
         "Selling Price": `${this.props.defaultCurrency} ${actualAmount.toFixed(3)}`,
-        "Vat Amount": `${this.props.defaultCurrency} ${vatAmount.toFixed(3)}`,
+        "VAT Amount": `${this.props.defaultCurrency} ${vatAmount.toFixed(3)}`,
         "Discount Amount": `${this.props.defaultCurrency} ${discount.toFixed(3)}`,
         "Gift Card": `${this.props.defaultCurrency} ${giftcard.toFixed(3)}`,
         "Paid Amount": `${this.props.defaultCurrency} ${totalAmount.toFixed(3)}`,
@@ -841,7 +841,7 @@ class TableExport extends Component {
       "Transaction Date & Time": 'Grand Total',
       "Cost Price": `${this.props.defaultCurrency} ${totalCostPrice.toFixed(3)}`,
       "Selling Price": `${this.props.defaultCurrency} ${totalSellingPrice.toFixed(3)}`,
-      "Vat Amount": `${this.props.defaultCurrency} ${totalVatAmount.toFixed(3)}`,
+      "VAT Amount": `${this.props.defaultCurrency} ${totalVatAmount.toFixed(3)}`,
       "Discount Amount": `${this.props.defaultCurrency} ${totalDiscountAmount.toFixed(3)}`,
       "Gift Card": `${this.props.defaultCurrency} ${totalGiftCard.toFixed(3)}`,
       "Paid Amount": `${this.props.defaultCurrency} ${totalPaidAmount.toFixed(3)}`,

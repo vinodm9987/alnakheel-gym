@@ -272,7 +272,7 @@
           "Transaction Type",
           "Amount",
           "Discount Amount",
-          "Vat %",
+          "VAT %",
           "Gift Card",
           "Paid Amount",
           "Cash",
@@ -291,7 +291,7 @@
           "Transaction Date & Time",
           "Cost Price",
           "Selling Price",
-          "Vat Amount",
+          "VAT Amount",
           "Discount Amount",
           "Gift Card",
           "Paid Amount",
@@ -352,7 +352,7 @@
           "Branch",
           "Cost Price",
           "Selling Price",
-          "Vat %"
+          "VAT %"
         ],
         "description": "This report will show stock details as of current date."
       },
@@ -369,7 +369,7 @@
           "Branch",
           "Cost Price",
           "Selling Price",
-          "Vat %"
+          "VAT %"
         ],
         "description": "This report will show product expiry details as of current date."
       },

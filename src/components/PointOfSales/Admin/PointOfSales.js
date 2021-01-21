@@ -879,7 +879,7 @@ class PointOfSales extends Component {
                 <div className="modal-body">
                   <div className="container">
                     <div className="text-center my-3">
-                      <img alt='' src={`/${avatarPath}`} className="" width="250" />
+                      <img alt='' src={`/${avatarPath}`} className="" width="100" />
                     </div>
                     <h4 class="border-bottom border-dark text-center font-weight-bold pb-1">Tax Invoice</h4>
                     <div className="row px-5 justify-content-between">
