@@ -3664,3 +3664,80 @@ input:focus {
 .text-al-red:hover {
   color: #e11f2b !important;
 }
+
+/* Modern Table */
+#ModernTableResponsive,
+#ModernTableResponsive1,
+#ModernTableResponsive2,
+#ModernTableResponsive3 {
+  position: relative;
+  padding-top: 51px;
+  scrollbar-color: #c1c1c1;
+}
+
+#ModernTableResponsive thead,
+#ModernTableResponsive1 thead,
+#ModernTableResponsive2 thead,
+#ModernTableResponsive3 thead {
+  background: white;
+  padding-top: 11px;
+  top: 0;
+  left: 0;
+  z-index: 2;
+}
+
+/* width */
+#ModernTableResponsive::-webkit-scrollbar,
+#ModernTableResponsive1::-webkit-scrollbar,
+#ModernTableResponsive2::-webkit-scrollbar,
+#ModernTableResponsive3::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+/* Handle */
+#ModernTableResponsive::-webkit-scrollbar-thumb,
+#ModernTableResponsive1::-webkit-scrollbar-thumb,
+#ModernTableResponsive2::-webkit-scrollbar-thumb,
+#ModernTableResponsive3::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 10px;
+}
+
+/* Handle on hover */
+#ModernTableResponsive::-webkit-scrollbar-thumb:hover,
+#ModernTableResponsive1::-webkit-scrollbar-thumb:hover,
+#ModernTableResponsive2::-webkit-scrollbar-thumb:hover,
+#ModernTableResponsive3::-webkit-scrollbar-thumb:hover {
+  background: #a1a1a1;
+}
+
+/* discount-class */
+.discount-class {
+  width: 80px;
+  height: 80px;
+}
+
+.discount-class h3 {
+  margin: 0 0 -9px 0;
+}
+
+.discount-class h3 + span {
+  font-size: 14px;
+}
+/* giftcard-class */
+.giftcard-class {
+  width: 80px;
+  height: 80px;
+}
+
+.giftcard-class h3 {
+  margin: 0 0 -9px 0;
+}
+
+.giftcard-class h3 + span {
+  font-size: 14px;
+}
+.inner-head-down {
+  height: calc(100% - 52px);
+}

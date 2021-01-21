@@ -369,7 +369,8 @@ class AdminDashboard extends Component {
               <div className="underline w-100"></div>
             </div>
 
-            <div className="col-12 d-flex flex-wrap hScrollCnt align-items-start">
+            {/* tushar if data */}
+            <div className="col-12 d-flex flex-wrap pb-3 align-items-start">
               <div className="table-responsive">
                 <table className="borderRoundSeperateTable tdWhite mostsellingTable">
                   <thead>
@@ -402,6 +403,14 @@ class AdminDashboard extends Component {
                   </tbody>
                 </table>
               </div>
+            </div>
+
+            {/* tushar if no-data */}
+            <div className="col-12 px-0 text-center pt-5 pb-3">
+              <h4 className="text-orange">
+                <span className="iconv1 iconv1-info"></span>
+              </h4>
+              <h5 className="text-body">There is no data to show you</h5>
             </div>
 
             {/* <div className="col-12 d-flex flex-wrap align-items-center justify-content-end mt-auto">
@@ -452,7 +461,7 @@ class AdminDashboard extends Component {
                           autoOk
                           invalidDateMessage=''
                           minDateMessage=''
-                          className="bg-white border-secondary border-secondary pr-4 pl-1 mw-100"
+                          className="bg-white border-secondary border border-secondary pr-4 pl-1 mw-100 form-control"
                           format="dd/MM/yyyy"
                           value={salesDate}
                           onChange={(e) => this.setDatePaymentTransaction(e, paymentType, transactionType)}
@@ -460,7 +469,7 @@ class AdminDashboard extends Component {
                         />
                       </MuiPickersUtilsProvider>
                       <span className="position-absolute d-flex align-items-center justify-content-end w-100 h-100 pointerNone px-2" style={{ top: '0', left: '0' }}>
-                        <span className="iconv1 iconv1-arrow-down"></span>
+                        <span className="iconv1 iconv1-calander dateBoxIcon"></span>
                       </span>
                     </span>
                   </div>
@@ -592,7 +601,7 @@ class AdminDashboard extends Component {
               <div className="underline w-100"></div>
             </div>
 
-            <div className="col-12 d-flex flex-wrap align-items-center justify-content-between py-1">
+            <div className="col-12 d-flex flex-wrap align-items-start justify-content-between py-1 inner-head-down">
               <div className="col-12">
                 <div className="row">
                   <div className="col-12">
@@ -601,8 +610,8 @@ class AdminDashboard extends Component {
                         <h6>Total Pending Amount</h6>
                         <h6 className="font-weight-bold dirltrtar text-danger">$ 87511</h6>
                       </div> */}
-                      <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
-                        <div className="row d-block d-sm-flex justify-content-end">
+                      <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                        <div className="row d-block d-sm-flex justify-content-start">
                           <div className="col w-auto px-1 flexBasis-auto flex-grow-0" >
                             {/* <div className="form-group inlineFormGroup">
                                         <select className="form-control mx-sm-2 inlineFormInputs bg-white">
@@ -629,6 +638,9 @@ class AdminDashboard extends Component {
                             </div>
 
                           </div>
+
+                          {/* tushar remove below col fully as bose told monthly only come and jan feb in arabic needed in arabic */}
+
                           <div className="col w-auto px-1 flexBasis-auto flex-grow-0">
                             {/* <div className="form-group inlineFormGroup">
                                         <select className="form-control mx-sm-2 inlineFormInputs bg-white">
@@ -659,7 +671,8 @@ class AdminDashboard extends Component {
                       </div>
                     </div>
                   </div>
-                  <div className="col-12">
+                  {/* tushar if data */}
+                  <div className="col-12 px-0">
                     <div className="table-responsive">
                       <table className="borderRoundSeperateTable tdWhite">
                         <thead>
@@ -697,6 +710,13 @@ class AdminDashboard extends Component {
                         </tbody>
                       </table>
                     </div>
+                  </div>
+                  {/* tushar if no-data */}
+                  <div className="col-12 px-0 text-center pt-5 pb-3">
+                    <h4 className="text-orange">
+                      <span className="iconv1 iconv1-info"></span>
+                    </h4>
+                    <h5 className="text-body">There is no data to show you</h5>
                   </div>
                 </div>
               </div>

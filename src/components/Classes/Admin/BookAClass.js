@@ -545,10 +545,10 @@ class BookAClass extends Component {
                 <h5 className="my-2 font-weight-bold px-1">{t('Payment Method')}</h5>
               </div>
               <div className="col-12 col-sm-6 d-flex align-items-center justify-content-end">
-                <button data-toggle="modal" data-target="#Discount" className="d-flex flex-column align-items-center justify-content-center bg-danger w-100px h-100px m-1 linkHoverDecLess rounded-circle text-white cursorPointer border-0">
-                  <span className="w-100 text-center"><h3 className="m-0"><span className="iconv1 iconv1-discount text-white"></span></h3><small className="text-white">{t('Discount')}</small></span></button>
-                <button data-toggle="modal" data-target="#GiftCard" className="d-flex flex-column align-items-center justify-content-center bg-primary w-100px h-100px m-1 linkHoverDecLess rounded-circle text-white cursorPointer border-0">
-                  <span className="w-100 text-center"><h3 className="m-0"><span className="iconv1 iconv1-giftcard text-white"></span></h3><small className="text-white">{t('Gift Card')}</small></span></button>
+                <button data-toggle="modal" data-target="#Discount" className="d-flex flex-column align-items-center justify-content-center bg-danger discount-class m-1 linkHoverDecLess rounded-circle text-white cursorPointer border-0">
+                  <span className="w-100 text-center"><h3><span className="iconv1 iconv1-discount text-white"></span></h3><span className="text-white">{t('Discount')}</span></span></button>
+                <button data-toggle="modal" data-target="#GiftCard" className="d-flex flex-column align-items-center justify-content-center bg-primary giftcard-class m-1 linkHoverDecLess rounded-circle text-white cursorPointer border-0">
+                  <span className="w-100 text-center"><h3><span className="iconv1 iconv1-giftcard text-white"></span></h3><span className="text-white">{t('Gift Card')}</span></span></button>
               </div>
             </div>
             <div className="row mt-3">
@@ -613,7 +613,7 @@ class BookAClass extends Component {
                   <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
                     <div className="form-group inlineFormGroup mb-3">
                       <label htmlFor="bankName" className="mx-sm-2 inlineFormLabel mb-1">{t('Bank Name')}</label>
-                      <input type="number" autoComplete="off" className="form-control mx-sm-2 inlineFormInputs FormInputsError w-100 p-0 d-flex align-items-center bg-white dirltr" id="bankName" />
+                      <input type="number" autoComplete="off" className="form-control mx-sm-2 inlineFormInputs FormInputsError w-100 py-0 px-2 d-flex align-items-center bg-white dirltr" id="bankName" />
                       <div className="errorMessageWrapper">
                         <small className="text-danger mx-sm-2 errorMessage"></small>
                       </div>
@@ -621,8 +621,8 @@ class BookAClass extends Component {
                   </div>
                   <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
                     <div className="form-group inlineFormGroup mb-3">
-                      <label htmlFor="CheckNumber" className="mx-sm-2 inlineFormLabel mb-1">{t('Check Number')}</label>
-                      <input type="number" autoComplete="off" className="form-control mx-sm-2 inlineFormInputs FormInputsError w-100 p-0 d-flex align-items-center bg-white dirltr" id="CheckNumber" />
+                      <label htmlFor="CheckNumber" className="mx-sm-2 inlineFormLabel mb-1">{t('Cheque Number')}</label>
+                      <input type="number" autoComplete="off" className="form-control mx-sm-2 inlineFormInputs FormInputsError w-100 py-0 px-2 d-flex align-items-center bg-white dirltr" id="CheckNumber" />
                       <div className="errorMessageWrapper">
                         <small className="text-danger mx-sm-2 errorMessage"></small>
                       </div>
@@ -630,7 +630,7 @@ class BookAClass extends Component {
                   </div>
                   <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
                     <div className="form-group inlineFormGroup mb-3">
-                      <label htmlFor="CheckDate" className="mx-sm-2 inlineFormLabel mb-1">{t('Check Date')}</label>
+                      <label htmlFor="CheckDate" className="mx-sm-2 inlineFormLabel mb-1">{t('Cheque Date')}</label>
                       <input type="number" autoComplete="off" className="form-control mx-sm-2 inlineFormInputs FormInputsError w-100 p-0 d-flex align-items-center bg-white dirltr" id="CheckDate" />
                       <div className="errorMessageWrapper">
                         <small className="text-danger mx-sm-2 errorMessage"></small>
