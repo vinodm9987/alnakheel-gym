@@ -220,7 +220,7 @@ class BookAClass extends Component {
 
   selectBranch(e) {
     const { t } = this.props
-    this.setState({ ...validator(e, 'branch', 'text', [t('Enter branch')]), ...{ classes: '', amount: 0, cash: 0, card: 0, giftcard: 0, discount: 0, count: 0, member: '', tax: 0, taxPercent: '' } }, () => {
+    this.setState({ ...validator(e, 'branch', 'text', [t('Enter branch')]), ...{ classes: '', amount: 0, cash: 0, card: 0, digital: 0, giftcard: 0, discount: 0, count: 0, member: '', tax: 0, taxPercent: '' } }, () => {
       this.state.branch && this.props.dispatch(getAllClassesByBranch({ branch: this.state.branch }))
       this.state.branch && this.props.dispatch(getAllActiveMember({ branch: this.state.branch }))
     })
@@ -232,7 +232,7 @@ class BookAClass extends Component {
     this.setState(validator(e, 'classes', 'text', [t('Select class')]), () => {
       if (index > 0) {
         this.state.classes && this.setState({
-          amount: this.props.classesByBranch[index - 1].amount, cash: 0, card: 0, giftcard: 0, discount: 0, count: 0,
+          amount: this.props.classesByBranch[index - 1].amount, cash: 0, card: 0, digital: 0, giftcard: 0, discount: 0, count: 0,
           tax: this.props.classesByBranch[index - 1].amount * this.props.classesByBranch[index - 1].vat.taxPercent / 100,
           taxPercent: this.props.classesByBranch[index - 1].vat.taxPercent
         })
@@ -349,24 +349,24 @@ class BookAClass extends Component {
     if (subTotal) {
       if (this.state.discountMethod === 'percent') {
         if (this.state.count && this.state.count <= 100) {
-          this.setState({ discount: parseFloat(this.state.count ? this.state.count : 0) / 100 * subTotal, cash: 0, card: 0 }, () => {
+          this.setState({ discount: parseFloat(this.state.count ? this.state.count : 0) / 100 * subTotal, cash: 0, card: 0, digital: 0 }, () => {
             const tax = (subTotal - this.state.discount - this.state.giftCard) * parseFloat(this.state.taxPercent) / 100
             this.setState({ tax })
           })
         } else {
-          this.setState({ discount: 0, count: 0, cash: 0, card: 0 }, () => {
+          this.setState({ discount: 0, count: 0, cash: 0, card: 0, digital: 0 }, () => {
             const tax = (subTotal - this.state.discount - this.state.giftCard) * parseFloat(this.state.taxPercent) / 100
             this.setState({ tax })
           })
         }
       } else {
         if (this.state.count && this.state.count <= subTotal) {
-          this.setState({ discount: parseFloat(this.state.count ? this.state.count : 0), cash: 0, card: 0 }, () => {
+          this.setState({ discount: parseFloat(this.state.count ? this.state.count : 0), cash: 0, card: 0, digital: 0 }, () => {
             const tax = (subTotal - this.state.discount - this.state.giftCard) * parseFloat(this.state.taxPercent) / 100
             this.setState({ tax })
           })
         } else {
-          this.setState({ discount: 0, count: 0, cash: 0, card: 0 }, () => {
+          this.setState({ discount: 0, count: 0, cash: 0, card: 0, digital: 0 }, () => {
             const tax = (subTotal - this.state.discount - this.state.giftCard) * parseFloat(this.state.taxPercent) / 100
             this.setState({ tax })
           })
@@ -377,7 +377,7 @@ class BookAClass extends Component {
 
   addGiftcard(subTotalGiftCard) {
     if (this.state.member) {
-      subTotalGiftCard && this.setState({ subTotalGiftCard, cash: 0, card: 0 }, () => {
+      subTotalGiftCard && this.setState({ subTotalGiftCard, cash: 0, card: 0, digital: 0 }, () => {
         if (this.state.text !== this.state.redeemCode) {
           this.setState({ giftcard: 0 })
           this.props.dispatch(getAmountByRedeemCode({ code: this.state.text, memberId: this.state.member._id }))
@@ -392,8 +392,7 @@ class BookAClass extends Component {
 
   render() {
     const { t } = this.props
-    const { branch, classes, member, amount, discount, giftcard, discountMethod, tax, count, text, cash, card, digital,
-      classReceipt } = this.state
+    const { branch, classes, member, amount, discount, giftcard, discountMethod, tax, count, text, cash, card, digital, classReceipt } = this.state
 
     let subTotal = amount
 
@@ -494,34 +493,34 @@ class BookAClass extends Component {
                 <tbody>
                   <tr>
                     <td>
-                      <h5 className="m-0">{t('Sub Total')}</h5>
+                      <h5 className="m-0 text-left">{t('Sub Total')}</h5>
                     </td>
                     <td>
-                      <h5 className="m-0"><small className="d-flex justify-content-end">{this.props.defaultCurrency} {subTotal.toFixed(3)}</small></h5>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <h5 className="m-0">{t('Discount')} {parseFloat(this.state.count) ? `(${this.state.count} ${this.state.discountMethod === 'percent' ? '%' : this.props.defaultCurrency})` : ''}</h5>
-                    </td>
-                    <td>
-                      <h5 className="m-0"><small className="d-flex justify-content-end">{parseFloat(discount).toFixed(3)}</small></h5>
+                      <h5 className="m-0 text-right"><small className="d-flex justify-content-end">{this.props.defaultCurrency} {subTotal.toFixed(3)}</small></h5>
                     </td>
                   </tr>
                   <tr>
                     <td>
-                      <h5 className="m-0">{t('Gift Card')} {this.state.text ? `(${this.state.text})` : ''}</h5>
+                      <h5 className="m-0 text-left">{t('Discount')} {parseFloat(this.state.count) ? `(${this.state.count} ${this.state.discountMethod === 'percent' ? '%' : this.props.defaultCurrency})` : ''}</h5>
                     </td>
                     <td>
-                      <h5 className="m-0"><small className="d-flex justify-content-end">{giftcard.toFixed(3)}</small></h5>
+                      <h5 className="m-0 text-right"><small className="d-flex justify-content-end">{parseFloat(discount).toFixed(3)}</small></h5>
                     </td>
                   </tr>
                   <tr>
                     <td>
-                      <h5 className="m-0">{t('Tax')} {this.state.taxPercent ? `(${this.state.taxPercent} %)` : ''}</h5>
+                      <h5 className="m-0 text-left">{t('Gift Card')} {this.state.text ? `(${this.state.text})` : ''}</h5>
                     </td>
                     <td>
-                      <h5 className="m-0"><small className="d-flex justify-content-end text-primary">{tax.toFixed(3)}</small></h5>
+                      <h5 className="m-0 text-right"><small className="d-flex justify-content-end">{giftcard.toFixed(3)}</small></h5>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <h5 className="m-0 text-left">{t('Vat')} {this.state.taxPercent ? `(${this.state.taxPercent} %)` : ''}</h5>
+                    </td>
+                    <td>
+                      <h5 className="m-0 text-right"><small className="d-flex justify-content-end text-primary">{tax.toFixed(3)}</small></h5>
                     </td>
                   </tr>
                   <tr>
@@ -531,7 +530,7 @@ class BookAClass extends Component {
                   </tr>
                   <tr>
                     <td>
-                      <h3 className="m-0">{t('Total')}</h3>
+                      <h3 className="m-0 text-left">{t('Total')}</h3>
                     </td>
                     <td>
                       <h5 className="text-danger d-flex justify-content-end m-0 font-weight-bold dirltrjcs"><span className="mx-1">{this.props.defaultCurrency}</span><span className="mx-1">{total.toFixed(3)}</span></h5>
@@ -545,10 +544,11 @@ class BookAClass extends Component {
                 <h5 className="my-2 font-weight-bold px-1">{t('Payment Method')}</h5>
               </div>
               <div className="col-12 col-sm-6 d-flex align-items-center justify-content-end">
-                <button data-toggle="modal" data-target="#Discount" className="d-flex flex-column align-items-center justify-content-center bg-danger w-100px h-100px m-1 linkHoverDecLess rounded-circle text-white cursorPointer border-0">
-                  <span className="w-100 text-center"><h3 className="m-0"><span className="iconv1 iconv1-discount text-white"></span></h3><small className="text-white">{t('Discount')}</small></span></button>
-                <button data-toggle="modal" data-target="#GiftCard" className="d-flex flex-column align-items-center justify-content-center bg-primary w-100px h-100px m-1 linkHoverDecLess rounded-circle text-white cursorPointer border-0">
-                  <span className="w-100 text-center"><h3 className="m-0"><span className="iconv1 iconv1-giftcard text-white"></span></h3><small className="text-white">{t('Gift Card')}</small></span></button>
+                <button data-toggle="modal" data-target="#passwordAskModal" className="d-flex flex-column align-items-center justify-content-center bg-danger discount-class m-1 linkHoverDecLess rounded-circle text-white cursorPointer border-0">
+                  <span className="w-100 text-center"><h3><span className="iconv1 iconv1-discount text-white"></span></h3><span className="text-white">{t('Discount')}</span></span></button>
+                <button data-toggle="modal" data-target="#GiftCard" className="d-flex flex-column align-items-center justify-content-center bg-primary giftcard-class m-1 linkHoverDecLess rounded-circle text-white cursorPointer border-0">
+                  <span className="w-100 text-center"><h3><span className="iconv1 iconv1-giftcard text-white"></span></h3><span className="text-white">{t('Gift Card')}</span></span></button>
+
               </div>
             </div>
             <div className="row mt-3">
@@ -613,7 +613,7 @@ class BookAClass extends Component {
                   <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
                     <div className="form-group inlineFormGroup mb-3">
                       <label htmlFor="bankName" className="mx-sm-2 inlineFormLabel mb-1">{t('Bank Name')}</label>
-                      <input type="number" autoComplete="off" className="form-control mx-sm-2 inlineFormInputs FormInputsError w-100 p-0 d-flex align-items-center bg-white dirltr" id="bankName" />
+                      <input type="number" autoComplete="off" className="form-control mx-sm-2 inlineFormInputs FormInputsError w-100 py-0 px-2 d-flex align-items-center bg-white dirltr" id="bankName" />
                       <div className="errorMessageWrapper">
                         <small className="text-danger mx-sm-2 errorMessage"></small>
                       </div>
@@ -621,8 +621,8 @@ class BookAClass extends Component {
                   </div>
                   <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
                     <div className="form-group inlineFormGroup mb-3">
-                      <label htmlFor="CheckNumber" className="mx-sm-2 inlineFormLabel mb-1">{t('Check Number')}</label>
-                      <input type="number" autoComplete="off" className="form-control mx-sm-2 inlineFormInputs FormInputsError w-100 p-0 d-flex align-items-center bg-white dirltr" id="CheckNumber" />
+                      <label htmlFor="CheckNumber" className="mx-sm-2 inlineFormLabel mb-1">{t('Cheque Number')}</label>
+                      <input type="number" autoComplete="off" className="form-control mx-sm-2 inlineFormInputs FormInputsError w-100 py-0 px-2 d-flex align-items-center bg-white dirltr" id="CheckNumber" />
                       <div className="errorMessageWrapper">
                         <small className="text-danger mx-sm-2 errorMessage"></small>
                       </div>
@@ -630,7 +630,7 @@ class BookAClass extends Component {
                   </div>
                   <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
                     <div className="form-group inlineFormGroup mb-3">
-                      <label htmlFor="CheckDate" className="mx-sm-2 inlineFormLabel mb-1">{t('Check Date')}</label>
+                      <label htmlFor="CheckDate" className="mx-sm-2 inlineFormLabel mb-1">{t('Cheque Date')}</label>
                       <input type="number" autoComplete="off" className="form-control mx-sm-2 inlineFormInputs FormInputsError w-100 p-0 d-flex align-items-center bg-white dirltr" id="CheckDate" />
                       <div className="errorMessageWrapper">
                         <small className="text-danger mx-sm-2 errorMessage"></small>

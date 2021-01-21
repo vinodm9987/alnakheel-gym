@@ -70,7 +70,7 @@ class AdminPassword extends Component {
                   <td className="dirltrtar">{displayPass ? this.props.adminPassword.password : '**********'}</td>
                   <td className="text-center">
                     {/* edit if want */}
-                    <span className="bg-success action-icon mx-4 cursor-pointer" style={{ zoom: "1.2" }} ><span className="iconv1 iconv1-edit"></span></span>
+                    {/* <span className="bg-success action-icon mx-4 cursor-pointer" style={{ zoom: "1.2" }} ><span className="iconv1 iconv1-edit"></span></span> */}
                     {/* edit if want */}
                     <span onClick={() => this.setState({ displayPass: !displayPass })} className="position-relative d-inline-flex">
                       <span className={displayPass ? "iconv1 iconv1-eye modern-eye" : "iconv1 iconv1-eye modern-eye active"}></span>

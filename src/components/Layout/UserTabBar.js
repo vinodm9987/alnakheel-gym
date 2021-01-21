@@ -1,18 +1,18 @@
-import React, { Component } from 'react'
-import { toggleAction } from '../../actions/toggle.action'
-import { connect } from 'react-redux'
 import jwt_decode from 'jwt-decode';
-import { withRouter, Link } from 'react-router-dom'
-import { setLoading, removeLoading } from '../../actions/loader.action'
-import { getItemFromStorage } from '../../utils/localstorage'
-import { logoutUser } from '../../actions/auth.action'
+import React, { Component } from 'react';
 import { withTranslation } from 'react-i18next';
-import { changeLanguage } from '../../utils/changeLanguage';
-import algymlogo from '../../assets/img/al-main-logo.png'
+import { connect } from 'react-redux';
+import { Link, withRouter } from 'react-router-dom';
+import { logout, logoutUser } from '../../actions/auth.action';
+import { removeLoading, setLoading } from '../../actions/loader.action';
 import { getUserNotification, getUserNotifications } from '../../actions/notification.action';
-import { timeDiffCalc } from '../../utils/apis/helpers';
-import { socketConnect, emit } from '../../utils/socket';
+import { toggleAction } from '../../actions/toggle.action';
+import algymlogo from '../../assets/img/al-main-logo.png'
 import { NAMESPACE } from '../../config';
+import { timeDiffCalc } from '../../utils/apis/helpers';
+import { changeLanguage } from '../../utils/changeLanguage';
+import { getItemFromStorage } from '../../utils/localstorage';
+import { emit, socketConnect } from '../../utils/socket';
 
 
 class UserTabBar extends Component {
@@ -60,6 +60,7 @@ class UserTabBar extends Component {
     this.props.dispatch(setLoading())
     setTimeout(() => {
       this.props.history.push('/')
+      this.props.dispatch(logout())
       this.props.dispatch(removeLoading())
     }, 1000)
   }
