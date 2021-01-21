@@ -18,8 +18,6 @@ const memberSchema = new Schema({
 
     walletPoints: { type: Number, default: 0 },
 
-    branch: { type: Schema.Types.ObjectId, ref: "Branch" },
-
     personalId: String, height: Number, startWeight: Number,
 
     weight: Number, goal: Number, admissionDate: Date, emergencyNumber: String,

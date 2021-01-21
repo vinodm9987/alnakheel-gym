@@ -156,7 +156,7 @@ exports.createNewMember = (req, res) => {
         try {
             const memberDesignation = await Designation.findOne({ designationName: DESIGNATION[2] })
             const { mobileNo, gender, dateOfBirth, nationality, userName, email, password, referralCode,
-                personalId, branch, height, weight, questions, relationship, emergencyNumber, goal } = JSON.parse(req.body.data);
+                personalId, height, weight, questions, relationship, emergencyNumber, goal } = JSON.parse(req.body.data);
             if (referralCode) {
                 const isExist = await MemberCode.findOne({ code: referralCode }).count();
                 if (!isExist) return errorResponseHandler(res, 'error', 'referral code is wrong !');
@@ -164,7 +164,7 @@ exports.createNewMember = (req, res) => {
                 if (!isExpired) return errorResponseHandler(res, error, "referral code is expired !");
             }
             const member = new Member({
-                mobileNo, gender, dateOfBirth, nationality, personalId, branch, height, weight, questions,
+                mobileNo, gender, dateOfBirth, nationality, personalId, height, weight, questions,
                 isPackageSelected: false, emergencyNumber, relationship, startWeight: weight, goal
             });
             const credential = new Credential({
@@ -200,7 +200,7 @@ exports.createNewMemberByAdmin = (req, res) => {
         if (error) return errorResponseHandler(res, error, "while uploading profile error occurred !");
         try {
             const memberDesignation = await Designation.findOne({ designationName: DESIGNATION[2] })
-            const { mobileNo, gender, dateOfBirth, nationality, userName, email, personalId, branch,
+            const { mobileNo, gender, dateOfBirth, nationality, userName, email, personalId,
                 height, weight, packageDetails, questions, relationship, emergencyNumber, referralCode, notes } = JSON.parse(req.body.data);
             if (req.headers.userid) {
                 packageDetails[0]["doneBy"] = req.headers.userid;
@@ -220,7 +220,7 @@ exports.createNewMemberByAdmin = (req, res) => {
             }
             const { memberCounter } = await createId('memberCounter');
             const member = new Member({
-                mobileNo, gender, dateOfBirth, nationality, personalId, branch, height, weight,
+                mobileNo, gender, dateOfBirth, nationality, personalId, height, weight,
                 packageDetails, questions, relationship, emergencyNumber, startWeight: weight, notes
             });
             const credential = new Credential({
