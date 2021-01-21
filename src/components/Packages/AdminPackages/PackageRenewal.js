@@ -586,7 +586,7 @@ class PackageRenewal extends Component {
                   onChange={(e) => this.setStartDate(e)}
                 />
               </MuiPickersUtilsProvider>
-              <span className="icon-date dateBoxIcon"></span>
+              <span className="iconv1 iconv1-calander dateBoxIcon"></span>
               <div className="errorMessageWrapper">
                 <small className="text-danger mx-sm-2 errorMessage">{this.state.startDateE}</small>
               </div>
@@ -609,7 +609,7 @@ class PackageRenewal extends Component {
                   onChange={(e) => this.setState(validator(e, 'endDate', 'date', []))}
                 />
               </MuiPickersUtilsProvider>
-              <span className="icon-date dateBoxIcon"></span>
+              <span className="iconv1 iconv1-calander dateBoxIcon"></span>
               <div className="errorMessageWrapper">
                 <small className="text-danger mx-sm-2 errorMessage">{this.state.endDateE}</small>
               </div>
