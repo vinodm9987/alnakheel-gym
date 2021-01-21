@@ -41,16 +41,20 @@ exports.getAllPackage = (req, res) => {
 */
 
 
-exports.getAllPackageBySalesBranch = (req, res) => {
-    Package.find({ salesBranches: req.body.salesBranches, endDate: { $gte: setTime(new Date()) } })
-        .populate('period accessBranches salesBranches')
-        .then(response => {
-            successResponseHandler(res, response, "successfully get all packages !!");
-        }).catch(error => {
-            logger.error(error);
-            errorResponseHandler(res, error, "Exception while getting all packages !");
-        });
+exports.getAllPackageBySalesBranch = async (req, res) => { 
+try {
+    let queryCond = {};
+    if (req.body.salesBranches && req.body.salesBranches !== 'all') queryCond["salesBranches"] = req.body.salesBranches
+    let response = await Package.find(queryCond,{ endDate: { $gte: setTime(new Date()) } })
+    .populate('period accessBranches salesBranches')
+    successResponseHandler(res, response, "successfully get all packages !!");
+}
+catch (error) {
+    logger.error(error);
+    errorResponseHandler(res, error, "Exception while getting all packages !");
+ }
 };
+
 
 
 

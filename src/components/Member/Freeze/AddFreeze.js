@@ -469,7 +469,7 @@ class AddFreeze extends Component {
                                       <td className="text-right" dir="ltr"><h6 className="mb-0 mt-2">{this.props.defaultCurrency} {subTotal.toFixed(3)}</h6></td>
                                     </tr>
                                     <tr>
-                                      <td className="text-left" dir="ltr"><h6 className="mb-0 mt-2">{t('Vat')} {taxPercent ? `(${taxPercent} %)` : ''}</h6></td>
+                                      <td className="text-left" dir="ltr"><h6 className="mb-0 mt-2">{t('VAT')} {taxPercent ? `(${taxPercent} %)` : ''}</h6></td>
                                       <td className="text-right" dir="ltr"><h6 className="mb-0 mt-2">{this.props.defaultCurrency} {totalVat.toFixed(3)}</h6></td>
                                     </tr>
                                   </tbody>

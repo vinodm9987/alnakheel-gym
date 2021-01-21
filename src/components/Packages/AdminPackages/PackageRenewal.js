@@ -723,7 +723,7 @@ class PackageRenewal extends Component {
                                         autoOk
                                         invalidDateMessage=''
                                         minDateMessage=''
-                                        className={"form-control mx-sm-2 inlineFormInputs"}
+                                        className={"form-control mx-sm-2 inlineFormInputs w-150px"}
                                         minDate={new Date()}
                                         maxDate={endDate}
                                         format="dd/MM/yyyy"
@@ -789,7 +789,7 @@ class PackageRenewal extends Component {
                   </tr> */}
                   <tr>
                     <td>
-                      <h5 className="m-0 text-left">{t('Vat')} {this.state.tax ? `(${this.state.tax} %)` : ''}</h5>
+                      <h5 className="m-0 text-left">{t('VAT')} {this.state.tax ? `(${this.state.tax} %)` : ''}</h5>
                     </td>
                     <td>
                       <h5 className="m-0 text-right"><small className="d-flex justify-content-end text-primary">{totalVat.toFixed(3)}</small></h5>
@@ -1020,7 +1020,7 @@ class PackageRenewal extends Component {
                 <div className="modal-body">
                   <div className="container">
                     <div className="text-center my-3">
-                      <img alt='' src={packageReceipt.branch.avatar && packageReceipt.branch.avatar.path} className="" width="250" />
+                      <img alt='' src={packageReceipt.branch.avatar && packageReceipt.branch.avatar.path} className="" width="100" />
                     </div>
                     <h4 className="border-bottom border-dark text-center font-weight-bold pb-1">Tax Invoice</h4>
                     <div className="row px-5 justify-content-between">

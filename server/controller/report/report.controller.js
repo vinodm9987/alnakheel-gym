@@ -1318,7 +1318,7 @@ exports.getReport = async (req, res) => {
       successResponseHandler(res, response, "successfully get all appointment details !!");
     } else if (req.body.reportType === 'Vat') {
       const response = await getVat(req.body)
-      successResponseHandler(res, response, "successfully get all vat details !!");
+      successResponseHandler(res, response, "successfully get all VAT details !!");
     }
   }
   catch (error) {
