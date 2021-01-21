@@ -43,7 +43,7 @@ class MoneyCollectionHistory extends Component {
               <div className="position-relative w-200px mw-100 pr-15px mt-1">
                 <label className="mx-sm-2 pb-1">{t('Select Date')}</label>
                 <div className="form-group mx-sm-2 position-relative d-flex mb-2">
-                  <span onClick={() => this.handleFilter(branch, '')} className="btn btn-warning btn-sm text-white my-1">{t('ALL')}</span>
+                  <span onClick={() => this.handleFilter(branch, '')} className="btn btn-warning btn-sm text-white all-btn">{t('ALL')}</span>
                   <MuiPickersUtilsProvider utils={DateFnsUtils}>
                     <DatePicker
                       variant='inline'

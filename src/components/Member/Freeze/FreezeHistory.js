@@ -51,7 +51,7 @@ class FreezeHistory extends Component {
                 <div className="row d-block d-sm-flex justify-content-end pt-5">
                   <div className="col w-auto px-1 flexBasis-auto flex-grow-0">
                     <div className="form-group inlineFormGroup flex-nowrap">
-                      <span onClick={() => this.resetDate()} className="btn btn-warning btn-sm text-white my-1">{t('ALL')}</span>
+                      <span onClick={() => this.resetDate()} className="btn btn-warning btn-sm text-white all-btn">{t('ALL')}</span>
                       <MuiPickersUtilsProvider utils={DateFnsUtils}>
                         <DatePicker
                           variant='inline'
