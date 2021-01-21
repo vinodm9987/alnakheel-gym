@@ -28,6 +28,9 @@ const memberSchema = new Schema({
 
     notes: { type: String },
 
+    branch: { type: Schema.Types.ObjectId, ref: "Branch" },
+
+
     /** 
      * package information of member
     */
