@@ -200,7 +200,7 @@ exports.createNewMemberByAdmin = (req, res) => {
         if (error) return errorResponseHandler(res, error, "while uploading profile error occurred !");
         try {
             const memberDesignation = await Designation.findOne({ designationName: DESIGNATION[2] })
-            const { mobileNo, gender, dateOfBirth, nationality, userName, email, personalId,
+            const { mobileNo, gender, dateOfBirth, nationality, userName, email, personalId, branch,
                 height, weight, packageDetails, questions, relationship, emergencyNumber, referralCode, notes } = JSON.parse(req.body.data);
             if (req.headers.userid) {
                 packageDetails[0]["doneBy"] = req.headers.userid;
@@ -220,7 +220,7 @@ exports.createNewMemberByAdmin = (req, res) => {
             }
             const { memberCounter } = await createId('memberCounter');
             const member = new Member({
-                mobileNo, gender, dateOfBirth, nationality, personalId, height, weight,
+                mobileNo, gender, dateOfBirth, nationality, personalId, height, weight, branch,
                 packageDetails, questions, relationship, emergencyNumber, startWeight: weight, notes
             });
             const credential = new Credential({
