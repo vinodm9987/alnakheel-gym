@@ -55,7 +55,7 @@ class AllMember extends Component {
                   <th>{t('Member ID')}</th>
                   <th>{t('Name')}</th>
                   <th>{t('Member Status')}</th>
-                  <th>{t('Branch')}</th>
+                  {/* <th>{t('Branch')}</th> */}
                   <th>{t('Phone')}</th>
                   <th>{t('Admission Date')}</th>
                   <th className="text-center">{t('Action')}</th>
@@ -87,7 +87,7 @@ class AllMember extends Component {
                         <div className="m-0 mnw-200px mxw-250px whiteSpaceNormal">{memberStatus}</div>
                       </td>
 
-                      <td>{member.branch.branchName}</td>
+                      {/* <td>{member.branch.branchName}</td> */}
                       <td className="dirltrtar">{member.mobileNo}</td>
                       <td>{dateToDDMMYYYY(member.admissionDate)}</td>
                       <td className="text-center">
