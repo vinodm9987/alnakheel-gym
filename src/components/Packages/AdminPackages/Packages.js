@@ -223,7 +223,7 @@ class Packages extends Component {
               <div className="form-control mx-sm-2 inlineFormInputs p-0 border-0 bg-white">
                 <div className="d-flex align-items-center h-100">
                   <div style={styles.swatch} onClick={this.handleClick}>
-                    <div style={styles.colors} />
+                    <div style={styles.colors} className="d-flex align-items-center justify-content-end" ><span class="iconv1 iconv1-arrow-down font-weight-bold"></span></div>
                   </div>
                   {this.state.displayColorPicker ?
                     <div style={styles.popover}>
