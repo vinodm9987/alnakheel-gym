@@ -638,7 +638,7 @@ class PointOfSales extends Component {
                               } */}
                               <tr>
                                 <td>
-                                  <h5 className="m-0 text-left">{t('Vat')}</h5>
+                                  <h5 className="m-0 text-left">{t('VAT')}</h5>
                                 </td>
                                 <td>
                                   <h5 className="m-0 text-right"><small className="d-flex justify-content-end text-primary">{totalVat.toFixed(3)}</small></h5>

@@ -517,7 +517,7 @@ class BookAClass extends Component {
                   </tr>
                   <tr>
                     <td>
-                      <h5 className="m-0 text-left">{t('Vat')} {this.state.taxPercent ? `(${this.state.taxPercent} %)` : ''}</h5>
+                      <h5 className="m-0 text-left">{t('VAT')} {this.state.taxPercent ? `(${this.state.taxPercent} %)` : ''}</h5>
                     </td>
                     <td>
                       <h5 className="m-0 text-right"><small className="d-flex justify-content-end text-primary">{tax.toFixed(3)}</small></h5>

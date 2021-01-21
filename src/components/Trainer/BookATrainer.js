@@ -666,7 +666,7 @@ class BookATrainer extends Component {
                                           autoOk
                                           invalidDateMessage=''
                                           minDateMessage=''
-                                          className={"form-control mx-sm-2 inlineFormInputs"}
+                                          className={"form-control mx-sm-2 inlineFormInputs w-150px"}
                                           minDate={new Date()}
                                           maxDate={endDate}
                                           format="dd/MM/yyyy"
@@ -726,7 +726,7 @@ class BookATrainer extends Component {
                   </tr>
                   <tr>
                     <td>
-                      <h5 className="m-0 text-left">{t('Vat')} {this.state.tax ? `(${this.state.tax} %)` : ''}</h5>
+                      <h5 className="m-0 text-left">{t('VAT')} {this.state.tax ? `(${this.state.tax} %)` : ''}</h5>
                     </td>
                     <td>
                       <h5 className="m-0 text-right"><small className="d-flex justify-content-end text-primary">{totalVat.toFixed(3)}</small></h5>
