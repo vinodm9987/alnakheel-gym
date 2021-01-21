@@ -370,49 +370,49 @@ class AdminDashboard extends Component {
             </div>
 
             {/* tushar if data */}
-            <div className="col-12 d-flex flex-wrap pb-3 align-items-start">
-              <div className="table-responsive">
-                <table className="borderRoundSeperateTable tdWhite mostsellingTable">
-                  <thead>
-                    <tr>
-                      <th><small>{t('Product Name')}</small></th>
-                      <th><small>{t('Location')}</small></th>
-                      <th className="text-center"><small>{t('Sold Qty')}</small></th>
-                      <th className="text-center"><small>{t('Total Price')}</small></th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {this.props.mostSellingStock.slice(0, 3).map((stock, i) => {
-                      const { itemName, sellingPrice, branch: { branchName }, image, originalQuantity, quantity } = stock
-                      return (
-                        <tr key={i}>
-                          <td className="p-0">
-                            <div className="d-flex align-items-center">
-                              <img alt='' src={`/${image.path}`} className="mx-1 p-1 rounded-circle w-50px h-50px objectFitContain" />
-                              <h6 className="mx-1 my-1 whiteSpaceNormal mxw-150px"><small>{itemName}</small></h6>
-                            </div>
-                          </td>
-                          <td><small className="mnw-50px whiteSpaceNormal d-inline-block">{branchName}</small></td>
-                          <td><small className="mnw-50px whiteSpaceNormal d-inline-block">{originalQuantity - quantity}</small></td>
-                          <td className="text-center">
-                            <p className="m-0"><small className="text-warning SegoeBold">{this.props.defaultCurrency} {((originalQuantity - quantity) * sellingPrice).toFixed(3)}</small></p>
-                          </td>
-                        </tr>
-                      )
-                    })}
-                  </tbody>
-                </table>
+            {this.props.mostSellingStock.length > 0 ?
+              <div className="col-12 d-flex flex-wrap pb-3 align-items-start">
+                <div className="table-responsive">
+                  <table className="borderRoundSeperateTable tdWhite mostsellingTable">
+                    <thead>
+                      <tr>
+                        <th><small>{t('Product Name')}</small></th>
+                        <th><small>{t('Location')}</small></th>
+                        <th className="text-center"><small>{t('Sold Qty')}</small></th>
+                        <th className="text-center"><small>{t('Total Price')}</small></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {this.props.mostSellingStock.slice(0, 3).map((stock, i) => {
+                        const { itemName, sellingPrice, branch: { branchName }, image, originalQuantity, quantity } = stock
+                        return (
+                          <tr key={i}>
+                            <td className="p-0">
+                              <div className="d-flex align-items-center">
+                                <img alt='' src={`/${image.path}`} className="mx-1 p-1 rounded-circle w-50px h-50px objectFitContain" />
+                                <h6 className="mx-1 my-1 whiteSpaceNormal mxw-150px"><small>{itemName}</small></h6>
+                              </div>
+                            </td>
+                            <td><small className="mnw-50px whiteSpaceNormal d-inline-block">{branchName}</small></td>
+                            <td><small className="mnw-50px whiteSpaceNormal d-inline-block">{originalQuantity - quantity}</small></td>
+                            <td className="text-center">
+                              <p className="m-0"><small className="text-warning SegoeBold">{this.props.defaultCurrency} {((originalQuantity - quantity) * sellingPrice).toFixed(3)}</small></p>
+                            </td>
+                          </tr>
+                        )
+                      })}
+                    </tbody>
+                  </table>
+                </div>
               </div>
-            </div>
 
-            {/* tushar if no-data */}
-            <div className="col-12 px-0 text-center pt-5 pb-3">
-              <h4 className="text-orange">
-                <span className="iconv1 iconv1-info"></span>
-              </h4>
-              <h5 className="text-body">There is no data to show you</h5>
-            </div>
-
+              : <div className="col-12 px-0 text-center pt-5 pb-3">
+                <h4 className="text-orange">
+                  <span className="iconv1 iconv1-info"></span>
+                </h4>
+                <h5 className="text-body">There is no data to show you</h5>
+              </div>
+            }
             {/* <div className="col-12 d-flex flex-wrap align-items-center justify-content-end mt-auto">
               <a href="/#" className="text-success mx-1 my-3 SegoeBold linkHoverDecLess cursorPointer"><small>View All</small></a>
             </div> */}
@@ -674,52 +674,54 @@ class AdminDashboard extends Component {
                     </div>
                   </div>
                   {/* tushar if data */}
-                  <div className="col-12 px-0">
-                    <div className="table-responsive">
-                      <table className="borderRoundSeperateTable tdWhite">
-                        <thead>
-                          <tr>
-                            <th><small>Member Name</small></th>
-                            <th><small>Amount</small></th>
-                            <th><small>Due Date</small></th>
-                            <th></th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {this.props.pendingInstallments.map((pendingInstallment, i) => {
-                            const { credentialId: { avatar, userName, email }, packageAmount, dueDate } = pendingInstallment
-                            return (
-                              <tr key={i}>
-                                <td>
-                                  <div className="d-flex">
-                                    <img alt='' src={`/${avatar.path}`} className="mx-1 rounded-circle w-40px h-40px" />
-                                    <div className="mx-1">
-                                      <p className="m-0 font-weight-bold">{userName}</p>
-                                      <span className="text-body font-weight-light">{email}</span>
+                  {this.props.pendingInstallments.length > 0 ?
+                    <div className="col-12 px-0">
+                      <div className="table-responsive">
+                        <table className="borderRoundSeperateTable tdWhite">
+                          <thead>
+                            <tr>
+                              <th><small>Member Name</small></th>
+                              <th><small>Amount</small></th>
+                              <th><small>Due Date</small></th>
+                              <th></th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {this.props.pendingInstallments.map((pendingInstallment, i) => {
+                              const { credentialId: { avatar, userName, email }, packageAmount, dueDate } = pendingInstallment
+                              return (
+                                <tr key={i}>
+                                  <td>
+                                    <div className="d-flex">
+                                      <img alt='' src={`/${avatar.path}`} className="mx-1 rounded-circle w-40px h-40px" />
+                                      <div className="mx-1">
+                                        <p className="m-0 font-weight-bold">{userName}</p>
+                                        <span className="text-body font-weight-light">{email}</span>
+                                      </div>
                                     </div>
-                                  </div>
-                                </td>
-                                <td><h5 className="text-warning font-weight-bold m-0 dirltrtar">{this.props.defaultCurrency} {packageAmount}</h5></td>
-                                <td>{dateToDDMMYYYY(dueDate)}</td>
-                                {/* <td className="text-center">
+                                  </td>
+                                  <td><h5 className="text-warning font-weight-bold m-0 dirltrtar">{this.props.defaultCurrency} {packageAmount}</h5></td>
+                                  <td>{dateToDDMMYYYY(dueDate)}</td>
+                                  {/* <td className="text-center">
                               <a href="/#" className="dboard-btn-icon-primary">
                                 <span className="iconv1 iconv1-right-small-arrow"></span>
                               </a>
                             </td> */}
-                              </tr>
-                            )
-                          })}
-                        </tbody>
-                      </table>
+                                </tr>
+                              )
+                            })}
+                          </tbody>
+                        </table>
+                      </div>
                     </div>
-                  </div>
+                    : <div className="col-12 px-0 text-center pt-5 pb-3">
+                      <h4 className="text-orange">
+                        <span className="iconv1 iconv1-info"></span>
+                      </h4>
+                      <h5 className="text-body">There is no data to show you</h5>
+                    </div>
+                  }
                   {/* tushar if no-data */}
-                  <div className="col-12 px-0 text-center pt-5 pb-3">
-                    <h4 className="text-orange">
-                      <span className="iconv1 iconv1-info"></span>
-                    </h4>
-                    <h5 className="text-body">There is no data to show you</h5>
-                  </div>
                 </div>
               </div>
               {/* <div className="col-12 px-0">
