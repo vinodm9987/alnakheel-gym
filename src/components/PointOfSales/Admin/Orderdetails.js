@@ -135,7 +135,7 @@ class Orderdetails extends Component {
                       <td className="text-right">{parseFloat(giftcard).toFixed(3)}</td>
                     </tr>
                     <tr>
-                      <td>VAT(5%):</td>
+                      <td>VAT:</td>
                       <td className="text-right text-primary">{parseFloat(vatAmount).toFixed(3)}</td>
                     </tr>
                     <tr className="border-top">
@@ -254,7 +254,7 @@ class Orderdetails extends Component {
                                   <div className="text-right my-1">Gift Card :</div>
                                   : <div></div>}
                                 {parseFloat(orderById.vatAmount) ?
-                                  <div className="text-right my-1">VAT(5%) :</div>
+                                  <div className="text-right my-1">VAT :</div>
                                   : <div></div>}
                                 {parseFloat(orderById.digitalAmount) ?
                                   <div className="text-right my-1">Digital :</div>

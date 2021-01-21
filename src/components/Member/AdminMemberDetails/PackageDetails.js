@@ -117,7 +117,7 @@ class PackageDetails extends Component {
       packageDetails[index] = packages
       packageDetails[index].paidType = paidType
       if (paidType === 'Multiple') {
-        if ((cash || card || digital) && cardNumber && !cashE && !cardE && !digitalE) {
+        if ((parseInt(totalAmount) === parseInt((+cash || 0) + (+card || 0) + (+digital || 0))) && cardNumber && !cashE && !cardE && !digitalE) {
           packageDetails[index].cashAmount = parseFloat(cash)
           packageDetails[index].digitalAmount = parseFloat(digital)
           packageDetails[index].cardAmount = card
@@ -127,7 +127,8 @@ class PackageDetails extends Component {
           this.props.dispatch(updateMemberDetails(memberInfo._id, memberInfo))
           $(el).click();
         } else {
-          if (!cash) this.setState({ cashE: t('Enter amount') })
+
+          if (parseInt(totalAmount) !== parseInt((+cash || 0) + (+card || 0) + (+digital || 0))) this.setState({ cashE: t('Enter amount') })
           if (!digital) this.setState({ digitalE: t('Enter amount') })
           if (!card) this.setState({ cardE: t('Enter amount') })
           if (!cardNumber) this.setState({ cardNumberE: t('Enter card number') })

@@ -83,7 +83,7 @@ class AddFreeze extends Component {
           freezeType
         }
         if (wantCharge === 'Yes') {
-          if (amount && (cash || card || digital) && !cardE && !cashE && !digitalE) {
+          if (amount && (parseInt(totalAmount) === parseInt((+cash || 0) + (+card || 0) + (+digital || 0))) && !cardE && !cashE && !digitalE) {
             freezeInfo.totalAmount = totalAmount
             freezeInfo.actualAmount = amount ? parseInt(amount) : 0
             freezeInfo.cashAmount = cash ? parseFloat(cash) : 0
@@ -95,7 +95,7 @@ class AddFreeze extends Component {
             $(el).click();
           } else {
             if (!amount) this.setState({ amountE: t('Enter amount') })
-            if (!cash) this.setState({ cashE: t('Enter amount') })
+            if (parseInt(totalAmount) !== parseInt((+cash || 0) + (+card || 0) + (+digital || 0))) this.setState({ cashE: t('Enter amount') })
             if (!digital) this.setState({ digitalE: t('Enter amount') })
             if (!card) this.setState({ cardE: t('Enter amount') })
           }

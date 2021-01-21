@@ -274,15 +274,16 @@ class PointOfSales extends Component {
     const { t } = this.props
     const { cash, card, digital, addedStocks, customerStatus, member, discount, giftcard, memberTransactionId, branch, cashE, cardE, digitalE, cardNumber } = this.state
     if (customerStatus === 'Member') {
-      if ((cash || card || digital) && addedStocks.length > 0 && member && branch && !cardE && !cashE && !digitalE) {
-        let purchaseStock = []
-        let actualAmount = 0
-        let totalVat = 0
-        addedStocks.forEach(addedStock => {
-          purchaseStock.push({ stockId: addedStock._id, quantity: addedStock.addedQuantity, amount: addedStock.addedPrice })
-          actualAmount = actualAmount + addedStock.addedPrice
-          totalVat = totalVat + addedStock.addedPrice * addedStock.vat.taxPercent / 100
-        })
+      let purchaseStock = []
+      let actualAmount = 0
+      let totalVat = 0
+      addedStocks.forEach(addedStock => {
+        purchaseStock.push({ stockId: addedStock._id, quantity: addedStock.addedQuantity, amount: addedStock.addedPrice })
+        actualAmount = actualAmount + addedStock.addedPrice
+        totalVat = totalVat + addedStock.addedPrice * addedStock.vat.taxPercent / 100
+      })
+      let total = actualAmount - discount - giftcard + totalVat
+      if ((parseInt(total) === parseInt((+cash || 0) + (+card || 0) + (+digital || 0))) && addedStocks.length > 0 && member && branch && !cardE && !cashE && !digitalE) {
         const stockSellsInfo = {
           purchaseStock,
           customerDetails: {
@@ -294,7 +295,7 @@ class PointOfSales extends Component {
           vatAmount: totalVat,
           giftcard,
           actualAmount,
-          totalAmount: actualAmount - discount - giftcard + totalVat,
+          totalAmount: total,
           cashAmount: cash ? cash : 0,
           cardAmount: card ? card : 0,
           digitalAmount: digital ? digital : 0,
@@ -304,22 +305,23 @@ class PointOfSales extends Component {
         this.props.dispatch(addStockSell(stockSellsInfo))
         this.props.activeStocks.forEach(stock => stock.isAdded = false)
       } else {
-        if ((!cash || !digital)) this.setState({ cashE: t('Enter amount') })
+        if ((parseInt(total) !== parseInt((+cash || 0) + (+card || 0) + (+digital || 0)))) this.setState({ cashE: t('Enter amount') })
         if (!member) this.setState({ memberE: t('Select member') })
         if (!branch) this.setState({ branchE: t('Select branch') })
       }
     } else {
-      if ((cash || card || digital) && addedStocks.length > 0 && branch && !cardE && !cashE && !digitalE) {
-        let purchaseStock = []
-        let actualAmount = 0
-        let totalVat = 0
-        addedStocks.forEach(addedStock => {
-          purchaseStock.push({ stockId: addedStock._id, quantity: addedStock.addedQuantity, amount: addedStock.addedPrice })
-          actualAmount = actualAmount + addedStock.addedPrice
-        })
-        addedStocks.forEach(addedStock => {
-          totalVat = totalVat + (addedStock.addedPrice - (discount * addedStock.addedPrice / actualAmount) - (giftcard * addedStock.addedPrice / actualAmount)) * addedStock.vat.taxPercent / 100
-        })
+      let purchaseStock = []
+      let actualAmount = 0
+      let totalVat = 0
+      addedStocks.forEach(addedStock => {
+        purchaseStock.push({ stockId: addedStock._id, quantity: addedStock.addedQuantity, amount: addedStock.addedPrice })
+        actualAmount = actualAmount + addedStock.addedPrice
+      })
+      addedStocks.forEach(addedStock => {
+        totalVat = totalVat + (addedStock.addedPrice - (discount * addedStock.addedPrice / actualAmount) - (giftcard * addedStock.addedPrice / actualAmount)) * addedStock.vat.taxPercent / 100
+      })
+      let total = actualAmount - discount + totalVat
+      if ((parseInt(total) === parseInt((+cash || 0) + (+card || 0) + (+digital || 0))) && addedStocks.length > 0 && branch && !cardE && !cashE && !digitalE) {
         const stockSellsInfo = {
           purchaseStock,
           customerDetails: {
@@ -330,7 +332,7 @@ class PointOfSales extends Component {
           vatAmount: totalVat,
           giftcard: 0,
           actualAmount,
-          totalAmount: actualAmount - discount + totalVat,
+          totalAmount: total,
           cashAmount: cash ? cash : 0,
           cardAmount: card ? card : 0,
           digitalAmount: digital ? digital : 0,
@@ -340,7 +342,7 @@ class PointOfSales extends Component {
         this.props.dispatch(addStockSell(stockSellsInfo))
         this.props.activeStocks.forEach(stock => stock.isAdded = false)
       } else {
-        if ((!cash && !digital)) this.setState({ cashE: t('Enter amount') })
+        if ((parseInt(total) !== parseInt((+cash || 0) + (+card || 0) + (+digital || 0)))) this.setState({ cashE: t('Enter amount') })
         if (!branch) this.setState({ branchE: t('Select branch') })
       }
     }
@@ -968,7 +970,7 @@ class PointOfSales extends Component {
                                 <div className="text-right my-1">Gift Card :</div>
                                 : <div></div>}
                               {parseFloat(posReceipt.vatAmount) ?
-                                <div className="text-right my-1">VAT(5%):</div>
+                                <div className="text-right my-1">VAT:</div>
                                 : <div></div>}
                               {parseFloat(posReceipt.digitalAmount) ?
                                 <div className="text-right my-1">Digital :</div>
