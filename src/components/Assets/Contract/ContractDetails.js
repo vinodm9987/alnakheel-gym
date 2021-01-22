@@ -55,15 +55,20 @@ class ContractDetails extends Component {
           <div className="col-12 my-4">
             <div className="row">
               <div className="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-3">{t('Contractor')}<h6><b>{supplierName}</b></h6></div>
-              <div className="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-3">{t('Mobile Number')}<h6><b className="dirltrtar">{mobileNumber}</b></h6></div>
-              <div className="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-3">{t('Email')}<h6><b>{email}</b></h6></div>
-              <div className="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-3">{t('Address')}<h6><b>{address}</b></h6></div>
-              <div onClick={() => window.open(`${PRODIP}/${document.path}`)} className="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-3">  <h4 className="iconv1 iconv1-pdf mx-1 my-0 ellipsis d-inline-block">
-                <span className="path1"></span>
-                <span className="path2"></span><span className="path3"></span><span className="path4"></span>
-                <span className="patdiv"></span><span className="path6"></span><span className="path7"></span> <label><h6><u>{document.originalname}</u></h6></label>
-              </h4></div>
-
+              <div className="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-2">{t('Mobile Number')}<h6><b className="dirltrtar">{mobileNumber}</b></h6></div>
+              <div onClick={() => window.open(`${PRODIP}/${document.path}`)} className="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-2">
+                {t('Attachment')}
+                <div className="d-flex align-items-start">
+                  <h4 className="iconv1 iconv1-pdf mx-1 my-0 ellipsis d-inline-block flex-shrink-0 pointer">
+                    <span className="path1"></span>
+                    <span className="path2"></span><span className="path3"></span><span className="path4"></span>
+                    <span className="patdiv"></span><span className="path6"></span><span className="path7"></span>
+                  </h4>
+                  <label className="pointer"><h6><u>{document.originalname}</u></h6></label>
+                </div>
+              </div>
+              <div className="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-4 text-break">{t('Email')}<h6><b>{email}</b></h6></div>
+              <div className="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-4">{t('Address')}<h6><b>{address}</b></h6></div>
             </div>
           </div>
           <div className="row bg-light text-dark pb-4 px-4 mx-3" >

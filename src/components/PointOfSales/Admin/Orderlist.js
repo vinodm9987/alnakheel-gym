@@ -6,6 +6,7 @@ import Pagination from '../../Layout/Pagination'
 import { getOrderHistory } from '../../../actions/pos.action'
 import { Link } from 'react-router-dom'
 import $ from 'jquery'
+import image from '../../../assets/img/al-main-logo.png'
 
 class Orderlist extends Component {
 
@@ -201,7 +202,10 @@ class Orderlist extends Component {
                 <div className="modal-body">
                   <div className="container">
                     <div className="text-center my-3">
-                      <img alt='' src={orderById.branch.avatar ? `/${orderById.branch.avatar.path}` : ''} className="" width="250" />
+                      <img alt='' src={orderById.branch.avatar ? `/${orderById.branch.avatar.path}` : ''} className="mb-2" width="100" />
+                      {/* tushar image changedc here */}
+                      {/* <img alt='' src={image} className="mb-2" width="100" /> */}
+                      <h4 className="border-bottom border-dark text-center font-weight-bold pb-1">Tax Invoice</h4>
                     </div>
                     <div className="row px-5">
                       <div className="col-12 col-sm-12 col-md-5 col-lg-5 col-xl-5 p-3">

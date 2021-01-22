@@ -3687,6 +3687,7 @@ input:focus {
 }
 
 /* width */
+.scrollbarchrome::-webkit-scrollbar,
 #ModernTableResponsive::-webkit-scrollbar,
 #ModernTableResponsive1::-webkit-scrollbar,
 #ModernTableResponsive2::-webkit-scrollbar,
@@ -3696,6 +3697,7 @@ input:focus {
 }
 
 /* Handle */
+.scrollbarchrome::-webkit-scrollbar-thumb,
 #ModernTableResponsive::-webkit-scrollbar-thumb,
 #ModernTableResponsive1::-webkit-scrollbar-thumb,
 #ModernTableResponsive2::-webkit-scrollbar-thumb,
@@ -3705,6 +3707,7 @@ input:focus {
 }
 
 /* Handle on hover */
+.scrollbarchrome::-webkit-scrollbar-thumb:hover,
 #ModernTableResponsive::-webkit-scrollbar-thumb:hover,
 #ModernTableResponsive1::-webkit-scrollbar-thumb:hover,
 #ModernTableResponsive2::-webkit-scrollbar-thumb:hover,
@@ -3740,4 +3743,10 @@ input:focus {
 }
 .inner-head-down {
   height: calc(100% - 52px);
+}
+.pointer:hover {
+  cursor: pointer;
+}
+.fz-14px {
+  font-size: 14px;
 }
