@@ -302,7 +302,7 @@ class BookAClass extends Component {
   handleSubmit(total) {
     const { t } = this.props
     const { branch, classes, member, amount, cash, card, cardE, discount, tax, giftcard, cardNumber, memberTransactionId, cashE, digital, digitalE } = this.state
-    if (branch && classes && member && amount && (cash || card || digital) && !cardE && !cashE && !digitalE) {
+    if (branch && classes && member && amount && (parseInt(total) === parseInt((+cash || 0) + (+card || 0) + (+digital || 0))) && !cardE && !cashE && !digitalE) {
       const bookClassInfo = {
         member: member._id,
         classId: classes,
@@ -323,7 +323,7 @@ class BookAClass extends Component {
       if (!branch) this.setState({ branchE: t('Enter branch name') })
       if (!member) this.setState({ memberE: t('Select member') })
       if (!classes) this.setState({ classesE: t('Select class') })
-      if (!cash && !digital) this.setState({ cashE: t('Enter amount') })
+      if (parseInt(total) !== parseInt((+cash || 0) + (+card || 0) + (+digital || 0))) this.setState({ cashE: t('Enter amount') })
     }
   }
 
@@ -803,7 +803,7 @@ class BookAClass extends Component {
                                 <div className="text-right my-1">Discount :</div>
                                 : <div></div>}
                               {parseFloat(tax) ?
-                                <div className="text-right my-1">VAT(5%):</div>
+                                <div className="text-right my-1">VAT{this.state.tax ? `(${this.state.tax} %)` : ''}:</div>
                                 : <div></div>}
                               {parseFloat(digital) ?
                                 <div className="text-right my-1">Digital :</div>

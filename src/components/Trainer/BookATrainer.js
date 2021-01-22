@@ -278,7 +278,7 @@ class BookATrainer extends Component {
     const { t } = this.props
     const { packages, cash, card, member, trainer, period, trainerFeesId, cashE, cardE,
       digital, digitalE, oldPackageId, packageAmount, tax, discount, startDate, endDate, } = this.state
-    if (member && packages && (cash || card || digital) && !cardE && !cashE && !digitalE && trainer && period) {
+    if (member && packages && (parseInt(totalAmount) === parseInt((+cash || 0) + (+card || 0) + (+digital || 0))) && !cardE && !cashE && !digitalE && trainer && period) {
       const trainerInfo = {
         memberId: member._id,
         oldPackageId,
@@ -300,7 +300,7 @@ class BookATrainer extends Component {
     } else {
       if (!packages) this.setState({ packagesE: t('Enter package name') })
       if (!member) this.setState({ memberE: t('Select member') })
-      if (!cash && !card && !digital) this.setState({ cashE: t('Enter amount') })
+      if (parseInt(totalAmount) !== parseInt((+cash || 0) + (+card || 0) + (+digital || 0))) this.setState({ cashE: t('Enter amount') })
       if (!trainer) this.setState({ trainerE: t('Select trainer name') })
       if (!period) this.setState({ periodE: t('Select period') })
     }
@@ -1009,7 +1009,7 @@ class BookATrainer extends Component {
                                 <div className="text-right my-1">Discount :</div>
                                 : <div></div>}
                               {parseFloat(totalVat) ?
-                                <div className="text-right my-1">VAT(5%):</div>
+                                <div className="text-right my-1">VAT{this.state.tax ? `(${this.state.tax} %)` : ''}:</div>
                                 : <div></div>}
                               {parseFloat(digital) ?
                                 <div className="text-right my-1">Digital :</div>

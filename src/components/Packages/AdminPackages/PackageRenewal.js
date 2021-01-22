@@ -317,7 +317,7 @@ class PackageRenewal extends Component {
     const { t } = this.props
     const { packages, cardNumber, cash, card, packageAmount, member, discount, tax, giftcard, memberTransactionId, cashE, cardE, digital, digitalE,
       startDate, endDate } = this.state
-    if (member && packages && (cash || card || digital) && !cardE && !cashE && !digitalE && startDate <= endDate) {
+    if (member && packages && (parseInt(totalAmount) === parseInt((+cash || 0) + (+card || 0) + (+digital || 0))) && !cardE && !cashE && !digitalE && startDate <= endDate) {
       const memberInfo = {
         // oldPackageId,
         memberId: member._id,
@@ -342,7 +342,7 @@ class PackageRenewal extends Component {
     } else {
       if (!packages) this.setState({ packagesE: t('Enter package name') })
       if (!member) this.setState({ memberE: t('Select member') })
-      if (!cash && !card && !digital) this.setState({ cashE: t('Enter amount') })
+      if (parseInt(totalAmount) !== parseInt((+cash || 0) + (+card || 0) + (+digital || 0))) this.setState({ cashE: t('Enter amount') })
       if (startDate > endDate) this.setState({ endDateE: t('End Date should be greater than Start Date') })
     }
   }
@@ -1094,7 +1094,7 @@ class PackageRenewal extends Component {
                                 <div className="text-right my-1">Discount :</div>
                                 : <div></div>}
                               {parseFloat(totalVat) ?
-                                <div className="text-right my-1">VAT(5%):</div>
+                                <div className="text-right my-1">VAT{this.state.tax ? `(${this.state.tax} %)` : ''}:</div>
                                 : <div></div>}
                               {parseFloat(digital) ?
                                 <div className="text-right my-1">Digital :</div>

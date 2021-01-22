@@ -527,7 +527,8 @@ class AddMembers extends Component {
       trainer, wantTrainer, levelQuestion, exercisingQuestion, goalQuestion, period, trainerFeesId, addPackage, packageAmount,
       emailE, numberE, emergencyNumberE, cashE, cardE, digital, digitalE, startDate, endDate, trainerPeriodDays, installments,
       cheque, bankName, chequeNumber, chequeDate, showCheque } = this.state
-    if (name && email && number && personalId && dob && nationality && gender && userPhoto && packageName && branch && calculateDOB(dob) > 14 && (cash || card || digital || cheque) && !cardE && !cashE
+    if (name && email && number && personalId && dob && nationality && gender && userPhoto && packageName && branch && calculateDOB(dob) > 14 && (parseInt(totalAmount) === parseInt((+cash || 0) + (+card || 0) + (+digital || 0) + (+cheque || 0)))
+      && !cardE && !cashE
       && !digitalE && !emailE && !numberE && !emergencyNumberE && startDate <= endDate
     ) {
       const memberInfo = {
@@ -659,7 +660,7 @@ class AddMembers extends Component {
       if (!packageName) this.setState({ packageNameE: t('Enter package name') })
       if (!branch) this.setState({ branchE: t('Enter branch') })
       if (calculateDOB(dob) <= 14) this.props.dispatch({ type: GET_ALERT_ERROR, payload: t('You are little small to join the Gym') })
-      if (!cash && !digital) this.setState({ cashE: t('Enter amount') })
+      if (parseInt(totalAmount) === parseInt((+cash || 0) + (+card || 0) + (+digital || 0) + (+cheque || 0))) this.setState({ cashE: t('Enter amount') })
       if (!cardNumber) this.setState({ cardNumberE: t('Enter card number') })
       if (startDate > endDate) this.setState({ endDateE: t('End Date should be greater than Start Date') })
     }
@@ -1972,7 +1973,7 @@ class AddMembers extends Component {
                                   <div className="text-right my-1">Discount :</div>
                                   : <div></div>}
                                 {parseFloat(totalVat) ?
-                                  <div className="text-right my-1">VAT(5%):</div>
+                                  <div className="text-right my-1">VAT{this.state.tax ? `(${this.state.tax} %)` : ''}:</div>
                                   : <div></div>}
                                 {parseFloat(digital) ?
                                   <div className="text-right my-1">Digital :</div>
