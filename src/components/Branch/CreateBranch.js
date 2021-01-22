@@ -492,9 +492,9 @@ class CreateBranch extends Component {
                 <th>{t('Address')}</th>
                 <th>{t('Email')}</th>
                 <th>{t('Telephone')}</th>
-                <th>{t('Machine ID')}</th>
-                <th>{t('Private IP')}</th>
-                <th>{t('Type of Machine')}</th>
+                {/* <th>{t('Machine ID')}</th> */}
+                {/* <th>{t('Private IP')}</th> */}
+                {/* <th>{t('Type of Machine')}</th> */}
                 <th>{t('Mobile Number')}</th>
                 <th className="text-center">{t('Status')}</th>
                 <th className="text-center">{t('Action')}</th>
@@ -517,9 +517,9 @@ class CreateBranch extends Component {
                     </td>
                     <td>{branch.email}</td>
                     <td className="dirltrtar">{branch.telephone}</td>
-                    <td className="dirltrtar">{branch.machineId}</td>
-                    <td className="dirltrtar">{branch.bioStarIp}</td>
-                    <td className="dirltrtar">{branch.typeOfMachine}</td>
+                    {/* <td className="dirltrtar">{branch.machineId}</td> */}
+                    {/* <td className="dirltrtar">{branch.bioStarIp}</td> */}
+                    {/* <td className="dirltrtar">{branch.typeOfMachine}</td> */}
                     <td className="dirltrtar">{branch.mobile}</td>
                     <td className="text-center">
                       <label className="switch">
