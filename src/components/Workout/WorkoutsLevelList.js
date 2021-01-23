@@ -33,7 +33,7 @@ class WorkoutsLevelList extends Component {
               return (
                 <div key={i} className="col-12 col-sm-12 col-md-6 col-xl-4 d-flex align-items-stretch">
                   <div className="card bg-light mb-4 w-100">
-                    <div className="card-body">
+                    <div className="card-body pb-5">
                       <div className="col-12 px-0 d-flex justify-content-between">
                         <h4 className="m-0 wordBreakBreakAll">{level.levelName}</h4>
                         <div className="py-1 flex-shrink-0 flex-grow-0">
@@ -52,13 +52,13 @@ class WorkoutsLevelList extends Component {
                             </div>
                           )
                         })}
-                        <div className="d-flex justify-content-end w-100 align-items-center pb-2">
-                          <Link to={{ pathname: "/workouts-level", editData: JSON.stringify(level) }} className="linkHoverDecLess">
-                            <span className="bg-success action-icon w-30px h-30px rounded-circle d-flex align-items-center justify-content-center mx-1 text-white">
-                              <span className="iconv1 iconv1-edit"></span>
-                            </span>
-                          </Link>
-                        </div>
+                      </div>
+                      <div className="d-flex justify-content-end w-100 align-items-center pb-3 pr-3" style={{ position: "absolute", right: "0", bottom: "0" }}>
+                        <Link to={{ pathname: "/workouts-level", editData: JSON.stringify(level) }} className="linkHoverDecLess">
+                          <span className="bg-success action-icon w-30px h-30px rounded-circle d-flex align-items-center justify-content-center mx-1 text-white">
+                            <span className="iconv1 iconv1-edit"></span>
+                          </span>
+                        </Link>
                       </div>
                     </div>
                   </div>

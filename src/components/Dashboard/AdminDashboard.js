@@ -372,7 +372,7 @@ class AdminDashboard extends Component {
             {/* tushar if data */}
             {this.props.mostSellingStock.length > 0 ?
               <div className="col-12 d-flex flex-wrap pb-3 align-items-start">
-                <div className="table-responsive">
+                <div className="table-responsive scrollbarchrome" style={{ maxHeight: "400px" }}>
                   <table className="borderRoundSeperateTable tdWhite mostsellingTable">
                     <thead>
                       <tr>
@@ -396,7 +396,7 @@ class AdminDashboard extends Component {
                             <td><small className="mnw-50px whiteSpaceNormal d-inline-block">{branchName}</small></td>
                             <td><small className="mnw-50px whiteSpaceNormal d-inline-block">{originalQuantity - quantity}</small></td>
                             <td className="text-center">
-                              <p className="m-0"><small className="text-warning SegoeBold">{this.props.defaultCurrency} {((originalQuantity - quantity) * sellingPrice).toFixed(3)}</small></p>
+                              <p className="m-0"><span className="text-warning SegoeBold">{this.props.defaultCurrency} {((originalQuantity - quantity) * sellingPrice).toFixed(3)}</span></p>
                             </td>
                           </tr>
                         )
@@ -600,12 +600,25 @@ class AdminDashboard extends Component {
 
             <div className="col-12 d-flex flex-wrap align-items-center justify-content-between py-1 mb-auto">
               <h6 className="mx-1 my-2 SegoeBold py-1">Pending Installments</h6>
+              {/* tushar it is month alone. so keep it here in top */}
+              <div className="d-flex flex-wrap align-items-center">
+                <span className="position-relative mx-1 my-2">
+                  <select className="bg-white border-secondary border-secondary pr-4 pl-1 mw-100" style={{ fontSize: "13px" }} >
+                    <option >January</option>
+                  </select>
+                  <span className="position-absolute d-flex align-items-center justify-content-end w-100 h-100 pointerNone px-2" style={{ top: '0', left: '0' }}>
+                    <span className="iconv1 iconv1-arrow-down"></span>
+                  </span>
+                </span>
+              </div>
+              {/* -/ tushar it is month alone. so keep it here in top over */}
               <div className="underline w-100"></div>
             </div>
 
             <div className="col-12 d-flex flex-wrap align-items-start justify-content-between py-1 inner-head-down">
               <div className="col-12">
                 <div className="row">
+                  {/* tushar month we kept top. so remove from here */}
                   <div className="col-12">
                     <div className="row">
                       {/* <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
@@ -673,17 +686,18 @@ class AdminDashboard extends Component {
                       </div>
                     </div>
                   </div>
+                  {/* -/ tushar month we kept top. so remove from here over */}
                   {/* tushar if data */}
                   {this.props.pendingInstallments.length > 0 ?
-                    <div className="col-12 px-0">
-                      <div className="table-responsive">
+                    <div className="col-12 px-0 pb-3">
+                      <div className="table-responsive scrollbarchrome" style={{ maxHeight: "400px" }}>
                         <table className="borderRoundSeperateTable tdWhite">
                           <thead>
                             <tr>
                               <th><small>Member Name</small></th>
                               <th><small>Amount</small></th>
                               <th><small>Due Date</small></th>
-                              <th></th>
+                              {/* <th></th> */}
                             </tr>
                           </thead>
                           <tbody>
@@ -695,12 +709,12 @@ class AdminDashboard extends Component {
                                     <div className="d-flex">
                                       <img alt='' src={`/${avatar.path}`} className="mx-1 rounded-circle w-40px h-40px" />
                                       <div className="mx-1">
-                                        <p className="m-0 font-weight-bold">{userName}</p>
-                                        <span className="text-body font-weight-light">{email}</span>
+                                        <p className="m-0 font-weight-bold fz-14px" >{userName}</p>
+                                        <span className="text-body font-weight-light fz-14px">{email}</span>
                                       </div>
                                     </div>
                                   </td>
-                                  <td><h5 className="text-warning font-weight-bold m-0 dirltrtar">{this.props.defaultCurrency} {packageAmount}</h5></td>
+                                  <td><p className="text-warning SegoeBold m-0 dirltrtar">{this.props.defaultCurrency} {packageAmount}</p></td>
                                   <td>{dateToDDMMYYYY(dueDate)}</td>
                                   {/* <td className="text-center">
                               <a href="/#" className="dboard-btn-icon-primary">

@@ -345,7 +345,7 @@ class FeedbackRequestList extends Component {
                 <th>{t('Feedback Type')}</th>
                 <th>{t('Description')}</th>
                 <th>{t('View Status')}</th>
-                <th></th>
+                <th className="text-center">{t('Action')}</th>
               </tr>
             </thead>
             <tbody>
