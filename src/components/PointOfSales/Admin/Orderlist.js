@@ -6,7 +6,6 @@ import Pagination from '../../Layout/Pagination'
 import { getOrderHistory } from '../../../actions/pos.action'
 import { Link } from 'react-router-dom'
 import $ from 'jquery'
-import image from '../../../assets/img/al-main-logo.png'
 
 class Orderlist extends Component {
 

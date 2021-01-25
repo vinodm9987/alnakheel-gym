@@ -203,7 +203,7 @@ class PackageDetails extends Component {
                         <div className="col-12 d-flex justify-content-end align-items-center pb-2">
                           <span className="text-secondary">{t('Payment Status')}</span>
                           {(paidStatus === 'Paid' || paidStatus === 'Installment')
-                            ? <button className="btn btn-success badge-pill btn-sm px-3 py-05 d-inline-flex justify-content-between align-items-center mx-1 py-0 w-100px text-nowrap" data-toggle="modal" data-target="#allreadyPaid"><span className="mx-1">{t(`${paidStatus}`)}</span><span className="iconv1 iconv1-arrow-down mx-1"></span></button>
+                            ? <button className="btn btn-success badge-pill btn-sm px-3 py-05 d-inline-flex justify-content-between align-items-center mx-1 py-0 w-100px text-nowrap" data-toggle="modal" data-target="#allreadyPaid"><span className="mx-1">{t(`Paid`)}</span><span className="iconv1 iconv1-arrow-down mx-1"></span></button>
                             : <button className="btn btn-danger badge-pill btn-sm px-3 py-05 d-inline-flex justify-content-between align-items-center mx-1 py-0 w-100px text-nowrap" data-toggle="modal" data-target="#notYetPaid" onClick={() => this.onClickPayButton(packageName, totalAmount, _id, i)}><span className="mx-1">{t(`${paidStatus}`)}</span><span className="iconv1 iconv1-arrow-down mx-1"></span></button>
                           }
                         </div>
@@ -596,7 +596,9 @@ class PackageDetails extends Component {
                             <td>{packageName}</td>
                             <td>{dateToDDMMYYYY(startDate)}</td>
                             <td>{dateToDDMMYYYY(endDate)}</td>
-                            {totalAmount ? <td className="text-danger font-weight-bold"><span>{this.props.defaultCurrency}</span><span className="pl-1"></span><span>{totalAmount.toFixed(3)}</span></td> : <td>NA</td>}
+                            {totalAmount
+                              ? <td className="text-danger font-weight-bold"><span>{this.props.defaultCurrency}</span><span className="pl-1"></span><span>{totalAmount.toFixed(3)}</span></td>
+                              : <td className="text-danger font-weight-bold"><span>{this.props.defaultCurrency}</span><span className="pl-1"></span><span>{amount.toFixed(3)}</span></td>}
                             {/* <td>{trainer ? trainer.credentialId.userName : 'NA'}</td> */}
                             {/* <td className="text-center">
                           <span className="bg-warning action-icon"><span className="iconv1 iconv1-download"></span></span>
@@ -668,7 +670,7 @@ class PackageDetails extends Component {
           </div>
 
           {/* ------------Pop up Installments details------------ */}
-          {this.state.Installments && this.state.Installments.length &&
+          {this.state.Installments && this.state.Installments.length > 0 &&
             <div className="modal fade commonYellowModal" id="InstallmentDetails">
               <div className="modal-dialog modal-lg modal-dialog-centered">
                 <div className="modal-content">
