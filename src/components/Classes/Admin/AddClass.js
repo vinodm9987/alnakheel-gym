@@ -723,8 +723,8 @@ class AddClass extends Component {
                   <h5 className="font-weight-bold">{t('Class Days')}</h5>
                   {/* translte tushar */}
                 </div>
-                <div className="row">
-                  <div className="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
+                {/* <div className="row">
+                  <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12"> */}
                     <div className="form-group inlineFormGroup">
                       <label className="mx-sm-2 inlineFormLabel type3">{t('Days')}</label>
                       <Select
@@ -743,8 +743,8 @@ class AddClass extends Component {
                         <small className="text-danger mx-sm-2 errorMessage">{this.state.classDaysE}</small>
                       </div>
                     </div>
-                  </div>
-                </div>
+                  {/* </div>
+                </div> */}
               </div>
               {/* see design */}
 
