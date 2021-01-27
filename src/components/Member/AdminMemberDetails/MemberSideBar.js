@@ -118,6 +118,11 @@ class MemberSideBar extends Component {
                 <small><span>:<span
                   className="mx-1"></span><span>{branchName}</span></span></small>
               </div> */}
+              {/* tushar here spacing issue dummy branch name created today demo there india  */}
+              <div className="col-6 p-0">
+                <small><span>:<span
+                  className="mx-1"></span><span>India</span></span></small>
+              </div>
               <div className="col-6 p-0 text-right text-xl-left">
                 <small><span className="text-secondary">{t('Notes')}</span></small>
               </div>

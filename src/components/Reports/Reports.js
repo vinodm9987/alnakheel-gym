@@ -323,29 +323,31 @@ class Reports extends Component {
           reportName !== 'Employee Details'
         ) &&
           <div className="col-12 col-sm-12 col-md-4 col-lg-3 col-xl-2 py-3">
-            <label htmlFor="FromDate"><b>{reportName === 'End of Shift Report' ? t('Date') : t('From Date')}</b></label>
-            <MuiPickersUtilsProvider utils={DateFnsUtils}>
-              <DatePicker
-                variant='inline'
-                InputProps={{
-                  disableUnderline: true,
-                }}
-                autoOk
-                className={this.state.fromDateE ? "form-control pt-1 pl-2 border FormInputsError" : "form-control pt-1 pl-2 border"}
-                invalidDateMessage=''
-                minDateMessage=''
-                maxDate={reportName !== 'Booked Appointments By Members' &&
-                  reportName !== 'Booked Appointments Status' &&
-                  reportName !== 'Booked Appointments By Visitors' ? new Date() : new Date().setFullYear(new Date().getFullYear() + 1)}
-                format="dd/MM/yyyy"
-                value={fromDate}
-                onChange={(e) => this.handleDate(e, 'fromDate')}
-                id="fromDate"
-              />
-            </MuiPickersUtilsProvider>
-            <span class="iconv1 iconv1-calander dateBoxIcon"></span>
-            <div className="errorMessageWrapper">
-              <small className="text-danger errorMessage">{this.state.fromDateE}</small>
+            <div class="form-group position-relative">
+              <label htmlFor="FromDate"><b>{reportName === 'End of Shift Report' ? t('Date') : t('From Date')}</b></label>
+              <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                <DatePicker
+                  variant='inline'
+                  InputProps={{
+                    disableUnderline: true,
+                  }}
+                  autoOk
+                  className={this.state.fromDateE ? "form-control pt-1 pl-2 border FormInputsError" : "form-control pt-1 pl-2 border"}
+                  invalidDateMessage=''
+                  minDateMessage=''
+                  maxDate={reportName !== 'Booked Appointments By Members' &&
+                    reportName !== 'Booked Appointments Status' &&
+                    reportName !== 'Booked Appointments By Visitors' ? new Date() : new Date().setFullYear(new Date().getFullYear() + 1)}
+                  format="dd/MM/yyyy"
+                  value={fromDate}
+                  onChange={(e) => this.handleDate(e, 'fromDate')}
+                  id="fromDate"
+                />
+              </MuiPickersUtilsProvider>
+              <span class="iconv1 iconv1-calander dateBoxIcon"></span>
+              <div className="errorMessageWrapper">
+                <small className="text-danger errorMessage">{this.state.fromDateE}</small>
+              </div>
             </div>
           </div>
         }
@@ -359,7 +361,7 @@ class Reports extends Component {
         ) &&
           <div className="col-12 col-sm-12 col-md-4 col-lg-3 col-xl-2 py-3">
             <div class="form-group position-relative">
-              <label htmlFor="ToDa<b>te"><b>{t('To Date')}</b></label>
+              <label htmlFor="ToDate"><b>{t('To Date')}</b></label>
               <MuiPickersUtilsProvider utils={DateFnsUtils}>
                 <DatePicker
                   variant='inline'

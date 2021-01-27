@@ -675,7 +675,7 @@ class PackageDetails extends Component {
               <div className="modal-dialog modal-lg modal-dialog-centered">
                 <div className="modal-content">
                   <div className="modal-header">
-                    <h4 className="modal-title">Installments</h4>
+                    <h4 className="modal-title">Payment Details</h4>
                     <button type="button" className="close align-self-center" data-dismiss="modal"><span className="iconv1 iconv1-close"></span></button>
                   </div>
                   <div className="modal-body px-4">
