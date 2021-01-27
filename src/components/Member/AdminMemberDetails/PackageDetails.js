@@ -257,7 +257,7 @@ class PackageDetails extends Component {
                                   }
                                 </div>
                                 <div className="d-flex align-items-start w-100">
-                                  <img alt='' src={`http://${trainer.trainer.credentialId.avatar.ip}:5600/${trainer.trainer.credentialId.avatar.path}`} className="mx-1 rounded-circle w-50px h-50px" />
+                                  <img alt='' src={`/${trainer.trainer.credentialId.avatar.path}`} className="mx-1 rounded-circle w-50px h-50px" />
                                   <div className="mx-1">
                                     <p className="m-0 text-black">{trainer.trainer.credentialId.userName}</p>
                                     {/* <span className="wordBreakBreakAll text-black">{trainer.credentialId.email}</span> */}
@@ -644,7 +644,7 @@ class PackageDetails extends Component {
                               <tr key={j}>
                                 <td>
                                   <div className="d-flex align-items-center">
-                                    <img src={`http://${avatar.ip}:5600/${avatar.path}`} alt="" className="w-30px h-30px br-50 mr-2" />
+                                    <img src={`/${avatar.path}`} alt="" className="w-30px h-30px br-50 mr-2" />
                                     <h5 className="my-2">{userName}</h5>
                                   </div>
                                 </td>

@@ -12,7 +12,7 @@ import { getAllActiveMember } from '../../../actions/member.action'
 import { verifyAdminPassword } from '../../../actions/privilege.action'
 import { getAmountByRedeemCode } from '../../../actions/reward.action'
 import { GET_ALERT_ERROR } from '../../../actions/types'
-import instaimg from '../../../assets/img/insta.svg.webp'
+import instaimg from '../../../assets/img/insta.jpg'
 import { dateToDDMMYYYY, dateToHHMM, scrollToTop, validator } from '../../../utils/apis/helpers'
 
 class BookAClass extends Component {
@@ -199,15 +199,8 @@ class BookAClass extends Component {
 
   handlePrint() {
     var w = window.open('', 'new div', 'height=400,width=600');
-    var printOne = $('#ReceiptModal2').html();
-    w.document.write('<html><head><title></title>');
-    w.document.write('<link rel="stylesheet" href="css/style.css" type="text/css" />');
-    w.document.write('<link rel="stylesheet" href="css/style2.css" type="text/css" />');
-    w.document.write('<link rel="stylesheet" href="css/bootstrap.min.css" type="text/css" />');
-    w.document.write('<link rel="stylesheet" href="css/bootstrap.min.css" type="text/css" />');
-    w.document.write('</head><body >');
-    w.document.write(printOne)
-    w.document.write('</body></html>');
+    var printOne = $('#newPrint').html();
+    w.document.body.innerHTML = printOne
     w.window.print();
     w.document.close();
     this.setState(this.defaultCancel)
@@ -890,6 +883,138 @@ class BookAClass extends Component {
           </div>
         }
         {/* --------------Receipt Modal Ends-=--------------- */}
+
+        {classReceipt &&
+          <div className="PageBillWrapper d-none">
+            <div style={{ width: "450px", padding: "15px", margin: "auto" }} id="newPrint">
+              <div style={{ display: "flex", justifyContent: "center" }}>
+                <img src={`/${avatarPath}`} width="200" style={{ width: "100px" }} alt="" />
+              </div>
+              <h5 style={{ textAlign: "center", margin: "19px 0" }}>Tax Invoice</h5>
+              <p style={{ textAlign: "center", margin: "0 0 10px 0" }}>
+                <span>{this.props.branches && this.props.branches.filter(b => b._id === branch)[0] &&
+                  this.props.branches.filter(b => b._id === branch)[0].branchName}</span><br />
+                <span>{this.props.branches && this.props.branches.filter(b => b._id === branch)[0] &&
+                  this.props.branches.filter(b => b._id === branch)[0].address}</span><br />
+                {/* <span>Road/Street 50, Samaheej,</span><br /> */}
+                {/* <span>Block 236, Bahrain,</span><br /> */}
+                <span>Tel : {this.props.branches && this.props.branches.filter(b => b._id === branch)[0] &&
+                  this.props.branches.filter(b => b._id === branch)[0].telephone}</span><br />
+              </p>
+              <p style={{ textAlign: "center", margin: "0 0 10px 0" }}>VAT Reg No - {this.props.branches && this.props.branches.filter(b => b._id === branch)[0] &&
+                this.props.branches.filter(b => b._id === branch)[0].vatRegNo}</p>
+              <p style={{ display: "flex", justifyContent: "space-between", margin: "0" }}>
+                <span style={{ padding: "2px", fontSize: "14px" }}>{dateToDDMMYYYY(new Date())} {dateToHHMM(new Date())}</span>
+                <span style={{ padding: "2px", fontSize: "14px" }}>Bill No:{classReceipt.orderNo}</span>
+              </p>
+              {member &&
+                <div>
+                  <p style={{ display: "flex", textAlign: "center", justifyContent: "space-between" }}>
+                    <span>ID: <span style={{ padding: "10px" }}>{member.memberId}</span></span>
+                    <span>Mob: <span style={{ padding: "10px" }}>{member.mobileNo}</span></span>
+                  </p>
+                  <p style={{ display: "flex", textAlign: "center", justifyContent: "center", marginTop: "0" }}>
+                    <span>{member.credentialId.userName}</span>
+                  </p>
+                </div>
+              }
+              {/* <p style={{ textAlign: "right", margin: "0 0 10px 0" }}>66988964</p> */}
+              <table style={{ width: "100%" }}>
+                <tbody>
+                  <tr style={{ borderTop: "1px dashed #000" }}>
+                    <td>No.</td>
+                    <td>CLASS NAME</td>
+                  </tr>
+                  {/* <tr style={{ borderTop: "1px dashed #000" }}>
+                  <td>1</td>
+                  <td>3 Month</td>
+                  <td>26-Dec-19</td>
+                  <td>13-Sep-20</td>
+                </tr> */}
+                  <tr>
+                    <td>1</td>
+                    <td>{this.props.classesByBranch && this.props.classesByBranch.filter(c => c._id === classes)[0] &&
+                      this.props.classesByBranch.filter(c => c._id === classes)[0].className}</td>
+                  </tr>
+                </tbody>
+              </table>
+              <table style={{ width: "100%", textAlign: "right", borderTop: "1px dashed #000", borderBottom: "1px dashed #000" }}>
+                <tbody>
+                  <tr>
+                    <td style={{ textAlign: "right", padding: "4px 4px 0 4px", width: "100%" }}>Amount Total {this.props.defaultCurrency}: </td>
+                    <td style={{ textAlign: "right", padding: "4px 0px 0 0px" }}>{parseFloat(subTotal).toFixed(3)}</td>
+                  </tr>
+                  {parseFloat(discount) ?
+                    <tr>
+                      <td style={{ textAlign: "right", padding: "0 4px", width: "100%" }}>Discount {this.props.defaultCurrency}: </td>
+                      <td style={{ textAlign: "right", padding: "0" }}>{parseFloat(discount).toFixed(3)}</td>
+                    </tr>
+                    : <tr></tr>}
+                  {parseFloat(giftcard) ?
+                    <tr>
+                      <td style={{ textAlign: "right", padding: "0 4px", width: "100%" }}>Giftcard {this.props.defaultCurrency}: </td>
+                      <td style={{ textAlign: "right", padding: "0" }}>{parseFloat(giftcard).toFixed(3)}</td>
+                    </tr>
+                    : <tr></tr>}
+                  {parseFloat(tax) ?
+                    <tr>
+                      <td style={{ textAlign: "right", padding: "0 4px", width: "100%" }}>VAT {this.props.defaultCurrency}: </td>
+                      <td style={{ textAlign: "right", padding: "0" }}>{parseFloat(tax).toFixed(3)}</td>
+                    </tr>
+                    : <tr></tr>}
+                  {parseFloat(digital) ?
+                    <tr>
+                      <td style={{ textAlign: "right", padding: "0 4px", width: "100%" }}>Digital {this.props.defaultCurrency}: </td>
+                      <td style={{ textAlign: "right", padding: "0" }}>5{parseFloat(digital).toFixed(3)}</td>
+                    </tr>
+                    : <tr></tr>}
+                  {parseFloat(cash) ?
+                    <tr>
+                      <td style={{ textAlign: "right", padding: "0 4px", width: "100%" }}>Cash {this.props.defaultCurrency}: </td>
+                      <td style={{ textAlign: "right", padding: "0" }}>5{parseFloat(cash).toFixed(3)}</td>
+                    </tr>
+                    : <tr></tr>}
+                  {parseFloat(card) ?
+                    <tr>
+                      <td style={{ textAlign: "right", padding: "0px 4px 4px 4px", width: "100%" }}>Card {this.props.defaultCurrency}: </td>
+                      <td style={{ textAlign: "right", padding: "0px 0px 4px 0px" }}>{parseFloat(card).toFixed(3)}</td>
+                    </tr>
+                    : <tr></tr>}
+                  <tr>
+                    <td style={{ textAlign: "right", padding: "0px 4px 4px 4px", width: "100%" }}>Grand Total {this.props.defaultCurrency}: </td>
+                    <td style={{ textAlign: "right", padding: "0px 0px 4px 0px" }}>{parseFloat(total).toFixed(3)}</td>
+                  </tr>
+                  <tr>
+                    <td style={{ textAlign: "right", padding: "0px 4px 4px 4px", width: "100%" }}>Paid Amount {this.props.defaultCurrency}: </td>
+                    <td style={{ textAlign: "right", padding: "0px 0px 4px 0px" }}>{parseFloat(total).toFixed(3)}</td>
+                  </tr>
+                  {this.state.cardNumber ?
+                    <tr>
+                      <td style={{ textAlign: "right", padding: "0px 4px 4px 4px", width: "100%" }}>Card last four digit :</td>
+                      <td style={{ textAlign: "right", padding: "0px 0px 4px 0px" }}>{this.state.cardNumber}</td>
+                    </tr>
+                    : <tr></tr>}
+                </tbody>
+              </table>
+              <div style={{ display: "flex", justifyContent: "space-between", margin: "10px 0" }}>
+                <div style={{ display: "flex", flexDirection: "row", justifyContent: "center", alignItems: "center" }}>
+                  <div style={{ marginRight: "10px", justifyContent: "center" }}>
+                    <img src={instaimg} alt="" style={{ width: "30px", height: "30px" }} />
+                    {/* <h6>Follow Us</h6> */}
+                  </div>
+                  <QRCode value={`http://instagram.com/${this.props.branches && this.props.branches.filter(b => b._id === branch)[0] &&
+                    this.props.branches.filter(b => b._id === branch)[0].instaId}/`} renderAs='svg' width="50" height="50" />
+                </div>
+                {this.props.loggedUser && <span>Served by: {this.props.loggedUser.userName}</span>}
+              </div>
+              <p style={{ display: "flex", margin: "0 0 10px 0" }}>
+                <span>NB:</span>
+                <span style={{ flexGrow: "1", textAlign: "center" }}>Membership cannot be refunded or transferred to others.</span>
+              </p>
+              <p style={{ textAlign: "center", margin: "0 0 10px 0" }}>Thank You</p>
+            </div>
+          </div>
+        }
 
         <div className="modal fade commonYellowModal" id="passwordAskModal">
           <div className="modal-dialog modal-dialog-centered">

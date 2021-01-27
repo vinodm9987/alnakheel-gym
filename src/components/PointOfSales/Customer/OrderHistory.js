@@ -4,7 +4,8 @@ import { connect } from 'react-redux'
 import { getCustomerOrderHistory } from '../../../actions/pos.action'
 import { dateToDDMMYYYY, dateToHHMM } from '../../../utils/apis/helpers'
 import $ from 'jquery'
-
+import QRCode from 'qrcode.react';
+import instaimg from '../../../assets/img/insta.jpg'
 class OrderHistory extends Component {
 
   constructor(props) {
@@ -32,15 +33,8 @@ class OrderHistory extends Component {
 
   handlePrint() {
     var w = window.open('', 'new div', 'height=400,width=600');
-    var printOne = $('#ReceiptModal2').html();
-    w.document.write('<html><head><title></title>');
-    w.document.write('<link rel="stylesheet" href="css/style.css" type="text/css" />');
-    w.document.write('<link rel="stylesheet" href="css/style2.css" type="text/css" />');
-    w.document.write('<link rel="stylesheet" href="css/bootstrap.min.css" type="text/css" />');
-    w.document.write('<link rel="stylesheet" href="css/bootstrap.min.css" type="text/css" />');
-    w.document.write('</head><body >');
-    w.document.write(printOne)
-    w.document.write('</body></html>');
+    var printOne = $('#newPrint').html();
+    w.document.body.innerHTML = printOne
     w.window.print();
     w.document.close();
     return false;
@@ -275,7 +269,7 @@ class OrderHistory extends Component {
                       <div className="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 p-3">
                         <div className="mb-3">
                           <label className="m-0 font-weight-bold">Receipt No</label>
-                          <p className="">{}</p>
+                          <p className="">{ }</p>
                         </div>
                         <div className="">
                           <label className="m-0 font-weight-bold">Date & Time</label>
@@ -367,6 +361,143 @@ class OrderHistory extends Component {
           </div>
         }
         {/* --------------Receipt Modal Ends-=--------------- */}
+
+        {orderById &&
+          <div className="PageBillWrapper d-none">
+            <div style={{ width: "450px", padding: "15px", margin: "auto" }} id="newPrint">
+              <div style={{ display: "flex", justifyContent: "center" }}>
+                <img src={orderById.branch.avatar ? `/${orderById.branch.avatar.path}` : ''} width="200" style={{ width: "100px" }} alt="" />
+              </div>
+              <h5 style={{ textAlign: "center", margin: "19px 0" }}>Tax Invoice</h5>
+              <p style={{ textAlign: "center", margin: "0 0 10px 0" }}>
+                <span>{orderById.branch.branchName}</span><br />
+                <span>{orderById.branch.address}</span><br />
+                {/* <span>Road/Street 50, Samaheej,</span><br /> */}
+                {/* <span>Block 236, Bahrain,</span><br /> */}
+                <span>Tel : {orderById.branch.telephone}</span><br />
+              </p>
+              <p style={{ textAlign: "center", margin: "0 0 10px 0" }}>VAT - {orderById.branch.vatRegNo}</p>
+              <p style={{ display: "flex", justifyContent: "space-between", margin: "0" }}>
+                <span style={{ padding: "2px", fontSize: "14px" }}>{dateToDDMMYYYY(orderById.dateOfPurchase)} {dateToHHMM(orderById.created_at)}</span>
+                <span style={{ padding: "2px", fontSize: "14px" }}>Bill No:{orderById.orderNo}</span>
+              </p>
+              {orderById.customerDetails.member &&
+                <div>
+                  <p style={{ display: "flex", textAlign: "center", justifyContent: "space-between" }}>
+                    <span>ID: <span style={{ padding: "10px" }}>{orderById.customerDetails.member.memberId}</span></span>
+                    <span>Mob: <span style={{ padding: "10px" }}>{orderById.customerDetails.member.mobileNo}</span></span>
+                  </p>
+                  <p style={{ display: "flex", textAlign: "center", justifyContent: "center", marginTop: "0" }}>
+                    <span>{orderById.customerDetails.member.credentialId.userName}</span>
+                  </p>
+                </div>
+              }
+              {/* <p style={{ textAlign: "right", margin: "0 0 10px 0" }}>66988964</p> */}
+              <table style={{ width: "100%" }}>
+                <tbody>
+                  <tr style={{ borderTop: "1px dashed #000" }}>
+                    <td>No.</td>
+                    <td>DESCRIPTION</td>
+                    <td>PRICE</td>
+                    <td>QTY</td>
+                    <td>TOTAL</td>
+                  </tr>
+                  {/* <tr style={{ borderTop: "1px dashed #000" }}>
+                  <td>1</td>
+                  <td>3 Month</td>
+                  <td>26-Dec-19</td>
+                  <td>13-Sep-20</td>
+                </tr> */}
+                  {orderById.purchaseStock.map((stock, i) => {
+                    const { quantity, amount, stockId } = stock
+                    return (
+                      <tr key={i}>
+                        <td>{i + 1}</td>
+                        <td>{stockId.itemName}</td>
+                        <td>{this.props.defaultCurrency} {(parseFloat(amount) / quantity).toFixed(3)}</td>
+                        <td>{quantity}</td>
+                        <td>{this.props.defaultCurrency} {parseFloat(amount).toFixed(3)}</td>
+                      </tr>
+                    )
+                  })}
+                </tbody>
+              </table>
+              <table style={{ width: "100%", textAlign: "right", borderTop: "1px dashed #000", borderBottom: "1px dashed #000" }}>
+                <tbody>
+                  <tr>
+                    <td style={{ textAlign: "right", padding: "4px 4px 0 4px", width: "100%" }}>Amount Total {this.props.defaultCurrency}: </td>
+                    <td style={{ textAlign: "right", padding: "4px 0px 0 0px" }}>{parseFloat(orderById.actualAmount).toFixed(3)}</td>
+                  </tr>
+                  {parseFloat(orderById.discount) ?
+                    <tr>
+                      <td style={{ textAlign: "right", padding: "0 4px", width: "100%" }}>Discount {this.props.defaultCurrency}: </td>
+                      <td style={{ textAlign: "right", padding: "0" }}>{parseFloat(orderById.discount).toFixed(3)}</td>
+                    </tr>
+                    : <tr></tr>}
+                  {parseFloat(orderById.giftcard) ?
+                    <tr>
+                      <td style={{ textAlign: "right", padding: "0 4px", width: "100%" }}>Giftcard {this.props.defaultCurrency}: </td>
+                      <td style={{ textAlign: "right", padding: "0" }}>{parseFloat(orderById.giftcard).toFixed(3)}</td>
+                    </tr>
+                    : <tr></tr>}
+                  {parseFloat(orderById.vatAmount) ?
+                    <tr>
+                      <td style={{ textAlign: "right", padding: "0 4px", width: "100%" }}>VAT {this.props.defaultCurrency}: </td>
+                      <td style={{ textAlign: "right", padding: "0" }}>{parseFloat(orderById.vatAmount).toFixed(3)}</td>
+                    </tr>
+                    : <tr></tr>}
+                  {parseFloat(orderById.digitalAmount) ?
+                    <tr>
+                      <td style={{ textAlign: "right", padding: "0 4px", width: "100%" }}>Digital {this.props.defaultCurrency}: </td>
+                      <td style={{ textAlign: "right", padding: "0" }}>5{parseFloat(orderById.digitalAmount).toFixed(3)}</td>
+                    </tr>
+                    : <tr></tr>}
+                  {parseFloat(orderById.cashAmount) ?
+                    <tr>
+                      <td style={{ textAlign: "right", padding: "0 4px", width: "100%" }}>Cash {this.props.defaultCurrency}: </td>
+                      <td style={{ textAlign: "right", padding: "0" }}>5{parseFloat(orderById.cashAmount).toFixed(3)}</td>
+                    </tr>
+                    : <tr></tr>}
+                  {parseFloat(orderById.cardAmount) ?
+                    <tr>
+                      <td style={{ textAlign: "right", padding: "0px 4px 4px 4px", width: "100%" }}>Card {this.props.defaultCurrency}: </td>
+                      <td style={{ textAlign: "right", padding: "0px 0px 4px 0px" }}>{parseFloat(orderById.cardAmount).toFixed(3)}</td>
+                    </tr>
+                    : <tr></tr>}
+                  <tr>
+                    <td style={{ textAlign: "right", padding: "0px 4px 4px 4px", width: "100%" }}>Grand Total {this.props.defaultCurrency}: </td>
+                    <td style={{ textAlign: "right", padding: "0px 0px 4px 0px" }}>{parseFloat(orderById.totalAmount).toFixed(3)}</td>
+                  </tr>
+                  <tr>
+                    <td style={{ textAlign: "right", padding: "0px 4px 4px 4px", width: "100%" }}>Paid Amount {this.props.defaultCurrency}: </td>
+                    <td style={{ textAlign: "right", padding: "0px 0px 4px 0px" }}>{parseFloat(orderById.totalAmount).toFixed(3)}</td>
+                  </tr>
+                  {orderById.cardNumber ?
+                    <tr>
+                      <td style={{ textAlign: "right", padding: "0px 4px 4px 4px", width: "100%" }}>Card last four digit :</td>
+                      <td style={{ textAlign: "right", padding: "0px 0px 4px 0px" }}>{orderById.cardNumber}</td>
+                    </tr>
+                    : <tr></tr>}
+                </tbody>
+              </table>
+              <div style={{ display: "flex", justifyContent: "space-between", margin: "10px 0" }}>
+                <div style={{ display: "flex", flexDirection: "row", justifyContent: "center", alignItems: "center" }}>
+                  <div style={{ marginRight: "10px", justifyContent: "center" }}>
+                    <img src={instaimg} alt="" style={{ width: "30px", height: "30px" }} />
+                    {/* <h6>Follow Us</h6> */}
+                  </div>
+                  <QRCode value={`http://instagram.com/${orderById.branch.instaId}/`} renderAs='svg' width="50" height="50" />
+                </div>
+                {orderById.doneBy && <span>Served by: {orderById.doneBy.userName}</span>}
+              </div>
+              <p style={{ display: "flex", margin: "0 0 10px 0" }}>
+                <span>NB:</span>
+                <span style={{ flexGrow: "1", textAlign: "center" }}>Membership cannot be refunded or transferred to others.</span>
+              </p>
+              <p style={{ textAlign: "center", margin: "0 0 10px 0" }}>Thank You</p>
+            </div>
+          </div>
+        }
       </div>
     )
   }
