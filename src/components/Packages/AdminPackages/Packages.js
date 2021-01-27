@@ -45,9 +45,9 @@ class Packages extends Component {
       image: null,
       imageE: '',
       displayColorPicker: false,
-      fromTime: new Date(),
+      fromTime: new Date('9/12/2020 0:00 AM'),
       fromTimeE: '',
-      toTime: new Date(),
+      toTime: new Date('9/12/2020 11:59 PM'),
       toTimeE: '',
       salesBranches: [],
       salesBranchesE: '',
@@ -89,7 +89,8 @@ class Packages extends Component {
     if (packageId) {
       if (name && amount && period && startDate && endDate && description && color && startDate <= endDate && fromTime && toTime && fromTime < toTime && salesBranches.length && accessBranches.length) {
         const packageInfo = {
-          packageName: name, amount, period, startDate, endDate, description, color, fromTime, toTime,
+          packageName: name, amount, period, startDate, endDate, description, color,
+          // fromTime, toTime,
           salesBranches: salesBranches.map(a => a.value), accessBranches: accessBranches.map(a => a.value)
         }
         let formData = new FormData()
@@ -112,7 +113,8 @@ class Packages extends Component {
     } else {
       if (name && amount && period && startDate && endDate && description && color && startDate <= endDate && image && fromTime && toTime && fromTime < toTime && salesBranches.length && accessBranches.length) {
         const packageInfo = {
-          packageName: name, amount, period, startDate, endDate, description, color, fromTime, toTime,
+          packageName: name, amount, period, startDate, endDate, description, color,
+          // fromTime, toTime,
           salesBranches: salesBranches.map(a => a.value), accessBranches: accessBranches.map(a => a.value)
         }
         let formData = new FormData()
@@ -327,6 +329,7 @@ class Packages extends Component {
             <div className="form-group inlineFormGroup">
               <label htmlFor="fromTime" className="mx-sm-2 inlineFormLabel type1">{t('From Time')}</label>
               <TimePicker
+                disabled
                 value={fromTime}
                 className={this.state.fromTimeE ? "form-control mx-sm-2 inlineFormInputs FormInputsError p-0 " : "form-control mx-sm-2 inlineFormInputs  p-0"}
                 formatPlaceholder={{ hour: 'H', minute: 'MM' }}
@@ -342,6 +345,7 @@ class Packages extends Component {
             <div className="form-group inlineFormGroup">
               <label htmlFor="toTime" className="mx-sm-2 inlineFormLabel type2">{t('To Time')}</label>
               <TimePicker
+                disabled
                 value={toTime}
                 min={fromTime}
                 className={this.state.toTimeE ? "form-control mx-sm-2 inlineFormInputs FormInputsError p-0 " : "form-control mx-sm-2 inlineFormInputs  p-0"}

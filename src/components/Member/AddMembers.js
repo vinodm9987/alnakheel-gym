@@ -16,7 +16,7 @@ import { getAllPackageBySalesBranch } from '../../actions/package.action';
 import { verifyAdminPassword } from '../../actions/privilege.action';
 import { checkReferralCodeValidityOnAdmin } from '../../actions/reward.action';
 import { getPeriodOfTrainer, getUniqueTrainerByBranch } from '../../actions/trainerFees.action';
-import { GET_ALERT_ERROR, GET_CPR, GET_UNIQUE_TRAINER_BY_BRANCH } from '../../actions/types';
+import { GET_CPR, GET_UNIQUE_TRAINER_BY_BRANCH } from '../../actions/types';
 import { getAllVat } from '../../actions/vat.action';
 import instaimg from '../../assets/img/insta.jpg'
 import Nationality from '../../utils/apis/country.json';
@@ -518,11 +518,11 @@ class AddMembers extends Component {
     const { name, email, number, personalId, dob, nationality, gender, userPhoto, packageName, branch, cardNumber, setPackageAmount,
       cash, card, height, weight, emergencyNumber, relationship, referralCode, notes, credentialId, memberId, discount, tax,
       trainer, wantTrainer, levelQuestion, exercisingQuestion, goalQuestion, period, trainerFeesId, addPackage, packageAmount,
-      emailE, numberE, emergencyNumberE, cashE, cardE, digital, digitalE, startDate, endDate, trainerPeriodDays, installments,
+      numberE, emergencyNumberE, cashE, cardE, digital, digitalE, startDate, endDate, trainerPeriodDays, installments,
       cheque, bankName, chequeNumber, chequeDate, showCheque } = this.state
-    if (name && email && number && personalId && dob && nationality && gender && userPhoto && packageName && branch && calculateDOB(dob) > 14 && (parseInt(totalAmount) === parseInt((+cash || 0) + (+card || 0) + (+digital || 0) + (+cheque || 0)))
+    if (name && number && personalId && gender && packageName && (parseInt(totalAmount) === parseInt((+cash || 0) + (+card || 0) + (+digital || 0) + (+cheque || 0)))
       && !cardE && !cashE
-      && !digitalE && !emailE && !numberE && !emergencyNumberE && startDate <= endDate
+      && !digitalE && !numberE && !emergencyNumberE && startDate <= endDate
     ) {
       const memberInfo = {
         userName: name,
@@ -643,16 +643,16 @@ class AddMembers extends Component {
       }
     } else {
       if (!name) this.setState({ nameE: t('Enter member name') })
-      if (!email) this.setState({ emailE: t('Enter email') })
+      // if (!email) this.setState({ emailE: t('Enter email') })
       if (!number) this.setState({ numberE: t('Enter number') })
       if (!personalId) this.setState({ personalIdE: t('Enter personal id') })
-      if (!dob) this.setState({ dobE: t('Enter dob') })
-      if (!nationality) this.setState({ nationalityE: t('Enter nationality') })
+      // if (!dob) this.setState({ dobE: t('Enter dob') })
+      // if (!nationality) this.setState({ nationalityE: t('Enter nationality') })
       if (!gender) this.setState({ genderE: t('Enter gender') })
-      if (!userPhoto) this.props.dispatch({ type: GET_ALERT_ERROR, payload: t('Enter user photo') })
+      // if (!userPhoto) this.props.dispatch({ type: GET_ALERT_ERROR, payload: t('Enter user photo') })
       if (!packageName) this.setState({ packageNameE: t('Enter package name') })
-      if (!branch) this.setState({ branchE: t('Enter branch') })
-      if (calculateDOB(dob) <= 14) this.props.dispatch({ type: GET_ALERT_ERROR, payload: t('You are little small to join the Gym') })
+      // if (!branch) this.setState({ branchE: t('Enter branch') })
+      // if (calculateDOB(dob) <= 14) this.props.dispatch({ type: GET_ALERT_ERROR, payload: t('You are little small to join the Gym') })
       if (parseInt(totalAmount) === parseInt((+cash || 0) + (+card || 0) + (+digital || 0) + (+cheque || 0))) this.setState({ cashE: t('Enter amount') })
       if (!cardNumber) this.setState({ cardNumberE: t('Enter card number') })
       if (startDate > endDate) this.setState({ endDateE: t('End Date should be greater than Start Date') })
@@ -905,8 +905,8 @@ class AddMembers extends Component {
   handleUpdate() {
     const { t } = this.props
     const { name, email, number, personalId, dob, nationality, gender, userPhoto, branch,
-      height, weight, emergencyNumber, relationship, referralCode, notes, credentialId, memberId, emailE, numberE, emergencyNumberE } = this.state
-    if (name && email && number && personalId && dob && nationality && gender && branch && calculateDOB(dob) > 14 && !emailE && !numberE && !emergencyNumberE) {
+      height, weight, emergencyNumber, relationship, referralCode, notes, credentialId, memberId, numberE, emergencyNumberE } = this.state
+    if (name && number && personalId && gender && !numberE && !emergencyNumberE) {
       const memberInfo = {
         userName: name,
         email,
@@ -931,22 +931,22 @@ class AddMembers extends Component {
       this.props.dispatch(updateMember(formData))
     } else {
       if (!name) this.setState({ nameE: t('Enter member name') })
-      if (!email) this.setState({ emailE: t('Enter email') })
+      // if (!email) this.setState({ emailE: t('Enter email') })
       if (!number) this.setState({ numberE: t('Enter number') })
       if (!personalId) this.setState({ personalIdE: t('Enter personal id') })
-      if (!dob) this.setState({ dobE: t('Enter dob') })
-      if (!nationality) this.setState({ nationalityE: t('Enter nationality') })
+      // if (!dob) this.setState({ dobE: t('Enter dob') })
+      // if (!nationality) this.setState({ nationalityE: t('Enter nationality') })
       if (!gender) this.setState({ genderE: t('Enter gender') })
-      if (!branch) this.setState({ branchE: t('Enter branch') })
-      if (calculateDOB(dob) <= 14) this.props.dispatch({ type: GET_ALERT_ERROR, payload: t('You are little small to join the Gym') })
+      // if (!branch) this.setState({ branchE: t('Enter branch') })
+      // if (calculateDOB(dob) <= 14) this.props.dispatch({ type: GET_ALERT_ERROR, payload: t('You are little small to join the Gym') })
     }
   }
 
   showPayment() {
     const { t } = this.props
-    const { name, email, number, personalId, dob, nationality, gender, userPhoto, packageName, branch, startDate, endDate,
+    const { name, number, personalId, gender, packageName, startDate, endDate,
       trainer, wantTrainer, levelQuestion, exercisingQuestion, goalQuestion, period, emailE, numberE, emergencyNumberE } = this.state
-    if (name && email && number && personalId && dob && nationality && gender && userPhoto && packageName && branch && calculateDOB(dob) > 14 && !emailE
+    if (name && number && personalId && gender && packageName && !emailE
       && !numberE && !emergencyNumberE && startDate <= endDate) {
       if (wantTrainer === 'Yes') {
         if (trainer && levelQuestion && exercisingQuestion && goalQuestion && period) {
@@ -963,16 +963,16 @@ class AddMembers extends Component {
       }
     } else {
       if (!name) this.setState({ nameE: t('Enter member name') })
-      if (!email) this.setState({ emailE: t('Enter email') })
+      // if (!email) this.setState({ emailE: t('Enter email') })
       if (!number) this.setState({ numberE: t('Enter number') })
       if (!personalId) this.setState({ personalIdE: t('Enter personal id') })
-      if (!dob) this.setState({ dobE: t('Enter dob') })
-      if (!nationality) this.setState({ nationalityE: t('Enter nationality') })
+      // if (!dob) this.setState({ dobE: t('Enter dob') })
+      // if (!nationality) this.setState({ nationalityE: t('Enter nationality') })
       if (!gender) this.setState({ genderE: t('Enter gender') })
-      if (!userPhoto) this.props.dispatch({ type: GET_ALERT_ERROR, payload: t('Enter user photo') })
+      // if (!userPhoto) this.props.dispatch({ type: GET_ALERT_ERROR, payload: t('Enter user photo') })
       if (!packageName) this.setState({ packageNameE: t('Enter package name') })
-      if (!branch) this.setState({ branchE: t('Enter branch') })
-      if (calculateDOB(dob) <= 14) this.props.dispatch({ type: GET_ALERT_ERROR, payload: t('You are little small to join the Gym') })
+      // if (!branch) this.setState({ branchE: t('Enter branch') })
+      // if (calculateDOB(dob) <= 14) this.props.dispatch({ type: GET_ALERT_ERROR, payload: t('You are little small to join the Gym') })
       if (startDate > endDate) this.setState({ endDateE: t('End Date should be greater than Start Date') })
     }
   }

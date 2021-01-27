@@ -450,10 +450,10 @@ class TableExport extends Component {
             // "Email ID": email,
             "Branch": branch.branchName,
             "Transaction Type": transactionType,
-            "Paid Amount": `${this.props.defaultCurrency} ${doc.totalAmount.toFixed(3)}`,
-            "Cash": doc.cashAmount ? `${this.props.defaultCurrency} ${doc.cashAmount.toFixed(3)}` : `${this.props.defaultCurrency} 0.000`,
-            "Card": doc.cardAmount ? `${this.props.defaultCurrency} ${doc.cardAmount.toFixed(3)}` : `${this.props.defaultCurrency} 0.000`,
-            "Digital": doc.digitalAmount ? `${this.props.defaultCurrency} ${doc.digitalAmount.toFixed(3)}` : `${this.props.defaultCurrency} 0.000`,
+            "Paid Amount": `${doc.totalAmount.toFixed(3)}`,
+            "Cash": doc.cashAmount ? `${doc.cashAmount.toFixed(3)}` : `0.000`,
+            "Card": doc.cardAmount ? `${doc.cardAmount.toFixed(3)}` : `0.000`,
+            "Digital": doc.digitalAmount ? `${doc.digitalAmount.toFixed(3)}` : `0.000`,
             "Done By": doc.doneBy ? doc.doneBy.userName : 'NA'
           })
           count = count + 1
@@ -478,10 +478,10 @@ class TableExport extends Component {
             // "Email ID": email ? email : 'NA',
             "Branch": branch.branchName,
             "Transaction Type": transactionType,
-            "Paid Amount": `${this.props.defaultCurrency} ${totalAmount.toFixed(3)}`,
-            "Cash": `${this.props.defaultCurrency} ${cashAmount.toFixed(3)}`,
-            "Card": `${this.props.defaultCurrency} ${cardAmount.toFixed(3)}`,
-            "Digital": digitalAmount ? `${this.props.defaultCurrency} ${digitalAmount.toFixed(3)}` : `${this.props.defaultCurrency} 0.000`,
+            "Paid Amount": `${totalAmount.toFixed(3)}`,
+            "Cash": `${cashAmount.toFixed(3)}`,
+            "Card": `${cardAmount.toFixed(3)}`,
+            "Digital": digitalAmount ? `${digitalAmount.toFixed(3)}` : `0.000`,
             "Done By": data.doneBy ? data.doneBy.userName : 'NA'
           })
         } else {
@@ -496,10 +496,10 @@ class TableExport extends Component {
             // "Email ID": 'NA',
             "Branch": branch.branchName,
             "Transaction Type": transactionType,
-            "Paid Amount": `${this.props.defaultCurrency} ${totalAmount.toFixed(3)}`,
-            "Cash": `${this.props.defaultCurrency} ${cashAmount.toFixed(3)}`,
-            "Card": `${this.props.defaultCurrency} ${cardAmount.toFixed(3)}`,
-            "Digital": digitalAmount ? `${this.props.defaultCurrency} ${digitalAmount.toFixed(3)}` : `${this.props.defaultCurrency} 0.000`,
+            "Paid Amount": `${totalAmount.toFixed(3)}`,
+            "Cash": `${cashAmount.toFixed(3)}`,
+            "Card": `${cardAmount.toFixed(3)}`,
+            "Digital": digitalAmount ? `${digitalAmount.toFixed(3)}` : `0.000`,
             "Done By": data.doneBy ? data.doneBy.userName : 'NA'
           })
         }
@@ -521,10 +521,10 @@ class TableExport extends Component {
           // "Email ID": email,
           "Branch": branch.branchName,
           "Transaction Type": transactionType,
-          "Paid Amount": `${this.props.defaultCurrency} ${totalAmount.toFixed(3)}`,
-          "Cash": `${this.props.defaultCurrency} ${cashAmount.toFixed(3)}`,
-          "Card": `${this.props.defaultCurrency} ${cardAmount.toFixed(3)}`,
-          "Digital": digitalAmount ? `${this.props.defaultCurrency} ${digitalAmount.toFixed(3)}` : `${this.props.defaultCurrency} 0.000`,
+          "Paid Amount": `${totalAmount.toFixed(3)}`,
+          "Cash": `${cashAmount.toFixed(3)}`,
+          "Card": `${cardAmount.toFixed(3)}`,
+          "Digital": digitalAmount ? `${digitalAmount.toFixed(3)}` : `0.000`,
           "Done By": data.doneBy ? data.doneBy.userName : 'NA'
         })
         count = count + 1
@@ -577,12 +577,12 @@ class TableExport extends Component {
           "Branch": branch.branchName,
           "Package": doc.packages.packageName,
           "Transaction Type": transactionType,
-          "Package Amount": `${this.props.defaultCurrency} ${doc.packages.amount.toFixed(3)}`,
-          "Trainer Amount": `${this.props.defaultCurrency} ${(doc.actualAmount - doc.packages.amount).toFixed(3)}`,
-          "Paid Amount": `${this.props.defaultCurrency} ${doc.totalAmount.toFixed(3)}`,
-          "Cash": doc.cashAmount ? `${this.props.defaultCurrency} ${doc.cashAmount.toFixed(3)}` : `${this.props.defaultCurrency} 0.000`,
-          "Card": doc.cardAmount ? `${this.props.defaultCurrency} ${doc.cardAmount.toFixed(3)}` : `${this.props.defaultCurrency} 0.000`,
-          "Digital": doc.digitalAmount ? `${this.props.defaultCurrency} ${doc.digitalAmount.toFixed(3)}` : `${this.props.defaultCurrency} 0.000`,
+          "Package Amount": `${doc.packages.amount.toFixed(3)}`,
+          "Trainer Amount": `${(doc.actualAmount - doc.packages.amount).toFixed(3)}`,
+          "Paid Amount": `${doc.totalAmount.toFixed(3)}`,
+          "Cash": doc.cashAmount ? `${doc.cashAmount.toFixed(3)}` : `0.000`,
+          "Card": doc.cardAmount ? `${doc.cardAmount.toFixed(3)}` : `0.000`,
+          "Digital": doc.digitalAmount ? `${doc.digitalAmount.toFixed(3)}` : `0.000`,
           "Done By": doc.doneBy ? doc.doneBy.userName : 'NA'
         })
         count = count + 1
@@ -641,12 +641,12 @@ class TableExport extends Component {
           "Branch": branch.branchName,
           "Items": itemNames,
           "QTY": quantities,
-          "Total Amount": `${this.props.defaultCurrency} ${actualAmount.toFixed(3)}`,
-          "Discount Amount": `${this.props.defaultCurrency} ${discount.toFixed(3)}`,
-          "Paid Amount": `${this.props.defaultCurrency} ${totalAmount.toFixed(3)}`,
-          "Cash": `${this.props.defaultCurrency} ${cashAmount.toFixed(3)}`,
-          "Card": `${this.props.defaultCurrency} ${cardAmount.toFixed(3)}`,
-          "Digital": digitalAmount ? `${this.props.defaultCurrency} ${digitalAmount.toFixed(3)}` : `${this.props.defaultCurrency} 0.000`,
+          "Total Amount": `${actualAmount.toFixed(3)}`,
+          "Discount Amount": `${discount.toFixed(3)}`,
+          "Paid Amount": `${totalAmount.toFixed(3)}`,
+          "Cash": `${cashAmount.toFixed(3)}`,
+          "Card": `${cardAmount.toFixed(3)}`,
+          "Digital": digitalAmount ? `${digitalAmount.toFixed(3)}` : `0.000`,
           "Done By": data.doneBy ? data.doneBy.userName : 'NA'
         })
       } else {
@@ -662,12 +662,12 @@ class TableExport extends Component {
           "Branch": branch.branchName,
           "Items": itemNames,
           "QTY": quantities,
-          "Total Amount": `${this.props.defaultCurrency} ${actualAmount.toFixed(3)}`,
-          "Discount Amount": `${this.props.defaultCurrency} ${discount.toFixed(3)}`,
-          "Paid Amount": `${this.props.defaultCurrency} ${totalAmount.toFixed(3)}`,
-          "Cash": `${this.props.defaultCurrency} ${cashAmount.toFixed(3)}`,
-          "Card": `${this.props.defaultCurrency} ${cardAmount.toFixed(3)}`,
-          "Digital": digitalAmount ? `${this.props.defaultCurrency} ${digitalAmount.toFixed(3)}` : `${this.props.defaultCurrency} 0.000`,
+          "Total Amount": `${actualAmount.toFixed(3)}`,
+          "Discount Amount": `${discount.toFixed(3)}`,
+          "Paid Amount": `${totalAmount.toFixed(3)}`,
+          "Cash": `${cashAmount.toFixed(3)}`,
+          "Card": `${cardAmount.toFixed(3)}`,
+          "Digital": digitalAmount ? `${digitalAmount.toFixed(3)}` : `0.000`,
           "Done By": data.doneBy ? data.doneBy.userName : 'NA'
         })
       }
@@ -722,11 +722,11 @@ class TableExport extends Component {
         "Class Name": className,
         "Trainer": trainerName,
         "Start Date": dateToDDMMYYYY(startDate),
-        "Amount": `${this.props.defaultCurrency} ${amount.toFixed(3)}`,
-        "Paid Amount": `${this.props.defaultCurrency} ${totalAmount.toFixed(3)}`,
-        "Cash": `${this.props.defaultCurrency} ${cashAmount.toFixed(3)}`,
-        "Card": `${this.props.defaultCurrency} ${cardAmount.toFixed(3)}`,
-        "Digital": digitalAmount ? `${this.props.defaultCurrency} ${digitalAmount.toFixed(3)}` : `${this.props.defaultCurrency} 0.000`,
+        "Amount": `${amount.toFixed(3)}`,
+        "Paid Amount": `${totalAmount.toFixed(3)}`,
+        "Cash": `${cashAmount.toFixed(3)}`,
+        "Card": `${cardAmount.toFixed(3)}`,
+        "Digital": digitalAmount ? `${digitalAmount.toFixed(3)}` : `0.000`,
         "Done By": data.doneBy ? data.doneBy.userName : 'NA'
       })
       count = count + 1
@@ -822,13 +822,13 @@ class TableExport extends Component {
         "Item Code": itemCodes,
         "Item Name": itemNames,
         "Transaction Date & Time": `${dateToDDMMYYYY(dateOfPurchase)} ${dateToHHMM(created_at)}`,
-        "Cost Price": `${this.props.defaultCurrency} ${costPrice.toFixed(3)}`,
-        "Selling Price": `${this.props.defaultCurrency} ${actualAmount.toFixed(3)}`,
-        "VAT Amount": `${this.props.defaultCurrency} ${vatAmount.toFixed(3)}`,
-        "Discount Amount": `${this.props.defaultCurrency} ${discount.toFixed(3)}`,
-        "Gift Card": `${this.props.defaultCurrency} ${giftcard.toFixed(3)}`,
-        "Paid Amount": `${this.props.defaultCurrency} ${totalAmount.toFixed(3)}`,
-        "Profit Amount": `${this.props.defaultCurrency} ${profitAmount.toFixed(3)}`,
+        "Cost Price": `${costPrice.toFixed(3)}`,
+        "Selling Price": `${actualAmount.toFixed(3)}`,
+        "VAT Amount": `${vatAmount.toFixed(3)}`,
+        "Discount Amount": `${discount.toFixed(3)}`,
+        "Gift Card": `${giftcard.toFixed(3)}`,
+        "Paid Amount": `${totalAmount.toFixed(3)}`,
+        "Profit Amount": `${profitAmount.toFixed(3)}`,
         "Branch": branch.branchName,
         "Source": paymentType
       })
@@ -883,7 +883,7 @@ class TableExport extends Component {
             "Branch": branch.branchName,
             "Transaction Type": transactionType,
             "Payment Method": paymentMethod,
-            "Paid Amount": `${this.props.defaultCurrency} ${displayAmount.toFixed(3)}`,
+            "Paid Amount": `${displayAmount.toFixed(3)}`,
             "Done By": doc.doneBy ? doc.doneBy.userName : 'NA'
           })
           count = count + 1
@@ -914,7 +914,7 @@ class TableExport extends Component {
             "Branch": branch.branchName,
             "Transaction Type": transactionType,
             "Payment Method": paymentMethod,
-            "Paid Amount": `${this.props.defaultCurrency} ${displayAmount.toFixed(3)}`,
+            "Paid Amount": `${displayAmount.toFixed(3)}`,
             "Done By": data.doneBy ? data.doneBy.userName : 'NA'
           })
         } else {
@@ -929,7 +929,7 @@ class TableExport extends Component {
             "Branch": branch.branchName,
             "Transaction Type": transactionType,
             "Payment Method": paymentMethod,
-            "Paid Amount": `${this.props.defaultCurrency} ${displayAmount.toFixed(3)}`,
+            "Paid Amount": `${displayAmount.toFixed(3)}`,
             "Done By": data.doneBy ? data.doneBy.userName : 'NA'
           })
         }
@@ -958,7 +958,7 @@ class TableExport extends Component {
           "Branch": branch.branchName,
           "Transaction Type": transactionType,
           "Payment Method": paymentMethod,
-          "Paid Amount": `${this.props.defaultCurrency} ${displayAmount.toFixed(3)}`,
+          "Paid Amount": `${displayAmount.toFixed(3)}`,
           "Done By": data.doneBy ? data.doneBy.userName : 'NA'
         })
         count = count + 1
@@ -1002,9 +1002,9 @@ class TableExport extends Component {
             // "Email ID": email,
             "Branch": branch.branchName,
             "Transaction Type": transactionType,
-            "Digital": doc.digitalAmount ? `${this.props.defaultCurrency} ${doc.digitalAmount.toFixed(3)}` : `${this.props.defaultCurrency} 0.000`,
-            "Cash": doc.cashAmount ? `${this.props.defaultCurrency} ${doc.cashAmount.toFixed(3)}` : `${this.props.defaultCurrency} 0.000`,
-            "Card": doc.cardAmount ? `${this.props.defaultCurrency} ${doc.cardAmount.toFixed(3)}` : `${this.props.defaultCurrency} 0.000`,
+            "Digital": doc.digitalAmount ? `${doc.digitalAmount.toFixed(3)}` : `0.000`,
+            "Cash": doc.cashAmount ? `${doc.cashAmount.toFixed(3)}` : `0.000`,
+            "Card": doc.cardAmount ? `${doc.cardAmount.toFixed(3)}` : `0.000`,
             "Done By": doc.doneBy ? doc.doneBy.userName : 'NA'
           })
           count = count + 1
@@ -1025,9 +1025,9 @@ class TableExport extends Component {
             // "Email ID": email ? email : 'NA',
             "Branch": branch.branchName,
             "Transaction Type": transactionType,
-            "Cash": `${this.props.defaultCurrency} ${cashAmount.toFixed(3)}`,
-            "Card": `${this.props.defaultCurrency} ${cardAmount.toFixed(3)}`,
-            "Digital": digitalAmount ? `${this.props.defaultCurrency} ${digitalAmount.toFixed(3)}` : `${this.props.defaultCurrency} 0.000`,
+            "Cash": `${cashAmount.toFixed(3)}`,
+            "Card": `${cardAmount.toFixed(3)}`,
+            "Digital": digitalAmount ? `${digitalAmount.toFixed(3)}` : `0.000`,
             "Done By": data.doneBy ? data.doneBy.userName : 'NA'
           })
         } else {
@@ -1040,9 +1040,9 @@ class TableExport extends Component {
             // "Email ID": 'NA',
             "Branch": branch.branchName,
             "Transaction Type": transactionType,
-            "Cash": `${this.props.defaultCurrency} ${cashAmount.toFixed(3)}`,
-            "Card": `${this.props.defaultCurrency} ${cardAmount.toFixed(3)}`,
-            "Digital": digitalAmount ? `${this.props.defaultCurrency} ${digitalAmount.toFixed(3)}` : `${this.props.defaultCurrency} 0.000`,
+            "Cash": `${cashAmount.toFixed(3)}`,
+            "Card": `${cardAmount.toFixed(3)}`,
+            "Digital": digitalAmount ? `${digitalAmount.toFixed(3)}` : `0.000`,
             "Done By": data.doneBy ? data.doneBy.userName : 'NA'
           })
         }
@@ -1061,9 +1061,9 @@ class TableExport extends Component {
           // "Email ID": email,
           "Branch": branch.branchName,
           "Transaction Type": transactionType,
-          "Cash": `${this.props.defaultCurrency} ${cashAmount.toFixed(3)}`,
-          "Card": `${this.props.defaultCurrency} ${cardAmount.toFixed(3)}`,
-          "Digital": digitalAmount ? `${this.props.defaultCurrency} ${digitalAmount.toFixed(3)}` : `${this.props.defaultCurrency} 0.000`,
+          "Cash": `${cashAmount.toFixed(3)}`,
+          "Card": `${cardAmount.toFixed(3)}`,
+          "Digital": digitalAmount ? `${digitalAmount.toFixed(3)}` : `0.000`,
           "Done By": data.doneBy ? data.doneBy.userName : 'NA'
         })
         count = count + 1
@@ -1105,9 +1105,9 @@ class TableExport extends Component {
         "Expiry Date": dateToDDMMYYYY(expiryDate),
         "Days Since Expired": calculateDays(expiryDate, new Date()),
         "Branch": branchName,
-        "Cost Price": `${this.props.defaultCurrency} ${costPerUnit.toFixed(3)}`,
-        "Selling Price": `${this.props.defaultCurrency} ${sellingPrice.toFixed(3)}`,
-        "Total Cost Price": `${this.props.defaultCurrency} ${(costPerUnit * quantity).toFixed(3)}`
+        "Cost Price": `${costPerUnit.toFixed(3)}`,
+        "Selling Price": `${sellingPrice.toFixed(3)}`,
+        "Total Cost Price": `${(costPerUnit * quantity).toFixed(3)}`
       })
       count = count + 1
     })
@@ -1147,8 +1147,8 @@ class TableExport extends Component {
         "Capacity": capacity,
         "Total Bookings": occupied ? occupied : 0,
         "Trainer": userName,
-        "Amount": `${this.props.defaultCurrency} ${amount.toFixed(3)}`,
-        "Total Amount": `${this.props.defaultCurrency} ${(occupied ? (amount * occupied) : 0).toFixed(3)}`
+        "Amount": `${amount.toFixed(3)}`,
+        "Total Amount": `${(occupied ? (amount * occupied) : 0).toFixed(3)}`
       })
       count = count + 1
     })
@@ -1311,10 +1311,10 @@ class TableExport extends Component {
             "Member Name": userName,
             "Transaction Type": transactionType,
             "Description": doc.packages.packageName,
-            "Excl. VAT": `${this.props.defaultCurrency} ${exclVat.toFixed(3)}`,
+            "Excl. VAT": `${exclVat.toFixed(3)}`,
             "VAT %": `${vatPer} %`,
-            "VAT Amount": doc.vatAmount ? `${this.props.defaultCurrency} ${doc.vatAmount.toFixed(3)}` : `${this.props.defaultCurrency} 0.000`,
-            "Total Incl. VAT": `${this.props.defaultCurrency} ${doc.totalAmount.toFixed(3)}`,
+            "VAT Amount": doc.vatAmount ? `${doc.vatAmount.toFixed(3)}` : `0.000`,
+            "Total Incl. VAT": `${doc.totalAmount.toFixed(3)}`,
             "Done By": doc.doneBy ? doc.doneBy.userName : 'NA'
           })
           count = count + 1
@@ -1336,10 +1336,10 @@ class TableExport extends Component {
             "Member Name": userName ? userName : 'NA',
             "Transaction Type": transactionType,
             "Description": 'NA',
-            "Excl. VAT": `${this.props.defaultCurrency} ${exclVat.toFixed(3)}`,
+            "Excl. VAT": `${exclVat.toFixed(3)}`,
             "VAT %": `${vatPer} %`,
-            "VAT Amount": vatAmount ? `${this.props.defaultCurrency} ${vatAmount.toFixed(3)}` : `${this.props.defaultCurrency} 0.000`,
-            "Total Incl. VAT": `${this.props.defaultCurrency} ${totalAmount.toFixed(3)}`,
+            "VAT Amount": vatAmount ? `${vatAmount.toFixed(3)}` : `0.000`,
+            "Total Incl. VAT": `${totalAmount.toFixed(3)}`,
             "Done By": data.doneBy ? data.doneBy.userName : 'NA'
           })
         } else {
@@ -1351,10 +1351,10 @@ class TableExport extends Component {
             "Member Name": 'NA',
             "Transaction Type": transactionType,
             "Description": 'NA',
-            "Excl. VAT": `${this.props.defaultCurrency} ${exclVat.toFixed(3)}`,
+            "Excl. VAT": `${exclVat.toFixed(3)}`,
             "VAT %": `${vatPer} %`,
-            "VAT Amount": vatAmount ? `${this.props.defaultCurrency} ${vatAmount.toFixed(3)}` : `${this.props.defaultCurrency} 0.000`,
-            "Total Incl. VAT": `${this.props.defaultCurrency} ${totalAmount.toFixed(3)}`,
+            "VAT Amount": vatAmount ? `${vatAmount.toFixed(3)}` : `0.000`,
+            "Total Incl. VAT": `${totalAmount.toFixed(3)}`,
             "Done By": data.doneBy ? data.doneBy.userName : 'NA'
           })
         }
@@ -1375,10 +1375,10 @@ class TableExport extends Component {
           "Member Name": userName,
           "Transaction Type": transactionType,
           "Description": className,
-          "Excl. VAT": `${this.props.defaultCurrency} ${exclVat.toFixed(3)}`,
+          "Excl. VAT": `${exclVat.toFixed(3)}`,
           "VAT %": `${vatPer} %`,
-          "VAT Amount": vatAmount ? `${this.props.defaultCurrency} ${vatAmount.toFixed(3)}` : `${this.props.defaultCurrency} 0.000`,
-          "Total Incl. VAT": `${this.props.defaultCurrency} ${totalAmount.toFixed(3)}`,
+          "VAT Amount": vatAmount ? `${vatAmount.toFixed(3)}` : `0.000`,
+          "Total Incl. VAT": `${totalAmount.toFixed(3)}`,
           "Done By": data.doneBy ? data.doneBy.userName : 'NA'
         })
         count = count + 1
