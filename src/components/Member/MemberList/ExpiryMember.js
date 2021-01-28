@@ -14,37 +14,38 @@ class ExpiryMember extends Component {
     this.state = {
       search: '',
       url: this.props.match.url,
-      expiryType: 'upcoming'
+      expiryType: 'upcoming',
+      searchFor: 'All'
     }
-    this.props.dispatch(getAboutToExpireMembers({ search: this.state.search }))
+    this.props.dispatch(getAboutToExpireMembers({ search: this.state.search, searchFor: 'All' }))
   }
 
-  handleFilter(search, expiryType) {
-    this.setState({ search, expiryType }, () => {
+  handleFilter(search, expiryType, searchFor) {
+    this.setState({ search, expiryType, searchFor }, () => {
       if (this.state.expiryType === 'upcoming') {
-        window.dispatchWithDebounce(getAboutToExpireMembers)({ search })
+        window.dispatchWithDebounce(getAboutToExpireMembers)({ search, searchFor })
       } else {
-        window.dispatchWithDebounce(getExpiredMembers)({ search })
+        window.dispatchWithDebounce(getExpiredMembers)({ search, searchFor })
       }
     });
   }
 
   render() {
     const { t } = this.props
-    const { expiryType, search } = this.state
+    const { expiryType, search, searchFor } = this.state
     return (
       <div className={this.state.url === '/members/expiry-members' ? "tab-pane fade show active" : "tab-pane fade"} id="menu4" role="tabpanel">
         <div className="col-12">
           <div className="form-group mt-5 mb-3 d-flex flex-wrap">
             <div className="custom-control custom-checkbox roundedGreenRadioCheck mx-2">
               <input type="radio" className="custom-control-input" id="Upcoming-Expiry" name="Upcoming-Expiry"
-                checked={expiryType === "upcoming"} onChange={() => this.handleFilter(search, "upcoming")}
+                checked={expiryType === "upcoming"} onChange={() => this.handleFilter(search, "upcoming", searchFor)}
               />
               <label className="custom-control-label" htmlFor="Upcoming-Expiry">{t('Upcoming Expiry')}</label>
             </div>
             <div className="custom-control custom-checkbox roundedGreenRadioCheck mx-2">
               <input type="radio" className="custom-control-input" id="Expired" name="Expired"
-                checked={expiryType === "expired"} onChange={() => this.handleFilter(search, "expired")}
+                checked={expiryType === "expired"} onChange={() => this.handleFilter(search, "expired", searchFor)}
               />
               <label className="custom-control-label" htmlFor="Expired">{t('Expired')}</label>
             </div>
@@ -53,10 +54,23 @@ class ExpiryMember extends Component {
           <div className="row d-block d-sm-flex justify-content-end pt-5">
             <div className="col w-auto px-1 flexBasis-auto flex-grow-0">
               <div className="form-group inlineFormGroup">
+                <label className="mx-sm-2 inlineFormLabel">{t('Search Filter')}</label>
+                <select className="form-control mx-sm-2 inlineFormInputs" value={this.state.searchFor} onChange={(e) => this.handleFilter(search, expiryType, e.target.value)}>
+                  <option value="All">{t('All')}</option>
+                  <option value="Name">{t('Name')}</option>
+                  <option value="Email">{t('Email')}</option>
+                  <option value="Mobile No">{t('Mobile No')}</option>
+                  <option value="Personal ID">{t('Personal ID')}</option>
+                </select>
+                <span className="iconv1 iconv1-arrow-down selectBoxIcon"></span>
+              </div>
+            </div>
+            <div className="col w-auto px-1 flexBasis-auto flex-grow-0">
+              <div className="form-group inlineFormGroup">
                 <input
                   type="text" autoComplete="off"
                   className="form-control mx-sm-2 badge-pill inlineFormInputs"
-                  onChange={(e) => this.handleFilter(e.target.value, expiryType)}
+                  onChange={(e) => this.handleFilter(e.target.value, expiryType, searchFor)}
                 />
                 <span className="iconv1 iconv1-search searchBoxIcon"></span>
               </div>

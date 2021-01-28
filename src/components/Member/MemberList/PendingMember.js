@@ -13,15 +13,15 @@ class PendingMember extends Component {
     this.state = {
       search: "",
       url: this.props.match.url,
-      paymentType: ""
+      searchFor: "All"
     }
-    this.props.dispatch(getAllPendingMember({ search: "", paymentType: "" }))
+    this.props.dispatch(getAllPendingMember({ search: "", searchFor: "All" }))
 
   }
 
-  handleFilter(search, paymentType) {
-    this.setState({ search, paymentType }, () => {
-      window.dispatchWithDebounce(getAllPendingMember)({ search, paymentType })
+  handleFilter(search, searchFor) {
+    this.setState({ search, searchFor }, () => {
+      window.dispatchWithDebounce(getAllPendingMember)({ search, searchFor })
     });
   }
 
@@ -37,10 +37,23 @@ class PendingMember extends Component {
                 <div className="row d-block d-sm-flex justify-content-end pt-5">
                   <div className="col w-auto px-1 flexBasis-auto flex-grow-0">
                     <div className="form-group inlineFormGroup">
+                      <label className="mx-sm-2 inlineFormLabel">{t('Search Filter')}</label>
+                      <select className="form-control mx-sm-2 inlineFormInputs" value={this.state.searchFor} onChange={(e) => this.handleFilter(this.state.search, e.target.value)}>
+                        <option value="All">{t('All')}</option>
+                        <option value="Name">{t('Name')}</option>
+                        <option value="Email">{t('Email')}</option>
+                        <option value="Mobile No">{t('Mobile No')}</option>
+                        <option value="Personal ID">{t('Personal ID')}</option>
+                      </select>
+                      <span className="iconv1 iconv1-arrow-down selectBoxIcon"></span>
+                    </div>
+                  </div>
+                  <div className="col w-auto px-1 flexBasis-auto flex-grow-0">
+                    <div className="form-group inlineFormGroup">
                       <input
                         type="text" autoComplete="off"
                         className="form-control mx-sm-2 badge-pill inlineFormInputs"
-                        onChange={(event) => this.handleFilter(event.target.value, this.state.paymentType)}
+                        onChange={(event) => this.handleFilter(event.target.value, this.state.searchFor)}
                       />
                       <span className="iconv1 iconv1-search searchBoxIcon"></span>
                     </div>
