@@ -43,9 +43,18 @@ class PackageDetails extends Component {
     })
   }
 
-  setInstallments(Installments, installmentTotalAmount, installmentPaidAmount, installmentRemainAmount, installmentPackageName) {
+  setInstallments(Installments, installmentTotalAmount, installmentPackageName) {
+    let paidAmount = 0
     if (Installments && Installments.length) {
-      this.setState({ Installments, installmentTotalAmount, installmentPaidAmount, installmentRemainAmount, installmentPackageName })
+      Installments.forEach((installment) => {
+        if (installment.paidStatus === 'Paid') {
+          paidAmount += installment.actualAmount ? installment.actualAmount : installment.totalAmount
+        }
+      })
+    }
+    let remainAmount = parseFloat(installmentTotalAmount) - parseFloat(paidAmount)
+    if (Installments && Installments.length) {
+      this.setState({ Installments, installmentTotalAmount, installmentPaidAmount: paidAmount, installmentRemainAmount: remainAmount, installmentPackageName })
     }
   }
 
@@ -582,15 +591,6 @@ class PackageDetails extends Component {
                     <tbody>
                       {packageDetails && packageDetails.map((pack, i) => {
                         const { startDate, endDate, packages: { packageName, amount }, totalAmount, paidStatus, Installments } = pack
-                        let paidAmount = 0
-                        if (Installments && Installments.length) {
-                          Installments.forEach((installment) => {
-                            if (installment.paidStatus === 'Paid') {
-                              paidAmount += installment.actualAmount
-                            }
-                          })
-                        }
-                        let remainAmount = parseFloat(amount) - parseFloat(paidAmount)
                         return (
                           <tr key={i}>
                             <td>{packageName}</td>
@@ -606,8 +606,8 @@ class PackageDetails extends Component {
                             <td className="text-center">{paidStatus === 'Installment' ? t('Yes') : t('No')}</td>
                             {paidStatus === 'Installment'
                               ? <td className="text-center">
-                                <span class="badge badge-pill badge-primary px-3 py-2 cursorPointer" data-toggle="modal" data-target="#InstallmentDetails"
-                                  onClick={() => this.setInstallments(Installments, amount, paidAmount, remainAmount, packageName)}>Payment Details</span>
+                                <span className="badge badge-pill badge-primary px-3 py-2 cursorPointer" data-toggle="modal" data-target="#InstallmentDetails"
+                                  onClick={() => this.setInstallments(Installments, amount, packageName)}>Payment Details</span>
                               </td>
                               : <td className="text-center">NA</td>
                             }
@@ -653,7 +653,7 @@ class PackageDetails extends Component {
                                 <td className="dirltrtar">{dateToDDMMYYYY(trainerEnd)}</td>
                                 <td className="text-danger font-weight-bold"><span>{this.props.defaultCurrency}</span><span className="pl-1"></span><span>{amount}</span></td>
                                 <td className="text-center">
-                                  <span class="badge badge-pill badge-primary px-3 py-2 cursorPointer" data-toggle="modal" data-target="#InstallmentDetails">Payment Details</span>
+                                  <span className="badge badge-pill badge-primary px-3 py-2 cursorPointer" data-toggle="modal" data-target="#InstallmentDetails">Payment Details</span>
                                 </td>
                               </tr>
                             )
@@ -714,7 +714,7 @@ class PackageDetails extends Component {
                             return (
                               <tr>
                                 <td>Installment {k + 1}</td>
-                                <td className="text-danger font-weight-bold">{this.props.defaultCurrency} {installment.actualAmount}</td>
+                                <td className="text-danger font-weight-bold">{this.props.defaultCurrency} {installment.actualAmount ? installment.actualAmount : installment.totalAmount}</td>
                                 <td>{dateToDDMMYYYY(installment.dueDate)}</td>
                                 <td>{dateToDDMMYYYY(installment.dateOfPaid)}</td>
                                 {installment.paidStatus === 'Paid' ? <td className="text-success font-weight-bold">Paid</td> : <td className="text-danger font-weight-bold">Pending</td>}
