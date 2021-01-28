@@ -51,7 +51,7 @@ class ExpiryMember extends Component {
             </div>
           </div>
 
-          <div className="row d-block d-sm-flex justify-content-end pt-5">
+          <div className="form-inline row d-block d-sm-flex justify-content-end pt-5">
             <div className="col w-auto px-1 flexBasis-auto flex-grow-0">
               <div className="form-group inlineFormGroup">
                 <label className="mx-sm-2 inlineFormLabel">{t('Search Filter')}</label>

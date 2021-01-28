@@ -39,8 +39,15 @@ class DietPlan extends Component {
           </div>
 
           <div className="col-12">
+            <table className="table table-borderless whiteSpaceNoWrap">
+              <thead>
+                <tr>
+                  <th className="pl-4"><span className="pl-1">Session Name</span></th>
+                  <th className="text-right pr-5"><span className="text-right pr-5">Session Timing</span></th>
+                </tr>
+              </thead>
+            </table>
             <div id="accordion">
-
               {this.props.memberDietByDate && this.props.memberDietByDate.map((memberDiet, i) => {
                 const { dietPlanSession: { sessionName, fromTime, toTime }, dietPlan } = memberDiet
                 return (

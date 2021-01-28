@@ -228,9 +228,9 @@ class CancelFreeze extends Component {
                             </div>
                             <div className="modal-body px-4">
                               <div className="row">
-                                <div className="col-sm-12 col-xs-12 col-md-12 col-lg-6 col-xl-6">
+                                <div className="col-sm-12 col-xs-12 col-md-12 col-lg-12 col-xl-12">
+                                  <label>Returning Date</label>
                                   <div className="form-group position-relative">
-                                    <label>Returning Date</label>
                                     <MuiPickersUtilsProvider utils={DateFnsUtils}>
                                       <DatePicker
                                         variant='inline'
@@ -239,7 +239,7 @@ class CancelFreeze extends Component {
                                         }}
                                         autoOk
                                         minDate={new Date()}
-                                        className="form-control mx-sm-2 inlineFormInputs"
+                                        className="form-control pl-2 pt-2"
                                         invalidDateMessage=''
                                         minDateMessage=''
                                         format="dd/MM/yyyy"
