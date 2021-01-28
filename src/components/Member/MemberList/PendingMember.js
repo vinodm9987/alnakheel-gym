@@ -75,7 +75,7 @@ class PendingMember extends Component {
                 </tr>
               </thead>
               <tbody>
-                {this.props.member.pendingRegisterMember && getPageWiseData(this.state.pageNumber, this.props.member.pendingRegisterMember, this.state.displayNum).map((member => {
+                {this.props.pendingRegisterMember && getPageWiseData(this.state.pageNumber, this.props.pendingRegisterMember, this.state.displayNum).map((member => {
                   return (
                     <tr key={member._id}>
                       {/* <td className="text-primary font-weight-bold">{member.memberId}</td> */}
@@ -105,11 +105,11 @@ class PendingMember extends Component {
             </table>
           </div>
           {/*Pagination Start*/}
-          {this.props.member.pendingRegisterMember &&
+          {this.props.pendingRegisterMember &&
             <Pagination
               pageNumber={this.state.pageNumber ? this.state.pageNumber : 1}
               getPageNumber={(pageNumber) => this.setState({ pageNumber })}
-              fullData={this.props.member.pendingRegisterMember}
+              fullData={this.props.pendingRegisterMember}
               displayNumber={(displayNum) => this.setState({ displayNum })}
               displayNum={this.state.displayNum ? this.state.displayNum : 5}
             />
@@ -121,8 +121,8 @@ class PendingMember extends Component {
   }
 }
 
-function mapStateToProps({ member }) {
-  return { member }
+function mapStateToProps({ member: { pendingRegisterMember } }) {
+  return { pendingRegisterMember: pendingRegisterMember && pendingRegisterMember.sort((a, b) => new Date(b.admissionDate) - new Date(a.admissionDate)) }
 }
 
 

@@ -155,7 +155,7 @@ class ExpiryMember extends Component {
 }
 
 function mapStateToProps({ member: { expiredMember } }) {
-  return { expiredMember }
+  return { expiredMember: expiredMember && expiredMember.sort((a, b) => new Date(b.admissionDate) - new Date(a.admissionDate)) }
 }
 
 

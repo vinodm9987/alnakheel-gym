@@ -125,7 +125,7 @@ class ClassesMember extends Component {
 }
 
 function mapStateToProps({ member: { classesMember } }) {
-  return { classesMember }
+  return { classesMember: classesMember && classesMember.sort((a, b) => new Date(b.admissionDate) - new Date(a.admissionDate)) }
 }
 
 

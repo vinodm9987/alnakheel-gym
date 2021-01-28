@@ -77,7 +77,7 @@ class NewMember extends Component {
                 </tr>
               </thead>
               <tbody>
-                {this.props.member.NewRegisteredMember && getPageWiseData(this.state.pageNumber, this.props.member.NewRegisteredMember, this.state.displayNum).map((member => {
+                {this.props.NewRegisteredMember && getPageWiseData(this.state.pageNumber, this.props.NewRegisteredMember, this.state.displayNum).map((member => {
                   const packageName = member.packageDetails.map((doc, i) => {
                     if (i === member.packageDetails.length - 1) {
                       return doc.packages.packageName
@@ -124,11 +124,11 @@ class NewMember extends Component {
             </table>
           </div>
           {/*Pagination Start*/}
-          {this.props.member.NewRegisteredMember &&
+          {this.props.NewRegisteredMember &&
             <Pagination
               pageNumber={this.state.pageNumber ? this.state.pageNumber : 1}
               getPageNumber={(pageNumber) => this.setState({ pageNumber })}
-              fullData={this.props.member.NewRegisteredMember}
+              fullData={this.props.NewRegisteredMember}
               displayNumber={(displayNum) => this.setState({ displayNum })}
               displayNum={this.state.displayNum ? this.state.displayNum : 5}
             />
@@ -140,8 +140,8 @@ class NewMember extends Component {
   }
 }
 
-function mapStateToProps({ member }) {
-  return { member }
+function mapStateToProps({ member: { NewRegisteredMember } }) {
+  return { NewRegisteredMember: NewRegisteredMember && NewRegisteredMember.sort((a, b) => new Date(b.admissionDate) - new Date(a.admissionDate)) }
 }
 
 

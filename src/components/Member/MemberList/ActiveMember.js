@@ -139,7 +139,7 @@ class ActiveMember extends Component {
 }
 
 function mapStateToProps({ member: { activeRegisterMember } }) {
-  return { activeRegisterMember }
+  return { activeRegisterMember: activeRegisterMember && activeRegisterMember.sort((a, b) => new Date(b.admissionDate) - new Date(a.admissionDate)) }
 }
 
 
