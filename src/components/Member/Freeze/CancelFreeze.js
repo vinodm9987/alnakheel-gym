@@ -259,7 +259,7 @@ class CancelFreeze extends Component {
                                   </div>
                                 </div>
                                 <div className="col-12 py-3 d-flex flex-wrap align-items-center justify-content-end">
-                                  <button type="button" className="btn btn-success px-4" onClick={() => this.handleSubmit(member)}>{t('Submit')}</button>
+                                  <button type="button" data-dismiss="modal" className="btn btn-success px-4" onClick={() => this.handleSubmit(member)}>{t('Submit')}</button>
                                 </div>
                               </div>
                             </div>
