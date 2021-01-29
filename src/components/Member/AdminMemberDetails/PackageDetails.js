@@ -245,8 +245,8 @@ class PackageDetails extends Component {
                               text2={t('Left')}
                             />
                             : <DonutChart
-                              dataValue={calculateDays(new Date(), endDate)}
-                              value={calculateDays(new Date(), endDate) / calculateDays(startDate, endDate) * 100}
+                              dataValue={calculateDays(new Date(startDate).setHours(0, 0, 0, 0) < new Date().setHours(0, 0, 0, 0) ? new Date() : startDate, endDate)}
+                              value={calculateDays(new Date(startDate).setHours(0, 0, 0, 0) < new Date().setHours(0, 0, 0, 0) ? new Date() : startDate, endDate) / calculateDays(startDate, endDate) * 100}
                               size={90}
                               strokewidth={12}
                               text1={t('Days')}
