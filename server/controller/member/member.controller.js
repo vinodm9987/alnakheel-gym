@@ -213,7 +213,7 @@ exports.createNewMemberByAdmin = (req, res) => {
             packageDetails[0]["startDate"] = setTime(packageDetails[0].startDate);
             packageDetails[0]["endDate"] = setTime(packageDetails[0].endDate);
             packageDetails[0]["orderNo"] = generateOrderId()
-            packageDetails[0]["timeOfPurchase"] = new Date()
+            packageDetails[0]["timeOfPaid"] = new Date()
             if (referralCode) {
                 let isExpired = await checkExpiry(referralCode);
                 if (!isExpired) return errorResponseHandler(res, error, "referral code is expired !")
