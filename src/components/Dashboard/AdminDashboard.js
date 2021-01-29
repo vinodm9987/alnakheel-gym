@@ -9,7 +9,7 @@ import {
   getMemberDashBoard, getMostSellingStock, getPackageDistribution, getSystemYear, getMemberAttendanceDashboard, getDashboardTotalSales, getPendingInstallments
   // getAllBranchSales,   getRevenueDetails 
 } from '../../actions/dashboard.action';
-import { monthFullNames, monthSmallNamesCaps, weekDaysSmall, dateToDDMMYYYY } from '../../utils/apis/helpers';
+import { monthFullNames, monthSmallNamesCaps, dateToDDMMYYYY } from '../../utils/apis/helpers';
 // import { CSVLink } from "react-csv";
 import jsPDF from 'jspdf'
 import 'jspdf-autotable'
@@ -33,7 +33,7 @@ class AdminDashboard extends Component {
       paymentType: 'all',
       transactionType: 'all',
       pendingMonth: new Date().getMonth(),
-      pendingDay: new Date().getDay()
+      pendingYear: new Date().getFullYear(),
     }
     this.props.dispatch(getSystemYear())
     this.props.dispatch(getAllBranch())
@@ -46,7 +46,7 @@ class AdminDashboard extends Component {
     // this.props.dispatch(getAllBranchSales({ year: parseInt(this.state.yearSales) }))
     // this.props.dispatch(getRevenueDetails({ year: parseInt(this.state.yearRevenue), category: this.state.category }))
     this.props.dispatch(getDashboardTotalSales({ date: new Date(), type: 'all', category: 'all' }))
-    this.props.dispatch(getPendingInstallments({ month: this.state.pendingMonth, day: this.state.pendingDay }))
+    this.props.dispatch(getPendingInstallments({ month: this.state.pendingMonth, day: this.state.pendingYear }))
   }
 
   onChangeCalendarDate = date => this.setState({ date }, () => {
@@ -437,7 +437,7 @@ class AdminDashboard extends Component {
       const data = {
         labels: ['POS', 'Classes', 'Packages'],
         datasets: [{ data: [(totalStockSells ? totalStockSells : 0), (totalClassSells ? totalClassSells : 0), (totalPackageSells ? totalPackageSells : 0)], backgroundColor: ['orange', 'red', 'blue'], hoverBackgroundColor: ['orange', 'red', 'blue'] }],
-        text: `${t('Total')} ${totalSells}`
+        text: `${t('Total')} ${totalSells.toFixed(3)}`
       };
       return (
         <div className="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-8 d-flex mt-3">
@@ -583,17 +583,22 @@ class AdminDashboard extends Component {
     }
   }
 
-  setMonthDay(pendingMonth, pendingDay) {
-    this.setState({ pendingMonth, pendingDay }, () => {
-      this.props.dispatch(getPendingInstallments({ month: this.state.pendingMonth, day: this.state.pendingDay }))
+  setMonthYear(pendingMonth, pendingYear) {
+    this.setState({ pendingMonth, pendingYear }, () => {
+      this.props.dispatch(getPendingInstallments({ month: this.state.pendingMonth, year: parseInt(this.state.pendingYear) }))
     })
   }
 
   pendingInstallments = () => {
     const { t } = this.props
     if (this.props.pendingInstallments) {
-      const { pendingMonth, pendingDay } = this.state
-
+      const { pendingMonth, pendingYear } = this.state
+      let systemYears = []
+      if (this.props.systemYear) {
+        for (let i = new Date(this.props.systemYear.year).getFullYear(); i <= new Date().getFullYear(); i++) {
+          systemYears.push(i)
+        }
+      }
       return (
         <div className="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-4 d-flex mt-3">
           <div className="row m-0 w-100 mw-100 bg-light rounded d-flex align-items-start h-100">
@@ -603,8 +608,10 @@ class AdminDashboard extends Component {
               {/* tushar it is month alone. so keep it here in top */}
               <div className="d-flex flex-wrap align-items-center">
                 <span className="position-relative mx-1 my-2">
-                  <select className="bg-white border-secondary border-secondary pr-4 pl-1 mw-100" style={{ fontSize: "13px" }} >
-                    <option >January</option>
+                  <select className="bg-white border-secondary border-secondary pr-4 pl-1 mw-100" style={{ fontSize: "13px" }} value={this.state.pendingYear} onChange={(e) => this.setMonthYear(pendingMonth, e.target.value)}>
+                    {systemYears.map(year => {
+                      return (<option key={year} value={year}>{year}</option>)
+                    })}
                   </select>
                   <span className="position-absolute d-flex align-items-center justify-content-end w-100 h-100 pointerNone px-2" style={{ top: '0', left: '0' }}>
                     <span className="iconv1 iconv1-arrow-down"></span>
@@ -638,7 +645,7 @@ class AdminDashboard extends Component {
                             <div className="d-flex flex-wrap align-items-center">
                               <span className="position-relative mx-1 my-1">
                                 <select className="bg-white border-secondary border-secondary pr-4 pl-1 w-100" style={{ fontSize: "13px" }}
-                                  value={pendingMonth} onChange={(e) => this.setMonthDay(e.target.value, pendingDay)}
+                                  value={pendingMonth} onChange={(e) => this.setMonthYear(e.target.value, pendingYear)}
                                 >
                                   {monthSmallNamesCaps.map((month, i) => {
                                     return (
@@ -664,23 +671,6 @@ class AdminDashboard extends Component {
                                         </select>
                                         <span className="iconv1 iconv1-arrow-down selectBoxIcon"></span>
                                       </div> */}
-
-                            <div className="d-flex flex-wrap align-items-center">
-                              <span className="position-relative mx-1 my-1">
-                                <select className="bg-white border-secondary border-secondary pr-4 pl-1 w-100" style={{ fontSize: "13px" }}
-                                  value={pendingDay} onChange={(e) => this.setMonthDay(pendingMonth, e.target.value)}
-                                >
-                                  {weekDaysSmall.map((week, i) => {
-                                    return (
-                                      <option value={i}>{t(week)}</option>
-                                    )
-                                  })}
-                                </select>
-                                <span className="position-absolute d-flex align-items-center justify-content-end w-100 h-100 pointerNone px-2" style={{ top: '0', left: '0' }}>
-                                  <span className="iconv1 iconv1-arrow-down"></span>
-                                </span>
-                              </span>
-                            </div>
                           </div>
                         </div>
                       </div>
