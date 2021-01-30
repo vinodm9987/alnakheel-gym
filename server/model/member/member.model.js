@@ -28,7 +28,7 @@ const memberSchema = new Schema({
 
     notes: { type: String },
 
-    accessBranch: [{ type: Schema.Types.ObjectId, ref: "Branch" }],
+    // accessBranch: [{ type: Schema.Types.ObjectId, ref: "Branch" }],
 
     branch: { type: Schema.Types.ObjectId, ref: "Branch" },
 
