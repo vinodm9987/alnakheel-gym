@@ -605,8 +605,7 @@ class AdminDashboard extends Component {
 
             <div className="col-12 d-flex flex-wrap align-items-center justify-content-between py-1 mb-auto">
               <h6 className="mx-1 my-2 SegoeBold py-1">Pending Installments</h6>
-              {/* tushar it is month alone. so keep it here in top */}
-              <div className="d-flex flex-wrap align-items-center">
+              {/* <div className="d-flex flex-wrap align-items-center">
                 <span className="position-relative mx-1 my-2">
                   <select className="bg-white border-secondary border-secondary pr-4 pl-1 mw-100" style={{ fontSize: "13px" }} value={this.state.pendingYear} onChange={(e) => this.setMonthYear(pendingMonth, e.target.value)}>
                     {systemYears.map(year => {
@@ -617,15 +616,13 @@ class AdminDashboard extends Component {
                     <span className="iconv1 iconv1-arrow-down"></span>
                   </span>
                 </span>
-              </div>
-              {/* -/ tushar it is month alone. so keep it here in top over */}
+              </div> */}
               <div className="underline w-100"></div>
             </div>
 
             <div className="col-12 d-flex flex-wrap align-items-start justify-content-between py-1 inner-head-down">
               <div className="col-12">
                 <div className="row">
-                  {/* tushar month we kept top. so remove from here */}
                   <div className="col-12">
                     <div className="row">
                       {/* <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
@@ -635,18 +632,10 @@ class AdminDashboard extends Component {
                       <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
                         <div className="row d-block d-sm-flex justify-content-start">
                           <div className="col w-auto px-1 flexBasis-auto flex-grow-0" >
-                            {/* <div className="form-group inlineFormGroup">
-                                        <select className="form-control mx-sm-2 inlineFormInputs bg-white">
-                                          <option value=""></option>
-                                        </select>
-                                        <span className="iconv1 iconv1-arrow-down selectBoxIcon"></span>
-                                      </div> */}
-
                             <div className="d-flex flex-wrap align-items-center">
                               <span className="position-relative mx-1 my-1">
                                 <select className="bg-white border-secondary border-secondary pr-4 pl-1 w-100" style={{ fontSize: "13px" }}
-                                  value={pendingMonth} onChange={(e) => this.setMonthYear(e.target.value, pendingYear)}
-                                >
+                                  value={pendingMonth} onChange={(e) => this.setMonthYear(e.target.value, pendingYear)} >
                                   {monthSmallNamesCaps.map((month, i) => {
                                     return (
                                       <option key={i} value={i}>{t(month)}</option>
@@ -658,25 +647,35 @@ class AdminDashboard extends Component {
                                 </span>
                               </span>
                             </div>
-
+                          </div>
+                          <div className="col w-auto px-1 flexBasis-auto flex-grow-0" >
+                            <div className="d-flex flex-wrap align-items-center">
+                              <span className="position-relative mx-1 my-1">
+                                <select className="bg-white border-secondary border-secondary pr-4 pl-1 w-100" style={{ fontSize: "13px" }} value={this.state.pendingYear} onChange={(e) => this.setMonthYear(pendingMonth, e.target.value)}>
+                                  {systemYears.map(year => {
+                                    return (<option key={year} value={year}>{year}</option>)
+                                  })}
+                                </select>
+                                <span className="position-absolute d-flex align-items-center justify-content-end w-100 h-100 pointerNone px-2" style={{ top: '0', left: '0' }}>
+                                  <span className="iconv1 iconv1-arrow-down"></span>
+                                </span>
+                              </span>
+                            </div>
+                          </div>
+                          <div className="col w-auto px-2">
+                            <div className="row">
+                              <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                  <h6>Total Amount</h6>
+                                  <h5 class="font-weight-bold dirltrtar text-success">BHD 0.00</h5>
+                              </div>
+                            </div>
                           </div>
 
-                          {/* tushar remove below col fully as bose told monthly only come and jan feb in arabic needed in arabic */}
 
-                          <div className="col w-auto px-1 flexBasis-auto flex-grow-0">
-                            {/* <div className="form-group inlineFormGroup">
-                                        <select className="form-control mx-sm-2 inlineFormInputs bg-white">
-                                          <option value="">Jan</option>
-                                          <option value="">Feb</option>
-                                        </select>
-                                        <span className="iconv1 iconv1-arrow-down selectBoxIcon"></span>
-                                      </div> */}
-                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
-                  {/* -/ tushar month we kept top. so remove from here over */}
                   {/* tushar if data */}
                   {this.props.pendingInstallments.length > 0 ?
                     <div className="col-12 px-0 pb-3">

@@ -28,8 +28,6 @@ const memberSchema = new Schema({
 
     notes: { type: String },
 
-    // accessBranch: [{ type: Schema.Types.ObjectId, ref: "Branch" }],
-
     branch: { type: Schema.Types.ObjectId, ref: "Branch" },
 
 
@@ -52,8 +50,6 @@ const memberSchema = new Schema({
         isExpiredPackage: { type: Boolean, default: false },
 
         packageRenewal: { type: Boolean, default: false },
-
-        salesBranch: [{ type: Schema.Types.ObjectId, ref: "Branch" }],
 
         paidStatus: { type: String, enum: ["Paid", "UnPaid", "Installment"], default: "UnPaid" },
 

@@ -633,6 +633,7 @@ class PackageDetails extends Component {
                         <th>{t('Start Date')}</th>
                         <th>{t('End Date')}</th>
                         <th>{t('Amount')}</th>
+                        <th>{t('Action')}</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -655,6 +656,10 @@ class PackageDetails extends Component {
                                 <td className="text-danger font-weight-bold"><span>{this.props.defaultCurrency}</span><span className="pl-1"></span><span>{amount}</span></td>
                                 <td className="text-center">
                                   <span className="badge badge-pill badge-primary px-3 py-2 cursorPointer" data-toggle="modal" data-target="#InstallmentDetails">Payment Details</span>
+                                </td>
+                                <td>
+                                  <button className="btn btn-success badge-pill btn-sm px-3 py-05 d-inline-flex justify-content-between align-items-center mx-1 py-0 w-100px text-nowrap" data-toggle="modal" data-target="#allreadyPaid"><span className="mx-1">Paid</span><span className="iconv1 iconv1-arrow-down mx-1"></span></button>
+                                  {/* <button className="btn btn-danger badge-pill btn-sm px-3 py-05 d-inline-flex justify-content-between align-items-center mx-1 py-0 w-100px text-nowrap" data-toggle="modal" data-target="#notYetPaid" ><span className="mx-1">Unpaid</span><span className="iconv1 iconv1-arrow-down mx-1"></span></button> */}
                                 </td>
                               </tr>
                             )
