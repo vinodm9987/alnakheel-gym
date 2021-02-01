@@ -49,10 +49,10 @@ class Packages extends Component {
       fromTimeE: '',
       toTime: new Date('9/12/2020 11:59 PM'),
       toTimeE: '',
-      salesBranches: [],
-      salesBranchesE: '',
-      accessBranches: [],
-      accessBranchesE: '',
+      // salesBranches: [],
+      // salesBranchesE: '',
+      // accessBranches: [],
+      // accessBranchesE: '',
     }
     this.state = this.default
     this.props.dispatch(getAllPackage())
@@ -85,13 +85,17 @@ class Packages extends Component {
 
   handleSubmit() {
     const { t } = this.props
-    const { name, amount, period, startDate, endDate, packageId, description, color, image, fromTime, toTime, salesBranches, accessBranches } = this.state
+    const { name, amount, period, startDate, endDate, packageId, description, color, image, fromTime, toTime,
+      // salesBranches, accessBranches 
+    } = this.state
     if (packageId) {
-      if (name && amount && period && startDate && endDate && description && color && startDate <= endDate && fromTime && toTime && fromTime < toTime && salesBranches.length && accessBranches.length) {
+      if (name && amount && period && startDate && endDate && description && color && startDate <= endDate && fromTime && toTime && fromTime < toTime
+        // && salesBranches.length && accessBranches.length
+      ) {
         const packageInfo = {
           packageName: name, amount, period, startDate, endDate, description, color,
           fromTime, toTime,
-          salesBranches: salesBranches.map(a => a.value), accessBranches: accessBranches.map(a => a.value)
+          // salesBranches: salesBranches.map(a => a.value), accessBranches: accessBranches.map(a => a.value)
         }
         let formData = new FormData()
         image && formData.append('image', image)
@@ -104,18 +108,20 @@ class Packages extends Component {
         if (!startDate) this.setState({ startDateE: t('Enter start date') })
         if (!endDate) this.setState({ endDateE: t('Enter end date') })
         if (!description) this.setState({ descriptionE: t('Enter description') })
-        if (!salesBranches.length) this.setState({ salesBranchesE: t('Enter branch') })
-        if (!accessBranches.length) this.setState({ accessBranchesE: t('Enter branch') })
+        // if (!salesBranches.length) this.setState({ salesBranchesE: t('Enter branch') })
+        // if (!accessBranches.length) this.setState({ accessBranchesE: t('Enter branch') })
         if (!color) this.props.dispatch({ type: GET_ALERT_ERROR, payload: t('Please select color') })
         if (startDate > endDate) this.setState({ endDateE: t('End Date should be greater than Start Date') })
         if (fromTime >= toTime) this.setState({ toTimeE: t('To Time should be greater than From Time') })
       }
     } else {
-      if (name && amount && period && startDate && endDate && description && color && startDate <= endDate && image && fromTime && toTime && fromTime < toTime && salesBranches.length && accessBranches.length) {
+      if (name && amount && period && startDate && endDate && description && color && startDate <= endDate && image && fromTime && toTime && fromTime < toTime
+        // && salesBranches.length && accessBranches.length
+      ) {
         const packageInfo = {
           packageName: name, amount, period, startDate, endDate, description, color,
           fromTime, toTime,
-          salesBranches: salesBranches.map(a => a.value), accessBranches: accessBranches.map(a => a.value)
+          // salesBranches: salesBranches.map(a => a.value), accessBranches: accessBranches.map(a => a.value)
         }
         let formData = new FormData()
         formData.append('image', image)
@@ -128,8 +134,8 @@ class Packages extends Component {
         if (!startDate) this.setState({ startDateE: t('Enter start date') })
         if (!endDate) this.setState({ endDateE: t('Enter end date') })
         if (!description) this.setState({ descriptionE: t('Enter description') })
-        if (!salesBranches.length) this.setState({ salesBranchesE: t('Enter branch') })
-        if (!accessBranches.length) this.setState({ accessBranchesE: t('Enter branch') })
+        // if (!salesBranches.length) this.setState({ salesBranchesE: t('Enter branch') })
+        // if (!accessBranches.length) this.setState({ accessBranchesE: t('Enter branch') })
         if (!color) this.props.dispatch({ type: GET_ALERT_ERROR, payload: t('Please select color') })
         if (!image) this.setState({ imageE: t('Please select image') })
         if (startDate > endDate) this.setState({ endDateE: t('End Date should be greater than Start Date') })
@@ -155,8 +161,8 @@ class Packages extends Component {
       image: packages.image,
       fromTime: packages.fromTime ? new Date(packages.fromTime) : new Date(),
       toTime: packages.fromTime ? new Date(packages.toTime) : new Date(),
-      salesBranches: packages.salesBranches.map(a => { return { label: a.branchName, value: a._id } }),
-      accessBranches: packages.accessBranches.map(a => { return { label: a.branchName, value: a._id } }),
+      // salesBranches: packages.salesBranches.map(a => { return { label: a.branchName, value: a._id } }),
+      // accessBranches: packages.accessBranches.map(a => { return { label: a.branchName, value: a._id } }),
       packageId: packages._id
     })
   }
@@ -167,7 +173,9 @@ class Packages extends Component {
 
   renderCreatePackageForm() {
     const { t } = this.props
-    const { name, amount, period, packageId, description, color, fromTime, toTime, salesBranches, accessBranches } = this.state
+    const { name, amount, period, packageId, description, color, fromTime, toTime,
+      // salesBranches, accessBranches 
+    } = this.state
     const styles = {
       colors: { width: '36px', height: '14px', borderRadius: '2px', backgroundColor: `${this.state.color}`, },
       swatch: { padding: '5px', background: '#fff', borderRadius: '1px', boxShadow: '0 0 0 1px rgba(0,0,0,.1)', display: 'inline-block', cursor: 'pointer', },
@@ -175,19 +183,19 @@ class Packages extends Component {
       cover: { position: 'fixed', top: '0px', right: '0px', bottom: '0px', left: '0px', }
     }
 
-    const salesOptions = this.props.branchs.activeResponse && this.props.branchs.activeResponse.map(branch => {
-      return {
-        label: branch.branchName,
-        value: branch._id
-      }
-    })
+    // const salesOptions = this.props.branchs.activeResponse && this.props.branchs.activeResponse.map(branch => {
+    //   return {
+    //     label: branch.branchName,
+    //     value: branch._id
+    //   }
+    // })
 
-    const accessOptions = this.props.branchs.activeResponse && this.props.branchs.activeResponse.map(branch => {
-      return {
-        label: branch.branchName,
-        value: branch._id
-      }
-    })
+    // const accessOptions = this.props.branchs.activeResponse && this.props.branchs.activeResponse.map(branch => {
+    //   return {
+    //     label: branch.branchName,
+    //     value: branch._id
+    //   }
+    // })
 
     return (
       <form className="col-12 form-inline mt-5">
@@ -287,7 +295,7 @@ class Packages extends Component {
               </div>
             </div>
           </div>
-          <div className="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
+          {/* <div className="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
             <div className="form-group inlineFormGroup">
               <label htmlFor="salesBranches" className="mx-sm-2 inlineFormLabel type1">{t('Sales Branch')}</label>
               <Select
@@ -324,7 +332,7 @@ class Packages extends Component {
                 <small className="text-danger mx-sm-2 errorMessage">{this.state.accessBranchesE}</small>
               </div>
             </div>
-          </div>
+          </div> */}
           <div className="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
             <div className="form-group inlineFormGroup">
               <label htmlFor="fromTime" className="mx-sm-2 inlineFormLabel type1">{t('From Time')}</label>
