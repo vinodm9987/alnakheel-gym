@@ -1,11 +1,11 @@
 import axios from 'axios';
-import { GET_MEMBER_BY_ID, GET_ALERT_ERROR, GET_CUSTOMER_CLASSES_DETAILS, GET_EMPLOYEE_BY_ID } from './types'
-import { IP } from '../config'
+import { IP } from '../config';
+import { GET_ALERT_ERROR, GET_CUSTOMER_CLASSES_DETAILS, GET_EMPLOYEE_BY_ID, GET_MEMBER_BY_ID } from './types';
 
 
 
 
-export const addMemberInBioStar = (postData) => dispatch => {
+export const addMemberFingerPrint = (postData) => dispatch => {
     axios.post(`${IP}/member/addMemberFingerPrint`, postData)
         .then(res => {
             dispatch({
@@ -35,21 +35,6 @@ export const addMemberFaceRecognition = (postData) => dispatch => {
         })
 };
 
-export const excludeMemberFingerPrint = (postData) => dispatch => {
-    axios.post(`${IP}/member/excludeMemberFingerPrint`, postData)
-        .then(res => {
-            dispatch({
-                type: GET_MEMBER_BY_ID,
-                payload: res.data
-            });
-        }).catch(err => {
-            err.response && dispatch({
-                type: GET_ALERT_ERROR,
-                payload: err.response.data.message
-            })
-        })
-};
-
 export const updateFingerPrint = (postData) => dispatch => {
     axios.post(`${IP}/member/updateFingerPrint`, postData)
         .then(res => {
@@ -65,6 +50,35 @@ export const updateFingerPrint = (postData) => dispatch => {
         })
 };
 
+export const updateFaceRecognition = (postData) => dispatch => {
+    axios.post(`${IP}/member/updateFaceRecognition`, postData)
+        .then(res => {
+            dispatch({
+                type: GET_MEMBER_BY_ID,
+                payload: res.data
+            });
+        }).catch(err => {
+            dispatch({
+                type: GET_ALERT_ERROR,
+                payload: err.response.data.message
+            })
+        })
+};
+
+export const excludeMemberFingerPrint = (postData) => dispatch => {
+    axios.post(`${IP}/member/excludeMemberFingerPrint`, postData)
+        .then(res => {
+            dispatch({
+                type: GET_MEMBER_BY_ID,
+                payload: res.data
+            });
+        }).catch(err => {
+            err.response && dispatch({
+                type: GET_ALERT_ERROR,
+                payload: err.response.data.message
+            })
+        })
+};
 
 export const updateEmployeeFingerPrint = (postData) => dispatch => {
     axios.post(`${IP}/employee/updateEmployeeFingerPrint`, postData)

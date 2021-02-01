@@ -297,7 +297,7 @@ exports.excludeMemberFingerPrint = async (req, res) => {
             else {
                 req.responseData = await Member.findById(req.body.memberId).populate('credentialId').lean()
                 await Credential.findOneAndUpdate({ userId: req.body.memberId }, { doneFingerAuth: true });
-                await Member.findByIdAndUpdate(req.body.memberId, { doneFingerAuth: true });
+                await Member.findByIdAndUpdate(req.body.memberId, { doneFingerAuth: true, selectedAuth: 'Exclude', });
                 const newResponse = await Member.findById(req.body.memberId).populate('credentialId branch')
                     .populate({ path: "packageDetails.trainerDetails.trainer", populate: { path: "credentialId" } })
                     .populate({ path: "packageDetails.packages", populate: { path: "period" } })

@@ -13,6 +13,7 @@ import { GET_ALERT_ERROR } from '../../../actions/types'
 class PackageDetails extends Component {
 
   state = {
+    url: this.props.match.url,
     packageName: '',
     totalAmount: 0,
     packageId: '',
@@ -195,7 +196,7 @@ class PackageDetails extends Component {
       let totalLeftAfterDigital = totalAmount - digital
 
       return (
-        <div className="tab-pane fade show active" id="menu1" role="tabpanel">
+        <div className={this.state.url === `/members-details/${this.props.memberId}` ? "tab-pane fade show active" : "tab-pane fade"} id="menu1" role="tabpanel">
           <div className="col-12">
             <ul className="row px-0">
               {packageDetails && packageDetails.map((pack, i) => {
@@ -712,7 +713,7 @@ class PackageDetails extends Component {
                         <tbody>
                           {this.state.Installments.map((installment, k) => {
                             return (
-                              <tr>
+                              <tr key={k}>
                                 <td>Installment {k + 1}</td>
                                 <td className="text-danger font-weight-bold">{this.props.defaultCurrency} {installment.actualAmount ? installment.actualAmount : installment.totalAmount}</td>
                                 <td>{dateToDDMMYYYY(installment.dueDate)}</td>

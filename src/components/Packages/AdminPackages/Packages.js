@@ -90,7 +90,7 @@ class Packages extends Component {
       if (name && amount && period && startDate && endDate && description && color && startDate <= endDate && fromTime && toTime && fromTime < toTime && salesBranches.length && accessBranches.length) {
         const packageInfo = {
           packageName: name, amount, period, startDate, endDate, description, color,
-          // fromTime, toTime,
+          fromTime, toTime,
           salesBranches: salesBranches.map(a => a.value), accessBranches: accessBranches.map(a => a.value)
         }
         let formData = new FormData()
@@ -114,7 +114,7 @@ class Packages extends Component {
       if (name && amount && period && startDate && endDate && description && color && startDate <= endDate && image && fromTime && toTime && fromTime < toTime && salesBranches.length && accessBranches.length) {
         const packageInfo = {
           packageName: name, amount, period, startDate, endDate, description, color,
-          // fromTime, toTime,
+          fromTime, toTime,
           salesBranches: salesBranches.map(a => a.value), accessBranches: accessBranches.map(a => a.value)
         }
         let formData = new FormData()
@@ -225,7 +225,7 @@ class Packages extends Component {
               <div className="form-control mx-sm-2 inlineFormInputs p-0 border-0 bg-white">
                 <div className="d-flex align-items-center h-100">
                   <div style={styles.swatch} onClick={this.handleClick}>
-                    <div style={styles.colors} className="d-flex align-items-center justify-content-end" ><span class="iconv1 iconv1-arrow-down font-weight-bold"></span></div>
+                    <div style={styles.colors} className="d-flex align-items-center justify-content-end" ><span className="iconv1 iconv1-arrow-down font-weight-bold"></span></div>
                   </div>
                   {this.state.displayColorPicker ?
                     <div style={styles.popover}>

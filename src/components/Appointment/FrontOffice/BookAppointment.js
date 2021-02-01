@@ -28,7 +28,7 @@ class BookAppointment extends Component {
     super(props)
     this.default = {
       url: this.props.match.url,
-      appointmentFor: 'member',
+      appointmentFor: 'visitor',
       member: '',
       memberE: '',
       purposeOfVisit: '',
@@ -466,7 +466,7 @@ class BookAppointment extends Component {
           {this.renderBarGraph()}
           <div className="col-12">
             <div className="row">
-              <div className="col-12 py-3 d-flex flex-wrap align-items-center">
+              {/* <div className="col-12 py-3 d-flex flex-wrap align-items-center">
                 <div className="px-3">
                   <div className="custom-control custom-checkbox roundedGreenRadioCheck">
                     <input type="radio" className="custom-control-input" id="Members" name="xxx" checked={appointmentFor === 'member'}
@@ -483,7 +483,7 @@ class BookAppointment extends Component {
                     <label className="custom-control-label" htmlFor="Visitors">{t('Visitors')}</label>
                   </div>
                 </div>
-              </div>
+              </div> */}
               {appointmentFor === 'member' &&
                 <div className="col-12 col-sm-6 col-md-6 col-lg-6">
                   <div className="form-group position-relative pt-3">

@@ -11,6 +11,9 @@ class ClassesDetails extends Component {
 
   constructor(props) {
     super(props)
+    this.state = {
+      url: this.props.match.url,
+    }
     this.props.dispatch(getCustomerClassesDetails({ member: this.props.memberId }))
   }
 
@@ -33,7 +36,7 @@ class ClassesDetails extends Component {
     if (this.props.customerClassesDetails) {
       const { customerClassesDetails } = this.props
       return (
-        <div className="tab-pane fade" id="menu5" role="tabpanel">
+        <div className={this.state.url === `/members-details/${this.props.memberId}/classes-details` ? "tab-pane fade show active" : "tab-pane fade"} id="menu5" role="tabpanel">
           <div className="col-12">
             <ul className="row px-0">
               {customerClassesDetails && customerClassesDetails.map((classes, i) => {

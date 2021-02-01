@@ -12,6 +12,7 @@ class DietPlan extends Component {
   constructor(props) {
     super(props)
     this.state = {
+      url: this.props.match.url,
       dateOfDiet: new Date(),
     }
     this.props.dispatch({ type: EMPTY_MEMBER_DIET_BY_DATE, payload: {} })
@@ -26,7 +27,7 @@ class DietPlan extends Component {
   render() {
     const { t } = this.props
     return (
-      <div className="tab-pane fade" id="menu4" role="tabpanel">
+      <div className={this.state.url === `/members-details/${this.props.memberId}/diet-plans` ? "tab-pane fade show active" : "tab-pane fade"} id="menu4" role="tabpanel">
         <div className="row form-inline">
           <div className="col-12">
             <h4 className="m-0 p-2">{t('Diet Plans Details')}</h4>

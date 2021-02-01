@@ -649,7 +649,7 @@ class AdminDashboard extends Component {
                                 >
                                   {monthSmallNamesCaps.map((month, i) => {
                                     return (
-                                      <option value={i}>{t(month)}</option>
+                                      <option key={i} value={i}>{t(month)}</option>
                                     )
                                   })}
                                 </select>
