@@ -63,36 +63,19 @@ module.exports = {
     }
   },
 
-  employeeBioStarObject: (type, bioStarInfo, employee, credential) => {
-    if (type === 'Exclude') return;
-    if (type === 'BioStation') {
-      return {
-        accessGroupName: bioStarInfo.accessGroupName,
-        accessGroupId: bioStarInfo.accessGroupId,
-        userGroupId: bioStarInfo.userGroupId,
-        memberId: 'E' + employee.employeeId,
-        name: credential.userName,
-        email: credential.email,
-        phoneNumber: employee.mobileNo,
-        template0: employee.biometricTemplate.template0,
-        template1: employee.biometricTemplate.template1,
-        endDate: new Date(new Date().setFullYear(2030, 10, 12)).toISOString(),
-        startDate: new Date().toISOString(),
-      };
-    } else {
-      return {
-        accessGroupName: bioStarInfo.accessGroupName,
-        accessGroupId: bioStarInfo.accessGroupId,
-        userGroupId: bioStarInfo.userGroupId,
-        memberId: 'E' + employee.employeeId,
-        name: credential.userName,
-        email: credential.email,
-        phoneNumber: employee.mobileNo,
-        templates: employee.biometricTemplate.templates,
-        raw_image: employee.biometricTemplate.raw_image,
-        endDate: new Date(new Date().setFullYear(2030, 10, 12)).toISOString(),
-        startDate: new Date().toISOString(),
-      }
+  employeeBioStarObject: (bioStarInfo, employee, credential) => {
+    return {
+      accessGroupName: bioStarInfo.accessGroupName,
+      accessGroupId: bioStarInfo.accessGroupId,
+      userGroupId: bioStarInfo.userGroupId,
+      memberId: 'E' + employee.employeeId,
+      name: credential.userName,
+      email: credential.email,
+      phoneNumber: employee.mobileNo,
+      templates: employee.faceRecognitionTemplate.templates,
+      raw_image: employee.faceRecognitionTemplate.raw_image,
+      endDate: new Date(new Date().setFullYear(2030, 10, 12)).toISOString(),
+      startDate: new Date().toISOString(),
     }
   },
 

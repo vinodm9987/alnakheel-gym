@@ -12,9 +12,10 @@ const { Mailer: { sendMail } } = require('../../utils')
  * models.
 */
 
-const { Employee, Credential, Designation, Member, AdminPassword } = require('../../model');
+const { Employee, Credential, Designation, Member, AdminPassword, EmployeePackage } = require('../../model');
 const { auditLogger } = require('../../middleware/auditlog.middleware');
-const { deviceObjectByTypeOfMachine, } = require('../../service/branch.service');
+const { employeeBioStarObject } = require('../../service/branch.service');
+const { addMemberInBioStar, getFaceRecognitionTemplate, updateFaceRecognition } = require('../../biostar')
 
 
 
@@ -165,12 +166,17 @@ exports.createNewEmployee = (req, res) => {
             const { userName, email, designation, doneFingerAuth } = JSON.parse(req.body.data);
             const employee = new Employee(JSON.parse(req.body.data));
             const credential = new Credential({ userName, email, designation, userId: employee._id, designationName: DESIGNATION[3], doneFingerAuth })
+            const { raw_image, templates } = await getFaceRecognitionTemplate();
             const password = Math.random().toString(36).slice(-8);
             credential.setPassword(password);
             credential["avatar"] = req.files[0]
             const newResponse = await credential.save();
             employee["credentialId"] = newResponse._id;
+            employee['faceRecognitionTemplate'] = { raw_image, templates };
             const employeeData = await employee.save();
+            const bioStarInfo = await EmployeePackage.findOne({}).lean();
+            const bioObject = employeeBioStarObject(bioStarInfo, employeeData, newResponse);
+            await addMemberInBioStar(bioObject)
             await sendMail(email, password);
             await auditLogger(req, 'Success')
             return successResponseHandler(res, employeeData, "successfully added new employee !!");
@@ -186,15 +192,18 @@ exports.createNewEmployee = (req, res) => {
 };
 
 
-exports.updateEmployeeFingerPrint = async (req, res) => {
+
+
+exports.updateEmployeeFaceRecognition = async (req, res) => {
     try {
         await AdminPassword.findOne({ password: req.body.password }).then(async user => {
             if (!user) return errorResponseHandler(res, '', "Your entered password is wrong !");
             else {
-                const { template0, template1 } = await deviceObjectByTypeOfMachine('BioStation');
+                const { raw_image, templates } = await getFaceRecognitionTemplate();
                 const userData = await Employee.findById(req.body.employeeId).lean()
-                const bioObject = { template0, template1, fingerIndex: req.body.fingerIndex, memberId: 'e' + userData.employeeId }
-                await Employee.findByIdAndUpdate(req.body.employeeId, { doneFingerAuth: true, biometricTemplate: bioObject }, { new: true })
+                const bioObject = { raw_image, templates, memberId: 'e' + userData.employeeId }
+                await updateFaceRecognition(bioObject);
+                await Employee.findByIdAndUpdate(req.body.employeeId, { faceRecognitionTemplate: bioObject }, { new: true })
                 const newResponse = await Employee.findById(req.body.employeeId).populate('credentialId branch designation').lean()
                 successResponseHandler(res, newResponse, "successfully save the transaction !!");
             }
@@ -203,27 +212,7 @@ exports.updateEmployeeFingerPrint = async (req, res) => {
         logger.error(error);
         errorResponseHandler(res, error, "Exception while send code !");
     }
-}
-
-exports.updateEmployeeFaceRecognition = async (req, res) => {
-    try {
-        // await AdminPassword.findOne({ password: req.body.password }).then(async user => {
-        //     if (!user) return errorResponseHandler(res, '', "Your entered password is wrong !");
-        //     else {
-
-        //     }
-        // });
-        const { raw_image, templates } = await getFaceRecognitionTemplate()
-        const userData = await Employee.findById(req.body.employeeId).lean()
-        await updateFingerPrint(bioObject)
-        await Employee.findByIdAndUpdate(req.body.employeeId, { doneFingerAuth: true, biometricTemplate: bioObject }, { new: true })
-        const newResponse = await Employee.findById(req.body.employeeId).populate('credentialId branch designation').lean()
-        successResponseHandler(res, newResponse, "successfully save the transaction !!");
-    } catch (error) {
-        logger.error(error);
-        errorResponseHandler(res, error, "Exception while send code !");
-    }
-}
+};
 
 
 

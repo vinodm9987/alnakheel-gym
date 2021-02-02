@@ -4,8 +4,7 @@
 
 const { logger: { logger }, handler: { successResponseHandler, errorResponseHandler }, upload: { uploadAvatar } } = require('../../../config');
 const { auditLogger } = require('../../middleware/auditlog.middleware');
-const { matchBranchPassword } = require('../../startup/initServer')
-const { checkMachineConfigured } = require('../../service/branch.service');
+
 
 /**
  * models.
@@ -77,8 +76,6 @@ exports.addBranch = (req, res) => {
     uploadAvatar(req, res, async (err, result) => {
         if (err) return errorResponseHandler(res, err, "while uploading photo error occurred !");
         let data = JSON.parse(req.body.data)
-        const isMatch = await matchBranchPassword(data.password);
-        if (!isMatch) return errorResponseHandler(res, isMatch, "password does not match");
         let newBranch = new Branch(data);
         newBranch["avatar"] = req.files[0]
         newBranch.save().then(response => {
