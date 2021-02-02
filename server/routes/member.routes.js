@@ -82,12 +82,6 @@ exports.routes = (express, app) => {
 
     router.get("/getBioStarToken", getBioStarToken);
 
-    router.post('/addMemberFingerPrint', addMemberFingerPrint);
-
-    router.post('/excludeMemberFingerPrint', excludeMemberFingerPrint);
-
-    router.post('/updateFingerPrint', updateFingerPrint);
-
     router.post('/addMemberFaceRecognition', addMemberFaceRecognition);
 
     router.post('/startPackage', startPackage);
