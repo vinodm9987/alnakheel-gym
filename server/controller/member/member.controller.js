@@ -14,16 +14,14 @@ const { Mailer: { sendMail, }, Formate: { setTime, convertToDate }, IdGenerator:
     Referral: { updateTransaction, addPointOfPolicy, checkExpiry, pendingPaymentToGetPoint, checkExpiryOfPolicy, addPointOfReferral } } = require('../../utils');
 
 
-const { updateMemberInBioStar, bioStarToken,
-    updateFingerPrint, disableMember, getFingerPrintTemplate,
-    getFaceRecognitionTemplate } = require('../../biostar');
+const { updateMemberInBioStar, bioStarToken, disableMember,
+    getFaceRecognitionTemplate, addMemberInBioStar, updateFaceRecognition } = require('../../biostar');
 
 
 const { newMemberAssign } = require('../../notification/helper');
 
 const { memberEntranceStatus } = require('../../socket/emitter');
 
-const { registerUserInBioStar, deviceObjectByTypeOfMachine } = require('../../service/branch.service');
 
 
 /**
@@ -258,87 +256,6 @@ exports.createNewMemberByAdmin = (req, res) => {
 
 
 
-exports.addMemberFingerPrint = async (req, res) => {
-    try {
-        const userData = await Member.findById(req.body.memberId).populate('credentialId packageDetails.packages').lean();
-        const { template0, template1 } = await deviceObjectByTypeOfMachine('BioStation');
-        const bioObject = { template0, template1, fingerIndex: req.body.fingerIndex };
-        await Credential.findOneAndUpdate({ userId: req.body.memberId }, { doneFingerAuth: true })
-        await Member.findByIdAndUpdate(req.body.memberId, { doneFingerAuth: true, biometricTemplate: bioObject })
-        let obj = {
-            accessGroupName: userData.packageDetails[0].packages.bioStarInfo.accessGroupName,
-            accessGroupId: userData.packageDetails[0].packages.bioStarInfo.accessGroupId,
-            userGroupId: userData.packageDetails[0].packages.bioStarInfo.userGroupId,
-            endDate: userData.packageDetails[0].endDate,
-            startDate: userData.packageDetails[0].startDate,
-            memberId: userData.memberId,
-            name: userData.credentialId.userName,
-            email: userData.credentialId.email,
-            phoneNumber: userData.mobileNo,
-            template0, template1,
-        };
-        await registerUserInBioStar(obj);
-        const newResponse = await Member.findById(req.body.memberId).populate('credentialId branch')
-            .populate({ path: "packageDetails.trainerDetails.trainer", populate: { path: "credentialId" } })
-            .populate({ path: "packageDetails.packages", populate: { path: "period" } })
-            .populate({ path: "packageDetails.trainerDetails.trainerFees", populate: { path: "period" } }).lean()
-        return successResponseHandler(res, newResponse, "success !!");
-    } catch (error) {
-        logger.error(error);
-        errorResponseHandler(res, error, "Exception while adding fingerprint !");
-    }
-};
-
-
-exports.excludeMemberFingerPrint = async (req, res) => {
-    try {
-        await AdminPassword.findOne({ password: req.body.password }).then(async user => {
-            if (!user) return errorResponseHandler(res, '', "Your entered password is wrong !");
-            else {
-                req.responseData = await Member.findById(req.body.memberId).populate('credentialId').lean()
-                await Credential.findOneAndUpdate({ userId: req.body.memberId }, { doneFingerAuth: true });
-                await Member.findByIdAndUpdate(req.body.memberId, { doneFingerAuth: true, selectedAuth: 'Exclude', });
-                const newResponse = await Member.findById(req.body.memberId).populate('credentialId branch')
-                    .populate({ path: "packageDetails.trainerDetails.trainer", populate: { path: "credentialId" } })
-                    .populate({ path: "packageDetails.packages", populate: { path: "period" } })
-                    .populate({ path: "packageDetails.trainerDetails.trainerFees", populate: { path: "period" } }).lean()
-                await auditLogger(req, 'Success');
-                successResponseHandler(res, newResponse, "successfully excluded the member fingerprint !!");
-            }
-        });
-    } catch (error) {
-        logger.error(error);
-        auditLogger(req, 'Failed')
-        errorResponseHandler(res, error, "Exception while adding fingerprint !");
-    }
-};
-
-
-exports.updateFingerPrint = async (req, res) => {
-    try {
-        await AdminPassword.findOne({ password: req.body.password }).then(async user => {
-            if (!user) return errorResponseHandler(res, '', "Your entered password is wrong !");
-            else {
-                const { template0, template1 } = await getFingerPrintTemplate()
-                const userData = await Member.findById(req.body.memberId).lean()
-                const bioObject = { template0, template1, fingerIndex: req.body.fingerIndex, memberId: userData.memberId }
-                await updateFingerPrint(bioObject)
-                await Member.findByIdAndUpdate(req.body.memberId, { doneFingerAuth: true, biometricTemplate: bioObject }, { new: true })
-                const newResponse = await Member.findById(req.body.memberId).populate('credentialId branch')
-                    .populate({ path: "packageDetails.trainerDetails.trainer", populate: { path: "credentialId" } })
-                    .populate({ path: "packageDetails.packages", populate: { path: "period" } })
-                    .populate({ path: "packageDetails.trainerDetails.trainerFees", populate: { path: "period" } }).lean()
-                successResponseHandler(res, newResponse, "successfully save the transaction !!");
-            }
-        });
-
-    } catch (error) {
-        logger.error(error);
-        errorResponseHandler(res, error, "Exception while send code !");
-    }
-}
-
-
 exports.addMemberFaceRecognition = async (req, res) => {
     try {
         const { raw_image, templates } = await getFaceRecognitionTemplate()
@@ -361,6 +278,7 @@ exports.addMemberFaceRecognition = async (req, res) => {
             templates: userData.biometricTemplate.templates,
             raw_image: userData.biometricTemplate.raw_image
         };
+        await addMemberInBioStar(obj);
         const newResponse = await Member.findById(req.body.memberId).populate('credentialId branch')
             .populate({ path: "packageDetails.trainerDetails.trainer", populate: { path: "credentialId" } })
             .populate({ path: "packageDetails.packages", populate: { path: "period" } })
@@ -373,6 +291,28 @@ exports.addMemberFaceRecognition = async (req, res) => {
 };
 
 
+exports.updateFaceRecognition = async (req, res) => {
+    try {
+        await AdminPassword.findOne({ password: req.body.password }).then(async user => {
+            if (!user) return errorResponseHandler(res, '', "Your entered password is wrong !");
+            else {
+                const { raw_image, templates } = await getFaceRecognitionTemplate()
+                const userData = await Member.findById(req.body.memberId).lean()
+                const bioObject = { raw_image, templates, memberId: userData.memberId, }
+                await updateFaceRecognition(bioObject)
+                await Member.findByIdAndUpdate(req.body.memberId, { biometricTemplate: bioObject }, { new: true })
+                const newResponse = await Member.findById(req.body.memberId).populate('credentialId branch')
+                    .populate({ path: "packageDetails.trainerDetails.trainer", populate: { path: "credentialId" } })
+                    .populate({ path: "packageDetails.packages", populate: { path: "period" } })
+                    .populate({ path: "packageDetails.trainerDetails.trainerFees", populate: { path: "period" } }).lean()
+                return successResponseHandler(res, newResponse, "successfully save the transaction !!");
+            }
+        });
+    } catch (error) {
+        logger.error(error);
+        errorResponseHandler(res, error, "Exception while send code !");
+    }
+};
 
 
 

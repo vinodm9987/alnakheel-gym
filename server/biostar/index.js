@@ -155,10 +155,10 @@ exports.addMemberInBioStar = async (data) => {
 };
 
 
-exports.updateFaceRecognition = async (ip, userId, data) => {
+exports.updateFaceRecognition = async (data) => {
     try {
-        const headers = await bioStarLogin(ip);
-        const response = await axios.put(`${BIO_STAR_USER_REGISTRATION_URL}/${userId}/face_templates`, faceRecognitionObj(data.raw_image, data.templates), { headers })
+        const headers = await bioStarLogin();
+        const response = await axios.put(`${BIO_STAR_USER_REGISTRATION_URL}/${data.memberId}/face_templates`, faceRecognitionObj(data.raw_image, data.templates), { headers })
         return response;
     } catch (error) {
         logger.error(error.response);
