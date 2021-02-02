@@ -259,6 +259,7 @@ class SideNavBar extends Component {
                 <li className="secondaryLevelMenuList"><NavLink to='/freeze-members' onClick={() => this.handleActiveSubTab()}>{t(`Freeze Members`)}</NavLink></li>
                 <li className="secondaryLevelMenuList"><NavLink to='/package-renewal' onClick={() => this.handleActiveSubTab()}>{t('Member Renewal')}</NavLink></li>
                 <li className="secondaryLevelMenuList"><NavLink to='/book-trainer' onClick={() => this.handleActiveSubTab()}>{t('Book A Trainer')}</NavLink></li>
+                <li className="secondaryLevelMenuList"><NavLink to='/pending-installments' onClick={() => this.handleActiveSubTab()}>{t('Pending Installments')}</NavLink></li>
                 {/* <li className="secondaryLevelMenuList"><NavLink to='/trainer-members' onClick={() => this.handleActiveSubTab()}>{t(`Trainer Members`)}</NavLink></li> */}
               </ul>
             </li>
