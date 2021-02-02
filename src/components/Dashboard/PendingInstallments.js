@@ -135,7 +135,7 @@ class PendingInstallments extends Component {
                         <div className="modal-dialog modal-dialog-centered">
                             <div className="modal-content">
                                 <div className="modal-header">
-                                    <h4 className="modal-title">Edit</h4>
+                                    <h4 className="modal-title">Edit Due Date</h4>
                                     <button type="button" className="close" data-dismiss="modal">
                                         <span className="iconv1 iconv1-close"></span>
                                     </button>
@@ -165,6 +165,9 @@ class PendingInstallments extends Component {
                                                         <small className="text-danger errorMessage">Err</small>
                                                     </div>
                                                 </div>
+                                            </div>
+                                            <div className="col-12 py-3 text-center">
+                                                <button type="button" className="btn btn-success">Submit</button>
                                             </div>
                                         </div>
                                     </div>
