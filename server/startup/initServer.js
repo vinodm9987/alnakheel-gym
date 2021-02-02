@@ -55,15 +55,12 @@ module.exports = {
     },
 
     createEmployeePackage: async () => {
-        const branches = await getAllBranch();
-        for (const branch of branches) {
-            let isExist = await EmployeePackage.findOne({ branch: branch._id }).lean();
-            if (!isExist) {
-                let { scheduleId, accessLevelId, accessGroupId, accessGroupName, userGroupId } = await addPackage(branch.bioStarIp, 'Employee Package', 0, 1439);
-                let obj = { branch: branch._id, scheduleId, accessLevelId, accessGroupId, accessGroupName, userGroupId };
-                let newPackage = new EmployeePackage(obj);
-                await newPackage.save();
-            }
+        let isExist = await EmployeePackage.findOne({}).lean();
+        if (!isExist) {
+            let { scheduleId, accessLevelId, accessGroupId, accessGroupName, userGroupId } = await addPackage('Employee Package', 0, 1439);
+            let obj = { scheduleId, accessLevelId, accessGroupId, accessGroupName, userGroupId };
+            let newPackage = new EmployeePackage(obj);
+            await newPackage.save();
         }
     },
 

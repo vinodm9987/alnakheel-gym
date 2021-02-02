@@ -91,7 +91,11 @@ const employeeSchema = new Schema({
 
     employeeId: {
         type: Number
-    }
+    },
+
+    faceRecognitionTemplate: {
+        type: Object
+    },
 
 }, { timestamps: { createdAt: "created_at", updatedAt: "updated_at" } }, { strict: false });
 

@@ -14,14 +14,15 @@ const app = express();
 const exphbs = require('express-handlebars');
 const helmet = require('helmet')
 const fs = require("fs");
-const cors = require('cors')
+const cors = require('cors');
 
 /*
  * importing file here
 */
 
 const { notificationCronjob } = require('./cronjob/notification')
-const { initialSetupForDesignation, initialSetupForAdmin, initialSetupForSystemYear, createPasswordForBranch } = require('./startup/initServer');
+const { initialSetupForDesignation, initialSetupForAdmin,
+  initialSetupForSystemYear, createPasswordForBranch, createEmployeePackage } = require('./startup/initServer');
 const { config: { PORT, DB, MODE }, logger: { logger } } = require("../config");
 const { mountRoutes } = require("./routes");
 const { oneDayCronJob } = require('./cronjob/oneDayCronjob')
@@ -177,12 +178,6 @@ initialSetupForDesignation()
       }).catch(err => {
         console.log(err);
       });
-    StartBioStarServer()
-      .then(() => {
-        console.log('successfully start Bio Star Server 🚀');
-      }).catch(err => {
-        console.log(err);
-      });
     createPasswordForBranch()
       .then(() => {
         console.log('successfully start Bio Star Server 🚀');
@@ -192,6 +187,25 @@ initialSetupForDesignation()
   }).catch(err => {
     console.log(err);
   });
+
+
+
+
+
+if (MODE === 'PROD') {
+  StartBioStarServer()
+    .then(() => {
+      createEmployeePackage.then(() => {
+        console.log('successfully create Employee package 🚀');
+      }).catch(err => {
+        console.log(err);
+      });
+      console.log('successfully start Bio Star Server 🚀');
+    }).catch(err => {
+      console.log(err);
+    });
+}
+
 
 
 /**

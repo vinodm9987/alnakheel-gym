@@ -145,7 +145,7 @@ exports.getAccessGroupObject = (packageName, accessLevelData, userGroupId) => {
 
 exports.getUserObject = (data) => {
     const { accessGroupName, accessGroupId, endDate, memberId, name, email,
-        phoneNumber, template0, template1, newPhoto, startDate, userGroupId
+        phoneNumber, newPhoto, startDate, userGroupId
     } = data;
     return {
         "access_groups": [{ "name": accessGroupName, "id": accessGroupId }],
@@ -157,12 +157,7 @@ exports.getUserObject = (data) => {
         "permission": { "id": "2", "name": "User Operator", "description": "this is a permission for User Operators" },
         "disabled": "false",
         "phone_number": phoneNumber,
-        "fingerprint_templates": [{
-            "finger_mask": "false",
-            "isNew": "true",
-            "template0": template0,
-            "template1": template1
-        }],
+
         "status": "true",
         "photo": newPhoto,
         "photo_exists": true,
@@ -220,6 +215,19 @@ exports.fingerPrintObj = (template0, template1) => {
         ]
     }
 };
+
+
+exports.faceRecognitionObj = (raw_image, templates) => {
+    return {
+        "face_template_list": [
+            {
+                "raw_image": raw_image,
+                "templates": templates
+            }
+        ]
+    }
+};
+
 
 
 

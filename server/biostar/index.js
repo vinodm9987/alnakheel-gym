@@ -8,7 +8,7 @@ const {
         getUserObject, fingerPrintObj, getUpdateUserObject, getUserDisableObject, getUserFreezeObject,
         BIO_STAR_LOGIN_URL, BIO_STAR_LOGIN_BODY, BIO_STAR_SCHEDULE_URL, BIO_STAR_USER_GROUP_URL,
         BIO_STAR_ACCESS_LEVEL_URL, BIO_STAR_ACCESS_GROUP_URL, BIO_STAR_USER_REGISTRATION_URL,
-        BIO_STAR_IP, BIO_STAR_MACHINE_ID
+        BIO_STAR_IP, BIO_STAR_MACHINE_ID, faceRecognitionObj
     }
 } = require('../../config')
 
@@ -146,8 +146,20 @@ exports.addMemberInBioStar = async (data) => {
     try {
         const headers = await bioStarLogin();
         const userResponse = await axios.post(`${BIO_STAR_USER_REGISTRATION_URL}`, getUserObject(data), { headers })
-        await axios.put(`${BIO_STAR_USER_REGISTRATION_URL}/${data.memberId}/fingerprint_templates`, fingerPrintObj(data.template0, data.template1), { headers })
+        await axios.put(`${BIO_STAR_USER_REGISTRATION_URL}/${data.memberId}/face_templates`, faceRecognitionObj(data.raw_image, data.templates), { headers })
         return userResponse
+    } catch (error) {
+        logger.error(error.response);
+        console.error("TCL: exports.bioStarLogin -> error", error.response.data);
+    }
+};
+
+
+exports.updateFaceRecognition = async (data) => {
+    try {
+        const headers = await bioStarLogin();
+        const response = await axios.put(`${BIO_STAR_USER_REGISTRATION_URL}/${data.memberId}/face_templates`, faceRecognitionObj(data.raw_image, data.templates), { headers })
+        return response;
     } catch (error) {
         logger.error(error.response);
         console.error("TCL: exports.bioStarLogin -> error", error.response.data);
@@ -220,3 +232,15 @@ exports.getFingerPrintTemplate = async () => {
         console.error("TCL: exports.bioStarLogin -> error", error.response.data);
     }
 }
+
+
+exports.getFaceRecognitionTemplate = async () => {
+    try {
+        const headers = await bioStarLogin();
+        const response = await axios.post(`${BIO_STAR_IP}/devices/${BIO_STAR_MACHINE_ID}/scan_face`, { "pose_sensitivity": 0 }, { headers });
+        return { raw_image: response.data.raw_image, templates: response.data.templates }
+    } catch (error) {
+        logger.error(error.response.data);
+        console.error("TCL: exports.bioStarLogin -> error", error.response.data);
+    }
+};
