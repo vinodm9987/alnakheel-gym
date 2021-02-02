@@ -32,7 +32,16 @@ class PackageDetails extends Component {
     installmentTotalAmount: 0,
     installmentPaidAmount: 0,
     installmentRemainAmount: 0,
-    installmentPackageName: ''
+    installmentPackageName: '',
+    showCheque: false,
+    bankName: '',
+    chequeNumber: '',
+    chequeDate: '',
+    cheque: 0,
+    bankNameE: '',
+    chequeNumberE: '',
+    chequeDateE: '',
+    chequeE: ''
   }
 
   onClickPayButton(packageName, totalAmount, packageId, index) {
@@ -63,7 +72,9 @@ class PackageDetails extends Component {
     this.setState({
       paidType: type,
       cash: 0,
-      card: 0
+      card: 0,
+      digital: 0,
+      cheque: 0
     })
   }
 
@@ -103,6 +114,26 @@ class PackageDetails extends Component {
         })
       }
     })
+  }
+
+  setCard(e, total) {
+    const { t } = this.props
+    if (this.state.showCheque) {
+      this.setState(validator(e, 'card', 'numberText', [t('Enter amount'), t('Enter valid amount')]), () => {
+        if (this.state.card <= total.toFixed(3) && this.state.card >= 0) {
+          const cheque = (total.toFixed(3) - this.state.card).toFixed(3)
+          this.setState({
+            cheque,
+            chequeE: ''
+          })
+        } else {
+          this.setState({
+            chequeE: t('Enter valid amount'),
+            cheque: 0
+          })
+        }
+      })
+    }
   }
 
   setCardNumber(e) {
@@ -194,6 +225,7 @@ class PackageDetails extends Component {
       const { cash, paidType, card, digital, totalAmount } = this.state
 
       let totalLeftAfterDigital = totalAmount - digital
+      let totalLeftAfterCash = totalAmount - digital - cash
 
       return (
         <div className={this.state.url === `/members-details/${this.props.memberId}` ? "tab-pane fade show active" : "tab-pane fade"} id="menu1" role="tabpanel">
@@ -448,7 +480,7 @@ class PackageDetails extends Component {
                               <label htmlFor="addCard" className="mx-sm-2 inlineFormLabel mb-1">{t('Card')}</label>
                               <div className="form-control mx-sm-2 inlineFormInputs w-100 p-0 d-flex align-items-center">
                                 <label htmlFor="addCard" className="text-danger my-0 mx-1">{this.props.defaultCurrency}</label>
-                                <input disabled type="number" autoComplete="off" className="border-0 bg-light w-100 h-100 p-1" id="addCard" value={card.toFixed(3)} />
+                                <input type="number" autoComplete="off" className="border-0 bg-light w-100 h-100 p-1 bg-white" id="addCard" value={card} onChange={(e) => this.setCard(e, totalLeftAfterCash)} />
                               </div>
                               <div className="errorMessageWrapper">
                                 <small className="text-danger mx-sm-2 errorMessage">{this.state.cardE}</small>
@@ -475,7 +507,8 @@ class PackageDetails extends Component {
                             <div className="form-group inlineFormGroup  mb-3">
                               <label htmlFor="addCardNumber" className="mx-sm-2 inlineFormLabel mb-1">{t('Card Number (last 4 digits)')}</label>
                               <div className={this.state.cardNumberE ? "form-control mx-sm-2 inlineFormInputs FormInputsError w-100 p-0 d-flex align-items-center" : "form-control mx-sm-2 inlineFormInputs w-100 p-0 d-flex align-items-center"}>
-                                <input type="number" autoComplete="off" className="border-0 bg-light w-100 h-100 p-1" id="addCardNumber" value={this.state.cardNumber} onChange={(e) => this.setCardNumber(e)} />
+                                <input type="number" autoComplete="off" className="border-0 bg-light w-100 h-100 p-1" id="addCardNumber"
+                                  value={this.state.cardNumber} onChange={(e) => this.setCardNumber(e)} />
                               </div>
                               <div className="errorMessageWrapper">
                                 <small className="text-danger mx-sm-2 errorMessage">{this.state.cardNumberE}</small>
@@ -492,62 +525,75 @@ class PackageDetails extends Component {
                             </div>
                           </div>
                         } */}
-                        <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                          <div className="form-group inlineFormGroup  mb-3">
+                        <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
+                          <div className="form-group inlineFormGroup">
                             <label className="mx-sm-2 inlineFormLabel mb-1"></label>
                             <div className="d-flex">
                               <div className="custom-control custom-checkbox roundedGreenRadioCheck mx-2">
-                                <input type="checkbox" className="custom-control-input" id="check" name="checkorNo" />
+                                <input type="checkbox" className="custom-control-input" id="check" name="checkorNo"
+                                  checked={this.state.showCheque} onChange={() => this.setState({ showCheque: !this.state.showCheque, cash: 0, card: 0, digital: 0, cheque: 0 })}
+                                />
                                 <label className="custom-control-label" htmlFor="check">{t('Cheque')}</label>
                               </div>
                             </div>
                           </div>
                         </div>
                         {/* if cheque */}
-                        <div className="col-12">
-                          <div className="row">
-                            <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                              <div className="form-group inlineFormGroup  mb-3">
-                                <label htmlFor="bankName" className="mx-sm-2 inlineFormLabel mb-1">{t('Bank Name')}</label>
-                                <input type="number" autoComplete="off" className="form-control mx-sm-2 inlineFormInputs FormInputsError w-100 py-0 px-2 d-flex align-items-center bg-white dirltr" id="bankName" />
-                                <div className="errorMessageWrapper">
-                                  <small className="text-danger mx-sm-2 errorMessage"></small>
+                        {this.state.showCheque &&
+                          <div className="col-12">
+                            <div className="row">
+                              <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
+                                <div className="form-group inlineFormGroup mb-3">
+                                  <label htmlFor="bankName" className="mx-sm-2 inlineFormLabel mb-1">{t('Bank Name')}</label>
+                                  <input type="text" autoComplete="off" className={this.state.bankNameE ? "form-control mx-sm-2 inlineFormInputs FormInputsError w-100 py-0 px-2 d-flex align-items-center bg-white dirltr" : "form-control mx-sm-2 inlineFormInputs w-100 py-0 px-2 d-flex align-items-center bg-white dirltr"}
+                                    id="bankName"
+                                    value={this.state.bankName} onChange={(e) => this.setState({ bankName: e.target.value })}
+                                  />
+                                  <div className="errorMessageWrapper">
+                                    <small className="text-danger mx-sm-2 errorMessage"></small>
+                                  </div>
                                 </div>
                               </div>
-                            </div>
-                            <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                              <div className="form-group inlineFormGroup  mb-3">
-                                <label htmlFor="CheckNumber" className="mx-sm-2 inlineFormLabel mb-1">{t('Cheque Number')}</label>
-                                <input type="number" autoComplete="off" className="form-control mx-sm-2 inlineFormInputs FormInputsError w-100 py-0 px-2 d-flex align-items-center bg-white dirltr" id="CheckNumber" />
-                                <div className="errorMessageWrapper">
-                                  <small className="text-danger mx-sm-2 errorMessage"></small>
+                              <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
+                                <div className="form-group inlineFormGroup mb-3">
+                                  <label htmlFor="CheckNumber" className="mx-sm-2 inlineFormLabel mb-1">{t('Cheque Number')}</label>
+                                  <input type="text" autoComplete="off" className={this.state.chequeNumberE ? "form-control mx-sm-2 inlineFormInputs FormInputsError w-100 py-0 px-2 d-flex align-items-center bg-white dirltr" : "form-control mx-sm-2 inlineFormInputs w-100 py-0 px-2 d-flex align-items-center bg-white dirltr"}
+                                    id="CheckNumber"
+                                    value={this.state.chequeNumber} onChange={(e) => this.setState({ chequeNumber: e.target.value })}
+                                  />
+                                  <div className="errorMessageWrapper">
+                                    <small className="text-danger mx-sm-2 errorMessage"></small>
+                                  </div>
                                 </div>
                               </div>
-                            </div>
-                            <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                              <div className="form-group inlineFormGroup  mb-3">
-                                <label htmlFor="CheckDate" className="mx-sm-2 inlineFormLabel mb-1">{t('Cheque Date')}</label>
-                                <input type="number" autoComplete="off" className="form-control mx-sm-2 inlineFormInputs FormInputsError w-100 p-0 d-flex align-items-center bg-white dirltr" id="CheckDate" />
-                                <div className="errorMessageWrapper">
-                                  <small className="text-danger mx-sm-2 errorMessage"></small>
+                              <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
+                                <div className="form-group inlineFormGroup mb-3">
+                                  <label htmlFor="CheckDate" className="mx-sm-2 inlineFormLabel mb-1">{t('Cheque Date')}</label>
+                                  <input type="text" autoComplete="off" className={this.state.chequeDateE ? "form-control mx-sm-2 inlineFormInputs FormInputsError w-100 p-0 d-flex align-items-center bg-white dirltr" : "form-control mx-sm-2 inlineFormInputs w-100 p-0 d-flex align-items-center bg-white dirltr"}
+                                    id="CheckDate"
+                                    value={this.state.chequeDate} onChange={(e) => this.setState({ chequeDate: e.target.value })}
+                                  />
+                                  <div className="errorMessageWrapper">
+                                    <small className="text-danger mx-sm-2 errorMessage"></small>
+                                  </div>
                                 </div>
                               </div>
-                            </div>
-                            <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                              <div className="form-group inlineFormGroup mb-3">
-                                <label htmlFor="ChequeAmount" className="mx-sm-2 inlineFormLabel mb-1">{t('Cheque Amount')}</label>
-                                {/* here currency comes , so change errorclass for div below */}
-                                <div className="form-control mx-sm-2 inlineFormInputs FormInputsError w-100 p-0 d-flex align-items-center bg-white dirltr">
-                                  <label htmlFor="ChequeAmount" className="text-danger my-0 mx-1 font-weight-bold">{this.props.defaultCurrency}</label>
-                                  <input type="number" autoComplete="off" className="border-0 bg-light w-100 h-100 p-1 bg-white" id="ChequeAmount" />
-                                </div>
-                                <div className="errorMessageWrapper">
-                                  <small className="text-danger mx-sm-2 errorMessage"></small>
+                              <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
+                                <div className="form-group inlineFormGroup mb-3">
+                                  <label htmlFor="ChequeAmount" className="mx-sm-2 inlineFormLabel mb-1">{t('Cheque Amount')}</label>
+                                  {/* here currency comes , so change errorclass for div below */}
+                                  <div className={this.state.chequeE ? "form-control mx-sm-2 inlineFormInputs FormInputsError w-100 p-0 d-flex align-items-center bg-white dirltr" : "form-control mx-sm-2 inlineFormInputs w-100 p-0 d-flex align-items-center bg-white dirltr"}>
+                                    <label htmlFor="ChequeAmount" className="text-danger my-0 mx-1 font-weight-bold">{this.props.defaultCurrency}</label>
+                                    <input disabled type="number" autoComplete="off" className="border-0 bg-light w-100 h-100 p-1 bg-white" id="ChequeAmount" value={this.state.cheque} />
+                                  </div>
+                                  <div className="errorMessageWrapper">
+                                    <small className="text-danger mx-sm-2 errorMessage"></small>
+                                  </div>
                                 </div>
                               </div>
                             </div>
                           </div>
-                        </div>
+                        }
                         {/* if cheque over */}
                         <div className="col-12 pt-3">
                           <div className="justify-content-sm-end d-flex pt-3 pb-2">

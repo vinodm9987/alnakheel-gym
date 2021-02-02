@@ -12,9 +12,6 @@ class PendingInstallments extends Component {
                         <div className="row">
                             <div className="col-12 col-sm-12 pageHead">
                                 <h1>
-                                    <small>
-                                        <span className="iconv1 iconv1-left-arrow cursorPointer"></span>
-                                    </small>
                                     <span className="px-1"></span>
                                     <span>Pending Installments</span>
                                 </h1>

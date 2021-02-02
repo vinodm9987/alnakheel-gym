@@ -50,6 +50,15 @@ class BookAClass extends Component {
       password: '',
       passwordE: '',
       showPass: false,
+      showCheque: false,
+      bankName: '',
+      chequeNumber: '',
+      chequeDate: '',
+      cheque: 0,
+      bankNameE: '',
+      chequeNumberE: '',
+      chequeDateE: '',
+      chequeE: ''
     }
     if (this.props.location.addClassProps) {
       const { branch } = this.props.location.addClassProps
@@ -84,6 +93,15 @@ class BookAClass extends Component {
         password: '',
         passwordE: '',
         showPass: false,
+        showCheque: false,
+        bankName: '',
+        chequeNumber: '',
+        chequeDate: '',
+        cheque: 0,
+        bankNameE: '',
+        chequeNumberE: '',
+        chequeDateE: '',
+        chequeE: ''
       }
       scrollToTop()
     } else if (this.props.location.classesProps) {
@@ -118,6 +136,15 @@ class BookAClass extends Component {
         password: '',
         passwordE: '',
         showPass: false,
+        showCheque: false,
+        bankName: '',
+        chequeNumber: '',
+        chequeDate: '',
+        cheque: 0,
+        bankNameE: '',
+        chequeNumberE: '',
+        chequeDateE: '',
+        chequeE: ''
       }
       scrollToTop()
     } else {
@@ -152,6 +179,15 @@ class BookAClass extends Component {
         password: '',
         passwordE: '',
         showPass: false,
+        showCheque: false,
+        bankName: '',
+        chequeNumber: '',
+        chequeDate: '',
+        cheque: 0,
+        bankNameE: '',
+        chequeNumberE: '',
+        chequeDateE: '',
+        chequeE: ''
       }
     }
     this.state = this.default
@@ -213,7 +249,7 @@ class BookAClass extends Component {
 
   selectBranch(e) {
     const { t } = this.props
-    this.setState({ ...validator(e, 'branch', 'text', [t('Enter branch')]), ...{ classes: '', amount: 0, cash: 0, card: 0, digital: 0, giftcard: 0, discount: 0, count: 0, member: '', tax: 0, taxPercent: '' } }, () => {
+    this.setState({ ...validator(e, 'branch', 'text', [t('Enter branch')]), ...{ classes: '', amount: 0, cash: 0, card: 0, digital: 0, cheque: 0, giftcard: 0, discount: 0, count: 0, member: '', tax: 0, taxPercent: '' } }, () => {
       this.state.branch && this.props.dispatch(getAllClassesByBranch({ branch: this.state.branch }))
       this.state.branch && this.props.dispatch(getAllActiveMember({ branch: this.state.branch }))
     })
@@ -225,7 +261,7 @@ class BookAClass extends Component {
     this.setState(validator(e, 'classes', 'text', [t('Select class')]), () => {
       if (index > 0) {
         this.state.classes && this.setState({
-          amount: this.props.classesByBranch[index - 1].amount, cash: 0, card: 0, digital: 0, giftcard: 0, discount: 0, count: 0,
+          amount: this.props.classesByBranch[index - 1].amount, cash: 0, card: 0, digital: 0, cheque: 0, giftcard: 0, discount: 0, count: 0,
           tax: this.props.classesByBranch[index - 1].amount * this.props.classesByBranch[index - 1].vat.taxPercent / 100,
           taxPercent: this.props.classesByBranch[index - 1].vat.taxPercent
         })
@@ -271,6 +307,26 @@ class BookAClass extends Component {
     })
   }
 
+  setCard(e, total) {
+    const { t } = this.props
+    if (this.state.showCheque) {
+      this.setState(validator(e, 'card', 'numberText', [t('Enter amount'), t('Enter valid amount')]), () => {
+        if (this.state.card <= total.toFixed(3) && this.state.card >= 0) {
+          const cheque = (total.toFixed(3) - this.state.card).toFixed(3)
+          this.setState({
+            cheque,
+            chequeE: ''
+          })
+        } else {
+          this.setState({
+            chequeE: t('Enter valid amount'),
+            cheque: 0
+          })
+        }
+      })
+    }
+  }
+
   setCardNumber(e) {
     const { t } = this.props
     if (e.target.value.length <= 4) {
@@ -294,8 +350,8 @@ class BookAClass extends Component {
 
   handleSubmit(total) {
     const { t } = this.props
-    const { branch, classes, member, amount, cash, card, cardE, discount, tax, giftcard, cardNumber, memberTransactionId, cashE, digital, digitalE } = this.state
-    if (branch && classes && member && amount && (parseInt(total) === parseInt((+cash || 0) + (+card || 0) + (+digital || 0))) && !cardE && !cashE && !digitalE) {
+    const { branch, classes, member, amount, cash, card, cardE, discount, tax, giftcard, cardNumber, memberTransactionId, cashE, digital, digitalE, cheque } = this.state
+    if (branch && classes && member && amount && (parseInt(total) === parseInt((+cash || 0) + (+card || 0) + (+digital || 0) + (+cheque || 0))) && !cardE && !cashE && !digitalE) {
       const bookClassInfo = {
         member: member._id,
         classId: classes,
@@ -316,7 +372,7 @@ class BookAClass extends Component {
       if (!branch) this.setState({ branchE: t('Enter branch name') })
       if (!member) this.setState({ memberE: t('Select member') })
       if (!classes) this.setState({ classesE: t('Select class') })
-      if (parseInt(total) !== parseInt((+cash || 0) + (+card || 0) + (+digital || 0))) this.setState({ cashE: t('Enter amount') })
+      if (parseInt(total) !== parseInt((+cash || 0) + (+card || 0) + (+digital || 0) + (+cheque || 0))) this.setState({ cashE: t('Enter amount') })
     }
   }
 
@@ -342,24 +398,24 @@ class BookAClass extends Component {
     if (subTotal) {
       if (this.state.discountMethod === 'percent') {
         if (this.state.count && this.state.count <= 100) {
-          this.setState({ discount: parseFloat(this.state.count ? this.state.count : 0) / 100 * subTotal, cash: 0, card: 0, digital: 0 }, () => {
+          this.setState({ discount: parseFloat(this.state.count ? this.state.count : 0) / 100 * subTotal, cash: 0, card: 0, digital: 0, cheque: 0 }, () => {
             const tax = (subTotal - this.state.discount - this.state.giftCard) * parseFloat(this.state.taxPercent) / 100
             this.setState({ tax })
           })
         } else {
-          this.setState({ discount: 0, count: 0, cash: 0, card: 0, digital: 0 }, () => {
+          this.setState({ discount: 0, count: 0, cash: 0, card: 0, digital: 0, cheque: 0 }, () => {
             const tax = (subTotal - this.state.discount - this.state.giftCard) * parseFloat(this.state.taxPercent) / 100
             this.setState({ tax })
           })
         }
       } else {
         if (this.state.count && this.state.count <= subTotal) {
-          this.setState({ discount: parseFloat(this.state.count ? this.state.count : 0), cash: 0, card: 0, digital: 0 }, () => {
+          this.setState({ discount: parseFloat(this.state.count ? this.state.count : 0), cash: 0, card: 0, digital: 0, cheque: 0 }, () => {
             const tax = (subTotal - this.state.discount - this.state.giftCard) * parseFloat(this.state.taxPercent) / 100
             this.setState({ tax })
           })
         } else {
-          this.setState({ discount: 0, count: 0, cash: 0, card: 0, digital: 0 }, () => {
+          this.setState({ discount: 0, count: 0, cash: 0, card: 0, digital: 0, cheque: 0 }, () => {
             const tax = (subTotal - this.state.discount - this.state.giftCard) * parseFloat(this.state.taxPercent) / 100
             this.setState({ tax })
           })
@@ -370,7 +426,7 @@ class BookAClass extends Component {
 
   addGiftcard(subTotalGiftCard) {
     if (this.state.member) {
-      subTotalGiftCard && this.setState({ subTotalGiftCard, cash: 0, card: 0, digital: 0 }, () => {
+      subTotalGiftCard && this.setState({ subTotalGiftCard, cash: 0, card: 0, digital: 0, cheque: 0 }, () => {
         if (this.state.text !== this.state.redeemCode) {
           this.setState({ giftcard: 0 })
           this.props.dispatch(getAmountByRedeemCode({ code: this.state.text, memberId: this.state.member._id }))
@@ -392,6 +448,7 @@ class BookAClass extends Component {
     let total = subTotal - discount - giftcard + tax
 
     let totalLeftAfterDigital = total - digital
+    let totalLeftAfterCash = total - digital - cash
 
     let avatarPath = this.props.branches && this.props.branches.filter(b => b._id === branch)[0] &&
       this.props.branches.filter(b => b._id === branch)[0].avatar && this.props.branches.filter(b => b._id === branch)[0].avatar.path
@@ -574,77 +631,93 @@ class BookAClass extends Component {
                   <label htmlFor="addCard" className="mx-sm-2 inlineFormLabel mb-1">{t('Card')}</label>
                   <div className={this.state.cardE ? "form-control mx-sm-2 inlineFormInputs FormInputsError w-100 p-0 d-flex align-items-center bg-white dirltr" : "form-control mx-sm-2 inlineFormInputs w-100 p-0 d-flex align-items-center bg-white dirltr"}>
                     <label htmlFor="addCard" className="text-danger my-0 mx-1 font-weight-bold">{this.props.defaultCurrency}</label>
-                    <input readOnly type="number" autoComplete="off" className="border-0 bg-light w-100 h-100 p-1 bg-white" id="addCard" value={card} />
+                    <input type="number" autoComplete="off" className="border-0 bg-light w-100 h-100 p-1 bg-white" id="addCard" value={card} onChange={(e) => this.setCard(e, totalLeftAfterCash)} />
                   </div>
                   <div className="errorMessageWrapper">
                     <small className="text-danger mx-sm-2 errorMessage">{this.state.cardE}</small>
                   </div>
                 </div>
               </div>
-              <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
-                <div className="form-group inlineFormGroup mb-3">
-                  <label htmlFor="addCardNumber" className="mx-sm-2 inlineFormLabel mb-1">{t('Card Number (last 4 digits)')}</label>
-                  <input type="number" autoComplete="off" className="form-control mx-sm-2 inlineFormInputs bg-white" id="addCard4lastno"
-                    value={this.state.cardNumber} onChange={(e) => this.setCardNumber(e)}
-                  />
+              {parseFloat(card) ?
+                <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
+                  <div className="form-group inlineFormGroup mb-3">
+                    <label htmlFor="addCardNumber" className="mx-sm-2 inlineFormLabel mb-1">{t('Card Number (last 4 digits)')}</label>
+                    <input type="text" autoComplete="off" className={this.state.cardNumberE ? "form-control mx-sm-2 inlineFormInputs FormInputsError bg-white" : "form-control mx-sm-2 inlineFormInputs bg-white"} id="addCard4lastno"
+                      value={this.state.cardNumber} onChange={(e) => this.setCardNumber(e)}
+                    />
+                  </div>
                 </div>
-              </div>
+                : null
+              }
               <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
-                <div className="form-group inlineFormGroup mb-3">
+                <div className="form-group inlineFormGroup">
                   <label className="mx-sm-2 inlineFormLabel mb-1"></label>
                   <div className="d-flex">
                     <div className="custom-control custom-checkbox roundedGreenRadioCheck mx-2">
-                      <input type="checkbox" className="custom-control-input" id="check" name="checkorNo" />
+                      <input type="checkbox" className="custom-control-input" id="check" name="checkorNo"
+                        checked={this.state.showCheque} onChange={() => this.setState({ showCheque: !this.state.showCheque, cash: 0, card: 0, digital: 0, cheque: 0 })}
+                      />
                       <label className="custom-control-label" htmlFor="check">{t('Cheque')}</label>
                     </div>
                   </div>
                 </div>
               </div>
               {/* if cheque */}
-              <div className="col-12">
-                <div className="row">
-                  <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
-                    <div className="form-group inlineFormGroup mb-3">
-                      <label htmlFor="bankName" className="mx-sm-2 inlineFormLabel mb-1">{t('Bank Name')}</label>
-                      <input type="number" autoComplete="off" className="form-control mx-sm-2 inlineFormInputs FormInputsError w-100 py-0 px-2 d-flex align-items-center bg-white dirltr" id="bankName" />
-                      <div className="errorMessageWrapper">
-                        <small className="text-danger mx-sm-2 errorMessage"></small>
+              {this.state.showCheque &&
+                <div className="col-12">
+                  <div className="row">
+                    <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
+                      <div className="form-group inlineFormGroup mb-3">
+                        <label htmlFor="bankName" className="mx-sm-2 inlineFormLabel mb-1">{t('Bank Name')}</label>
+                        <input type="text" autoComplete="off" className={this.state.bankNameE ? "form-control mx-sm-2 inlineFormInputs FormInputsError w-100 py-0 px-2 d-flex align-items-center bg-white dirltr" : "form-control mx-sm-2 inlineFormInputs w-100 py-0 px-2 d-flex align-items-center bg-white dirltr"}
+                          id="bankName"
+                          value={this.state.bankName} onChange={(e) => this.setState({ bankName: e.target.value })}
+                        />
+                        <div className="errorMessageWrapper">
+                          <small className="text-danger mx-sm-2 errorMessage"></small>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
-                    <div className="form-group inlineFormGroup mb-3">
-                      <label htmlFor="CheckNumber" className="mx-sm-2 inlineFormLabel mb-1">{t('Cheque Number')}</label>
-                      <input type="number" autoComplete="off" className="form-control mx-sm-2 inlineFormInputs FormInputsError w-100 py-0 px-2 d-flex align-items-center bg-white dirltr" id="CheckNumber" />
-                      <div className="errorMessageWrapper">
-                        <small className="text-danger mx-sm-2 errorMessage"></small>
+                    <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
+                      <div className="form-group inlineFormGroup mb-3">
+                        <label htmlFor="CheckNumber" className="mx-sm-2 inlineFormLabel mb-1">{t('Cheque Number')}</label>
+                        <input type="text" autoComplete="off" className={this.state.chequeNumberE ? "form-control mx-sm-2 inlineFormInputs FormInputsError w-100 py-0 px-2 d-flex align-items-center bg-white dirltr" : "form-control mx-sm-2 inlineFormInputs w-100 py-0 px-2 d-flex align-items-center bg-white dirltr"}
+                          id="CheckNumber"
+                          value={this.state.chequeNumber} onChange={(e) => this.setState({ chequeNumber: e.target.value })}
+                        />
+                        <div className="errorMessageWrapper">
+                          <small className="text-danger mx-sm-2 errorMessage"></small>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
-                    <div className="form-group inlineFormGroup mb-3">
-                      <label htmlFor="CheckDate" className="mx-sm-2 inlineFormLabel mb-1">{t('Cheque Date')}</label>
-                      <input type="number" autoComplete="off" className="form-control mx-sm-2 inlineFormInputs FormInputsError w-100 p-0 d-flex align-items-center bg-white dirltr" id="CheckDate" />
-                      <div className="errorMessageWrapper">
-                        <small className="text-danger mx-sm-2 errorMessage"></small>
+                    <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
+                      <div className="form-group inlineFormGroup mb-3">
+                        <label htmlFor="CheckDate" className="mx-sm-2 inlineFormLabel mb-1">{t('Cheque Date')}</label>
+                        <input type="text" autoComplete="off" className={this.state.chequeDateE ? "form-control mx-sm-2 inlineFormInputs FormInputsError w-100 p-0 d-flex align-items-center bg-white dirltr" : "form-control mx-sm-2 inlineFormInputs w-100 p-0 d-flex align-items-center bg-white dirltr"}
+                          id="CheckDate"
+                          value={this.state.chequeDate} onChange={(e) => this.setState({ chequeDate: e.target.value })}
+                        />
+                        <div className="errorMessageWrapper">
+                          <small className="text-danger mx-sm-2 errorMessage"></small>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
-                    <div className="form-group inlineFormGroup mb-3">
-                      <label htmlFor="ChequeAmount" className="mx-sm-2 inlineFormLabel mb-1">{t('Cheque Amount')}</label>
-                      {/* here currency comes , so change errorclass for div below */}
-                      <div className="form-control mx-sm-2 inlineFormInputs FormInputsError w-100 p-0 d-flex align-items-center bg-white dirltr">
-                        <label htmlFor="ChequeAmount" className="text-danger my-0 mx-1 font-weight-bold">{this.props.defaultCurrency}</label>
-                        <input type="number" autoComplete="off" className="border-0 bg-light w-100 h-100 p-1 bg-white" id="ChequeAmount" />
-                      </div>
-                      <div className="errorMessageWrapper">
-                        <small className="text-danger mx-sm-2 errorMessage"></small>
+                    <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
+                      <div className="form-group inlineFormGroup mb-3">
+                        <label htmlFor="ChequeAmount" className="mx-sm-2 inlineFormLabel mb-1">{t('Cheque Amount')}</label>
+                        {/* here currency comes , so change errorclass for div below */}
+                        <div className={this.state.chequeE ? "form-control mx-sm-2 inlineFormInputs FormInputsError w-100 p-0 d-flex align-items-center bg-white dirltr" : "form-control mx-sm-2 inlineFormInputs w-100 p-0 d-flex align-items-center bg-white dirltr"}>
+                          <label htmlFor="ChequeAmount" className="text-danger my-0 mx-1 font-weight-bold">{this.props.defaultCurrency}</label>
+                          <input disabled type="number" autoComplete="off" className="border-0 bg-light w-100 h-100 p-1 bg-white" id="ChequeAmount" value={this.state.cheque} />
+                        </div>
+                        <div className="errorMessageWrapper">
+                          <small className="text-danger mx-sm-2 errorMessage"></small>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
+              }
               {/* if cheque over */}
               <div className="col-12">
                 <div className="px-sm-1 pt-4 pb-5"><button type="button" className="btn btn-block btn-success btn-lg" onClick={() => this.handleSubmit(total)}>{t('Checkout')}</button></div>

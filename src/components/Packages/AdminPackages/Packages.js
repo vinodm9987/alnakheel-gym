@@ -20,7 +20,7 @@ import '@progress/kendo-react-popup'
 import '@progress/kendo-date-math'
 import '@progress/kendo-react-dropdowns'
 import { getAllBranch } from '../../../actions/branch.action';
-import Select from 'react-select'
+// import Select from 'react-select'
 
 class Packages extends Component {
 
