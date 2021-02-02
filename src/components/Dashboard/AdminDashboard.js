@@ -608,7 +608,7 @@ class AdminDashboard extends Component {
 
             <div className="col-12 d-flex flex-wrap align-items-center justify-content-between py-1 mb-auto">
               <h6 className="mx-1 my-2 SegoeBold py-1">Pending Installments</h6>
-              {/* <div className="d-flex flex-wrap align-items-center">
+              <div className="d-flex flex-wrap align-items-center">
                 <span className="position-relative mx-1 my-2">
                   <select className="bg-white border-secondary border-secondary pr-4 pl-1 mw-100" style={{ fontSize: "13px" }} value={this.state.pendingYear} onChange={(e) => this.setMonthYear(pendingMonth, e.target.value)}>
                     {systemYears.map(year => {
@@ -619,7 +619,20 @@ class AdminDashboard extends Component {
                     <span className="iconv1 iconv1-arrow-down"></span>
                   </span>
                 </span>
-              </div> */}
+                <span className="position-relative mx-1 my-2">
+                  <select className="bg-white border-secondary border-secondary pr-4 pl-1 mw-100" style={{ fontSize: "13px" }}
+                    value={pendingMonth} onChange={(e) => this.setMonthYear(e.target.value, pendingYear)} >
+                    {monthSmallNamesCaps.map((month, i) => {
+                      return (
+                        <option key={i} value={i}>{t(month)}</option>
+                      )
+                    })}
+                  </select>
+                  <span className="position-absolute d-flex align-items-center justify-content-end w-100 h-100 pointerNone px-2" style={{ top: '0', left: '0' }}>
+                    <span className="iconv1 iconv1-arrow-down"></span>
+                  </span>
+                </span>
+              </div>
               <div className="underline w-100"></div>
             </div>
 
@@ -634,7 +647,7 @@ class AdminDashboard extends Component {
                       </div> */}
                       <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
                         <div className="row d-block d-sm-flex justify-content-start">
-                          <div className="col w-auto px-1 flexBasis-auto flex-grow-0" >
+                          {/* <div className="col w-auto px-1 flexBasis-auto flex-grow-0" >
                             <div className="d-flex flex-wrap align-items-center">
                               <span className="position-relative mx-1 my-1">
                                 <select className="bg-white border-secondary border-secondary pr-4 pl-1 w-100" style={{ fontSize: "13px" }}
@@ -650,8 +663,8 @@ class AdminDashboard extends Component {
                                 </span>
                               </span>
                             </div>
-                          </div>
-                          <div className="col w-auto px-1 flexBasis-auto flex-grow-0" >
+                          </div> */}
+                          {/* <div className="col w-auto px-1 flexBasis-auto flex-grow-0" >
                             <div className="d-flex flex-wrap align-items-center">
                               <span className="position-relative mx-1 my-1">
                                 <select className="bg-white border-secondary border-secondary pr-4 pl-1 w-100" style={{ fontSize: "13px" }} value={this.state.pendingYear} onChange={(e) => this.setMonthYear(pendingMonth, e.target.value)}>
@@ -664,7 +677,7 @@ class AdminDashboard extends Component {
                                 </span>
                               </span>
                             </div>
-                          </div>
+                          </div> */}
                           <div className="col w-auto px-2">
                             <div className="row">
                               <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
