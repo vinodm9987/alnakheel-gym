@@ -1,4 +1,6 @@
 import React, { Component } from 'react'
+import DateFnsUtils from '@date-io/date-fns';
+import { DatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 
 class PendingInstallments extends Component {
     render() {
@@ -62,7 +64,7 @@ class PendingInstallments extends Component {
                                                         <th>Package</th>
                                                         <th>Amount</th>
                                                         <th>Due Date</th>
-                                                        <th></th>
+                                                        <th className="text-center w-50px">Action</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -82,9 +84,11 @@ class PendingInstallments extends Component {
                                                         <td>12/02/2020</td>
                                                         <td className="text-center">
                                                             <span className="d-inline-flex">
-                                                                <button type="button" className="btn btn-success btn-sm w-100px rounded-50px mx-1" data-toggle="modal" data-target="#allreadyPaid">Paid</button>
                                                                 <button type="button" className="btn btn-success btn-sm w-100px rounded-50px mx-1" data-toggle="modal" data-target="#notYetPaid">Pay</button>
                                                                 <a href="/#" className="btn btn-primary br-50px w-100px btn-sm px-3 mx-1">Details</a>
+                                                                <span className="bg-success action-icon w-30px h-30px rounded-circle d-flex align-items-center justify-content-center mx-1 text-white pointer" data-toggle="modal" data-target="#Duedate">
+                                                                    <span className="iconv1 iconv1-edit"></span>
+                                                                </span>
                                                             </span>
                                                         </td>
                                                     </tr>
@@ -104,9 +108,11 @@ class PendingInstallments extends Component {
                                                         <td>12/02/2020</td>
                                                         <td className="text-center">
                                                             <span className="d-inline-flex">
-                                                                <button type="button" className="btn btn-success btn-sm w-100px rounded-50px mx-1" data-toggle="modal" data-target="#allreadyPaid">Paid</button>
                                                                 <button type="button" className="btn btn-success btn-sm w-100px rounded-50px mx-1" data-toggle="modal" data-target="#notYetPaid">Pay</button>
                                                                 <a href="/#" className="btn btn-primary br-50px w-100px btn-sm px-3 mx-1">Details</a>
+                                                                <span className="bg-success action-icon w-30px h-30px rounded-circle d-flex align-items-center justify-content-center mx-1 text-white pointer" data-toggle="modal" data-target="#Duedate">
+                                                                    <span className="iconv1 iconv1-edit"></span>
+                                                                </span>
                                                             </span>
                                                         </td>
                                                     </tr>
@@ -124,13 +130,12 @@ class PendingInstallments extends Component {
 
 
 
-
-                    {/* if paid */}
-                    <div className="modal fade commonYellowModal" id="allreadyPaid">
+                    {/* if Due date popup */}
+                    <div className="modal fade commonYellowModal" id="Duedate">
                         <div className="modal-dialog modal-dialog-centered">
                             <div className="modal-content">
                                 <div className="modal-header">
-                                    <h4 className="modal-title">Payment</h4>
+                                    <h4 className="modal-title">Edit</h4>
                                     <button type="button" className="close" data-dismiss="modal">
                                         <span className="iconv1 iconv1-close"></span>
                                     </button>
@@ -138,11 +143,28 @@ class PendingInstallments extends Component {
                                 <div className="modal-body px-0">
                                     <div className="container-fluid">
                                         <div className="row">
-                                            <div className="col-12 py-3 text-center">
-                                                <span className="justify-content-center align-items-center d-inline-flex rounded-circle w-50px h-50px" style={{ backgroundColor: 'rgb(139, 196, 64)' }}>
-                                                    <h4 className="iconv1 iconv1-tick m-0"><span className="path1"></span><span className="path2"></span></h4>
-                                                </span>
-                                                <h3 className="font-weight-normal pt-3 pb-2 mt-2">You have already paid</h3>
+                                            <div className="col-12">
+                                                <div className="form-group position-relative">
+                                                    <label>Due date</label>
+                                                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                                                        <DatePicker
+                                                            variant='inline'
+                                                            InputProps={{
+                                                                disableUnderline: true,
+                                                            }}
+                                                            autoOk
+                                                            maxDate={new Date()}
+                                                            invalidDateMessage=''
+                                                            className="form-control pl-2 bg-white FormInputsError border pt-1"
+                                                            minDateMessage=''
+                                                            format="dd/MM/yyyy"
+                                                        />
+                                                    </MuiPickersUtilsProvider>
+                                                    <span className="iconv1 iconv1-calander dateBoxIcon"></span>
+                                                    <div className="errorMessageWrapper">
+                                                        <small className="text-danger errorMessage">Err</small>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -150,8 +172,7 @@ class PendingInstallments extends Component {
                             </div>
                         </div>
                     </div>
-                    {/* -/ if paid over */}
-
+                    {/* -/ Due date popup over */}
 
                     {/* if not paid */}
                     {/* <div className="modal fade commonYellowModal" id="notYetPaid" ref='notYetPaid'>
@@ -334,7 +355,7 @@ class PendingInstallments extends Component {
                             </div>
                         </div>
                     </div> */}
-                    {/* -/ if not paid over */}
+                    {/* -/ not paid over */}
 
 
 
