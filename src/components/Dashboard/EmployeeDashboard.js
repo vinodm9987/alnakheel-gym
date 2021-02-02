@@ -196,7 +196,6 @@ class EmployeeDashboard extends Component {
               </div>
             </div>
 
-            <p>Total {total}</p>
 
             {/* <div className="col-12 d-flex flex-wrap align-items-center justify-content-end mt-auto">
               <h5 className="d-flex align-items-center mx-3 my-3">
