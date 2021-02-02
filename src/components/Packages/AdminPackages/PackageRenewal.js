@@ -309,8 +309,8 @@ class PackageRenewal extends Component {
   handleSubmit(totalAmount) {
     const { t } = this.props
     const { packages, cardNumber, cash, card, packageAmount, member, discount, tax, giftcard, memberTransactionId, cashE, cardE, digital, digitalE,
-      startDate, endDate } = this.state
-    if (member && packages && (parseInt(totalAmount) === parseInt((+cash || 0) + (+card || 0) + (+digital || 0))) && !cardE && !cashE && !digitalE && startDate <= endDate) {
+      startDate, endDate, cheque } = this.state
+    if (member && packages && (parseInt(totalAmount) === parseInt((+cash || 0) + (+card || 0) + (+digital || 0) + (+cheque || 0))) && !cardE && !cashE && !digitalE && startDate <= endDate) {
       const memberInfo = {
         // oldPackageId,
         memberId: member._id,
@@ -335,7 +335,7 @@ class PackageRenewal extends Component {
     } else {
       if (!packages) this.setState({ packagesE: t('Enter package name') })
       if (!member) this.setState({ memberE: t('Select member') })
-      if (parseInt(totalAmount) !== parseInt((+cash || 0) + (+card || 0) + (+digital || 0))) this.setState({ cashE: t('Enter amount') })
+      if (parseInt(totalAmount) !== parseInt((+cash || 0) + (+card || 0) + (+digital || 0) + (+cheque || 0))) this.setState({ cashE: t('Enter amount') })
       if (startDate > endDate) this.setState({ endDateE: t('End Date should be greater than Start Date') })
     }
   }

@@ -593,12 +593,15 @@ class AdminDashboard extends Component {
     const { t } = this.props
     if (this.props.pendingInstallments) {
       const { pendingMonth, pendingYear } = this.state
-      let systemYears = []
+      let systemYears = [], totalPendingAmount = 0
       if (this.props.systemYear) {
         for (let i = new Date(this.props.systemYear.year).getFullYear(); i <= new Date().getFullYear(); i++) {
           systemYears.push(i)
         }
       }
+      this.props.pendingInstallments.forEach(installment => {
+        totalPendingAmount += installment.packageAmount ? installment.packageAmount : 0
+      })
       return (
         <div className="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-4 d-flex mt-3">
           <div className="row m-0 w-100 mw-100 bg-light rounded d-flex align-items-start h-100">
@@ -664,9 +667,9 @@ class AdminDashboard extends Component {
                           </div>
                           <div className="col w-auto px-2">
                             <div className="row">
-                              <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                  <h6>Total Amount</h6>
-                                  <h5 class="font-weight-bold dirltrtar text-success">BHD 0.00</h5>
+                              <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                <h6>Total Amount</h6>
+                                <h5 className="font-weight-bold dirltrtar text-success">{this.props.defaultCurrency} {totalPendingAmount.toFixed(3)}</h5>
                               </div>
                             </div>
                           </div>
@@ -686,12 +689,13 @@ class AdminDashboard extends Component {
                               <th><small>Member Name</small></th>
                               <th><small>Amount</small></th>
                               <th><small>Due Date</small></th>
+                              <th><small>Type</small></th>
                               {/* <th></th> */}
                             </tr>
                           </thead>
                           <tbody>
                             {this.props.pendingInstallments.map((pendingInstallment, i) => {
-                              const { credentialId: { avatar, userName, email }, packageAmount, dueDate } = pendingInstallment
+                              const { credentialId: { avatar, userName, email }, packageAmount, dueDate, type } = pendingInstallment
                               return (
                                 <tr key={i}>
                                   <td>
@@ -705,6 +709,7 @@ class AdminDashboard extends Component {
                                   </td>
                                   <td><p className="text-warning SegoeBold m-0 dirltrtar">{this.props.defaultCurrency} {packageAmount}</p></td>
                                   <td>{dateToDDMMYYYY(dueDate)}</td>
+                                  <td>{type}</td>
                                   {/* <td className="text-center">
                               <a href="/#" className="dboard-btn-icon-primary">
                                 <span className="iconv1 iconv1-right-small-arrow"></span>
