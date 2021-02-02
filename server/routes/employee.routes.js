@@ -1,6 +1,6 @@
 const { createNewEmployee, getAllActiveEmployee, getEmployeeById, getAllEmployee,
     getAllEmployeeByFilter, updateEmployee, getTrainerByBranch, getActiveTrainer,
-    updateEmployeeFingerPrint, updateEmployeeFaceRecognition,
+    updateEmployeeFaceRecognition,
     updateStatusOfEmployee, getAllMemberOfTrainer, updateEmployeeProfile, trainerRating } = require('../controller/employee/employee.controller')
 
 
@@ -20,7 +20,6 @@ exports.routes = (express, app) => {
 
     router.post('/createNewEmployee', createNewEmployee)
 
-    router.post('/updateEmployeeFingerPrint', updateEmployeeFingerPrint)
 
     router.post('/updateEmployeeFaceRecognition', updateEmployeeFaceRecognition)
 

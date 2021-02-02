@@ -11,7 +11,7 @@ const { logger: { logger }, upload: { uploadAvatar },
 
 
 const { Mailer: { sendMail, }, Formate: { setTime, convertToDate }, IdGenerator: { createId, generateOrderId },
-    Referral: { updateTransaction, addPointOfPolicy, checkExpiry, pendingPaymentToGetPoint, checkExpiryOfPolicy } } = require('../../utils');
+    Referral: { updateTransaction, addPointOfPolicy, checkExpiry, pendingPaymentToGetPoint, checkExpiryOfPolicy, addPointOfReferral } } = require('../../utils');
 
 
 const { updateMemberInBioStar, bioStarToken,
