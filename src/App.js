@@ -217,7 +217,7 @@ class App extends Component {
             ?
             <Switch>
               <Route exact path='/' component={Login} />
-              <Route path='/sign-up' component={Register} />
+              {/* <Route path='/sign-up' component={Register} /> */}
               <Route path='/forgot-password' component={ForgotPassword} />
               <Route path="/login" component={Login} />
               <Redirect to='/login' />
