@@ -16,6 +16,7 @@ import handright from '../../assets/img/fingerhand-right.png';
 import Nationality from '../../utils/apis/country.json';
 import { scrollToTop, validator } from '../../utils/apis/helpers';
 import { disableSubmit } from '../../utils/disableButton';
+import faceRecBefore from '../../assets/img/faceRecBefore.png'
 
 class CreateEmployeeForm extends Component {
 
@@ -64,7 +65,7 @@ class CreateEmployeeForm extends Component {
       passwordE: '',
       showPass: false,
       index: null,
-      biometricType: 'finger',
+      biometricType: 'face',
       showFingerPopup: false,
     }
     if (this.props.location.aboutProps && this.props.currentEmployee) {
@@ -112,7 +113,7 @@ class CreateEmployeeForm extends Component {
         passwordE: '',
         showPass: false,
         index: null,
-        biometricType: 'finger',
+        biometricType: 'face',
         showFingerPopup: false,
       }
       scrollToTop()
@@ -160,7 +161,7 @@ class CreateEmployeeForm extends Component {
         passwordE: '',
         showPass: false,
         index: null,
-        biometricType: 'finger',
+        biometricType: 'face',
         showFingerPopup: false,
       }
     }
@@ -854,184 +855,8 @@ class CreateEmployeeForm extends Component {
                 }
                 <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
                   <div className="justify-content-sm-end d-flex">
-                    <button disabled={disableSubmit(this.props.loggedUser, 'Human Resources', 'Employees')} type="button" className="btn btn-success mx-1 px-4" onClick={() => this.handleNext()}>{employeeId ? t('Update') : t('Submit')}</button>
+                    <button disabled={disableSubmit(this.props.loggedUser, 'Human Resources', 'Employees')} type="button" className="btn btn-success mx-1 px-4" onClick={() => this.handleSubmit()}>{employeeId ? t('Update') : t('Submit')}</button>
                     <button type="button" className="btn btn-danger mx-1 px-4" onClick={() => this.handleCancel()}>{t('Cancel')}</button>
-                  </div>
-                </div>
-
-                {/* make active below while click of submit */}
-                <div className={this.state.showFingerPopup ? "bio-popup active" : "bio-popup"}>
-                  <div className="bio-popup-inner">
-                    <div className="commonYellowModal">
-                      <div className="modal-content">
-                        <div className="modal-header">
-                          <h4 className="modal-title">Biometric Details</h4>
-                          {/* make active remove by below button  */}
-                          <button type="button" className="close" ref="repairAssetsClose" onClick={() => this.setState({ showFingerPopup: false })}><span className="iconv1 iconv1-close"></span></button>
-                        </div>
-                        <div className="modal-body px-0">
-                          <div className="container-fluid">
-                            <div className="row">
-                              <div className="col-12">
-                                <div className="col-12 py-3 d-flex flex-wrap align-items-center">
-                                  <div className="px-3">
-                                    <div className="custom-control custom-checkbox roundedGreenRadioCheck">
-                                      <input type="radio" className="custom-control-input" id="ForFinger" name="FingOrFace"
-                                        checked={this.state.biometricType === 'finger'} onChange={() => this.setState({ biometricType: 'finger' })}
-                                      />
-                                      <label className="custom-control-label" htmlFor="ForFinger">Finger Print</label>
-                                    </div>
-                                  </div>
-                                  <div className="px-3">
-                                    <div className="custom-control custom-checkbox roundedGreenRadioCheck">
-                                      <input type="radio" className="custom-control-input" id="ForFace" name="FingOrFace"
-                                        checked={this.state.biometricType === 'face'} onChange={() => this.setState({ biometricType: 'face' })}
-                                      />
-                                      <label className="custom-control-label" htmlFor="ForFace">Face</label>
-                                    </div>
-                                  </div>
-                                </div>
-                                <div className="col-12">
-                                  {this.state.biometricType === 'finger'
-                                    ? <div className="row form-inline">
-                                      <div className="col-12 d-flex flex-wrap justify-content-between align-items-center">
-                                        <h4 className="m-0 p-2">Enroll Fingerprint</h4>
-                                        <div className="p-2 colorRoundRadioCheck-blue">
-                                          <div className="custom-control custom-radio custom-control-inline">
-                                          </div>
-                                          <div className="custom-control custom-radio custom-control-inline">
-                                            <button type="button" className="excludeblue-btn" id="passwordAskModalBtn" data-toggle="modal" data-target="#passwordAskModal">
-                                              <span className="excludeblue-btn-ring mr-2"></span>
-                                              <span>Exclude</span>
-                                            </button>
-                                          </div>
-                                          <div className="custom-control custom-radio custom-control-inline">
-                                          </div>
-                                        </div>
-                                      </div>
-                                      <button type="button" id="passwordAskModalBtn2" className="d-none" data-toggle="modal" data-target="#passwordAskModal" ref="passwordModalOpen">Open modal</button>
-                                      <div className="modal fade commonYellowModal" id="passwordAskModal">
-                                        <div className="modal-dialog modal-dialog-centered">
-                                          <div className="modal-content">
-                                            <div className="modal-header">
-                                              <h4 className="modal-title">{t('Password')}</h4>
-                                              <button type="button" className="close" data-dismiss="modal" ref="passwordModalClose">
-                                                <span className="iconv1 iconv1-close"></span>
-                                              </button>
-                                            </div>
-                                            <div className="modal-body px-0">
-                                              <div className="container-fluid">
-                                                <div className="row">
-                                                  <div className="col-12">
-                                                    <div className="form-group position-relative fle">
-                                                      <label htmlFor="password" className="m-0 text-secondary mx-sm-2">Password</label>
-                                                      <input type={this.state.showPass ? "text" : "password"} className={this.state.passwordE ? "form-control inlineFormInputs w-100 mx-sm-2 FormInputsError" : "form-control inlineFormInputs w-100 mx-sm-2"}
-                                                        value={this.state.password} onChange={(e) => this.setState(validator(e, 'password', 'text', [t('Enter password')]))}
-                                                      />
-                                                      <span className={this.state.showPass ? "iconv1 iconv1-eye passwordEye" : "iconv1 iconv1-eye passwordEye active"} onClick={() => this.setState({ showPass: !this.state.showPass })}></span>
-                                                      <div className="errorMessageWrapper">
-                                                        <small className="text-danger mx-sm-2 errorMessage">{this.state.passwordE}</small>
-                                                      </div>
-                                                    </div>
-                                                  </div>
-                                                  <div className="col-12 pt-3">
-                                                    <div className="justify-content-sm-end d-flex pt-4 pb-2">
-                                                      <button type="button" className="btn btn-success mx-1 px-4" onClick={() => this.handleSubmit()}>{t('Submit')}</button>
-                                                    </div>
-                                                  </div>
-                                                </div>
-                                              </div>
-                                            </div>
-                                          </div>
-                                        </div>
-                                      </div>
-                                      <div className="col-12 d-flex justify-content-center">
-                                        <div className="enroll-box-wrapper" dir="ltr">
-                                          <div className="enroll-box enroll-box-left">
-                                            <img src={handleft} alt="" className="enroll-left-image" />
-                                            <span className="enroll-span finger-left finger-left-1" onClick={() => this.handleSubmit(1)}>
-                                              {/* commented below beacuse not activated */}
-                                              {this.state.fingerIndex === 1 &&
-                                                <span className="iconv1 iconv1-tick finger-activate"><span className="path1"></span><span
-                                                  className="path2"></span></span>
-                                              }
-                                            </span>
-                                            <span className="enroll-span finger-left finger-left-2" onClick={() => this.handleSubmit(2)}>
-                                              {this.state.fingerIndex === 2 &&
-                                                <span className="iconv1 iconv1-tick finger-activate"><span className="path1"></span><span
-                                                  className="path2"></span></span>
-                                              }
-                                            </span>
-                                            <span className="enroll-span finger-left finger-left-3" onClick={() => this.handleSubmit(3)}>
-                                              {this.state.fingerIndex === 3 &&
-                                                <span className="iconv1 iconv1-tick finger-activate"><span className="path1"></span><span
-                                                  className="path2"></span></span>
-                                              }
-                                            </span>
-                                            <span className="enroll-span finger-left finger-left-4" onClick={() => this.handleSubmit(4)}>
-                                              {this.state.fingerIndex === 4 &&
-                                                <span className="iconv1 iconv1-tick finger-activate"><span className="path1"></span><span
-                                                  className="path2"></span></span>
-                                              }
-                                            </span>
-                                            <span className="enroll-span finger-left finger-left-5" onClick={() => this.handleSubmit(5)}>
-                                              {this.state.fingerIndex === 5 &&
-                                                <span className="iconv1 iconv1-tick finger-activate"><span className="path1"></span><span
-                                                  className="path2"></span></span>
-                                              }
-                                            </span>
-                                          </div>
-                                          <div className="enroll-box enroll-box-right">
-                                            <img src={handright} alt="" className="enroll-right-image" />
-                                            <span className="enroll-span finger-right finger-right-1" onClick={() => this.handleSubmit(6)}>
-                                              {this.state.fingerIndex === 6 &&
-                                                <span className="iconv1 iconv1-tick finger-activate"><span className="path1"></span><span
-                                                  className="path2"></span></span>
-                                              }
-                                            </span>
-                                            <span className="enroll-span finger-right finger-right-2" onClick={() => this.handleSubmit(7)}>
-                                              {this.state.fingerIndex === 7 &&
-                                                <span className="iconv1 iconv1-tick finger-activate"><span className="path1"></span><span
-                                                  className="path2"></span></span>
-                                              }
-                                            </span>
-                                            <span className="enroll-span finger-right finger-right-3" onClick={() => this.handleSubmit(8)}>
-                                              {this.state.fingerIndex === 8 &&
-                                                <span className="iconv1 iconv1-tick finger-activate"><span className="path1"></span><span
-                                                  className="path2"></span></span>
-                                              }
-                                            </span>
-                                            <span className="enroll-span finger-right finger-right-4" onClick={() => this.handleSubmit(9)}>
-                                              {this.state.fingerIndex === 9 &&
-                                                <span className="iconv1 iconv1-tick finger-activate"><span className="path1"></span><span
-                                                  className="path2"></span></span>
-                                              }
-                                            </span>
-                                            <span className="enroll-span finger-right finger-right-5" onClick={() => this.handleSubmit(10)}>
-                                              {this.state.fingerIndex === 10 &&
-                                                <span className="iconv1 iconv1-tick finger-activate"><span className="path1"></span><span
-                                                  className="path2"></span></span>
-                                              }
-                                            </span>
-                                          </div>
-                                        </div>
-                                      </div>
-                                      {/* <div className="col-12">
-                                      <div class="justify-content-sm-end d-flex">
-                                        <button type="button" class="btn btn-success mx-1 px-4">Submit</button>
-                                        <button type="button" class="btn btn-danger mx-1 px-4">Cancel</button>
-                                      </div>
-                                    </div> */}
-                                    </div>
-                                    : <button type="button" className="btn btn-success" id="faceButton" onClick={() => this.handleSubmit()}>Scan Face</button>
-                                  }
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
                   </div>
                 </div>
 
