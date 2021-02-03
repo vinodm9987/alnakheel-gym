@@ -57,10 +57,12 @@ module.exports = {
     createEmployeePackage: async () => {
         let isExist = await EmployeePackage.findOne({}).lean();
         if (!isExist) {
-            let { scheduleId, accessLevelId, accessGroupId, accessGroupName, userGroupId } = await addPackage('Employee Package', 0, 1439);
+            let { scheduleId, accessLevelId, accessGroupId, accessGroupName, userGroupId }
+                = await addPackage('Employee Package', 0, 1439);
             let obj = { scheduleId, accessLevelId, accessGroupId, accessGroupName, userGroupId };
             let newPackage = new EmployeePackage(obj);
-            await newPackage.save();
+            const response = await newPackage.save();
+            return response;
         }
     },
 
