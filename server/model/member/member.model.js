@@ -2,13 +2,16 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 
+
 const memberSchema = new Schema({
 
     /** 
      * general information of member
-    */
+     */
 
-    memberId: Number, dateOfBirth: Date, nationality: String,
+    memberId: Number,
+    dateOfBirth: Date,
+    nationality: String,
 
     mobileNo: { type: String, required: [true, 'Mobile no is required !'] },
 
@@ -18,9 +21,14 @@ const memberSchema = new Schema({
 
     walletPoints: { type: Number, default: 0 },
 
-    personalId: String, height: Number, startWeight: Number,
+    personalId: String,
+    height: Number,
+    startWeight: Number,
 
-    weight: Number, goal: Number, admissionDate: Date, emergencyNumber: String,
+    weight: Number,
+    goal: Number,
+    admissionDate: Date,
+    emergencyNumber: String,
 
     credentialId: { type: Schema.Types.ObjectId, ref: "Credential" },
 
@@ -33,7 +41,7 @@ const memberSchema = new Schema({
 
     /** 
      * package information of member
-    */
+     */
 
     isPackageSelected: { type: Boolean, default: true },
 
@@ -41,9 +49,12 @@ const memberSchema = new Schema({
 
         /** 
          * packages fields
-        */
+         */
 
-        startDate: Date, endDate: Date, extendDate: Date, isFreeze: Boolean,
+        startDate: Date,
+        endDate: Date,
+        extendDate: Date,
+        isFreeze: Boolean,
 
         packages: { type: Schema.Types.ObjectId, ref: "Package" },
 
@@ -57,33 +68,56 @@ const memberSchema = new Schema({
 
             paidStatus: { type: String, enum: ["Paid", "UnPaid"], default: "UnPaid" },
 
-            dueDate: Date, dateOfPaid: Date, timeOfInstallment: Date,
+            dueDate: Date,
+            dateOfPaid: Date,
+            timeOfInstallment: Date,
 
             paidType: { type: String, enum: ["Online", "Offline"] },
 
-            cardNumber: String, cashAmount: Number,
+            cardNumber: String,
+            cashAmount: Number,
 
-            cardAmount: Number, vatAmount: Number, discount: Number,
+            cardAmount: Number,
+            vatAmount: Number,
+            discount: Number,
 
-            digitalAmount: Number, chequeAmount: Number,
+            digitalAmount: Number,
+            chequeAmount: Number,
 
-            chequeNumber: String, bankName: String, chequeDate: Date,
+            chequeNumber: String,
+            bankName: String,
+            chequeDate: Date,
 
-            totalAmount: Number, actualAmount: Number,
+            totalAmount: Number,
+            actualAmount: Number,
 
         }],
 
-        paidType: { type: String, enum: ["Online", "Offline"] }, dateOfPaid: Date, timeOfPaid: Date,
+        paidType: { type: String, enum: ["Online", "Offline"] },
+        dateOfPaid: Date,
+        timeOfPaid: Date,
 
-        cardNumber: String, cashAmount: Number, cardAmount: Number, vatAmount: Number, discount: Number,
+        cardNumber: String,
+        cashAmount: Number,
+        cardAmount: Number,
+        vatAmount: Number,
+        discount: Number,
 
-        digitalAmount: Number, chequeAmount: Number, chequeNumber: String, bankName: String, chequeDate: Date,
+        digitalAmount: Number,
+        chequeAmount: Number,
+        chequeNumber: String,
+        bankName: String,
+        chequeDate: Date,
 
-        totalAmount: Number, actualAmount: Number, paypalObject: Object, freezeDate: Date, reactivationDate: Date,
+        totalAmount: Number,
+        actualAmount: Number,
+        paypalObject: Object,
+        freezeDate: Date,
+        reactivationDate: Date,
 
         /** 
          * trainer fields
-        */
+         */
 
         trainerDetails: [{
 
@@ -93,7 +127,9 @@ const memberSchema = new Schema({
 
             isExpiredTrainer: { type: Boolean, default: false },
 
-            trainerStart: Date, trainerEnd: Date, trainerExtend: Date,
+            trainerStart: Date,
+            trainerEnd: Date,
+            trainerExtend: Date,
 
             orderNo: String,
 
@@ -101,25 +137,46 @@ const memberSchema = new Schema({
 
                 paidStatus: { type: String, enum: ["Paid", "UnPaid"], default: "UnPaid" },
 
-                dueDate: Date, dateOfPaid: Date, timeOfInstallment: Date,
+                dueDate: Date,
+                dateOfPaid: Date,
+                timeOfInstallment: Date,
 
                 paidType: { type: String, enum: ["Online", "Offline"] },
 
-                cardNumber: String, cashAmount: Number, cardAmount: Number, vatAmount: Number, discount: Number,
+                cardNumber: String,
+                cashAmount: Number,
+                cardAmount: Number,
+                vatAmount: Number,
+                discount: Number,
 
-                digitalAmount: Number, chequeAmount: Number, chequeNumber: String, bankName: String, chequeDate: Date,
+                digitalAmount: Number,
+                chequeAmount: Number,
+                chequeNumber: String,
+                bankName: String,
+                chequeDate: Date,
 
-                totalAmount: Number, actualAmount: Number
+                totalAmount: Number,
+                actualAmount: Number
 
             }],
 
-            paidType: { type: String, enum: ["Online", "Offline"] }, dateOfPaid: Date,
+            paidType: { type: String, enum: ["Online", "Offline"] },
+            dateOfPaid: Date,
 
-            cardNumber: String, cashAmount: Number, cardAmount: Number, vatAmount: Number, discount: Number,
+            cardNumber: String,
+            cashAmount: Number,
+            cardAmount: Number,
+            vatAmount: Number,
+            discount: Number,
 
-            digitalAmount: Number, chequeAmount: Number, chequeNumber: String, bankName: String, chequeDate: Date,
+            digitalAmount: Number,
+            chequeAmount: Number,
+            chequeNumber: String,
+            bankName: String,
+            chequeDate: Date,
 
-            totalAmount: Number, actualAmount: Number
+            totalAmount: Number,
+            actualAmount: Number
 
         }],
 
@@ -132,7 +189,7 @@ const memberSchema = new Schema({
 
     /** 
      * biometric information of member
-    */
+     */
 
     doneFingerAuth: { type: Boolean, default: false },
 
