@@ -89,7 +89,8 @@
     "winston": "2.4.0",
     "ws": "^7.3.0",
     "xlsx": "^0.16.1",
-    "xml2js": "^0.4.23"
+    "xml2js": "^0.4.23",
+    "yarn": "^1.22.10"
   },
   "scripts": {
     "start": "set PORT=5001 && react-scripts start",
