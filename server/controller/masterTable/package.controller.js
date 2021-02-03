@@ -92,9 +92,7 @@ exports.addPackage = async (req, res) => {
             newPackage["startDate"] = setTime(startDate);
             newPackage["endDate"] = setTime(endDate);
             newPackage["image"] = req.files[0];
-            const startTimePackage = new Date(fromTime).getHours() * 60 + new Date(fromTime).getMinutes();
-            const toTimePackage = new Date(toTime).getHours() * 60 + new Date(toTime).getMinutes();
-            newPackage["bioStarInfo"] = await await addPackage(packageName, startTimePackage, toTimePackage);
+            newPackage["bioStarInfo"] = await await addPackage(packageName, 0, 1439);
             let response = await newPackage.save()
             let newResponse = await Package.findById(response._id).populate('accessBranches salesBranches').lean()
             let periodData = await Period.findById(response.period).lean()
