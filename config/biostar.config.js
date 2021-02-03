@@ -2,7 +2,7 @@
  * BIO STAR LOGIN URL
 */
 
-exports.BIO_STAR_LOGIN_URL = "http://skoolgo.pixelmindit.com:8795/v2/login";
+exports.BIO_STAR_LOGIN_URL = "http://127.0.0.1:8795/v2/login";
 
 
 /** 
@@ -200,7 +200,7 @@ exports.getUpdateUserObject = (data) => {
 
 
 exports.getFingerPrintUrl = (userId) => {
-    return `http://skoolgo.pixelmindit.com:8795/v2/users/${userId}/fingerprint_templates`
+    return `http://127.0.0.1:8795/v2/users/${userId}/fingerprint_templates`
 };
 
 
@@ -271,7 +271,7 @@ exports.getUserFreezeObject = (data, startDate, endDate) => {
 */
 
 
-exports.BIO_STAR_SCHEDULE_URL = "http://skoolgo.pixelmindit.com:8795/v2/schedules";
+exports.BIO_STAR_SCHEDULE_URL = "http://127.0.0.1:8795/v2/schedules";
 
 
 
@@ -280,7 +280,7 @@ exports.BIO_STAR_SCHEDULE_URL = "http://skoolgo.pixelmindit.com:8795/v2/schedule
 */
 
 
-exports.BIO_STAR_ACCESS_LEVEL_URL = "http://skoolgo.pixelmindit.com:8795/v2/access_levels";
+exports.BIO_STAR_ACCESS_LEVEL_URL = "http://127.0.0.1:8795/v2/access_levels";
 
 
 
@@ -289,7 +289,7 @@ exports.BIO_STAR_ACCESS_LEVEL_URL = "http://skoolgo.pixelmindit.com:8795/v2/acce
 */
 
 
-exports.BIO_STAR_USER_GROUP_URL = "http://skoolgo.pixelmindit.com:8795/v2/user_groups";
+exports.BIO_STAR_USER_GROUP_URL = "http://127.0.0.1:8795/v2/user_groups";
 
 
 
@@ -298,7 +298,7 @@ exports.BIO_STAR_USER_GROUP_URL = "http://skoolgo.pixelmindit.com:8795/v2/user_g
 */
 
 
-exports.BIO_STAR_ACCESS_GROUP_URL = "http://skoolgo.pixelmindit.com:8795/v2/access_groups";
+exports.BIO_STAR_ACCESS_GROUP_URL = "http://127.0.0.1:8795/v2/access_groups";
 
 
 
@@ -306,11 +306,11 @@ exports.BIO_STAR_ACCESS_GROUP_URL = "http://skoolgo.pixelmindit.com:8795/v2/acce
  * BIO STAR USER REGISTRATION SERVICE URL
 */
 
-exports.BIO_STAR_USER_REGISTRATION_URL = "http://skoolgo.pixelmindit.com:8795/v2/users";
+exports.BIO_STAR_USER_REGISTRATION_URL = "http://127.0.0.1:8795/v2/users";
 
 
 
-exports.BIO_STAR_IP = "http://skoolgo.pixelmindit.com:8795/v2";
+exports.BIO_STAR_IP = "http://127.0.0.1:8795/v2";
 
 
 exports.BIO_STAR_MACHINE_ID = "546844789";
