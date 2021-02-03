@@ -24,7 +24,8 @@ class BioMetric extends Component {
       biometricType: 'face',
       email: '',
       emailE: '',
-      edited: false
+      edited: false,
+      faceEnrolled: false
     }
   }
 
@@ -38,19 +39,37 @@ class BioMetric extends Component {
     } else if (this.props.memberById.selectedAuth === 'BioStation') {
       postData.selectedAuth = 'Both'
     }
-    if (this.props.memberById && this.props.memberById.faceRecognitionTemplate) {
-      this.props.dispatch(updateFaceRecognition(postData))
-    } else {
-      this.props.dispatch(addMemberFaceRecognition(postData))
-    }
+    this.props.dispatch(addMemberFaceRecognition(postData))
+  }
+
+  handleFaceUpdate() {
+    const el = findDOMNode(this.refs.passwordModalOpen);
+    $(el).click();
+    this.setState({ faceEnrolled: true })
   }
 
 
   handleFingerPrint(i) {
     const el = findDOMNode(this.refs.passwordModalClose);
-    const { password } = this.state
+    const { password, faceEnrolled } = this.state
     const { t } = this.props
-    if (this.props.memberById && !this.props.memberById.biometricTemplate && this.props.memberById.selectedAuth !== 'Exclude' && i) {
+    if (faceEnrolled) {
+      if (password) {
+        const postData = {
+          memberId: this.props.memberId,
+          password: password
+        }
+        if (!this.props.memberById.selectedAuth) {
+          postData.selectedAuth = 'FaceStation'
+        } else if (this.props.memberById.selectedAuth === 'BioStation') {
+          postData.selectedAuth = 'Both'
+        }
+        this.props.dispatch(updateFaceRecognition(postData))
+        $(el).click();
+      } else {
+        if (!password) this.setState({ passwordE: t('Enter password') })
+      }
+    } else if (this.props.memberById && !this.props.memberById.biometricTemplate && this.props.memberById.selectedAuth !== 'Exclude' && i) {
       const postData = {
         memberId: this.props.memberId,
         fingerIndex: i,
@@ -321,7 +340,7 @@ class BioMetric extends Component {
                     <span className="font-weight-bold">{t('Success!')}</span>
                   </h5>
                   <h5 className="my-3">{t('Your face scanning has successfully completed')}</h5>
-                  <button type="button" className="btn btn-success" id="faceButton" onClick={() => this.handleFaceRecognition()}>{t('Update Face')}</button>
+                  <button type="button" className="btn btn-success" id="faceButton" onClick={() => this.handleFaceUpdate()}>{t('Update Face')}</button>
                 </div>
                 : <div className="w-100 text-center">
                   <div className="w-100 d-flex justify-content-center">
