@@ -66,6 +66,8 @@ const memberSchema = new Schema({
 
         Installments: [{
 
+            installmentName: String,
+
             paidStatus: { type: String, enum: ["Paid", "UnPaid"], default: "UnPaid" },
 
             dueDate: Date,
@@ -134,6 +136,8 @@ const memberSchema = new Schema({
             orderNo: String,
 
             Installments: [{
+
+                installmentName: String,
 
                 paidStatus: { type: String, enum: ["Paid", "UnPaid"], default: "UnPaid" },
 
