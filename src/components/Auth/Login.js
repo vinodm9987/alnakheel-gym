@@ -140,10 +140,10 @@ class Login extends Component {
               <div className="col-12">
                 <button type="submit" className="btn btn-success btn-block mt-1 font-weight-bold">{t('LOGIN')}</button>
               </div>
-              <div className="col-12 d-flex flex-wrap justify-content-between py-3">
+              {/* <div className="col-12 d-flex flex-wrap justify-content-between py-3">
                 <h6><small className="mx-1 font-weight-bold">{t('Create an account?')}</small></h6>
                 <h6><small className="mx-1 font-weight-bold"><Link to="/sign-up" className="text-warning cursorPointer">{t('Sign Up')}</Link></small></h6>
-              </div>
+              </div> */}
             </div>
           </form>
         </div>
