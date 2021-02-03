@@ -2,11 +2,9 @@ const {
     getAllMember, createNewMember, generateToken, getMemberByCredentialId,
     updateMember, updateMemberAndAddPackage, createNewMemberByAdmin, getFirstRegisterMembers, payAtGymMobile,
     updateMemberDetails, getAllActiveMember, getAllActiveMemberOfTrainer, getMemberById,
-    getActiveRegisterMembers, getBioStarToken, addMemberFingerPrint, excludeMemberFingerPrint, getAllPendingMember, addMemberFaceRecognition,
-    updateFingerPrint, startPackage, updateMemberProfile, blackListUser, getActiveStatusRegisterMembers,
-    getActiveStatusNotExpiredRegisterMembers,
-    getExpiredMembers, getAboutToExpireMembers, getClassesMembers,
-    getCprData, getMemberByMemberId, bookTrainer
+    getActiveRegisterMembers, getBioStarToken, getAllPendingMember, addMemberFaceRecognition,
+    startPackage, updateMemberProfile, blackListUser, getActiveStatusRegisterMembers, getActiveStatusNotExpiredRegisterMembers,
+    getExpiredMembers, getAboutToExpireMembers, getClassesMembers, getCprData, getMemberByMemberId, bookTrainer
 } = require('../controller/member/member.controller');
 
 

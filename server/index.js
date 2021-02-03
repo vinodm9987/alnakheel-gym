@@ -195,15 +195,15 @@ initialSetupForDesignation()
 if (MODE === 'PROD') {
   StartBioStarServer()
     .then(async () => {
-      createEmployeePackage.then(() => {
-        console.log('successfully create Employee pa 🚀');
-      }).catch(err => {
-        console.log(err);
-      });
       console.log('successfully start Bio Star Server 🚀');
     }).catch(err => {
       console.log(err);
     });
+  createEmployeePackage.then(() => {
+    console.log('successfully create Employee pa 🚀');
+  }).catch(err => {
+    console.log(err);
+  });
 }
 
 
