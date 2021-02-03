@@ -17,15 +17,13 @@ exports.BIO_STAR_LOGIN_BODY = { "name": "test", "user_id": "1", "password": "pix
 */
 
 exports.getScheduleObject = (packageName, startTime, endTime) => {
-    let startTimePackage = startTime ? new Date(startTime).getHours() * 60 + new Date(startTime).getMinutes() : 0
-    let endTimePackage = endTime ? new Date(endTime).getHours() * 60 + new Date(endTime).getMinutes() : 1439
     return {
         "daily_schedules": [
             {
                 "day_index": 0,
                 "time_segments": [
                     {
-                        "start_time": startTimePackage, "end_time": endTimePackage
+                        "start_time": startTime, "end_time": endTime
                     }
                 ],
             },
@@ -33,7 +31,7 @@ exports.getScheduleObject = (packageName, startTime, endTime) => {
                 "day_index": 1,
                 "time_segments": [
                     {
-                        "start_time": startTimePackage, "end_time": endTimePackage
+                        "start_time": startTime, "end_time": endTime
                     }
                 ],
             },
@@ -41,7 +39,7 @@ exports.getScheduleObject = (packageName, startTime, endTime) => {
                 "day_index": 2,
                 "time_segments": [
                     {
-                        "start_time": startTimePackage, "end_time": endTimePackage
+                        "start_time": startTime, "end_time": endTime
                     }
                 ],
             },
@@ -50,14 +48,14 @@ exports.getScheduleObject = (packageName, startTime, endTime) => {
                 "day_index": 3,
                 "time_segments": [
                     {
-                        "start_time": startTimePackage, "end_time": endTimePackage
+                        "start_time": startTime, "end_time": endTime
                     }
                 ],
             }, {
                 "day_index": 4,
                 "time_segments": [
                     {
-                        "start_time": startTimePackage, "end_time": endTimePackage
+                        "start_time": startTime, "end_time": endTime
                     }
                 ],
             },
@@ -65,7 +63,7 @@ exports.getScheduleObject = (packageName, startTime, endTime) => {
                 "day_index": 5,
                 "time_segments": [
                     {
-                        "start_time": startTimePackage, "end_time": endTimePackage
+                        "start_time": startTime, "end_time": endTime
                     }
                 ],
             },
@@ -73,7 +71,7 @@ exports.getScheduleObject = (packageName, startTime, endTime) => {
                 "day_index": 6,
                 "time_segments": [
                     {
-                        "start_time": startTimePackage, "end_time": endTimePackage
+                        "start_time": startTime, "end_time": endTime
                     }
                 ],
             }
@@ -313,7 +311,7 @@ exports.BIO_STAR_USER_REGISTRATION_URL = "http://127.0.0.1:8795/v2/users";
 exports.BIO_STAR_IP = "http://127.0.0.1:8795/v2";
 
 
-exports.BIO_STAR_MACHINE_ID = "546844789";
+exports.BIO_STAR_MACHINE_ID = "542352205";
 
 
 exports.fingerPrintBody = { enroll_quality: 0, retrieve_raw_image: true };
