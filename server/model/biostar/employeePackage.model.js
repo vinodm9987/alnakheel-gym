@@ -3,11 +3,6 @@ const Schema = mongoose.Schema;
 
 const EmployeePackageSchema = new Schema({
 
-  branch: {
-    type: Schema.Types.ObjectId,
-    ref: "Branch"
-  },
-
   accessLevelId: String,
 
   accessGroupId: String,
