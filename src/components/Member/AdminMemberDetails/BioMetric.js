@@ -207,51 +207,7 @@ class BioMetric extends Component {
                   </div>
                 </div>
 
-                <button type="button" id="passwordAskModalBtn2" className="d-none" data-toggle="modal" data-target="#passwordAskModal" ref="passwordModalOpen">Open modal</button>
-                <div className="modal fade commonYellowModal" id="passwordAskModal">
-                  <div className="modal-dialog modal-dialog-centered">
-                    <div className="modal-content">
-                      <div className="modal-header">
-                        <h4 className="modal-title">{t('Password')}</h4>
-                        <button type="button" className="close" data-dismiss="modal" ref="passwordModalClose">
-                          <span className="iconv1 iconv1-close"></span>
-                        </button>
-                      </div>
-                      <div className="modal-body px-0">
-                        <div className="container-fluid">
-                          <div className="row">
-                            <div className="col-12">
-                              {/* <div className="form-group position-relative fle">
-                            <label htmlFor="email" className="m-0 text-secondary mx-sm-2">{t('Email')}</label>
-                            <input type="email" autoComplete="off" className={this.state.emailE ? "form-control inlineFormInputs w-100 mx-sm-2 FormInputsError" : "form-control inlineFormInputs w-100 mx-sm-2"} id="email"
-                              value={this.state.email} onChange={(e) => this.setState(validator(e, 'email', 'text', [t('Enter email')]))}
-                            />
-                            <div className="errorMessageWrapper">
-                              <small className="text-danger mx-sm-2 errorMessage">{this.state.emailE}</small>
-                            </div>
-                          </div> */}
-                              <div className="form-group position-relative fle">
-                                <label htmlFor="password" className="m-0 text-secondary mx-sm-2">{t('Password')}</label>
-                                <input type={this.state.showPass ? "text" : "password"} className={this.state.passwordE ? "form-control inlineFormInputs w-100 mx-sm-2 FormInputsError" : "form-control inlineFormInputs w-100 mx-sm-2"} id="password"
-                                  value={this.state.password} onChange={(e) => this.setState(validator(e, 'password', 'text', [t('Enter password')]))}
-                                />
-                                <span className={this.state.showPass ? "iconv1 iconv1-eye passwordEye" : "iconv1 iconv1-eye passwordEye active"} onClick={() => this.setState({ showPass: !this.state.showPass })}></span>
-                                <div className="errorMessageWrapper">
-                                  <small className="text-danger mx-sm-2 errorMessage">{this.state.passwordE}</small>
-                                </div>
-                              </div>
-                            </div>
-                            <div className="col-12 pt-3">
-                              <div className="justify-content-sm-end d-flex pt-4 pb-2">
-                                <button type="button" className="btn btn-success mx-1 px-4" onClick={() => this.handleFingerPrint(this.state.index)}>{t('Submit')}</button>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+
 
                 {(selectedAuth === 'Exclude' && !this.state.edited)
                   ? <div>
@@ -330,7 +286,7 @@ class BioMetric extends Component {
                   </div>
                 }
               </form>
-              : faceRecognitionTemplate
+              : !faceRecognitionTemplate
                 ? <div className="w-100 text-center">
                   <div className="w-100 d-flex justify-content-center">
                     <img src={faceRecAfter} width="200px" alt="" />
@@ -352,6 +308,51 @@ class BioMetric extends Component {
             }
           </div>
           : <h1>{t('Please pay for the package first')}</h1>}
+        <button type="button" id="passwordAskModalBtn2" className="d-none" data-toggle="modal" data-target="#passwordAskModal" ref="passwordModalOpen">Open modal</button>
+        <div className="modal fade commonYellowModal" id="passwordAskModal">
+          <div className="modal-dialog modal-dialog-centered">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h4 className="modal-title">{t('Password')}</h4>
+                <button type="button" className="close" data-dismiss="modal" ref="passwordModalClose">
+                  <span className="iconv1 iconv1-close"></span>
+                </button>
+              </div>
+              <div className="modal-body px-0">
+                <div className="container-fluid">
+                  <div className="row">
+                    <div className="col-12">
+                      {/* <div className="form-group position-relative fle">
+                            <label htmlFor="email" className="m-0 text-secondary mx-sm-2">{t('Email')}</label>
+                            <input type="email" autoComplete="off" className={this.state.emailE ? "form-control inlineFormInputs w-100 mx-sm-2 FormInputsError" : "form-control inlineFormInputs w-100 mx-sm-2"} id="email"
+                              value={this.state.email} onChange={(e) => this.setState(validator(e, 'email', 'text', [t('Enter email')]))}
+                            />
+                            <div className="errorMessageWrapper">
+                              <small className="text-danger mx-sm-2 errorMessage">{this.state.emailE}</small>
+                            </div>
+                          </div> */}
+                      <div className="form-group position-relative fle">
+                        <label htmlFor="password" className="m-0 text-secondary mx-sm-2">{t('Password')}</label>
+                        <input type={this.state.showPass ? "text" : "password"} className={this.state.passwordE ? "form-control inlineFormInputs w-100 mx-sm-2 FormInputsError" : "form-control inlineFormInputs w-100 mx-sm-2"} id="password"
+                          value={this.state.password} onChange={(e) => this.setState(validator(e, 'password', 'text', [t('Enter password')]))}
+                        />
+                        <span className={this.state.showPass ? "iconv1 iconv1-eye passwordEye" : "iconv1 iconv1-eye passwordEye active"} onClick={() => this.setState({ showPass: !this.state.showPass })}></span>
+                        <div className="errorMessageWrapper">
+                          <small className="text-danger mx-sm-2 errorMessage">{this.state.passwordE}</small>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="col-12 pt-3">
+                      <div className="justify-content-sm-end d-flex pt-4 pb-2">
+                        <button type="button" className="btn btn-success mx-1 px-4" onClick={() => this.handleFingerPrint(this.state.index)}>{t('Submit')}</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     )
   }
