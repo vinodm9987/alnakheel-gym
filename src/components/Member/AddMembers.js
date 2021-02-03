@@ -554,7 +554,7 @@ class AddMembers extends Component {
             if (showCheque) {
               return {
                 ...installment, ...{
-                  paidStatus: 'Paid', cashAmount: cash ? parseFloat(cash) : 0, cardAmount: card ? parseFloat(card) : 0, digitalAmount: digital ? digital : 0,
+                  installmentName: `Installment ${k + 1}`, paidStatus: 'Paid', cashAmount: cash ? parseFloat(cash) : 0, cardAmount: card ? parseFloat(card) : 0, digitalAmount: digital ? digital : 0,
                   cardNumber: cardNumber, actualAmount: installment.amount, totalAmount: totalAmount, discount: parseFloat(discount), vatAmount: (setPackageAmount - discount) * tax / 100,
                   chequeAmount: cheque ? parseFloat(cheque) : 0, bankName, chequeNumber, chequeDate
                 }
@@ -562,7 +562,7 @@ class AddMembers extends Component {
             } else {
               return {
                 ...installment, ...{
-                  paidStatus: 'Paid', cashAmount: cash ? parseFloat(cash) : 0, cardAmount: card ? parseFloat(card) : 0, digitalAmount: digital ? digital : 0,
+                  installmentName: `Installment ${k + 1}`, paidStatus: 'Paid', cashAmount: cash ? parseFloat(cash) : 0, cardAmount: card ? parseFloat(card) : 0, digitalAmount: digital ? digital : 0,
                   cardNumber: cardNumber, actualAmount: installment.amount, totalAmount: totalAmount, discount: parseFloat(discount), vatAmount: (setPackageAmount - discount) * tax / 100,
                 }
               }

@@ -197,7 +197,9 @@ const memberSchema = new Schema({
 
     doneFingerAuth: { type: Boolean, default: false },
 
-    biometricTemplate: { template0: String, template1: String, fingerIndex: Number },
+    faceRecognitionTemplate: {
+        type: Object
+    },
 
     status: { type: Boolean, default: true }
 

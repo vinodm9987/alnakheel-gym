@@ -261,7 +261,7 @@ exports.addMemberFaceRecognition = async (req, res) => {
         const { raw_image, templates } = await getFaceRecognitionTemplate()
         const bioObject = { raw_image, templates }
         await Credential.findOneAndUpdate({ userId: req.body.memberId }, { doneFingerAuth: true })
-        await Member.findByIdAndUpdate(req.body.memberId, { doneFingerAuth: true, biometricTemplate: bioObject }, { new: true })
+        await Member.findByIdAndUpdate(req.body.memberId, { doneFingerAuth: true, faceRecognitionTemplate: bioObject }, { new: true })
         const userData = await Member.findById(req.body.memberId).populate('credentialId packageDetails.packages').lean();
         const photo = sharp(userData.credentialId.avatar.path).rotate().resize(200).toBuffer()
         let obj = {
@@ -275,8 +275,7 @@ exports.addMemberFaceRecognition = async (req, res) => {
             newPhoto: photo.toString('base64').replace('data:image/png;base64,', ''),
             phoneNumber: userData.mobileNo,
             startDate: userData.packageDetails[0].startDate,
-            templates: userData.biometricTemplate.templates,
-            raw_image: userData.biometricTemplate.raw_image
+            templates,raw_image
         };
         await addMemberInBioStar(obj);
         const newResponse = await Member.findById(req.body.memberId).populate('credentialId branch')
