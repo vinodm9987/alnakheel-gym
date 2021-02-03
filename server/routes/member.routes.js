@@ -2,7 +2,7 @@ const {
     getAllMember, createNewMember, generateToken, getMemberByCredentialId,
     updateMember, updateMemberAndAddPackage, createNewMemberByAdmin, getFirstRegisterMembers, payAtGymMobile,
     updateMemberDetails, getAllActiveMember, getAllActiveMemberOfTrainer, getMemberById,
-    getActiveRegisterMembers, getBioStarToken, getAllPendingMember, addMemberFaceRecognition,
+    getActiveRegisterMembers, getBioStarToken, getAllPendingMember, addMemberFaceRecognition, updateFaceRecognition,
     startPackage, updateMemberProfile, blackListUser, getActiveStatusRegisterMembers, getActiveStatusNotExpiredRegisterMembers,
     getExpiredMembers, getAboutToExpireMembers, getClassesMembers, getCprData, getMemberByMemberId, bookTrainer
 } = require('../controller/member/member.controller');
@@ -31,6 +31,8 @@ exports.routes = (express, app) => {
     router.get('/getMemberById/:id', getMemberById);
 
     router.post('/getAllActiveMember', getAllActiveMember);
+
+    router.post('/updateFaceRecognition', updateFaceRecognition);
 
     router.post('/getExpiredMembers', getExpiredMembers);
 
