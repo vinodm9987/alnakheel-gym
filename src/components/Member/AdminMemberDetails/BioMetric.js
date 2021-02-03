@@ -286,7 +286,7 @@ class BioMetric extends Component {
                   </div>
                 }
               </form>
-              : !faceRecognitionTemplate
+              : faceRecognitionTemplate
                 ? <div className="w-100 text-center">
                   <div className="w-100 d-flex justify-content-center">
                     <img src={faceRecAfter} width="200px" alt="" />
