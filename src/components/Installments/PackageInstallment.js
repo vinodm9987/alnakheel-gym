@@ -2,223 +2,165 @@ import React, { Component } from 'react'
 import DateFnsUtils from '@date-io/date-fns';
 import { DatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 
-class PendingInstallments extends Component {
-    render() {
-        return (
-            <div className="mainPage p-3 membersInstallment">
+class PackageInstallment extends Component {
+  render() {
+    return (
+      <div className="tab-pane px-3 fade show active" id="menu1" role="tabpanel">
+        <div className="row">
+          <div className="container-fluid px-4 mt-3">
+            <div className="row">
+              <div className="col-12">
                 <div className="row">
-                    <div className="col-12 pageBreadCrumbs">
-                        <span className="crumbText">Home</span><span className="mx-2">/</span><span className="crumbText">Dashboard</span><span className="mx-2">/</span><span className="crumbText">Pending Installments</span>
+                  <div className="col-12">
+                    <div className="row">
+                      <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-5">
+                        <h4>Total Pending Amount</h4>
+                        <h2 className="font-weight-bold dirltrtar text-danger">$ 87511</h2>
+                      </div>
+                      <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-7">
+                        <div class="row d-block d-sm-flex justify-content-end pt-3">
+                          <div class="col w-auto px-1 flexBasis-auto flex-grow-0">
+                            <div class="form-group inlineFormGroup">
+                              <select class="form-control mx-sm-2 inlineFormInputs">
+                                <option value="">Monthly</option>
+                              </select>
+                              <span class="iconv1 iconv1-arrow-down selectBoxIcon"></span>
+                            </div>
+                          </div>
+                          <div class="col w-auto px-1 flexBasis-auto flex-grow-0">
+                            <div class="form-group inlineFormGroup">
+                              <select class="form-control mx-sm-2 inlineFormInputs">
+                                <option value="">Jan</option>
+                                <option value="">Feb</option>
+                              </select>
+                              <span class="iconv1 iconv1-arrow-down selectBoxIcon"></span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                     </div>
+                  </div>
+                  <div className="col-12">
+                    <div className="table-responsive">
+                      <table className="borderRoundSeperateTable tdGray">
+                        <thead>
+                          <tr>
+                            <th>Member Id</th>
+                            <th>Name</th>
+                            <th>Package</th>
+                            <th>Amount</th>
+                            <th>Due Date</th>
+                            <th className="text-center w-50px">Action</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td className="text-primary font-weight-bold">3656</td>
+                            <td>
+                              <div className="d-flex">
+                                <img alt='' src="https://cdn4.iconfinder.com/data/icons/business-conceptual-part1-1/513/business-man-512.png" className="mx-1 rounded-circle w-50px h-50px" />
+                                <div className="mx-1">
+                                  <h5 className="m-0 font-weight-bold">Mohammed Al Mulla</h5>
+                                  <span class="text-body font-weight-light">abcdefg@gmail.com</span>
+                                </div>
+                              </div>
+                            </td>
+                            <td><span className="mx-200-normalwrap">1 Month golden membership</span></td>
+                            <td><h5 className="text-warning font-weight-bold m-0 dirltrtar">$ 200</h5></td>
+                            <td>12/02/2020</td>
+                            <td className="text-center">
+                              <span className="d-inline-flex">
+                                <button type="button" className="btn btn-success btn-sm w-100px rounded-50px mx-1" data-toggle="modal" data-target="#notYetPaid">Pay</button>
+                                <a href="/#" className="btn btn-primary br-50px w-100px btn-sm px-3 mx-1">Details</a>
+                                <span className="bg-success action-icon w-30px h-30px rounded-circle d-flex align-items-center justify-content-center mx-1 text-white pointer" data-toggle="modal" data-target="#Duedate">
+                                  <span className="iconv1 iconv1-edit"></span>
+                                </span>
+                              </span>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td className="text-primary font-weight-bold">3656</td>
+                            <td>
+                              <div className="d-flex">
+                                <img alt='' src="https://cdn4.iconfinder.com/data/icons/business-conceptual-part1-1/513/business-man-512.png" className="mx-1 rounded-circle w-50px h-50px" />
+                                <div className="mx-1">
+                                  <h5 className="m-0 font-weight-bold">Mohammed Al Mulla</h5>
+                                  <span class="text-body font-weight-light">abcdefg@gmail.com</span>
+                                </div>
+                              </div>
+                            </td>
+                            <td><span className="mx-200-normalwrap">1 Month golden membership</span></td>
+                            <td><h5 className="text-warning font-weight-bold m-0 dirltrtar">$ 200</h5></td>
+                            <td>12/02/2020</td>
+                            <td className="text-center">
+                              <span className="d-inline-flex">
+                                <button type="button" className="btn btn-success btn-sm w-100px rounded-50px mx-1" data-toggle="modal" data-target="#notYetPaid">Pay</button>
+                                <a href="/#" className="btn btn-primary br-50px w-100px btn-sm px-3 mx-1">Details</a>
+                                <span className="bg-success action-icon w-30px h-30px rounded-circle d-flex align-items-center justify-content-center mx-1 text-white pointer" data-toggle="modal" data-target="#Duedate">
+                                  <span className="iconv1 iconv1-edit"></span>
+                                </span>
+                              </span>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* if Due date popup */}
+        <div className="modal fade commonYellowModal" id="Duedate">
+          <div className="modal-dialog modal-dialog-centered">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h4 className="modal-title">Edit Due Date</h4>
+                <button type="button" className="close" data-dismiss="modal">
+                  <span className="iconv1 iconv1-close"></span>
+                </button>
+              </div>
+              <div className="modal-body px-0">
+                <div className="container-fluid">
+                  <div className="row">
                     <div className="col-12">
-                        <div className="row">
-                            <div className="col-12 col-sm-12 pageHead">
-                                <h1>
-                                    <span className="px-1"></span>
-                                    <span>Pending Installments</span>
-                                </h1>
-                            </div>
+                      <div className="form-group position-relative">
+                        <label>Due date</label>
+                        <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                          <DatePicker
+                            variant='inline'
+                            InputProps={{
+                              disableUnderline: true,
+                            }}
+                            autoOk
+                            maxDate={new Date()}
+                            invalidDateMessage=''
+                            className="form-control pl-2 bg-white FormInputsError border pt-1"
+                            minDateMessage=''
+                            format="dd/MM/yyyy"
+                          />
+                        </MuiPickersUtilsProvider>
+                        <span className="iconv1 iconv1-calander dateBoxIcon"></span>
+                        <div className="errorMessageWrapper">
+                          <small className="text-danger errorMessage">Err</small>
                         </div>
-                        <div className="pageHeadLine"></div>
+                      </div>
                     </div>
-
-
-
-
-                    <div className="container-fluid mt-3">
-                        <div className="row">
-                            <div className="col-12">
-                                <nav className="commonNavForTab">
-                                    <div className="nav nav-tabs flex-nowrap overflow-auto" id="nav-tab" role="tablist">
-                                        <a href='#menu1' className="nav-item nav-link active" role="tab" data-toggle="tab">Package Installment</a>
-                                        <a href='#menu2' className="nav-item nav-link" role="tab" data-toggle="tab">Trainer Installment</a>
-                                    </div>
-                                </nav>
-                                <div className="tab-content" id="nav-tabContent">
-                                    
-                                    <div className="tab-pane px-3 fade show active" id="menu1" role="tabpanel">
-                                        <div className="row">
-                                            <div className="container-fluid px-4 mt-3">
-                                                <div className="row">
-                                                    <div className="col-12">
-                                                        <div className="row">
-                                                            <div className="col-12">
-                                                                <div className="row">
-                                                                    <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-5">
-                                                                        <h4>Total Pending Amount</h4>
-                                                                        <h2 className="font-weight-bold dirltrtar text-danger">$ 87511</h2>
-                                                                    </div>
-                                                                    <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-7">
-                                                                        <div class="row d-block d-sm-flex justify-content-end pt-3">
-                                                                            <div class="col w-auto px-1 flexBasis-auto flex-grow-0">
-                                                                                <div class="form-group inlineFormGroup">
-                                                                                    <select class="form-control mx-sm-2 inlineFormInputs">
-                                                                                        <option value="">Monthly</option>
-                                                                                    </select>
-                                                                                    <span class="iconv1 iconv1-arrow-down selectBoxIcon"></span>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="col w-auto px-1 flexBasis-auto flex-grow-0">
-                                                                                <div class="form-group inlineFormGroup">
-                                                                                    <select class="form-control mx-sm-2 inlineFormInputs">
-                                                                                        <option value="">Jan</option>
-                                                                                        <option value="">Feb</option>
-                                                                                    </select>
-                                                                                    <span class="iconv1 iconv1-arrow-down selectBoxIcon"></span>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div className="col-12">
-                                                                <div className="table-responsive">
-                                                                    <table className="borderRoundSeperateTable tdGray">
-                                                                        <thead>
-                                                                            <tr>
-                                                                                <th>Member Id</th>
-                                                                                <th>Name</th>
-                                                                                <th>Package</th>
-                                                                                <th>Amount</th>
-                                                                                <th>Due Date</th>
-                                                                                <th className="text-center w-50px">Action</th>
-                                                                            </tr>
-                                                                        </thead>
-                                                                        <tbody>
-                                                                            <tr>
-                                                                                <td className="text-primary font-weight-bold">3656</td>
-                                                                                <td>
-                                                                                    <div className="d-flex">
-                                                                                        <img alt='' src="https://cdn4.iconfinder.com/data/icons/business-conceptual-part1-1/513/business-man-512.png" className="mx-1 rounded-circle w-50px h-50px" />
-                                                                                        <div className="mx-1">
-                                                                                            <h5 className="m-0 font-weight-bold">Mohammed Al Mulla</h5>
-                                                                                            <span class="text-body font-weight-light">abcdefg@gmail.com</span>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </td>
-                                                                                <td><span className="mx-200-normalwrap">1 Month golden membership</span></td>
-                                                                                <td><h5 className="text-warning font-weight-bold m-0 dirltrtar">$ 200</h5></td>
-                                                                                <td>12/02/2020</td>
-                                                                                <td className="text-center">
-                                                                                    <span className="d-inline-flex">
-                                                                                        <button type="button" className="btn btn-success btn-sm w-100px rounded-50px mx-1" data-toggle="modal" data-target="#notYetPaid">Pay</button>
-                                                                                        <a href="/#" className="btn btn-primary br-50px w-100px btn-sm px-3 mx-1">Details</a>
-                                                                                        <span className="bg-success action-icon w-30px h-30px rounded-circle d-flex align-items-center justify-content-center mx-1 text-white pointer" data-toggle="modal" data-target="#Duedate">
-                                                                                            <span className="iconv1 iconv1-edit"></span>
-                                                                                        </span>
-                                                                                    </span>
-                                                                                </td>
-                                                                            </tr>
-                                                                            <tr>
-                                                                                <td className="text-primary font-weight-bold">3656</td>
-                                                                                <td>
-                                                                                    <div className="d-flex">
-                                                                                        <img alt='' src="https://cdn4.iconfinder.com/data/icons/business-conceptual-part1-1/513/business-man-512.png" className="mx-1 rounded-circle w-50px h-50px" />
-                                                                                        <div className="mx-1">
-                                                                                            <h5 className="m-0 font-weight-bold">Mohammed Al Mulla</h5>
-                                                                                            <span class="text-body font-weight-light">abcdefg@gmail.com</span>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </td>
-                                                                                <td><span className="mx-200-normalwrap">1 Month golden membership</span></td>
-                                                                                <td><h5 className="text-warning font-weight-bold m-0 dirltrtar">$ 200</h5></td>
-                                                                                <td>12/02/2020</td>
-                                                                                <td className="text-center">
-                                                                                    <span className="d-inline-flex">
-                                                                                        <button type="button" className="btn btn-success btn-sm w-100px rounded-50px mx-1" data-toggle="modal" data-target="#notYetPaid">Pay</button>
-                                                                                        <a href="/#" className="btn btn-primary br-50px w-100px btn-sm px-3 mx-1">Details</a>
-                                                                                        <span className="bg-success action-icon w-30px h-30px rounded-circle d-flex align-items-center justify-content-center mx-1 text-white pointer" data-toggle="modal" data-target="#Duedate">
-                                                                                            <span className="iconv1 iconv1-edit"></span>
-                                                                                        </span>
-                                                                                    </span>
-                                                                                </td>
-                                                                            </tr>
-                                                                        </tbody>
-                                                                    </table>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div className="tab-pane px-3 fade" id="menu2" role="tabpanel">
-                                        <div className="row">
-                                            <div className="container-fluid px-4 mt-3">
-                                                <div className="row">
-                                                    <div className="col-12">sdfsdfsdfsffsfsdfsdfs
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                </div>
-                            </div>
-                        </div>
+                    <div className="col-12 py-3 text-center">
+                      <button type="button" className="btn btn-success">Submit</button>
                     </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        {/* -/ Due date popup over */}
 
-
-
-
-
-
-
-
-
-
-
-                    {/* if Due date popup */}
-                    <div className="modal fade commonYellowModal" id="Duedate">
-                        <div className="modal-dialog modal-dialog-centered">
-                            <div className="modal-content">
-                                <div className="modal-header">
-                                    <h4 className="modal-title">Edit Due Date</h4>
-                                    <button type="button" className="close" data-dismiss="modal">
-                                        <span className="iconv1 iconv1-close"></span>
-                                    </button>
-                                </div>
-                                <div className="modal-body px-0">
-                                    <div className="container-fluid">
-                                        <div className="row">
-                                            <div className="col-12">
-                                                <div className="form-group position-relative">
-                                                    <label>Due date</label>
-                                                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                                                        <DatePicker
-                                                            variant='inline'
-                                                            InputProps={{
-                                                                disableUnderline: true,
-                                                            }}
-                                                            autoOk
-                                                            maxDate={new Date()}
-                                                            invalidDateMessage=''
-                                                            className="form-control pl-2 bg-white FormInputsError border pt-1"
-                                                            minDateMessage=''
-                                                            format="dd/MM/yyyy"
-                                                        />
-                                                    </MuiPickersUtilsProvider>
-                                                    <span className="iconv1 iconv1-calander dateBoxIcon"></span>
-                                                    <div className="errorMessageWrapper">
-                                                        <small className="text-danger errorMessage">Err</small>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div className="col-12 py-3 text-center">
-                                                <button type="button" className="btn btn-success">Submit</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    {/* -/ Due date popup over */}
-
-                    {/* if not paid */}
-                    {/* <div className="modal fade commonYellowModal" id="notYetPaid" ref='notYetPaid'>
+        {/* if not paid */}
+        {/* <div className="modal fade commonYellowModal" id="notYetPaid" ref='notYetPaid'>
                         <div className="modal-dialog modal-dialog-centered">
                             <div className="modal-content">
                                 <div className="modal-header">
@@ -398,17 +340,11 @@ class PendingInstallments extends Component {
                             </div>
                         </div>
                     </div> */}
-                    {/* -/ not paid over */}
+        {/* -/ not paid over */}
 
-
-
-
-
-
-                </div>
-            </div>
-        )
-    }
+      </div>
+    )
+  }
 }
 
-export default PendingInstallments
+export default PackageInstallment

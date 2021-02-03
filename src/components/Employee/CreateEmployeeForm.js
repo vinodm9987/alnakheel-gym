@@ -1,17 +1,21 @@
-import React, { Component } from 'react'
-import { scrollToTop, validator } from '../../utils/apis/helpers'
 import DateFnsUtils from '@date-io/date-fns';
 import { DatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
-import Nationality from '../../utils/apis/country.json'
 import 'date-fns';
-import PhoneInput from 'react-phone-number-input'
-import { addEmployee, updateEmployee } from '../../actions/employee.action'
-import { getAllBranch } from '../../actions/branch.action'
-import { getFilterDesignation } from '../../actions/designation.action'
-import { connect } from 'react-redux'
-import { withTranslation } from 'react-i18next'
-import Select from 'react-select'
-import { disableSubmit } from '../../utils/disableButton'
+import $ from 'jquery';
+import React, { Component } from 'react';
+import { findDOMNode } from 'react-dom';
+import { withTranslation } from 'react-i18next';
+import PhoneInput from 'react-phone-number-input';
+import { connect } from 'react-redux';
+import Select from 'react-select';
+import { getAllBranch } from '../../actions/branch.action';
+import { getFilterDesignation } from '../../actions/designation.action';
+import { addEmployee, updateEmployee } from '../../actions/employee.action';
+import handleft from '../../assets/img/fingerhand-left.png';
+import handright from '../../assets/img/fingerhand-right.png';
+import Nationality from '../../utils/apis/country.json';
+import { scrollToTop, validator } from '../../utils/apis/helpers';
+import { disableSubmit } from '../../utils/disableButton';
 
 class CreateEmployeeForm extends Component {
 
@@ -56,6 +60,12 @@ class CreateEmployeeForm extends Component {
       employeeId: '',
       credentialId: '',
       url: this.props.match.url,
+      password: '',
+      passwordE: '',
+      showPass: false,
+      index: null,
+      biometricType: 'finger',
+      showFingerPopup: false,
     }
     if (this.props.location.aboutProps && this.props.currentEmployee) {
       const { credentialId: { _id: credentialId, userName, email, avatar }, mobileNo, personalId, gender, address, designation, employeeType, visaDetails, dateOfBirth, joiningDate, _id, branch, nationality } = this.props.currentEmployee
@@ -98,6 +108,12 @@ class CreateEmployeeForm extends Component {
         userPhotoE: '',
         credentialId,
         url: this.props.match.url,
+        password: '',
+        passwordE: '',
+        showPass: false,
+        index: null,
+        biometricType: 'finger',
+        showFingerPopup: false,
       }
       scrollToTop()
     } else {
@@ -140,6 +156,12 @@ class CreateEmployeeForm extends Component {
         employeeId: '',
         credentialId: '',
         url: this.props.match.url,
+        password: '',
+        passwordE: '',
+        showPass: false,
+        index: null,
+        biometricType: 'finger',
+        showFingerPopup: false,
       }
     }
     this.state = this.default
@@ -158,12 +180,75 @@ class CreateEmployeeForm extends Component {
     }
   }
 
-  handleSubmit() {
+  handleNext() {
+    const { t } = this.props
+    const { name, email, number, personalId, dob, joiningDate, gender, address, branch, designation, employeeType, visaNumber, issueDate,
+      expiryDate, passportNo, enterVisa, userPhoto, employeeId, nationality,
+      nameE, emailE, numberE, personalIdE, dobE, joiningDateE, genderE, addressE, designationE, employeeTypeE,
+      credentialIdE, nationalityE, userPhotoE } = this.state
+    if (employeeId) {
+      this.handleSubmit()
+    } else {
+      if (name && email && number && personalId && dob && joiningDate && gender && address && branch.length !== 0 && designation && employeeType && userPhoto !== null && nationality &&
+        !nameE && !emailE && !numberE && !personalIdE && !dobE && !joiningDateE && !genderE && !addressE && !designationE && !employeeTypeE && !credentialIdE && !nationalityE && !userPhotoE
+      ) {
+        if (enterVisa === 'Yes') {
+          if (visaNumber && issueDate && expiryDate && passportNo) {
+            this.setState({ showFingerPopup: true })
+          } else {
+            if (visaNumber === '') {
+              this.setState({ visaNumberE: t('Enter visa number') })
+            } if (issueDate === '') {
+              this.setState({ issueDateE: t('Enter issue date') })
+            } if (expiryDate === '') {
+              this.setState({ expiryDateE: t('Enter expiry date') })
+            } if (passportNo === '') {
+              this.setState({ passportNoE: t('Enter passport number') })
+            } if (issueDate > expiryDate) {
+              this.setState({ expiryDateE: t('Expiry Date should be greater than Issue Date') })
+            }
+          }
+        } else {
+          this.setState({ showFingerPopup: true })
+        }
+      } else {
+        if (name === '') {
+          this.setState({ nameE: t('Enter employee name') })
+        } if (email === '') {
+          this.setState({ emailE: t('Enter email') })
+        } if (number === '') {
+          this.setState({ numberE: t('Enter number') })
+        } if (personalId === '') {
+          this.setState({ personalIdE: t('Enter personal id') })
+        } if (dob === '') {
+          this.setState({ dobE: t('Enter dob') })
+        } if (joiningDate === '') {
+          this.setState({ joiningDateE: t('Enter joining date') })
+        } if (gender === '') {
+          this.setState({ genderE: t('Enter gender') })
+        } if (address === '') {
+          this.setState({ addressE: t('Enter address') })
+        } if (branch.length === 0) {
+          this.setState({ branchE: t('Enter branch') })
+        } if (designation === '') {
+          this.setState({ designationE: t('Enter designation') })
+        } if (employeeType === '') {
+          this.setState({ employeeTypeE: t('Enter employee type') })
+        } if (userPhoto === null) {
+          this.setState({ userPhotoE: t('Upload user photo') })
+        } if (nationality === '') {
+          this.setState({ nationalityE: t('Enter nationality') })
+        }
+      }
+    }
+  }
+
+  handleSubmit(i) {
     const { t } = this.props
     const { name, email, number, personalId, dob, joiningDate, gender, address, branch, designation, employeeType, visaNumber, issueDate,
       expiryDate, passportNo, enterVisa, userPhoto, employeeId, credentialId, nationality,
       nameE, emailE, numberE, personalIdE, dobE, joiningDateE, genderE, addressE, designationE, employeeTypeE,
-      credentialIdE, nationalityE, userPhotoE } = this.state
+      credentialIdE, nationalityE, userPhotoE, password } = this.state
     if (employeeId) {                                                                                                   //for updating
       if (name && email && number && personalId && dob && joiningDate && gender && address && designation && employeeType && credentialId && nationality &&
         !nameE && !emailE && !numberE && !personalIdE && !dobE && !joiningDateE && !genderE && !addressE && !designationE && !employeeTypeE && !credentialIdE && !nationalityE
@@ -302,10 +387,39 @@ class CreateEmployeeForm extends Component {
               expiryDate,
               passportNo
             }
-            let formData = new FormData()
-            formData.append('userPhoto', userPhoto)
-            formData.append('data', JSON.stringify(employeeInfo))
-            this.props.dispatch(addEmployee(formData))
+            const el = findDOMNode(this.refs.passwordModalClose);
+            if (this.state.biometricType === 'finger') {
+              if (i) {
+                employeeInfo.fingerIndex = i
+                employeeInfo.doneFingerAuth = true
+                employeeInfo.selectedAuth = 'BioStation'
+                let formData = new FormData()
+                formData.append('userPhoto', userPhoto)
+                formData.append('data', JSON.stringify(employeeInfo))
+                this.props.dispatch(addEmployee(formData))
+              } else if (!i) {
+                if (password) {
+                  employeeInfo.password = password
+                  employeeInfo.doneFingerAuth = true
+                  employeeInfo.selectedAuth = 'Exclude'
+                  let formData = new FormData()
+                  formData.append('userPhoto', userPhoto)
+                  formData.append('data', JSON.stringify(employeeInfo))
+                  this.props.dispatch(addEmployee(formData))
+                  $(el).click();
+                } else {
+                  if (!password) this.setState({ passwordE: t('Enter password') })
+                }
+              }
+            } else {
+              employeeInfo.selectedAuth = 'FaceStation'
+              employeeInfo.faceIndex = 1
+              employeeInfo.doneFingerAuth = true
+              let formData = new FormData()
+              formData.append('userPhoto', userPhoto)
+              formData.append('data', JSON.stringify(employeeInfo))
+              this.props.dispatch(addEmployee(formData))
+            }
           } else {
             if (visaNumber === '') {
               this.setState({
@@ -330,10 +444,39 @@ class CreateEmployeeForm extends Component {
             }
           }
         } else {
-          let formData = new FormData()
-          formData.append('userPhoto', userPhoto)
-          formData.append('data', JSON.stringify(employeeInfo))
-          this.props.dispatch(addEmployee(formData))
+          const el = findDOMNode(this.refs.passwordModalClose);
+          if (this.state.biometricType === 'finger') {
+            if (i) {
+              employeeInfo.selectedAuth = 'BioStation'
+              employeeInfo.fingerIndex = i
+              employeeInfo.doneFingerAuth = true
+              let formData = new FormData()
+              formData.append('userPhoto', userPhoto)
+              formData.append('data', JSON.stringify(employeeInfo))
+              this.props.dispatch(addEmployee(formData))
+            } else if (!i) {
+              if (password) {
+                employeeInfo.password = password
+                employeeInfo.doneFingerAuth = true
+                employeeInfo.selectedAuth = 'Exclude'
+                let formData = new FormData()
+                formData.append('userPhoto', userPhoto)
+                formData.append('data', JSON.stringify(employeeInfo))
+                this.props.dispatch(addEmployee(formData))
+                $(el).click();
+              } else {
+                if (!password) this.setState({ passwordE: t('Enter password') })
+              }
+            }
+          } else {
+            employeeInfo.selectedAuth = 'FaceStation'
+            employeeInfo.faceIndex = 1
+            employeeInfo.doneFingerAuth = true
+            let formData = new FormData()
+            formData.append('userPhoto', userPhoto)
+            formData.append('data', JSON.stringify(employeeInfo))
+            this.props.dispatch(addEmployee(formData))
+          }
         }
       } else {
         if (name === '') {
@@ -408,7 +551,7 @@ class CreateEmployeeForm extends Component {
     })
     return (
       <div className={this.state.url === '/employee' ? "tab-pane fade show active" : "tab-pane fade"} id="menu1" role="tabpanel">
-        <div className="col-12">
+        <div className="col-12 CreateEmployeeForm-tab">
           <form className="row form-inline mt-4 pt-3">
             <div className="col-12">
               <div className="row">
@@ -711,10 +854,189 @@ class CreateEmployeeForm extends Component {
                 }
                 <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
                   <div className="justify-content-sm-end d-flex">
-                    <button disabled={disableSubmit(this.props.loggedUser, 'Human Resources', 'Employees')} type="button" className="btn btn-success mx-1 px-4" onClick={() => this.handleSubmit()}>{employeeId ? t('Update') : t('Submit')}</button>
+                    <button disabled={disableSubmit(this.props.loggedUser, 'Human Resources', 'Employees')} type="button" className="btn btn-success mx-1 px-4" onClick={() => this.handleNext()}>{employeeId ? t('Update') : t('Submit')}</button>
                     <button type="button" className="btn btn-danger mx-1 px-4" onClick={() => this.handleCancel()}>{t('Cancel')}</button>
                   </div>
                 </div>
+
+                {/* make active below while click of submit */}
+                <div className={this.state.showFingerPopup ? "bio-popup active" : "bio-popup"}>
+                  <div className="bio-popup-inner">
+                    <div className="commonYellowModal">
+                      <div className="modal-content">
+                        <div className="modal-header">
+                          <h4 className="modal-title">Biometric Details</h4>
+                          {/* make active remove by below button  */}
+                          <button type="button" className="close" ref="repairAssetsClose" onClick={() => this.setState({ showFingerPopup: false })}><span className="iconv1 iconv1-close"></span></button>
+                        </div>
+                        <div className="modal-body px-0">
+                          <div className="container-fluid">
+                            <div className="row">
+                              <div className="col-12">
+                                <div className="col-12 py-3 d-flex flex-wrap align-items-center">
+                                  <div className="px-3">
+                                    <div className="custom-control custom-checkbox roundedGreenRadioCheck">
+                                      <input type="radio" className="custom-control-input" id="ForFinger" name="FingOrFace"
+                                        checked={this.state.biometricType === 'finger'} onChange={() => this.setState({ biometricType: 'finger' })}
+                                      />
+                                      <label className="custom-control-label" htmlFor="ForFinger">Finger Print</label>
+                                    </div>
+                                  </div>
+                                  <div className="px-3">
+                                    <div className="custom-control custom-checkbox roundedGreenRadioCheck">
+                                      <input type="radio" className="custom-control-input" id="ForFace" name="FingOrFace"
+                                        checked={this.state.biometricType === 'face'} onChange={() => this.setState({ biometricType: 'face' })}
+                                      />
+                                      <label className="custom-control-label" htmlFor="ForFace">Face</label>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div className="col-12">
+                                  {this.state.biometricType === 'finger'
+                                    ? <div className="row form-inline">
+                                      <div className="col-12 d-flex flex-wrap justify-content-between align-items-center">
+                                        <h4 className="m-0 p-2">Enroll Fingerprint</h4>
+                                        <div className="p-2 colorRoundRadioCheck-blue">
+                                          <div className="custom-control custom-radio custom-control-inline">
+                                          </div>
+                                          <div className="custom-control custom-radio custom-control-inline">
+                                            <button type="button" className="excludeblue-btn" id="passwordAskModalBtn" data-toggle="modal" data-target="#passwordAskModal">
+                                              <span className="excludeblue-btn-ring mr-2"></span>
+                                              <span>Exclude</span>
+                                            </button>
+                                          </div>
+                                          <div className="custom-control custom-radio custom-control-inline">
+                                          </div>
+                                        </div>
+                                      </div>
+                                      <button type="button" id="passwordAskModalBtn2" className="d-none" data-toggle="modal" data-target="#passwordAskModal" ref="passwordModalOpen">Open modal</button>
+                                      <div className="modal fade commonYellowModal" id="passwordAskModal">
+                                        <div className="modal-dialog modal-dialog-centered">
+                                          <div className="modal-content">
+                                            <div className="modal-header">
+                                              <h4 className="modal-title">{t('Password')}</h4>
+                                              <button type="button" className="close" data-dismiss="modal" ref="passwordModalClose">
+                                                <span className="iconv1 iconv1-close"></span>
+                                              </button>
+                                            </div>
+                                            <div className="modal-body px-0">
+                                              <div className="container-fluid">
+                                                <div className="row">
+                                                  <div className="col-12">
+                                                    <div className="form-group position-relative fle">
+                                                      <label htmlFor="password" className="m-0 text-secondary mx-sm-2">Password</label>
+                                                      <input type={this.state.showPass ? "text" : "password"} className={this.state.passwordE ? "form-control inlineFormInputs w-100 mx-sm-2 FormInputsError" : "form-control inlineFormInputs w-100 mx-sm-2"}
+                                                        value={this.state.password} onChange={(e) => this.setState(validator(e, 'password', 'text', [t('Enter password')]))}
+                                                      />
+                                                      <span className={this.state.showPass ? "iconv1 iconv1-eye passwordEye" : "iconv1 iconv1-eye passwordEye active"} onClick={() => this.setState({ showPass: !this.state.showPass })}></span>
+                                                      <div className="errorMessageWrapper">
+                                                        <small className="text-danger mx-sm-2 errorMessage">{this.state.passwordE}</small>
+                                                      </div>
+                                                    </div>
+                                                  </div>
+                                                  <div className="col-12 pt-3">
+                                                    <div className="justify-content-sm-end d-flex pt-4 pb-2">
+                                                      <button type="button" className="btn btn-success mx-1 px-4" onClick={() => this.handleSubmit()}>{t('Submit')}</button>
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                      <div className="col-12 d-flex justify-content-center">
+                                        <div className="enroll-box-wrapper" dir="ltr">
+                                          <div className="enroll-box enroll-box-left">
+                                            <img src={handleft} alt="" className="enroll-left-image" />
+                                            <span className="enroll-span finger-left finger-left-1" onClick={() => this.handleSubmit(1)}>
+                                              {/* commented below beacuse not activated */}
+                                              {this.state.fingerIndex === 1 &&
+                                                <span className="iconv1 iconv1-tick finger-activate"><span className="path1"></span><span
+                                                  className="path2"></span></span>
+                                              }
+                                            </span>
+                                            <span className="enroll-span finger-left finger-left-2" onClick={() => this.handleSubmit(2)}>
+                                              {this.state.fingerIndex === 2 &&
+                                                <span className="iconv1 iconv1-tick finger-activate"><span className="path1"></span><span
+                                                  className="path2"></span></span>
+                                              }
+                                            </span>
+                                            <span className="enroll-span finger-left finger-left-3" onClick={() => this.handleSubmit(3)}>
+                                              {this.state.fingerIndex === 3 &&
+                                                <span className="iconv1 iconv1-tick finger-activate"><span className="path1"></span><span
+                                                  className="path2"></span></span>
+                                              }
+                                            </span>
+                                            <span className="enroll-span finger-left finger-left-4" onClick={() => this.handleSubmit(4)}>
+                                              {this.state.fingerIndex === 4 &&
+                                                <span className="iconv1 iconv1-tick finger-activate"><span className="path1"></span><span
+                                                  className="path2"></span></span>
+                                              }
+                                            </span>
+                                            <span className="enroll-span finger-left finger-left-5" onClick={() => this.handleSubmit(5)}>
+                                              {this.state.fingerIndex === 5 &&
+                                                <span className="iconv1 iconv1-tick finger-activate"><span className="path1"></span><span
+                                                  className="path2"></span></span>
+                                              }
+                                            </span>
+                                          </div>
+                                          <div className="enroll-box enroll-box-right">
+                                            <img src={handright} alt="" className="enroll-right-image" />
+                                            <span className="enroll-span finger-right finger-right-1" onClick={() => this.handleSubmit(6)}>
+                                              {this.state.fingerIndex === 6 &&
+                                                <span className="iconv1 iconv1-tick finger-activate"><span className="path1"></span><span
+                                                  className="path2"></span></span>
+                                              }
+                                            </span>
+                                            <span className="enroll-span finger-right finger-right-2" onClick={() => this.handleSubmit(7)}>
+                                              {this.state.fingerIndex === 7 &&
+                                                <span className="iconv1 iconv1-tick finger-activate"><span className="path1"></span><span
+                                                  className="path2"></span></span>
+                                              }
+                                            </span>
+                                            <span className="enroll-span finger-right finger-right-3" onClick={() => this.handleSubmit(8)}>
+                                              {this.state.fingerIndex === 8 &&
+                                                <span className="iconv1 iconv1-tick finger-activate"><span className="path1"></span><span
+                                                  className="path2"></span></span>
+                                              }
+                                            </span>
+                                            <span className="enroll-span finger-right finger-right-4" onClick={() => this.handleSubmit(9)}>
+                                              {this.state.fingerIndex === 9 &&
+                                                <span className="iconv1 iconv1-tick finger-activate"><span className="path1"></span><span
+                                                  className="path2"></span></span>
+                                              }
+                                            </span>
+                                            <span className="enroll-span finger-right finger-right-5" onClick={() => this.handleSubmit(10)}>
+                                              {this.state.fingerIndex === 10 &&
+                                                <span className="iconv1 iconv1-tick finger-activate"><span className="path1"></span><span
+                                                  className="path2"></span></span>
+                                              }
+                                            </span>
+                                          </div>
+                                        </div>
+                                      </div>
+                                      {/* <div className="col-12">
+                                      <div class="justify-content-sm-end d-flex">
+                                        <button type="button" class="btn btn-success mx-1 px-4">Submit</button>
+                                        <button type="button" class="btn btn-danger mx-1 px-4">Cancel</button>
+                                      </div>
+                                    </div> */}
+                                    </div>
+                                    : <button type="button" className="btn btn-success" id="faceButton" onClick={() => this.handleSubmit()}>Scan Face</button>
+                                  }
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+
+
               </div>
             </div>
           </form>
