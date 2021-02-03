@@ -14,7 +14,7 @@ import { DESIGNATION } from './config'
 import { scrollToTop } from './utils/apis/helpers';
 import axios from 'axios';
 
-import Register from './components/Auth/Register';
+// import Register from './components/Auth/Register';
 import Login from './components/Auth/Login';
 import ForgotPassword from './components/Auth/ForgotPassword';
 import PageNotFound from './components/Auth/PageNotFound';
@@ -118,7 +118,7 @@ import AuditLog from './components/AuditLog/AuditLog';
 import BookATrainer from './components/Trainer/BookATrainer';
 import MoneyCollection from './components/MoneyCollection/MoneyCollection';
 import MoneyCollectionDetails from './components/MoneyCollection/MoneyCollectionDetails';
-import PendingInstallments from './components/Dashboard/PendingInstallments';
+import PendingInstallments from './components/Installments/PendingInstallments';
 
 
 
