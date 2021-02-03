@@ -199,7 +199,7 @@ if (MODE === 'PROD') {
     }).catch(err => {
       console.log(err);
     });
-  createEmployeePackage.then(() => {
+  createEmployeePackage().then(() => {
     console.log('successfully create Employee pa 🚀');
   }).catch(err => {
     console.log(err);
