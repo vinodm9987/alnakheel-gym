@@ -12,7 +12,7 @@ import { connect } from 'react-redux';
 import Webcam from "react-webcam";
 import { getAllBranch } from '../../actions/branch.action';
 import { createNewMemberByAdmin, getCprData, updateMember, updateMemberAndAddPackage } from '../../actions/member.action';
-import { getAllPackageBySalesBranch } from '../../actions/package.action';
+import { getAllActivePackage } from '../../actions/package.action';
 import { verifyAdminPassword } from '../../actions/privilege.action';
 import { checkReferralCodeValidityOnAdmin } from '../../actions/reward.action';
 import { getPeriodOfTrainer, getUniqueTrainerByBranch } from '../../actions/trainerFees.action';
@@ -413,7 +413,7 @@ class AddMembers extends Component {
     }
     this.state = this.default
     this.props.dispatch(getAllBranch())
-    // this.props.dispatch(getAllActivePackage())
+    this.props.dispatch(getAllActivePackage())
     this.props.dispatch({ type: GET_CPR, payload: {} })
   }
 
@@ -674,7 +674,7 @@ class AddMembers extends Component {
     }, () => {
       this.state.branch && this.props.dispatch(getAllVat({ branch: this.state.branch }))
       this.state.branch && this.props.dispatch(getUniqueTrainerByBranch(this.state.branch))
-      this.state.branch && this.props.dispatch(getAllPackageBySalesBranch({ salesBranches: this.state.branch }))
+      // this.state.branch && this.props.dispatch(getAllPackageBySalesBranch({ salesBranches: this.state.branch }))
     })
   }
 
@@ -725,9 +725,9 @@ class AddMembers extends Component {
     var tax = 0
     var endDate = startDate
     if (index > 0) {
-      periodDays = this.props.packages.packageBySalesBranch[index - 1].period.periodDays
-      packageAmount = this.props.packages.packageBySalesBranch[index - 1].amount
-      setPackageAmount = this.props.packages.packageBySalesBranch[index - 1].amount
+      periodDays = this.props.packages.active[index - 1].period.periodDays
+      packageAmount = this.props.packages.active[index - 1].amount
+      setPackageAmount = this.props.packages.active[index - 1].amount
       tax = this.props.activeVats ? this.props.activeVats.filter(vat => vat.defaultVat)[0] ? this.props.activeVats.filter(vat => vat.defaultVat)[0].taxPercent : 0 : 0
       endDate = new Date(new Date(endDate).setDate(startDate.getDate() + periodDays - 1))
     }
@@ -1170,7 +1170,7 @@ class AddMembers extends Component {
                   </div>
                   <div className="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
                     <div className="form-group position-relative">
-                      <label htmlFor="branch">{t('Sales Branch')}</label>
+                      <label htmlFor="branch">{t('Branch')}</label>
                       <select className={this.state.branchE ? "form-control bg-white FormInputsError" : "form-control bg-white"}
                         value={branch} onChange={(e) => this.setBranch(e)} id="branch">
                         <option value="" hidden>{t('Please Select')}</option>
@@ -1335,7 +1335,7 @@ class AddMembers extends Component {
                         <select className={this.state.packageNameE ? "form-control bg-white FormInputsError" : "form-control bg-white"}
                           value={packageName} onChange={(e) => this.setPackage(e)} id="packageName">
                           <option value="" hidden>{t('Please Select')}</option>
-                          {this.props.packages.packageBySalesBranch && this.props.packages.packageBySalesBranch.map((packages, i) => {
+                          {this.props.packages.active && this.props.packages.active.map((packages, i) => {
                             return (
                               <option key={i} value={packages._id}>{packages.packageName}</option>
                             )
@@ -1936,8 +1936,8 @@ class AddMembers extends Component {
                         </thead>
                         <tbody>
                           <tr>
-                            <td>{this.props.packages.packageBySalesBranch && this.props.packages.packageBySalesBranch.filter(pack => pack._id === packageName)[0] &&
-                              this.props.packages.packageBySalesBranch.filter(pack => pack._id === packageName)[0].packageName}</td>
+                            <td>{this.props.packages.active && this.props.packages.active.filter(pack => pack._id === packageName)[0] &&
+                              this.props.packages.active.filter(pack => pack._id === packageName)[0].packageName}</td>
                             <td>{dateToDDMMYYYY(startDate)}</td>
                             <td>{dateToDDMMYYYY(endDate)}</td>
                           </tr>
