@@ -249,12 +249,10 @@ exports.getPendingInstallments = async (req, res) => {
                     for (const installment of packages.Installments) {
                         const dueDate = new Date(setTime(installment.dueDate)).getTime();
                         const todayMonth = new Date(dueDate).getMonth();
-                        // const todayDay = new Date(dueDate).getDay();
                         const thisYear = new Date(dueDate).getFullYear();
                         const monthConditions = typeof req.body.month === 'number' ? req.body.month === todayMonth : true;
-                        // const dayConditions = typeof req.body.month === 'number' ? req.body.day === todayDay : true;
                         const yearConditions = typeof req.body.year === 'number' ? req.body.year === thisYear : true;
-                        const conditions = (today <= dueDate) && monthConditions &&  yearConditions;
+                        const conditions = (today <= dueDate) && monthConditions && yearConditions;
                         if (conditions && installment.paidStatus !== 'Paid') {
                             const memberObj = Object.assign({}, member);
                             memberObj['packageAmount'] = installment.actualAmount;
@@ -269,10 +267,8 @@ exports.getPendingInstallments = async (req, res) => {
                         for (const installment of trainer.Installments) {
                             const dueDate = new Date(setTime(installment.dueDate));
                             const todayMonth = new Date(dueDate).getMonth();
-                            // const todayDay = new Date(dueDate).getDay();
                             const thisYear = new Date(dueDate).getFullYear();
                             const monthConditions = req.body.month ? req.body.month === todayMonth : true;
-                            // const dayConditions = req.body.day ? req.body.day === todayDay : true;
                             const yearConditions = req.body.year ? req.body.year === thisYear : true;
                             const conditions = (new Date() > dueDate) && monthConditions && yearConditions;
                             if (new Date() > dueDate && conditions) {

@@ -92,6 +92,7 @@ exports.addPackage = async (req, res) => {
             newPackage["startDate"] = setTime(startDate);
             newPackage["endDate"] = setTime(endDate);
             newPackage["image"] = req.files[0];
+            newPackage["bioStarInfo"] = await await addPackage(packageName, 0, 1439);
             let response = await newPackage.save()
             let newResponse = await Package.findById(response._id).populate('accessBranches salesBranches').lean()
             let periodData = await Period.findById(response.period).lean()
