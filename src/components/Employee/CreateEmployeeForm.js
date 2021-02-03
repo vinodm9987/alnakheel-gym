@@ -11,12 +11,9 @@ import Select from 'react-select';
 import { getAllBranch } from '../../actions/branch.action';
 import { getFilterDesignation } from '../../actions/designation.action';
 import { addEmployee, updateEmployee } from '../../actions/employee.action';
-import handleft from '../../assets/img/fingerhand-left.png';
-import handright from '../../assets/img/fingerhand-right.png';
 import Nationality from '../../utils/apis/country.json';
 import { scrollToTop, validator } from '../../utils/apis/helpers';
 import { disableSubmit } from '../../utils/disableButton';
-import faceRecBefore from '../../assets/img/faceRecBefore.png'
 
 class CreateEmployeeForm extends Component {
 
