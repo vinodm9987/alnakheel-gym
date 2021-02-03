@@ -111,7 +111,7 @@ class Receipt extends Component {
                             <h6 className="font-weight-bold">Served by: Bahgabati Rao</h6>
                         </div>
                         <div className="text-center px-5">
-                            <h5 className="text-muted">The recepit amount will not be refunded in any case.</h5>
+                            <h5 className="text-muted">The receipt amount will not be refunded in any case.</h5>
                             <h5 className="font-weight-bold">Thank You</h5>
                         </div>
                     </div>
@@ -200,7 +200,7 @@ class Receipt extends Component {
                             <h6 className="font-weight-bold">Served by: Bahgabati Rao</h6>
                         </div>
                         <div className="text-center px-5">
-                            <h5 className="text-muted">The recepit amount will not be refunded in any case.</h5>
+                            <h5 className="text-muted">The receipt amount will not be refunded in any case.</h5>
                             <h5 className="font-weight-bold">Thank You</h5>
                         </div>
                     </div>

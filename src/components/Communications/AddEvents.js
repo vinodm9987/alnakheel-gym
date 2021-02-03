@@ -178,7 +178,7 @@ class AddEvents extends Component {
                 <th>{t('Event Title')}</th>
                 <th className="text-center">{t('Start Date')}</th>
                 <th className="text-center">{t('End Date')}</th>
-                <th className="text-center"></th>
+                <th className="text-center">{t('Action')}</th>
               </tr>
             </thead>
             <tbody>

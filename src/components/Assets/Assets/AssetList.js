@@ -101,9 +101,8 @@ class AssetList extends Component {
                   <th>{t('Serial Number')}</th>
                   <th>{t('Location')}</th>
                   <th>{t('Supplier Name')}</th>
-                  <th></th>
-                  <th></th>
-                  <th></th>
+                  <th>{t('Status')}</th>
+                  <th className="text-center w-50px">{t('Action')}</th>
                 </tr>
               </thead>
               <tbody>
@@ -128,13 +127,11 @@ class AssetList extends Component {
                         <span className="slider round"></span>
                       </label></td>
                       <td className="text-center">
-                        <Link to={`/asset-details/${_id}`} className="linkHoverDecLess">
+                        <div className="d-inline-flex">
+                        <Link to={`/asset-details/${_id}`} className="linkHoverDecLess mx-1">
                           <button type="button" className="btn btn-primary btn-sm w-100px rounded-50px linkHoverDecLess">{t('Details')}</button>
                         </Link>
-                      </td>
-                      <td className="text-center">
-                        <div className="d-inline-flex">
-                          <Link to={{ pathname: "/asset", assetData: JSON.stringify(asset) }} className="linkHoverDecLess">
+                          <Link to={{ pathname: "/asset", assetData: JSON.stringify(asset) }} className="linkHoverDecLess mx-1">
                             <span className="bg-success action-icon w-30px h-30px rounded-circle d-flex align-items-center justify-content-center mx-1 text-white">
                               <span className="iconv1 iconv1-edit"></span>
                             </span>

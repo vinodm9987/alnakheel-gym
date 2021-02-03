@@ -71,7 +71,7 @@ class Orderdetails extends Component {
                     <tr>
                       <th><span className="px-3">Item</span></th>
                       <th>Price</th>
-                      <th></th>
+                      <th>Qty</th>
                     </tr>
                   </thead>
                   <tbody>
