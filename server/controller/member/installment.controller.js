@@ -13,7 +13,6 @@ exports.getPackageInstallment = async (req, res) => {
     try {
         const members = await Member.find({})
             .populate('credentialId packageDetails.packages').lean();
-        const today = new Date(setTime(new Date())).getTime();
         let response = [];
         for (const member of members) {
             for (const packages of member.packageDetails) {
@@ -29,7 +28,8 @@ exports.getPackageInstallment = async (req, res) => {
                             delete memberObj.packageDetails;
                             memberObj['packageAmount'] = installment.actualAmount;
                             memberObj['dueDate'] = installment.dueDate;
-                            memberObj['packages'] = packages;
+                            memberObj['packages'] = packages.packages;
+                            memberObj['packagesDetailsId'] = packages._id;
                             memberObj['installmentId'] = installment._id.toString();
                             response.push(memberObj);
                         }
@@ -65,7 +65,8 @@ exports.getTrainerInstallment = async (req, res) => {
                                 delete memberObj.packageDetails;
                                 memberObj['trainerAmount'] = installment.actualAmount;
                                 memberObj['dueDate'] = installment.dueDate;
-                                memberObj['packages'] = packages;
+                                memberObj['packagesDetailsId'] = packages._id;
+                                memberObj['trainerDetailsId'] = trainer._id;
                                 memberObj['installmentId'] = installment._id.toString();
                                 response.push(memberObj);
                             }
@@ -79,4 +80,54 @@ exports.getTrainerInstallment = async (req, res) => {
         logger.error(error);
         return errorResponseHandler(res, error, 'failed');
     }
+};
+
+
+
+exports.changeDueDateOfPackageInstallment = async (req, res) => {
+    try {
+        const dueDate = setTime(req.body.dueDate);
+        const member = await Member.findById(req.body.memberId);
+        for (const [packages, i] of member.packageDetails.entries()) {
+            if (packages._id.toString() === req.body.packagesDetailsId) {
+                for (const [installment, j] of member.packageDetails[i].Installments.entries()) {
+                    if (installment._id.toString() === req.body.installmentId) {
+                        member.packageDetails[i].Installments[j].dueDate = dueDate;
+                    }
+                }
+            }
+        }
+        const response = await member.save();
+        return successResponseHandler(res, response, "success");
+    } catch (error) {
+        logger.error(error);
+        return errorResponseHandler(res, error, 'failed')
+    }
+};
+
+
+exports.changeDueDateOfTrainerInstallment = async (req, res) => {
+    try {
+        const dueDate = setTime(req.body.dueDate);
+        const member = await Member.findById(req.body.memberId);
+        for (const [packages, i] of member.packageDetails.entries()) {
+            if (packages[i]._id.toString() === req.body.packagesDetailsId) {
+                for (const [trainer, j] of member.packageDetails[i].trainerDetails.entries()) {
+                    if (trainer[j]._id.toString() === req.body.trainerDetailsId) {
+                        for (const [installment, k] of member.packageDetails[i].trainerDetails[j].Installments.entries()) {
+                            if (installment._id.toString() === req.body.installmentId) {
+                                member.packageDetails[i].trainerDetails[j].Installments[k].dueDate = dueDate;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        const response = await member.save();
+        return successResponseHandler(res, response, "success");
+    } catch (error) {
+        logger.error(error);
+        return errorResponseHandler(res, error, 'failed')
+    }
+
 };
