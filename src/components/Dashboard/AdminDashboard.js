@@ -610,9 +610,12 @@ class AdminDashboard extends Component {
               <h6 className="mx-1 my-2 SegoeBold py-1">Pending Installments</h6>
               <div className="d-flex flex-wrap align-items-center">
                 <span className="position-relative mx-1 my-2">
-                  <select className="bg-white border-secondary border-secondary pr-4 pl-1 mw-100" style={{ fontSize: "13px" }} value={this.state.pendingYear} onChange={(e) => this.setMonthYear(pendingMonth, e.target.value)}>
-                    {systemYears.map(year => {
-                      return (<option key={year} value={year}>{year}</option>)
+                  <select className="bg-white border-secondary border-secondary pr-4 pl-1 mw-100" style={{ fontSize: "13px" }}
+                    value={pendingMonth} onChange={(e) => this.setMonthYear(e.target.value, pendingYear)} >
+                    {monthSmallNamesCaps.map((month, i) => {
+                      return (
+                        <option key={i} value={i}>{t(month)}</option>
+                      )
                     })}
                   </select>
                   <span className="position-absolute d-flex align-items-center justify-content-end w-100 h-100 pointerNone px-2" style={{ top: '0', left: '0' }}>
@@ -620,12 +623,9 @@ class AdminDashboard extends Component {
                   </span>
                 </span>
                 <span className="position-relative mx-1 my-2">
-                  <select className="bg-white border-secondary border-secondary pr-4 pl-1 mw-100" style={{ fontSize: "13px" }}
-                    value={pendingMonth} onChange={(e) => this.setMonthYear(e.target.value, pendingYear)} >
-                    {monthSmallNamesCaps.map((month, i) => {
-                      return (
-                        <option key={i} value={i}>{t(month)}</option>
-                      )
+                  <select className="bg-white border-secondary border-secondary pr-4 pl-1 mw-100" style={{ fontSize: "13px" }} value={this.state.pendingYear} onChange={(e) => this.setMonthYear(pendingMonth, e.target.value)}>
+                    {systemYears.map(year => {
+                      return (<option key={year} value={year}>{year}</option>)
                     })}
                   </select>
                   <span className="position-absolute d-flex align-items-center justify-content-end w-100 h-100 pointerNone px-2" style={{ top: '0', left: '0' }}>
@@ -695,7 +695,7 @@ class AdminDashboard extends Component {
                   {/* tushar if data */}
                   {this.props.pendingInstallments.length > 0 ?
                     <div className="col-12 px-0 pb-3">
-                      <div className="table-responsive scrollbarchrome" style={{ maxHeight: "400px" }}>
+                      <div className="table-responsive scrollbarchrome" style={{ maxHeight: "339px" }}>
                         <table className="borderRoundSeperateTable tdWhite">
                           <thead>
                             <tr>

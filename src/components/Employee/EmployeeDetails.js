@@ -331,7 +331,7 @@ class EmployeeDetails extends Component {
                           </div>
                         </div>
                         {this.state.biometricType === 'finger'
-                          ? <div className="col-12 d-flex justify-content-center">
+                          ? <div className="col-12 d-flex justify-content-center pt-5">
                             <div className="enroll-box-wrapper" dir="ltr">
                               <div className="enroll-box enroll-box-left">
                                 <img src={handleft} alt="" className="enroll-left-image" />
@@ -403,18 +403,18 @@ class EmployeeDetails extends Component {
                             </div>
                           </div>
                           : faceRecognitionTemplate
-                            ? <div className="w-100 text-center">
+                            ? <div className="w-100 text-center pt-5">
                               <div className="w-100 d-flex justify-content-center">
                                 <img src={faceRecAfter} width="200px" alt="" />
                               </div>
-                              <h5 className="mt-3 mb-0 d-flex">
+                              <h5 className="mt-3 mb-0 d-flex justify-content-center">
                                 <span className="icon mr-3 scan-success-icon"></span>
                                 <span className="font-weight-bold">{t('Success!')}</span>
                               </h5>
                               <h5 className="my-3">{t('Your face scanning has successfully completed')}</h5>
                               <button type="button" className="btn btn-success" id="faceButton" onClick={() => this.handleIncludeModify()}>{t('Update Face')}</button>
                             </div>
-                            : <div className="w-100 text-center">
+                            : <div className="w-100 text-center pt-5">
                               <div className="w-100 d-flex justify-content-center">
                                 <img src={faceRecBefore} width="200px" alt="" />
                               </div>

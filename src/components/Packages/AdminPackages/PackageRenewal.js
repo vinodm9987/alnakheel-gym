@@ -1055,12 +1055,12 @@ class PackageRenewal extends Component {
                     <div className="row px-5 justify-content-between">
                       <div className="col-free p-3">
                         <div className="mb-3">
-                          <label className="m-0 font-weight-bold">Address</label>
-                          <p className="whiteSpaceNormal mnw-150px mxw-200px">{packageReceipt.branch.address}</p>
-                        </div>
-                        <div className="">
                           <label className="m-0 font-weight-bold">VAT Reg Number</label>
                           <p className="">{packageReceipt.branch.vatRegNo}</p>
+                        </div>
+                        <div className="">
+                          <label className="m-0 font-weight-bold">Address</label>
+                          <p className="whiteSpaceNormal mnw-150px mxw-200px">{packageReceipt.branch.address}</p>
                         </div>
                       </div>
                       <div className="col-free p-3">

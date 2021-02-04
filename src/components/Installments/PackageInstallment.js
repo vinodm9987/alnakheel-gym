@@ -217,9 +217,11 @@ class PackageInstallment extends Component {
                         <div className="row d-block d-sm-flex justify-content-end pt-3">
                           <div className="col w-auto px-1 flexBasis-auto flex-grow-0">
                             <div className="form-group inlineFormGroup">
-                              <select className="form-control mx-sm-2 inlineFormInputs" value={this.state.pendingYear} onChange={(e) => this.setMonthYear(pendingMonth, e.target.value)}>
-                                {systemYears.map(year => {
-                                  return (<option key={year} value={year}>{year}</option>)
+                              <select className="form-control mx-sm-2 inlineFormInputs" value={pendingMonth} onChange={(e) => this.setMonthYear(e.target.value, pendingYear)} >
+                                {monthSmallNamesCaps.map((month, i) => {
+                                  return (
+                                    <option key={i} value={i}>{t(month)}</option>
+                                  )
                                 })}
                               </select>
                               <span className="iconv1 iconv1-arrow-down selectBoxIcon"></span>
@@ -227,12 +229,9 @@ class PackageInstallment extends Component {
                           </div>
                           <div className="col w-auto px-1 flexBasis-auto flex-grow-0">
                             <div className="form-group inlineFormGroup">
-                              <select className="form-control mx-sm-2 inlineFormInputs" style={{ fontSize: "13px" }}
-                                value={pendingMonth} onChange={(e) => this.setMonthYear(e.target.value, pendingYear)} >
-                                {monthSmallNamesCaps.map((month, i) => {
-                                  return (
-                                    <option key={i} value={i}>{t(month)}</option>
-                                  )
+                              <select className="form-control mx-sm-2 inlineFormInputs" value={this.state.pendingYear} onChange={(e) => this.setMonthYear(pendingMonth, e.target.value)}>
+                                {systemYears.map(year => {
+                                  return (<option key={year} value={year}>{year}</option>)
                                 })}
                               </select>
                               <span className="iconv1 iconv1-arrow-down selectBoxIcon"></span>
