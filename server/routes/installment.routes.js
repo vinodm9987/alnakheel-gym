@@ -1,4 +1,4 @@
-const { getPackageInstallment, getTrainerInstallment } = require('../controller/member/installment.controller')
+const { getPackageInstallment, getTrainerInstallment, changeDueDateOfTrainerInstallment, changeDueDateOfPackageInstallment } = require('../controller/member/installment.controller')
 
 
 exports.routes = (express, app) => {
@@ -7,7 +7,11 @@ exports.routes = (express, app) => {
 
     router.post('/getPackageInstallment', getPackageInstallment);
 
-    router.post('/getTrainerInstallment', getTrainerInstallment);
+    router.post('/getPackageInstallment', getPackageInstallment);
+
+    router.post('/changeDueDateOfTrainerInstallment', changeDueDateOfTrainerInstallment);
+
+    router.post('/changeDueDateOfPackageInstallment', changeDueDateOfPackageInstallment);
 
     app.use('/api/installment/', router);
 };
