@@ -10,6 +10,7 @@ module.exports = {
             if (type === 'digital') totalAmount += stockSells[i].digitalAmount;
             if (type === 'cash') totalAmount += stockSells[i].cashAmount;
             if (type === 'card') totalAmount += stockSells[i].cardAmount;
+            if (type === 'cheque') totalAmount += stockSells[i].cheque;
         }
         return totalAmount;
     },
@@ -21,6 +22,7 @@ module.exports = {
             if (type === 'digital') totalAmount += classSells[i].digitalAmount;
             if (type === 'cash') totalAmount += classSells[i].cashAmount;
             if (type === 'card') totalAmount += classSells[i].cardAmount;
+            if (type === 'cheque') totalAmount += classSells[i].cheque;
         }
         return totalAmount;
     },
@@ -103,6 +105,8 @@ module.exports = {
                 if (type === 'digital') totalAmount += installment.digitalAmount;
                 if (type === 'cash') totalAmount += installment.cashAmount;
                 if (type === 'card') totalAmount += installment.cardAmount;
+                if (type === 'cheque') totalAmount += installment.cheque;
+
             }
         }
         return totalAmount;
@@ -116,6 +120,7 @@ module.exports = {
             if (type === 'digital') totalAmount += stockSells[i].digitalAmount;
             if (type === 'cash') totalAmount += stockSells[i].cashAmount;
             if (type === 'card') totalAmount += stockSells[i].cardAmount;
+            if (type === 'cheque') totalAmount += stockSells[i].cheque;
             const index = branches.findIndex(doc => stockBranch === doc._id.toString());
             branches[index]['amount'] = typeof branches[index]['amount'] === 'number' ? branches[index]['amount'] += totalAmount : totalAmount;
         }
