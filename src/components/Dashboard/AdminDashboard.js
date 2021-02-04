@@ -46,7 +46,7 @@ class AdminDashboard extends Component {
     // this.props.dispatch(getAllBranchSales({ year: parseInt(this.state.yearSales) }))
     // this.props.dispatch(getRevenueDetails({ year: parseInt(this.state.yearRevenue), category: this.state.category }))
     this.props.dispatch(getDashboardTotalSales({ date: new Date(), type: 'all', category: 'all' }))
-    this.props.dispatch(getPendingInstallments({ month: this.state.pendingMonth, day: this.state.pendingYear }))
+    this.props.dispatch(getPendingInstallments({ month: parseInt(this.state.pendingMonth), day: this.state.pendingYear }))
   }
 
   onChangeCalendarDate = date => this.setState({ date }, () => {
@@ -585,7 +585,7 @@ class AdminDashboard extends Component {
 
   setMonthYear(pendingMonth, pendingYear) {
     this.setState({ pendingMonth, pendingYear }, () => {
-      this.props.dispatch(getPendingInstallments({ month: this.state.pendingMonth, year: parseInt(this.state.pendingYear) }))
+      this.props.dispatch(getPendingInstallments({ month: parseInt(this.state.pendingMonth), year: parseInt(this.state.pendingYear) }))
     })
   }
 
