@@ -515,7 +515,7 @@ class AddMembers extends Component {
   handlePayment(totalAmount) {
     const el = findDOMNode(this.refs.checkoutCloseModal);
     const { t } = this.props
-    const { name, email, number, personalId, dob, nationality, gender, userPhoto, packageName, branch, cardNumber, setPackageAmount,
+    const { name, email, number, personalId, dob, nationality, gender, userPhoto, packageName, branch, cardNumber,
       cash, card, height, weight, emergencyNumber, relationship, referralCode, notes, credentialId, memberId, discount, tax,
       trainer, wantTrainer, levelQuestion, exercisingQuestion, goalQuestion, period, trainerFeesId, addPackage, packageAmount,
       numberE, emergencyNumberE, cashE, cardE, digital, digitalE, startDate, endDate, trainerPeriodDays, installments,
@@ -555,7 +555,7 @@ class AddMembers extends Component {
               return {
                 ...installment, ...{
                   installmentName: `Installment ${k + 1}`, paidStatus: 'Paid', cashAmount: cash ? parseFloat(cash) : 0, cardAmount: card ? parseFloat(card) : 0, digitalAmount: digital ? digital : 0,
-                  cardNumber: cardNumber, actualAmount: installment.amount, totalAmount: totalAmount, discount: parseFloat(discount), vatAmount: (setPackageAmount - discount) * tax / 100,
+                  cardNumber: cardNumber, actualAmount: installment.amount, totalAmount: totalAmount, discount: parseFloat(discount), vatAmount: (installment.amount - discount) * tax / 100,
                   chequeAmount: cheque ? parseFloat(cheque) : 0, bankName, chequeNumber, chequeDate
                 }
               }
@@ -563,7 +563,7 @@ class AddMembers extends Component {
               return {
                 ...installment, ...{
                   installmentName: `Installment ${k + 1}`, paidStatus: 'Paid', cashAmount: cash ? parseFloat(cash) : 0, cardAmount: card ? parseFloat(card) : 0, digitalAmount: digital ? digital : 0,
-                  cardNumber: cardNumber, actualAmount: installment.amount, totalAmount: totalAmount, discount: parseFloat(discount), vatAmount: (setPackageAmount - discount) * tax / 100,
+                  cardNumber: cardNumber, actualAmount: installment.amount, totalAmount: totalAmount, discount: parseFloat(discount), vatAmount: (installment.amount - discount) * tax / 100,
                 }
               }
             }
@@ -575,7 +575,7 @@ class AddMembers extends Component {
           memberInfo.packageDetails[0] = {
             ...memberInfo.packageDetails[0], ...{
               paidStatus: 'Paid', cashAmount: cash ? parseFloat(cash) : 0, cardAmount: card ? parseFloat(card) : 0, digitalAmount: digital ? digital : 0,
-              cardNumber: cardNumber, actualAmount: packageAmount, totalAmount: totalAmount, discount: parseFloat(discount), vatAmount: (setPackageAmount - discount) * tax / 100,
+              cardNumber: cardNumber, actualAmount: packageAmount, totalAmount: totalAmount, discount: parseFloat(discount), vatAmount: (packageAmount - discount) * tax / 100,
               chequeAmount: cheque ? parseFloat(cheque) : 0, bankName, chequeNumber, chequeDate
             }
           }
@@ -583,7 +583,7 @@ class AddMembers extends Component {
           memberInfo.packageDetails[0] = {
             ...memberInfo.packageDetails[0], ...{
               paidStatus: 'Paid', cashAmount: cash ? parseFloat(cash) : 0, cardAmount: card ? parseFloat(card) : 0, digitalAmount: digital ? digital : 0,
-              cardNumber: cardNumber, actualAmount: packageAmount, totalAmount: totalAmount, discount: parseFloat(discount), vatAmount: (setPackageAmount - discount) * tax / 100,
+              cardNumber: cardNumber, actualAmount: packageAmount, totalAmount: totalAmount, discount: parseFloat(discount), vatAmount: (packageAmount - discount) * tax / 100,
             }
           }
         }
@@ -854,11 +854,11 @@ class AddMembers extends Component {
   addInstallment(packageAmount) {
     const { installments, installmentsCopy } = this.state
     if (installments.length === 0) {
-      installments.push({ actualAmount: packageAmount.toFixed(3), dueDate: new Date(), paidStatus: 'UnPaid' })
-      installmentsCopy.push({ actualAmount: packageAmount.toFixed(3), dueDate: new Date(), paidStatus: 'UnPaid' })
+      installments.push({ amount: packageAmount.toFixed(3), dueDate: new Date(), paidStatus: 'UnPaid' })
+      installmentsCopy.push({ amount: packageAmount.toFixed(3), dueDate: new Date(), paidStatus: 'UnPaid' })
     } else {
-      installments.push({ actualAmount: 0, dueDate: new Date(), paidStatus: 'UnPaid' })
-      installmentsCopy.push({ actualAmount: 0, dueDate: new Date(), paidStatus: 'UnPaid' })
+      installments.push({ amount: 0, dueDate: new Date(), paidStatus: 'UnPaid' })
+      installmentsCopy.push({ amount: 0, dueDate: new Date(), paidStatus: 'UnPaid' })
     }
     this.setState({ installments, installmentsCopy })
   }
@@ -870,11 +870,11 @@ class AddMembers extends Component {
       installmentsCopy.splice(i, 1);
       installments.forEach((installment, j) => {
         if (j === 0) {
-          installment.actualAmount = packageAmount.toFixed(3)
-          installmentsCopy[j].actualAmount = packageAmount.toFixed(3)
+          installment.amount = packageAmount.toFixed(3)
+          installmentsCopy[j].amount = packageAmount.toFixed(3)
         } else {
-          installment.actualAmount = 0
-          installmentsCopy[j].actualAmount = 0
+          installment.amount = 0
+          installmentsCopy[j].amount = 0
         }
       })
     }
@@ -884,14 +884,14 @@ class AddMembers extends Component {
   setInstallmentAmountDueDate(e, i, type) {
     const { installments, installmentsCopy } = this.state
     if (type === 'amount') {
-      if (installmentsCopy[i + 1] && parseFloat(installmentsCopy[i].actualAmount) >= parseFloat(e.target.value ? e.target.value : 0)) {
-        installments[i].actualAmount = e.target.value
-        installments[i + 1].actualAmount = installmentsCopy[i].actualAmount - e.target.value
-        installmentsCopy[i + 1].actualAmount = installmentsCopy[i].actualAmount - e.target.value
+      if (installmentsCopy[i + 1] && parseFloat(installmentsCopy[i].amount) >= parseFloat(e.target.value ? e.target.value : 0)) {
+        installments[i].amount = e.target.value
+        installments[i + 1].amount = installmentsCopy[i].amount - e.target.value
+        installmentsCopy[i + 1].amount = installmentsCopy[i].amount - e.target.value
         installments.forEach((installment, j) => {
           if (j > i + 1) {
-            installment.actualAmount = 0
-            installmentsCopy[j].actualAmount = 0
+            installment.amount = 0
+            installmentsCopy[j].amount = 0
           }
         })
       }
@@ -1026,7 +1026,7 @@ class AddMembers extends Component {
     //   trainerFee.period.periodDays <= this.state.periodDays
     // ) : []
 
-    let subTotal = (installments[0] && installments[0].actualAmount) ? parseFloat(installments[0].actualAmount) : packageAmount
+    let subTotal = (installments[0] && installments[0].amount) ? parseFloat(installments[0].amount) : packageAmount
     let totalVat = (subTotal - discount) * tax / 100
     const totalAmount = subTotal - discount + totalVat
 
@@ -1569,7 +1569,7 @@ class AddMembers extends Component {
                                     <div className="position-relative d-flex flex-grow-1" dir="ltr">
                                       <span className="OnlyCurrency Uppercase">{this.props.defaultCurrency}</span>
                                       <input type="text" className="form-control inputFieldPaddingCls ar-en-px-2"
-                                        value={installment.actualAmount} onChange={(e) => this.setInstallmentAmountDueDate(e, i, 'amount')}
+                                        value={installment.amount} onChange={(e) => this.setInstallmentAmountDueDate(e, i, 'amount')}
                                       />
                                     </div>
                                   </div>

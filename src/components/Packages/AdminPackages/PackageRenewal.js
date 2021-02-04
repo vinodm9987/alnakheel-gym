@@ -308,27 +308,57 @@ class PackageRenewal extends Component {
 
   handleSubmit(totalAmount) {
     const { t } = this.props
-    const { packages, cardNumber, cash, card, packageAmount, member, discount, tax, giftcard, memberTransactionId, cashE, cardE, digital, digitalE,
-      startDate, endDate, cheque } = this.state
+    const { packages, cardNumber, cash, card, packageAmount, member, discount, tax, memberTransactionId, cashE, cardE, digital, digitalE,
+      startDate, endDate, cheque, installments, bankName, chequeNumber, chequeDate, showCheque } = this.state
     if (member && packages && (parseInt(totalAmount) === parseInt((+cash || 0) + (+card || 0) + (+digital || 0) + (+cheque || 0))) && !cardE && !cashE && !digitalE && startDate <= endDate) {
       const memberInfo = {
         // oldPackageId,
         memberId: member._id,
         packageDetails: {
           packages: packages,
-          paidStatus: 'Paid',
-          cashAmount: cash ? parseFloat(cash) : 0,
-          cardAmount: card ? parseFloat(card) : 0,
-          digitalAmount: digital ? digital : 0,
-          cardNumber: cardNumber,
-          actualAmount: packageAmount,
-          totalAmount: totalAmount,
-          discount: parseFloat(discount),
-          tax: (packageAmount - discount - giftcard) * tax / 100,
-          giftcard: giftcard,
           memberTransactionId: memberTransactionId,
           startDate,
           endDate
+        }
+      }
+      if (installments.length > 0) {
+        memberInfo.packageDetails.Installments = installments.map((installment, k) => {
+          if (k === 0) {
+            if (showCheque) {
+              return {
+                ...installment, ...{
+                  installmentName: `Installment ${k + 1}`, paidStatus: 'Paid', cashAmount: cash ? parseFloat(cash) : 0, cardAmount: card ? parseFloat(card) : 0, digitalAmount: digital ? digital : 0,
+                  cardNumber: cardNumber, actualAmount: installment.amount, totalAmount: totalAmount, discount: parseFloat(discount), vatAmount: (installment.amount - discount) * tax / 100,
+                  chequeAmount: cheque ? parseFloat(cheque) : 0, bankName, chequeNumber, chequeDate
+                }
+              }
+            } else {
+              return {
+                ...installment, ...{
+                  installmentName: `Installment ${k + 1}`, paidStatus: 'Paid', cashAmount: cash ? parseFloat(cash) : 0, cardAmount: card ? parseFloat(card) : 0, digitalAmount: digital ? digital : 0,
+                  cardNumber: cardNumber, actualAmount: installment.amount, totalAmount: totalAmount, discount: parseFloat(discount), vatAmount: (installment.amount - discount) * tax / 100,
+                }
+              }
+            }
+          } else { return installment }
+        })
+        memberInfo.packageDetails.paidStatus = 'Installment'
+      } else {
+        if (showCheque) {
+          memberInfo.packageDetails = {
+            ...memberInfo.packageDetails, ...{
+              paidStatus: 'Paid', cashAmount: cash ? parseFloat(cash) : 0, cardAmount: card ? parseFloat(card) : 0, digitalAmount: digital ? digital : 0,
+              cardNumber: cardNumber, actualAmount: packageAmount, totalAmount: totalAmount, discount: parseFloat(discount), vatAmount: (packageAmount - discount) * tax / 100,
+              chequeAmount: cheque ? parseFloat(cheque) : 0, bankName, chequeNumber, chequeDate
+            }
+          }
+        } else {
+          memberInfo.packageDetails = {
+            ...memberInfo.packageDetails, ...{
+              paidStatus: 'Paid', cashAmount: cash ? parseFloat(cash) : 0, cardAmount: card ? parseFloat(card) : 0, digitalAmount: digital ? digital : 0,
+              cardNumber: cardNumber, actualAmount: packageAmount, totalAmount: totalAmount, discount: parseFloat(discount), vatAmount: (packageAmount - discount) * tax / 100,
+            }
+          }
         }
       }
       this.wantTrainer(memberInfo)
