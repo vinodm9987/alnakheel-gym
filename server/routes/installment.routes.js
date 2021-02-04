@@ -7,7 +7,7 @@ exports.routes = (express, app) => {
 
     router.post('/getPackageInstallment', getPackageInstallment);
 
-    router.post('/getPackageInstallment', getPackageInstallment);
+    router.post('/getTrainerInstallment', getTrainerInstallment);
 
     router.post('/changeDueDateOfTrainerInstallment', changeDueDateOfTrainerInstallment);
 
