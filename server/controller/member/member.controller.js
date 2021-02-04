@@ -275,7 +275,7 @@ exports.addMemberFaceRecognition = async (req, res) => {
             newPhoto: photo.toString('base64').replace('data:image/png;base64,', ''),
             phoneNumber: userData.mobileNo,
             startDate: userData.packageDetails[0].startDate,
-            templates,raw_image
+            templates, raw_image
         };
         await addMemberInBioStar(obj);
         const newResponse = await Member.findById(req.body.memberId).populate('credentialId branch')
@@ -673,21 +673,11 @@ exports.generateToken = async (req, res) => {
 
 exports.payAtGymMobile = async (req, res) => {
     let queryCond = {}
-    queryCond["isPackageSelected"] = true
-    if (req.body.questions) queryCond["questions"] = req.body.questions;
-    if (req.body.oldPackageId) {
-        await Member.update({ "packageDetails._id": req.body.oldPackageId }, { $set: { "packageDetails.$.packageRenewal": true } })
-    }
     if (req.headers.userid) {
         req.body.packageDetails["doneBy"] = req.headers.userid
     }
     req.body.packageDetails["startDate"] = setTime(req.body.packageDetails.startDate);
     req.body.packageDetails["endDate"] = setTime(req.body.packageDetails.endDate);
-    if (req.body.packageDetails.trainerDetails[0]) {
-        req.body.packageDetails.trainerDetails[0]["trainerStart"] = setTime(req.body.packageDetails.trainerDetails[0].trainerStart);
-        req.body.packageDetails.trainerDetails[0]["trainerEnd"] = setTime(req.body.packageDetails.trainerDetails[0].trainerEnd);
-        req.body.packageDetails.trainerDetails[0]["orderNo"] = generateOrderId()
-    }
     req.body.packageDetails["orderNo"] = generateOrderId()
     req.body.packageDetails["dateOfPurchase"] = setTime(new Date())
     req.body.packageDetails["timeOfPurchase"] = new Date()
@@ -716,36 +706,22 @@ exports.payAtGymMobile = async (req, res) => {
 */
 
 exports.bookTrainer = async (req, res) => {
-    if (req.body.trainerDetails) {
-        req.body.trainerDetails["trainerStart"] = setTime(req.body.trainerDetails.trainerStart);
-        req.body.trainerDetails["trainerEnd"] = setTime(req.body.trainerDetails.trainerEnd);
-        req.body.trainerDetails["orderNo"] = generateOrderId()
-    }
-    await Member.update({ 'packageDetails._id': req.body.oldPackageId }, {
-        $push: {
-            'packageDetails.$.trainerDetails': req.body.trainerDetails
-        },
-        $inc: {
-            'packageDetails.$.cashAmount': req.body.cashAmount,
-            'packageDetails.$.cardAmount': req.body.cardAmount,
-            'packageDetails.$.digitalAmount': req.body.digitalAmount,
-            'packageDetails.$.actualAmount': req.body.actualAmount,
-            'packageDetails.$.totalAmount': req.body.totalAmount,
-            'packageDetails.$.discount': req.body.discount,
-            'packageDetails.$.tax': req.body.tax,
+    try {
+        let trainerDetails = req.body.trainerDetails;
+        trainerDetails['trainerStart'] = setTime(trainerDetails['trainerStart']);
+        trainerDetails['trainerEnd'] = setTime(trainerDetails['trainerEnd']);
+        const member = await Member.findById(req.body.memberId);
+        for (const [i, packages] of member.packageDetails.entries()) {
+            if (req.body.packageDetailsId === packages._id.toString()) {
+                member.packageDetails[i].trainerDetails.push(trainerDetails);
+            }
         }
-    }, { new: true })
-    Member.findById(req.body.memberId)
-        .populate('credentialId branch')
-        .populate('packageDetails.doneBy')
-        .then(response => {
-            auditLogger(req, 'Success')
-            successResponseHandler(res, { ...response, ...{ displayReceipt: true } }, "successfully save the transaction !!");
-        }).catch(error => {
-            logger.error(error);
-            auditLogger(req, 'Failed')
-            errorResponseHandler(res, error, "Exception while saving the transaction !");
-        });
+        const response = await member.save();
+        return successResponseHandler(res, response, "success");
+    } catch (error) {
+        logger.error(error);
+        return errorResponseHandler(res, error, "failed");
+    }
 };
 
 
