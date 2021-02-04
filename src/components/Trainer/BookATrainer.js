@@ -302,7 +302,7 @@ class BookATrainer extends Component {
     if (member && packages && (parseInt(totalAmount) === parseInt((+cash || 0) + (+card || 0) + (+digital || 0) + (+cheque || 0))) && !cardE && !cashE && !digitalE && trainer && period) {
       const trainerInfo = {
         memberId: member._id,
-        oldPackageId,
+        packageDetailsId: oldPackageId,
         trainerDetails: {
           trainerFees: trainerFeesId,
           trainer: trainer._id,
@@ -329,7 +329,13 @@ class BookATrainer extends Component {
                 }
               }
             }
-          } else { return installment }
+          } else {
+            return {
+              ...installment, ...{
+                installmentName: `Installment ${k + 1}`
+              }
+            }
+          }
         })
       } else {
         if (showCheque) {

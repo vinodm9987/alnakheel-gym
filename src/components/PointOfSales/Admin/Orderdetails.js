@@ -71,7 +71,7 @@ class Orderdetails extends Component {
                     <tr>
                       <th><span className="px-3">Item</span></th>
                       <th>Price</th>
-                      <th>Qty</th>
+                      <th></th>
                     </tr>
                   </thead>
                   <tbody>
@@ -247,7 +247,7 @@ class Orderdetails extends Component {
                                   <div className="text-right my-1">Gift Card :</div>
                                   : <div></div>}
                                 {parseFloat(orderById.vatAmount) ?
-                                  <div className="text-right my-1">VAT :</div>
+                                  <div className="text-right my-1">VAT:</div>
                                   : <div></div>}
                                 {parseFloat(orderById.digitalAmount) ?
                                   <div className="text-right my-1">Digital :</div>
@@ -340,8 +340,8 @@ class Orderdetails extends Component {
                 </p>
                 <p style={{ textAlign: "center", margin: "0 0 10px 0" }}>VAT - {orderById.branch.vatRegNo}</p>
                 <p style={{ display: "flex", justifyContent: "space-between", margin: "0" }}>
-                  <span style={{ padding: "2px", fontSize: "14px" }}>{dateToDDMMYYYY(orderById.dateOfPurchase)} {dateToHHMM(orderById.created_at)}</span>
-                  <span style={{ padding: "2px", fontSize: "14px" }}>Bill No:{orderById.orderNo}</span>
+                  <span style={{ paddingRight: "4px", fontSize: "14px", whiteSpace: "nowrap" }}>{dateToDDMMYYYY(orderById.dateOfPurchase)} {dateToHHMM(orderById.created_at)}</span>
+                  <span style={{ paddingLeft: "4px", fontSize: "14px", whiteSpace: "nowrap" }}>Bill No:{orderById.orderNo}</span>
                 </p>
                 {orderById.customerDetails.member &&
                   <div>
