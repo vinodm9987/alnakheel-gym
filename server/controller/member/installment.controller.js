@@ -57,7 +57,7 @@ exports.getTrainerInstallment = async (req, res) => {
                 if (packages.trainerDetails && packages.trainerDetails.length) {
                     for (const trainer of packages.trainerDetails) {
                         for (const installment of trainer.Installments) {
-                            const trainerData = Employee.findById(trainer.trainer).select({ faceRecognitionTemplate: 0 })
+                            const trainerData = await Employee.findById(trainer.trainer).select({ faceRecognitionTemplate: 0 })
                             const dueDate = new Date(setTime(installment.dueDate));
                             const todayMonth = new Date(dueDate).getMonth();
                             const thisYear = new Date(dueDate).getFullYear();
