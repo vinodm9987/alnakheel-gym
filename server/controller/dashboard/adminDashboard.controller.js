@@ -6,7 +6,7 @@ const { Formate: { setTime } } = require('../../utils');
 */
 
 
-const { Member, Package, Stocks, Classes, StockSell, MemberPurchase, MemberClass, MemberAttendance, Branch } = require('../../model');
+const { Member, Package, Stocks, Classes, StockSell, MemberClass, MemberAttendance, Branch } = require('../../model');
 
 
 const { getStockSellTotalAmount, getClassesSellTotalAmount,
@@ -241,7 +241,6 @@ exports.getDashboardTotalSales = async (req, res) => {
 exports.getPendingInstallments = async (req, res) => {
     try {
         const members = await Member.find({}).populate('credentialId').lean();
-        const today = new Date(setTime(new Date())).getTime();
         let response = [];
         for (const member of members) {
             for (const packages of member.packageDetails) {
@@ -252,8 +251,7 @@ exports.getPendingInstallments = async (req, res) => {
                         const thisYear = new Date(dueDate).getFullYear();
                         const monthConditions = typeof req.body.month === 'number' ? req.body.month === todayMonth : true;
                         const yearConditions = typeof req.body.year === 'number' ? req.body.year === thisYear : true;
-                        const conditions = (today <= dueDate) && monthConditions && yearConditions;
-                        if (conditions && installment.paidStatus !== 'Paid') {
+                        if (monthConditions && yearConditions && installment.paidStatus !== 'Paid') {
                             const memberObj = Object.assign({}, member);
                             memberObj['packageAmount'] = installment.actualAmount;
                             memberObj['dueDate'] = installment.dueDate;
@@ -265,13 +263,12 @@ exports.getPendingInstallments = async (req, res) => {
                 if (packages.trainerDetails && packages.trainerDetails.length) {
                     for (const trainer of packages.trainerDetails) {
                         for (const installment of trainer.Installments) {
-                            const dueDate = new Date(setTime(installment.dueDate));
+                            const dueDate = new Date(setTime(installment.dueDate)).getTime();
                             const todayMonth = new Date(dueDate).getMonth();
                             const thisYear = new Date(dueDate).getFullYear();
                             const monthConditions = req.body.month ? req.body.month === todayMonth : true;
                             const yearConditions = req.body.year ? req.body.year === thisYear : true;
-                            const conditions = (new Date() > dueDate) && monthConditions && yearConditions;
-                            if (new Date() > dueDate && conditions) {
+                            if (monthConditions && yearConditions && installment.paidStatus !== 'Paid') {
                                 const memberObj = Object.assign({}, member);
                                 memberObj['trainerAmount'] = installment.actualAmount;
                                 memberObj['dueDate'] = installment.dueDate;
