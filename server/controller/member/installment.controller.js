@@ -88,9 +88,9 @@ exports.changeDueDateOfPackageInstallment = async (req, res) => {
     try {
         const dueDate = setTime(req.body.dueDate);
         const member = await Member.findById(req.body.memberId);
-        for (const [packages, i] of member.packageDetails.entries()) {
+        for (const [i, packages] of member.packageDetails.entries()) {
             if (packages._id.toString() === req.body.packagesDetailsId) {
-                for (const [installment, j] of member.packageDetails[i].Installments.entries()) {
+                for (const [j, installment] of member.packageDetails[i].Installments.entries()) {
                     if (installment._id.toString() === req.body.installmentId) {
                         member.packageDetails[i].Installments[j].dueDate = dueDate;
                     }
@@ -110,11 +110,11 @@ exports.changeDueDateOfTrainerInstallment = async (req, res) => {
     try {
         const dueDate = setTime(req.body.dueDate);
         const member = await Member.findById(req.body.memberId);
-        for (const [packages, i] of member.packageDetails.entries()) {
+        for (const [i, packages] of member.packageDetails.entries()) {
             if (packages[i]._id.toString() === req.body.packagesDetailsId) {
-                for (const [trainer, j] of member.packageDetails[i].trainerDetails.entries()) {
+                for (const [j, trainer] of member.packageDetails[i].trainerDetails.entries()) {
                     if (trainer[j]._id.toString() === req.body.trainerDetailsId) {
-                        for (const [installment, k] of member.packageDetails[i].trainerDetails[j].Installments.entries()) {
+                        for (const [k, installment] of member.packageDetails[i].trainerDetails[j].Installments.entries()) {
                             if (installment._id.toString() === req.body.installmentId) {
                                 member.packageDetails[i].trainerDetails[j].Installments[k].dueDate = dueDate;
                             }
