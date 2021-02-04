@@ -673,14 +673,18 @@ exports.generateToken = async (req, res) => {
 
 exports.payAtGymMobile = async (req, res) => {
     let queryCond = {}
-    if (req.headers.userid) {
-        req.body.packageDetails["doneBy"] = req.headers.userid
-    }
+    if (req.headers.userid) req.body.packageDetails["doneBy"] = req.headers.userid;
     req.body.packageDetails["startDate"] = setTime(req.body.packageDetails.startDate);
     req.body.packageDetails["endDate"] = setTime(req.body.packageDetails.endDate);
     req.body.packageDetails["orderNo"] = generateOrderId()
-    req.body.packageDetails["dateOfPurchase"] = setTime(new Date())
-    req.body.packageDetails["timeOfPurchase"] = new Date()
+    req.body.packageDetails["dateOfPaid"] = setTime(new Date());
+    req.body.packageDetails["timeOfPaid"] = new Date();
+    if (req.body.packageDetails.Installments) {
+        req.body.packageDetails.Installments.forEach(doc => {
+            doc.dateOfPaid = setTime(new Date())
+            doc.timeOfPaid = new Date();
+        });
+    }
     req.responseData = await Member.findById(req.params.id).populate('credentialId').lean()
     Member.findByIdAndUpdate(req.params.id, { $push: { packageDetails: req.body.packageDetails }, $set: queryCond })
         .populate('credentialId branch')
@@ -710,6 +714,14 @@ exports.bookTrainer = async (req, res) => {
         let trainerDetails = req.body.trainerDetails;
         trainerDetails['trainerStart'] = setTime(trainerDetails['trainerStart']);
         trainerDetails['trainerEnd'] = setTime(trainerDetails['trainerEnd']);
+        trainerDetails["dateOfPaid"] = setTime(new Date());
+        trainerDetails["timeOfPaid"] = new Date();
+        if (trainerDetails.Installments) {
+            req.body.trainerDetails.Installments.forEach(doc => {
+                doc.dateOfPaid = setTime(new Date())
+                doc.timeOfPaid = new Date();
+            });
+        }
         const member = await Member.findById(req.body.memberId);
         for (const [i, packages] of member.packageDetails.entries()) {
             if (req.body.packageDetailsId === packages._id.toString()) {
