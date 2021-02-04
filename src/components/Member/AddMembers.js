@@ -567,7 +567,13 @@ class AddMembers extends Component {
                 }
               }
             }
-          } else { return installment }
+          } else {
+            return {
+              ...installment, ...{
+                installmentName: `Installment ${k + 1}`
+              }
+            }
+          }
         })
         memberInfo.packageDetails[0].paidStatus = 'Installment'
       } else {

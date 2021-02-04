@@ -340,7 +340,13 @@ class PackageRenewal extends Component {
                 }
               }
             }
-          } else { return installment }
+          } else {
+            return {
+              ...installment, ...{
+                installmentName: `Installment ${k + 1}`
+              }
+            }
+          }
         })
         memberInfo.packageDetails.paidStatus = 'Installment'
       } else {
