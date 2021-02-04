@@ -64,6 +64,9 @@ module.exports.StartBioStarServer = async () => {
                 case '6402':
                     await getMemberLog(data.Event.user_id.user_id, "Disabled User")
                     break;
+                case '4867':
+                    await addAttendanceLog(data.Event.user_id.user_id, "Successfully Done Face Recognition")
+                    break;
                 default:
                     break;
             }

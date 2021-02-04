@@ -1,19 +1,15 @@
-/**  
+/**
  * utils.
 */
 
-const { logger: { logger }, handler: { successResponseHandler, errorResponseHandler }, biostar: { BIO_STAR_USER_REGISTRATION_URL } } = require('../../../config');
+const { logger: { logger }, handler: { successResponseHandler, errorResponseHandler } } = require('../../../config');
 
-const { Formate: { setTime } } = require('../../utils');
+const { Formate: { setTime, checkDateInBetween } } = require('../../utils');
 
-const { bioStarToken, } = require('../../biostar');
+const { memberFreezeNotification, freezeMemberInBioStar } = require('../../worker/freeze')
 
-const { setConnection, jobs, startWorker, workerEvent,
-    connectQueue, addQueued } = require('../../worker/freeze')
 
-const axios = require('axios');
-
-/**  
+/**
  * models.
 */
 
@@ -163,79 +159,64 @@ exports.removeMemberFreeze = (req, res) => {
 
 
 exports.freezeMember = async (req, res) => {
-    const connection = setConnection();
-    const job = jobs();
-    const queue = await connectQueue(connection, job);
-    const worker = await startWorker(connection, job)
-    workerEvent(worker);
     const { member } = req.body;
     const users = member.map(doc => { return doc.member });
-    for (let i = 0; i < member.length; i++) {
-        let startDate = new Date(member[i].reactivation).toISOString();
+    for (const item of member) {
+        let memberInfo = await Member.findById(item.member);
+        let startDate = new Date(item.reactivation).toISOString();
         let largest = setTime(new Date());
-        member[i].packageDetails.forEach(async (doc, index) => {
-            let temp = await memberFreeze(doc, largest, member[i].days, member[i]._id, startDate);
+        let today = new Date(setTime(new Date())).getTime();
+        for (const [i] of memberInfo.packageDetails.entries()) {
+            let temp = await memberFreeze(memberInfo, i, largest, item.days, item._id, startDate);
             largest = new Date(temp) > new Date(largest) ? new Date(temp) : largest;
-            if (index === member[i].packageDetails.length - 1) {
-                if (i === member.length - 1) {
-                    await addQueued(queue, "notification", [users]);
-                }
-                const headers = await bioStarToken();
-                await addQueued(queue, "biostar", [member[i].memberId, startDate, new Date(largest).toISOString(), headers]);
-            }
-        });
+        }
+        let checkLargest = new Date(largest).getTime();
+        if (today !== checkLargest) {
+            await freezeMemberInBioStar(item.memberId, startDate, largest);
+        }
     }
-    worker.start();
-    successResponseHandler(res, [], "successfully freeze member !");
+    await memberFreezeNotification(users);
+    return successResponseHandler(res, [], "successfully freeze member !");
 };
 
 
 
-const memberFreeze = async (doc, largest, days, _id, reactivationDate) => {
+const memberFreeze = async (member, packageIndex, largest, days, _id, reactivationDate) => {
     try {
-        const freezeDate = setTime(new Date());
-        if (!doc.isExpiredPackage && doc.extendDate) {
-            await Member.update({ "packageDetails._id": doc._id }, {
-                $set: {
-                    "packageDetails.$.extendDate": new Date(doc.extendDate).setDate(new Date(doc.extendDate).getDate() + days),
-                    "packageDetails.$.reactivationDate": reactivationDate, "packageDetails.$.freezeDate": freezeDate
-                }
-            });
+        const today = setTime(new Date());
+        const memberPackageData = member.packageDetails[packageIndex];
+        const notStartedPackage = new Date(memberPackageData.startDate) > new Date(today) && checkDateInBetween(reactivationDate, memberPackageData.startDate, memberPackageData.endDate);
+        if (new Date(memberPackageData.startDate) >= new Date(reactivationDate)) return largest;  // handle package is not started and reactivation date is not lie in between startDate and endDate
+        if (!memberPackageData.isExpiredPackage && notStartedPackage) {  // handle package is not started and reactivation date lie in between startDate and endDate
+            memberPackageData.endDate = new Date(new Date(memberPackageData.endDate).setDate(new Date(memberPackageData.endDate).getDate() + days));
+            memberPackageData.startDate = new Date(new Date(memberPackageData.startDate).setDate(new Date(memberPackageData.startDate).getDate() + days));
             await MemberFreezing.findByIdAndUpdate(_id, { status: "Completed" })
-            if (new Date(doc.extendDate) > new Date(largest)) { largest = new Date(doc.extendDate).setDate(new Date(doc.extendDate).getDate() + days) }
-        } else if (!doc.isExpiredPackage && doc.endDate && doc.startDate <= setTime(new Date())) {
-            await Member.update({ "packageDetails._id": doc._id }, {
-                $set: {
-                    "packageDetails.$.extendDate": new Date(new Date(doc.endDate).setDate(new Date(doc.endDate).getDate() + days)),
-                    "packageDetails.$.reactivationDate": reactivationDate, "packageDetails.$.freezeDate": freezeDate
-                }
-            });
-            await MemberFreezing.findByIdAndUpdate(_id, { status: "Completed" })
-            if (new Date(doc.endDate) > new Date(largest)) { largest = new Date(new Date(doc.endDate).setDate(new Date(doc.endDate).getDate() + days)); }
-        } else if (!doc.isExpiredPackage && doc.endDate && doc.startDate > setTime(new Date())) {
-            await Member.update({ "packageDetails._id": doc._id }, {
-                $set: {
-                    "packageDetails.$.endDate": new Date(new Date(doc.endDate).setDate(new Date(doc.endDate).getDate() + days)),
-                    "packageDetails.$.startDate": new Date(new Date(doc.startDate).setDate(new Date(doc.startDate).getDate() + days))
-                }
-            });
-            await MemberFreezing.findByIdAndUpdate(_id, { status: "Completed" })
-            if (new Date(doc.endDate) > new Date(largest)) { largest = new Date(new Date(doc.endDate).setDate(new Date(doc.endDate).getDate() + days)); }
+            if (new Date(memberPackageData.endDate) > new Date(largest)) { largest = new Date(memberPackageData.extendDate) }
         }
-        doc.trainerDetails.forEach(async (trainerDetail) => {
-            if (!trainerDetail.isExpiredTrainer && trainerDetail.trainerExtend) {
-                await Member.update({ "packageDetails.trainerDetails._id": trainerDetail._id }, { $addToSet: { "packageDetails.$.trainerDetails.trainerExtend": new Date(trainerDetail.trainerExtend).setDate(new Date(trainerDetail.trainerExtend).getDate() + days) } });
-            } else if (!trainerDetail.isExpiredTrainer && trainerDetail.trainerEnd && trainerDetail.trainerStart <= setTime(new Date())) {
-                await Member.update({ "packageDetails.trainerDetails._id": trainerDetail._id }, { $set: { "packageDetails.$.trainerDetails": { trainerExtend: new Date(trainerDetail.trainerEnd).setDate(new Date(trainerDetail.trainerEnd).getDate() + days) } } });
-            } else if (!trainerDetail.isExpiredTrainer && trainerDetail.trainerEnd && trainerDetail.trainerStart > setTime(new Date())) {
-                await Member.update({ "packageDetails.trainerDetails._id": trainerDetail._id }, {
-                    $addToSet: {
-                        "packageDetails.$.trainerDetails.trainerEnd": new Date(trainerDetail.trainerEnd).setDate(new Date(trainerDetail.trainerEnd).getDate() + days),
-                        "packageDetails.$.trainerDetails.trainerStart": new Date(trainerDetail.trainerStart).setDate(new Date(trainerDetail.trainerStart).getDate() + days)
-                    }
-                });
+        else if (!memberPackageData.isExpiredPackage && memberPackageData.extendDate && memberPackageData.extendDate > new Date(today)) {   // handle package should not expire and it already freeze earlier
+            memberPackageData.extendDate = new Date(memberPackageData.extendDate).setDate(new Date(memberPackageData.extendDate).getDate() + days);
+            memberPackageData.reactivationDate = reactivationDate; memberPackageData.freezeDate = today;
+            await MemberFreezing.findByIdAndUpdate(_id, { status: "Completed" })
+            if (new Date(memberPackageData.extendDate) > new Date(largest)) { largest = new Date(memberPackageData.extendDate) }
+        } else if (!memberPackageData.isExpiredPackage && memberPackageData.endDate > new Date(today)) {  // handle package should not expire
+            memberPackageData.extendDate = new Date(memberPackageData.endDate).setDate(new Date(memberPackageData.endDate).getDate() + days);
+            memberPackageData.reactivationDate = reactivationDate; memberPackageData.freezeDate = today;
+            await MemberFreezing.findByIdAndUpdate(_id, { status: "Completed" })
+            if (new Date(memberPackageData.extendDate) > new Date(largest)) { largest = new Date(memberPackageData.extendDate) }
+        }
+        if (!memberPackageData.isExpiredPackage) {
+            for (const [j, trainer] of memberPackageData.trainerDetails.entries()) {
+                if (!trainer.isExpiredTrainer && trainer.trainerExtend && trainer.trainerExtend > new Date(today)) {
+                    memberPackageData.trainerDetails[j].trainerExtend = new Date(trainer.trainerExtend).setDate(new Date(trainer.trainerExtend).getDate() + days);
+                } else if (!trainer.isExpiredTrainer && trainer.trainerEnd && trainer.trainerEnd > new Date(today)) {
+                    memberPackageData.trainerDetails[j].trainerExtend = new Date(trainer.trainerEnd).setDate(new Date(trainer.trainerEnd).getDate() + days);
+                } else if (!trainer.isExpiredTrainer && trainer.trainerEnd && trainer.trainerStart > new Date(today)) {
+                    memberPackageData.trainerDetails[j].trainerEnd = new Date(trainer.trainerEnd).setDate(new Date(trainer.trainerEnd).getDate() + days);
+                    memberPackageData.trainerDetails[j].trainerStart = new Date(trainer.trainerStart).setDate(new Date(trainer.trainerStart).getDate() + days)
+                }
             }
-        });
+        }
+        await member.save();
         return largest;
     } catch (error) {
         logger.error(error);
@@ -243,61 +224,49 @@ const memberFreeze = async (doc, largest, days, _id, reactivationDate) => {
 };
 
 
-const cancelFreezeUpdate = async (doc, largest, returningDate) => {
-    if (!doc.isExpiredPackage && doc.extendDate) {
-        const differentDate = new Date(doc.reactivationDate).getDate() - new Date(returningDate).getDate();
-        const newExtendedDate = new Date(doc.extendDate).setDate(new Date(doc.extendDate).getDate() - differentDate);
-        await Member.update({ "packageDetails._id": doc._id }, {
-            $set: {
-                "packageDetails.$.extendDate": new Date(newExtendedDate),
-                "packageDetails.$.reactivationDate": returningDate,
-            }
-        });
-        if (new Date(newExtendedDate) > new Date(largest)) largest = newExtendedDate;
-    }
-    if (!doc.isExpiredTrainer && doc.trainerExtend) {
-        const differentDate = new Date(doc.reactivationDate).getDate() - new Date(returningDate).getDate();
-        const newExtendedDate = new Date(doc.extendDate).setDate(new Date(doc.trainerExtend).getDate() - differentDate);
-        await Member.update({ "packageDetails._id": doc._id },
-            { $set: { "packageDetails.$.trainerExtend": setTime(newExtendedDate) } });
-    }
-    return largest;
-};
+
 
 
 
 exports.cancelFreeze = async (req, res) => {
     try {
         const userData = await Member.findById(req.body.memberId)
-            .populate('credentialId packageDetails.packages').lean();
+            .populate('credentialId packageDetails.packages');
         let largestEndDate = new Date().getTime();
-        for (const doc of userData.packageDetails) {
-            let temp = cancelFreezeUpdate(doc, largestEndDate, req.body.returningDate);
+        for (const [i] of userData.packageDetails.entries()) {
+            let temp = await cancelFreezeUpdate(userData, i, largestEndDate, req.body.returningDate);
             largestEndDate = new Date(temp) > new Date(largestEndDate) ? new Date(temp) : largestEndDate;
-        }
-        const headers = await bioStarToken();
-        const { data } = await axios.get(`${BIO_STAR_USER_REGISTRATION_URL}/${userData.memberId}`, { headers });
-        let obj = {
-            user_group: data.user_group,
-            access_groups: data.access_groups,
-            name: userData.credentialId.userName,
-            email: userData.credentialId.email,
-            start_datetime: new Date(req.body.returningDate).toISOString(),
-            expiry_datetime: new Date(largestEndDate).toISOString(),
-            security_level: data.security_level,
-            status: 'AC',
-            password: "ANujm4467@gmail.com"
         };
-        await axios.put(`${BIO_STAR_USER_REGISTRATION_URL}/${userData.memberId}`, obj, { headers });
         const newCancelFreeze = new MemberFreezing(req.body);
         newCancelFreeze['typeOfFreeze'] = 'Canceled';
         newCancelFreeze['returningDate'] = setTime(req.body.returningDate);
         const response = await newCancelFreeze.save();
+        await freezeMemberInBioStar(userData.memberId, req.body.returningDate, largestEndDate);
         return successResponseHandler(res, response, "success");
     } catch (error) {
         logger.error(error);
         return errorResponseHandler(res, error, 'failed to get freeze history!');
     }
+};
+
+const cancelFreezeUpdate = async (member, i, largest, returningDate) => {
+    const packages = member.packageDetails[i];
+    const today = setTime(new Date());
+    if (!packages.isExpiredPackage && packages.extendDate && new Date(packages.extendDate) > new Date(today)) {
+        const differentDate = new Date(new Date(packages.reactivationDate).setDate(new Date(packages.reactivationDate).getDate() - new Date(returningDate).getDate())).getDate()
+        const newExtendedDate = new Date(packages.extendDate).setDate(new Date(packages.extendDate).getDate() - differentDate);
+        member.packageDetails[i].extendDate = setTime(newExtendedDate);
+        member.packageDetails[i].reactivationDate = setTime(returningDate);
+        for (const [j, trainer] of packages.trainerDetails.entries()) {
+            if (!trainer.isExpiredTrainer && trainer.trainerExtend && trainer.trainerExtend > new Date(today)) {
+                const newExtendedDate = new Date(trainer.trainerExtend).setDate(new Date(trainer.trainerExtend).getDate() - differentDate);
+                packages.trainerDetails[j].trainerExtend = setTime(newExtendedDate);
+            }
+        }
+        if (new Date(newExtendedDate) > new Date(largest)) largest = newExtendedDate;
+    }
+    await member.save();
+    return largest;
 };
 
 

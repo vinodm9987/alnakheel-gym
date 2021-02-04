@@ -5,12 +5,12 @@ const {
 const { Formate: { setTime } } = require('../../utils');
 
 
-const { Member, } = require('../../model');
+const { Member, Employee } = require('../../model');
 
 
 
 
-exports.getPackageInstallment = async(req, res) => {
+exports.getPackageInstallment = async (req, res) => {
     try {
         const members = await Member.find({})
             .populate('credentialId packageDetails.packages').lean();
@@ -47,15 +47,19 @@ exports.getPackageInstallment = async(req, res) => {
 };
 
 
-exports.getTrainerInstallment = async(req, res) => {
+exports.getTrainerInstallment = async (req, res) => {
     try {
         const members = await Member.find({})
-            .populate('credentialId  packageDetails.packages').lean();
+            .populate('credentialId  packageDetails.packages')
+            .select({ faceRecognitionTemplate: 0 }).lean();
         let response = [];
         for (const member of members) {
             for (const packages of member.packageDetails) {
                 if (packages.trainerDetails && packages.trainerDetails.length) {
                     for (const trainer of packages.trainerDetails) {
+                        const trainerData = await Employee.findById(trainer.trainer)
+                            .populate('credentialId')
+                            .select({ faceRecognitionTemplate: 0 }).lean();
                         for (const installment of trainer.Installments) {
                             const dueDate = new Date(setTime(installment.dueDate));
                             const todayMonth = new Date(dueDate).getMonth();
@@ -71,6 +75,7 @@ exports.getTrainerInstallment = async(req, res) => {
                                 memberObj['trainerDetailsId'] = trainer._id;
                                 memberObj['installmentName'] = installment.installmentName;
                                 memberObj['installmentId'] = installment._id.toString();
+                                memberObj['trainerData'] = trainerData;
                                 response.push(memberObj);
                             }
                         }
@@ -87,7 +92,7 @@ exports.getTrainerInstallment = async(req, res) => {
 
 
 
-exports.changeDueDateOfPackageInstallment = async(req, res) => {
+exports.changeDueDateOfPackageInstallment = async (req, res) => {
     try {
         const dueDate = setTime(req.body.dueDate);
         const member = await Member.findById(req.body.memberId);
@@ -109,7 +114,7 @@ exports.changeDueDateOfPackageInstallment = async(req, res) => {
 };
 
 
-exports.changeDueDateOfTrainerInstallment = async(req, res) => {
+exports.changeDueDateOfTrainerInstallment = async (req, res) => {
     try {
         const dueDate = setTime(req.body.dueDate);
         const member = await Member.findById(req.body.memberId);

@@ -73,3 +73,19 @@ exports.getIncrementEqualTime = (date, date1, interval) => {
     }
     return arr;
 };
+
+exports.formateBioStarDate = (date) => {
+    let newDate = new Date(date);
+    let year = newDate.getFullYear();
+    let month = newDate.getMonth() < 9 ? '0' + (newDate.getMonth() + 1) : newDate.getMonth() + 1;
+    let dateOfDay = newDate.getDate();
+    return `${year}-${month}-${dateOfDay}T00:00:00.007Z`
+};
+
+
+exports.checkDateInBetween = (check, start, end) => {
+    const checkDate = new Date(check).getTime();
+    const startDate = new Date(start).getTime();
+    const endDate = new Date(end).getTime();
+    return (checkDate <= endDate && checkDate >= startDate);
+};
