@@ -16,7 +16,7 @@ class MemberSideBar extends Component {
     const { t } = this.props
     if (this.props.memberById) {
       const { credentialId: { avatar, userName, email }, memberId, mobileNo, admissionDate, personalId, dateOfBirth, nationality, gender,
-        questions, notes, packageDetails, status } = this.props.memberById
+        questions, notes, packageDetails, status, branch: { branchName } } = this.props.memberById
       return (
         <div className="row">
           <div className="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-12">
@@ -114,15 +114,15 @@ class MemberSideBar extends Component {
               <div className="col-6 p-0 text-right text-xl-left">
                 <small><span className="text-secondary">{t('Branch')}</span></small>
               </div>
-              {/* <div className="col-6 p-0">
-                <small><span>:<span
-                  className="mx-1"></span><span>{branchName}</span></span></small>
-              </div> */}
-              {/* tushar here spacing issue dummy branch name created today demo there india  */}
               <div className="col-6 p-0">
                 <small><span>:<span
-                  className="mx-1"></span><span>India</span></span></small>
+                  className="mx-1"></span><span>{branchName}</span></span></small>
               </div>
+              {/* tushar here spacing issue dummy branch name created today demo there india  */}
+              {/* <div className="col-6 p-0">
+                <small><span>:<span
+                  className="mx-1"></span><span>India</span></span></small>
+              </div> */}
               <div className="col-6 p-0 text-right text-xl-left">
                 <small><span className="text-secondary">{t('Notes')}</span></small>
               </div>
