@@ -1,6 +1,8 @@
 /** 
  * BIO STAR LOGIN URL
 */
+const { formateBioStarDate } = require('../server/utils/timeFormate.util');
+
 
 exports.BIO_STAR_LOGIN_URL = "http://127.0.0.1:8795/v2/login";
 
@@ -148,7 +150,7 @@ exports.getUserObject = (data) => {
     return {
         "access_groups": [{ "name": accessGroupName, "id": accessGroupId }],
         "email": email,
-        "expiry_datetime": endDate,
+        "expiry_datetime": formateBioStarDate(endDate),
         "login_id": `${name.replace(/\s/g, "")}${memberId}`,
         "name": name,
         "password": "ANujm4467@gmail.com",
@@ -159,7 +161,7 @@ exports.getUserObject = (data) => {
         "status": "true",
         "photo": newPhoto,
         "photo_exists": true,
-        "start_datetime": startDate,
+        "start_datetime": formateBioStarDate(startDate),
         "user_group": { "id": userGroupId },
         "user_id": memberId,
         "security_level": "LOW"
@@ -174,7 +176,7 @@ exports.getUpdateUserObject = (data) => {
     return {
         "access_groups": [{ "name": accessGroupName, "id": accessGroupId }],
         "email": email,
-        "expiry_datetime": endDate,
+        "expiry_datetime": formateBioStarDate(endDate),
         "name": name,
         "password": "ANujm4467@gmail.com",
         "permission": { "id": "2", "name": "User Operator", "description": "this is a permission for User Operators" },
@@ -189,7 +191,7 @@ exports.getUpdateUserObject = (data) => {
         "status": "true",
         "photo": newPhoto,
         "photo_exists": true,
-        "start_datetime": startDate,
+        "start_datetime": formateBioStarDate(startDate),
         "user_group": { "id": userGroupId },
         "security_level": "LOW"
     }
@@ -233,8 +235,8 @@ exports.getUserDisableObject = (data, status) => {
     return {
         "user_group": data.user_group,
         "access_groups": data.access_groups,
-        "start_datetime": data.start_datetime,
-        "expiry_datetime": data.expiry_datetime,
+        "start_datetime": formateBioStarDate(data.start_datetime),
+        "expiry_datetime": formateBioStarDate(data.expiry_datetime),
         "security_level": data.security_level,
         "status": status,
         "name": data.name,
@@ -250,8 +252,8 @@ exports.getUserFreezeObject = (data, startDate, endDate) => {
     return {
         "user_group": data.user_group,
         "access_groups": data.access_groups,
-        "start_datetime": startDate,
-        "expiry_datetime": endDate,
+        "start_datetime": formateBioStarDate(startDate),
+        "expiry_datetime": formateBioStarDate(endDate),
         "security_level": data.security_level,
         "status": 'AC',
         "name": data.name,
@@ -262,6 +264,19 @@ exports.getUserFreezeObject = (data, startDate, endDate) => {
 
 
 
+exports.getUserFreezeCancelObject = (data) => {
+    return {
+        "user_group": data.user_group,
+        "access_groups": data.access_groups,
+        "start_datetime": formateBioStarDate(data.startDate),
+        "expiry_datetime": formateBioStarDate(data.endDate),
+        "security_level": data.security_level,
+        "status": 'AC',
+        "name": data.name,
+        "email": data.email,
+        "password": "ANujm4467@gmail.com"
+    }
+};
 
 
 /**
