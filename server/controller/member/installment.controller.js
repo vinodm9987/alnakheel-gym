@@ -5,12 +5,12 @@ const {
 const { Formate: { setTime } } = require('../../utils');
 
 
-const { Member, } = require('../../model');
+const { Member, Employee } = require('../../model');
 
 
 
 
-exports.getPackageInstallment = async(req, res) => {
+exports.getPackageInstallment = async (req, res) => {
     try {
         const members = await Member.find({})
             .populate('credentialId packageDetails.packages').lean();
@@ -47,7 +47,7 @@ exports.getPackageInstallment = async(req, res) => {
 };
 
 
-exports.getTrainerInstallment = async(req, res) => {
+exports.getTrainerInstallment = async (req, res) => {
     try {
         const members = await Member.find({})
             .populate('credentialId  packageDetails.packages').lean();
@@ -57,6 +57,7 @@ exports.getTrainerInstallment = async(req, res) => {
                 if (packages.trainerDetails && packages.trainerDetails.length) {
                     for (const trainer of packages.trainerDetails) {
                         for (const installment of trainer.Installments) {
+                            const trainerData = Employee.findById(trainer.trainer).select({ faceRecognitionTemplate: 0 })
                             const dueDate = new Date(setTime(installment.dueDate));
                             const todayMonth = new Date(dueDate).getMonth();
                             const thisYear = new Date(dueDate).getFullYear();
@@ -71,6 +72,7 @@ exports.getTrainerInstallment = async(req, res) => {
                                 memberObj['trainerDetailsId'] = trainer._id;
                                 memberObj['installmentName'] = installment.installmentName;
                                 memberObj['installmentId'] = installment._id.toString();
+                                memberObj['trainerData'] = trainerData;
                                 response.push(memberObj);
                             }
                         }
@@ -87,7 +89,7 @@ exports.getTrainerInstallment = async(req, res) => {
 
 
 
-exports.changeDueDateOfPackageInstallment = async(req, res) => {
+exports.changeDueDateOfPackageInstallment = async (req, res) => {
     try {
         const dueDate = setTime(req.body.dueDate);
         const member = await Member.findById(req.body.memberId);
@@ -109,7 +111,7 @@ exports.changeDueDateOfPackageInstallment = async(req, res) => {
 };
 
 
-exports.changeDueDateOfTrainerInstallment = async(req, res) => {
+exports.changeDueDateOfTrainerInstallment = async (req, res) => {
     try {
         const dueDate = setTime(req.body.dueDate);
         const member = await Member.findById(req.body.memberId);
