@@ -119,9 +119,9 @@ exports.changeDueDateOfTrainerInstallment = async (req, res) => {
         const dueDate = setTime(req.body.dueDate);
         const member = await Member.findById(req.body.memberId);
         for (const [i, packages] of member.packageDetails.entries()) {
-            if (packages[i]._id.toString() === req.body.packagesDetailsId) {
+            if (packages._id.toString() === req.body.packagesDetailsId) {
                 for (const [j, trainer] of member.packageDetails[i].trainerDetails.entries()) {
-                    if (trainer[j]._id.toString() === req.body.trainerDetailsId) {
+                    if (trainer._id.toString() === req.body.trainerDetailsId) {
                         for (const [k, installment] of member.packageDetails[i].trainerDetails[j].Installments.entries()) {
                             if (installment._id.toString() === req.body.installmentId) {
                                 member.packageDetails[i].trainerDetails[j].Installments[k].dueDate = dueDate;

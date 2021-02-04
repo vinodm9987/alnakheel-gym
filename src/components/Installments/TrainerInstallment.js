@@ -6,8 +6,12 @@ import { withTranslation } from 'react-i18next';
 import { connect } from 'react-redux';
 import { findDOMNode } from 'react-dom';
 import { Link } from 'react-router-dom';
-import { getTrainerInstallment } from '../../actions/installment.action';
+import { changeDueDateOfTrainerInstallment, getTrainerInstallment } from '../../actions/installment.action';
 import Pagination from '../Layout/Pagination';
+import { getAllVat } from '../../actions/vat.action';
+import $ from 'jquery';
+import { verifyAdminPassword } from '../../actions/privilege.action';
+import { VERIFY_ADMIN_PASSWORD } from '../../actions/types';
 
 class TrainerInstallment extends Component {
   constructor(props) {
@@ -37,8 +41,20 @@ class TrainerInstallment extends Component {
       digital: 0,
       digitalE: '',
       changeDueDate: new Date(),
+      packagesDetailsId: '',
+      installmentId: '',
+      memberId: '',
+      trainerDetailsId: '',
+      subTotal: 0
     }
     this.props.dispatch(getTrainerInstallment({ month: parseInt(this.state.pendingMonth), day: this.state.pendingYear }))
+  }
+
+  componentDidUpdate(prevProps) {
+    if (((this.props.verifyPassword && this.props.verifyPassword) !== (prevProps.verifyPassword)) && this.props.verifyPassword === 'verified') {
+      const el = findDOMNode(this.refs.openDiscount);
+      $(el).click();
+    }
   }
 
   setMonthYear(pendingMonth, pendingYear) {
@@ -112,8 +128,49 @@ class TrainerInstallment extends Component {
     }
   }
 
-  handleSubmit() {
+  addDiscount(subTotal) {
+    if (this.state.discountMethod === 'percent') {
+      if (this.state.count && this.state.count <= 100) {
+        this.setState({ discount: (parseFloat(this.state.count ? this.state.count : 0) / 100 * subTotal).toFixed(3), cash: 0, card: 0, digital: 0, cheque: 0, })
+      } else {
+        this.setState({ discount: 0, count: 0, cash: 0, card: 0, digital: 0, cheque: 0, })
+      }
+    } else {
+      if (this.state.count && this.state.count <= subTotal) {
+        this.setState({ discount: parseFloat(this.state.count ? this.state.count : 0), cash: 0, card: 0, digital: 0, cheque: 0, })
+      } else {
+        this.setState({ discount: 0, count: 0, cash: 0, card: 0, digital: 0, cheque: 0, })
+      }
+    }
+  }
 
+  verifyPassword() {
+    const { password } = this.state
+    const { t } = this.props
+    if (password) {
+      const postData = {
+        password: password
+      }
+      this.props.dispatch({ type: VERIFY_ADMIN_PASSWORD, payload: 'null' })
+      this.props.dispatch(verifyAdminPassword(postData))
+    } else {
+      if (!password) this.setState({ passwordE: t('Enter password') })
+    }
+  }
+
+  handleSubmit() {
+    const { packagesDetailsId, installmentId, memberId, changeDueDate, trainerDetailsId } = this.state
+    const dueDateInfo = {
+      packagesDetailsId, installmentId, memberId, dueDate: changeDueDate, trainerDetailsId
+    }
+    this.props.dispatch(changeDueDateOfTrainerInstallment(dueDateInfo))
+  }
+
+  setPayment(trainerAmount, branch) {
+    this.setState({
+      subTotal: trainerAmount
+    })
+    this.props.dispatch(getAllVat({ branch }))
   }
 
   handlePayment(totalAmount) {
@@ -123,14 +180,14 @@ class TrainerInstallment extends Component {
 
   render() {
     const { t } = this.props
-    const { pendingMonth, pendingYear, digital, cash, card, discount, tax, discountMethod, count } = this.state
+    const { pendingMonth, pendingYear, digital, cash, card, discount, discountMethod, count, subTotal } = this.state
     let systemYears = []
     if (this.props.systemYear) {
       for (let i = new Date(this.props.systemYear.year).getFullYear(); i <= new Date().getFullYear(); i++) {
         systemYears.push(i)
       }
     }
-    let subTotal = 0
+    let tax = this.props.activeVats ? this.props.activeVats.filter(vat => vat.defaultVat)[0] ? this.props.activeVats.filter(vat => vat.defaultVat)[0].taxPercent : 0 : 0
     let totalVat = (subTotal - discount) * tax / 100
     const totalAmount = subTotal - discount + totalVat
 
@@ -138,8 +195,8 @@ class TrainerInstallment extends Component {
     let totalLeftAfterCash = totalAmount - digital - cash
 
     let totalPendingAmount = 0
-    this.props.pendingInstallments && this.props.pendingInstallments.forEach(installment => {
-      totalPendingAmount += installment.packageAmount ? installment.packageAmount : 0
+    this.props.trainerInstallment && this.props.trainerInstallment.forEach(installment => {
+      totalPendingAmount += installment.trainerAmount ? installment.trainerAmount : 0
     })
 
     return (
@@ -200,7 +257,8 @@ class TrainerInstallment extends Component {
                         </thead>
                         <tbody>
                           {this.props.trainerInstallment && getPageWiseData(this.state.pageNumber, this.props.trainerInstallment, this.state.displayNum).map((installment, i) => {
-                            const { memberId, credentialId: { avatar, userName }, mobileNo, packages: { packageName }, installmentName, packageAmount, dueDate, _id } = installment
+                            const { memberId, branch, credentialId: { avatar, userName }, mobileNo, trainerData: { credentialId: { userName: trainerName } }, installmentName, trainerAmount,
+                              dueDate, packagesDetailsId, installmentId, trainerDetailsId, _id } = installment
                             return (
                               <tr key={i}>
                                 <td className="text-primary font-weight-bold">{memberId}</td>
@@ -213,15 +271,19 @@ class TrainerInstallment extends Component {
                                     </div>
                                   </div>
                                 </td>
-                                <td><span className="mx-200-normalwrap">{packageName}</span></td>
+                                <td><span className="mx-200-normalwrap">{trainerName}</span></td>
                                 <td><span className="mx-200-normalwrap">{installmentName}</span></td>
-                                <td><h5 className="text-warning font-weight-bold m-0 dirltrtar">{this.props.defaultCurrency} {packageAmount}</h5></td>
+                                <td><h5 className="text-warning font-weight-bold m-0 dirltrtar">{this.props.defaultCurrency} {trainerAmount}</h5></td>
                                 <td>{dateToDDMMYYYY(dueDate)}</td>
                                 <td className="text-center">
                                   <span className="d-inline-flex">
-                                    <button type="button" className="btn btn-success btn-sm w-100px rounded-50px mx-1" data-toggle="modal" data-target="#notYetPaid">Pay</button>
+                                    <button type="button" className="btn btn-success btn-sm w-100px rounded-50px mx-1" data-toggle="modal" data-target="#notYetPaid1"
+                                      onClick={() => this.setPayment(trainerAmount, branch)}
+                                    >Pay</button>
                                     <Link type="button" className="btn btn-primary br-50px w-100px btn-sm px-3 mx-1" to={`/members-details/${_id}`}>{t('Details')}</Link>
-                                    <span className="bg-success action-icon w-30px h-30px rounded-circle d-flex align-items-center justify-content-center mx-1 text-white pointer" data-toggle="modal" data-target="#Duedate">
+                                    <span className="bg-success action-icon w-30px h-30px rounded-circle d-flex align-items-center justify-content-center mx-1 text-white pointer" data-toggle="modal" data-target="#Duedate1"
+                                      onClick={() => this.setState({ changeDueDate: dueDate, packagesDetailsId, installmentId, memberId: _id, trainerDetailsId })}
+                                    >
                                       <span className="iconv1 iconv1-edit"></span>
                                     </span>
                                   </span>
@@ -273,7 +335,7 @@ class TrainerInstallment extends Component {
                               disableUnderline: true,
                             }}
                             autoOk
-                            maxDate={new Date()}
+                            minDate={new Date()}
                             invalidDateMessage=''
                             className="form-control pl-2 bg-white border pt-1"
                             minDateMessage=''
@@ -286,7 +348,7 @@ class TrainerInstallment extends Component {
                       </div>
                     </div>
                     <div className="col-12 py-3 text-center">
-                      <button type="button" className="btn btn-success" onClick={() => this.handleSubmit()}>Submit</button>
+                      <button type="button" className="btn btn-success" data-dismiss="modal" onClick={() => this.handleSubmit()}>Submit</button>
                     </div>
                   </div>
                 </div>
@@ -550,9 +612,9 @@ class TrainerInstallment extends Component {
 }
 
 
-function mapStateToProps({ dashboard: { systemYear, pendingInstallments }, currency: { defaultCurrency }, installment: { trainerInstallment } }) {
+function mapStateToProps({ dashboard: { systemYear, pendingInstallments }, currency: { defaultCurrency }, installment: { trainerInstallment }, vat: { activeVats } }) {
   return {
-    defaultCurrency, pendingInstallments, systemYear,
+    defaultCurrency, pendingInstallments, systemYear, activeVats,
     trainerInstallment: trainerInstallment && trainerInstallment.sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate))
   }
 }

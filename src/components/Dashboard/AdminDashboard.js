@@ -708,7 +708,7 @@ class AdminDashboard extends Component {
                           </thead>
                           <tbody>
                             {this.props.pendingInstallments.map((pendingInstallment, i) => {
-                              const { credentialId: { avatar, userName, email }, packageAmount, dueDate, type } = pendingInstallment
+                              const { credentialId: { avatar, userName, email }, packageAmount, trainerAmount, dueDate, type } = pendingInstallment
                               return (
                                 <tr key={i}>
                                   <td>
@@ -720,7 +720,7 @@ class AdminDashboard extends Component {
                                       </div>
                                     </div>
                                   </td>
-                                  <td><p className="text-warning SegoeBold m-0 dirltrtar">{this.props.defaultCurrency} {packageAmount}</p></td>
+                                  <td><p className="text-warning SegoeBold m-0 dirltrtar">{this.props.defaultCurrency} {type === 'Trainer' ? trainerAmount : packageAmount}</p></td>
                                   <td>{dateToDDMMYYYY(dueDate)}</td>
                                   <td>{type}</td>
                                   {/* <td className="text-center">
