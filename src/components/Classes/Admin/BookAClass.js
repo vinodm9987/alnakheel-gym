@@ -596,8 +596,8 @@ class BookAClass extends Component {
               <div className="col-12 col-sm-6 d-flex align-items-center justify-content-end">
                 <button data-toggle="modal" data-target="#passwordAskModal" className="d-flex flex-column align-items-center justify-content-center bg-danger discount-class m-1 linkHoverDecLess rounded-circle text-white cursorPointer border-0">
                   <span className="w-100 text-center"><h3><span className="iconv1 iconv1-discount text-white"></span></h3><span className="text-white">{t('Discount')}</span></span></button>
-                <button data-toggle="modal" data-target="#GiftCard" className="d-flex flex-column align-items-center justify-content-center bg-primary giftcard-class m-1 linkHoverDecLess rounded-circle text-white cursorPointer border-0">
-                  <span className="w-100 text-center"><h3><span className="iconv1 iconv1-giftcard text-white"></span></h3><span className="text-white">{t('Gift Card')}</span></span></button>
+                {/* <button data-toggle="modal" data-target="#GiftCard" className="d-flex flex-column align-items-center justify-content-center bg-primary giftcard-class m-1 linkHoverDecLess rounded-circle text-white cursorPointer border-0">
+                  <span className="w-100 text-center"><h3><span className="iconv1 iconv1-giftcard text-white"></span></h3><span className="text-white">{t('Gift Card')}</span></span></button> */}
 
               </div>
             </div>

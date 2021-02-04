@@ -7,8 +7,12 @@ import { withTranslation } from 'react-i18next';
 import { connect } from 'react-redux';
 import { findDOMNode } from 'react-dom';
 import { Link } from 'react-router-dom';
-import { getPackageInstallment } from '../../actions/installment.action';
+import { changeDueDateOfPackageInstallment, getPackageInstallment } from '../../actions/installment.action';
 import Pagination from '../Layout/Pagination';
+import { getAllVat } from '../../actions/vat.action';
+import $ from 'jquery';
+import { VERIFY_ADMIN_PASSWORD } from '../../actions/types';
+import { verifyAdminPassword } from '../../actions/privilege.action';
 
 class PackageInstallment extends Component {
   constructor(props) {
@@ -38,9 +42,20 @@ class PackageInstallment extends Component {
       digital: 0,
       digitalE: '',
       changeDueDate: new Date(),
+      packagesDetailsId: '',
+      installmentId: '',
+      memberId: '',
+      subTotal: 0
     }
     this.props.dispatch(getSystemYear())
     this.props.dispatch(getPackageInstallment({ month: parseInt(this.state.pendingMonth), day: this.state.pendingYear }))
+  }
+
+  componentDidUpdate(prevProps) {
+    if (((this.props.verifyPassword && this.props.verifyPassword) !== (prevProps.verifyPassword)) && this.props.verifyPassword === 'verified') {
+      const el = findDOMNode(this.refs.openDiscount);
+      $(el).click();
+    }
   }
 
   setMonthYear(pendingMonth, pendingYear) {
@@ -114,8 +129,49 @@ class PackageInstallment extends Component {
     }
   }
 
-  handleSubmit() {
+  addDiscount(subTotal) {
+    if (this.state.discountMethod === 'percent') {
+      if (this.state.count && this.state.count <= 100) {
+        this.setState({ discount: (parseFloat(this.state.count ? this.state.count : 0) / 100 * subTotal).toFixed(3), cash: 0, card: 0, digital: 0, cheque: 0, })
+      } else {
+        this.setState({ discount: 0, count: 0, cash: 0, card: 0, digital: 0, cheque: 0, })
+      }
+    } else {
+      if (this.state.count && this.state.count <= subTotal) {
+        this.setState({ discount: parseFloat(this.state.count ? this.state.count : 0), cash: 0, card: 0, digital: 0, cheque: 0, })
+      } else {
+        this.setState({ discount: 0, count: 0, cash: 0, card: 0, digital: 0, cheque: 0, })
+      }
+    }
+  }
 
+  verifyPassword() {
+    const { password } = this.state
+    const { t } = this.props
+    if (password) {
+      const postData = {
+        password: password
+      }
+      this.props.dispatch({ type: VERIFY_ADMIN_PASSWORD, payload: 'null' })
+      this.props.dispatch(verifyAdminPassword(postData))
+    } else {
+      if (!password) this.setState({ passwordE: t('Enter password') })
+    }
+  }
+
+  handleSubmit() {
+    const { packagesDetailsId, installmentId, memberId, changeDueDate } = this.state
+    const dueDateInfo = {
+      packagesDetailsId, installmentId, memberId, dueDate: changeDueDate
+    }
+    this.props.dispatch(changeDueDateOfPackageInstallment(dueDateInfo))
+  }
+
+  setPayment(packageAmount, branch) {
+    this.setState({
+      subTotal: packageAmount
+    })
+    this.props.dispatch(getAllVat({ branch }))
   }
 
   handlePayment(totalAmount) {
@@ -125,14 +181,14 @@ class PackageInstallment extends Component {
 
   render() {
     const { t } = this.props
-    const { pendingMonth, pendingYear, digital, cash, card, discount, tax, discountMethod, count } = this.state
+    const { pendingMonth, pendingYear, digital, cash, card, discount, discountMethod, count, subTotal } = this.state
     let systemYears = []
     if (this.props.systemYear) {
       for (let i = new Date(this.props.systemYear.year).getFullYear(); i <= new Date().getFullYear(); i++) {
         systemYears.push(i)
       }
     }
-    let subTotal = 0
+    let tax = this.props.activeVats ? this.props.activeVats.filter(vat => vat.defaultVat)[0] ? this.props.activeVats.filter(vat => vat.defaultVat)[0].taxPercent : 0 : 0
     let totalVat = (subTotal - discount) * tax / 100
     const totalAmount = subTotal - discount + totalVat
 
@@ -140,7 +196,7 @@ class PackageInstallment extends Component {
     let totalLeftAfterCash = totalAmount - digital - cash
 
     let totalPendingAmount = 0
-    this.props.pendingInstallments && this.props.pendingInstallments.forEach(installment => {
+    this.props.packageInstallment && this.props.packageInstallment.forEach(installment => {
       totalPendingAmount += installment.packageAmount ? installment.packageAmount : 0
     })
 
@@ -202,7 +258,8 @@ class PackageInstallment extends Component {
                         </thead>
                         <tbody>
                           {this.props.packageInstallment && getPageWiseData(this.state.pageNumber, this.props.packageInstallment, this.state.displayNum).map((installment, i) => {
-                            const { memberId, credentialId: { avatar, userName }, mobileNo, packages: { packageName }, installmentName, packageAmount, dueDate, _id } = installment
+                            const { memberId, branch, credentialId: { avatar, userName }, mobileNo, packages: { packageName }, installmentName, packageAmount,
+                              dueDate, packagesDetailsId, installmentId, _id } = installment
                             return (
                               <tr key={i}>
                                 <td className="text-primary font-weight-bold">{memberId}</td>
@@ -221,9 +278,13 @@ class PackageInstallment extends Component {
                                 <td>{dateToDDMMYYYY(dueDate)}</td>
                                 <td className="text-center">
                                   <span className="d-inline-flex">
-                                    <button type="button" className="btn btn-success btn-sm w-100px rounded-50px mx-1" data-toggle="modal" data-target="#notYetPaid">Pay</button>
+                                    <button type="button" className="btn btn-success btn-sm w-100px rounded-50px mx-1" data-toggle="modal" data-target="#notYetPaid"
+                                      onClick={() => this.setPayment(packageAmount, branch)}
+                                    >Pay</button>
                                     <Link type="button" className="btn btn-primary br-50px w-100px btn-sm px-3 mx-1" to={`/members-details/${_id}`}>{t('Details')}</Link>
-                                    <span className="bg-success action-icon w-30px h-30px rounded-circle d-flex align-items-center justify-content-center mx-1 text-white pointer" data-toggle="modal" data-target="#Duedate">
+                                    <span className="bg-success action-icon w-30px h-30px rounded-circle d-flex align-items-center justify-content-center mx-1 text-white pointer" data-toggle="modal" data-target="#Duedate"
+                                      onClick={() => this.setState({ changeDueDate: dueDate, packagesDetailsId, installmentId, memberId: _id })}
+                                    >
                                       <span className="iconv1 iconv1-edit"></span>
                                     </span>
                                   </span>
@@ -275,7 +336,7 @@ class PackageInstallment extends Component {
                               disableUnderline: true,
                             }}
                             autoOk
-                            maxDate={new Date()}
+                            minDate={new Date()}
                             invalidDateMessage=''
                             className="form-control pl-2 bg-white border pt-1"
                             minDateMessage=''
@@ -288,7 +349,7 @@ class PackageInstallment extends Component {
                       </div>
                     </div>
                     <div className="col-12 py-3 text-center">
-                      <button type="button" className="btn btn-success" onClick={() => this.handleSubmit()}>Submit</button>
+                      <button type="button" className="btn btn-success" data-dismiss="modal" onClick={() => this.handleSubmit()}>Submit</button>
                     </div>
                   </div>
                 </div>
@@ -553,9 +614,9 @@ class PackageInstallment extends Component {
 }
 
 
-function mapStateToProps({ dashboard: { systemYear, pendingInstallments }, currency: { defaultCurrency }, installment: { packageInstallment } }) {
+function mapStateToProps({ dashboard: { systemYear, pendingInstallments }, currency: { defaultCurrency }, installment: { packageInstallment }, vat: { activeVats } }) {
   return {
-    defaultCurrency, pendingInstallments, systemYear,
+    defaultCurrency, pendingInstallments, systemYear, activeVats,
     packageInstallment: packageInstallment && packageInstallment.sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate))
   }
 }
