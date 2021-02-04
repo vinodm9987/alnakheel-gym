@@ -297,7 +297,8 @@ class BookATrainer extends Component {
   handleSubmit(totalAmount) {
     const { t } = this.props
     const { packages, cash, card, member, trainer, period, trainerFeesId, cashE, cardE,
-      digital, digitalE, oldPackageId, packageAmount, tax, discount, startDate, endDate, cheque } = this.state
+      digital, digitalE, oldPackageId, packageAmount, tax, discount, startDate, endDate, cheque,
+      installments, bankName, chequeNumber, chequeDate, showCheque, cardNumber } = this.state
     if (member && packages && (parseInt(totalAmount) === parseInt((+cash || 0) + (+card || 0) + (+digital || 0) + (+cheque || 0))) && !cardE && !cashE && !digitalE && trainer && period) {
       const trainerInfo = {
         memberId: member._id,
@@ -307,13 +308,45 @@ class BookATrainer extends Component {
           trainer: trainer._id,
           trainerStart: startDate,
           trainerEnd: endDate,
-          cashAmount: cash ? parseFloat(cash) : 0,
-          cardAmount: card ? parseFloat(card) : 0,
-          digitalAmount: digital ? digital : 0,
-          actualAmount: packageAmount,
-          totalAmount: totalAmount,
-          discount: parseFloat(discount),
-          tax: (packageAmount - discount) * tax / 100,
+        }
+      }
+      if (installments.length > 0) {
+        trainerInfo.trainerDetails.Installments = installments.map((installment, k) => {
+          if (k === 0) {
+            if (showCheque) {
+              return {
+                ...installment, ...{
+                  installmentName: `Installment ${k + 1}`, paidStatus: 'Paid', cashAmount: cash ? parseFloat(cash) : 0, cardAmount: card ? parseFloat(card) : 0, digitalAmount: digital ? digital : 0,
+                  cardNumber: cardNumber, actualAmount: installment.amount, totalAmount: totalAmount, discount: parseFloat(discount), vatAmount: (installment.amount - discount) * tax / 100,
+                  chequeAmount: cheque ? parseFloat(cheque) : 0, bankName, chequeNumber, chequeDate
+                }
+              }
+            } else {
+              return {
+                ...installment, ...{
+                  installmentName: `Installment ${k + 1}`, paidStatus: 'Paid', cashAmount: cash ? parseFloat(cash) : 0, cardAmount: card ? parseFloat(card) : 0, digitalAmount: digital ? digital : 0,
+                  cardNumber: cardNumber, actualAmount: installment.amount, totalAmount: totalAmount, discount: parseFloat(discount), vatAmount: (installment.amount - discount) * tax / 100,
+                }
+              }
+            }
+          } else { return installment }
+        })
+      } else {
+        if (showCheque) {
+          trainerInfo.trainerDetails = {
+            ...trainerInfo.trainerDetails, ...{
+              paidStatus: 'Paid', cashAmount: cash ? parseFloat(cash) : 0, cardAmount: card ? parseFloat(card) : 0, digitalAmount: digital ? digital : 0,
+              cardNumber: cardNumber, actualAmount: packageAmount, totalAmount: totalAmount, discount: parseFloat(discount), vatAmount: (packageAmount - discount) * tax / 100,
+              chequeAmount: cheque ? parseFloat(cheque) : 0, bankName, chequeNumber, chequeDate
+            }
+          }
+        } else {
+          trainerInfo.trainerDetails = {
+            ...trainerInfo.trainerDetails, ...{
+              paidStatus: 'Paid', cashAmount: cash ? parseFloat(cash) : 0, cardAmount: card ? parseFloat(card) : 0, digitalAmount: digital ? digital : 0,
+              cardNumber: cardNumber, actualAmount: packageAmount, totalAmount: totalAmount, discount: parseFloat(discount), vatAmount: (packageAmount - discount) * tax / 100,
+            }
+          }
         }
       }
       this.props.dispatch(bookTrainer(trainerInfo))
