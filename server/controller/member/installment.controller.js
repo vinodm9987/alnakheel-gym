@@ -30,6 +30,7 @@ exports.getPackageInstallment = async (req, res) => {
                             memberObj['dueDate'] = installment.dueDate;
                             memberObj['packages'] = packages.packages;
                             memberObj['packagesDetailsId'] = packages._id;
+                            memberObj['installmentName'] = installment.installmentName;
                             memberObj['installmentId'] = installment._id.toString();
                             response.push(memberObj);
                         }
@@ -67,6 +68,7 @@ exports.getTrainerInstallment = async (req, res) => {
                                 memberObj['dueDate'] = installment.dueDate;
                                 memberObj['packagesDetailsId'] = packages._id;
                                 memberObj['trainerDetailsId'] = trainer._id;
+                                memberObj['installmentName'] = installment.installmentName;
                                 memberObj['installmentId'] = installment._id.toString();
                                 response.push(memberObj);
                             }
