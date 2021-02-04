@@ -1,5 +1,5 @@
 git status
 git add .
-git commit -m "done by anuj"
+git commit -m "Added"
 git pull 
 git push
