@@ -680,9 +680,10 @@ exports.payAtGymMobile = async (req, res) => {
     req.body.packageDetails["dateOfPaid"] = setTime(new Date());
     req.body.packageDetails["timeOfPaid"] = new Date();
     if (req.body.packageDetails.Installments) {
-        req.body.packageDetails.Installments.forEach(doc => {
+        req.body.packageDetails.Installments.map(doc => {
             doc.dateOfPaid = setTime(new Date())
             doc.timeOfPaid = new Date();
+            return doc;
         });
     }
     req.responseData = await Member.findById(req.params.id).populate('credentialId').lean()
