@@ -44,6 +44,7 @@ class TrainerInstallment extends Component {
       packagesDetailsId: '',
       installmentId: '',
       memberId: '',
+      trainerDetailsId: '',
       subTotal: 0
     }
     this.props.dispatch(getTrainerInstallment({ month: parseInt(this.state.pendingMonth), day: this.state.pendingYear }))
@@ -158,9 +159,9 @@ class TrainerInstallment extends Component {
   }
 
   handleSubmit() {
-    const { packagesDetailsId, installmentId, memberId, changeDueDate } = this.state
+    const { packagesDetailsId, installmentId, memberId, changeDueDate, trainerDetailsId } = this.state
     const dueDateInfo = {
-      packagesDetailsId, installmentId, memberId, dueDate: changeDueDate
+      packagesDetailsId, installmentId, memberId, dueDate: changeDueDate, trainerDetailsId
     }
     this.props.dispatch(changeDueDateOfTrainerInstallment(dueDateInfo))
   }
@@ -257,7 +258,7 @@ class TrainerInstallment extends Component {
                         <tbody>
                           {this.props.trainerInstallment && getPageWiseData(this.state.pageNumber, this.props.trainerInstallment, this.state.displayNum).map((installment, i) => {
                             const { memberId, branch, credentialId: { avatar, userName }, mobileNo, trainerData: { credentialId: { userName: trainerName } }, installmentName, trainerAmount,
-                              dueDate, packagesDetailsId, installmentId, _id } = installment
+                              dueDate, packagesDetailsId, installmentId, trainerDetailsId, _id } = installment
                             return (
                               <tr key={i}>
                                 <td className="text-primary font-weight-bold">{memberId}</td>
@@ -281,7 +282,7 @@ class TrainerInstallment extends Component {
                                     >Pay</button>
                                     <Link type="button" className="btn btn-primary br-50px w-100px btn-sm px-3 mx-1" to={`/members-details/${_id}`}>{t('Details')}</Link>
                                     <span className="bg-success action-icon w-30px h-30px rounded-circle d-flex align-items-center justify-content-center mx-1 text-white pointer" data-toggle="modal" data-target="#Duedate1"
-                                      onClick={() => this.setState({ changeDueDate: dueDate, packagesDetailsId, installmentId, memberId: _id })}
+                                      onClick={() => this.setState({ changeDueDate: dueDate, packagesDetailsId, installmentId, memberId: _id, trainerDetailsId })}
                                     >
                                       <span className="iconv1 iconv1-edit"></span>
                                     </span>
