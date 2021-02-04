@@ -72,7 +72,7 @@ const memberSchema = new Schema({
 
             dueDate: Date,
             dateOfPaid: Date,
-            timeOfInstallment: Date,
+            timeOfPaid: Date,
 
             paidType: { type: String, enum: ["Online", "Offline"] },
 
@@ -143,7 +143,7 @@ const memberSchema = new Schema({
 
                 dueDate: Date,
                 dateOfPaid: Date,
-                timeOfInstallment: Date,
+                timeOfPaid: Date,
 
                 paidType: { type: String, enum: ["Online", "Offline"] },
 
