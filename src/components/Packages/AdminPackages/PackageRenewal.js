@@ -343,7 +343,7 @@ class PackageRenewal extends Component {
           } else {
             return {
               ...installment, ...{
-                installmentName: `Installment ${k + 1}`
+                installmentName: `Installment ${k + 1}`, actualAmount: installment.amount
               }
             }
           }
