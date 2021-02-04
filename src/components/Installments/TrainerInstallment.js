@@ -1,12 +1,13 @@
 import React, { Component } from 'react'
 import DateFnsUtils from '@date-io/date-fns';
 import { DatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
-import { monthSmallNamesCaps, validator } from '../../utils/apis/helpers';
-import { getPendingInstallments, getSystemYear } from '../../actions/dashboard.action';
+import { dateToDDMMYYYY, getPageWiseData, monthSmallNamesCaps, validator } from '../../utils/apis/helpers';
 import { withTranslation } from 'react-i18next';
 import { connect } from 'react-redux';
 import { findDOMNode } from 'react-dom';
 import { Link } from 'react-router-dom';
+import { getTrainerInstallment } from '../../actions/installment.action';
+import Pagination from '../Layout/Pagination';
 
 class TrainerInstallment extends Component {
   constructor(props) {
@@ -37,13 +38,12 @@ class TrainerInstallment extends Component {
       digitalE: '',
       changeDueDate: new Date(),
     }
-    this.props.dispatch(getSystemYear())
-    this.props.dispatch(getPendingInstallments({ month: this.state.pendingMonth, day: this.state.pendingYear }))
+    this.props.dispatch(getTrainerInstallment({ month: parseInt(this.state.pendingMonth), day: this.state.pendingYear }))
   }
 
   setMonthYear(pendingMonth, pendingYear) {
     this.setState({ pendingMonth, pendingYear }, () => {
-      this.props.dispatch(getPendingInstallments({ month: this.state.pendingMonth, year: parseInt(this.state.pendingYear) }))
+      this.props.dispatch(getTrainerInstallment({ month: parseInt(this.state.pendingMonth), year: parseInt(this.state.pendingYear) }))
     })
   }
 
@@ -136,6 +136,12 @@ class TrainerInstallment extends Component {
 
     let totalLeftAfterDigital = totalAmount - digital
     let totalLeftAfterCash = totalAmount - digital - cash
+
+    let totalPendingAmount = 0
+    this.props.pendingInstallments && this.props.pendingInstallments.forEach(installment => {
+      totalPendingAmount += installment.packageAmount ? installment.packageAmount : 0
+    })
+
     return (
       <div className="tab-pane px-3 fade" id="menu2" role="tabpanel">
         <div className="row">
@@ -147,22 +153,22 @@ class TrainerInstallment extends Component {
                     <div className="row">
                       <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-5">
                         <h4>Total Pending Amount</h4>
-                        <h2 className="font-weight-bold dirltrtar text-danger">{this.props.defaultCurrency} 87511</h2>
+                        <h2 className="font-weight-bold dirltrtar text-danger">{this.props.defaultCurrency} {totalPendingAmount}</h2>
                       </div>
                       <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-7">
-                        <div class="row d-block d-sm-flex justify-content-end pt-3">
-                          <div class="col w-auto px-1 flexBasis-auto flex-grow-0">
-                            <div class="form-group inlineFormGroup">
+                        <div className="row d-block d-sm-flex justify-content-end pt-3">
+                          <div className="col w-auto px-1 flexBasis-auto flex-grow-0">
+                            <div className="form-group inlineFormGroup">
                               <select className="form-control mx-sm-2 inlineFormInputs" value={this.state.pendingYear} onChange={(e) => this.setMonthYear(pendingMonth, e.target.value)}>
                                 {systemYears.map(year => {
                                   return (<option key={year} value={year}>{year}</option>)
                                 })}
                               </select>
-                              <span class="iconv1 iconv1-arrow-down selectBoxIcon"></span>
+                              <span className="iconv1 iconv1-arrow-down selectBoxIcon"></span>
                             </div>
                           </div>
-                          <div class="col w-auto px-1 flexBasis-auto flex-grow-0">
-                            <div class="form-group inlineFormGroup">
+                          <div className="col w-auto px-1 flexBasis-auto flex-grow-0">
+                            <div className="form-group inlineFormGroup">
                               <select className="form-control mx-sm-2 inlineFormInputs" style={{ fontSize: "13px" }}
                                 value={pendingMonth} onChange={(e) => this.setMonthYear(e.target.value, pendingYear)} >
                                 {monthSmallNamesCaps.map((month, i) => {
@@ -171,7 +177,7 @@ class TrainerInstallment extends Component {
                                   )
                                 })}
                               </select>
-                              <span class="iconv1 iconv1-arrow-down selectBoxIcon"></span>
+                              <span className="iconv1 iconv1-arrow-down selectBoxIcon"></span>
                             </div>
                           </div>
                         </div>
@@ -186,39 +192,57 @@ class TrainerInstallment extends Component {
                             <th>Member Id</th>
                             <th>Name</th>
                             <th>Trainer</th>
+                            <th>Installment</th>
                             <th>Amount</th>
                             <th>Due Date</th>
                             <th className="text-center w-50px">Action</th>
                           </tr>
                         </thead>
                         <tbody>
-                          <tr>
-                            <td className="text-primary font-weight-bold">3656</td>
-                            <td>
-                              <div className="d-flex">
-                                <img alt='' src="https://cdn4.iconfinder.com/data/icons/business-conceptual-part1-1/513/business-man-512.png" className="mx-1 rounded-circle w-50px h-50px" />
-                                <div className="mx-1">
-                                  <h5 className="m-0 font-weight-bold">Mohammed Al Mulla</h5>
-                                  <span class="text-body font-weight-light">abcdefg@gmail.com</span>
-                                </div>
-                              </div>
-                            </td>
-                            <td><span className="mx-200-normalwrap">1 Month golden membership</span></td>
-                            <td><h5 className="text-warning font-weight-bold m-0 dirltrtar">{this.props.defaultCurrency} 200</h5></td>
-                            <td>12/02/2020</td>
-                            <td className="text-center">
-                              <span className="d-inline-flex">
-                                <button type="button" className="btn btn-success btn-sm w-100px rounded-50px mx-1" data-toggle="modal" data-target="#notYetPaid1">Pay</button>
-                                <Link type="button" className="btn btn-primary br-50px w-100px btn-sm px-3 mx-1" to={`/members-details/${123}`}>{t('Details')}</Link>
-                                <span className="bg-success action-icon w-30px h-30px rounded-circle d-flex align-items-center justify-content-center mx-1 text-white pointer" data-toggle="modal" data-target="#Duedate1">
-                                  <span className="iconv1 iconv1-edit"></span>
-                                </span>
-                              </span>
-                            </td>
-                          </tr>
+                          {this.props.trainerInstallment && getPageWiseData(this.state.pageNumber, this.props.trainerInstallment, this.state.displayNum).map((installment, i) => {
+                            const { memberId, credentialId: { avatar, userName }, mobileNo, packages: { packageName }, installmentName, packageAmount, dueDate, _id } = installment
+                            return (
+                              <tr key={i}>
+                                <td className="text-primary font-weight-bold">{memberId}</td>
+                                <td>
+                                  <div className="d-flex">
+                                    <img alt='' src={`/${avatar.path}`} className="mx-1 rounded-circle w-50px h-50px" />
+                                    <div className="mx-1">
+                                      <h5 className="m-0 font-weight-bold">{userName}</h5>
+                                      <span className="text-body font-weight-light">{mobileNo}</span>
+                                    </div>
+                                  </div>
+                                </td>
+                                <td><span className="mx-200-normalwrap">{packageName}</span></td>
+                                <td><span className="mx-200-normalwrap">{installmentName}</span></td>
+                                <td><h5 className="text-warning font-weight-bold m-0 dirltrtar">{this.props.defaultCurrency} {packageAmount}</h5></td>
+                                <td>{dateToDDMMYYYY(dueDate)}</td>
+                                <td className="text-center">
+                                  <span className="d-inline-flex">
+                                    <button type="button" className="btn btn-success btn-sm w-100px rounded-50px mx-1" data-toggle="modal" data-target="#notYetPaid">Pay</button>
+                                    <Link type="button" className="btn btn-primary br-50px w-100px btn-sm px-3 mx-1" to={`/members-details/${_id}`}>{t('Details')}</Link>
+                                    <span className="bg-success action-icon w-30px h-30px rounded-circle d-flex align-items-center justify-content-center mx-1 text-white pointer" data-toggle="modal" data-target="#Duedate">
+                                      <span className="iconv1 iconv1-edit"></span>
+                                    </span>
+                                  </span>
+                                </td>
+                              </tr>
+                            )
+                          })}
                         </tbody>
                       </table>
                     </div>
+                    {/*Pagination Start*/}
+                    {this.props.trainerInstallment &&
+                      <Pagination
+                        pageNumber={this.state.pageNumber ? this.state.pageNumber : 1}
+                        getPageNumber={(pageNumber) => this.setState({ pageNumber })}
+                        fullData={this.props.trainerInstallment}
+                        displayNumber={(displayNum) => this.setState({ displayNum })}
+                        displayNum={this.state.displayNum ? this.state.displayNum : 5}
+                      />
+                    }
+                    {/* Pagination End // displayNumber={5} */}
                   </div>
                 </div>
               </div>
@@ -371,7 +395,7 @@ class TrainerInstallment extends Component {
                   <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
                     <div className="form-group inlineFormGroup mb-3">
                       <label htmlFor="addCardNumber" className="mx-sm-2 inlineFormLabel mb-1">{t('Card Number (last 4 digits)')}</label>
-                      <input type="text" autoComplete="off" className="form-control bg-white" id="addCard4lastno" value={this.state.cardNumber} onChange={(e) => this.setCardNumber(e)} />
+                      <input type="text" autoComplete="off" className="form-control bg-white" id="addCard4lastno1" value={this.state.cardNumber} onChange={(e) => this.setCardNumber(e)} />
                     </div>
                   </div>
                   <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
@@ -499,7 +523,7 @@ class TrainerInstallment extends Component {
                     <div className="col-12">
                       <div className="form-group position-relative fle">
                         <label htmlFor="password" className="m-0 text-secondary mx-sm-2">{t('Password')}</label>
-                        <input type={this.state.showPass ? "text" : "password"} className={this.state.passwordE ? "form-control inlineFormInputs w-100 mx-sm-2 FormInputsError" : "form-control inlineFormInputs w-100 mx-sm-2"} id="password"
+                        <input type={this.state.showPass ? "text" : "password"} className={this.state.passwordE ? "form-control inlineFormInputs w-100 mx-sm-2 FormInputsError" : "form-control inlineFormInputs w-100 mx-sm-2"} id="password1"
                           value={this.state.password} onChange={(e) => this.setState(validator(e, 'password', 'text', [t('Enter password')]))}
                         />
                         <span className={this.state.showPass ? "iconv1 iconv1-eye passwordEye" : "iconv1 iconv1-eye passwordEye active"} onClick={() => this.setState({ showPass: !this.state.showPass })}></span>
@@ -526,9 +550,10 @@ class TrainerInstallment extends Component {
 }
 
 
-function mapStateToProps({ dashboard: { systemYear, pendingInstallments }, currency: { defaultCurrency } }) {
+function mapStateToProps({ dashboard: { systemYear, pendingInstallments }, currency: { defaultCurrency }, installment: { trainerInstallment } }) {
   return {
-    defaultCurrency, pendingInstallments, systemYear
+    defaultCurrency, pendingInstallments, systemYear,
+    trainerInstallment: trainerInstallment && trainerInstallment.sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate))
   }
 }
 

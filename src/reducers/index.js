@@ -34,6 +34,7 @@ import appointment from './appointment.reducer'
 import backupRestore from './backupRestore.reducer'
 import moneyCollection from './moneyCollection.reducer'
 import auditLog from './auditLog.reducer'
+import installment from './installment.reducer'
 
 const appReducer = combineReducers({
     auth, packages, systemAdmin, errors, period,
@@ -42,7 +43,8 @@ const appReducer = combineReducers({
     pos, alertError, shift, attendance, privilege,
     classes, asset, feedback, communication, reward,
     dashboard, freeze, vat, notification, report, message,
-    appointment, backupRestore, moneyCollection, auditLog
+    appointment, backupRestore, moneyCollection, auditLog,
+    installment
 });
 
 const rootReducer = (state, action) => {

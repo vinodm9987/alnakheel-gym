@@ -1,13 +1,13 @@
+import $ from 'jquery'
+import QRCode from 'qrcode.react'
 import React, { Component } from 'react'
 import { withTranslation } from 'react-i18next'
 import { connect } from 'react-redux'
+import { Link } from 'react-router-dom'
+import { getOrderHistory } from '../../../actions/pos.action'
+import instaimg from '../../../assets/img/insta.jpg'
 import { dateToDDMMYYYY, dateToHHMM, getPageWiseData } from '../../../utils/apis/helpers'
 import Pagination from '../../Layout/Pagination'
-import { getOrderHistory } from '../../../actions/pos.action'
-import { Link } from 'react-router-dom'
-import $ from 'jquery'
-import QRCode from 'qrcode.react';
-import instaimg from '../../../assets/img/insta.jpg'
 
 class Orderlist extends Component {
 
@@ -106,13 +106,13 @@ class Orderlist extends Component {
               </thead>
               <tbody>
                 {this.props.orderHistories && getPageWiseData(this.state.pageNumber, this.props.orderHistories, this.state.displayNum).map((order, i) => {
-                  const { customerDetails: { member }, _id, dateOfPurchase, paymentType } = order
+                  const { customerDetails: { member }, _id, dateOfPurchase, paymentType, orderNo } = order
                   if (member) {
                     const { credentialId: { userName, avatar, email } } = member
 
                     return (
                       <tr key={i}>
-                        <td className="text-primary font-weight-bold"></td>
+                        <td className="text-primary font-weight-bold">#{orderNo}</td>
                         <td>
                           <div className="d-flex">
                             <img alt='' src={`/${avatar.path}`}
@@ -142,7 +142,7 @@ class Orderlist extends Component {
                   } else {
                     return (
                       <tr key={i}>
-                        <td className="text-primary font-weight-bold"></td>
+                        <td className="text-primary font-weight-bold">#{orderNo}</td>
                         <td>
                           <div className="d-flex">
                             <div className="mx-1">
@@ -197,29 +197,37 @@ class Orderlist extends Component {
                   <div className="container">
                     <div className="text-center my-3">
                       <img alt='' src={orderById.branch.avatar ? `/${orderById.branch.avatar.path}` : ''} className="mb-2" width="100" />
-                      {/* tushar image changedc here */}
-                      {/* <img alt='' src={image} className="mb-2" width="100" /> */}
-                      <h4 className="border-bottom border-dark text-center font-weight-bold pb-1">Tax Invoice</h4>
                     </div>
-                    <div className="row px-5">
-                      <div className="col-12 col-sm-12 col-md-5 col-lg-5 col-xl-5 p-3">
-                        <label className="m-0 font-weight-bold">Address</label>
-                        <p className="whiteSpaceNormal mnw-150px mxw-200px">{orderById.branch.address}</p>
-                      </div>
-                      <div className="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 p-3">
+                    <h4 className="border-bottom border-dark text-center font-weight-bold pb-1">Tax Invoice</h4>
+                    <div className="row px-5 justify-content-between">
+                      <div className="col-free p-3">
                         <div className="mb-3">
-                          <label className="m-0 font-weight-bold">Receipt No</label>
-                          <p className="">{ }</p>
+                          <label className="m-0 font-weight-bold">Address</label>
+                          <p className="whiteSpaceNormal mnw-150px mxw-200px">{orderById.branch.address}</p>
+                        </div>
+                        <div className="">
+                          <label className="m-0 font-weight-bold">VAT Reg Number</label>
+                          <p className="">{orderById.branch.vatRegNo}</p>
+                        </div>
+                      </div>
+                      <div className="col-free p-3">
+                        <div className="mb-3">
+                          <label className="m-0 font-weight-bold">Tax Invoice No</label>
+                          <p className="">{orderById.orderNo}</p>
                         </div>
                         <div className="">
                           <label className="m-0 font-weight-bold">Date & Time</label>
                           <p className="">{dateToDDMMYYYY(orderById.dateOfPurchase)} {dateToHHMM(orderById.created_at)}</p>
                         </div>
                       </div>
-                      <div className="col-12 col-sm-12 col-md-3 col-lg-3 col-xl-3 p-3">
-                        <div className="text-md-right">
-                          <label className="m-0">Receipt Total</label>
+                      <div className="col-free p-3">
+                        <div className="">
+                          <label className="m-0 font-weight-bold">Receipt Total</label>
                           <p className="h4 font-weight-bold">{this.props.defaultCurrency} {parseFloat(orderById.totalAmount).toFixed(3)}</p>
+                        </div>
+                        <div className="">
+                          <label className="m-0 font-weight-bold">Telephone</label>
+                          <p className="">{orderById.branch.telephone}</p>
                         </div>
                       </div>
                     </div>
@@ -267,29 +275,88 @@ class Orderlist extends Component {
                           <tr>
                             <td colSpan="4">
                               <div className="text-right my-1">Amount Total :</div>
-                              <div className="text-right my-1">Discount :</div>
-                              <div className="text-right my-1">Gift Card :</div>
-                              <div className="text-right my-1">Tax :</div>
+                              {parseFloat(orderById.discount) ?
+                                <div className="text-right my-1">Discount :</div>
+                                : <div></div>}
+                              {parseFloat(orderById.giftcard) ?
+                                <div className="text-right my-1">Gift Card :</div>
+                                : <div></div>}
+                              {parseFloat(orderById.vatAmount) ?
+                                <div className="text-right my-1">VAT(5%):</div>
+                                : <div></div>}
+                              {parseFloat(orderById.digitalAmount) ?
+                                <div className="text-right my-1">Digital :</div>
+                                : <div></div>}
+                              {parseFloat(orderById.cashAmount) ?
+                                <div className="text-right my-1">Cash :</div>
+                                : <div></div>}
+                              {parseFloat(orderById.cardAmount) ?
+                                <div className="text-right my-1">Card :</div>
+                                : <div></div>}
                               <div className="text-right my-1">Grand Total :</div>
+                              <div className="text-right my-1">Paid Amount :</div>
+                              {orderById.cardNumber ?
+                                <div className="text-right my-1">Card last four digit :</div>
+                                : <div></div>}
                             </td>
                             <td className="">
                               <div className="my-1"><span className="">{this.props.defaultCurrency}</span> <span className="px-1">{parseFloat(orderById.actualAmount).toFixed(3)}</span></div>
-                              <div className="my-1"><span className="invisible">{this.props.defaultCurrency}</span> <span className="px-1">{parseFloat(orderById.discount).toFixed(3)}</span></div>
-                              <div className="my-1"><span className="invisible">{this.props.defaultCurrency}</span> <span className="px-1">{parseFloat(orderById.giftcard).toFixed(3)}</span></div>
-                              <div className="my-1"><span className="invisible">{this.props.defaultCurrency}</span> <span className="px-1">{parseFloat(orderById.vatAmount).toFixed(3)}</span></div>
+                              {parseFloat(orderById.discount) ?
+                                <div className="my-1"><span className="invisible">{this.props.defaultCurrency}</span> <span className="px-1">{parseFloat(orderById.discount).toFixed(3)}</span></div>
+                                : <div></div>}
+                              {parseFloat(orderById.giftcard) ?
+                                <div className="my-1"><span className="invisible">{this.props.defaultCurrency}</span> <span className="px-1">{parseFloat(orderById.giftcard).toFixed(3)}</span></div>
+                                : <div></div>}
+                              {parseFloat(orderById.vatAmount) ?
+                                <div className="my-1"><span className="invisible">{this.props.defaultCurrency}</span> <span className="px-1">{parseFloat(orderById.vatAmount).toFixed(3)}</span></div>
+                                : <div></div>}
+                              {parseFloat(orderById.digitalAmount) ?
+                                <div className="my-1"><span className="invisible">{this.props.defaultCurrency}</span> <span className="px-1">{parseFloat(orderById.digitalAmount).toFixed(3)}</span></div>
+                                : <div></div>}
+                              {parseFloat(orderById.cashAmount) ?
+                                <div className="my-1"><span className="invisible">{this.props.defaultCurrency}</span> <span className="px-1">{parseFloat(orderById.cashAmount).toFixed(3)}</span></div>
+                                : <div></div>}
+                              {parseFloat(orderById.cardAmount) ?
+                                <div className="my-1"><span className="invisible">{this.props.defaultCurrency}</span> <span className="px-1">{parseFloat(orderById.cardAmount).toFixed(3)}</span></div>
+                                : <div></div>}
                               <div className="my-1"><span className="">{this.props.defaultCurrency}</span> <span className="px-1">{parseFloat(orderById.totalAmount).toFixed(3)}</span></div>
+                              <div className="my-1"><span className="">{this.props.defaultCurrency}</span> <span className="px-1">{parseFloat(orderById.totalAmount).toFixed(3)}</span></div>
+                              {orderById.cardNumber ?
+                                <div className="my-1"><span className="invisible">{this.props.defaultCurrency}</span> <span className="px-1">{orderById.cardNumber}</span></div>
+                                : <div></div>}
                             </td>
                           </tr>
                         </tbody>
                       </table>
+                      {/* {orderById.cardNumber ?
+                        <div className="my-1"><span className="px-1">Card last four digit {orderById.cardNumber}</span></div>
+                        : <div></div>} */}
                     </div>
-                    <div className="d-flex flex-wrap justify-content-between my-4">
-                      <h6 className="font-weight-bold">Paid Amount: {this.props.defaultCurrency} {parseFloat(orderById.totalAmount).toFixed(3)}</h6>
-                      {orderById.doneBy && <h6 className="font-weight-bold">Done by: {orderById.doneBy.userName}</h6>}
+                    {/* <div className="d-flex justify-content-center">
+                      <QRCode value={`http://instagram.com/${orderById.branch.instaId}/`} renderAs='svg' />
+                    </div> */}
+                    <div className="d-flex flex-wrap justify-content-between align-items-center my-4">
+                      <div className="d-flex">
+                        <div className="mr-3 text-center">
+                          <img src={instaimg} alt="" className="w-30px" />
+                          <h6 className="font-weight-bold mb-0 mt-1">Follow Us</h6>
+                        </div>
+                        <div className="w-50px mr-3">
+                          <QRCode value={`http://instagram.com/${orderById.branch.instaId}/`} renderAs='svg' width="50" height="50" />
+                        </div>
+                      </div>
+                      {/* <h6 className="font-weight-bold">Paid Amount: {this.props.defaultCurrency} {parseFloat(orderById.totalAmount).toFixed(3)}</h6> */}
+                      {orderById.doneBy && <h6 className="font-weight-bold">Served by: {orderById.doneBy.userName}</h6>}
                     </div>
-                    <div className="text-center px-5">
-                      <h5 className="text-muted">The receipt amount will not be refunded in any case.</h5>
+                    {/* <div className="text-center px-5">
+                      <h5 className="text-muted">Membership cannot be refunded or transferred to others.</h5>
                       <h5 className="font-weight-bold">Thank You</h5>
+                    </div> */}
+                    <div className="d-flex align-items-center justify-content-center">
+                      <div className="text-center">
+                        <h6 className="font-weight-bold">Membership cannot be refunded or transferred to others.</h6>
+                        <h6 className="font-weight-bold">Thank You</h6>
+                      </div>
                     </div>
                     <div className="text-center">
                       <button type="button" className="btn btn-success px-4 py-1 my-2" data-dismiss="modal" onClick={() => this.handlePrint()}>Print Receipt</button>
@@ -318,8 +385,8 @@ class Orderlist extends Component {
               </p>
               <p style={{ textAlign: "center", margin: "0 0 10px 0" }}>VAT Reg No - {orderById.branch.vatRegNo}</p>
               <p style={{ display: "flex", justifyContent: "space-between", margin: "0" }}>
-                <span style={{ padding: "2px", fontSize: "14px" }}>{dateToDDMMYYYY(orderById.dateOfPurchase)} {dateToHHMM(orderById.created_at)}</span>
-                <span style={{ padding: "2px", fontSize: "14px" }}>Bill No:{orderById.orderNo}</span>
+                <span style={{ paddingRight: "4px", fontSize: "14px", whiteSpace: "nowrap" }}>{dateToDDMMYYYY(orderById.dateOfPurchase)} {dateToHHMM(orderById.created_at)}</span>
+                <span style={{ paddingLeft: "4px", fontSize: "14px", whiteSpace: "nowrap" }}>Bill No:{orderById.orderNo}</span>
               </p>
               {orderById.customerDetails.member &&
                 <div>
