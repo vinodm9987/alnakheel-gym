@@ -39,7 +39,7 @@ class ClassesMember extends Component {
                       <label className="mx-sm-2 inlineFormLabel">{t('Search Filter')}</label>
                       <select className="form-control mx-sm-2 inlineFormInputs" value={this.state.searchFor} onChange={(e) => this.handleFilter(this.state.search, e.target.value)}>
                         <option value="All">{t('All')}</option>
-                        <option value="Name">{t('Name')}</option>
+                        <option value="Name">{t('Name')}</option><option value="Member ID">{t('Member ID')}</option>
                         <option value="Email">{t('Email')}</option>
                         <option value="Mobile No">{t('Mobile No')}</option>
                         <option value="Personal ID">{t('Personal ID')}</option>
