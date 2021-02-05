@@ -7,7 +7,7 @@ import { withTranslation } from 'react-i18next';
 import { connect } from 'react-redux';
 import { findDOMNode } from 'react-dom';
 import { Link } from 'react-router-dom';
-import { changeDueDateOfPackageInstallment, getPackageInstallment } from '../../actions/installment.action';
+import { changeDueDateOfPackageInstallment, getPackageInstallment, payPackageInstallments } from '../../actions/installment.action';
 import Pagination from '../Layout/Pagination';
 import { getAllVat } from '../../actions/vat.action';
 import $ from 'jquery';
@@ -45,7 +45,13 @@ class PackageInstallment extends Component {
       packagesDetailsId: '',
       installmentId: '',
       memberId: '',
-      subTotal: 0
+      password: '',
+      passwordE: '',
+      showPass: false,
+      subTotal: 0,
+      dueDate: new Date(),
+      installmentName: '',
+      packageAmount: 0
     }
     this.props.dispatch(getSystemYear())
     this.props.dispatch(getPackageInstallment({ month: parseInt(this.state.pendingMonth), day: this.state.pendingYear }))
@@ -54,6 +60,7 @@ class PackageInstallment extends Component {
   componentDidUpdate(prevProps) {
     if (((this.props.verifyPassword && this.props.verifyPassword) !== (prevProps.verifyPassword)) && this.props.verifyPassword === 'verified') {
       const el = findDOMNode(this.refs.openDiscount);
+      console.log("🚀 ~ file: PackageInstallment.js ~ line 57 ~ PackageInstallment ~ componentDidUpdate ~ el", el)
       $(el).click();
     }
   }
@@ -66,7 +73,7 @@ class PackageInstallment extends Component {
 
   setDigital(e, total) {
     const { t } = this.props
-    this.setState({ ...validator(e, 'digital', 'numberText', [t('Enter amount')]), ...{ card: 0 } }, () => {
+    this.setState({ ...validator(e, 'digital', 'numberText', [t('Enter amount')]), ...{ card: 0, cheque: 0, cardE: '', chequeE: '' } }, () => {
       if (this.state.digital <= total.toFixed(3) && this.state.digital >= 0) {
         const cash = (total.toFixed(3) - this.state.digital).toFixed(3)
 
@@ -85,7 +92,7 @@ class PackageInstallment extends Component {
 
   setCash(e, total) {
     const { t } = this.props
-    this.setState(validator(e, 'cash', 'numberText', [t('Enter amount'), t('Enter valid amount')]), () => {
+    this.setState({ ...validator(e, 'cash', 'numberText', [t('Enter amount'), t('Enter valid amount')]), ...{ cheque: 0, chequeE: '' } }, () => {
       if (this.state.cash <= total.toFixed(3) && this.state.cash >= 0) {
         const card = (total.toFixed(3) - this.state.cash).toFixed(3)
 
@@ -167,16 +174,39 @@ class PackageInstallment extends Component {
     this.props.dispatch(changeDueDateOfPackageInstallment(dueDateInfo))
   }
 
-  setPayment(packageAmount, branch) {
+  setPayment(packageAmount, branch, packagesDetailsId, installmentId, memberId, dueDate, installmentName) {
     this.setState({
-      subTotal: packageAmount
+      subTotal: packageAmount, packagesDetailsId, installmentId, memberId, dueDate, installmentName
     })
     this.props.dispatch(getAllVat({ branch }))
   }
 
-  handlePayment(totalAmount) {
+  handlePayment(totalAmount, totalVat) {
     const el = findDOMNode(this.refs.checkoutCloseModal);
     const { t } = this.props
+    const { packagesDetailsId, installmentId, memberId, dueDate, showCheque, cash, card, digital, cheque, bankName,
+      chequeNumber, chequeDate, discount, cardNumber, subTotal, cashE, cardE, digitalE } = this.state
+    if (packagesDetailsId && installmentId && memberId && dueDate && (parseInt(totalAmount) === parseInt((+cash || 0) + (+card || 0) + (+digital || 0) + (+cheque || 0))) && !cardE && !cashE && !digitalE) {
+      let memberInfo = {
+        packagesDetailsId, installmentId, memberId, dueDate
+      }
+      if (showCheque) {
+        memberInfo = {
+          paidStatus: 'Paid', cashAmount: cash ? parseFloat(cash) : 0, cardAmount: card ? parseFloat(card) : 0, digitalAmount: digital ? digital : 0,
+          cardNumber: cardNumber, actualAmount: subTotal, totalAmount: totalAmount, discount: parseFloat(discount), vatAmount: totalVat,
+          chequeAmount: cheque ? parseFloat(cheque) : 0, bankName, chequeNumber, chequeDate
+        }
+      } else {
+        memberInfo = {
+          paidStatus: 'Paid', cashAmount: cash ? parseFloat(cash) : 0, cardAmount: card ? parseFloat(card) : 0, digitalAmount: digital ? digital : 0,
+          cardNumber: cardNumber, actualAmount: subTotal, totalAmount: totalAmount, discount: parseFloat(discount), vatAmount: totalVat,
+        }
+      }
+      this.props.dispatch(payPackageInstallments(memberInfo))
+      $(el).click();
+    } else {
+      if (parseInt(totalAmount) !== parseInt((+cash || 0) + (+card || 0) + (+digital || 0) + (+cheque || 0))) this.setState({ cashE: t('Enter amount') })
+    }
   }
 
   render() {
@@ -278,7 +308,7 @@ class PackageInstallment extends Component {
                                 <td className="text-center">
                                   <span className="d-inline-flex">
                                     <button type="button" className="btn btn-success btn-sm w-100px rounded-50px mx-1" data-toggle="modal" data-target="#notYetPaid"
-                                      onClick={() => this.setPayment(packageAmount, branch)}
+                                      onClick={() => this.setPayment(packageAmount, branch, packagesDetailsId, installmentId, _id, dueDate, installmentName)}
                                     >Pay</button>
                                     <Link type="button" className="btn btn-primary br-50px w-100px btn-sm px-3 mx-1" to={`/members-details/${_id}`}>{t('Details')}</Link>
                                     <span className="bg-success action-icon w-30px h-30px rounded-circle d-flex align-items-center justify-content-center mx-1 text-white pointer" data-toggle="modal" data-target="#Duedate"
@@ -474,6 +504,7 @@ class PackageInstallment extends Component {
                       </div>
                     </div>
                   </div>
+
                   {/* if cheque */}
                   {this.state.showCheque &&
                     <div className="col-12">
@@ -544,35 +575,7 @@ class PackageInstallment extends Component {
                   {/* if cheque over */}
                   <div className="col-12">
                     <div className="px-sm-1 pt-4 pb-5">
-                      <button type="button" className="btn btn-block btn-success btn-lg" onClick={() => this.handlePayment(totalAmount)}>Checkout</button>
-                    </div>
-                  </div>
-                  <div className="modal fade commonYellowModal" id="Discount" >
-                    <div className="modal-dialog modal-dialog-centered">
-                      <div className="modal-content">
-                        <div className="modal-header">
-                          <h4 className="modal-title">{t('Add Order Discount')}</h4>
-                          <button type="button" className="close" data-dismiss="modal"><span className="iconv1 iconv1-close"></span></button>
-                        </div>
-                        <div className="modal-body px-0">
-                          <div className="container-fluid">
-                            <div className="col-12 px-3 pt-3 d-flex">
-                              <ul className="pagination">
-                                <li className={discountMethod === 'percent' ? "page-item active cursorPointer" : "page-item cursorPointer"}
-                                  onClick={() => this.setState({ discountMethod: 'percent', count: 0 })}><span className="page-link">%</span></li>
-                                <li className={discountMethod === 'money' ? "page-item active cursorPointer" : "page-item cursorPointer"}
-                                  onClick={() => this.setState({ discountMethod: 'money', count: 0 })}><span className="page-link">{this.props.defaultCurrency}</span></li>
-                              </ul>
-                              <span className="mx-1"></span>
-                              <input type="number" autoComplete="off" className="form-control" placeholder={t('Enter discount')}
-                                value={count} onChange={(e) => this.setState(validator(e, 'count', 'numberText', []))} />
-                            </div>
-                            <div className="col-12 p-3">
-                              <button type="button" className="btn btn-block btn-success btn-lg" data-dismiss="modal" onClick={() => this.addDiscount(subTotal)}>{t('Add Discount')}</button>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
+                      <button type="button" className="btn btn-block btn-success btn-lg" onClick={() => this.handlePayment(totalAmount, totalVat)}>Checkout</button>
                     </div>
                   </div>
                 </div>
@@ -619,15 +622,48 @@ class PackageInstallment extends Component {
           </div>
         </div>
 
+        {/* Popup Discount */}
+        <button type="button" id="Discount2" className="d-none" data-toggle="modal" data-target="#Discount" ref="openDiscount">Open modal</button>
+        <div className="modal fade commonYellowModal" id="Discount" >
+          <div className="modal-dialog modal-dialog-centered">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h4 className="modal-title">{t('Add Order Discount')}</h4>
+                <button type="button" className="close" data-dismiss="modal"><span className="iconv1 iconv1-close"></span></button>
+              </div>
+              <div className="modal-body px-0">
+                <div className="container-fluid">
+                  <div className="col-12 px-3 pt-3 d-flex">
+                    <ul className="pagination">
+                      <li className={discountMethod === 'percent' ? "page-item active cursorPointer" : "page-item cursorPointer"}
+                        onClick={() => this.setState({ discountMethod: 'percent', count: 0 })}><span className="page-link">%</span></li>
+                      <li className={discountMethod === 'money' ? "page-item active cursorPointer" : "page-item cursorPointer"}
+                        onClick={() => this.setState({ discountMethod: 'money', count: 0 })}><span className="page-link">{this.props.defaultCurrency}</span></li>
+                    </ul>
+                    <span className="mx-1"></span>
+                    <input type="number" autoComplete="off" className="form-control" placeholder={t('Enter discount')}
+                      value={count} onChange={(e) => this.setState(validator(e, 'count', 'numberText', []))} />
+                  </div>
+                  <div className="col-12 p-3">
+                    <button type="button" className="btn btn-block btn-success btn-lg" data-dismiss="modal" onClick={() => this.addDiscount(subTotal)}>{t('Add Discount')}</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        {/* /- Popup Discount End*/}
+
       </div>
     )
   }
 }
 
 
-function mapStateToProps({ dashboard: { systemYear, pendingInstallments }, currency: { defaultCurrency }, installment: { packageInstallment }, vat: { activeVats } }) {
+function mapStateToProps({ dashboard: { systemYear, pendingInstallments }, currency: { defaultCurrency }, installment: { packageInstallment }, vat: { activeVats },
+  privilege: { verifyPassword } }) {
   return {
-    defaultCurrency, pendingInstallments, systemYear, activeVats,
+    defaultCurrency, pendingInstallments, systemYear, activeVats, verifyPassword,
     packageInstallment: packageInstallment && packageInstallment.sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate))
   }
 }
