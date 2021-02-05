@@ -491,8 +491,27 @@ class PackageRenewal extends Component {
         })
       }
     } else {
-      installments[i].dueDate = e
-      installmentsCopy[i].dueDate = e
+      if (i !== 0) {
+        if (installmentsCopy[i - 1] && setTime(installmentsCopy[i - 1].dueDate) <= setTime(e)) {
+          installments[i].dueDate = e
+          installmentsCopy[i].dueDate = e
+          installments.forEach((installment, j) => {
+            if (j > i) {
+              installment.dueDate = e
+              installmentsCopy[j].dueDate = e
+            }
+          })
+        }
+      } else {
+        installments[i].dueDate = e
+        installmentsCopy[i].dueDate = e
+        installments.forEach((installment, j) => {
+          if (j > i) {
+            installment.dueDate = e
+            installmentsCopy[j].dueDate = e
+          }
+        })
+      }
     }
     this.setState({ installments, installmentsCopy })
   }
