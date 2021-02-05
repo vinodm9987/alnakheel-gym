@@ -21,7 +21,7 @@ import { getAllVat } from '../../actions/vat.action';
 import instaimg from '../../assets/img/insta.jpg'
 import profilePic from '../../assets/img/profilePic.png'
 import Nationality from '../../utils/apis/country.json';
-import { calculateDOB, dateToDDMMYYYY, dateToHHMM, scrollToTop, validator } from '../../utils/apis/helpers';
+import { calculateDOB, dateToDDMMYYYY, dateToHHMM, scrollToTop, setTime, validator } from '../../utils/apis/helpers';
 import { disableSubmit } from '../../utils/disableButton';
 
 class AddMembers extends Component {
@@ -903,8 +903,27 @@ class AddMembers extends Component {
         })
       }
     } else {
-      installments[i].dueDate = e
-      installmentsCopy[i].dueDate = e
+      if (i !== 0) {
+        if (installmentsCopy[i - 1] && setTime(installmentsCopy[i - 1].dueDate) <= setTime(e)) {
+          installments[i].dueDate = e
+          installmentsCopy[i].dueDate = e
+          installments.forEach((installment, j) => {
+            if (j > i) {
+              installment.dueDate = e
+              installmentsCopy[j].dueDate = e
+            }
+          })
+        }
+      } else {
+        installments[i].dueDate = e
+        installmentsCopy[i].dueDate = e
+        installments.forEach((installment, j) => {
+          if (j > i) {
+            installment.dueDate = e
+            installmentsCopy[j].dueDate = e
+          }
+        })
+      }
     }
     this.setState({ installments, installmentsCopy })
   }

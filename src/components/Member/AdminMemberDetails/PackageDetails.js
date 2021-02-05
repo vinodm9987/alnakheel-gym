@@ -35,6 +35,7 @@ class PackageDetails extends Component {
     installmentPaidAmount: 0,
     installmentRemainAmount: 0,
     installmentPackageName: '',
+    installmentTrainerName: '',
     showCheque: false,
     bankName: '',
     chequeNumber: '',
@@ -67,6 +68,22 @@ class PackageDetails extends Component {
     let remainAmount = parseFloat(installmentTotalAmount) - parseFloat(paidAmount)
     if (Installments && Installments.length) {
       this.setState({ Installments, installmentTotalAmount, installmentPaidAmount: paidAmount, installmentRemainAmount: remainAmount, installmentPackageName })
+    }
+  }
+
+
+  setTrainerInstallments(Installments, installmentTotalAmount, installmentTrainerName) {
+    let paidAmount = 0
+    if (Installments && Installments.length) {
+      Installments.forEach((installment) => {
+        if (installment.paidStatus === 'Paid') {
+          paidAmount += installment.actualAmount ? installment.actualAmount : installment.totalAmount
+        }
+      })
+    }
+    let remainAmount = parseFloat(installmentTotalAmount) - parseFloat(paidAmount)
+    if (Installments && Installments.length) {
+      this.setState({ Installments, installmentTotalAmount, installmentPaidAmount: paidAmount, installmentRemainAmount: remainAmount, installmentTrainerName })
     }
   }
 
@@ -701,7 +718,7 @@ class PackageDetails extends Component {
                         const { packages: { packageName }, trainerDetails } = pack
                         return (
                           trainerDetails && trainerDetails.map((t, j) => {
-                            const { trainerStart, trainerEnd, trainer: { credentialId: { userName, avatar } }, trainerFees: { amount } } = t
+                            const { trainerStart, trainerEnd, trainer: { credentialId: { userName, avatar } }, trainerFees: { amount }, Installments } = t
                             return (
                               <tr key={j}>
                                 <td>
@@ -715,11 +732,8 @@ class PackageDetails extends Component {
                                 <td className="dirltrtar">{dateToDDMMYYYY(trainerEnd)}</td>
                                 <td className="text-danger font-weight-bold"><span>{this.props.defaultCurrency}</span><span className="pl-1"></span><span>{amount}</span></td>
                                 <td className="text-center">
-                                  <span className="badge badge-pill badge-primary px-3 py-2 cursorPointer" data-toggle="modal" data-target="#InstallmentDetails">Payment Details</span>
-                                </td>
-                                <td>
-                                  <button className="btn btn-success badge-pill btn-sm px-3 py-05 d-inline-flex justify-content-between align-items-center mx-1 py-0 w-100px text-nowrap" data-toggle="modal" data-target="#allreadyPaid"><span className="mx-1">Paid</span><span className="iconv1 iconv1-arrow-down mx-1"></span></button>
-                                  {/* <button className="btn btn-danger badge-pill btn-sm px-3 py-05 d-inline-flex justify-content-between align-items-center mx-1 py-0 w-100px text-nowrap" data-toggle="modal" data-target="#notYetPaid" ><span className="mx-1">Unpaid</span><span className="iconv1 iconv1-arrow-down mx-1"></span></button> */}
+                                  <span className="badge badge-pill badge-primary px-3 py-2 cursorPointer" data-toggle="modal" data-target="#InstallmentDetails1"
+                                    onClick={() => this.setTrainerInstallments(Installments, amount, userName)}>Payment Details</span>
                                 </td>
                               </tr>
                             )
@@ -749,6 +763,66 @@ class PackageDetails extends Component {
                       <div className="m-1">
                         <h6 className="font-weight-bold mb-1">Package Name</h6>
                         <h6 className="text-danger">{this.state.installmentPackageName}</h6>
+                      </div>
+                      <div className="m-1">
+                        <h6 className="font-weight-bold mb-1">Total Amount</h6>
+                        <h6 className="text-danger"><b>{this.props.defaultCurrency} {this.state.installmentTotalAmount}</b></h6>
+                      </div>
+                      <div className="m-1">
+                        <h6 className="font-weight-bold mb-1">Paid Amount</h6>
+                        <h6 className="text-danger"><b>{this.props.defaultCurrency} {this.state.installmentPaidAmount}</b></h6>
+                      </div>
+                      <div className="m-1">
+                        <h6 className="font-weight-bold mb-1">Remaining Amount</h6>
+                        <h6 className="text-danger"><b>{this.props.defaultCurrency} {this.state.installmentRemainAmount}</b></h6>
+                      </div>
+                    </div>
+                    <h5 className="m-1 py-3"><b>Installment History</b></h5>
+                    <div className="table-responsive">
+                      <table className="table table-striped InstallmentTable">
+                        <thead>
+                          <tr className="border">
+                            <th>Installment Type</th>
+                            <th>Amount</th>
+                            <th>Due Date</th>
+                            <th>Paid Date</th>
+                            <th>Status</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {this.state.Installments.map((installment, k) => {
+                            return (
+                              <tr key={k}>
+                                <td>Installment {k + 1}</td>
+                                <td className="text-danger font-weight-bold">{this.props.defaultCurrency} {installment.actualAmount ? installment.actualAmount : installment.totalAmount}</td>
+                                <td>{dateToDDMMYYYY(installment.dueDate)}</td>
+                                <td>{dateToDDMMYYYY(installment.dateOfPaid)}</td>
+                                {installment.paidStatus === 'Paid' ? <td className="text-success font-weight-bold">Paid</td> : <td className="text-danger font-weight-bold">Pending</td>}
+                              </tr>
+                            )
+                          })}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          }
+
+          {this.state.Installments && this.state.Installments.length > 0 &&
+            <div className="modal fade commonYellowModal" id="InstallmentDetails1">
+              <div className="modal-dialog modal-lg modal-dialog-centered">
+                <div className="modal-content">
+                  <div className="modal-header">
+                    <h4 className="modal-title">Payment Details</h4>
+                    <button type="button" className="close align-self-center" data-dismiss="modal"><span className="iconv1 iconv1-close"></span></button>
+                  </div>
+                  <div className="modal-body px-4">
+                    <div className="d-flex flex-wrap justify-content-between p-1">
+                      <div className="m-1">
+                        <h6 className="font-weight-bold mb-1">Trainer Name</h6>
+                        <h6 className="text-danger">{this.state.installmentTrainerName}</h6>
                       </div>
                       <div className="m-1">
                         <h6 className="font-weight-bold mb-1">Total Amount</h6>

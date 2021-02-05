@@ -175,7 +175,7 @@ class BookATrainer extends Component {
     }
     this.setState({
       ...validator(e, 'packages', 'text', [t('Enter package name')]), ...{
-        tax, periodDays, oldPackageId, packageAmount, setPackageAmount, packageDaysLeft,
+        tax, periodDays, oldPackageId, packageAmount, setPackageAmount, packageDaysLeft, installments: [], installmentsCopy: [],
         cash: 0, card: 0, digital: 0, cheque: 0, period: '', amount: 0, giftcard: 0, discount: 0, count: 0, trainer: null,
         startDate: new Date(), endDate: new Date(),
       }
@@ -194,13 +194,13 @@ class BookATrainer extends Component {
     const { t } = this.props
     this.setState({
       ...validator(e, 'trainer', 'select', [t('Select trainer name')]), ...{
-        period: '', amount: 0, packageAmount: this.state.setPackageAmount, giftcard: 0,
+        period: '', amount: 0, packageAmount: this.state.setPackageAmount, giftcard: 0, installments: [], installmentsCopy: [],
         discount: 0, count: 0, cash: 0, card: 0, digital: 0, cheque: 0, startDate: new Date(), endDate: new Date(),
       }
     }, () => {
       const data = {
         branch: this.state.branch,
-        trainerName: this.state.trainer._id
+        trainerName: this.state.trainer && this.state.trainer._id
       }
       this.state.trainer && this.state.branch && this.props.dispatch(getPeriodOfTrainer(data))
     })
@@ -225,7 +225,7 @@ class BookATrainer extends Component {
     }
     this.setState({
       ...validator(e, 'period', 'text', [t('Select period')]), ...{
-        amount, trainerFeesId, packageAmount, giftcard: 0, discount: 0,
+        amount, trainerFeesId, packageAmount, giftcard: 0, discount: 0, installments: [], installmentsCopy: [],
         count: 0, cash: 0, card: 0, digital: 0, cheque: 0, trainerPeriodDays, endDate
       }
     })
@@ -459,8 +459,27 @@ class BookATrainer extends Component {
         })
       }
     } else {
-      installments[i].dueDate = e
-      installmentsCopy[i].dueDate = e
+      if (i !== 0) {
+        if (installmentsCopy[i - 1] && setTime(installmentsCopy[i - 1].dueDate) <= setTime(e)) {
+          installments[i].dueDate = e
+          installmentsCopy[i].dueDate = e
+          installments.forEach((installment, j) => {
+            if (j > i) {
+              installment.dueDate = e
+              installmentsCopy[j].dueDate = e
+            }
+          })
+        }
+      } else {
+        installments[i].dueDate = e
+        installmentsCopy[i].dueDate = e
+        installments.forEach((installment, j) => {
+          if (j > i) {
+            installment.dueDate = e
+            installmentsCopy[j].dueDate = e
+          }
+        })
+      }
     }
     this.setState({ installments, installmentsCopy })
   }
