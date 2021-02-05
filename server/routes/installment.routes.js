@@ -1,6 +1,7 @@
 const { getPackageInstallment, getTrainerInstallment,
-    payPackageInstallments, changeDueDateOfTrainerInstallment, payTrainerInstallments,
-    changeDueDateOfPackageInstallment } = require('../controller/member/installment.controller')
+    payPackageInstallments, changeDueDateOfTrainerInstallment,
+    payTrainerInstallments, changeDueDateOfPackageInstallment }
+    = require('../controller/member/installment.controller');
 
 
 exports.routes = (express, app) => {
@@ -18,7 +19,6 @@ exports.routes = (express, app) => {
     router.post('/payPackageInstallments', payPackageInstallments);
 
     router.post('/payTrainerInstallments', payTrainerInstallments);
-
 
 
     app.use('/api/installment/', router);

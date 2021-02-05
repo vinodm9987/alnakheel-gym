@@ -56,13 +56,22 @@ const { auditLogger } = require('../../middleware/auditlog.middleware');
 
 
 
-const memberSearch = (response, search) => {
+const memberSearch = (response, search, searchFor) => {
     let newResponse = response.filter((doc) => {
         if (search) {
-            let temp = doc.credentialId.email ? doc.credentialId.email.toLowerCase() : '';
-            let temp1 = doc.credentialId.userName ? doc.credentialId.userName : '';
-            let temp2 = doc.personalId ? doc.personalId.toLowerCase() : '';
-            let temp3 = doc.mobileNo ? doc.mobileNo.toLowerCase() : '';
+            let email = doc.credentialId.email ? doc.credentialId.email.toLowerCase() : '';
+            let name = doc.credentialId.userName ? doc.credentialId.userName : '';
+            let personalId = doc.personalId ? doc.personalId.toLowerCase() : '';
+            let mobile = doc.mobileNo ? doc.mobileNo.toLowerCase() : '';
+            let temp, temp1, temp2, temp3 = false;
+            if (searchFor === 'All') {
+                temp = email.includes(search); temp1 = name.includes(search);
+                temp2 = personalId.includes(search); temp3 = mobile.includes(search);
+            }
+            if (searchFor === 'Email') temp = email.includes(search);
+            if (searchFor === 'Name') temp1 = name.includes(search);
+            if (searchFor === 'PersonalId') temp2 = personalId.includes(search);
+            if (searchFor === 'Mobile') temp1 = mobile.includes(search);
             if (temp.includes(search) || temp1.includes(search) ||
                 temp2.includes(search) || temp3.includes(search)) {
                 return doc
@@ -624,19 +633,7 @@ exports.getFirstRegisterMembers = async (req, res) => {
         if (req.body.branch) queryCond["branch"] = req.body.branch;
         let response = await Member.find(queryCond)
             .populate('credentialId branch').populate("packageDetails.packages").lean()
-        let newResponse = response.filter((doc) => {
-            if (search) {
-                let temp = doc.credentialId.email.toLowerCase()
-                let temp1 = doc.credentialId.userName.toLowerCase()
-                let temp2 = doc.memberId ? doc.memberId.toString() : ''
-                let temp3 = doc.mobileNo ? doc.mobileNo.toString() : ''
-                if (temp.includes(search) || temp1.includes(search) || temp2.includes(search) || temp3.includes(search)) {
-                    return doc
-                }
-            } else {
-                return doc;
-            }
-        })
+        let newResponse = memberSearch(response, search, req.body.searchFor);
         successResponseHandler(res, newResponse, "successfully get all member details !!");
     } catch (error) {
         logger.error(error);
@@ -660,7 +657,7 @@ exports.getAllPendingMember = async (req, res) => {
         queryCond["isPackageSelected"] = false;
         if (req.body.branch) queryCond["branch"] = req.body.branch
         let response = await Member.find(queryCond).populate('credentialId branch').populate("packageDetails.packages").lean()
-        let newResponse = memberSearch(response, search);
+        let newResponse = memberSearch(response, search, req.body.searchFor);
         return successResponseHandler(res, newResponse, "successfully get all member details !!");
     } catch (error) {
         logger.error(error);
@@ -685,7 +682,7 @@ exports.getActiveRegisterMembers = async (req, res) => {
         queryCond["doneFingerAuth"] = true;
         if (req.body.branch) queryCond["branch"] = req.body.branch;
         let response = await Member.find(queryCond).populate('credentialId branch').populate("packageDetails.packages").lean()
-        let newResponse = memberSearch(response, search);
+        let newResponse = memberSearch(response, search, req.body.searchFor);
         return successResponseHandler(res, newResponse, "successfully get all member details !!");
     } catch (error) {
         logger.error(error);
@@ -711,7 +708,7 @@ exports.getActiveStatusRegisterMembers = async (req, res) => {
         let response = await Member.find(queryCond)
             .populate('credentialId').populate("packageDetails.packages")
             .populate({ path: 'packageDetails.trainer', populate: { path: "credentialId" } }).lean()
-        let newResponse = memberSearch(response, search);
+        let newResponse = memberSearch(response, search, req.body.searchFor);
         return successResponseHandler(res, newResponse, "successfully get all member details !!");
     } catch (error) {
         logger.error(error);
@@ -736,7 +733,7 @@ exports.getActiveStatusNotExpiredRegisterMembers = async (req, res) => {
         let response = await Member.find(queryCond)
             .populate('credentialId').populate("packageDetails.packages")
             .populate({ path: 'packageDetails.trainer', populate: { path: "credentialId" } }).lean()
-        let newResponse = memberSearch(response, search);
+        let newResponse = memberSearch(response, search, req.body.searchFor);
         return successResponseHandler(res, newResponse, "successfully get all member details !!");
     } catch (error) {
         logger.error(error);
