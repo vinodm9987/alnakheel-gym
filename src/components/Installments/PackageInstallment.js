@@ -192,14 +192,18 @@ class PackageInstallment extends Component {
       }
       if (showCheque) {
         memberInfo = {
-          paidStatus: 'Paid', cashAmount: cash ? parseFloat(cash) : 0, cardAmount: card ? parseFloat(card) : 0, digitalAmount: digital ? digital : 0,
-          cardNumber: cardNumber, actualAmount: subTotal, totalAmount: totalAmount, discount: parseFloat(discount), vatAmount: totalVat,
-          chequeAmount: cheque ? parseFloat(cheque) : 0, bankName, chequeNumber, chequeDate
+          ...memberInfo, ...{
+            paidStatus: 'Paid', cashAmount: cash ? parseFloat(cash) : 0, cardAmount: card ? parseFloat(card) : 0, digitalAmount: digital ? digital : 0,
+            cardNumber: cardNumber, actualAmount: subTotal, totalAmount: totalAmount, discount: parseFloat(discount), vatAmount: totalVat,
+            chequeAmount: cheque ? parseFloat(cheque) : 0, bankName, chequeNumber, chequeDate
+          }
         }
       } else {
         memberInfo = {
-          paidStatus: 'Paid', cashAmount: cash ? parseFloat(cash) : 0, cardAmount: card ? parseFloat(card) : 0, digitalAmount: digital ? digital : 0,
-          cardNumber: cardNumber, actualAmount: subTotal, totalAmount: totalAmount, discount: parseFloat(discount), vatAmount: totalVat,
+          ...memberInfo, ...{
+            paidStatus: 'Paid', cashAmount: cash ? parseFloat(cash) : 0, cardAmount: card ? parseFloat(card) : 0, digitalAmount: digital ? digital : 0,
+            cardNumber: cardNumber, actualAmount: subTotal, totalAmount: totalAmount, discount: parseFloat(discount), vatAmount: totalVat,
+          }
         }
       }
       this.props.dispatch(payPackageInstallments(memberInfo))

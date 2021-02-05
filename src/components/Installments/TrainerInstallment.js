@@ -51,7 +51,7 @@ class TrainerInstallment extends Component {
       showPass: false,
       dueDate: new Date(),
       installmentName: '',
-      packageAmount: 0
+      trainerAmount: 0
     }
     this.props.dispatch(getTrainerInstallment({ month: parseInt(this.state.pendingMonth), day: this.state.pendingYear }))
   }
@@ -172,9 +172,9 @@ class TrainerInstallment extends Component {
     this.props.dispatch(changeDueDateOfTrainerInstallment(dueDateInfo))
   }
 
-  setPayment(packageAmount, branch, packagesDetailsId, installmentId, memberId, dueDate, installmentName, trainerDetailsId) {
+  setPayment(trainerAmount, branch, packagesDetailsId, installmentId, memberId, dueDate, installmentName, trainerDetailsId) {
     this.setState({
-      subTotal: packageAmount, packagesDetailsId, installmentId, memberId, dueDate, installmentName, trainerDetailsId
+      subTotal: trainerAmount, packagesDetailsId, installmentId, memberId, dueDate, installmentName, trainerDetailsId
     })
     this.props.dispatch(getAllVat({ branch }))
   }
@@ -190,14 +190,18 @@ class TrainerInstallment extends Component {
       }
       if (showCheque) {
         memberInfo = {
-          paidStatus: 'Paid', cashAmount: cash ? parseFloat(cash) : 0, cardAmount: card ? parseFloat(card) : 0, digitalAmount: digital ? digital : 0,
-          cardNumber: cardNumber, actualAmount: subTotal, totalAmount: totalAmount, discount: parseFloat(discount), vatAmount: totalVat,
-          chequeAmount: cheque ? parseFloat(cheque) : 0, bankName, chequeNumber, chequeDate
+          ...memberInfo, ...{
+            paidStatus: 'Paid', cashAmount: cash ? parseFloat(cash) : 0, cardAmount: card ? parseFloat(card) : 0, digitalAmount: digital ? digital : 0,
+            cardNumber: cardNumber, actualAmount: subTotal, totalAmount: totalAmount, discount: parseFloat(discount), vatAmount: totalVat,
+            chequeAmount: cheque ? parseFloat(cheque) : 0, bankName, chequeNumber, chequeDate
+          }
         }
       } else {
         memberInfo = {
-          paidStatus: 'Paid', cashAmount: cash ? parseFloat(cash) : 0, cardAmount: card ? parseFloat(card) : 0, digitalAmount: digital ? digital : 0,
-          cardNumber: cardNumber, actualAmount: subTotal, totalAmount: totalAmount, discount: parseFloat(discount), vatAmount: totalVat,
+          ...memberInfo, ...{
+            paidStatus: 'Paid', cashAmount: cash ? parseFloat(cash) : 0, cardAmount: card ? parseFloat(card) : 0, digitalAmount: digital ? digital : 0,
+            cardNumber: cardNumber, actualAmount: subTotal, totalAmount: totalAmount, discount: parseFloat(discount), vatAmount: totalVat,
+          }
         }
       }
       this.props.dispatch(payTrainerInstallments(memberInfo))
