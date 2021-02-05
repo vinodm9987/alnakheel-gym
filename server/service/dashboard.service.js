@@ -6,11 +6,11 @@ module.exports = {
     getStockSellTotalAmount: (stockSells, type) => {
         let totalAmount = 0;
         for (let i = 0; i < stockSells.length; i++) {
-            if (type === 'all') totalAmount += stockSells[i].totalAmount;
-            if (type === 'digital') totalAmount += stockSells[i].digitalAmount;
-            if (type === 'cash') totalAmount += stockSells[i].cashAmount;
-            if (type === 'card') totalAmount += stockSells[i].cardAmount;
-            if (type === 'cheque') totalAmount += stockSells[i].cheque;
+            if (type === 'all') totalAmount += stockSells[i].totalAmount?stockSells[i].totalAmount:0;
+            if (type === 'digital') totalAmount += stockSells[i].digitalAmount?stockSells[i].digitalAmount:0;
+            if (type === 'cash') totalAmount += stockSells[i].cashAmount?stockSells[i].cashAmount:0;
+            if (type === 'card') totalAmount += stockSells[i].cardAmount?stockSells[i].cardAmount:0;
+            if (type === 'cheque') totalAmount += stockSells[i].chequeAmount?stockSells[i].chequeAmount:0;
         }
         return totalAmount;
     },
@@ -22,7 +22,7 @@ module.exports = {
             if (type === 'digital') totalAmount += classSells[i].digitalAmount;
             if (type === 'cash') totalAmount += classSells[i].cashAmount;
             if (type === 'card') totalAmount += classSells[i].cardAmount;
-            if (type === 'cheque') totalAmount += classSells[i].cheque;
+            if (type === 'cheque') totalAmount += classSells[i].chequeAmount;
         }
         return totalAmount;
     },
@@ -102,12 +102,11 @@ module.exports = {
         if (installment.paidStatus === 'Paid') {
             const dateOfPaid = new Date(setTime(installment.dateOfPaid))
             if (new Date(date).getTime() === dateOfPaid.getTime()) {
-                if (type === 'all') totalAmount += (+installment.totalAmount);
-                if (type === 'digital') totalAmount += installment.digitalAmount;
-                if (type === 'cash') totalAmount += installment.cashAmount;
-                if (type === 'card') totalAmount += installment.cardAmount;
-                if (type === 'cheque') totalAmount += installment.cheque;
-
+                if (type === 'all') totalAmount += typeof installment.totalAmount === 'number' ?installment.totalAmount :0 ;
+                if (type === 'digital') totalAmount += typeof installment.digitalAmount === 'number' ?installment.digitalAmount :0 ;
+                if (type === 'cash') totalAmount += typeof installment.cashAmount === 'number' ?installment.cashAmount :0;
+                if (type === 'card') totalAmount += typeof installment.cardAmount === 'number' ?installment.cardAmount :0;
+                if (type === 'cheque') totalAmount +=typeof  installment.chequeAmount === 'number' ? installment.chequeAmount :0 ;
             }
         }
         return totalAmount;
@@ -117,11 +116,11 @@ module.exports = {
         for (let i = 0; i < stockSells.length; i++) {
             let totalAmount = 0;
             let stockBranch = stockSells[i].branch.toString();
-            if (type === 'all') totalAmount += stockSells[i].totalAmount;
-            if (type === 'digital') totalAmount += stockSells[i].digitalAmount;
-            if (type === 'cash') totalAmount += stockSells[i].cashAmount;
-            if (type === 'card') totalAmount += stockSells[i].cardAmount;
-            if (type === 'cheque') totalAmount += stockSells[i].cheque;
+            if (type === 'all') totalAmount += stockSells[i].totalAmount?stockSells[i].totalAmount:0 ;
+            if (type === 'digital') totalAmount += stockSells[i].digitalAmount?stockSells[i].digitalAmount:0;
+            if (type === 'cash') totalAmount += stockSells[i].cashAmount?stockSells[i].cashAmount:0;
+            if (type === 'card') totalAmount += stockSells[i].cardAmount?stockSells[i].cardAmount:0;
+            if (type === 'cheque') totalAmount += stockSells[i].chequeAmount?stockSells[i].chequeAmount:0;
             const index = branches.findIndex(doc => stockBranch === doc._id.toString());
             branches[index]['amount'] = typeof branches[index]['amount'] === 'number' ? branches[index]['amount'] += totalAmount : totalAmount;
         }

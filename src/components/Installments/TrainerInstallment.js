@@ -396,7 +396,7 @@ class TrainerInstallment extends Component {
             <div className="modal-content">
               <div className="modal-header">
                 <h4 className="modal-title">{t('Payment')}</h4>
-                <button type="button" className="close" data-dismiss="modal" onClick={() => this.setState({ digital: 0, cash: 0, card: 0 })}><span className="iconv1 iconv1-close"></span></button>
+                <button type="button" className="close" data-dismiss="modal" ref='checkoutCloseModal' onClick={() => this.setState({ digital: 0, cash: 0, card: 0 })}><span className="iconv1 iconv1-close"></span></button>
               </div>
               <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 px-4 pb-4 pt-4 bg-light rounded-bottom">
                 <div className="table-responsive bg-white px-4 pt-3">
