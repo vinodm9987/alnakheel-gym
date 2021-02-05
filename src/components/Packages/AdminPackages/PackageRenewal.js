@@ -699,7 +699,7 @@ class PackageRenewal extends Component {
               <h5 className="mx-3">{t('Do you want to pay as Installment?')}</h5>
               <div className="position-relative mx-3">
                 <select className="bg-warning rounded w-100px px-3 py-1 border border-warning text-white"
-                  value={wantInstallment} onChange={(e) => this.setState({ wantInstallment: e.target.value })}
+                  value={wantInstallment} onChange={(e) => this.setState({ wantInstallment: e.target.value, installments: [], installmentsCopy: [], cash: 0, card: 0, digital: 0, cheque: 0 })}
                 >
                   <option value="Yes">{t('Yes')}</option>
                   <option value="No">{t('No')}</option>

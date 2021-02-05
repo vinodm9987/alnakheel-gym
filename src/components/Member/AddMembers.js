@@ -1537,7 +1537,7 @@ class AddMembers extends Component {
                   <h5 className="mx-3">{t('Do you want to pay as Installment?')}</h5>
                   <div className="position-relative mx-3">
                     <select className="bg-warning rounded w-100px px-3 py-1 border border-warning text-white"
-                      value={wantInstallment} onChange={(e) => this.setState({ wantInstallment: e.target.value })}
+                      value={wantInstallment} onChange={(e) => this.setState({ wantInstallment: e.target.value, installments: [], installmentsCopy: [], cash: 0, card: 0, digital: 0, cheque: 0 })}
                     >
                       <option value="Yes">{t('Yes')}</option>
                       <option value="No">{t('No')}</option>
@@ -1761,6 +1761,39 @@ class AddMembers extends Component {
                               </div>
                             </div>
                           </div>
+
+                          {/* Popup Discount */}
+                          <button type="button" id="Discount2" className="d-none" data-toggle="modal" data-target="#Discount" ref="openDiscount">Open modal</button>
+                          <div className="modal fade commonYellowModal" id="Discount" >
+                            <div className="modal-dialog modal-dialog-centered">
+                              <div className="modal-content">
+                                <div className="modal-header">
+                                  <h4 className="modal-title">{t('Add Order Discount')}</h4>
+                                  <button type="button" className="close" data-dismiss="modal"><span className="iconv1 iconv1-close"></span></button>
+                                </div>
+                                <div className="modal-body px-0">
+                                  <div className="container-fluid">
+                                    <div className="col-12 px-3 pt-3 d-flex">
+                                      <ul className="pagination">
+                                        <li className={discountMethod === 'percent' ? "page-item active cursorPointer" : "page-item cursorPointer"}
+                                          onClick={() => this.setState({ discountMethod: 'percent', count: 0 })}><span className="page-link">%</span></li>
+                                        <li className={discountMethod === 'money' ? "page-item active cursorPointer" : "page-item cursorPointer"}
+                                          onClick={() => this.setState({ discountMethod: 'money', count: 0 })}><span className="page-link">{this.props.defaultCurrency}</span></li>
+                                      </ul>
+                                      <span className="mx-1"></span>
+                                      <input type="number" autoComplete="off" className="form-control" placeholder={t('Enter discount')}
+                                        value={count} onChange={(e) => this.setState(validator(e, 'count', 'numberText', []))} />
+                                    </div>
+                                    <div className="col-12 p-3">
+                                      <button type="button" className="btn btn-block btn-success btn-lg" data-dismiss="modal" onClick={() => this.addDiscount(subTotal)}>{t('Add Discount')}</button>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          {/* /- Popup Discount End*/}
+
                           {/* if cheque */}
                           {this.state.showCheque &&
                             <div className="col-12">
