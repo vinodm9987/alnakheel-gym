@@ -252,7 +252,7 @@ class PackageDetails extends Component {
                         <div className="col-12 col-lg-5">
                           <h5 className="">{packageName}</h5>
                           <div className="d-flex justify-content-between align-items-start flex-wrap">
-                            <div className="d-flex justify-content-end flex-wrap flexBasis-0">
+                            <div className="d-flex justify-content-start flex-wrap flexBasis-0">
                               <span className="text-secondary">{t('Start Date')}</span>
                               <span className="text-danger w-100">{dateToDDMMYYYY(startDate)}</span>
                             </div>
@@ -648,8 +648,8 @@ class PackageDetails extends Component {
                               : <td className="text-danger font-weight-bold"><span>{this.props.defaultCurrency}</span><span className="pl-1"></span><span>{amount.toFixed(3)}</span></td>}
                             {/* <td>{trainer ? trainer.credentialId.userName : 'NA'}</td> */}
                             {/* <td className="text-center">
-                          <span className="bg-warning action-icon"><span className="iconv1 iconv1-download"></span></span>
-                        </td> */}
+                              <span className="bg-warning action-icon"><span className="iconv1 iconv1-download"></span></span>
+                            </td> */}
                             <td className="text-center">{paidStatus === 'Installment' ? t('Yes') : t('No')}</td>
                             {paidStatus === 'Installment'
                               ? <td className="text-center">
@@ -669,9 +669,9 @@ class PackageDetails extends Component {
             </div>
 
             <div className="tab-pane fade" id="submenu2" role="tabpanel" >
-              <div className="col-12">
+              <div className="col-12 tableTypeStriped">
                 <div className="table-responsive">
-                  <table className="borderRoundSeperateTable tdGray">
+                  <table className="table table-striped">
                     <thead>
                       <tr>
                         <th>{t('Trainer Name')}</th>
