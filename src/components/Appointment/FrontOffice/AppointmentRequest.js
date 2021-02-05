@@ -177,9 +177,9 @@ class AppointmentRequest extends Component {
             </div>
           </form>
         </div>
-        <div className="col-12">
+        <div className="col-12 tableTypeStriped">
           <div className="table-responsive">
-            <table className="borderRoundSeperateTable tdGray">
+            <table className="table table-striped">
               <thead>
                 {appointmentFor === 'member'
                   ?
@@ -259,13 +259,22 @@ class AppointmentRequest extends Component {
                     const { visitorName, date, fromTime, toTime, purposeOfVisit, mobileNo, branch: { branchName } } = appointment
                     return (
                       <tr key={i}>
-                        <td><h5 className="m-0 SegoeSemiBold">{visitorName}</h5></td>
+                        <td>
+                          {/* tushar if image and id -> give it below */}
+                          <div className="d-flex align-items-center">
+                              {/* <img src={`/${member.credentialId.avatar.path}`} alt='' className="mx-1 rounded-circle w-50px h-50px" /> */}
+                              <div className="mx-1">
+                                <h5 className="m-0 SegoeSemiBold">{visitorName}</h5>
+                                {/* <h6 className="dirltrtar my-0">ID : {member.memberId}</h6> */}
+                              </div>
+                            </div>
+                        </td>
                         <td><span className="d-inline-block dirltrtar">{branchName}</span></td>
                         <td><span className="d-inline-block dirltrtar">{mobileNo}</span></td>
                         <td><span className="d-inline-block dirltrtar">{dateToDDMMYYYY(date)}</span></td>
                         <td><span className="d-inline-block dirltrtar">{dateToHHMM(fromTime)}</span></td>
                         <td><span className="d-inline-block dirltrtar">{dateToHHMM(toTime)}</span></td>
-                        <td><span className="d-inline-block dirltrtar">{purposeOfVisit}</span></td>
+                        <td><span className="text-wrap w-200px d-inline-block dirltrtar">{purposeOfVisit}</span></td>
                       </tr>
                     )
                   })}

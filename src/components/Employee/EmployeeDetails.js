@@ -407,19 +407,19 @@ class EmployeeDetails extends Component {
                               <div className="w-100 d-flex justify-content-center">
                                 <img src={faceRecAfter} width="200px" alt="" />
                               </div>
-                              <h5 className="mt-3 mb-0 d-flex justify-content-center">
-                                <span className="icon mr-3 scan-success-icon"></span>
+                              <h5 className="mt-3 mb-0 d-flex justify-content-center align-items-center">
+                                <span className="icon mr-3 scan-success-icon"><span class="iconv1 iconv1-tick"></span></span>
                                 <span className="font-weight-bold">{t('Success!')}</span>
                               </h5>
                               <h5 className="my-3">{t('Your face scanning has successfully completed')}</h5>
-                              <button type="button" className="btn btn-success" id="faceButton" onClick={() => this.handleIncludeModify()}>{t('Update Face')}</button>
+                              <button type="button" className="btn btn-success scan-btn-bio" id="faceButton" onClick={() => this.handleIncludeModify()}>{t('Update Face')}</button>
                             </div>
                             : <div className="w-100 text-center pt-5">
                               <div className="w-100 d-flex justify-content-center">
                                 <img src={faceRecBefore} width="200px" alt="" />
                               </div>
                               <h5 className="my-3">{t('Enroll face scanning')}</h5>
-                              <button type="button" className="btn btn-success" id="faceButton" onClick={() => this.handleIncludeModify()}>{t('Enroll')}</button>
+                              <button type="button" className="btn btn-success scan-btn-bio" id="faceButton" onClick={() => this.handleIncludeModify()}>{t('Enroll')}</button>
                             </div>
                         }
                       </form>
