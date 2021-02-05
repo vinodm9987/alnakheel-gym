@@ -74,9 +74,9 @@ const memberSearch = (response, search, searchFor) => {
             }
             if (searchFor === 'Email') temp = email.includes(search);
             if (searchFor === 'Name') temp1 = name.includes(search);
-            if (searchFor === 'PersonalId') temp2 = personalId.includes(search);
+            if (searchFor === 'Personal ID') temp2 = personalId.includes(search);
             if (searchFor === 'Mobile') temp3 = mobile.includes(search);
-            if (searchFor === 'Member Id') temp4 = memberId.includes(search);
+            if (searchFor === 'Member ID') temp4 = memberId.includes(search);
             if (temp || temp1 || temp2 || temp3 || temp4) {
                 return doc
             }
@@ -189,21 +189,9 @@ exports.createNewMember = (req, res) => {
         try {
             const memberDesignation = await Designation.findOne({ designationName: DESIGNATION[2] })
             const {
-                mobileNo,
-                gender,
-                dateOfBirth,
-                nationality,
-                userName,
-                email,
-                password,
-                referralCode,
-                personalId,
-                height,
-                weight,
-                questions,
-                relationship,
-                emergencyNumber,
-                goal
+                mobileNo, gender, dateOfBirth, nationality, userName,
+                email, password, referralCode, personalId, height,
+                weight, questions, relationship, emergencyNumber, goal
             } = JSON.parse(req.body.data);
             if (referralCode) {
                 const isExist = await MemberCode.findOne({ code: referralCode }).count();
@@ -212,19 +200,10 @@ exports.createNewMember = (req, res) => {
                 if (!isExpired) return errorResponseHandler(res, error, "referral code is expired !");
             }
             const member = new Member({
-                mobileNo,
-                gender,
-                dateOfBirth,
-                nationality,
-                personalId,
-                height,
-                weight,
-                questions,
-                isPackageSelected: false,
-                emergencyNumber,
-                relationship,
-                startWeight: weight,
-                goal
+                mobileNo, gender, dateOfBirth, nationality,
+                personalId, height, weight, questions,
+                isPackageSelected: false, emergencyNumber,
+                relationship, startWeight: weight, goal
             });
             const credential = new Credential({
                 userName,

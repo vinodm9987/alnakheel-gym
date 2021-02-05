@@ -83,7 +83,7 @@ class PackageDetails extends Component {
   setDigital(e) {
     const { t } = this.props
     const { totalAmount } = this.state
-    this.setState({ ...validator(e, 'digital', 'numberText', [t('Enter amount')]), ...{ card: 0, cheque: 0 } }, () => {
+    this.setState({ ...validator(e, 'digital', 'numberText', [t('Enter amount')]), ...{ card: 0, cheque: 0, cardE: '', chequeE: '' } }, () => {
       if (this.state.digital <= totalAmount.toFixed(3) && this.state.digital >= 0) {
         const cash = (totalAmount.toFixed(3) - this.state.digital).toFixed(3)
 
@@ -102,7 +102,7 @@ class PackageDetails extends Component {
 
   setCash(e, totalAmount) {
     const { t } = this.props
-    this.setState({ ...validator(e, 'cash', 'numberText', [t('Enter amount'), t('Enter valid amount')]), ...{ cheque: 0 } }, () => {
+    this.setState({ ...validator(e, 'cash', 'numberText', [t('Enter amount'), t('Enter valid amount')]), ...{ cheque: 0, chequeE: '' } }, () => {
       if (this.state.cash && this.state.cash <= parseFloat(totalAmount).toFixed(3) && this.state.cash >= 0) {
         const card = parseFloat(totalAmount).toFixed(3) - this.state.cash
         this.setState({
