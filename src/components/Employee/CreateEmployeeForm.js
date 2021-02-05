@@ -77,7 +77,7 @@ class CreateEmployeeForm extends Component {
         gender,
         address,
         branch: branch.map(a => { return { label: a.branchName, value: a._id } }),
-        designation,
+        designation: designation._id,
         employeeType,
         userPhotoD: '',
         visaNumber: visaDetails ? visaDetails.visaNumber : '',

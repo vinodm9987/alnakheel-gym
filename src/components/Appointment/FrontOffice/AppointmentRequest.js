@@ -19,7 +19,7 @@ class AppointmentRequest extends Component {
     super(props)
     this.default = {
       url: this.props.match.url,
-      appointmentFor: 'member',
+      appointmentFor: 'visitor',
       date: new Date(),
       branch: '',
       search: '',
@@ -67,7 +67,7 @@ class AppointmentRequest extends Component {
           <form className="form-inline row">
             <div className="col-12">
               <div className="row d-block d-sm-flex justify-content-between pt-5">
-                <div className="col-12 py-3 d-flex flex-wrap align-items-center">
+                {/* <div className="col-12 py-3 d-flex flex-wrap align-items-center">
                   <div className="px-3">
                     <div className="custom-control custom-checkbox roundedGreenRadioCheck">
                       <input type="radio" className="custom-control-input" id="Members" name="xxx" checked={appointmentFor === 'member'}
@@ -84,7 +84,7 @@ class AppointmentRequest extends Component {
                       <label className="custom-control-label" htmlFor="Visitors">{t('Visitors')}</label>
                     </div>
                   </div>
-                </div>
+                </div> */}
                 <div className="col w-auto px-1 flexBasis-auto flex-grow-0 subHead">
                   {/* <h4 className="mb-3 SegoeSemiBold">Head</h4> */}
                 </div>
