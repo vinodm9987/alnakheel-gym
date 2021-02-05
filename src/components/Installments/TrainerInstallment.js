@@ -182,11 +182,11 @@ class TrainerInstallment extends Component {
   handlePayment(totalAmount, totalVat) {
     const el = findDOMNode(this.refs.checkoutCloseModal);
     const { t } = this.props
-    const { packagesDetailsId, installmentId, memberId, dueDate, showCheque, cash, card, digital, cheque, bankName,
+    const { packagesDetailsId, installmentId, memberId, dueDate, showCheque, cash, card, digital, cheque, bankName, trainerDetailsId,
       chequeNumber, chequeDate, discount, cardNumber, subTotal, cashE, cardE, digitalE } = this.state
     if (packagesDetailsId && installmentId && memberId && dueDate && (parseInt(totalAmount) === parseInt((+cash || 0) + (+card || 0) + (+digital || 0) + (+cheque || 0))) && !cardE && !cashE && !digitalE) {
       let memberInfo = {
-        packagesDetailsId, installmentId, memberId, dueDate
+        packagesDetailsId, installmentId, memberId, dueDate, trainerDetailsId
       }
       if (showCheque) {
         memberInfo = {
