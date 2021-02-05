@@ -10,7 +10,7 @@ const { Member, Employee } = require('../../model');
 
 
 
-exports.getPackageInstallment = async (req, res) => {
+exports.getPackageInstallment = async(req, res) => {
     try {
         const members = await Member.find({})
             .populate('credentialId packageDetails.packages').lean();
@@ -47,7 +47,7 @@ exports.getPackageInstallment = async (req, res) => {
 };
 
 
-exports.getTrainerInstallment = async (req, res) => {
+exports.getTrainerInstallment = async(req, res) => {
     try {
         const members = await Member.find({})
             .populate('credentialId  packageDetails.packages')
@@ -92,7 +92,7 @@ exports.getTrainerInstallment = async (req, res) => {
 
 
 
-exports.changeDueDateOfPackageInstallment = async (req, res) => {
+exports.changeDueDateOfPackageInstallment = async(req, res) => {
     try {
         const dueDate = setTime(req.body.dueDate);
         const member = await Member.findById(req.body.memberId);
@@ -114,7 +114,7 @@ exports.changeDueDateOfPackageInstallment = async (req, res) => {
 };
 
 
-exports.changeDueDateOfTrainerInstallment = async (req, res) => {
+exports.changeDueDateOfTrainerInstallment = async(req, res) => {
     try {
         const dueDate = setTime(req.body.dueDate);
         const member = await Member.findById(req.body.memberId);
@@ -139,12 +139,12 @@ exports.changeDueDateOfTrainerInstallment = async (req, res) => {
     }
 };
 
-exports.payPackageInstallments = async (req, res) => {
+exports.payPackageInstallments = async(req, res) => {
     try {
         const dueDate = setTime(req.body.dueDate);
         const member = await Member.findById(req.body.memberId);
         for (const [i, packages] of member.packageDetails.entries()) {
-            if (packages[i]._id.toString() === req.body.packagesDetailsId) {
+            if (packages._id.toString() === req.body.packagesDetailsId && packages.Installments) {
                 for (const [k, installment] of member.packageDetails[i].Installments.entries()) {
                     if (installment._id.toString() === req.body.installmentId) {
                         let obj = Object.assign({}, {});
@@ -179,14 +179,14 @@ exports.payPackageInstallments = async (req, res) => {
 };
 
 
-exports.payTrainerInstallments = async (req, res) => {
+exports.payTrainerInstallments = async(req, res) => {
     try {
         const dueDate = setTime(req.body.dueDate);
         const member = await Member.findById(req.body.memberId);
         for (const [i, packages] of member.packageDetails.entries()) {
-            if (packages[i]._id.toString() === req.body.packagesDetailsId) {
+            if (packages._id.toString() === req.body.packagesDetailsId) {
                 for (const [j, trainer] of member.packageDetails[i].trainerDetails.entries()) {
-                    if (trainer[j]._id.toString() === req.body.trainerDetailsId) {
+                    if (trainer._id.toString() === req.body.trainerDetailsId) {
                         for (const [k, installment] of member.packageDetails[i].trainerDetails[j].Installments.entries()) {
                             if (installment._id.toString() === req.body.installmentId) {
                                 let obj = Object.assign({}, {});
