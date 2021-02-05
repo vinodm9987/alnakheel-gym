@@ -19,8 +19,9 @@ import { getPeriodOfTrainer, getUniqueTrainerByBranch } from '../../actions/trai
 import { GET_CPR, GET_UNIQUE_TRAINER_BY_BRANCH } from '../../actions/types';
 import { getAllVat } from '../../actions/vat.action';
 import instaimg from '../../assets/img/insta.jpg'
+import profilePic from '../../assets/img/profilePic.png'
 import Nationality from '../../utils/apis/country.json';
-import { calculateDOB, dateToDDMMYYYY, dateToHHMM, scrollToTop, validator } from '../../utils/apis/helpers';
+import { calculateDOB, dateToDDMMYYYY, dateToHHMM, scrollToTop, setTime, validator } from '../../utils/apis/helpers';
 import { disableSubmit } from '../../utils/disableButton';
 
 class AddMembers extends Component {
@@ -36,7 +37,7 @@ class AddMembers extends Component {
       dob: new Date(),
       nationality: '',
       gender: '',
-      userPhoto: null,
+      userPhoto: this.dataURLtoFile(profilePic, `Captured_User_Photo.jpeg`),
       packageName: '',
       nameE: '',
       emailE: '',
@@ -47,7 +48,7 @@ class AddMembers extends Component {
       genderE: '',
       userPhotoE: '',
       packageNameE: '',
-      userPhotoD: '',
+      userPhotoD: URL.createObjectURL(this.dataURLtoFile(profilePic, `Captured_User_Photo.jpeg`)),
       wantTrainer: 'No',
       trainer: null,
       trainerE: '',
@@ -326,7 +327,7 @@ class AddMembers extends Component {
         dob: new Date(),
         nationality: '',
         gender: '',
-        userPhoto: null,
+        userPhoto: this.dataURLtoFile(profilePic, `Captured_User_Photo.jpeg`),
         packageName: '',
         nameE: '',
         emailE: '',
@@ -337,7 +338,7 @@ class AddMembers extends Component {
         genderE: '',
         userPhotoE: '',
         packageNameE: '',
-        userPhotoD: '',
+        userPhotoD: URL.createObjectURL(this.dataURLtoFile(profilePic, `Captured_User_Photo.jpeg`)),
         wantTrainer: 'No',
         trainer: null,
         trainerE: '',
@@ -519,10 +520,10 @@ class AddMembers extends Component {
       cash, card, height, weight, emergencyNumber, relationship, referralCode, notes, credentialId, memberId, discount, tax,
       trainer, wantTrainer, levelQuestion, exercisingQuestion, goalQuestion, period, trainerFeesId, addPackage, packageAmount,
       numberE, emergencyNumberE, cashE, cardE, digital, digitalE, startDate, endDate, trainerPeriodDays, installments,
-      cheque, bankName, chequeNumber, chequeDate, showCheque } = this.state
-    if (name && number && personalId && gender && packageName && branch && (parseInt(totalAmount) === parseInt((+cash || 0) + (+card || 0) + (+digital || 0) + (+cheque || 0)))
+      cheque, bankName, chequeNumber, chequeDate, showCheque, emailE } = this.state
+    if (name && number && personalId && gender && packageName && branch && email && (parseInt(totalAmount) === parseInt((+cash || 0) + (+card || 0) + (+digital || 0) + (+cheque || 0)))
       && !cardE && !cashE
-      && !digitalE && !numberE && !emergencyNumberE && startDate <= endDate
+      && !digitalE && !numberE && !emergencyNumberE && !emailE && startDate <= endDate
     ) {
       const memberInfo = {
         userName: name,
@@ -649,7 +650,7 @@ class AddMembers extends Component {
       }
     } else {
       if (!name) this.setState({ nameE: t('Enter member name') })
-      // if (!email) this.setState({ emailE: t('Enter email') })
+      if (!email) this.setState({ emailE: t('Enter email') })
       if (!number) this.setState({ numberE: t('Enter number') })
       if (!personalId) this.setState({ personalIdE: t('Enter personal id / passport no') })
       // if (!dob) this.setState({ dobE: t('Enter dob') })
@@ -902,8 +903,27 @@ class AddMembers extends Component {
         })
       }
     } else {
-      installments[i].dueDate = e
-      installmentsCopy[i].dueDate = e
+      if (i !== 0) {
+        if (installmentsCopy[i - 1] && setTime(installmentsCopy[i - 1].dueDate) <= setTime(e)) {
+          installments[i].dueDate = e
+          installmentsCopy[i].dueDate = e
+          installments.forEach((installment, j) => {
+            if (j > i) {
+              installment.dueDate = e
+              installmentsCopy[j].dueDate = e
+            }
+          })
+        }
+      } else {
+        installments[i].dueDate = e
+        installmentsCopy[i].dueDate = e
+        installments.forEach((installment, j) => {
+          if (j > i) {
+            installment.dueDate = e
+            installmentsCopy[j].dueDate = e
+          }
+        })
+      }
     }
     this.setState({ installments, installmentsCopy })
   }
@@ -911,8 +931,8 @@ class AddMembers extends Component {
   handleUpdate() {
     const { t } = this.props
     const { name, email, number, personalId, dob, nationality, gender, userPhoto, branch,
-      height, weight, emergencyNumber, relationship, referralCode, notes, credentialId, memberId, numberE, emergencyNumberE } = this.state
-    if (name && number && personalId && gender && branch && !numberE && !emergencyNumberE) {
+      height, weight, emergencyNumber, relationship, referralCode, notes, credentialId, memberId, numberE, emergencyNumberE, emailE } = this.state
+    if (name && number && personalId && gender && branch && email && !numberE && !emergencyNumberE && !emailE) {
       const memberInfo = {
         userName: name,
         email,
@@ -937,7 +957,7 @@ class AddMembers extends Component {
       this.props.dispatch(updateMember(formData))
     } else {
       if (!name) this.setState({ nameE: t('Enter member name') })
-      // if (!email) this.setState({ emailE: t('Enter email') })
+      if (!email) this.setState({ emailE: t('Enter email') })
       if (!number) this.setState({ numberE: t('Enter number') })
       if (!personalId) this.setState({ personalIdE: t('Enter personal id / passport no') })
       // if (!dob) this.setState({ dobE: t('Enter dob') })
@@ -951,8 +971,8 @@ class AddMembers extends Component {
   showPayment() {
     const { t } = this.props
     const { name, number, personalId, gender, packageName, startDate, endDate,
-      trainer, wantTrainer, levelQuestion, exercisingQuestion, goalQuestion, period, emailE, numberE, emergencyNumberE, branch } = this.state
-    if (name && number && personalId && gender && packageName && branch && !emailE
+      trainer, wantTrainer, levelQuestion, exercisingQuestion, goalQuestion, period, emailE, numberE, emergencyNumberE, branch, email } = this.state
+    if (name && number && personalId && gender && packageName && branch && email && !emailE
       && !numberE && !emergencyNumberE && startDate <= endDate) {
       if (wantTrainer === 'Yes') {
         if (trainer && levelQuestion && exercisingQuestion && goalQuestion && period) {
@@ -969,7 +989,7 @@ class AddMembers extends Component {
       }
     } else {
       if (!name) this.setState({ nameE: t('Enter member name') })
-      // if (!email) this.setState({ emailE: t('Enter email') })
+      if (!email) this.setState({ emailE: t('Enter email') })
       if (!number) this.setState({ numberE: t('Enter number') })
       if (!personalId) this.setState({ personalIdE: t('Enter personal id / passport no') })
       // if (!dob) this.setState({ dobE: t('Enter dob') })

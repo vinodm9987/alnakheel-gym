@@ -186,7 +186,8 @@ class PackageInstallment extends Component {
     const { t } = this.props
     const { packagesDetailsId, installmentId, memberId, dueDate, showCheque, cash, card, digital, cheque, bankName,
       chequeNumber, chequeDate, discount, cardNumber, subTotal, cashE, cardE, digitalE } = this.state
-    if (packagesDetailsId && installmentId && memberId && dueDate && (parseInt(totalAmount) === parseInt((+cash || 0) + (+card || 0) + (+digital || 0) + (+cheque || 0))) && !cardE && !cashE && !digitalE) {
+    if (packagesDetailsId && installmentId && memberId && dueDate && (parseInt(totalAmount) === parseInt((+cash || 0) + (+card || 0) + (+digital || 0) + (+cheque || 0)))
+      && !cardE && !cashE && !digitalE) {
       let memberInfo = {
         packagesDetailsId, installmentId, memberId, dueDate
       }
@@ -207,7 +208,7 @@ class PackageInstallment extends Component {
         }
       }
       this.props.dispatch(payPackageInstallments(memberInfo))
-      $(el).click();
+      $(el).click()
     } else {
       if (parseInt(totalAmount) !== parseInt((+cash || 0) + (+card || 0) + (+digital || 0) + (+cheque || 0))) this.setState({ cashE: t('Enter amount') })
     }
@@ -301,7 +302,7 @@ class PackageInstallment extends Component {
                                     <img alt='' src={`/${avatar.path}`} className="mx-1 rounded-circle w-50px h-50px" />
                                     <div className="mx-1">
                                       <h5 className="m-0 font-weight-bold">{userName}</h5>
-                                      <span className="text-body font-weight-light">{mobileNo}</span>
+                                      <span className="text-body font-weight-light dirltrtar d-inline-block">{mobileNo}</span>
                                     </div>
                                   </div>
                                 </td>
@@ -398,7 +399,7 @@ class PackageInstallment extends Component {
             <div className="modal-content">
               <div className="modal-header">
                 <h4 className="modal-title">{t('Payment')}</h4>
-                <button type="button" className="close" data-dismiss="modal" onClick={() => this.setState({ digital: 0, cash: 0, card: 0 })}><span className="iconv1 iconv1-close"></span></button>
+                <button type="button" className="close" data-dismiss="modal" ref='checkoutCloseModal' onClick={() => this.setState({ digital: 0, cash: 0, card: 0 })}><span className="iconv1 iconv1-close"></span></button>
               </div>
               <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 px-4 pb-4 pt-4 bg-light rounded-bottom">
                 <div className="table-responsive bg-white px-4 pt-3">
@@ -472,7 +473,7 @@ class PackageInstallment extends Component {
                   <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
                     <div className="form-group inlineFormGroup mb-3">
                       <label htmlFor="addCash" className="mx-sm-2 inlineFormLabel mb-1">{t('Cash')}</label>
-                      <div className="form-control w-100 p-0 d-flex align-items-center bg-white dirltr">
+                      <div className="form-control mx-sm-2 inlineFormInputs w-100 p-0 d-flex align-items-center bg-white dirltr">
                         <label htmlFor="addCash" className="text-danger my-0 mx-1 font-weight-bold">{this.props.defaultCurrency}</label>
                         <input type="number" autoComplete="off" className="border-0 bg-light w-100 h-100 p-1 bg-white" id="addCash" value={cash} onChange={(e) => this.setCash(e, totalLeftAfterDigital)} />
                       </div>
@@ -482,7 +483,7 @@ class PackageInstallment extends Component {
                   <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
                     <div className="form-group inlineFormGroup mb-3">
                       <label htmlFor="addCard" className="mx-sm-2 inlineFormLabel mb-1">{t('Card')}</label>
-                      <div className="form-control w-100 p-0 d-flex align-items-center bg-white dirltr">
+                      <div className="form-control mx-sm-2 inlineFormInputs w-100 p-0 d-flex align-items-center bg-white dirltr">
                         <label htmlFor="addCard" className="text-danger my-0 mx-1 font-weight-bold">{this.props.defaultCurrency}</label>
                         <input type="number" autoComplete="off" className="border-0 bg-light w-100 h-100 p-1 bg-white" id="addCard" value={card} onChange={(e) => this.setCard(e, totalLeftAfterCash)} />
                       </div>
@@ -492,7 +493,7 @@ class PackageInstallment extends Component {
                   <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
                     <div className="form-group inlineFormGroup mb-3">
                       <label htmlFor="addCardNumber" className="mx-sm-2 inlineFormLabel mb-1">{t('Card Number (last 4 digits)')}</label>
-                      <input type="text" autoComplete="off" className="form-control bg-white" id="addCard4lastno" value={this.state.cardNumber} onChange={(e) => this.setCardNumber(e)} />
+                      <input type="text" autoComplete="off" className="form-control bg-white mx-sm-2 inlineFormInputs" id="addCard4lastno" value={this.state.cardNumber} onChange={(e) => this.setCardNumber(e)} />
                     </div>
                   </div>
                   <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">

@@ -1,7 +1,6 @@
 const { Designation, Credential, SystemYear, BranchPassword, EmployeePackage } = require('../model');
 const { addPackage } = require('../biostar');
 const { config: { DESIGNATION, ADMIN_PASSWORD } } = require('../../config');
-const { getAllBranch } = require('../service/branch.service');
 const { Formate: { setTime } } = require('../utils');
 const crypto = require('crypto')
 

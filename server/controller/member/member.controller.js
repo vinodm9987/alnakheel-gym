@@ -75,7 +75,7 @@ const memberSearch = (response, search, searchFor) => {
             if (searchFor === 'Email') temp = email.includes(search);
             if (searchFor === 'Name') temp1 = name.includes(search);
             if (searchFor === 'Personal ID') temp2 = personalId.includes(search);
-            if (searchFor === 'Mobile') temp3 = mobile.includes(search);
+            if (searchFor === 'Mobile No') temp3 = mobile.includes(search);
             if (searchFor === 'Member ID') temp4 = memberId.includes(search);
             if (temp || temp1 || temp2 || temp3 || temp4) {
                 return doc
