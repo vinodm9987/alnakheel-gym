@@ -1870,11 +1870,11 @@ button:focus {
 /* Create Branch */
 @media (min-width: 992px) {
   .CreateBranch label.type1 {
-    width: 97px;
+    width: 119px;
   }
   .CreateBranch label.type1 + .inlineFormInputs,
   .CreateBranch label.type1 ~ .errorMessageWrapper .errorMessage {
-    max-width: calc(100% - 97px - 2rem);
+    max-width: calc(100% - 119px - 2rem);
   }
 }
 
@@ -3537,7 +3537,7 @@ input:focus {
   align-items: stretch;
   border-radius: 4px;
   margin-bottom: 5px;
-  /* min-width: 744px; */
+  min-width: 524px;
   background: #eaeaea;
   border: 1px solid #ccc;
   border-radius: 4px;
@@ -3764,4 +3764,26 @@ input:focus {
     flex-shrink: 0;
     flex-basis: 100%;
   }
+}
+
+.scan-success-icon {
+  background: #28a745;
+  color: #fff;
+  width: 32px;
+  height: 32px;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  border-radius: 50%;
+}
+
+@media only screen and (min-width: 1200px) {
+  .scan-btn-bio {
+    position: absolute;
+    top: 59px;
+    right: 12%;
+  }
+}
+.PhoneInput input {
+  margin-right: 5px;
 }

@@ -17,6 +17,11 @@ body {
   font-family: "Tajawal", sans-serif !important;
 }
 
+/* icomoon */
+.iconv1 {
+  direction: ltr;
+}
+
 /* TopBar  */
 .topLogoWrapper {
   left: unset;

@@ -209,7 +209,7 @@ class ShoppingCart extends Component {
                             </tr>
                             <tr>
                               <td>
-                                <p className="m-0">{t('Tax')}</p>
+                                <p className="m-0">{t('VAT')}</p>
                               </td>
                               <td>
                                 <p className="m-0"><small className="d-flex justify-content-end text-primary">{totalVat.toFixed(3)}</small></p>

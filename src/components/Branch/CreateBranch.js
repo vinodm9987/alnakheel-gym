@@ -385,7 +385,7 @@ class CreateBranch extends Component {
             </div>
             <div className="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
               <div className="form-group inlineFormGroup">
-                <label htmlFor="vatRegNo" className="mx-sm-2 inlineFormLabel type1">{t('Vat Reg Number')}</label>
+                <label htmlFor="vatRegNo" className="mx-sm-2 inlineFormLabel type1">{t('VAT Reg Number')}</label>
                 <input type="text" autoComplete="off" className={this.state.vatRegNoE ? "form-control mx-sm-2 inlineFormInputs FormInputsError" : "form-control mx-sm-2 inlineFormInputs"}
                   id="vatRegNo" value={vatRegNo} onChange={(e) => this.setState(validator(e, 'vatRegNo', 'text', [t('Enter vat registration number')]))} />
                 <div className="errorMessageWrapper">
@@ -489,7 +489,7 @@ class CreateBranch extends Component {
                 <th>{t('Branch Name')}</th>
                 <th>{t('Geocode')}</th>
                 <th>{t('Capacity')}</th>
-                <th>{t('Vat Reg Number')}</th>
+                <th>{t('VAT Reg Number')}</th>
                 <th>{t('Instagram Id')}</th>
                 <th>{t('Address')}</th>
                 <th>{t('Email')}</th>

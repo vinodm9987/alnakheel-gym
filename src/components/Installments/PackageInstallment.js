@@ -423,7 +423,7 @@ class PackageInstallment extends Component {
                       </tr>
                       <tr>
                         <td>
-                          <h5 className="m-0">{t('Tax')} {this.state.tax ? `(${this.state.tax} %)` : ''}</h5>
+                          <h5 className="m-0">{t('VAT')} {this.state.tax ? `(${this.state.tax} %)` : ''}</h5>
                         </td>
                         <td>
                           <h5 className="m-0"><small className="d-flex justify-content-end text-primary">{totalVat.toFixed(3)}</small></h5>
