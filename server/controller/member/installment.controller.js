@@ -139,9 +139,47 @@ exports.changeDueDateOfTrainerInstallment = async (req, res) => {
     }
 };
 
+exports.payPackageInstallments = async (req, res) => {
+    try {
+        const dueDate = setTime(req.body.dueDate);
+        const member = await Member.findById(req.body.memberId);
+        for (const [i, packages] of member.packageDetails.entries()) {
+            if (packages[i]._id.toString() === req.body.packagesDetailsId) {
+                for (const [k, installment] of member.packageDetails[i].Installments.entries()) {
+                    if (installment._id.toString() === req.body.installmentId) {
+                        let obj = Object.assign({}, {});
+                        obj['dateOfPaid'] = setTime(new Date());
+                        obj['timeOfPaid'] = new Date();
+                        obj['cardNumber'] = req.body.cardNumber;
+                        obj['cashAmount'] = req.body.cashAmount;
+                        obj['cardAmount'] = req.body.cardAmount;
+                        obj['vatAmount'] = req.body.vatAmount;
+                        obj['discount'] = req.body.discount;
+                        obj['digitalAmount'] = req.body.digitalAmount;
+                        obj['chequeAmount'] = req.body.chequeAmount;
+                        obj['chequeNumber'] = req.body.chequeNumber;
+                        obj['bankName'] = req.body.bankName;
+                        obj['chequeDate'] = req.body.chequeDate;
+                        obj['totalAmount'] = req.body.totalAmount;
+                        obj['actualAmount'] = req.body.actualAmount;
+                        obj['paidStatus'] = 'Paid';
+                        obj['dueDate'] = dueDate;
+                        obj['installmentName'] = req.body.installmentName;
+                        member.packageDetails[i].Installments[k] = obj
+                    }
+                }
+            }
+        }
+        const response = await member.save();
+        return successResponseHandler(res, response, "success");
+    } catch (error) {
+        logger.error(error);
+        return errorResponseHandler(res, error, 'failed');
+    }
+};
 
 
-exports.payInstallments = async (req, res) => {
+exports.payTrainerInstallments = async (req, res) => {
     try {
         const dueDate = setTime(req.body.dueDate);
         const member = await Member.findById(req.body.memberId);
