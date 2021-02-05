@@ -79,7 +79,7 @@ exports.formateBioStarDate = (date) => {
     let year = newDate.getFullYear();
     let month = newDate.getMonth() < 9 ? '0' + (newDate.getMonth() + 1) : newDate.getMonth() + 1;
     let dateOfDay = newDate.getDate();
-    return `${year}-${month}-${dateOfDay}T00:00:00.007Z`
+    return `${year}-${month}-${dateOfDay}T23:00:00.007Z`
 };
 
 
