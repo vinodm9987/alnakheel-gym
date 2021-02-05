@@ -79,8 +79,8 @@ module.exports = {
                 if (packages.trainerDetails && packages.trainerDetails.length) {
                     for (const trainer of packages.trainerDetails) {
                         if (trainer.Installments && trainer.Installments.length) {
-                            let totalAmount = 0;
                             for (const installment of trainer.Installments) {
+                                let totalAmount = 0;
                                 totalAmount = module.exports
                                     .handleInstallmentAmount(installment, type, totalAmount, date);
                                 branches[index]['amount'] = typeof branches[index]['amount'] === 'number' ? branches[index]['amount'] += totalAmount : totalAmount;
@@ -95,6 +95,7 @@ module.exports = {
                 }
             }
         }
+        return branches;
     },
 
     handleInstallmentAmount: (installment, type, totalAmount, date) => {
@@ -124,7 +125,7 @@ module.exports = {
             const index = branches.findIndex(doc => stockBranch === doc._id.toString());
             branches[index]['amount'] = typeof branches[index]['amount'] === 'number' ? branches[index]['amount'] += totalAmount : totalAmount;
         }
-
+        return branches;
     },
 
     getBranchClassSells: (branches, classSells, type) => {
