@@ -287,20 +287,22 @@ class CreateBranch extends Component {
   handleEdit(branch) {
     scrollToTop()
     this.setState({
-      name: branch.branchName,
-      geocode: branch.geoCode,
-      address: branch.address,
-      email: branch.email,
-      number: branch.mobile,
-      branchId: branch._id,
-      capacity: branch.capacity,
-      vatRegNo: branch.vatRegNo,
-      telephone: branch.telephone,
-      instaId: branch.instaId,
-      // machineId: branch.machineId ? branch.machineId : '',
-      // bioStarIp: branch.bioStarIp ? branch.bioStarIp : '',
-      // typeOFMachine: branch.typeOFMachine ? branch.typeOFMachine : '',
-      userPhoto: branch.avatar
+      ...this.default, ...{
+        name: branch.branchName,
+        geocode: branch.geoCode,
+        address: branch.address,
+        email: branch.email,
+        number: branch.mobile,
+        branchId: branch._id,
+        capacity: branch.capacity,
+        vatRegNo: branch.vatRegNo,
+        telephone: branch.telephone,
+        instaId: branch.instaId,
+        // machineId: branch.machineId ? branch.machineId : '',
+        // bioStarIp: branch.bioStarIp ? branch.bioStarIp : '',
+        // typeOFMachine: branch.typeOFMachine ? branch.typeOFMachine : '',
+        userPhoto: branch.avatar
+      }
     })
   }
 
