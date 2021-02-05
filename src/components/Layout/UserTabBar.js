@@ -158,12 +158,12 @@ class UserTabBar extends Component {
               <span className="userName">{userName}</span>
               <span className="iconv1 iconv1-arrow-down"></span>
               <ul className="UserMenu">
-                <li className="w-100">
+                {/* <li className="w-100">
                   <a href="/#" className="d-flex align-items-center linkHoverDecLess w-100">
                     <span className="iconv1 iconv1-members ml-4 mr-1 text-body"></span>
                     <span className="ml-1 mr-4 text-muted"><small>{t('Profile')}</small></span>
                   </a>
-                </li>
+                </li> */}
                 {/* <li className="w-100">
                   <a href="/#" className="d-flex align-items-center linkHoverDecLess w-100">
                     <span className="iconv1 iconv1-money ml-4 mr-1 text-muted"></span>

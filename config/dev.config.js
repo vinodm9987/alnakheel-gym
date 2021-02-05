@@ -3,7 +3,7 @@ module.exports = {
   IP: "127.0.0.1:5000",
   DBNAME: "alnakheel-gym",
   DB: `mongodb://127.0.0.1:27017/alnakheel-gym`,
-  MODE: "PROD",
+  MODE: "DEV",
   BUILDPATH: "../build/index.html",
   DESIGNATION: ["Super Admin", "System Admin", "Member", "Employee", "Trainer"],
   SECRET: "PIXEl",

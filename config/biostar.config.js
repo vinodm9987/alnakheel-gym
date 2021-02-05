@@ -1,7 +1,7 @@
 /** 
  * BIO STAR LOGIN URL
 */
-const { formateBioStarDate } = require('../server/utils/timeFormate.util');
+const { formateBioStarDate, formateBioEndDateDate } = require('../server/utils/timeFormate.util');
 
 
 exports.BIO_STAR_LOGIN_URL = "http://127.0.0.1:8795/v2/login";
@@ -150,7 +150,7 @@ exports.getUserObject = (data) => {
     return {
         "access_groups": [{ "name": accessGroupName, "id": accessGroupId }],
         "email": email,
-        "expiry_datetime": formateBioStarDate(endDate),
+        "expiry_datetime": formateBioEndDateDate(endDate),
         "login_id": `${name.replace(/\s/g, "")}${memberId}`,
         "name": name,
         "password": "ANujm4467@gmail.com",
@@ -176,7 +176,7 @@ exports.getUpdateUserObject = (data) => {
     return {
         "access_groups": [{ "name": accessGroupName, "id": accessGroupId }],
         "email": email,
-        "expiry_datetime": formateBioStarDate(endDate),
+        "expiry_datetime": formateBioEndDateDate(endDate),
         "name": name,
         "password": "ANujm4467@gmail.com",
         "permission": { "id": "2", "name": "User Operator", "description": "this is a permission for User Operators" },
@@ -236,7 +236,7 @@ exports.getUserDisableObject = (data, status) => {
         "user_group": data.user_group,
         "access_groups": data.access_groups,
         "start_datetime": formateBioStarDate(data.start_datetime),
-        "expiry_datetime": formateBioStarDate(data.expiry_datetime),
+        "expiry_datetime": formateBioEndDateDate(data.expiry_datetime),
         "security_level": data.security_level,
         "status": status,
         "name": data.name,
@@ -253,7 +253,7 @@ exports.getUserFreezeObject = (data, startDate, endDate) => {
         "user_group": data.user_group,
         "access_groups": data.access_groups,
         "start_datetime": formateBioStarDate(startDate),
-        "expiry_datetime": formateBioStarDate(endDate),
+        "expiry_datetime": formateBioEndDateDate(endDate),
         "security_level": data.security_level,
         "status": 'AC',
         "name": data.name,
@@ -269,7 +269,7 @@ exports.getUserFreezeCancelObject = (data) => {
         "user_group": data.user_group,
         "access_groups": data.access_groups,
         "start_datetime": formateBioStarDate(data.startDate),
-        "expiry_datetime": formateBioStarDate(data.endDate),
+        "expiry_datetime": formateBioEndDateDate(data.endDate),
         "security_level": data.security_level,
         "status": 'AC',
         "name": data.name,

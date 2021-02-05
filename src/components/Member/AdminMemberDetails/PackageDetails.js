@@ -9,6 +9,8 @@ import $ from 'jquery'
 import { findDOMNode } from 'react-dom';
 import { withTranslation } from 'react-i18next'
 import { GET_ALERT_ERROR } from '../../../actions/types'
+import DateFnsUtils from '@date-io/date-fns';
+import { DatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 
 class PackageDetails extends Component {
 
@@ -81,7 +83,7 @@ class PackageDetails extends Component {
   setDigital(e) {
     const { t } = this.props
     const { totalAmount } = this.state
-    this.setState({ ...validator(e, 'digital', 'numberText', [t('Enter amount')]), ...{ card: 0 } }, () => {
+    this.setState({ ...validator(e, 'digital', 'numberText', [t('Enter amount')]), ...{ card: 0, cheque: 0, cardE: '', chequeE: '' } }, () => {
       if (this.state.digital <= totalAmount.toFixed(3) && this.state.digital >= 0) {
         const cash = (totalAmount.toFixed(3) - this.state.digital).toFixed(3)
 
@@ -100,7 +102,7 @@ class PackageDetails extends Component {
 
   setCash(e, totalAmount) {
     const { t } = this.props
-    this.setState(validator(e, 'cash', 'numberText', [t('Enter amount'), t('Enter valid amount')]), () => {
+    this.setState({ ...validator(e, 'cash', 'numberText', [t('Enter amount'), t('Enter valid amount')]), ...{ cheque: 0, chequeE: '' } }, () => {
       if (this.state.cash && this.state.cash <= parseFloat(totalAmount).toFixed(3) && this.state.cash >= 0) {
         const card = parseFloat(totalAmount).toFixed(3) - this.state.cash
         this.setState({
@@ -569,10 +571,22 @@ class PackageDetails extends Component {
                               <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
                                 <div className="form-group inlineFormGroup mb-3">
                                   <label htmlFor="CheckDate" className="mx-sm-2 inlineFormLabel mb-1">{t('Cheque Date')}</label>
-                                  <input type="text" autoComplete="off" className={this.state.chequeDateE ? "form-control mx-sm-2 inlineFormInputs FormInputsError w-100 p-0 d-flex align-items-center bg-white dirltr" : "form-control mx-sm-2 inlineFormInputs w-100 p-0 d-flex align-items-center bg-white dirltr"}
-                                    id="CheckDate"
-                                    value={this.state.chequeDate} onChange={(e) => this.setState({ chequeDate: e.target.value })}
-                                  />
+                                  <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                                    <DatePicker
+                                      InputProps={{
+                                        disableUnderline: true,
+                                      }}
+                                      autoOk
+                                      invalidDateMessage=''
+                                      minDateMessage=''
+                                      className={this.state.chequeDateE ? "form-control mx-sm-2 inlineFormInputs FormInputsError w-100 p-0 d-flex align-items-center bg-white dirltr" : "form-control mx-sm-2 inlineFormInputs w-100 p-0 d-flex align-items-center bg-white dirltr"}
+                                      minDate={new Date()}
+                                      format="dd/MM/yyyy"
+                                      value={this.state.chequeDate}
+                                      onChange={(e) => this.setState(validator(e, 'chequeDate', 'date', []))}
+                                    />
+                                  </MuiPickersUtilsProvider>
+                                  <span className="icon-date dateBoxIcon"></span>
                                   <div className="errorMessageWrapper">
                                     <small className="text-danger mx-sm-2 errorMessage"></small>
                                   </div>

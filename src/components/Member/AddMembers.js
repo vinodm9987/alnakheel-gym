@@ -520,7 +520,7 @@ class AddMembers extends Component {
       trainer, wantTrainer, levelQuestion, exercisingQuestion, goalQuestion, period, trainerFeesId, addPackage, packageAmount,
       numberE, emergencyNumberE, cashE, cardE, digital, digitalE, startDate, endDate, trainerPeriodDays, installments,
       cheque, bankName, chequeNumber, chequeDate, showCheque } = this.state
-    if (name && number && personalId && gender && packageName && (parseInt(totalAmount) === parseInt((+cash || 0) + (+card || 0) + (+digital || 0) + (+cheque || 0)))
+    if (name && number && personalId && gender && packageName && branch && (parseInt(totalAmount) === parseInt((+cash || 0) + (+card || 0) + (+digital || 0) + (+cheque || 0)))
       && !cardE && !cashE
       && !digitalE && !numberE && !emergencyNumberE && startDate <= endDate
     ) {
@@ -651,13 +651,13 @@ class AddMembers extends Component {
       if (!name) this.setState({ nameE: t('Enter member name') })
       // if (!email) this.setState({ emailE: t('Enter email') })
       if (!number) this.setState({ numberE: t('Enter number') })
-      if (!personalId) this.setState({ personalIdE: t('Enter personal id') })
+      if (!personalId) this.setState({ personalIdE: t('Enter personal id / passport no') })
       // if (!dob) this.setState({ dobE: t('Enter dob') })
       // if (!nationality) this.setState({ nationalityE: t('Enter nationality') })
       if (!gender) this.setState({ genderE: t('Enter gender') })
       // if (!userPhoto) this.props.dispatch({ type: GET_ALERT_ERROR, payload: t('Enter user photo') })
       if (!packageName) this.setState({ packageNameE: t('Enter package name') })
-      // if (!branch) this.setState({ branchE: t('Enter branch') })
+      if (!branch) this.setState({ branchE: t('Enter branch') })
       // if (calculateDOB(dob) <= 14) this.props.dispatch({ type: GET_ALERT_ERROR, payload: t('You are little small to join the Gym') })
       if (parseInt(totalAmount) === parseInt((+cash || 0) + (+card || 0) + (+digital || 0) + (+cheque || 0))) this.setState({ cashE: t('Enter amount') })
       if (!cardNumber) this.setState({ cardNumberE: t('Enter card number') })
@@ -747,7 +747,7 @@ class AddMembers extends Component {
 
   setDigital(e, total) {
     const { t } = this.props
-    this.setState({ ...validator(e, 'digital', 'numberText', [t('Enter amount')]), ...{ card: 0 } }, () => {
+    this.setState({ ...validator(e, 'digital', 'numberText', [t('Enter amount')]), ...{ card: 0, cheque: 0, cardE: '', chequeE: '' } }, () => {
       if (this.state.digital <= total.toFixed(3) && this.state.digital >= 0) {
         const cash = (total.toFixed(3) - this.state.digital).toFixed(3)
 
@@ -766,7 +766,7 @@ class AddMembers extends Component {
 
   setCash(e, total) {
     const { t } = this.props
-    this.setState(validator(e, 'cash', 'numberText', [t('Enter amount'), t('Enter valid amount')]), () => {
+    this.setState({ ...validator(e, 'cash', 'numberText', [t('Enter amount'), t('Enter valid amount')]), ...{ cheque: 0, chequeE: '' } }, () => {
       if (this.state.cash <= total.toFixed(3) && this.state.cash >= 0) {
         const card = (total.toFixed(3) - this.state.cash).toFixed(3)
 
@@ -912,7 +912,7 @@ class AddMembers extends Component {
     const { t } = this.props
     const { name, email, number, personalId, dob, nationality, gender, userPhoto, branch,
       height, weight, emergencyNumber, relationship, referralCode, notes, credentialId, memberId, numberE, emergencyNumberE } = this.state
-    if (name && number && personalId && gender && !numberE && !emergencyNumberE) {
+    if (name && number && personalId && gender && branch && !numberE && !emergencyNumberE) {
       const memberInfo = {
         userName: name,
         email,
@@ -939,11 +939,11 @@ class AddMembers extends Component {
       if (!name) this.setState({ nameE: t('Enter member name') })
       // if (!email) this.setState({ emailE: t('Enter email') })
       if (!number) this.setState({ numberE: t('Enter number') })
-      if (!personalId) this.setState({ personalIdE: t('Enter personal id') })
+      if (!personalId) this.setState({ personalIdE: t('Enter personal id / passport no') })
       // if (!dob) this.setState({ dobE: t('Enter dob') })
       // if (!nationality) this.setState({ nationalityE: t('Enter nationality') })
       if (!gender) this.setState({ genderE: t('Enter gender') })
-      // if (!branch) this.setState({ branchE: t('Enter branch') })
+      if (!branch) this.setState({ branchE: t('Enter branch') })
       // if (calculateDOB(dob) <= 14) this.props.dispatch({ type: GET_ALERT_ERROR, payload: t('You are little small to join the Gym') })
     }
   }
@@ -951,8 +951,8 @@ class AddMembers extends Component {
   showPayment() {
     const { t } = this.props
     const { name, number, personalId, gender, packageName, startDate, endDate,
-      trainer, wantTrainer, levelQuestion, exercisingQuestion, goalQuestion, period, emailE, numberE, emergencyNumberE } = this.state
-    if (name && number && personalId && gender && packageName && !emailE
+      trainer, wantTrainer, levelQuestion, exercisingQuestion, goalQuestion, period, emailE, numberE, emergencyNumberE, branch } = this.state
+    if (name && number && personalId && gender && packageName && branch && !emailE
       && !numberE && !emergencyNumberE && startDate <= endDate) {
       if (wantTrainer === 'Yes') {
         if (trainer && levelQuestion && exercisingQuestion && goalQuestion && period) {
@@ -971,13 +971,13 @@ class AddMembers extends Component {
       if (!name) this.setState({ nameE: t('Enter member name') })
       // if (!email) this.setState({ emailE: t('Enter email') })
       if (!number) this.setState({ numberE: t('Enter number') })
-      if (!personalId) this.setState({ personalIdE: t('Enter personal id') })
+      if (!personalId) this.setState({ personalIdE: t('Enter personal id / passport no') })
       // if (!dob) this.setState({ dobE: t('Enter dob') })
       // if (!nationality) this.setState({ nationalityE: t('Enter nationality') })
       if (!gender) this.setState({ genderE: t('Enter gender') })
       // if (!userPhoto) this.props.dispatch({ type: GET_ALERT_ERROR, payload: t('Enter user photo') })
       if (!packageName) this.setState({ packageNameE: t('Enter package name') })
-      // if (!branch) this.setState({ branchE: t('Enter branch') })
+      if (!branch) this.setState({ branchE: t('Enter branch') })
       // if (calculateDOB(dob) <= 14) this.props.dispatch({ type: GET_ALERT_ERROR, payload: t('You are little small to join the Gym') })
       if (startDate > endDate) this.setState({ endDateE: t('End Date should be greater than Start Date') })
     }
@@ -1102,7 +1102,7 @@ class AddMembers extends Component {
                     <div className="form-group position-relative">
                       <label htmlFor="personalId">{t('Personal ID')} / {t('Passport No')}</label>
                       <input type="text" autoComplete="off" className={this.state.personalIdE ? "form-control bg-white FormInputsError" : "form-control bg-white"}
-                        value={personalId} onChange={(e) => this.setState(validator(e, 'personalId', 'text', [t('Enter personal id')]))} id="personalId" />
+                        value={personalId} onChange={(e) => this.setState(validator(e, 'personalId', 'text', [t('Enter personal id / passport no')]))} id="personalId" />
                       <div className="errorMessageWrapper">
                         <small className="text-danger errorMessage">{this.state.personalIdE}</small>
                       </div>
@@ -1537,7 +1537,7 @@ class AddMembers extends Component {
                   <h5 className="mx-3">{t('Do you want to pay as Installment?')}</h5>
                   <div className="position-relative mx-3">
                     <select className="bg-warning rounded w-100px px-3 py-1 border border-warning text-white"
-                      value={wantInstallment} onChange={(e) => this.setState({ wantInstallment: e.target.value })}
+                      value={wantInstallment} onChange={(e) => this.setState({ wantInstallment: e.target.value, installments: [], installmentsCopy: [], cash: 0, card: 0, digital: 0, cheque: 0 })}
                     >
                       <option value="Yes">{t('Yes')}</option>
                       <option value="No">{t('No')}</option>
@@ -1761,6 +1761,39 @@ class AddMembers extends Component {
                               </div>
                             </div>
                           </div>
+
+                          {/* Popup Discount */}
+                          <button type="button" id="Discount2" className="d-none" data-toggle="modal" data-target="#Discount" ref="openDiscount">Open modal</button>
+                          <div className="modal fade commonYellowModal" id="Discount" >
+                            <div className="modal-dialog modal-dialog-centered">
+                              <div className="modal-content">
+                                <div className="modal-header">
+                                  <h4 className="modal-title">{t('Add Order Discount')}</h4>
+                                  <button type="button" className="close" data-dismiss="modal"><span className="iconv1 iconv1-close"></span></button>
+                                </div>
+                                <div className="modal-body px-0">
+                                  <div className="container-fluid">
+                                    <div className="col-12 px-3 pt-3 d-flex">
+                                      <ul className="pagination">
+                                        <li className={discountMethod === 'percent' ? "page-item active cursorPointer" : "page-item cursorPointer"}
+                                          onClick={() => this.setState({ discountMethod: 'percent', count: 0 })}><span className="page-link">%</span></li>
+                                        <li className={discountMethod === 'money' ? "page-item active cursorPointer" : "page-item cursorPointer"}
+                                          onClick={() => this.setState({ discountMethod: 'money', count: 0 })}><span className="page-link">{this.props.defaultCurrency}</span></li>
+                                      </ul>
+                                      <span className="mx-1"></span>
+                                      <input type="number" autoComplete="off" className="form-control" placeholder={t('Enter discount')}
+                                        value={count} onChange={(e) => this.setState(validator(e, 'count', 'numberText', []))} />
+                                    </div>
+                                    <div className="col-12 p-3">
+                                      <button type="button" className="btn btn-block btn-success btn-lg" data-dismiss="modal" onClick={() => this.addDiscount(subTotal)}>{t('Add Discount')}</button>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          {/* /- Popup Discount End*/}
+
                           {/* if cheque */}
                           {this.state.showCheque &&
                             <div className="col-12">
@@ -1792,10 +1825,22 @@ class AddMembers extends Component {
                                 <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
                                   <div className="form-group inlineFormGroup mb-3">
                                     <label htmlFor="CheckDate" className="mx-sm-2 inlineFormLabel mb-1">{t('Cheque Date')}</label>
-                                    <input type="text" autoComplete="off" className={this.state.chequeDateE ? "form-control mx-sm-2 inlineFormInputs FormInputsError w-100 p-0 d-flex align-items-center bg-white dirltr" : "form-control mx-sm-2 inlineFormInputs w-100 p-0 d-flex align-items-center bg-white dirltr"}
-                                      id="CheckDate"
-                                      value={this.state.chequeDate} onChange={(e) => this.setState({ chequeDate: e.target.value })}
-                                    />
+                                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                                      <DatePicker
+                                        InputProps={{
+                                          disableUnderline: true,
+                                        }}
+                                        autoOk
+                                        invalidDateMessage=''
+                                        minDateMessage=''
+                                        className={this.state.chequeDateE ? "form-control mx-sm-2 inlineFormInputs FormInputsError w-100 p-0 d-flex align-items-center bg-white dirltr" : "form-control mx-sm-2 inlineFormInputs w-100 p-0 d-flex align-items-center bg-white dirltr"}
+                                        minDate={new Date()}
+                                        format="dd/MM/yyyy"
+                                        value={this.state.chequeDate}
+                                        onChange={(e) => this.setState(validator(e, 'chequeDate', 'date', []))}
+                                      />
+                                    </MuiPickersUtilsProvider>
+                                    <span className="icon-date dateBoxIcon"></span>
                                     <div className="errorMessageWrapper">
                                       <small className="text-danger mx-sm-2 errorMessage"></small>
                                     </div>

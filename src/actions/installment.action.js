@@ -62,3 +62,41 @@ export const changeDueDateOfTrainerInstallment = (postData) => dispatch => {
       dispatch({ type: CLEAR_ERRORS })
     }, 5000))
 };
+
+
+export const payPackageInstallments = (postData) => dispatch => {
+  dispatch(setLoading());
+  axios
+    .post(`${IP}/installment/payPackageInstallments`, postData)
+    .then(res => {
+      dispatch({ type: GET_ERROR, payload: res.data })
+      dispatch(getTrainerInstallment({ month: new Date().getMonth(), day: new Date().getFullYear() }))
+    })
+    .catch(err =>
+      err.response && dispatch({ type: GET_ERROR, payload: err.response.data })
+    ).then(() => setTimeout(() => {
+      dispatch(removeLoading())
+    }, 1000))
+    .then(() => setTimeout(() => {
+      dispatch({ type: CLEAR_ERRORS })
+    }, 5000))
+};
+
+
+export const payTrainerInstallments = (postData) => dispatch => {
+  dispatch(setLoading());
+  axios
+    .post(`${IP}/installment/payTrainerInstallments`, postData)
+    .then(res => {
+      dispatch({ type: GET_ERROR, payload: res.data })
+      dispatch(getTrainerInstallment({ month: new Date().getMonth(), day: new Date().getFullYear() }))
+    })
+    .catch(err =>
+      err.response && dispatch({ type: GET_ERROR, payload: err.response.data })
+    ).then(() => setTimeout(() => {
+      dispatch(removeLoading())
+    }, 1000))
+    .then(() => setTimeout(() => {
+      dispatch({ type: CLEAR_ERRORS })
+    }, 5000))
+};

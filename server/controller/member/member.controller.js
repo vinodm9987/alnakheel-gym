@@ -1,21 +1,34 @@
 /**
  * utils.
-*/
+ */
 const sharp = require('sharp');
 var fs = require('fs'),
     xml2js = require('xml2js');
 
-const { logger: { logger }, upload: { uploadAvatar },
+const {
+    logger: { logger },
+    upload: { uploadAvatar },
     handler: { successResponseHandler, errorResponseHandler },
-    config: { DESIGNATION, } } = require('../../../config')
+    config: { DESIGNATION, }
+} = require('../../../config')
 
 
-const { Mailer: { sendMail, }, Formate: { setTime, convertToDate }, IdGenerator: { createId, generateOrderId },
-    Referral: { updateTransaction, addPointOfPolicy, checkExpiry, pendingPaymentToGetPoint, checkExpiryOfPolicy, addPointOfReferral } } = require('../../utils');
+const {
+    Mailer: { sendMail, },
+    Formate: { setTime, convertToDate },
+    IdGenerator: { createId, generateOrderId },
+    Referral: { updateTransaction, addPointOfPolicy, checkExpiry, pendingPaymentToGetPoint, checkExpiryOfPolicy, addPointOfReferral }
+} = require('../../utils');
 
 
-const { updateMemberInBioStar, bioStarToken, disableMember,
-    getFaceRecognitionTemplate, addMemberInBioStar, updateFaceRecognition } = require('../../biostar');
+const {
+    updateMemberInBioStar,
+    bioStarToken,
+    disableMember,
+    getFaceRecognitionTemplate,
+    addMemberInBioStar,
+    updateFaceRecognition
+} = require('../../biostar');
 
 
 const { newMemberAssign } = require('../../notification/helper');
@@ -26,25 +39,45 @@ const { memberEntranceStatus } = require('../../socket/emitter');
 
 /**
  * models.
-*/
+ */
 
 
-const { Credential, Member, Designation, Employee,
-    MemberCode, MemberClass, AdminPassword } = require('../../model');
+const {
+    Credential,
+    Member,
+    Designation,
+    Employee,
+    MemberCode,
+    MemberClass,
+    AdminPassword
+} = require('../../model');
 
 const { auditLogger } = require('../../middleware/auditlog.middleware');
 
 
 
-const memberSearch = (response, search) => {
+const memberSearch = (response, search, searchFor) => {
     let newResponse = response.filter((doc) => {
         if (search) {
-            let temp = doc.credentialId.email ? doc.credentialId.email.toLowerCase() : '';
-            let temp1 = doc.credentialId.userName.toLowerCase();
-            let temp2 = doc.personalId.toLowerCase();
-            let temp3 = doc.mobileNo.toString();
-            if (temp.includes(search) || temp1.includes(search) ||
-                temp2.includes(search) || temp3.includes(search)) {
+            let email = doc.credentialId.email ? doc.credentialId.email.toLowerCase() : '';
+            let name = doc.credentialId.userName ? doc.credentialId.userName.toLowerCase() : '';
+            let personalId = doc.personalId ? doc.personalId.toLowerCase() : '';
+            let mobile = doc.mobileNo ? doc.mobileNo.toLowerCase() : '';
+            let memberId = doc.memberId.toString();
+            let temp, temp1, temp2, temp3, temp4 = false;
+            if (searchFor === 'All') {
+                temp = email.includes(search);
+                temp1 = name.includes(search);
+                temp2 = personalId.includes(search);
+                temp3 = mobile.includes(search);
+                temp4 = memberId.includes(search);
+            }
+            if (searchFor === 'Email') temp = email.includes(search);
+            if (searchFor === 'Name') temp1 = name.includes(search);
+            if (searchFor === 'Personal ID') temp2 = personalId.includes(search);
+            if (searchFor === 'Mobile') temp3 = mobile.includes(search);
+            if (searchFor === 'Member ID') temp4 = memberId.includes(search);
+            if (temp || temp1 || temp2 || temp3 || temp4) {
                 return doc
             }
         } else {
@@ -81,21 +114,24 @@ exports.updateMemberProfile = (req, res) => {
 
 /**
  * get all members
-*/
+ */
 
 
 exports.getAllMember = async (req, res) => {
     try {
-        let search = ''
-        if (req.body.search) search = req.body.search.toLowerCase()
+        let search = '',
+            searchFor = ''
+        if (req.body.search) {
+            search = req.body.search.toLowerCase()
+            searchFor = req.body.searchFor
+        }
         let queryCond = {};
         if (req.body.branch) queryCond["branch"] = req.body.branch
         let response = await Member.find(queryCond).populate('credentialId branch')
             .populate("packageDetails.packages").lean()
-        let newResponse = memberSearch(response, search);
+        let newResponse = memberSearch(response, search, searchFor);
         successResponseHandler(res, newResponse, "successfully get all member details !!");
-    }
-    catch (error) {
+    } catch (error) {
         logger.error(error);
         errorResponseHandler(res, error, "Exception while getting all member details !");
     }
@@ -103,10 +139,9 @@ exports.getAllMember = async (req, res) => {
 
 
 
-
 /**
  * get all actives members
-*/
+ */
 
 
 exports.getAllActiveMember = (req, res) => {
@@ -127,7 +162,7 @@ exports.getAllActiveMember = (req, res) => {
 
 /**
  * get all actives members of trainer
-*/
+ */
 
 exports.getAllActiveMemberOfTrainer = async (req, res) => {
     Member.find({ status: true, "packageDetails.trainer": req.params.employeeId }).then(response => {
@@ -145,7 +180,7 @@ exports.getAllActiveMemberOfTrainer = async (req, res) => {
 
 /**
  *  create new member 
-*/
+ */
 
 exports.createNewMember = (req, res) => {
     uploadAvatar(req, res, async (error, data) => {
@@ -153,8 +188,11 @@ exports.createNewMember = (req, res) => {
             return errorResponseHandler(res, error, "while uploading profile error occurred !");
         try {
             const memberDesignation = await Designation.findOne({ designationName: DESIGNATION[2] })
-            const { mobileNo, gender, dateOfBirth, nationality, userName, email, password, referralCode,
-                personalId, height, weight, questions, relationship, emergencyNumber, goal } = JSON.parse(req.body.data);
+            const {
+                mobileNo, gender, dateOfBirth, nationality, userName,
+                email, password, referralCode, personalId, height,
+                weight, questions, relationship, emergencyNumber, goal
+            } = JSON.parse(req.body.data);
             if (referralCode) {
                 const isExist = await MemberCode.findOne({ code: referralCode }).count();
                 if (!isExist) return errorResponseHandler(res, 'error', 'referral code is wrong !');
@@ -162,12 +200,17 @@ exports.createNewMember = (req, res) => {
                 if (!isExpired) return errorResponseHandler(res, error, "referral code is expired !");
             }
             const member = new Member({
-                mobileNo, gender, dateOfBirth, nationality, personalId, height, weight, questions,
-                isPackageSelected: false, emergencyNumber, relationship, startWeight: weight, goal
+                mobileNo, gender, dateOfBirth, nationality,
+                personalId, height, weight, questions,
+                isPackageSelected: false, emergencyNumber,
+                relationship, startWeight: weight, goal
             });
             const credential = new Credential({
-                userName, email, designation: memberDesignation._id,
-                userId: member._id, designationName: DESIGNATION[2]
+                userName,
+                email,
+                designation: memberDesignation._id,
+                userId: member._id,
+                designationName: DESIGNATION[2]
             });
             credential["avatar"] = req.files[0];
             credential.setPassword(password);
@@ -191,15 +234,31 @@ exports.createNewMember = (req, res) => {
 
 /**
  *  create new member by admin
-*/
+ */
 
 exports.createNewMemberByAdmin = (req, res) => {
     uploadAvatar(req, res, async (error, data) => {
         if (error) return errorResponseHandler(res, error, "while uploading profile error occurred !");
         try {
             const memberDesignation = await Designation.findOne({ designationName: DESIGNATION[2] })
-            const { mobileNo, gender, dateOfBirth, nationality, userName, email, personalId, branch,
-                height, weight, packageDetails, questions, relationship, emergencyNumber, referralCode, notes } = JSON.parse(req.body.data);
+            const {
+                mobileNo,
+                gender,
+                dateOfBirth,
+                nationality,
+                userName,
+                email,
+                personalId,
+                branch,
+                height,
+                weight,
+                packageDetails,
+                questions,
+                relationship,
+                emergencyNumber,
+                referralCode,
+                notes
+            } = JSON.parse(req.body.data);
             if (req.headers.userid) {
                 packageDetails[0]["doneBy"] = req.headers.userid;
             }
@@ -218,12 +277,27 @@ exports.createNewMemberByAdmin = (req, res) => {
             }
             const { memberCounter } = await createId('memberCounter');
             const member = new Member({
-                mobileNo, gender, dateOfBirth, nationality, personalId, height, weight, branch,
-                packageDetails, questions, relationship, emergencyNumber, startWeight: weight, notes
+                mobileNo,
+                gender,
+                dateOfBirth,
+                nationality,
+                personalId,
+                height,
+                weight,
+                branch,
+                packageDetails,
+                questions,
+                relationship,
+                emergencyNumber,
+                startWeight: weight,
+                notes
             });
             const credential = new Credential({
-                userName, email, designation: memberDesignation._id,
-                userId: member._id, designationName: DESIGNATION[2]
+                userName,
+                email,
+                designation: memberDesignation._id,
+                userId: member._id,
+                designationName: DESIGNATION[2]
             });
             const password = Math.random().toString(36).slice(-8);
             member["admissionDate"] = setTime(new Date());
@@ -240,7 +314,7 @@ exports.createNewMemberByAdmin = (req, res) => {
             const newMemberResponse = await Member.findById(response._id)
                 .populate('credentialId branch').populate('packageDetails.doneBy')
             await auditLogger(req, 'Success')
-            return successResponseHandler(res, { ...newMemberResponse, ...{ displayReceipt: true } }, "successfully added new member !!");
+            return successResponseHandler(res, { ...newMemberResponse, ... { displayReceipt: true } }, "successfully added new member !!");
         } catch (error) {
             logger.error(error);
             auditLogger(req, 'Failed')
@@ -275,7 +349,8 @@ exports.addMemberFaceRecognition = async (req, res) => {
             newPhoto: photo.toString('base64').replace('data:image/png;base64,', ''),
             phoneNumber: userData.mobileNo,
             startDate: userData.packageDetails[0].startDate,
-            templates, raw_image
+            templates,
+            raw_image
         };
         await addMemberInBioStar(obj);
         const newResponse = await Member.findById(req.body.memberId).populate('credentialId branch')
@@ -317,7 +392,7 @@ exports.updateFaceRecognition = async (req, res) => {
 
 /**
  *  purchase new package
-*/
+ */
 
 
 exports.updateMemberDetails = async (req, res) => {
@@ -362,7 +437,7 @@ exports.updateMemberDetails = async (req, res) => {
 
 /**
  *  update member info
-*/
+ */
 exports.updateMember = (req, res) => {
     uploadAvatar(req, res, async (error, data) => {
         if (error)
@@ -399,14 +474,30 @@ exports.updateMember = (req, res) => {
 
 /**
  *  update member and add package for the first time
-*/
+ */
 exports.updateMemberAndAddPackage = (req, res) => {
     uploadAvatar(req, res, async (error, data) => {
         if (error)
             return errorResponseHandler(res, error, "while uploading profile error occurred !");
         try {
-            const { mobileNo, gender, dateOfBirth, nationality, userName, email, personalId, branch, height, weight, emergencyNumber,
-                relationship, memberId, credentialId, notes, packageDetails } = JSON.parse(req.body.data);
+            const {
+                mobileNo,
+                gender,
+                dateOfBirth,
+                nationality,
+                userName,
+                email,
+                personalId,
+                branch,
+                height,
+                weight,
+                emergencyNumber,
+                relationship,
+                memberId,
+                credentialId,
+                notes,
+                packageDetails
+            } = JSON.parse(req.body.data);
             if (req.headers.userid) {
                 packageDetails[0]["doneBy"] = req.headers.userid
             }
@@ -417,8 +508,19 @@ exports.updateMemberAndAddPackage = (req, res) => {
             if (isUsedReferralCode) req.body["walletPoints"] = await updateTransaction(isUsedReferralCode, memberId);
             let memberAllClassResponse = await MemberClass.find({ member: req.params.id }).populate('classId').lean()
             let newObj = {
-                mobileNo, gender, dateOfBirth, nationality, personalId, branch, height, weight, emergencyNumber, relationship, notes,
-                packageDetails, isPackageSelected: true
+                mobileNo,
+                gender,
+                dateOfBirth,
+                nationality,
+                personalId,
+                branch,
+                height,
+                weight,
+                emergencyNumber,
+                relationship,
+                notes,
+                packageDetails,
+                isPackageSelected: true
             }
             if (memberAllClassResponse.length === 0) {
                 const { memberCounter } = await createId('memberCounter');
@@ -436,7 +538,7 @@ exports.updateMemberAndAddPackage = (req, res) => {
             const policy = await checkExpiryOfPolicy();
             if (policy) await addPointOfPolicy(packageDetails[0].totalAmount, response._id);
             auditLogger(req, 'Success')
-            return successResponseHandler(res, { ...response, ...{ displayReceipt: true } }, "successfully updated Member !!");
+            return successResponseHandler(res, { ...response, ... { displayReceipt: true } }, "successfully updated Member !!");
         } catch (error) {
             logger.error(error);
             auditLogger(req, 'Failed')
@@ -454,7 +556,7 @@ exports.updateMemberAndAddPackage = (req, res) => {
 
 /**
  * get member details by credential id
-*/
+ */
 
 
 exports.getMemberByCredentialId = (req, res) => {
@@ -476,7 +578,7 @@ exports.getMemberByCredentialId = (req, res) => {
 
 /**
  * get member details by member id
-*/
+ */
 
 
 exports.getMemberById = (req, res) => {
@@ -503,7 +605,7 @@ exports.getMemberById = (req, res) => {
 
 /**
  *  get all first registered member
-*/
+ */
 
 exports.getFirstRegisterMembers = async (req, res) => {
     try {
@@ -514,22 +616,9 @@ exports.getFirstRegisterMembers = async (req, res) => {
         if (req.body.branch) queryCond["branch"] = req.body.branch;
         let response = await Member.find(queryCond)
             .populate('credentialId branch').populate("packageDetails.packages").lean()
-        let newResponse = response.filter((doc) => {
-            if (search) {
-                let temp = doc.credentialId.email.toLowerCase()
-                let temp1 = doc.credentialId.userName.toLowerCase()
-                let temp2 = doc.memberId ? doc.memberId.toString() : ''
-                let temp3 = doc.mobileNo ? doc.mobileNo.toString() : ''
-                if (temp.includes(search) || temp1.includes(search) || temp2.includes(search) || temp3.includes(search)) {
-                    return doc
-                }
-            } else {
-                return doc;
-            }
-        })
+        let newResponse = memberSearch(response, search, req.body.searchFor);
         successResponseHandler(res, newResponse, "successfully get all member details !!");
-    }
-    catch (error) {
+    } catch (error) {
         logger.error(error);
         errorResponseHandler(res, error, "Exception while getting all member details !");
     }
@@ -541,7 +630,7 @@ exports.getFirstRegisterMembers = async (req, res) => {
 
 /**
  *  get all pending registration
-*/
+ */
 
 exports.getAllPendingMember = async (req, res) => {
     try {
@@ -551,10 +640,9 @@ exports.getAllPendingMember = async (req, res) => {
         queryCond["isPackageSelected"] = false;
         if (req.body.branch) queryCond["branch"] = req.body.branch
         let response = await Member.find(queryCond).populate('credentialId branch').populate("packageDetails.packages").lean()
-        let newResponse = memberSearch(response, search);
+        let newResponse = memberSearch(response, search, req.body.searchFor);
         return successResponseHandler(res, newResponse, "successfully get all member details !!");
-    }
-    catch (error) {
+    } catch (error) {
         logger.error(error);
         errorResponseHandler(res, error, "Exception while getting all member details !");
     }
@@ -568,7 +656,7 @@ exports.getAllPendingMember = async (req, res) => {
 
 /**
  *  get all active registered member
-*/
+ */
 
 exports.getActiveRegisterMembers = async (req, res) => {
     try {
@@ -577,10 +665,9 @@ exports.getActiveRegisterMembers = async (req, res) => {
         queryCond["doneFingerAuth"] = true;
         if (req.body.branch) queryCond["branch"] = req.body.branch;
         let response = await Member.find(queryCond).populate('credentialId branch').populate("packageDetails.packages").lean()
-        let newResponse = memberSearch(response, search);
+        let newResponse = memberSearch(response, search, req.body.searchFor);
         return successResponseHandler(res, newResponse, "successfully get all member details !!");
-    }
-    catch (error) {
+    } catch (error) {
         logger.error(error);
         errorResponseHandler(res, error, "Exception while getting all member details !");
     }
@@ -592,7 +679,7 @@ exports.getActiveRegisterMembers = async (req, res) => {
 
 /**
  *  get all active registered member with Status flag
-*/
+ */
 
 exports.getActiveStatusRegisterMembers = async (req, res) => {
     try {
@@ -604,10 +691,9 @@ exports.getActiveStatusRegisterMembers = async (req, res) => {
         let response = await Member.find(queryCond)
             .populate('credentialId').populate("packageDetails.packages")
             .populate({ path: 'packageDetails.trainer', populate: { path: "credentialId" } }).lean()
-        let newResponse = memberSearch(response, search);
+        let newResponse = memberSearch(response, search, req.body.searchFor);
         return successResponseHandler(res, newResponse, "successfully get all member details !!");
-    }
-    catch (error) {
+    } catch (error) {
         logger.error(error);
         errorResponseHandler(res, error, "Exception while getting all member details !");
     }
@@ -617,7 +703,7 @@ exports.getActiveStatusRegisterMembers = async (req, res) => {
 
 /**
  *  get all active registered member with Status flag and  not expired also
-*/
+ */
 
 exports.getActiveStatusNotExpiredRegisterMembers = async (req, res) => {
     try {
@@ -630,10 +716,9 @@ exports.getActiveStatusNotExpiredRegisterMembers = async (req, res) => {
         let response = await Member.find(queryCond)
             .populate('credentialId').populate("packageDetails.packages")
             .populate({ path: 'packageDetails.trainer', populate: { path: "credentialId" } }).lean()
-        let newResponse = memberSearch(response, search);
+        let newResponse = memberSearch(response, search, req.body.searchFor);
         return successResponseHandler(res, newResponse, "successfully get all member details !!");
-    }
-    catch (error) {
+    } catch (error) {
         logger.error(error);
         errorResponseHandler(res, error, "Exception while getting all member details !");
     }
@@ -643,7 +728,7 @@ exports.getActiveStatusNotExpiredRegisterMembers = async (req, res) => {
 
 /**
  * generate token for verification
-*/
+ */
 
 
 exports.generateToken = async (req, res) => {
@@ -655,8 +740,7 @@ exports.generateToken = async (req, res) => {
             await sendMail(req.body.email, code)
             successResponseHandler(res, { code }, "successfully send code !!");
         }
-    }
-    catch (error) {
+    } catch (error) {
         logger.error(error);
         errorResponseHandler(res, error, "Exception while send code !");
     }
@@ -669,7 +753,7 @@ exports.generateToken = async (req, res) => {
 /**
  * paypal apis for payment
  *
-*/
+ */
 
 exports.payAtGymMobile = async (req, res) => {
     let queryCond = {}
@@ -692,7 +776,7 @@ exports.payAtGymMobile = async (req, res) => {
         .populate('packageDetails.doneBy')
         .then(response => {
             auditLogger(req, 'Success')
-            successResponseHandler(res, { ...response, ...{ displayReceipt: true } }, "successfully save the transaction !!");
+            successResponseHandler(res, { ...response, ... { displayReceipt: true } }, "successfully save the transaction !!");
         }).catch(error => {
             logger.error(error);
             auditLogger(req, 'Failed')
@@ -708,7 +792,7 @@ exports.payAtGymMobile = async (req, res) => {
 /**
  * add trainer in package for member
  *
-*/
+ */
 
 exports.bookTrainer = async (req, res) => {
     try {
@@ -743,7 +827,7 @@ exports.bookTrainer = async (req, res) => {
 
 /**
  * BIOSTAR AUTH APIS
-*/
+ */
 
 
 
@@ -762,7 +846,7 @@ exports.getBioStarToken = async (req, res) => {
 
 /**
  *  start the package of member
-*/
+ */
 
 
 exports.startPackage = async (req, res) => {
@@ -773,8 +857,10 @@ exports.startPackage = async (req, res) => {
         req.body["trainerEnd"] = setTime(req.body.trainerEnd);
         await Member.update({ 'packageDetails._id': req.body.packageDetailId }, {
             $set: {
-                'packageDetails.$.startDate': req.body.startDate, 'packageDetails.$.endDate': req.body.endDate,
-                'packageDetails.$.trainerDetails.$.trainerStart': req.body.trainerStart, 'packageDetails.$.trainerDetails.$.trainerEnd': req.body.trainerEnd
+                'packageDetails.$.startDate': req.body.startDate,
+                'packageDetails.$.endDate': req.body.endDate,
+                'packageDetails.$.trainerDetails.$.trainerStart': req.body.trainerStart,
+                'packageDetails.$.trainerDetails.$.trainerEnd': req.body.trainerEnd
             }
         });
         let memberAllClassResponse = await MemberClass.find({ member: req.body.memberId }).populate('classId').lean()
@@ -828,7 +914,7 @@ exports.startPackage = async (req, res) => {
 
 /**
  * black list user from account
-*/
+ */
 
 
 exports.blackListUser = async (req, res) => {
@@ -857,7 +943,7 @@ exports.blackListUser = async (req, res) => {
 
 /**
  * expire list of member
-*/
+ */
 
 exports.getExpiredMembers = async (req, res) => {
     try {
@@ -879,8 +965,7 @@ exports.getExpiredMembers = async (req, res) => {
             }
         });
         return successResponseHandler(res, newResponse, "successfully get expired member !!");
-    }
-    catch (error) {
+    } catch (error) {
         logger.error(error);
         errorResponseHandler(res, error, "Failed to get expired members!");
     }
@@ -943,7 +1028,7 @@ exports.getClassesMembers = async (req, res) => {
         for (let i = 0; i < pendingMember.length; i++) {
             let classesDetails = await MemberClass.find({ 'member': pendingMember[i]._id.toString() }).populate('classId').lean()
             if (classesDetails.length > 0) {
-                pendingMemberClasses.push({ ...pendingMember[i], ...{ classesDetails } })
+                pendingMemberClasses.push({ ...pendingMember[i], ... { classesDetails } })
             }
         }
         return successResponseHandler(res, pendingMemberClasses, "successfully get all member details !!");

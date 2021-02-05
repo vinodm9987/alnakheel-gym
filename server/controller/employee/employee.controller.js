@@ -1,6 +1,6 @@
 /**
  * utils.
-*/
+ */
 
 
 const { logger: { logger }, upload: { uploadAvatar }, handler: { successResponseHandler, errorResponseHandler }, config: { DESIGNATION } } = require('../../../config')
@@ -10,7 +10,7 @@ const { Mailer: { sendMail } } = require('../../utils')
 
 /**
  * models.
-*/
+ */
 
 const { Employee, Credential, Designation, Member, AdminPassword, EmployeePackage } = require('../../model');
 const { auditLogger } = require('../../middleware/auditlog.middleware');
@@ -30,8 +30,8 @@ const { addMemberInBioStar, getFaceRecognitionTemplate, updateFaceRecognition } 
  */
 
 
-exports.updateEmployeeProfile = async (req, res) => {
-    uploadAvatar(req, res, async (error, result) => {
+exports.updateEmployeeProfile = async(req, res) => {
+    uploadAvatar(req, res, async(error, result) => {
         if (error) {
             auditLogger(req, 'Failed')
             return errorResponseHandler(res, error, "while uploading profile error occurred !");
@@ -61,7 +61,7 @@ exports.updateEmployeeProfile = async (req, res) => {
 
 /**
  *  get all employee employee
-*/
+ */
 
 
 
@@ -79,11 +79,11 @@ exports.getAllEmployee = (req, res) => {
 
 /**
  *  get all employee by filter
-*/
+ */
 
 
 
-exports.getAllEmployeeByFilter = async (req, res) => {
+exports.getAllEmployeeByFilter = async(req, res) => {
     try {
         let queryCond = {}
         if (req.body.designation) { queryCond["designation"] = req.body.designation }
@@ -92,9 +92,9 @@ exports.getAllEmployeeByFilter = async (req, res) => {
         if (search) {
             let newResponse = response.filter(doc => {
                 let empId = doc.employeeId.toString()
-                if (doc.credentialId.userName.toLowerCase().includes(search)
-                    || doc.credentialId.email.toLowerCase().includes(search)
-                    || empId.includes(search)) {
+                if (doc.credentialId.userName.toLowerCase().includes(search) ||
+                    doc.credentialId.email.toLowerCase().includes(search) ||
+                    empId.includes(search)) {
                     return doc
                 }
             })
@@ -111,7 +111,7 @@ exports.getAllEmployeeByFilter = async (req, res) => {
 
 /**
  *  get all active employee employee
-*/
+ */
 
 
 
@@ -135,7 +135,7 @@ exports.getAllActiveEmployee = (req, res) => {
 
 /**
  * get  employee by id
-*/
+ */
 
 
 exports.getEmployeeById = (req, res) => {
@@ -156,10 +156,10 @@ exports.getEmployeeById = (req, res) => {
 
 /**
  *  create new employee
-*/
+ */
 
 exports.createNewEmployee = (req, res) => {
-    uploadAvatar(req, res, async (error, data) => {
+    uploadAvatar(req, res, async(error, data) => {
         if (error)
             return errorResponseHandler(res, error, "while uploading profile error occurred !");
         try {
@@ -194,7 +194,7 @@ exports.createNewEmployee = (req, res) => {
 
 
 
-exports.updateEmployeeFaceRecognition = async (req, res) => {
+exports.updateEmployeeFaceRecognition = async(req, res) => {
     try {
         await AdminPassword.findOne({ password: req.body.password }).then(async user => {
             if (!user) return errorResponseHandler(res, '', "Your entered password is wrong !");
@@ -217,7 +217,7 @@ exports.updateEmployeeFaceRecognition = async (req, res) => {
 
 
 exports.updateEmployee = (req, res) => {
-    uploadAvatar(req, res, async (error, data) => {
+    uploadAvatar(req, res, async(error, data) => {
         if (error) {
             auditLogger(req, 'Failed')
             return errorResponseHandler(res, error, "while uploading profile error occurred !");
@@ -235,7 +235,7 @@ exports.updateEmployee = (req, res) => {
             }
             const response = await Employee.findByIdAndUpdate(employeeId, newObj, { new: true });
             auditLogger(req, 'Success')
-            return successResponseHandler(res, response, "successfully updated  employee !!");
+            return successResponseHandler(res, response, "Successfully Updated  Employee !!");
         } catch (error) {
             logger.error(error);
             auditLogger(req, 'Failed')
@@ -260,7 +260,7 @@ exports.updateEmployee = (req, res) => {
 
 
 
-exports.getTrainerByBranch = async (req, res) => {
+exports.getTrainerByBranch = async(req, res) => {
     let designation = await Designation.findOne({ designationName: DESIGNATION[4] }).lean()
     Employee.find({ branch: req.params.id, designation: designation._id, status: true }).populate('credentialId branch')
         .then(response => {
@@ -272,7 +272,7 @@ exports.getTrainerByBranch = async (req, res) => {
 }
 
 
-exports.getActiveTrainer = async (req, res) => {
+exports.getActiveTrainer = async(req, res) => {
     let designation = await Designation.findOne({ designationName: DESIGNATION[4] }).lean()
     Employee.find({ designation: designation._id, status: true }).populate('credentialId branch')
         .then(response => {
@@ -285,7 +285,7 @@ exports.getActiveTrainer = async (req, res) => {
 
 
 
-exports.updateStatusOfEmployee = async (req, res) => {
+exports.updateStatusOfEmployee = async(req, res) => {
     req.responseData = await Employee.findById(req.params.id).lean()
     Employee.findByIdAndUpdate(req.params.id, { status: req.body.status }, { new: true }).then(response => {
         auditLogger(req, 'Success')
@@ -298,7 +298,7 @@ exports.updateStatusOfEmployee = async (req, res) => {
 }
 
 
-exports.getAllMemberOfTrainer = async (req, res) => {
+exports.getAllMemberOfTrainer = async(req, res) => {
     try {
         let queryCond = { 'packageDetails.isExpiredPackage': false };
         queryCond['packageDetails.startDate'] = { '$exists': true }
@@ -324,21 +324,19 @@ exports.getAllMemberOfTrainer = async (req, res) => {
             }
         });
         successResponseHandler(res, newResponse, "successfully get all active  trainer  !!");
-    }
-    catch (error) {
+    } catch (error) {
         logger.error(error);
         errorResponseHandler(res, error, "Exception while getting all active  trainer  !");
     }
 };
 
 
-exports.trainerRating = async (req, res) => {
+exports.trainerRating = async(req, res) => {
     try {
         let queryCond = { _id: req.body.employeeId, 'rating.member': req.body.rating.member };
         let isExists = await Employee.find(queryCond);
         if (isExists.length !== 0) {
-            let response = await Employee.findOneAndUpdate(queryCond,
-                { $set: { 'rating.$.star': req.body.rating.star } }, { new: true }).lean();
+            let response = await Employee.findOneAndUpdate(queryCond, { $set: { 'rating.$.star': req.body.rating.star } }, { new: true }).lean();
             let sum = 0;
             let length = response.rating.length;
             response.rating.forEach(doc => { sum += parseInt(doc.star) });
@@ -346,8 +344,7 @@ exports.trainerRating = async (req, res) => {
             let newResponse = await Employee.findByIdAndUpdate(req.body.employeeId, { ratingAvg: ratingAvg }, { new: true }).lean();
             successResponseHandler(res, newResponse, "successfully give the ratings ! ");
         } else {
-            let response = await Employee.findByIdAndUpdate(req.body.employeeId,
-                { $push: { rating: req.body.rating } }, { new: true }).lean();
+            let response = await Employee.findByIdAndUpdate(req.body.employeeId, { $push: { rating: req.body.rating } }, { new: true }).lean();
             let sum = 0;
             let length = response.rating.length;
             response.rating.forEach(doc => { sum += parseInt(doc.star) });

@@ -6,7 +6,7 @@ import { withTranslation } from 'react-i18next';
 import { connect } from 'react-redux';
 import { findDOMNode } from 'react-dom';
 import { Link } from 'react-router-dom';
-import { changeDueDateOfTrainerInstallment, getTrainerInstallment } from '../../actions/installment.action';
+import { changeDueDateOfTrainerInstallment, getTrainerInstallment, payTrainerInstallments } from '../../actions/installment.action';
 import Pagination from '../Layout/Pagination';
 import { getAllVat } from '../../actions/vat.action';
 import $ from 'jquery';
@@ -45,7 +45,13 @@ class TrainerInstallment extends Component {
       installmentId: '',
       memberId: '',
       trainerDetailsId: '',
-      subTotal: 0
+      subTotal: 0,
+      password: '',
+      passwordE: '',
+      showPass: false,
+      dueDate: new Date(),
+      installmentName: '',
+      trainerAmount: 0
     }
     this.props.dispatch(getTrainerInstallment({ month: parseInt(this.state.pendingMonth), day: this.state.pendingYear }))
   }
@@ -65,7 +71,7 @@ class TrainerInstallment extends Component {
 
   setDigital(e, total) {
     const { t } = this.props
-    this.setState({ ...validator(e, 'digital', 'numberText', [t('Enter amount')]), ...{ card: 0 } }, () => {
+    this.setState({ ...validator(e, 'digital', 'numberText', [t('Enter amount')]), ...{ card: 0, cheque: 0, cardE: '', chequeE: '' } }, () => {
       if (this.state.digital <= total.toFixed(3) && this.state.digital >= 0) {
         const cash = (total.toFixed(3) - this.state.digital).toFixed(3)
 
@@ -84,7 +90,7 @@ class TrainerInstallment extends Component {
 
   setCash(e, total) {
     const { t } = this.props
-    this.setState(validator(e, 'cash', 'numberText', [t('Enter amount'), t('Enter valid amount')]), () => {
+    this.setState({ ...validator(e, 'cash', 'numberText', [t('Enter amount'), t('Enter valid amount')]), ...{ cheque: 0, chequeE: '' } }, () => {
       if (this.state.cash <= total.toFixed(3) && this.state.cash >= 0) {
         const card = (total.toFixed(3) - this.state.cash).toFixed(3)
 
@@ -166,16 +172,43 @@ class TrainerInstallment extends Component {
     this.props.dispatch(changeDueDateOfTrainerInstallment(dueDateInfo))
   }
 
-  setPayment(trainerAmount, branch) {
+  setPayment(trainerAmount, branch, packagesDetailsId, installmentId, memberId, dueDate, installmentName, trainerDetailsId) {
     this.setState({
-      subTotal: trainerAmount
+      subTotal: trainerAmount, packagesDetailsId, installmentId, memberId, dueDate, installmentName, trainerDetailsId
     })
     this.props.dispatch(getAllVat({ branch }))
   }
 
-  handlePayment(totalAmount) {
+  handlePayment(totalAmount, totalVat) {
     const el = findDOMNode(this.refs.checkoutCloseModal);
     const { t } = this.props
+    const { packagesDetailsId, installmentId, memberId, dueDate, showCheque, cash, card, digital, cheque, bankName,
+      chequeNumber, chequeDate, discount, cardNumber, subTotal, cashE, cardE, digitalE } = this.state
+    if (packagesDetailsId && installmentId && memberId && dueDate && (parseInt(totalAmount) === parseInt((+cash || 0) + (+card || 0) + (+digital || 0) + (+cheque || 0))) && !cardE && !cashE && !digitalE) {
+      let memberInfo = {
+        packagesDetailsId, installmentId, memberId, dueDate
+      }
+      if (showCheque) {
+        memberInfo = {
+          ...memberInfo, ...{
+            paidStatus: 'Paid', cashAmount: cash ? parseFloat(cash) : 0, cardAmount: card ? parseFloat(card) : 0, digitalAmount: digital ? digital : 0,
+            cardNumber: cardNumber, actualAmount: subTotal, totalAmount: totalAmount, discount: parseFloat(discount), vatAmount: totalVat,
+            chequeAmount: cheque ? parseFloat(cheque) : 0, bankName, chequeNumber, chequeDate
+          }
+        }
+      } else {
+        memberInfo = {
+          ...memberInfo, ...{
+            paidStatus: 'Paid', cashAmount: cash ? parseFloat(cash) : 0, cardAmount: card ? parseFloat(card) : 0, digitalAmount: digital ? digital : 0,
+            cardNumber: cardNumber, actualAmount: subTotal, totalAmount: totalAmount, discount: parseFloat(discount), vatAmount: totalVat,
+          }
+        }
+      }
+      this.props.dispatch(payTrainerInstallments(memberInfo))
+      $(el).click();
+    } else {
+      if (parseInt(totalAmount) !== parseInt((+cash || 0) + (+card || 0) + (+digital || 0) + (+cheque || 0))) this.setState({ cashE: t('Enter amount') })
+    }
   }
 
   render() {
@@ -210,7 +243,7 @@ class TrainerInstallment extends Component {
                     <div className="row">
                       <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-5">
                         <h4>Total Pending Amount</h4>
-                        <h2 className="font-weight-bold dirltrtar text-danger">{this.props.defaultCurrency} {totalPendingAmount}</h2>
+                        <h2 className="font-weight-bold dirltrtar text-danger">{this.props.defaultCurrency} {totalPendingAmount.toFixed(3)}</h2>
                       </div>
                       <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-7">
                         <div className="row d-block d-sm-flex justify-content-end pt-3">
@@ -272,12 +305,12 @@ class TrainerInstallment extends Component {
                                 </td>
                                 <td><span className="mx-200-normalwrap">{trainerName}</span></td>
                                 <td><span className="mx-200-normalwrap">{installmentName}</span></td>
-                                <td><h5 className="text-warning font-weight-bold m-0 dirltrtar">{this.props.defaultCurrency} {trainerAmount}</h5></td>
+                                <td><h5 className="text-warning font-weight-bold m-0 dirltrtar">{this.props.defaultCurrency} {trainerAmount.toFixed(3)}</h5></td>
                                 <td>{dateToDDMMYYYY(dueDate)}</td>
                                 <td className="text-center">
                                   <span className="d-inline-flex">
                                     <button type="button" className="btn btn-success btn-sm w-100px rounded-50px mx-1" data-toggle="modal" data-target="#notYetPaid1"
-                                      onClick={() => this.setPayment(trainerAmount, branch)}
+                                      onClick={() => this.setPayment(trainerAmount, branch, packagesDetailsId, installmentId, _id, dueDate, installmentName, trainerDetailsId)}
                                     >Pay</button>
                                     <Link type="button" className="btn btn-primary br-50px w-100px btn-sm px-3 mx-1" to={`/members-details/${_id}`}>{t('Details')}</Link>
                                     <span className="bg-success action-icon w-30px h-30px rounded-circle d-flex align-items-center justify-content-center mx-1 text-white pointer" data-toggle="modal" data-target="#Duedate1"
@@ -472,6 +505,7 @@ class TrainerInstallment extends Component {
                       </div>
                     </div>
                   </div>
+
                   {/* if cheque */}
                   {this.state.showCheque &&
                     <div className="col-12">
@@ -503,10 +537,22 @@ class TrainerInstallment extends Component {
                         <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
                           <div className="form-group inlineFormGroup mb-3">
                             <label htmlFor="CheckDate" className="mx-sm-2 inlineFormLabel mb-1">{t('Cheque Date')}</label>
-                            <input type="text" autoComplete="off" className={this.state.chequeDateE ? "form-control mx-sm-2 inlineFormInputs FormInputsError w-100 p-0 d-flex align-items-center bg-white dirltr" : "form-control mx-sm-2 inlineFormInputs w-100 p-0 d-flex align-items-center bg-white dirltr"}
-                              id="CheckDate"
-                              value={this.state.chequeDate} onChange={(e) => this.setState({ chequeDate: e.target.value })}
-                            />
+                            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                              <DatePicker
+                                InputProps={{
+                                  disableUnderline: true,
+                                }}
+                                autoOk
+                                invalidDateMessage=''
+                                minDateMessage=''
+                                className={this.state.chequeDateE ? "form-control mx-sm-2 inlineFormInputs FormInputsError w-100 p-0 d-flex align-items-center bg-white dirltr" : "form-control mx-sm-2 inlineFormInputs w-100 p-0 d-flex align-items-center bg-white dirltr"}
+                                minDate={new Date()}
+                                format="dd/MM/yyyy"
+                                value={this.state.chequeDate}
+                                onChange={(e) => this.setState(validator(e, 'chequeDate', 'date', []))}
+                              />
+                            </MuiPickersUtilsProvider>
+                            <span className="icon-date dateBoxIcon"></span>
                             <div className="errorMessageWrapper">
                               <small className="text-danger mx-sm-2 errorMessage"></small>
                             </div>
@@ -531,34 +577,6 @@ class TrainerInstallment extends Component {
                   <div className="col-12">
                     <div className="px-sm-1 pt-4 pb-5">
                       <button type="button" className="btn btn-block btn-success btn-lg" onClick={() => this.handlePayment(totalAmount)}>Checkout</button>
-                    </div>
-                  </div>
-                  <div className="modal fade commonYellowModal" id="Discount" >
-                    <div className="modal-dialog modal-dialog-centered">
-                      <div className="modal-content">
-                        <div className="modal-header">
-                          <h4 className="modal-title">{t('Add Order Discount')}</h4>
-                          <button type="button" className="close" data-dismiss="modal"><span className="iconv1 iconv1-close"></span></button>
-                        </div>
-                        <div className="modal-body px-0">
-                          <div className="container-fluid">
-                            <div className="col-12 px-3 pt-3 d-flex">
-                              <ul className="pagination">
-                                <li className={discountMethod === 'percent' ? "page-item active cursorPointer" : "page-item cursorPointer"}
-                                  onClick={() => this.setState({ discountMethod: 'percent', count: 0 })}><span className="page-link">%</span></li>
-                                <li className={discountMethod === 'money' ? "page-item active cursorPointer" : "page-item cursorPointer"}
-                                  onClick={() => this.setState({ discountMethod: 'money', count: 0 })}><span className="page-link">{this.props.defaultCurrency}</span></li>
-                              </ul>
-                              <span className="mx-1"></span>
-                              <input type="number" autoComplete="off" className="form-control" placeholder={t('Enter discount')}
-                                value={count} onChange={(e) => this.setState(validator(e, 'count', 'numberText', []))} />
-                            </div>
-                            <div className="col-12 p-3">
-                              <button type="button" className="btn btn-block btn-success btn-lg" data-dismiss="modal" onClick={() => this.addDiscount(subTotal)}>{t('Add Discount')}</button>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
                     </div>
                   </div>
                 </div>
@@ -604,6 +622,38 @@ class TrainerInstallment extends Component {
             </div>
           </div>
         </div>
+
+        {/* Popup Discount */}
+        <button type="button" id="Discount2" className="d-none" data-toggle="modal" data-target="#Discount" ref="openDiscount">Open modal</button>
+        <div className="modal fade commonYellowModal" id="Discount" >
+          <div className="modal-dialog modal-dialog-centered">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h4 className="modal-title">{t('Add Order Discount')}</h4>
+                <button type="button" className="close" data-dismiss="modal"><span className="iconv1 iconv1-close"></span></button>
+              </div>
+              <div className="modal-body px-0">
+                <div className="container-fluid">
+                  <div className="col-12 px-3 pt-3 d-flex">
+                    <ul className="pagination">
+                      <li className={discountMethod === 'percent' ? "page-item active cursorPointer" : "page-item cursorPointer"}
+                        onClick={() => this.setState({ discountMethod: 'percent', count: 0 })}><span className="page-link">%</span></li>
+                      <li className={discountMethod === 'money' ? "page-item active cursorPointer" : "page-item cursorPointer"}
+                        onClick={() => this.setState({ discountMethod: 'money', count: 0 })}><span className="page-link">{this.props.defaultCurrency}</span></li>
+                    </ul>
+                    <span className="mx-1"></span>
+                    <input type="number" autoComplete="off" className="form-control" placeholder={t('Enter discount')}
+                      value={count} onChange={(e) => this.setState(validator(e, 'count', 'numberText', []))} />
+                  </div>
+                  <div className="col-12 p-3">
+                    <button type="button" className="btn btn-block btn-success btn-lg" data-dismiss="modal" onClick={() => this.addDiscount(subTotal)}>{t('Add Discount')}</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        {/* /- Popup Discount End*/}
 
       </div>
     )
