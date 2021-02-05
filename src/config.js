@@ -1,5 +1,5 @@
-export const IP = "https://skoolgo.pixelmindit.com:5700/api";  // server
-// export const IP = "http://localhost:5700/api"; // localhost
+// export const IP = "https://skoolgo.pixelmindit.com:5700/api";  // server
+export const IP = "http://localhost:5700/api"; // localhost
 export const SOCKETIP = "https://skoolgo.pixelmindit.com:5700";
 export const PRODIP = "https://skoolgo.pixelmindit.com:5700";
 export const BIO_STAR_MACHINE_ID = "546844789";
