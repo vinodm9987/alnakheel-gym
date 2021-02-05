@@ -10,7 +10,7 @@ module.exports = {
             if (type === 'digital') totalAmount += stockSells[i].digitalAmount;
             if (type === 'cash') totalAmount += stockSells[i].cashAmount;
             if (type === 'card') totalAmount += stockSells[i].cardAmount;
-            if (type === 'cheque') totalAmount += stockSells[i].cheque;
+            if (type === 'cheque') totalAmount += stockSells[i].chequeAmount;
         }
         return totalAmount;
     },
@@ -22,7 +22,7 @@ module.exports = {
             if (type === 'digital') totalAmount += classSells[i].digitalAmount;
             if (type === 'cash') totalAmount += classSells[i].cashAmount;
             if (type === 'card') totalAmount += classSells[i].cardAmount;
-            if (type === 'cheque') totalAmount += classSells[i].cheque;
+            if (type === 'cheque') totalAmount += classSells[i].chequeAmount;
         }
         return totalAmount;
     },
@@ -106,7 +106,7 @@ module.exports = {
                 if (type === 'digital') totalAmount += installment.digitalAmount;
                 if (type === 'cash') totalAmount += installment.cashAmount;
                 if (type === 'card') totalAmount += installment.cardAmount;
-                if (type === 'cheque') totalAmount += installment.cheque;
+                if (type === 'cheque') totalAmount += installment.chequeAmount;
 
             }
         }
@@ -121,7 +121,7 @@ module.exports = {
             if (type === 'digital') totalAmount += stockSells[i].digitalAmount;
             if (type === 'cash') totalAmount += stockSells[i].cashAmount;
             if (type === 'card') totalAmount += stockSells[i].cardAmount;
-            if (type === 'cheque') totalAmount += stockSells[i].cheque;
+            if (type === 'cheque') totalAmount += stockSells[i].chequeAmount;
             const index = branches.findIndex(doc => stockBranch === doc._id.toString());
             branches[index]['amount'] = typeof branches[index]['amount'] === 'number' ? branches[index]['amount'] += totalAmount : totalAmount;
         }
