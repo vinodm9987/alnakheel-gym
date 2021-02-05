@@ -186,7 +186,8 @@ class PackageInstallment extends Component {
     const { t } = this.props
     const { packagesDetailsId, installmentId, memberId, dueDate, showCheque, cash, card, digital, cheque, bankName,
       chequeNumber, chequeDate, discount, cardNumber, subTotal, cashE, cardE, digitalE } = this.state
-    if (packagesDetailsId && installmentId && memberId && dueDate && (parseInt(totalAmount) === parseInt((+cash || 0) + (+card || 0) + (+digital || 0) + (+cheque || 0))) && !cardE && !cashE && !digitalE) {
+    if (packagesDetailsId && installmentId && memberId && dueDate && (parseInt(totalAmount) === parseInt((+cash || 0) + (+card || 0) + (+digital || 0) + (+cheque || 0)))
+      && !cardE && !cashE && !digitalE) {
       let memberInfo = {
         packagesDetailsId, installmentId, memberId, dueDate
       }
@@ -207,7 +208,7 @@ class PackageInstallment extends Component {
         }
       }
       this.props.dispatch(payPackageInstallments(memberInfo))
-      $(el).click();
+      $(el).click()
     } else {
       if (parseInt(totalAmount) !== parseInt((+cash || 0) + (+card || 0) + (+digital || 0) + (+cheque || 0))) this.setState({ cashE: t('Enter amount') })
     }
@@ -398,7 +399,7 @@ class PackageInstallment extends Component {
             <div className="modal-content">
               <div className="modal-header">
                 <h4 className="modal-title">{t('Payment')}</h4>
-                <button type="button" className="close" data-dismiss="modal" onClick={() => this.setState({ digital: 0, cash: 0, card: 0 })}><span className="iconv1 iconv1-close"></span></button>
+                <button type="button" className="close" data-dismiss="modal" ref='checkoutCloseModal' onClick={() => this.setState({ digital: 0, cash: 0, card: 0 })}><span className="iconv1 iconv1-close"></span></button>
               </div>
               <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 px-4 pb-4 pt-4 bg-light rounded-bottom">
                 <div className="table-responsive bg-white px-4 pt-3">
