@@ -520,7 +520,7 @@ class AddMembers extends Component {
       trainer, wantTrainer, levelQuestion, exercisingQuestion, goalQuestion, period, trainerFeesId, addPackage, packageAmount,
       numberE, emergencyNumberE, cashE, cardE, digital, digitalE, startDate, endDate, trainerPeriodDays, installments,
       cheque, bankName, chequeNumber, chequeDate, showCheque } = this.state
-    if (name && number && personalId && gender && packageName && (parseInt(totalAmount) === parseInt((+cash || 0) + (+card || 0) + (+digital || 0) + (+cheque || 0)))
+    if (name && number && personalId && gender && packageName && branch && (parseInt(totalAmount) === parseInt((+cash || 0) + (+card || 0) + (+digital || 0) + (+cheque || 0)))
       && !cardE && !cashE
       && !digitalE && !numberE && !emergencyNumberE && startDate <= endDate
     ) {
@@ -657,7 +657,7 @@ class AddMembers extends Component {
       if (!gender) this.setState({ genderE: t('Enter gender') })
       // if (!userPhoto) this.props.dispatch({ type: GET_ALERT_ERROR, payload: t('Enter user photo') })
       if (!packageName) this.setState({ packageNameE: t('Enter package name') })
-      // if (!branch) this.setState({ branchE: t('Enter branch') })
+      if (!branch) this.setState({ branchE: t('Enter branch') })
       // if (calculateDOB(dob) <= 14) this.props.dispatch({ type: GET_ALERT_ERROR, payload: t('You are little small to join the Gym') })
       if (parseInt(totalAmount) === parseInt((+cash || 0) + (+card || 0) + (+digital || 0) + (+cheque || 0))) this.setState({ cashE: t('Enter amount') })
       if (!cardNumber) this.setState({ cardNumberE: t('Enter card number') })
@@ -747,7 +747,7 @@ class AddMembers extends Component {
 
   setDigital(e, total) {
     const { t } = this.props
-    this.setState({ ...validator(e, 'digital', 'numberText', [t('Enter amount')]), ...{ card: 0 } }, () => {
+    this.setState({ ...validator(e, 'digital', 'numberText', [t('Enter amount')]), ...{ card: 0, cheque: 0 } }, () => {
       if (this.state.digital <= total.toFixed(3) && this.state.digital >= 0) {
         const cash = (total.toFixed(3) - this.state.digital).toFixed(3)
 
@@ -766,7 +766,7 @@ class AddMembers extends Component {
 
   setCash(e, total) {
     const { t } = this.props
-    this.setState(validator(e, 'cash', 'numberText', [t('Enter amount'), t('Enter valid amount')]), () => {
+    this.setState({ ...validator(e, 'cash', 'numberText', [t('Enter amount'), t('Enter valid amount')]), ...{ cheque: 0 } }, () => {
       if (this.state.cash <= total.toFixed(3) && this.state.cash >= 0) {
         const card = (total.toFixed(3) - this.state.cash).toFixed(3)
 
@@ -912,7 +912,7 @@ class AddMembers extends Component {
     const { t } = this.props
     const { name, email, number, personalId, dob, nationality, gender, userPhoto, branch,
       height, weight, emergencyNumber, relationship, referralCode, notes, credentialId, memberId, numberE, emergencyNumberE } = this.state
-    if (name && number && personalId && gender && !numberE && !emergencyNumberE) {
+    if (name && number && personalId && gender && branch && !numberE && !emergencyNumberE) {
       const memberInfo = {
         userName: name,
         email,
@@ -943,7 +943,7 @@ class AddMembers extends Component {
       // if (!dob) this.setState({ dobE: t('Enter dob') })
       // if (!nationality) this.setState({ nationalityE: t('Enter nationality') })
       if (!gender) this.setState({ genderE: t('Enter gender') })
-      // if (!branch) this.setState({ branchE: t('Enter branch') })
+      if (!branch) this.setState({ branchE: t('Enter branch') })
       // if (calculateDOB(dob) <= 14) this.props.dispatch({ type: GET_ALERT_ERROR, payload: t('You are little small to join the Gym') })
     }
   }
@@ -951,8 +951,8 @@ class AddMembers extends Component {
   showPayment() {
     const { t } = this.props
     const { name, number, personalId, gender, packageName, startDate, endDate,
-      trainer, wantTrainer, levelQuestion, exercisingQuestion, goalQuestion, period, emailE, numberE, emergencyNumberE } = this.state
-    if (name && number && personalId && gender && packageName && !emailE
+      trainer, wantTrainer, levelQuestion, exercisingQuestion, goalQuestion, period, emailE, numberE, emergencyNumberE, branch } = this.state
+    if (name && number && personalId && gender && packageName && branch && !emailE
       && !numberE && !emergencyNumberE && startDate <= endDate) {
       if (wantTrainer === 'Yes') {
         if (trainer && levelQuestion && exercisingQuestion && goalQuestion && period) {
@@ -977,7 +977,7 @@ class AddMembers extends Component {
       if (!gender) this.setState({ genderE: t('Enter gender') })
       // if (!userPhoto) this.props.dispatch({ type: GET_ALERT_ERROR, payload: t('Enter user photo') })
       if (!packageName) this.setState({ packageNameE: t('Enter package name') })
-      // if (!branch) this.setState({ branchE: t('Enter branch') })
+      if (!branch) this.setState({ branchE: t('Enter branch') })
       // if (calculateDOB(dob) <= 14) this.props.dispatch({ type: GET_ALERT_ERROR, payload: t('You are little small to join the Gym') })
       if (startDate > endDate) this.setState({ endDateE: t('End Date should be greater than Start Date') })
     }
