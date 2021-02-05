@@ -245,7 +245,7 @@ class PackageRenewal extends Component {
 
   setDigital(e, total) {
     const { t } = this.props
-    this.setState({ ...validator(e, 'digital', 'numberText', [t('Enter amount')]), ...{ card: 0, cheque: 0 } }, () => {
+    this.setState({ ...validator(e, 'digital', 'numberText', [t('Enter amount')]), ...{ card: 0, cheque: 0, cardE: '', chequeE: '' } }, () => {
       if (this.state.digital <= total.toFixed(3) && this.state.digital >= 0) {
         const cash = (total.toFixed(3) - this.state.digital).toFixed(3)
         this.setState({
@@ -263,7 +263,7 @@ class PackageRenewal extends Component {
 
   setCash(e, total) {
     const { t } = this.props
-    this.setState({ ...validator(e, 'cash', 'numberText', [t('Enter amount'), t('Enter valid amount')]), ...{ cheque: 0 } }, () => {
+    this.setState({ ...validator(e, 'cash', 'numberText', [t('Enter amount'), t('Enter valid amount')]), ...{ cheque: 0, chequeE: '' } }, () => {
       if (this.state.cash <= total.toFixed(3) && this.state.cash >= 0) {
         const card = (total.toFixed(3) - this.state.cash).toFixed(3)
         this.setState({
@@ -491,8 +491,27 @@ class PackageRenewal extends Component {
         })
       }
     } else {
-      installments[i].dueDate = e
-      installmentsCopy[i].dueDate = e
+      if (i !== 0) {
+        if (installmentsCopy[i - 1] && setTime(installmentsCopy[i - 1].dueDate) <= setTime(e)) {
+          installments[i].dueDate = e
+          installmentsCopy[i].dueDate = e
+          installments.forEach((installment, j) => {
+            if (j > i) {
+              installment.dueDate = e
+              installmentsCopy[j].dueDate = e
+            }
+          })
+        }
+      } else {
+        installments[i].dueDate = e
+        installmentsCopy[i].dueDate = e
+        installments.forEach((installment, j) => {
+          if (j > i) {
+            installment.dueDate = e
+            installmentsCopy[j].dueDate = e
+          }
+        })
+      }
     }
     this.setState({ installments, installmentsCopy })
   }

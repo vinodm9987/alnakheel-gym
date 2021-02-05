@@ -83,7 +83,7 @@ class PackageDetails extends Component {
   setDigital(e) {
     const { t } = this.props
     const { totalAmount } = this.state
-    this.setState({ ...validator(e, 'digital', 'numberText', [t('Enter amount')]), ...{ card: 0, cheque: 0 } }, () => {
+    this.setState({ ...validator(e, 'digital', 'numberText', [t('Enter amount')]), ...{ card: 0, cheque: 0, cardE: '', chequeE: '' } }, () => {
       if (this.state.digital <= totalAmount.toFixed(3) && this.state.digital >= 0) {
         const cash = (totalAmount.toFixed(3) - this.state.digital).toFixed(3)
 
@@ -102,7 +102,7 @@ class PackageDetails extends Component {
 
   setCash(e, totalAmount) {
     const { t } = this.props
-    this.setState({ ...validator(e, 'cash', 'numberText', [t('Enter amount'), t('Enter valid amount')]), ...{ cheque: 0 } }, () => {
+    this.setState({ ...validator(e, 'cash', 'numberText', [t('Enter amount'), t('Enter valid amount')]), ...{ cheque: 0, chequeE: '' } }, () => {
       if (this.state.cash && this.state.cash <= parseFloat(totalAmount).toFixed(3) && this.state.cash >= 0) {
         const card = parseFloat(totalAmount).toFixed(3) - this.state.cash
         this.setState({
@@ -254,7 +254,7 @@ class PackageDetails extends Component {
                         <div className="col-12 col-lg-5">
                           <h5 className="">{packageName}</h5>
                           <div className="d-flex justify-content-between align-items-start flex-wrap">
-                            <div className="d-flex justify-content-end flex-wrap flexBasis-0">
+                            <div className="d-flex justify-content-start flex-wrap flexBasis-0">
                               <span className="text-secondary">{t('Start Date')}</span>
                               <span className="text-danger w-100">{dateToDDMMYYYY(startDate)}</span>
                             </div>
@@ -662,8 +662,8 @@ class PackageDetails extends Component {
                               : <td className="text-danger font-weight-bold"><span>{this.props.defaultCurrency}</span><span className="pl-1"></span><span>{amount.toFixed(3)}</span></td>}
                             {/* <td>{trainer ? trainer.credentialId.userName : 'NA'}</td> */}
                             {/* <td className="text-center">
-                          <span className="bg-warning action-icon"><span className="iconv1 iconv1-download"></span></span>
-                        </td> */}
+                              <span className="bg-warning action-icon"><span className="iconv1 iconv1-download"></span></span>
+                            </td> */}
                             <td className="text-center">{paidStatus === 'Installment' ? t('Yes') : t('No')}</td>
                             {paidStatus === 'Installment'
                               ? <td className="text-center">
@@ -683,9 +683,9 @@ class PackageDetails extends Component {
             </div>
 
             <div className="tab-pane fade" id="submenu2" role="tabpanel" >
-              <div className="col-12">
+              <div className="col-12 tableTypeStriped">
                 <div className="table-responsive">
-                  <table className="borderRoundSeperateTable tdGray">
+                  <table className="table table-striped">
                     <thead>
                       <tr>
                         <th>{t('Trainer Name')}</th>
@@ -716,10 +716,6 @@ class PackageDetails extends Component {
                                 <td className="text-danger font-weight-bold"><span>{this.props.defaultCurrency}</span><span className="pl-1"></span><span>{amount}</span></td>
                                 <td className="text-center">
                                   <span className="badge badge-pill badge-primary px-3 py-2 cursorPointer" data-toggle="modal" data-target="#InstallmentDetails">Payment Details</span>
-                                </td>
-                                <td>
-                                  <button className="btn btn-success badge-pill btn-sm px-3 py-05 d-inline-flex justify-content-between align-items-center mx-1 py-0 w-100px text-nowrap" data-toggle="modal" data-target="#allreadyPaid"><span className="mx-1">Paid</span><span className="iconv1 iconv1-arrow-down mx-1"></span></button>
-                                  {/* <button className="btn btn-danger badge-pill btn-sm px-3 py-05 d-inline-flex justify-content-between align-items-center mx-1 py-0 w-100px text-nowrap" data-toggle="modal" data-target="#notYetPaid" ><span className="mx-1">Unpaid</span><span className="iconv1 iconv1-arrow-down mx-1"></span></button> */}
                                 </td>
                               </tr>
                             )
