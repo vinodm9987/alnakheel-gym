@@ -211,7 +211,7 @@ class PackageInstallment extends Component {
                     <div className="row">
                       <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-5">
                         <h4>Total Pending Amount</h4>
-                        <h2 className="font-weight-bold dirltrtar text-danger">{this.props.defaultCurrency} {totalPendingAmount}</h2>
+                        <h2 className="font-weight-bold dirltrtar text-danger">{this.props.defaultCurrency} {totalPendingAmount.toFixed(3)}</h2>
                       </div>
                       <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-7">
                         <div className="row d-block d-sm-flex justify-content-end pt-3">
@@ -273,7 +273,7 @@ class PackageInstallment extends Component {
                                 </td>
                                 <td><span className="mx-200-normalwrap">{packageName}</span></td>
                                 <td><span className="mx-200-normalwrap">{installmentName}</span></td>
-                                <td><h5 className="text-warning font-weight-bold m-0 dirltrtar">{this.props.defaultCurrency} {packageAmount}</h5></td>
+                                <td><h5 className="text-warning font-weight-bold m-0 dirltrtar">{this.props.defaultCurrency} {packageAmount.toFixed(3)}</h5></td>
                                 <td>{dateToDDMMYYYY(dueDate)}</td>
                                 <td className="text-center">
                                   <span className="d-inline-flex">
@@ -505,10 +505,22 @@ class PackageInstallment extends Component {
                         <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
                           <div className="form-group inlineFormGroup mb-3">
                             <label htmlFor="CheckDate" className="mx-sm-2 inlineFormLabel mb-1">{t('Cheque Date')}</label>
-                            <input type="text" autoComplete="off" className={this.state.chequeDateE ? "form-control mx-sm-2 inlineFormInputs FormInputsError w-100 p-0 d-flex align-items-center bg-white dirltr" : "form-control mx-sm-2 inlineFormInputs w-100 p-0 d-flex align-items-center bg-white dirltr"}
-                              id="CheckDate"
-                              value={this.state.chequeDate} onChange={(e) => this.setState({ chequeDate: e.target.value })}
-                            />
+                            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                              <DatePicker
+                                InputProps={{
+                                  disableUnderline: true,
+                                }}
+                                autoOk
+                                invalidDateMessage=''
+                                minDateMessage=''
+                                className={this.state.chequeDateE ? "form-control mx-sm-2 inlineFormInputs FormInputsError w-100 p-0 d-flex align-items-center bg-white dirltr" : "form-control mx-sm-2 inlineFormInputs w-100 p-0 d-flex align-items-center bg-white dirltr"}
+                                minDate={new Date()}
+                                format="dd/MM/yyyy"
+                                value={this.state.chequeDate}
+                                onChange={(e) => this.setState(validator(e, 'chequeDate', 'date', []))}
+                              />
+                            </MuiPickersUtilsProvider>
+                            <span className="icon-date dateBoxIcon"></span>
                             <div className="errorMessageWrapper">
                               <small className="text-danger mx-sm-2 errorMessage"></small>
                             </div>

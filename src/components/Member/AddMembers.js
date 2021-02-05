@@ -651,7 +651,7 @@ class AddMembers extends Component {
       if (!name) this.setState({ nameE: t('Enter member name') })
       // if (!email) this.setState({ emailE: t('Enter email') })
       if (!number) this.setState({ numberE: t('Enter number') })
-      if (!personalId) this.setState({ personalIdE: t('Enter personal id') })
+      if (!personalId) this.setState({ personalIdE: t('Enter personal id / passport no') })
       // if (!dob) this.setState({ dobE: t('Enter dob') })
       // if (!nationality) this.setState({ nationalityE: t('Enter nationality') })
       if (!gender) this.setState({ genderE: t('Enter gender') })
@@ -939,7 +939,7 @@ class AddMembers extends Component {
       if (!name) this.setState({ nameE: t('Enter member name') })
       // if (!email) this.setState({ emailE: t('Enter email') })
       if (!number) this.setState({ numberE: t('Enter number') })
-      if (!personalId) this.setState({ personalIdE: t('Enter personal id') })
+      if (!personalId) this.setState({ personalIdE: t('Enter personal id / passport no') })
       // if (!dob) this.setState({ dobE: t('Enter dob') })
       // if (!nationality) this.setState({ nationalityE: t('Enter nationality') })
       if (!gender) this.setState({ genderE: t('Enter gender') })
@@ -971,7 +971,7 @@ class AddMembers extends Component {
       if (!name) this.setState({ nameE: t('Enter member name') })
       // if (!email) this.setState({ emailE: t('Enter email') })
       if (!number) this.setState({ numberE: t('Enter number') })
-      if (!personalId) this.setState({ personalIdE: t('Enter personal id') })
+      if (!personalId) this.setState({ personalIdE: t('Enter personal id / passport no') })
       // if (!dob) this.setState({ dobE: t('Enter dob') })
       // if (!nationality) this.setState({ nationalityE: t('Enter nationality') })
       if (!gender) this.setState({ genderE: t('Enter gender') })
@@ -1102,7 +1102,7 @@ class AddMembers extends Component {
                     <div className="form-group position-relative">
                       <label htmlFor="personalId">{t('Personal ID')} / {t('Passport No')}</label>
                       <input type="text" autoComplete="off" className={this.state.personalIdE ? "form-control bg-white FormInputsError" : "form-control bg-white"}
-                        value={personalId} onChange={(e) => this.setState(validator(e, 'personalId', 'text', [t('Enter personal id')]))} id="personalId" />
+                        value={personalId} onChange={(e) => this.setState(validator(e, 'personalId', 'text', [t('Enter personal id / passport no')]))} id="personalId" />
                       <div className="errorMessageWrapper">
                         <small className="text-danger errorMessage">{this.state.personalIdE}</small>
                       </div>
@@ -1792,10 +1792,22 @@ class AddMembers extends Component {
                                 <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
                                   <div className="form-group inlineFormGroup mb-3">
                                     <label htmlFor="CheckDate" className="mx-sm-2 inlineFormLabel mb-1">{t('Cheque Date')}</label>
-                                    <input type="text" autoComplete="off" className={this.state.chequeDateE ? "form-control mx-sm-2 inlineFormInputs FormInputsError w-100 p-0 d-flex align-items-center bg-white dirltr" : "form-control mx-sm-2 inlineFormInputs w-100 p-0 d-flex align-items-center bg-white dirltr"}
-                                      id="CheckDate"
-                                      value={this.state.chequeDate} onChange={(e) => this.setState({ chequeDate: e.target.value })}
-                                    />
+                                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                                      <DatePicker
+                                        InputProps={{
+                                          disableUnderline: true,
+                                        }}
+                                        autoOk
+                                        invalidDateMessage=''
+                                        minDateMessage=''
+                                        className={this.state.chequeDateE ? "form-control mx-sm-2 inlineFormInputs FormInputsError w-100 p-0 d-flex align-items-center bg-white dirltr" : "form-control mx-sm-2 inlineFormInputs w-100 p-0 d-flex align-items-center bg-white dirltr"}
+                                        minDate={new Date()}
+                                        format="dd/MM/yyyy"
+                                        value={this.state.chequeDate}
+                                        onChange={(e) => this.setState(validator(e, 'chequeDate', 'date', []))}
+                                      />
+                                    </MuiPickersUtilsProvider>
+                                    <span className="icon-date dateBoxIcon"></span>
                                     <div className="errorMessageWrapper">
                                       <small className="text-danger mx-sm-2 errorMessage"></small>
                                     </div>

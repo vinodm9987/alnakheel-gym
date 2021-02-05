@@ -600,7 +600,8 @@ class AdminDashboard extends Component {
         }
       }
       this.props.pendingInstallments.forEach(installment => {
-        totalPendingAmount += installment.packageAmount ? installment.packageAmount : 0
+        if (installment.type === 'Trainer') totalPendingAmount += installment.trainerAmount ? installment.trainerAmount : 0
+        else totalPendingAmount += installment.packageAmount ? installment.packageAmount : 0
       })
       return (
         <div className="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-4 d-flex mt-3">
@@ -720,7 +721,7 @@ class AdminDashboard extends Component {
                                       </div>
                                     </div>
                                   </td>
-                                  <td><p className="text-warning SegoeBold m-0 dirltrtar">{this.props.defaultCurrency} {type === 'Trainer' ? trainerAmount : packageAmount}</p></td>
+                                  <td><p className="text-warning SegoeBold m-0 dirltrtar">{this.props.defaultCurrency} {type === 'Trainer' ? trainerAmount.toFixed(3) : packageAmount.toFixed(3)}</p></td>
                                   <td>{dateToDDMMYYYY(dueDate)}</td>
                                   <td>{type}</td>
                                   {/* <td className="text-center">
