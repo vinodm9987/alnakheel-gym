@@ -216,7 +216,7 @@ class PackageRenewal extends Component {
     }, () => {
       const data = {
         branch: this.state.branch,
-        trainerName: this.state.trainer
+        trainerName: this.state.trainer && this.state.trainer._id
       }
       this.state.trainer && this.state.branch && this.props.dispatch(getPeriodOfTrainer(data))
     })

@@ -10,7 +10,6 @@ import { connect } from 'react-redux';
 import Select from 'react-select';
 import { getAllMemberOfTrainer } from '../../actions/employee.action';
 import { bookTrainer } from '../../actions/member.action';
-import { getAllActivePackage } from '../../actions/package.action';
 import { verifyAdminPassword } from '../../actions/privilege.action';
 // import { disableSubmit } from '../../utils/disableButton'
 import { getAmountByRedeemCode } from '../../actions/reward.action';
@@ -88,7 +87,6 @@ class BookATrainer extends Component {
     }
     this.state = this.default
     this.props.dispatch(getAllMemberOfTrainer())
-    this.props.dispatch(getAllActivePackage())
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -167,13 +165,13 @@ class BookATrainer extends Component {
     var packageDaysLeft = 0
     var packageStartDate = new Date()
     if (index > 0) {
-      const { reactivationDate, extendDate, endDate } = this.state.packageDetails[index - 1]
+      const { reactivationDate, extendDate, endDate, startDate } = this.state.packageDetails[index - 1]
       periodDays = this.state.packageDetails[index - 1].packages.period.periodDays
       tax = this.props.activeVats ? this.props.activeVats.filter(vat => vat.defaultVat)[0] ? this.props.activeVats.filter(vat => vat.defaultVat)[0].taxPercent : 0 : 0
       oldPackageId = this.state.packageDetails[index - 1]._id
       packageDaysLeft = (extendDate && reactivationDate)
-        ? calculateDays(new Date(reactivationDate).setHours(0, 0, 0, 0) < new Date().setHours(0, 0, 0, 0) ? new Date() : reactivationDate, extendDate)
-        : calculateDays(new Date(), endDate)
+        ? calculateDays(new Date(reactivationDate).setHours(0, 0, 0, 0) < new Date().setHours(0, 0, 0, 0) ? new Date() : reactivationDate, extendDate) + 1
+        : calculateDays(new Date(startDate).setHours(0, 0, 0, 0) < new Date().setHours(0, 0, 0, 0) ? new Date() : startDate, endDate) + 1
       packageStartDate = this.state.packageDetails[index - 1].startDate
     }
     this.setState({
@@ -506,14 +504,7 @@ class BookATrainer extends Component {
     const { member, packages, trainer, period, cash, card, discount, tax, giftcard, discountMethod, count, text, digital,
       trainerReceipt, packageDetails, oldPackageId, startDate, endDate, wantInstallment, installments, packageAmount, packageStartDate } = this.state
 
-    let packageDetailsArr = []
-    let map = new Map();
-    packageDetails.forEach(packages => {
-      if (packages.packages && !map.has(packages.packages._id)) {
-        map.set(packages.packages._id, true);
-        packageDetailsArr.push(packages)
-      }
-    })
+    let packageDetailsArr = packageDetails || []
 
     const trainerPeriods = this.props.periodOfTrainer ? this.props.periodOfTrainer.filter(trainerFee =>
       trainerFee.period.periodDays <= this.state.packageDaysLeft
@@ -598,7 +589,7 @@ class BookATrainer extends Component {
                 <option value="" hidden>{t('Please Select')}</option>
                 {packageDetailsArr && packageDetailsArr.map((packageDetail, i) => {
                   return (
-                    <option key={i} value={packageDetail.packages._id}>{packageDetail.packages.packageName}</option>
+                    <option key={i} value={packageDetail.packages._id}>{packageDetail.packages.packageName} ({dateToDDMMYYYY(packageDetail.startDate)})</option>
                   )
                 })}
               </select>
