@@ -12,6 +12,7 @@ import { AuthToaster } from '../Toaster';
 import { withTranslation } from 'react-i18next';
 import { GET_ALERT_ERROR, VERIFY_CODE, CLEAR_ERRORS } from '../../actions/types';
 import algymlogo from '../../assets/img/al-main-logo.png'
+import gymnagologo from '../../assets/img/gymnago.png'
 import { changeLanguage } from '../../utils/changeLanguage'
 import { setLoading, removeLoading } from '../../actions/loader.action'
 import { checkReferralCodeValidity } from '../../actions/reward.action'
@@ -154,7 +155,7 @@ class Register extends Component {
         <div className="row mx-auto mx-lg-0 w-100 d-flex align-items-center loginRegisterWhiteBox register-only">
           {!this.state.verificationCode
             ?
-            <form className="col-12 loginRegisterFormBox">
+            <form className="col-12 mb-5 loginRegisterFormBox">
               <div className="row">
                 <div className="col-12" >
                   <div className="d-flex justify-content-end align-items-center w-100 register-lang">
@@ -505,7 +506,7 @@ class Register extends Component {
               </div>
             </form>
             :
-            <form className="w-100 px-3">
+            <form className="w-100 px-3 mb-5">
               <AuthToaster errorVerify={this.state.errorVerify} />
               <div className="col-12">
                 <h2 className="text-center my-4" style={{ color: 'rgb(123, 86, 213)' }}>{t('Authentication')}</h2>
@@ -526,6 +527,10 @@ class Register extends Component {
               <button type="button" className="btn btn-success btn-block mt-4 mb-3 font-weight-bold" onClick={() => this.handleVerification()}>{t('VERIFY')}</button>
             </form>
           }
+          <div className="powered-before-login">
+            <p className="my-1"><small>Powered by</small></p>
+                <a href="https://gymnago.com/" target="_blank" className="mx-2"><img src={gymnagologo} alt='' width="100" height="20" /></a>
+          </div>
         </div>
       </div>
     )

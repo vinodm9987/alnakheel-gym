@@ -177,8 +177,8 @@ class Packages extends Component {
       // salesBranches, accessBranches 
     } = this.state
     const styles = {
-      colors: { width: '36px', height: '14px', borderRadius: '2px', backgroundColor: `${this.state.color}`, },
-      swatch: { padding: '5px', background: '#fff', borderRadius: '1px', boxShadow: '0 0 0 1px rgba(0,0,0,.1)', display: 'inline-block', cursor: 'pointer', },
+      colors: { width: '59px', height: '34px', borderRadius: '2px', backgroundColor: `${this.state.color}`, },
+      swatch: { background: '#fff', borderRadius: '2px', boxShadow: '0 0 0 1px rgba(0,0,0,.1)', display: 'inline-block', cursor: 'pointer', },
       popover: { position: 'absolute', zIndex: '2', backgroundColor: '#fff', boxShadow: '0 0 0 1px rgba(0,0,0,.1)', padding: '10px' },
       cover: { position: 'fixed', top: '0px', right: '0px', bottom: '0px', left: '0px', }
     }
@@ -233,7 +233,7 @@ class Packages extends Component {
               <div className="form-control mx-sm-2 inlineFormInputs p-0 border-0 bg-white">
                 <div className="d-flex align-items-center h-100">
                   <div style={styles.swatch} onClick={this.handleClick}>
-                    <div style={styles.colors} className="d-flex align-items-center justify-content-end" ><span className="iconv1 iconv1-arrow-down font-weight-bold"></span></div>
+                    <div style={styles.colors} className="d-flex align-items-center justify-content-end" ><span className="iconv1 iconv1-arrow-down font-weight-bold mx-2"></span></div>
                   </div>
                   {this.state.displayColorPicker ?
                     <div style={styles.popover}>
@@ -466,8 +466,8 @@ class Packages extends Component {
                     </td>
                     <td>{dateToDDMMYYYY(packages.startDate)}</td>
                     <td>{dateToDDMMYYYY(packages.endDate)}</td>
-                    <td>{dateToHHMM(packages.fromTime)}</td>
-                    <td>{dateToHHMM(packages.toTime)}</td>
+                    <td className="dirltrtar">{dateToHHMM(packages.fromTime)}</td>
+                    <td className="dirltrtar">{dateToHHMM(packages.toTime)}</td>
                     <td className="text-center">
                       <span className="bg-success action-icon" onClick={() => this.handleEdit(packages)}><span className="iconv1 iconv1-edit"></span></span>
                       {/* <span className="bg-warning action-icon" onClick={() => this.handleDelete(packages)}><span className="iconv1 iconv1-delete"></span></span> */}
