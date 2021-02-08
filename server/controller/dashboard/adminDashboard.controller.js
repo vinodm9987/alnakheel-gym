@@ -48,8 +48,6 @@ exports.getPackageDistribution = async (req, res) => {
     try {
         let queryCond = {};
         if (req.body.branch && req.body.branch !== 'all') queryCond["branch"] = req.body.branch;
-        // queryCond["doneFingerAuth"] = true;
-        queryCond["isPackageSelected"] = true;
         let packagesResponse = await Package.find({}, 'packageName color').lean();
         let packages = []
         packagesResponse.forEach(ele => {
