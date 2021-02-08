@@ -74,7 +74,7 @@ class PackageRenewal extends Component {
       showPass: false,
       trainerId: '',
       startTrainerDate: new Date(),
-      wantInstallment: 'Yes',
+      wantInstallment: 'No',
       installments: [],
       installmentsCopy: [],
       showCheque: false,

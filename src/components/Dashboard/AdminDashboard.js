@@ -17,6 +17,7 @@ import 'jspdf-autotable'
 import DateFnsUtils from '@date-io/date-fns';
 import { DatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 import 'date-fns';
+import { Link } from 'react-router-dom';
 
 class AdminDashboard extends Component {
 
@@ -322,11 +323,11 @@ class AdminDashboard extends Component {
                       </div>
                     </div>
                     {/* tusar button */}
-                    {/* <Link to='/admin-attendance' className="linkHoverDecLess">
+                    <Link to='/admin-attendance' className="linkHoverDecLess">
                       <div className="col text-right full-width-576-down">
                         <button className="btn btn-warning br-50px text-white px-3 btn-sm text-nowrap mt-3 mt-sm-0">{t('View All Attendance')}</button>
                       </div>
-                    </Link> */}
+                    </Link>
                   </div>
                 </div>
               </div>
@@ -492,7 +493,7 @@ class AdminDashboard extends Component {
                   <div className="row">
                     <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-4 pb-2">
                       <h6>Total Amount</h6>
-                      <h4 className="font-weight-bold dirltrtar text-success">{this.props.defaultCurrency} {totalSells.toFixed(2)}</h4>
+                      <h4 className="font-weight-bold dirltrtar text-success">{this.props.defaultCurrency} {totalSells.toFixed(3)}</h4>
                     </div>
                     <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-4 pb-2">
                       <h6>Payment Type</h6>
@@ -531,11 +532,11 @@ class AdminDashboard extends Component {
                     </div>
                     <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-4 pb-2">
                       <h6>Packages Amount</h6>
-                      <h4 className="font-weight-bold dirltrtar text-orange">{this.props.defaultCurrency} {totalPackageSells ? totalPackageSells.toFixed(2) : 0}</h4>
+                      <h4 className="font-weight-bold dirltrtar text-orange">{this.props.defaultCurrency} {totalPackageSells ? totalPackageSells.toFixed(3) : 0}</h4>
                     </div>
                     <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-4 pb-2">
                       <h6>POS Amount</h6>
-                      <h4 className="font-weight-bold dirltrtar text-danger">{this.props.defaultCurrency} {totalStockSells ? totalStockSells.toFixed(2) : 0}</h4>
+                      <h4 className="font-weight-bold dirltrtar text-danger">{this.props.defaultCurrency} {totalStockSells ? totalStockSells.toFixed(3) : 0}</h4>
                     </div>
                     {/* <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-4 pb-2">
                                 <h6>Classes Amount</h6>
@@ -552,7 +553,7 @@ class AdminDashboard extends Component {
                             <div key={i} className="d-flex align-items-center mr-3">
                               <div className="dbd-blueblock"></div>
                               <small className="dbd-blueblock-txt mx-1">{branch.branchName}</small>
-                              <div className="dbd-blueblock-amt text-success font-weight-bold">{this.props.defaultCurrency} {branch.amount ? branch.amount.toFixed(2) : 0}</div>
+                              <div className="dbd-blueblock-amt text-success font-weight-bold">{this.props.defaultCurrency} {branch.amount ? branch.amount.toFixed(3) : 0}</div>
                             </div>
                           )
                         })}
@@ -710,27 +711,31 @@ class AdminDashboard extends Component {
                           <tbody>
                             {this.props.pendingInstallments.map((pendingInstallment, i) => {
                               const { credentialId: { avatar, userName, email }, packageAmount, trainerAmount, dueDate, type } = pendingInstallment
-                              return (
-                                <tr key={i}>
-                                  <td>
-                                    <div className="d-flex">
-                                      <img alt='' src={`/${avatar.path}`} className="mx-1 rounded-circle w-40px h-40px" />
-                                      <div className="mx-1">
-                                        <p className="m-0 font-weight-bold fz-14px" >{userName}</p>
-                                        <span className="text-body font-weight-light fz-14px">{email}</span>
+                              if (i < 3) {
+                                return (
+                                  <tr key={i}>
+                                    <td>
+                                      <div className="d-flex">
+                                        <img alt='' src={`/${avatar.path}`} className="mx-1 rounded-circle w-40px h-40px" />
+                                        <div className="mx-1">
+                                          <p className="m-0 font-weight-bold fz-14px" >{userName}</p>
+                                          <span className="text-body font-weight-light fz-14px">{email}</span>
+                                        </div>
                                       </div>
-                                    </div>
-                                  </td>
-                                  <td><p className="text-warning SegoeBold m-0 dirltrtar">{this.props.defaultCurrency} {type === 'Trainer' ? trainerAmount.toFixed(3) : packageAmount.toFixed(3)}</p></td>
-                                  <td>{dateToDDMMYYYY(dueDate)}</td>
-                                  <td>{type}</td>
-                                  {/* <td className="text-center">
+                                    </td>
+                                    <td><p className="text-warning SegoeBold m-0 dirltrtar">{this.props.defaultCurrency} {type === 'Trainer' ? trainerAmount.toFixed(3) : packageAmount.toFixed(3)}</p></td>
+                                    <td>{dateToDDMMYYYY(dueDate)}</td>
+                                    <td>{type}</td>
+                                    {/* <td className="text-center">
                               <a href="/#" className="dboard-btn-icon-primary">
                                 <span className="iconv1 iconv1-right-small-arrow"></span>
                               </a>
                             </td> */}
-                                </tr>
-                              )
+                                  </tr>
+                                )
+                              } else {
+                                return null
+                              }
                             })}
                           </tbody>
                         </table>
@@ -746,17 +751,17 @@ class AdminDashboard extends Component {
                   {/* tushar if no-data */}
                 </div>
               </div>
-              {/* <div className="col-12 px-0">
-                          <div className="row pt-3 pb-2">
-                            <div className="col-12 px-0 d-flex flex-wrap justify-content-end">
-                              <Link to='/pending-installments' className="linkHoverDecLess">
-                                <div className="col text-right full-width-576-down">
-                                  <button className="btn btn-warning br-50px text-white px-3 btn-sm text-nowrap mt-3 mt-sm-0">View All</button>
-                                </div>
-                              </Link>
-                            </div>
-                          </div>
-                        </div> */}
+              <div className="col-12 px-0">
+                <div className="row pt-3 pb-2">
+                  <div className="col-12 px-0 d-flex flex-wrap justify-content-end">
+                    <Link to='/pending-installments' className="linkHoverDecLess">
+                      <div className="col text-right full-width-576-down">
+                        <button className="btn btn-warning br-50px text-white px-3 btn-sm text-nowrap mt-3 mt-sm-0">View All</button>
+                      </div>
+                    </Link>
+                  </div>
+                </div>
+              </div>
             </div>
 
           </div>
@@ -865,7 +870,8 @@ function mapStateToProps({
     eventsByDate: eventsByDate && eventsByDate.sort((a, b) => new Date(a.startDate) - new Date(b.startDate)),
     activeAnnouncements: activeAnnouncements && activeAnnouncements.sort((a, b) => new Date(a.startDate) - new Date(b.startDate)),
     memberDashboard, mostSellingStock,
-    defaultCurrency, packageDistribution, branchSales, systemYear, dashboardAttendance, revenueDetails, dashboardTotalSales, pendingInstallments
+    defaultCurrency, packageDistribution, branchSales, systemYear, dashboardAttendance, revenueDetails, dashboardTotalSales,
+    pendingInstallments: pendingInstallments && pendingInstallments.sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate))
   }
 }
 

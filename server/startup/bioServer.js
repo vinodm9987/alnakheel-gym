@@ -22,14 +22,14 @@ const biostarEvent = async (bsSessionId) => {
 async function addAttendanceLog(memberId, fingerScanStatus) {
     let header = { 'Content-Type': 'application/json;charset=UTF-8', "Access-Control-Allow-Origin": "*" }
     let body = { memberId, fingerScanStatus }
-    const { datas } = await axios.post(`https://skoolgo.pixelmindit.com:5000/api/attendance/addMemberAttendance`, body, { header });
+    const { datas } = await axios.post(`https://skoolgo.pixelmindit.com:5700/api/attendance/addMemberAttendance`, body, { header });
     return datas
 }
 
 async function getMemberLog(memberId, fingerScanStatus) {
     let header = { 'Content-Type': 'application/json;charset=UTF-8', "Access-Control-Allow-Origin": "*" }
     let body = { memberId, fingerScanStatus }
-    const { datas } = await axios.post(`https://skoolgo.pixelmindit.com:5000/api/member/getMemberByMemberId`, body, { header });
+    const { datas } = await axios.post(`https://skoolgo.pixelmindit.com:5700/api/member/getMemberByMemberId`, body, { header });
     return datas
 }
 
