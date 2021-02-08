@@ -353,7 +353,7 @@ class BookAClass extends Component {
   handleSubmit(total) {
     const { t } = this.props
     const { branch, classes, member, amount, cash, card, cardE, discount, tax, giftcard, cardNumber, memberTransactionId, cashE, digital, digitalE, cheque } = this.state
-    if (branch && classes && member && amount && (parseInt(total) === parseInt((+cash || 0) + (+card || 0) + (+digital || 0) + (+cheque || 0))) && !cardE && !cashE && !digitalE) {
+    if (branch && classes && member && (parseInt(total) === parseInt((+cash || 0) + (+card || 0) + (+digital || 0) + (+cheque || 0))) && !cardE && !cashE && !digitalE) {
       const bookClassInfo = {
         member: member._id,
         classId: classes,
@@ -559,14 +559,14 @@ class BookAClass extends Component {
                       <h5 className="m-0 text-right"><small className="d-flex justify-content-end">{parseFloat(discount).toFixed(3)}</small></h5>
                     </td>
                   </tr>
-                  <tr>
+                  {/* <tr>
                     <td>
                       <h5 className="m-0 text-left">{t('Gift Card')} {this.state.text ? `(${this.state.text})` : ''}</h5>
                     </td>
                     <td>
                       <h5 className="m-0 text-right"><small className="d-flex justify-content-end">{giftcard.toFixed(3)}</small></h5>
                     </td>
-                  </tr>
+                  </tr> */}
                   <tr>
                     <td>
                       <h5 className="m-0 text-left">{t('VAT')} {this.state.taxPercent ? `(${this.state.taxPercent} %)` : ''}</h5>
