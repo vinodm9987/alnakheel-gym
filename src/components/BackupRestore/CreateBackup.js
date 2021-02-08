@@ -65,7 +65,7 @@ class CreateBackup extends Component {
     const { backupType, backupName, backupDestination } = this.state
     return (
       <div className={this.state.url === '/backup' ? "tab-pane fade show active" : "tab-pane fade"} id="menu1" role="tabpanel">
-        <div className="d-flex w-100 my-3">
+        {/* <div className="d-flex w-100 my-3">
           <div className="custom-control custom-checkbox roundedGreenRadioCheck mx-2">
             <input type="radio" className="custom-control-input" id="Manual" name="ManualOrAutomatic" checked={backupType === 'Manual'}
               onChange={() => this.setState({ ...this.default, ...{ backupType: 'Manual' } })}
@@ -78,7 +78,7 @@ class CreateBackup extends Component {
             />
             <label className="custom-control-label" htmlFor="Automatic">Automatic</label>
           </div>
-        </div>
+        </div> */}
         {backupType === 'Manual' &&
           <div className="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
             <div className="form-group position-relative">
