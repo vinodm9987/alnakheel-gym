@@ -58,7 +58,7 @@ exports.getPackageDistribution = async (req, res) => {
         activeMember.forEach(member => {
             member.packageDetails.forEach(doc => {
                 let packageIndex = packages.findIndex(ele => ele._id.toString() === doc.packages.toString());
-                if (doc.packages.toString() === packages[packageIndex]._id.toString() && packageIndex !== -1) {
+                if ((doc.paidStatus === 'Paid' || doc.paidStatus === 'Installment') && doc.packages.toString() === packages[packageIndex]._id.toString() && packageIndex !== -1) {
                     packages[packageIndex].count++;
                 }
             });
