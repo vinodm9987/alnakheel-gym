@@ -5,7 +5,7 @@ const { logger: { logger } } = require('../../config');
 const { getUpdatedValue, getFormattedObject } = require('../utils/auditLogDiff');
 
 
-exports.auditLogger =  async (req, status) => {
+exports.auditLogger = async (req, status) => {
   try {
     const { newValues, oldValues } = getUpdatedValue((req.body && req.body.data) ? JSON.parse(req.body.data) : req.body, req.responseData)
     if (req.headers.userid && req.originalUrl !== '/api/credential/login') {
@@ -13,7 +13,7 @@ exports.auditLogger =  async (req, status) => {
         ip: req.ip.substr(0, 7) == "::ffff:" ? req.ip.substr(7) : req.ip,
         ipLocation: JSON.stringify(geoip.lookup(req.ip)),
         method: (oldValues && Object.keys(oldValues).length !== 0) ? "PUT" : req.method,
-        event: req.body && req.body.fingerScanStatus ? '/a/b/fingerScan' : req.originalUrl,
+        event: req.body && req.body.fingerScanStatus ? '/a/b/FaceScan' : req.originalUrl,
         host: req.hostname,
         requestData: newValues,
         responseData: oldValues,
