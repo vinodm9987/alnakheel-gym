@@ -9,8 +9,8 @@ import { withTranslation } from 'react-i18next'
 import { changeLanguage } from '../../utils/changeLanguage'
 import { setLoading, removeLoading } from '../../actions/loader.action'
 import algymlogo from '../../assets/img/al-main-logo.png'
+import gymnagologo from '../../assets/img/gymnago.png'
 // import curvebg from '../../assets/img/login-curve2.png'
-
 class Login extends Component {
 
   constructor(props) {
@@ -137,7 +137,7 @@ class Login extends Component {
               <div className="col-12 d-flex justify-content-end">
                 <small className="mb-4 font-weight-bold"><Link to="/forgot-password" className="text-dark cursorPointer">{t('FORGOT PASSWORD?')}</Link></small>
               </div>
-              <div className="col-12">
+              <div className="col-12 mb-5">
                 <button type="submit" className="btn btn-success btn-block mt-1 font-weight-bold">{t('LOGIN')}</button>
               </div>
               {/* <div className="col-12 d-flex flex-wrap justify-content-between py-3">
@@ -146,6 +146,10 @@ class Login extends Component {
               </div> */}
             </div>
           </form>
+          <div className="powered-before-login">
+            <p className="my-1"><small>Powered by</small></p>
+                <a href="https://gymnago.com/" target="_blank" className="mx-2"><img src={gymnagologo} alt='' width="100" height="20" /></a>
+          </div>
         </div>
       </div>
 

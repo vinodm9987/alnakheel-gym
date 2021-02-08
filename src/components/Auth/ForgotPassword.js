@@ -6,6 +6,7 @@ import { changeLanguage } from '../../utils/changeLanguage'
 import { connect } from 'react-redux'
 import { validator } from '../../utils/apis/helpers'
 import { forgotPassword } from '../../actions/auth.action'
+import gymnagologo from '../../assets/img/gymnago.png'
 
 class ForgotPassword extends Component {
 
@@ -73,11 +74,15 @@ class ForgotPassword extends Component {
                   <small className="d-flex justify-content-end text-danger">{this.state.emailE}</small>
                 </div>
               </div>
-              <div className="col-12">
+              <div className="col-12 mb-5">
                 <button type="submit" className="btn btn-success btn-block mt-4 font-weight-bold">{t('SEND')}</button>
               </div>
             </div>
           </form>
+          <div className="powered-before-login">
+            <p className="my-1"><small>Powered by</small></p>
+                <a href="https://gymnago.com/" target="_blank" className="mx-2"><img src={gymnagologo} alt='' width="100" height="20" /></a>
+          </div>
         </div>
       </div>
     )
