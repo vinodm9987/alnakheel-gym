@@ -511,7 +511,7 @@ class BookAppointment extends Component {
                 <div className="col-12 col-sm-6 col-md-6 col-lg-6">
                   {/* only if RadioButton="visitor" */}
                   <div className="form-group position-relative pt-3">
-                    <h4 className="SegoeSemiBold mb-2">{t('Visitor Name')}</h4>
+                    <label>{t('Visitor Name')}</label>
                     <input type="text" autoComplete="off" className={this.state.visitorNameE ? "form-control FormInputsError" : "form-control"}
                       value={visitorName} onChange={(e) => this.setState(validator(e, 'visitorName', 'text', [t('Enter visitor name')]))}
                     />
@@ -526,13 +526,15 @@ class BookAppointment extends Component {
                 <div className="col-12 col-sm-6 col-md-6 col-lg-6">
                   {/* only if RadioButton="visitor" */}
                   <div className="form-group position-relative pt-3">
-                    <h4 className="SegoeSemiBold mb-2">{t('Mobile Number')}</h4>
-                    <PhoneInput
-                      defaultCountry="BH"
-                      flagUrl="https://t009s.github.io/Flags/{xx}.svg"
-                      value={number}
-                      onChange={(e) => this.setState(validator(e, 'number', 'mobile', [t('Enter valid mobile number')]))}
-                    />
+                    <label>{t('Mobile Number')}</label>
+                    <div className="form-control bg-gray">
+                      <PhoneInput
+                        defaultCountry="BH"
+                        flagUrl="https://t009s.github.io/Flags/{xx}.svg"
+                        value={number}
+                        onChange={(e) => this.setState(validator(e, 'number', 'mobile', [t('Enter valid mobile number')]))}
+                      />
+                    </div>
                     <div className="errorMessageWrapper">
                       <small className="text-danger errorMessage">{this.state.numberE}</small>
                     </div>
@@ -544,7 +546,7 @@ class BookAppointment extends Component {
                 <div className="col-12 col-sm-6 col-md-6 col-lg-6">
                   {/* only if RadioButton="visitor" */}
                   <div className="form-group position-relative pt-3">
-                    <h4 className="SegoeSemiBold mb-2">{t('Purpose of visit')}</h4>
+                    <label>{t('Purpose of visit')}</label>
                     <input type="text" autoComplete="off" className={this.state.purposeOfVisitE ? "form-control FormInputsError" : "form-control"}
                       value={purposeOfVisit} onChange={(e) => this.setState(validator(e, 'purposeOfVisit', 'text', [t('Enter purpose of visit')]))}
                     />
@@ -569,7 +571,7 @@ class BookAppointment extends Component {
                       }}
                       autoOk
                       minDate={new Date()}
-                      className={this.state.dateE ? "form-control FormInputsError" : "form-control"}
+                      className={this.state.dateE ? "form-control FormInputsError border pl-2 pt-1" : "form-control border pl-2 pt-1"}
                       invalidDateMessage=''
                       minDateMessage=''
                       format="dd/MM/yyyy"
@@ -585,7 +587,7 @@ class BookAppointment extends Component {
                 <div className="col-12 col-sm-6 col-md-6 col-lg-3">
                   <div className="form-group position-relative">
                     <label>{t('Schedule')}</label>
-                    <select className={this.state.scheduleE ? "form-control FormInputsError" : "form-control"}
+                    <select className={this.state.scheduleE ? "form-control FormInputsError border pl-2 pt-1" : "form-control border pl-2 pt-1"}
                       value={schedule} onChange={(e) => this.setSchedule(e)} id="schedules">
                       <option value="" hidden>{t('Please Select')}</option>
                       {this.props.notExpiredShiftByBranch && this.props.notExpiredShiftByBranch.map((shift, i) => {

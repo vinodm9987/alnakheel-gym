@@ -65,10 +65,10 @@ class Notifications extends Component {
                               </div>
                               <div className="w-100 flex-grow-1 flex-shrink-1">
                                 <h6 className="px-1 font-weight-bold text-body m-0 pb-1"><span>{title}</span></h6>
-                                <h6 className="text-muted m-0"><span className="px-1">{timeDiff} {timeDiff === 'now' ? '' : 'ago'}</span></h6>
+                                <h6 className="text-muted m-0 dirltrtar"><span className="px-1">{timeDiff} {timeDiff === 'now' ? '' : 'ago'}</span></h6>
                               </div>
                               <div className="d-flex align-items-center justify-content-center w-200px px-3 flex-grow-0 flex-shrink-0">
-                                <h6 className="text-danger my-2 font-weight-bold">{dateToDDMMYYYY(date)}, {dateToHHMM(time)}</h6>
+                                <h6 className="text-danger my-2 font-weight-bold dirltrtar">{dateToDDMMYYYY(date)}, {dateToHHMM(time)}</h6>
                               </div>
                             </Link>
                           </div>
@@ -105,10 +105,10 @@ class Notifications extends Component {
                               </div>
                               <div className="w-100 flex-grow-1 flex-shrink-1">
                                 <h6 className="px-1 font-weight-bold text-body m-0 pb-1"><span>{title}</span></h6>
-                                <h6 className="text-muted m-0"><span className="px-1">{timeDiff} {timeDiff === 'now' ? '' : 'ago'}</span></h6>
+                                <h6 className="text-muted m-0 dirltrtar"><span className="px-1">{timeDiff} {timeDiff === 'now' ? '' : 'ago'}</span></h6>
                               </div>
                               <div className="d-flex align-items-center justify-content-center w-200px px-3 flex-grow-0 flex-shrink-0">
-                                <h6 className="text-danger my-2 font-weight-bold">{dateToDDMMYYYY(date)}, {dateToHHMM(time)}</h6>
+                                <h6 className="text-danger my-2 font-weight-bold dirltrtar">{dateToDDMMYYYY(date)}, {dateToHHMM(time)}</h6>
                               </div>
                             </Link>
                           </div>
@@ -145,10 +145,10 @@ class Notifications extends Component {
                                 </div>
                                 <div className="w-100 flex-grow-1 flex-shrink-1">
                                   <h6 className="px-1 font-weight-bold text-body m-0 pb-1"><span>{title}</span></h6>
-                                  <h6 className="text-muted m-0"><span className="px-1">{timeDiff} {timeDiff === 'now' ? '' : 'ago'}</span></h6>
+                                  <h6 className="text-muted m-0 dirltrtar"><span className="px-1">{timeDiff} {timeDiff === 'now' ? '' : 'ago'}</span></h6>
                                 </div>
                                 <div className="d-flex align-items-center justify-content-center w-200px px-3 flex-grow-0 flex-shrink-0">
-                                  <h6 className="text-danger my-2 font-weight-bold">{dateToDDMMYYYY(date)}, {dateToHHMM(time)}</h6>
+                                  <h6 className="text-danger my-2 font-weight-bold dirltrtar">{dateToDDMMYYYY(date)}, {dateToHHMM(time)}</h6>
                                 </div>
                               </Link>
                             </div>
