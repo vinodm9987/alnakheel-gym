@@ -28,7 +28,7 @@ class BackupHistory extends Component {
     const { backupType } = this.state
     return (
       <div className={this.state.url === '/backup/backup-history' ? "tab-pane fade show active" : "tab-pane fade"} id="menu2" role="tabpanel">
-        <div className="d-flex w-100 my-3">
+        {/* <div className="d-flex w-100 my-3">
           <div className="custom-control custom-checkbox roundedGreenRadioCheck mx-2">
             <input type="radio" className="custom-control-input" id="ManualHistory" name="ManualOrAutomaticHistory"
               checked={backupType === "Manual"} onChange={() => this.handleFilter('Manual')}
@@ -41,7 +41,7 @@ class BackupHistory extends Component {
             />
             <label className="custom-control-label" htmlFor="AutomaticHistory">Automatic</label>
           </div>
-        </div>
+        </div> */}
         {/* --------------Manual backup table history------------ */}
         {backupType === "Manual" &&
           <div className="table-responsive">
@@ -51,7 +51,7 @@ class BackupHistory extends Component {
                   <th>Backup Name</th>
                   <th>Date & Time</th>
                   <th>Destination</th>
-                  <th>Status</th>
+                  <th>{t('Status')}</th>
                 </tr>
               </thead>
               <tbody>

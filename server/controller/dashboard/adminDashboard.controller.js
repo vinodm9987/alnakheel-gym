@@ -48,8 +48,6 @@ exports.getPackageDistribution = async (req, res) => {
     try {
         let queryCond = {};
         if (req.body.branch && req.body.branch !== 'all') queryCond["branch"] = req.body.branch;
-        // queryCond["doneFingerAuth"] = true;
-        queryCond["isPackageSelected"] = true;
         let packagesResponse = await Package.find({}, 'packageName color').lean();
         let packages = []
         packagesResponse.forEach(ele => {
@@ -60,7 +58,7 @@ exports.getPackageDistribution = async (req, res) => {
         activeMember.forEach(member => {
             member.packageDetails.forEach(doc => {
                 let packageIndex = packages.findIndex(ele => ele._id.toString() === doc.packages.toString());
-                if (doc.paidStatus === 'Paid' && doc.packages.toString() === packages[packageIndex]._id.toString() && packageIndex !== -1) {
+                if ((doc.paidStatus === 'Paid' || doc.paidStatus === 'Installment') && doc.packages.toString() === packages[packageIndex]._id.toString() && packageIndex !== -1) {
                     packages[packageIndex].count++;
                 }
             });

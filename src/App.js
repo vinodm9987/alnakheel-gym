@@ -116,8 +116,8 @@ import MemberInstallment from './components/Installments/MemberInstallment'
 import MemberInstallmentDetails from './components/Installments/MemberInstallmentDetails'
 import AuditLog from './components/AuditLog/AuditLog';
 import BookATrainer from './components/Trainer/BookATrainer';
-import MoneyCollection from './components/MoneyCollection/MoneyCollection';
-import MoneyCollectionDetails from './components/MoneyCollection/MoneyCollectionDetails';
+// import MoneyCollection from './components/MoneyCollection/MoneyCollection';
+// import MoneyCollectionDetails from './components/MoneyCollection/MoneyCollectionDetails';
 import PendingInstallments from './components/Installments/PendingInstallments';
 
 
@@ -370,8 +370,8 @@ class App extends Component {
           <Route path='/add-currency' component={Currency} />
           <Route path='/add-vat' component={Vats} />
 
-          <Route path='/money-collection' component={MoneyCollection} />
-          <Route path='/money-collection-details/:id' component={MoneyCollectionDetails} />
+          {/* <Route path='/money-collection' component={MoneyCollection} />
+          <Route path='/money-collection-details/:id' component={MoneyCollectionDetails} /> */}
 
           <Route path='/payroll' component={payroll} />
           <Route path='/earningsdeductions' component={earningsdeductions} />

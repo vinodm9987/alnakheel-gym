@@ -24,7 +24,7 @@ exports.addMemberAttendance = async (req, res) => {
     let memberInfo = await Member.findOne({ memberId: +req.body.memberId })
       .populate('credentialId')
       .populate({ path: "packageDetails.packages", populate: { path: "period" } }).lean()
-    memberInfo["fingerScanStatus"] = req.body.fingerScanStatus
+    memberInfo["faceScanStatus"] = req.body.fingerScanStatus
     req.headers.userid = memberInfo.credentialId._id
     auditLogger(req, 'Success')
     memberEntranceStatus(memberInfo)
