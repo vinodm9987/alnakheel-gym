@@ -695,7 +695,7 @@ class AddMembers extends Component {
     }, () => {
       const data = {
         branch: this.state.branch,
-        trainerName: this.state.trainer
+        trainerName: this.state.trainer && this.state.trainer._id
       }
       this.state.trainer && this.state.branch && this.props.dispatch(getPeriodOfTrainer(data))
     })
@@ -1034,9 +1034,9 @@ class AddMembers extends Component {
     // };
     const { name, email, number, personalId, dob, nationality, gender, packageName, height, weight,
       // wantTrainer, levelQuestion, exercisingQuestion, goalQuestion, period,
-      memberId, branch, discountMethod, count, trainer,
+      memberId, branch, discountMethod, count,
       cash, card, packageAmount, emergencyNumber, relationship, referralCode, notes, addPackage, discount, tax, digital, startDate, endDate,
-      wantInstallment, installments, packageReceipt, trainerPeriodDays, branches, staffName } = this.state
+      wantInstallment, installments, packageReceipt, branches, staffName } = this.state
 
     let filteredBranches = []
     if (staffName) {
@@ -2012,27 +2012,6 @@ class AddMembers extends Component {
                             <td>{dateToDDMMYYYY(startDate)}</td>
                             <td>{dateToDDMMYYYY(endDate)}</td>
                           </tr>
-                        </tbody>
-                      </table>
-                      <table className="table">
-                        <thead>
-                          {trainer &&
-                            <tr>
-                              <th>Trainer Name</th>
-                              <th>From Date</th>
-                              <th>To Date</th>
-                            </tr>
-                          }
-                        </thead>
-                        <tbody>
-                          {trainer &&
-                            <tr>
-                              <td>{this.props.uniqueTrainerByBranches && this.props.uniqueTrainerByBranches.filter(t => t._id === trainer._id)[0] &&
-                                this.props.uniqueTrainerByBranches.filter(t => t._id === trainer._id)[0].credentialId.userName}</td>
-                              <td>{dateToDDMMYYYY(startDate)}</td>
-                              <td>{dateToDDMMYYYY(new Date(new Date().setDate(new Date().getDate() + trainerPeriodDays - 1)))}</td>
-                            </tr>
-                          }
                           <tr>
                             <td colSpan="4">
                               <div className="text-right my-1">Amount Total :</div>
