@@ -2014,73 +2014,75 @@ class AddMembers extends Component {
                           </tr>
                         </tbody>
                       </table>
-                      {trainer &&
-                        <table className="table">
-                          <thead>
+                      <table className="table">
+                        <thead>
+                          {trainer &&
                             <tr>
                               <th>Trainer Name</th>
                               <th>From Date</th>
                               <th>To Date</th>
                             </tr>
-                          </thead>
-                          <tbody>
+                          }
+                        </thead>
+                        <tbody>
+                          {trainer &&
                             <tr>
                               <td>{this.props.uniqueTrainerByBranches && this.props.uniqueTrainerByBranches.filter(t => t._id === trainer._id)[0] &&
                                 this.props.uniqueTrainerByBranches.filter(t => t._id === trainer._id)[0].credentialId.userName}</td>
                               <td>{dateToDDMMYYYY(startDate)}</td>
                               <td>{dateToDDMMYYYY(new Date(new Date().setDate(new Date().getDate() + trainerPeriodDays - 1)))}</td>
                             </tr>
-                            <tr>
-                              <td colSpan="4">
-                                <div className="text-right my-1">Amount Total :</div>
-                                {parseFloat(discount) ?
-                                  <div className="text-right my-1">Discount :</div>
-                                  : <div></div>}
-                                {parseFloat(totalVat) ?
-                                  <div className="text-right my-1">VAT{this.state.tax ? `(${this.state.tax} %)` : ''}:</div>
-                                  : <div></div>}
-                                {parseFloat(digital) ?
-                                  <div className="text-right my-1">Digital :</div>
-                                  : <div></div>}
-                                {parseFloat(cash) ?
-                                  <div className="text-right my-1">Cash :</div>
-                                  : <div></div>}
-                                {parseFloat(card) ?
-                                  <div className="text-right my-1">Card :</div>
-                                  : <div></div>}
-                                <div className="text-right my-1">Grand Total :</div>
-                                <div className="text-right my-1">Paid Amount :</div>
-                                {this.state.cardNumber ?
-                                  <div className="text-right my-1">Card last four digit :</div>
-                                  : <div></div>}
-                              </td>
-                              <td className="">
-                                <div className="my-1"><span className="">{this.props.defaultCurrency}</span> <span className="px-1">{parseFloat(subTotal).toFixed(3)}</span></div>
-                                {parseFloat(discount) ?
-                                  <div className="my-1"><span className="invisible">{this.props.defaultCurrency}</span> <span className="px-1">{parseFloat(discount).toFixed(3)}</span></div>
-                                  : <div></div>}
-                                {parseFloat(totalVat) ?
-                                  <div className="my-1"><span className="invisible">{this.props.defaultCurrency}</span> <span className="px-1">{parseFloat(totalVat).toFixed(3)}</span></div>
-                                  : <div></div>}
-                                {parseFloat(digital) ?
-                                  <div className="my-1"><span className="invisible">{this.props.defaultCurrency}</span> <span className="px-1">{parseFloat(digital).toFixed(3)}</span></div>
-                                  : <div></div>}
-                                {parseFloat(cash) ?
-                                  <div className="my-1"><span className="invisible">{this.props.defaultCurrency}</span> <span className="px-1">{parseFloat(cash).toFixed(3)}</span></div>
-                                  : <div></div>}
-                                {parseFloat(card) ?
-                                  <div className="my-1"><span className="invisible">{this.props.defaultCurrency}</span> <span className="px-1">{parseFloat(card).toFixed(3)}</span></div>
-                                  : <div></div>}
-                                <div className="my-1"><span className="">{this.props.defaultCurrency}</span> <span className="px-1">{parseFloat(totalAmount).toFixed(3)}</span></div>
-                                <div className="my-1"><span className="">{this.props.defaultCurrency}</span> <span className="px-1">{parseFloat(totalAmount).toFixed(3)}</span></div>
-                                {this.state.cardNumber ?
-                                  <div className="my-1"><span className="invisible">{this.props.defaultCurrency}</span> <span className="px-1">{this.state.cardNumber}</span></div>
-                                  : <div></div>}
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      }
+                          }
+                          <tr>
+                            <td colSpan="4">
+                              <div className="text-right my-1">Amount Total :</div>
+                              {parseFloat(discount) ?
+                                <div className="text-right my-1">Discount :</div>
+                                : <div></div>}
+                              {parseFloat(totalVat) ?
+                                <div className="text-right my-1">VAT{this.state.tax ? `(${this.state.tax} %)` : ''}:</div>
+                                : <div></div>}
+                              {parseFloat(digital) ?
+                                <div className="text-right my-1">Digital :</div>
+                                : <div></div>}
+                              {parseFloat(cash) ?
+                                <div className="text-right my-1">Cash :</div>
+                                : <div></div>}
+                              {parseFloat(card) ?
+                                <div className="text-right my-1">Card :</div>
+                                : <div></div>}
+                              <div className="text-right my-1">Grand Total :</div>
+                              <div className="text-right my-1">Paid Amount :</div>
+                              {this.state.cardNumber ?
+                                <div className="text-right my-1">Card last four digit :</div>
+                                : <div></div>}
+                            </td>
+                            <td className="">
+                              <div className="my-1"><span className="">{this.props.defaultCurrency}</span> <span className="px-1">{parseFloat(subTotal).toFixed(3)}</span></div>
+                              {parseFloat(discount) ?
+                                <div className="my-1"><span className="invisible">{this.props.defaultCurrency}</span> <span className="px-1">{parseFloat(discount).toFixed(3)}</span></div>
+                                : <div></div>}
+                              {parseFloat(totalVat) ?
+                                <div className="my-1"><span className="invisible">{this.props.defaultCurrency}</span> <span className="px-1">{parseFloat(totalVat).toFixed(3)}</span></div>
+                                : <div></div>}
+                              {parseFloat(digital) ?
+                                <div className="my-1"><span className="invisible">{this.props.defaultCurrency}</span> <span className="px-1">{parseFloat(digital).toFixed(3)}</span></div>
+                                : <div></div>}
+                              {parseFloat(cash) ?
+                                <div className="my-1"><span className="invisible">{this.props.defaultCurrency}</span> <span className="px-1">{parseFloat(cash).toFixed(3)}</span></div>
+                                : <div></div>}
+                              {parseFloat(card) ?
+                                <div className="my-1"><span className="invisible">{this.props.defaultCurrency}</span> <span className="px-1">{parseFloat(card).toFixed(3)}</span></div>
+                                : <div></div>}
+                              <div className="my-1"><span className="">{this.props.defaultCurrency}</span> <span className="px-1">{parseFloat(totalAmount).toFixed(3)}</span></div>
+                              <div className="my-1"><span className="">{this.props.defaultCurrency}</span> <span className="px-1">{parseFloat(totalAmount).toFixed(3)}</span></div>
+                              {this.state.cardNumber ?
+                                <div className="my-1"><span className="invisible">{this.props.defaultCurrency}</span> <span className="px-1">{this.state.cardNumber}</span></div>
+                                : <div></div>}
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
                       {/* {this.state.cardNumber ?
                         <div className="my-1"><span className="px-1">Card last four digit {this.state.cardNumber}</span></div>
                         : <div></div>} */}

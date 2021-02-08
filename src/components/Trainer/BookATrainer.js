@@ -72,7 +72,7 @@ class BookATrainer extends Component {
       password: '',
       passwordE: '',
       showPass: false,
-      wantInstallment: 'Yes',
+      wantInstallment: 'No',
       installments: [],
       installmentsCopy: [],
       showCheque: false,
@@ -83,7 +83,8 @@ class BookATrainer extends Component {
       bankNameE: '',
       chequeNumberE: '',
       chequeDateE: '',
-      chequeE: ''
+      chequeE: '',
+      packageStartDate: new Date()
     }
     this.state = this.default
     this.props.dispatch(getAllMemberOfTrainer())
@@ -140,7 +141,7 @@ class BookATrainer extends Component {
       this.state.member && this.setState({
         packageDetails: this.state.member.packageDetails.filter(pack => (
           (pack.extendDate ? setTime(pack.extendDate) >= setTime(new Date()) : setTime(pack.endDate) >= setTime(new Date()))
-          && setTime(pack.startDate) <= setTime(new Date())
+          // && setTime(pack.startDate) <= setTime(new Date())
           && (pack.trainerDetails.length
             ? setTime(pack.trainerDetails[pack.trainerDetails.length - 1].trainerEnd) < setTime(new Date())
             : true))),
@@ -164,6 +165,7 @@ class BookATrainer extends Component {
     var tax = 0
     var oldPackageId = ''
     var packageDaysLeft = 0
+    var packageStartDate = new Date()
     if (index > 0) {
       const { reactivationDate, extendDate, endDate } = this.state.packageDetails[index - 1]
       periodDays = this.state.packageDetails[index - 1].packages.period.periodDays
@@ -172,12 +174,13 @@ class BookATrainer extends Component {
       packageDaysLeft = (extendDate && reactivationDate)
         ? calculateDays(new Date(reactivationDate).setHours(0, 0, 0, 0) < new Date().setHours(0, 0, 0, 0) ? new Date() : reactivationDate, extendDate)
         : calculateDays(new Date(), endDate)
+      packageStartDate = this.state.packageDetails[index - 1].startDate
     }
     this.setState({
       ...validator(e, 'packages', 'text', [t('Enter package name')]), ...{
         tax, periodDays, oldPackageId, packageAmount, setPackageAmount, packageDaysLeft, installments: [], installmentsCopy: [],
         cash: 0, card: 0, digital: 0, cheque: 0, period: '', amount: 0, giftcard: 0, discount: 0, count: 0, trainer: null,
-        startDate: new Date(), endDate: new Date(),
+        startDate: new Date(packageStartDate), endDate: new Date(packageStartDate), packageStartDate
       }
     })
   }
@@ -195,7 +198,7 @@ class BookATrainer extends Component {
     this.setState({
       ...validator(e, 'trainer', 'select', [t('Select trainer name')]), ...{
         period: '', amount: 0, packageAmount: this.state.setPackageAmount, giftcard: 0, installments: [], installmentsCopy: [],
-        discount: 0, count: 0, cash: 0, card: 0, digital: 0, cheque: 0, startDate: new Date(), endDate: new Date(),
+        discount: 0, count: 0, cash: 0, card: 0, digital: 0, cheque: 0, startDate: new Date(this.state.packageStartDate), endDate: new Date(this.state.packageStartDate),
       }
     }, () => {
       const data = {
@@ -501,7 +504,7 @@ class BookATrainer extends Component {
   render() {
     const { t } = this.props
     const { member, packages, trainer, period, cash, card, discount, tax, giftcard, discountMethod, count, text, digital,
-      trainerReceipt, packageDetails, oldPackageId, startDate, endDate, wantInstallment, installments, packageAmount } = this.state
+      trainerReceipt, packageDetails, oldPackageId, startDate, endDate, wantInstallment, installments, packageAmount, packageStartDate } = this.state
 
     let packageDetailsArr = []
     let map = new Map();
@@ -652,7 +655,7 @@ class BookATrainer extends Component {
                       invalidDateMessage=''
                       minDateMessage=''
                       className={this.state.startDateE ? "form-control mx-sm-2 inlineFormInputs FormInputsError" : "form-control mx-sm-2 inlineFormInputs"}
-                      minDate={new Date()}
+                      minDate={packageStartDate}
                       format="dd/MM/yyyy"
                       value={startDate}
                       onChange={(e) => this.setStartDate(e)}
