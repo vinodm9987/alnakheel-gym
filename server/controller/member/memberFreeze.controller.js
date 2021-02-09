@@ -53,7 +53,7 @@ exports.applyFreezeMember = async (req, res) => {
         let memberInfo = await Member.findById(req.body.memberId).lean();
         const isFreezable = checkIsMemberFreezable(memberInfo.packageDetails, req.body.toDate);
         const exist = await MemberFreezing.find({ memberId: req.body.memberId, status: "Pending" }).count();
-        if (!isFreezable) return errorResponseHandler(res, 'error', 'Member don not have package on freeze date')
+        if (!isFreezable) return errorResponseHandler(res, 'error', 'Member do not have package on freeze date')
         if (exist) {
             req.responseData = await MemberFreezing.findOne({ memberId: req.body.memberId }).lean()
             const response = await MemberFreezing.findOneAndUpdate({ memberId: req.body.memberId, status: "Pending" }, req.body, { returnNewDocuments: true })
