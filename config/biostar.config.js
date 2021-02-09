@@ -95,7 +95,7 @@ exports.getAccessLevelObject = (packageName, scheduleName, scheduleId) => {
     return {
         "description": ` this is the ${packageName} module`,
         "items": [{
-            "door_list": [{ "id": 1, "name": "Demo Door" }],
+            "door_list": [{ "id": 2, "name": "Demo Door" }],
             "schedule": { "id": scheduleId, "name": scheduleName }
         }],
         "name": `${packageName} access level`
