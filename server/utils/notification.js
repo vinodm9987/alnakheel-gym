@@ -5,14 +5,16 @@ const { logger: { logger } } = require('../../config')
 
 
 exports.sendNotification = (message) => {
-    FCM.send(message, (err, response) => {
-        if (err) {
-            console.log("TCL: exports.sendNotification -> err", err)
-            logger.error(err);
-        } else {
-            return response
-        }
-    });
+    if(message.reactToken){
+        FCM.send(message, (err, response) => {
+            if (err) {
+                console.log("TCL: exports.sendNotification -> err", err)
+                logger.error(err);
+            } else {
+                return response
+            }
+        });
+    }
 };
 
 exports.sendMultipleNotification = (message, tokens) => {
