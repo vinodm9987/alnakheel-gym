@@ -241,8 +241,8 @@ exports.cancelFreeze = async (req, res) => {
             largestEndDate = new Date(temp) > new Date(largestEndDate) ? new Date(temp) : largestEndDate;
         };
         await MemberFreezing.findByIdAndUpdate(req.body.id, { typeOfFreeze: 'Canceled', returningDate: setTime(req.body.returningDate) });
-        const response = await freezeMember(userData.memberId, req.body.returningDate, largestEndDate);
-        return successResponseHandler(res, response, "success");
+        await freezeMember(userData.memberId, req.body.returningDate, largestEndDate);
+        return successResponseHandler(res, '', "success");
     } catch (error) {
         logger.error(error);
         return errorResponseHandler(res, error, 'failed to get freeze history!');
