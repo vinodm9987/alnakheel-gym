@@ -6,7 +6,7 @@ const { logger: { logger }, handler: { successResponseHandler, errorResponseHand
 
 const { Formate: { setTime, checkDateInBetween } } = require('../../utils');
 
-const { memberFreezeNotification, freezeMemberInBioStar } = require('../../worker/freeze')
+const { memberFreezeNotification, freezeMemberInBioStar, checkIsMemberFreezable } = require('../../worker/freeze')
 
 
 /**
@@ -50,7 +50,10 @@ exports.applyFreezeMember = async (req, res) => {
         req.body["fromDate"] = setTime(req.body.fromDate);
         req.body["toDate"] = setTime(req.body.toDate);
         req.body["reactivationDate"] = setTime(req.body.reactivationDate)
-        const exist = await MemberFreezing.find({ memberId: req.body.memberId, status: "Pending" }).count()
+        let memberInfo = await Member.findById(req.body.memberId).lean();
+        const isFreezable = checkIsMemberFreezable(memberInfo.packageDetails, req.body.toDate);
+        const exist = await MemberFreezing.find({ memberId: req.body.memberId, status: "Pending" }).count();
+        if (!isFreezable) return errorResponseHandler(res, 'error', 'Member don not have package on freeze date')
         if (exist) {
             req.responseData = await MemberFreezing.findOne({ memberId: req.body.memberId }).lean()
             const response = await MemberFreezing.findOneAndUpdate({ memberId: req.body.memberId, status: "Pending" }, req.body, { returnNewDocuments: true })
