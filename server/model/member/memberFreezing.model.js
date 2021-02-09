@@ -13,9 +13,9 @@ const MemberFreezeSchema = new Schema({
 
     totalAmount: Number, actualAmount: Number, cashAmount: Number, cardAmount: Number,
 
-    cardNumber: String, vatAmount: Number,
+    cardNumber: String, vatAmount: Number, returningDate: Date,
 
-    typeOfFreeze: { type: String, enum: ['Froze', 'Canceled', "Both"], default: 'Froze' },
+    typeOfFreeze: { type: String, enum: ['Froze', 'Canceled'], default: 'Froze' },
 
 
 }, { timestamps: { createdAt: "created_at", updatedAt: "updated_at" } }, { strict: false });
