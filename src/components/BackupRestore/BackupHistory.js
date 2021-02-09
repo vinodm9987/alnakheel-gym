@@ -48,9 +48,9 @@ class BackupHistory extends Component {
             <table className="borderRoundSeperateTable tdGray">
               <thead>
                 <tr>
-                  <th>Backup Name</th>
-                  <th>Date & Time</th>
-                  <th>Destination</th>
+                  <th>{t('Backup Name')}</th>
+                  <th>{t('Date & Time')}</th>
+                  <th>{t('Destination')}</th>
                   <th>{t('Status')}</th>
                 </tr>
               </thead>
@@ -67,7 +67,7 @@ class BackupHistory extends Component {
                         <div className="m-0 mxw-150px mnw-100px whiteSpaceNormal">{backupDestination}</div>
                       </td>
                       <td className={status === 'Success' ? "text-primary" : "text-danger"}>{status}</td>
-                      {/* <td className="text-danger">Failed</td> */}
+                      {/* <td className="text-danger">{t('Failed')}</td> */}
                     </tr>
                   )
                 })}
@@ -94,12 +94,12 @@ class BackupHistory extends Component {
             <table className="borderRoundSeperateTable tdGray">
               <thead>
                 <tr>
-                  <th>Backup Name</th>
-                  <th>Type</th>
-                  <th>Days</th>
-                  <th>Elapse Time</th>
-                  <th>Created On</th>
-                  <th>Size</th>
+                  <th>{t('Backup Name')}</th>
+                  <th>{t('Type')}</th>
+                  <th>{t('Days')}</th>
+                  <th>{t('Elapse Time')}</th>
+                  <th>{t('Created On')}</th>
+                  <th>{t('Size')}</th>
                   <th></th>
                 </tr>
               </thead>
@@ -126,47 +126,47 @@ class BackupHistory extends Component {
           <div className="modal-dialog modal-lg modal-dialog-centered">
             <div className="modal-content">
               <div className="modal-header">
-                <h4 className="modal-title">Job Details</h4>
+                <h4 className="modal-title">{t('Job Details')}</h4>
                 <button type="button" className="close" data-dismiss="modal"><span className="iconv1 iconv1-close"></span></button>
               </div>
               <div className="modal-body px-4">
                 <div className="d-flex flex-wrap justify-content-between p-1">
                   <div className="m-1">
-                    <h6 className="font-weight-bold mb-1">Backup Name</h6>
+                    <h6 className="font-weight-bold mb-1">{t('Backup Name')}</h6>
                     <h6 className="">Alnakheel Manual Backup</h6>
                   </div>
                   <div className="m-1">
-                    <h6 className="font-weight-bold mb-1">Created On</h6>
+                    <h6 className="font-weight-bold mb-1">{t('Created On')}</h6>
                     <h6 className="">02/20/2020, 10:20 AM</h6>
                   </div>
                 </div>
                 <div className="d-flex flex-wrap justify-content-start p-1">
                   <div className="m-1 widBox">
-                    <h6 className="font-weight-bold mb-1">Type</h6>
+                    <h6 className="font-weight-bold mb-1">{t('Type')}</h6>
                     <h6 className="">Daily/Weekly</h6>
                   </div>
                   <div className="m-1 widBox">
-                    <h6 className="font-weight-bold mb-1">From Date</h6>
+                    <h6 className="font-weight-bold mb-1">{t('From Date')}</h6>
                     <h6 className="">02/20/2020</h6>
                   </div>
                   <div className="m-1 widBox">
-                    <h6 className="font-weight-bold mb-1">To Date</h6>
+                    <h6 className="font-weight-bold mb-1">{t('To Date')}</h6>
                     <h6 className="">02/20/2020</h6>
                   </div>
                   <div className="m-1 widBox">
-                    <h6 className="font-weight-bold mb-1">Backup Start Time</h6>
+                    <h6 className="font-weight-bold mb-1">{t('Backup Start Time')}</h6>
                     <h6 className="">11:15 AM</h6>
                   </div>
                   <div className="m-1 widBox">
-                    <h6 className="font-weight-bold mb-1">Days</h6>
+                    <h6 className="font-weight-bold mb-1">{t('Days')}</h6>
                     <h6 className="">Monday, Tuesday</h6>
                   </div>
                   <div className="m-1 widBox">
-                    <h6 className="font-weight-bold mb-1">Size</h6>
+                    <h6 className="font-weight-bold mb-1">{t('Size')}</h6>
                     <h6 className="">613 KB</h6>
                   </div>
                   <div className="m-1 widBox">
-                    <h6 className="font-weight-bold mb-1">Destination</h6>
+                    <h6 className="font-weight-bold mb-1">{t('Destination')}</h6>
                     <h6 className="">C:\program\backup</h6>
                   </div>
 

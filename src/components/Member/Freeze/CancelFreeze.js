@@ -216,7 +216,7 @@ class CancelFreeze extends Component {
                       <td>{typeOfFreeze}</td>
                       <td className="text-center">
                         <button disabled={calculateDays(new Date(), toDate) === 0 ? true : false} type="button" className="btn btn-danger btn-sm w-100px text-white"
-                          data-toggle="modal" data-target="#CancelFreeze">Cancel</button>
+                          data-toggle="modal" data-target="#CancelFreeze">{t('Cancel')}</button>
                       </td>
                       {/* <!-- ---------pop up---------- --> */}
                       <div className="modal fade commonYellowModal" id="CancelFreeze">

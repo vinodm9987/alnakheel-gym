@@ -563,7 +563,7 @@ class EmployeeDashboard extends Component {
                 <div className="pageHeadLine"></div>
               </div>
             </div>
-          </div>
+          </div> 
 
           <div className="col-12">
             <div className="row mx-0 w-100">

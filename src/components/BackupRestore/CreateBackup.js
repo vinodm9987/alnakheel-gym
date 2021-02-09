@@ -82,7 +82,7 @@ class CreateBackup extends Component {
         {backupType === 'Manual' &&
           <div className="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
             <div className="form-group position-relative">
-              <label htmlFor="BackupName">Backup Name</label>
+              <label htmlFor="BackupName">{t('Backup Name')}</label>
               <input type="text" autoComplete="off" className={this.state.backupNameE ? "form-control bg-white FormInputsError" : "form-control bg-white"} id="BackupName"
                 value={backupName} onChange={(e) => this.setState(validator(e, 'backupName', 'text', [t('Enter backup name')]))}
               />
@@ -95,12 +95,12 @@ class CreateBackup extends Component {
         {backupType === 'Manual' &&
           <div className="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
             <div className="form-group position-relative">
-              <label htmlFor="BackupDestination">Backup Destination</label>
+              <label htmlFor="BackupDestination">{t('Backup Destination')}</label>
               {/* <div className="custom-file-gym form-control">
                 <input type="file" className="custom-file-input-gym" id="customFile" webkitdirectory="" directory=""
                   onChange={(e) => this.selectDestination(e)}
                 />
-                <label className="rightBrowserLabel" htmlFor="customFile">Upload Image</label>
+                <label className="rightBrowserLabel" htmlFor="customFile">{t('Upload Image')}</label>
               </div> */}
               <input type="text" autoComplete="off" className={this.state.backupDestinationE ? "form-control bg-white FormInputsError" : "form-control bg-white"} id="BackupDestination"
                 value={backupDestination} onChange={(e) => this.setState(validator(e, 'backupDestination', 'text', [t('Enter backup destination')]))}
@@ -115,9 +115,9 @@ class CreateBackup extends Component {
           <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
             <div className="justify-content-sm-end d-flex pt-3">
               <button disabled={disableSubmit(this.props.loggedUser, 'Backup and Restore', 'Backup')} type="button" className="btn btn-success mx-1 px-4" onClick={() => this.handleSubmit()}>
-                <span className="iconv1 iconv1-sync"></span> <span className="px-1">Run Backup</span>
+                <span className="iconv1 iconv1-sync"></span> <span className="px-1">{t('Run Backup')}</span>
               </button>
-              <button type="button" className="btn btn-danger mx-1 px-4" onClick={() => this.handleCancel()}>Cancel</button>
+              <button type="button" className="btn btn-danger mx-1 px-4" onClick={() => this.handleCancel()}>{t('Cancel')}</button>
             </div>
           </div>
         }
@@ -149,7 +149,7 @@ class CreateBackup extends Component {
         {backupType === 'Automatic' &&
           <div className="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
             <div className="form-group position-relative">
-              <label htmlFor="BackupName">Backup Name</label>
+              <label htmlFor="BackupName">{t('Backup Name')}</label>
               <input disabled="" type="number" autoComplete="off" className="form-control bg-white" id="BackupName" />
             </div>
           </div>
@@ -157,10 +157,10 @@ class CreateBackup extends Component {
         {backupType === 'Automatic' &&
           <div className="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
             <div className="form-group position-relative">
-              <label htmlFor="BackupDestination">Backup Destination</label>
+              <label htmlFor="BackupDestination">{t('Backup Destination')}</label>
               <div className="custom-file-gym form-control">
                 <input type="file" className="custom-file-input-gym" id="customFile" />
-                <label className="rightBrowserLabel" htmlFor="customFile">Upload Image</label>
+                <label className="rightBrowserLabel" htmlFor="customFile">{t('Upload Image')}</label>
               </div>
             </div>
           </div>
@@ -169,7 +169,7 @@ class CreateBackup extends Component {
         {backupType === 'Automatic' &&
           <div className="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-3">
             <div className="form-group position-relative">
-              <label htmlFor="Type">Type</label>
+              <label htmlFor="Type">{t('Type')}</label>
               <select className="form-control bg-white" id="Type">
                 <option value="" hidden="">Monthly</option>
               </select>
@@ -188,7 +188,7 @@ class CreateBackup extends Component {
         {backupType === 'Automatic' &&
           <div className="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-2">
             <div className="form-group position-relative">
-              <label htmlFor="BackupTime">Backup Start Time</label>
+              <label htmlFor="BackupTime">{t('Backup Start Time')}</label>
               <input disabled="" type="number" autoComplete="off" className="form-control bg-white" id="BackupTime" />
               <span className="iconv1 iconv1-clock timeBoxIcon"></span>
             </div>
@@ -201,7 +201,7 @@ class CreateBackup extends Component {
           <div className="row px-3">
             <div className="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-3">
               <div className="form-group position-relative">
-                <label htmlFor="Type">Type</label>
+                <label htmlFor="Type">{t('Type')}</label>
                 <select className="form-control bg-white" id="Type">
                   <option value="" hidden="">Daily/Weekly</option>
                 </select>
@@ -213,14 +213,14 @@ class CreateBackup extends Component {
             </div>
             <div className="col-12 col-sm-12 col-md-12 col-lg-3 col-xl-2">
               <div className="form-group position-relative">
-                <label htmlFor="FromDate">From Date</label>
+                <label htmlFor="FromDate">{t('From Date')}</label>
                 <input disabled="" type="number" autoComplete="off" className="form-control bg-white" id="FromDate" />
                 <span className="iconv1 iconv1-calendar dateBoxIcon"></span>
               </div>
             </div>
             <div className="col-12 col-sm-12 col-md-12 col-lg-3 col-xl-2">
               <div className="form-group position-relative">
-                <label htmlFor="ToDate">To Date</label>
+                <label htmlFor="ToDate">{t('To Date')}</label>
                 <input disabled="" type="number" autoComplete="off" className="form-control bg-white" id="ToDate" />
                 <span className="iconv1 iconv1-calendar dateBoxIcon"></span>
               </div>
@@ -268,7 +268,7 @@ class CreateBackup extends Component {
         {backupType === 'Automatic' &&
           <div className="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-2">
             <div className="form-group position-relative">
-              <label htmlFor="BackupTime">Backup Start Time</label>
+              <label htmlFor="BackupTime">{t('Backup Start Time')}</label>
               <input disabled="" type="number" autoComplete="off" className="form-control bg-white" id="BackupTime" />
               <span className="iconv1 iconv1-clock timeBoxIcon"></span>
             </div>
@@ -280,8 +280,8 @@ class CreateBackup extends Component {
         {backupType === 'Automatic' &&
           <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 pb-4">
             <div className="justify-content-sm-end d-flex pt-3">
-              <button type="button" className="btn btn-success mx-1 px-4">Save</button>
-              <button type="button" className="btn btn-danger mx-1 px-4">Cancel</button>
+              <button type="button" className="btn btn-success mx-1 px-4">{t('Save')}</button>
+              <button type="button" className="btn btn-danger mx-1 px-4">{t('Cancel')}</button>
             </div>
           </div>
         }
@@ -299,11 +299,11 @@ class CreateBackup extends Component {
               <table className="table table-striped">
                 <thead>
                   <tr>
-                    <th>Backup Name</th>
-                    <th>Days</th>
-                    <th>From Date</th>
-                    <th>To Date</th>
-                    <th>Backup Start Time</th>
+                    <th>{t('Backup Name')}</th>
+                    <th>{t('Days')}</th>
+                    <th>{t('From Date')}</th>
+                    <th>{t('To Date')}</th>
+                    <th>{t('Backup Start Time')}</th>
                     <th></th>
                   </tr>
                 </thead>
@@ -333,9 +333,9 @@ class CreateBackup extends Component {
               <table className="table table-striped">
                 <thead>
                   <tr>
-                    <th>Backup Name</th>
+                    <th>{t('Backup Name')}</th>
                     <th>Monthly</th>
-                    <th>Backup Start Time</th>
+                    <th>{t('Backup Start Time')}</th>
                     <th></th>
                   </tr>
                 </thead>
@@ -364,43 +364,43 @@ class CreateBackup extends Component {
             <div className="modal-dialog modal-lg modal-dialog-centered">
               <div className="modal-content">
                 <div className="modal-header">
-                  <h4 className="modal-title">Job Details</h4>
+                  <h4 className="modal-title">{t('Job Details')}</h4>
                   <button type="button" className="close" data-dismiss="modal"><span className="iconv1 iconv1-close"></span></button>
                 </div>
                 <div className="modal-body px-4">
                   <div className="d-flex flex-wrap justify-content-between p-1">
                     <div className="m-1">
-                      <h6 className="font-weight-bold mb-1">Backup Name</h6>
+                      <h6 className="font-weight-bold mb-1">{t('Backup Name')}</h6>
                       <h6 className="">Alnakheel Manual Backup</h6>
                     </div>
                     <div className="m-1">
-                      <h6 className="font-weight-bold mb-1">Created On</h6>
+                      <h6 className="font-weight-bold mb-1">{t('Created On')}</h6>
                       <h6 className="">02/20/2020, 10:20 AM</h6>
                     </div>
                   </div>
                   <div className="d-flex flex-wrap justify-content-start p-1">
                     <div className="m-1 widBox">
-                      <h6 className="font-weight-bold mb-1">Type</h6>
+                      <h6 className="font-weight-bold mb-1">{t('Type')}</h6>
                       <h6 className="">Daily/Weekly</h6>
                     </div>
                     <div className="m-1 widBox">
-                      <h6 className="font-weight-bold mb-1">From Date</h6>
+                      <h6 className="font-weight-bold mb-1">{t('From Date')}</h6>
                       <h6 className="">02/20/2020</h6>
                     </div>
                     <div className="m-1 widBox">
-                      <h6 className="font-weight-bold mb-1">To Date</h6>
+                      <h6 className="font-weight-bold mb-1">{t('To Date')}</h6>
                       <h6 className="">02/20/2020</h6>
                     </div>
                     <div className="m-1 widBox">
-                      <h6 className="font-weight-bold mb-1">Backup Start Time</h6>
+                      <h6 className="font-weight-bold mb-1">{t('Backup Start Time')}</h6>
                       <h6 className="">11:15 AM</h6>
                     </div>
                     <div className="m-1 widBox">
-                      <h6 className="font-weight-bold mb-1">Days</h6>
+                      <h6 className="font-weight-bold mb-1">{t('Days')}</h6>
                       <h6 className="">Monday, Tuesday</h6>
                     </div>
                     <div className="m-1 widBox">
-                      <h6 className="font-weight-bold mb-1">Destination</h6>
+                      <h6 className="font-weight-bold mb-1">{t('Destination')}</h6>
                       <h6 className="">C:\program\backup</h6>
                     </div>
                   </div>

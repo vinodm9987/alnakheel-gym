@@ -807,7 +807,7 @@ class AddClass extends Component {
                 <th className="text-center">{t('Start Time')}</th>
                 <th className="text-center">{t('End Time')}</th>
                 <th className="text-center">{t('Color')}</th>
-                {/* <th className="text-center">Status</th> */}
+                {/* <th className="text-center">{t('Status')}</th> */}
                 <th className="text-center">{t('Action')}</th>
               </tr>
             </thead>

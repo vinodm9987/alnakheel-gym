@@ -158,7 +158,7 @@ class EmployeeDetails extends Component {
                                   </div>
                                   <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6 d-flex justify-content-end pb-3">
                                     {/* <div className="d-flex px-3 pt-3 align-items-center" style={{ height: "60px" }}>
-                                  <span className="mx-2 mb-2">Status</span>
+                                  <span className="mx-2 mb-2">{t('Status')}</span>
                                   <span className="mx-2">
                                     <label className="switch">
                                       <input type="checkbox" />

@@ -761,7 +761,7 @@ class PackageDetails extends Component {
                   <div className="modal-body px-4">
                     <div className="d-flex flex-wrap justify-content-between p-1">
                       <div className="m-1">
-                        <h6 className="font-weight-bold mb-1">Package Name</h6>
+                        <h6 className="font-weight-bold mb-1">{t('Package Name')}</h6>
                         <h6 className="text-danger">{this.state.installmentPackageName}</h6>
                       </div>
                       <div className="m-1">
@@ -786,7 +786,7 @@ class PackageDetails extends Component {
                             <th>Amount</th>
                             <th>Due Date</th>
                             <th>Paid Date</th>
-                            <th>Status</th>
+                            <th>{t('Status')}</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -846,7 +846,7 @@ class PackageDetails extends Component {
                             <th>Amount</th>
                             <th>Due Date</th>
                             <th>Paid Date</th>
-                            <th>Status</th>
+                            <th>{t('Status')}</th>
                           </tr>
                         </thead>
                         <tbody>

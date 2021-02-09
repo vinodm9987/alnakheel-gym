@@ -199,3 +199,12 @@ Manage Trainers
   color: #200909 !important;
   background: gainsboro;
 }
+.bg-black {
+  background-color: #000 !important;
+}
+.powered-in-cfv {
+  display: block;
+  left: 50%;
+  bottom: 10px;
+  transform: translate(-50px , 0);
+}

@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 
 class MemberInstallmentDetails extends Component {
     render() {
+        const { t } = this.props
         return (
             <div className="mainPage p-3 membersInstallment">
                 <div className="row">
@@ -76,7 +77,7 @@ class MemberInstallmentDetails extends Component {
                                                 <th>Amount</th>
                                                 <th>Paid Date</th>
                                                 <th>Due Date</th>
-                                                <th>Status</th>
+                                                <th>{t('Status')}</th>
                                                 <th className="text-center">Action</th>
                                             </tr>
                                         </thead>

@@ -429,7 +429,7 @@ class CustomerDashboard extends Component {
                     <div className="card-inner w-100 h-100 py-2 mt-3 d-flex align-items-center justify-content-center flex-wrap">
                       <h2 className="text-center pt-5 mt-5 text-warning"><span className="iconv1 iconv1-info"></span></h2>
                       {/* tusar translate below */}
-                      <h6 className="text-center w-100 font-weight-bold" style={{ color: "#4f4f4f" }}>You Are Not Selected Any Trainer Yet</h6>
+                      <h6 className="text-center w-100 font-weight-bold" style={{ color: "#4f4f4f" }}>{t('You Are Not Selected Any Trainer Yet')}</h6>
                     </div>
                   </div>
                 </div>
@@ -585,7 +585,7 @@ class CustomerDashboard extends Component {
                       if (i < 3) {
                         return (
                           <tr key={i}>
-                            <td><small className="mnw-50px whiteSpaceNormal d-inline-block">{title}</small> <div><button type="button" className="btn  btnaccred">{dateToDDMMYYYY(startDate)}</button></div></td>
+                            <td><small className="mnw-50px whiteSpaceNormal d-inline-block">{title}</small><div><button type="button" className="btn  btnaccred">{dateToDDMMYYYY(startDate)}</button></div></td>
                             <td>
                               <Link to='/announcement' className="linkHoverDecLess">
                                 <span className="iconv1 iconv1-right-arrow text-warning float-right border border-warning rounded-circle p-1"></span>

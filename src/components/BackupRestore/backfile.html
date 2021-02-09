@@ -35,23 +35,23 @@
                                         </div>
                                         <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
                                             <div class="form-group position-relative">
-                                                <label for="BackupName">Backup Name</label>
+                                                <label for="BackupName">{t('Backup Name')}</label>
                                                 <input disabled="" type="number" autoComplete="off" class="form-control bg-white" id="BackupName" />
                                             </div>
                                         </div>
                                         <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
                                             <div class="form-group position-relative">
-                                                <label for="BackupDestination">Backup Destination</label>
+                                                <label for="BackupDestination">{t('Backup Destination')}</label>
                                                 <div class="custom-file-gym form-control">
                                                     <input type="file" class="custom-file-input-gym" id="customFile" />
-                                                    <label class="rightBrowserLabel" for="customFile">Upload Image</label>
+                                                    <label class="rightBrowserLabel" for="customFile">{t('Upload Image')}</label>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                             <div class="justify-content-sm-end d-flex pt-3">
-                                                <button type="button" class="btn btn-success mx-1 px-4"><span className="iconv1 iconv1-sync"></span> <span className="px-1">Run Backup</span></button>
-                                                <button type="button" class="btn btn-danger mx-1 px-4">Cancel</button>
+                                                <button type="button" class="btn btn-success mx-1 px-4"><span className="iconv1 iconv1-sync"></span> <span className="px-1">{t('Run Backup')}</span></button>
+                                                <button type="button" class="btn btn-danger mx-1 px-4">{t('Cancel')}</button>
                                             </div>
                                         </div>
                                         <div className="p-3">
@@ -83,16 +83,16 @@
 
                                         <!-- <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
                                             <div class="form-group position-relative">
-                                                <label for="BackupName">Backup Name</label>
+                                                <label for="BackupName">{t('Backup Name')}</label>
                                                 <input disabled="" type="number" autoComplete="off" class="form-control bg-white" id="BackupName" />
                                             </div>
                                         </div>
                                         <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
                                             <div class="form-group position-relative">
-                                                <label for="BackupDestination">Backup Destination</label>
+                                                <label for="BackupDestination">{t('Backup Destination')}</label>
                                                 <div class="custom-file-gym form-control">
                                                     <input type="file" class="custom-file-input-gym" id="customFile" />
-                                                    <label class="rightBrowserLabel" for="customFile">Upload Image</label>
+                                                    <label class="rightBrowserLabel" for="customFile">{t('Upload Image')}</label>
                                                 </div>
                                             </div>
                                         </div> -->
@@ -100,7 +100,7 @@
                                         <!-- {/* ------------This is for Monthly Backup------------- */} -->
                                         <!-- <div class="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-3">
                                             <div class="form-group position-relative">
-                                                <label for="Type">Type</label>
+                                                <label for="Type">{t('Type')}</label>
                                                 <select class="form-control bg-white" id="Type">
                                                     <option value="" hidden="">Monthly</option>
                                                 </select>
@@ -115,7 +115,7 @@
                                         </div>
                                         <div class="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-2">
                                             <div class="form-group position-relative">
-                                                <label for="BackupTime">Backup Start Time</label>
+                                                <label for="BackupTime">{t('Backup Start Time')}</label>
                                                 <input disabled="" type="number" autoComplete="off" class="form-control bg-white" id="BackupTime" />
                                                 <span class="iconv1 iconv1-clock timeBoxIcon"></span>
                                             </div>
@@ -126,7 +126,7 @@
                                         <!-- <div className="row px-3">
                                             <div class="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-3">
                                                 <div class="form-group position-relative">
-                                                    <label for="Type">Type</label>
+                                                    <label for="Type">{t('Type')}</label>
                                                     <select class="form-control bg-white" id="Type">
                                                         <option value="" hidden="">Daily/Weekly</option>
                                                     </select>
@@ -138,14 +138,14 @@
                                             </div>
                                             <div class="col-12 col-sm-12 col-md-12 col-lg-3 col-xl-2">
                                                 <div class="form-group position-relative">
-                                                    <label for="FromDate">From Date</label>
+                                                    <label for="FromDate">{t('From Date')}</label>
                                                     <input disabled="" type="number" autoComplete="off" class="form-control bg-white" id="FromDate" />
                                                     <span class="iconv1 iconv1-calendar dateBoxIcon"></span>
                                                 </div>
                                             </div>
                                             <div class="col-12 col-sm-12 col-md-12 col-lg-3 col-xl-2">
                                                 <div class="form-group position-relative">
-                                                    <label for="ToDate">To Date</label>
+                                                    <label for="ToDate">{t('To Date')}</label>
                                                     <input disabled="" type="number" autoComplete="off" class="form-control bg-white" id="ToDate" />
                                                     <span class="iconv1 iconv1-calendar dateBoxIcon"></span>
                                                 </div>
@@ -190,7 +190,7 @@
                                         </div>
                                         <div class="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-2">
                                             <div class="form-group position-relative">
-                                                <label for="BackupTime">Backup Start Time</label>
+                                                <label for="BackupTime">{t('Backup Start Time')}</label>
                                                 <input disabled="" type="number" autoComplete="off" class="form-control bg-white" id="BackupTime" />
                                                 <span class="iconv1 iconv1-clock timeBoxIcon"></span>
                                             </div>
@@ -200,8 +200,8 @@
 
                                         <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 pb-4">
                                             <div class="justify-content-sm-end d-flex pt-3">
-                                                <button type="button" class="btn btn-success mx-1 px-4">Save</button>
-                                                <button type="button" class="btn btn-danger mx-1 px-4">Cancel</button>
+                                                <button type="button" class="btn btn-success mx-1 px-4">{t('Save')}</button>
+                                                <button type="button" class="btn btn-danger mx-1 px-4">{t('Cancel')}</button>
                                             </div>
                                         </div> -->
                                         <!-- {/* ----------Autobackup Details Table---------------- */} -->
@@ -218,11 +218,11 @@
                                                     <table className="table table-striped">
                                                         <thead>
                                                             <tr>
-                                                                <th>Backup Name</th>
-                                                                <th>Days</th>
-                                                                <th>From Date</th>
-                                                                <th>To Date</th>
-                                                                <th>Backup Start Time</th>
+                                                                <th>{t('Backup Name')}</th>
+                                                                <th>{t('Days')}</th>
+                                                                <th>{t('From Date')}</th>
+                                                                <th>{t('To Date')}</th>
+                                                                <th>{t('Backup Start Time')}</th>
                                                                 <th></th>
                                                             </tr>
                                                         </thead>
@@ -252,9 +252,9 @@
                                                     <table className="table table-striped">
                                                         <thead>
                                                             <tr>
-                                                                <th>Backup Name</th>
+                                                                <th>{t('Backup Name')}</th>
                                                                 <th>Monthly</th>
-                                                                <th>Backup Start Time</th>
+                                                                <th>{t('Backup Start Time')}</th>
                                                                 <th></th>
                                                             </tr>
                                                         </thead>
@@ -283,43 +283,43 @@
                                                 <div className="modal-dialog modal-lg modal-dialog-centered">
                                                     <div className="modal-content">
                                                         <div className="modal-header">
-                                                            <h4 className="modal-title">Job Details</h4>
+                                                            <h4 className="modal-title">{t('Job Details')}</h4>
                                                             <button type="button" className="close" data-dismiss="modal"><span className="iconv1 iconv1-close"></span></button>
                                                         </div>
                                                         <div className="modal-body px-4">
                                                             <div className="d-flex flex-wrap justify-content-between p-1">
                                                                 <div className="m-1">
-                                                                    <h6 className="font-weight-bold mb-1">Backup Name</h6>
+                                                                    <h6 className="font-weight-bold mb-1">{t('Backup Name')}</h6>
                                                                     <h6 className="">Alnakheel Manual Backup</h6>
                                                                 </div>
                                                                 <div className="m-1">
-                                                                    <h6 className="font-weight-bold mb-1">Created On</h6>
+                                                                    <h6 className="font-weight-bold mb-1">{t('Created On')}</h6>
                                                                     <h6 className="">02/20/2020, 10:20 AM</h6>
                                                                 </div>
                                                             </div>
                                                             <div className="d-flex flex-wrap justify-content-start p-1">
                                                                 <div className="m-1 widBox">
-                                                                    <h6 className="font-weight-bold mb-1">Type</h6>
+                                                                    <h6 className="font-weight-bold mb-1">{t('Type')}</h6>
                                                                     <h6 className="">Daily/Weekly</h6>
                                                                 </div>
                                                                 <div className="m-1 widBox">
-                                                                    <h6 className="font-weight-bold mb-1">From Date</h6>
+                                                                    <h6 className="font-weight-bold mb-1">{t('From Date')}</h6>
                                                                     <h6 className="">02/20/2020</h6>
                                                                 </div>
                                                                 <div className="m-1 widBox">
-                                                                    <h6 className="font-weight-bold mb-1">To Date</h6>
+                                                                    <h6 className="font-weight-bold mb-1">{t('To Date')}</h6>
                                                                     <h6 className="">02/20/2020</h6>
                                                                 </div>
                                                                 <div className="m-1 widBox">
-                                                                    <h6 className="font-weight-bold mb-1">Backup Start Time</h6>
+                                                                    <h6 className="font-weight-bold mb-1">{t('Backup Start Time')}</h6>
                                                                     <h6 className="">11:15 AM</h6>
                                                                 </div>
                                                                 <div className="m-1 widBox">
-                                                                    <h6 className="font-weight-bold mb-1">Days</h6>
+                                                                    <h6 className="font-weight-bold mb-1">{t('Days')}</h6>
                                                                     <h6 className="">Monday, Tuesday</h6>
                                                                 </div>
                                                                 <div className="m-1 widBox">
-                                                                    <h6 className="font-weight-bold mb-1">Destination</h6>
+                                                                    <h6 className="font-weight-bold mb-1">{t('Destination')}</h6>
                                                                     <h6 className="">C:\program\backup</h6>
                                                                 </div>
                                                             </div>
@@ -364,12 +364,12 @@
                                             <table className="borderRoundSeperateTable tdGray">
                                                 <thead>
                                                     <tr>
-                                                        <th>Backup Name</th>
-                                                        <th>Date & Time</th>
-                                                        <th>Destination</th>
-                                                        <th>Elapse Time</th>
-                                                        <th>Size</th>
-                                                        <th>Status</th>
+                                                        <th>{t('Backup Name')}</th>
+                                                        <th>{t('Date & Time')}</th>
+                                                        <th>{t('Destination')}</th>
+                                                        <th>{t('Elapse Time')}</th>
+                                                        <th>{t('Size')}</th>
+                                                        <th>{t('Status')}</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -383,8 +383,8 @@
                                                         </td>
                                                         <td>3:25 Mins</td>
                                                         <td>619 KB</td>
-                                                        <td className="text-primary">Success</td>
-                                                        <!-- {/* <td className="text-danger">Failed</td> */} -->
+                                                        <td className="text-primary">{t('Success')}</td>
+                                                        <!-- {/* <td className="text-danger">{t('Failed')}</td> */} -->
                                                     <!-- </tr>
                                                 </tbody>
                                             </table>
@@ -396,12 +396,12 @@
                                             <table className="borderRoundSeperateTable tdGray">
                                                 <thead>
                                                     <tr>
-                                                        <th>Backup Name</th>
-                                                        <th>Type</th>
-                                                        <th>Days</th>
-                                                        <th>Elapse Time</th>
-                                                        <th>Created On</th>
-                                                        <th>Size</th>
+                                                        <th>{t('Backup Name')}</th>
+                                                        <th>{t('Type')}</th>
+                                                        <th>{t('Days')}</th>
+                                                        <th>{t('Elapse Time')}</th>
+                                                        <th>{t('Created On')}</th>
+                                                        <th>{t('Size')}</th>
                                                         <th></th>
                                                     </tr>
                                                 </thead>
@@ -427,47 +427,47 @@
                                             <div className="modal-dialog modal-lg modal-dialog-centered">
                                                 <div className="modal-content">
                                                     <div className="modal-header">
-                                                        <h4 className="modal-title">Job Details</h4>
+                                                        <h4 className="modal-title">{t('Job Details')}</h4>
                                                         <button type="button" className="close" data-dismiss="modal"><span className="iconv1 iconv1-close"></span></button>
                                                     </div>
                                                     <div className="modal-body px-4">
                                                         <div className="d-flex flex-wrap justify-content-between p-1">
                                                             <div className="m-1">
-                                                                <h6 className="font-weight-bold mb-1">Backup Name</h6>
+                                                                <h6 className="font-weight-bold mb-1">{t('Backup Name')}</h6>
                                                                 <h6 className="">Alnakheel Manual Backup</h6>
                                                             </div>
                                                             <div className="m-1">
-                                                                <h6 className="font-weight-bold mb-1">Created On</h6>
+                                                                <h6 className="font-weight-bold mb-1">{t('Created On')}</h6>
                                                                 <h6 className="">02/20/2020, 10:20 AM</h6>
                                                             </div>
                                                         </div>
                                                         <div className="d-flex flex-wrap justify-content-start p-1">
                                                             <div className="m-1 widBox">
-                                                                <h6 className="font-weight-bold mb-1">Type</h6>
+                                                                <h6 className="font-weight-bold mb-1">{t('Type')}</h6>
                                                                 <h6 className="">Daily/Weekly</h6>
                                                             </div>
                                                             <div className="m-1 widBox">
-                                                                <h6 className="font-weight-bold mb-1">From Date</h6>
+                                                                <h6 className="font-weight-bold mb-1">{t('From Date')}</h6>
                                                                 <h6 className="">02/20/2020</h6>
                                                             </div>
                                                             <div className="m-1 widBox">
-                                                                <h6 className="font-weight-bold mb-1">To Date</h6>
+                                                                <h6 className="font-weight-bold mb-1">{t('To Date')}</h6>
                                                                 <h6 className="">02/20/2020</h6>
                                                             </div>
                                                             <div className="m-1 widBox">
-                                                                <h6 className="font-weight-bold mb-1">Backup Start Time</h6>
+                                                                <h6 className="font-weight-bold mb-1">{t('Backup Start Time')}</h6>
                                                                 <h6 className="">11:15 AM</h6>
                                                             </div>
                                                             <div className="m-1 widBox">
-                                                                <h6 className="font-weight-bold mb-1">Days</h6>
+                                                                <h6 className="font-weight-bold mb-1">{t('Days')}</h6>
                                                                 <h6 className="">Monday, Tuesday</h6>
                                                             </div>
                                                             <div className="m-1 widBox">
-                                                                <h6 className="font-weight-bold mb-1">Size</h6>
+                                                                <h6 className="font-weight-bold mb-1">{t('Size')}</h6>
                                                                 <h6 className="">613 KB</h6>
                                                             </div>
                                                             <div className="m-1 widBox">
-                                                                <h6 className="font-weight-bold mb-1">Destination</h6>
+                                                                <h6 className="font-weight-bold mb-1">{t('Destination')}</h6>
                                                                 <h6 className="">C:\program\backup</h6>
                                                             </div>
 

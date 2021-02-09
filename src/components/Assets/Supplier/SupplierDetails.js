@@ -34,7 +34,7 @@ class SupplierDetails extends Component {
             <div className="pageHeadLine"></div>
           </div>
           <div className="col-12 subHead py-3 px-4 text-primary">
-            <h4><b>Supplier Code {supplierCode}</b></h4>
+            <h4><b>{t('Supplier Code')} {supplierCode}</b></h4>
           </div>
           <div className="col-12">
             <div className="d-flex flex-wrap justify-content-lg-between">
@@ -48,7 +48,7 @@ class SupplierDetails extends Component {
           <div className="col-12 my-5">
             <div className="card bg-light text-dark">
               <div className="card-body">
-                <h4>Bank Details</h4>
+                <h4>{t('Bank Details')}</h4>
                 <div className="d-flex flex-wrap justify-content-md-between">
                   <div className="m-3">{t('Bank Name')}<h6><b>{bankName}</b></h6></div>
                   <div className="m-3">{t('Account Number')}<h6><b>{accountNumber}</b></h6></div>

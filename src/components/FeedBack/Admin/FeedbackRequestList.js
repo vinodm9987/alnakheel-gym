@@ -318,7 +318,7 @@ class FeedbackRequestList extends Component {
                     </div>
                     <div className="col-12 col-sm-12 col-md-6  col-lg-2">
                         <div className="form-group inlineFormGroup">
-                        <p className="mx-sm-2 inlineFormLabel">Type</p>
+                        <p className="mx-sm-2 inlineFormLabel">{t('Type')}</p>
                         <select className="form-control inlineFormInputs mnw-150px">
                             <option value="">All</option>
                         </select>

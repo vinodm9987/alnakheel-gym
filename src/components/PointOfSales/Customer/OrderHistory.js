@@ -262,7 +262,7 @@ class OrderHistory extends Component {
                     <div className="text-center my-3">
                       <img alt='' src={orderById.branch.avatar ? `/${orderById.branch.avatar.path}` : ''} className="" width="250" />
                     </div>
-                    <h4 class="border-bottom border-dark text-center font-weight-bold pb-1">Tax Invoice</h4>
+                    <h4 class="border-bottom border-dark text-center font-weight-bold pb-1">{t('Tax Invoice')}</h4>
                     <div className="row px-5 justify-content-between">
                       <div className="col-free p-3">
                         <div className="mb-3">
@@ -280,7 +280,7 @@ class OrderHistory extends Component {
                           <p className="">{orderById.orderNo}</p>
                         </div>
                         <div className="">
-                          <label className="m-0 font-weight-bold">Date & Time</label>
+                          <label className="m-0 font-weight-bold">{t('Date & Time')}</label>
                           <p className="">{dateToDDMMYYYY(orderById.dateOfPurchase)} {dateToHHMM(orderById.created_at)}</p>
                         </div>
                       </div>
@@ -360,7 +360,7 @@ class OrderHistory extends Component {
                               <div className="text-right my-1">Grand Total :</div>
                               <div className="text-right my-1">Paid Amount :</div>
                               {orderById.cardNumber ?
-                                <div className="text-right my-1">Card last four digit :</div>
+                                <div className="text-right my-1">{t('Card last four digit')} :</div>
                                 : <div></div>}
                             </td>
                             <td className="">
@@ -410,16 +410,16 @@ class OrderHistory extends Component {
                         </div>
                       </div>
                       {/* <h6 className="font-weight-bold">Paid Amount: {this.props.defaultCurrency} {parseFloat(orderById.totalAmount).toFixed(3)}</h6> */}
-                      {orderById.doneBy && <h6 className="font-weight-bold">Served by: {orderById.doneBy.userName}</h6>}
+                      {orderById.doneBy && <h6 className="font-weight-bold">{t('Served by')}: {orderById.doneBy.userName}</h6>}
                     </div>
                     {/* <div className="text-center px-5">
                       <h5 className="text-muted">Membership cannot be refunded or transferred to others.</h5>
-                      <h5 className="font-weight-bold">Thank You</h5>
+                      <h5 className="font-weight-bold">{t('Thank You')}</h5>
                     </div> */}
                     <div className="d-flex align-items-center justify-content-center">
                       <div className="text-center">
                         <h6 className="font-weight-bold" >Membership cannot be refunded or transferred to others.</h6>
-                        <h6 className="font-weight-bold">Thank You</h6>
+                        <h6 className="font-weight-bold">{t('Thank You')}</h6>
                       </div>
                     </div>
                     <div className="text-center">
@@ -438,7 +438,7 @@ class OrderHistory extends Component {
               <div style={{ display: "flex", justifyContent: "center" }}>
                 <img src={orderById.branch.avatar ? `/${orderById.branch.avatar.path}` : ''} width="200" style={{ width: "100px" }} alt="" />
               </div>
-              <h5 style={{ textAlign: "center", margin: "19px 0" }}>Tax Invoice</h5>
+              <h5 style={{ textAlign: "center", margin: "19px 0" }}>{t('Tax Invoice')}</h5>
               <p style={{ textAlign: "center", margin: "0 0 10px 0" }}>
                 <span>{orderById.branch.branchName}</span><br />
                 <span>{orderById.branch.address}</span><br />
@@ -454,8 +454,8 @@ class OrderHistory extends Component {
               {orderById.customerDetails.member &&
                 <div>
                   <p style={{ display: "flex", textAlign: "center", justifyContent: "space-between" }}>
-                    <span>ID: <span style={{ padding: "10px" }}>{orderById.customerDetails.member.memberId}</span></span>
-                    <span>Mob: <span style={{ padding: "10px" }}>{orderById.customerDetails.member.mobileNo}</span></span>
+                    <span>{t('ID:')} <span style={{ padding: "10px" }}>{orderById.customerDetails.member.memberId}</span></span>
+                    <span>{t('Mob:')} <span style={{ padding: "10px" }}>{orderById.customerDetails.member.mobileNo}</span></span>
                   </p>
                   <p style={{ display: "flex", textAlign: "center", justifyContent: "center", marginTop: "0" }}>
                     <span>{orderById.customerDetails.member.credentialId.userName}</span>
@@ -466,7 +466,7 @@ class OrderHistory extends Component {
               <table style={{ width: "100%" }}>
                 <tbody>
                   <tr style={{ borderTop: "1px dashed #000" }}>
-                    <td>No.</td>
+                    <td>{t('No.')}</td>
                     <td>DESCRIPTION</td>
                     <td>PRICE</td>
                     <td>QTY</td>
@@ -495,12 +495,12 @@ class OrderHistory extends Component {
               <table style={{ width: "100%", textAlign: "right", borderTop: "1px dashed #000", borderBottom: "1px dashed #000" }}>
                 <tbody>
                   <tr>
-                    <td style={{ textAlign: "right", padding: "4px 4px 0 4px", width: "100%" }}>Amount Total {this.props.defaultCurrency}: </td>
+                    <td style={{ textAlign: "right", padding: "4px 4px 0 4px", width: "100%" }}>{t('Amount Total')} {this.props.defaultCurrency}: </td>
                     <td style={{ textAlign: "right", padding: "4px 0px 0 0px" }}>{parseFloat(orderById.actualAmount).toFixed(3)}</td>
                   </tr>
                   {parseFloat(orderById.discount) ?
                     <tr>
-                      <td style={{ textAlign: "right", padding: "0 4px", width: "100%" }}>Discount {this.props.defaultCurrency}: </td>
+                      <td style={{ textAlign: "right", padding: "0 4px", width: "100%" }}>{t('Discount')} {this.props.defaultCurrency}: </td>
                       <td style={{ textAlign: "right", padding: "0" }}>{parseFloat(orderById.discount).toFixed(3)}</td>
                     </tr>
                     : <tr></tr>}
@@ -512,39 +512,39 @@ class OrderHistory extends Component {
                     : <tr></tr>}
                   {parseFloat(orderById.vatAmount) ?
                     <tr>
-                      <td style={{ textAlign: "right", padding: "0 4px", width: "100%" }}>VAT {this.props.defaultCurrency}: </td>
+                      <td style={{ textAlign: "right", padding: "0 4px", width: "100%" }}>{t('VAT')} {this.props.defaultCurrency}: </td>
                       <td style={{ textAlign: "right", padding: "0" }}>{parseFloat(orderById.vatAmount).toFixed(3)}</td>
                     </tr>
                     : <tr></tr>}
                   {parseFloat(orderById.digitalAmount) ?
                     <tr>
-                      <td style={{ textAlign: "right", padding: "0 4px", width: "100%" }}>Digital {this.props.defaultCurrency}: </td>
+                      <td style={{ textAlign: "right", padding: "0 4px", width: "100%" }}>{t('Digital')} {this.props.defaultCurrency}: </td>
                       <td style={{ textAlign: "right", padding: "0" }}>5{parseFloat(orderById.digitalAmount).toFixed(3)}</td>
                     </tr>
                     : <tr></tr>}
                   {parseFloat(orderById.cashAmount) ?
                     <tr>
-                      <td style={{ textAlign: "right", padding: "0 4px", width: "100%" }}>Cash {this.props.defaultCurrency}: </td>
+                      <td style={{ textAlign: "right", padding: "0 4px", width: "100%" }}>{t('Cash')} {this.props.defaultCurrency}: </td>
                       <td style={{ textAlign: "right", padding: "0" }}>5{parseFloat(orderById.cashAmount).toFixed(3)}</td>
                     </tr>
                     : <tr></tr>}
                   {parseFloat(orderById.cardAmount) ?
                     <tr>
-                      <td style={{ textAlign: "right", padding: "0px 4px 4px 4px", width: "100%" }}>Card {this.props.defaultCurrency}: </td>
+                      <td style={{ textAlign: "right", padding: "0px 4px 4px 4px", width: "100%" }}>{t('Card')} {this.props.defaultCurrency}: </td>
                       <td style={{ textAlign: "right", padding: "0px 0px 4px 0px" }}>{parseFloat(orderById.cardAmount).toFixed(3)}</td>
                     </tr>
                     : <tr></tr>}
                   <tr>
-                    <td style={{ textAlign: "right", padding: "0px 4px 4px 4px", width: "100%" }}>Grand Total {this.props.defaultCurrency}: </td>
+                    <td style={{ textAlign: "right", padding: "0px 4px 4px 4px", width: "100%" }}>{t('Grand Total')} {this.props.defaultCurrency}: </td>
                     <td style={{ textAlign: "right", padding: "0px 0px 4px 0px" }}>{parseFloat(orderById.totalAmount).toFixed(3)}</td>
                   </tr>
                   <tr>
-                    <td style={{ textAlign: "right", padding: "0px 4px 4px 4px", width: "100%" }}>Paid Amount {this.props.defaultCurrency}: </td>
+                    <td style={{ textAlign: "right", padding: "0px 4px 4px 4px", width: "100%" }}>{t('Paid Amount')} {this.props.defaultCurrency}: </td>
                     <td style={{ textAlign: "right", padding: "0px 0px 4px 0px" }}>{parseFloat(orderById.totalAmount).toFixed(3)}</td>
                   </tr>
                   {orderById.cardNumber ?
                     <tr>
-                      <td style={{ textAlign: "right", padding: "0px 4px 4px 4px", width: "100%" }}>Card last four digit :</td>
+                      <td style={{ textAlign: "right", padding: "0px 4px 4px 4px", width: "100%" }}>{t('Card last four digit')} :</td>
                       <td style={{ textAlign: "right", padding: "0px 0px 4px 0px" }}>{orderById.cardNumber}</td>
                     </tr>
                     : <tr></tr>}
@@ -558,13 +558,13 @@ class OrderHistory extends Component {
                   </div>
                   <QRCode value={`http://instagram.com/${orderById.branch.instaId}/`} renderAs='svg' width="50" height="50" />
                 </div>
-                {orderById.doneBy && <span>Served by: {orderById.doneBy.userName}</span>}
+                {orderById.doneBy && <span>{t('Served by')}: {orderById.doneBy.userName}</span>}
               </div>
               <p style={{ display: "flex", margin: "0 0 10px 0" }}>
-                <span>NB:</span>
+                <span>{t('NB')}:</span>
                 <span style={{ flexGrow: "1", textAlign: "center" }}>Membership cannot be refunded or transferred to others.</span>
               </p>
-              <p style={{ textAlign: "center", margin: "0 0 10px 0" }}>Thank You</p>
+              <p style={{ textAlign: "center", margin: "0 0 10px 0" }}>{t('Thank You')}</p>
             </div>
           </div>
         }

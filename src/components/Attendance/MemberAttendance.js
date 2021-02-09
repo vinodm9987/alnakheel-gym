@@ -143,7 +143,7 @@ class MemberAttendance extends Component {
       <div className="mainPage p-3 MemberAttendance">
         <div className="row">
           <div className="col-12 pageBreadCrumbs">
-            <span className="crumbText">Home</span><span className="mx-2">/</span><span className="crumbText">Dashboard</span><span className="mx-2">/</span><span className="crumbText">My Attendance</span>
+            <span className="crumbText">{t('Home')}</span><span className="mx-2">/</span><span className="crumbText">{t('Dashboard')}</span><span className="mx-2">/</span><span className="crumbText">{t('My Attendance')}</span>
           </div>
           <div className="col-12 pageHead">
             <h1>
@@ -193,10 +193,10 @@ class MemberAttendance extends Component {
                       <table className="borderRoundSeperateTable tdGray">
                         <thead>
                           <tr>
-                            <th>Date</th>
-                            <th className="text-center">Check in</th>
-                            <th className="text-center">Check Out</th>
-                            <th className="text-center">Total Hrs</th>
+                            <th>{t('Date')}</th>
+                            <th className="text-center">{t('Check in')}</th>
+                            <th className="text-center">{t('Check Out')}</th>
+                            <th className="text-center">{t('Total Hrs')}</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -218,7 +218,7 @@ class MemberAttendance extends Component {
                     <div className="d-flex my-3">
                       <div className="h-100 px-1 bg-success"></div>
                       <div className="mx-2">
-                        <h5 className="text-muted SegoeSemiBold m-0">Total</h5>
+                        <h5 className="text-muted SegoeSemiBold m-0">{t('Total')}</h5>
                         <h5 className="text-success SegoeBold m-0" dir="ltr">{total}</h5>
                       </div>
                     </div>

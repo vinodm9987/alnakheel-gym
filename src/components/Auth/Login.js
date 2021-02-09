@@ -96,7 +96,7 @@ class Login extends Component {
               <div className="col-12">
                 {/* <h3 className="text-center font-weight-bold pb-4">{t('Login')}</h3> */}
                 <img src={algymlogo} alt='' className="w-100px mx-auto d-block mb-3" style={{ maxWidth: '75%' }} />
-                <h5 className="mb-0 pb-5 font-weight-bold text-center">Login to your account</h5>
+                <h5 className="mb-0 pb-5 font-weight-bold text-center">{t('Login to your account')}</h5>
               </div>
               <div className="col-12">
                 <div className="form-group">
@@ -147,7 +147,7 @@ class Login extends Component {
             </div>
           </form>
           <div className="powered-before-login">
-            <p className="my-1"><small>Powered by</small></p>
+            <p className="my-1"><small>{t('Powered by')}</small></p>
                 <a href="https://gymnago.com/" target="_blank" className="mx-2"><img src={gymnagologo} alt='' width="100" height="20" /></a>
           </div>
         </div>

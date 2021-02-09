@@ -1547,7 +1547,7 @@ class AddMembers extends Component {
 
               {(!memberId || addPackage) &&
                 <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                  <label className="pt-4 mb-1">Total Amount</label>
+                  <label className="pt-4 mb-1">{t('Total Amount')}</label>
                   <h3 className="text-danger"><span className="mr-1">{this.props.defaultCurrency}</span><span className="font-weight-bold">{packageAmount}</span></h3>
                 </div>
               }
@@ -1573,7 +1573,7 @@ class AddMembers extends Component {
                   >
                     <span style={{ fontSize: "26px", lineHeight: "0.8" }}>+</span>
                     <span className="gaper"></span>
-                    <span>Add Installment</span>
+                    <span>{t('Add Installment')}</span>
                   </button>
                 </div>
               }
@@ -1588,10 +1588,10 @@ class AddMembers extends Component {
                             <div key={i} className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 grayBXhere">
                               <div className="lefthere">
                                 <div className="loopWhitehere">
-                                  <h4 className="displayFlexCls"><span>Installment</span><span className="gaper"></span><span className="mnw-20pxhere">{i + 1}</span></h4>
+                                  <h4 className="displayFlexCls"><span>{t('Installment')}</span><span className="gaper"></span><span className="mnw-20pxhere">{i + 1}</span></h4>
                                   <div className="vLinehere"></div>
                                   <div className="valuesetHere">
-                                    <label className="mt-2 mx-1">Value</label>
+                                    <label className="mt-2 mx-1">{t('Value')}</label>
                                     <div className="position-relative d-flex flex-grow-1" dir="ltr">
                                       <span className="OnlyCurrency Uppercase">{this.props.defaultCurrency}</span>
                                       <input type="text" className="form-control inputFieldPaddingCls ar-en-px-2"
@@ -1600,7 +1600,7 @@ class AddMembers extends Component {
                                     </div>
                                   </div>
                                   <div className="datesetHere">
-                                    <label className="mt-2 mx-1 text-nowrap">Due Date</label>
+                                    <label className="mt-2 mx-1 text-nowrap">{t('Due Date')}</label>
                                     <span className="position-relative">
                                       {/* please keep calendaer coming box input plugin */}
                                       <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -1718,10 +1718,9 @@ class AddMembers extends Component {
                           </table>
                         </div>
                         <div className="row mb-1 mt-4">
-                          <div className="col-12 col-sm-6 d-flex align-items-center"><h5 className="my-2 font-weight-bold px-1">Payment Method</h5></div>
+                          <div className="col-12 col-sm-6 d-flex align-items-center"><h5 className="my-2 font-weight-bold px-1">{t('Payment Method')}</h5></div>
                           <div className="col-12 col-sm-6 d-flex align-items-center justify-content-end">
                             <button onClick={(e) => e.preventDefault()} data-toggle="modal" data-target="#passwordAskModal" className="d-flex flex-column align-items-center justify-content-center bg-danger discount-class m-1 linkHoverDecLess rounded-circle text-white cursorPointer border-0">
-
                               <span className="w-100 text-center">
                                 <h3><span className="iconv1 iconv1-discount text-white"></span></h3>
                                 <span className="text-white">{t('Discount')}</span>
@@ -1783,7 +1782,7 @@ class AddMembers extends Component {
                           </div>
 
                           {/* Popup Discount */}
-                          <button type="button" id="Discount2" className="d-none" data-toggle="modal" data-target="#Discount" ref="openDiscount">Open modal</button>
+                          <button type="button" id="Discount2" className="d-none" data-toggle="modal" data-target="#Discount" ref="openDiscount">{t('Open')}</button>
                           <div className="modal fade commonYellowModal" id="Discount" >
                             <div className="modal-dialog modal-dialog-centered">
                               <div className="modal-content">
@@ -1885,7 +1884,7 @@ class AddMembers extends Component {
                           {/* if cheque over */}
                           <div className="col-12">
                             <div className="px-sm-1 pt-4 pb-5">
-                              <button type="button" className="btn btn-block btn-success btn-lg" onClick={() => this.handlePayment(totalAmount)}>Checkout</button>
+                              <button type="button" className="btn btn-block btn-success btn-lg" onClick={() => this.handlePayment(totalAmount)}>{t('Checkout')}</button>
                             </div>
                           </div>
                           <div className="modal fade commonYellowModal" id="Discount" >
@@ -1928,13 +1927,13 @@ class AddMembers extends Component {
         </div>
 
         {/* --------------Receipt Modal-=--------------- */}
-        <button type="button" className="btn btn-primary d-none" data-toggle="modal" data-target="#ReceiptModal" data-backdrop="static" data-keyboard="false" ref="receiptOpenModal">Receipt</button>
+        <button type="button" className="btn btn-primary d-none" data-toggle="modal" data-target="#ReceiptModal" data-backdrop="static" data-keyboard="false" ref="receiptOpenModal">{t('Receipt')}</button>
         {packageReceipt &&
           <div className="modal fade commonYellowModal" id="ReceiptModal">
             <div className="modal-dialog modal-lg" id="ReceiptModal2">
               <div className="modal-content">
                 <div className="modal-header">
-                  <h4 className="modal-title">Receipt</h4>
+                  <h4 className="modal-title">{t('Receipt')}</h4>
                   {/* <Link to={`/members-details/${packageReceipt._id}`}> */}
                   <button type="button" className="close" data-dismiss="modal" ref="receiptCloseModal" onClick={() => this.handleReceiptClose(packageReceipt._id)}><span className="iconv1 iconv1-close"></span></button>
                   {/* </Link> */}
@@ -1944,38 +1943,38 @@ class AddMembers extends Component {
                     <div className="text-center my-3">
                       <img alt='' src={`/${avatarPath}`} className="" width="100" />
                     </div>
-                    <h4 class="border-bottom border-dark text-center font-weight-bold pb-1">Tax Invoice</h4>
+                    <h4 class="border-bottom border-dark text-center font-weight-bold pb-1">{t('Tax Invoice')}</h4>
                     <div className="row px-5 justify-content-between">
                       <div className="col-free p-3">
                         <div className="mb-3">
-                          <label className="m-0 font-weight-bold">VAT Reg Number</label>
+                          <label className="m-0 font-weight-bold">{t('VAT Reg Number')}</label>
                           <p className="">{filteredBranches &&
                             filteredBranches.filter(b => b._id === branch)[0] && filteredBranches.filter(b => b._id === branch)[0].vatRegNo}</p>
                         </div>
                         <div className="">
-                          <label className="m-0 font-weight-bold">Address</label>
+                          <label className="m-0 font-weight-bold">{t('Address')}</label>
                           <p className="whiteSpaceNormal mnw-150px mxw-200px">{filteredBranches &&
                             filteredBranches.filter(b => b._id === branch)[0] && filteredBranches.filter(b => b._id === branch)[0].address}</p>
                         </div>
                       </div>
                       <div className="col-free p-3">
                         <div className="mb-3">
-                          <label className="m-0 font-weight-bold">Tax Invoice No</label>
+                          <label className="m-0 font-weight-bold">{t('Tax Invoice No')}</label>
                           <p className="">{packageReceipt.packageDetails.filter(p => p.packages === packageName && !p.isExpiredPackage)[0] &&
                             packageReceipt.packageDetails.filter(p => p.packages === packageName && !p.isExpiredPackage)[0].orderNo}</p>
                         </div>
                         <div className="">
-                          <label className="m-0 font-weight-bold">Date & Time</label>
+                          <label className="m-0 font-weight-bold">{t('Date & Time')}</label>
                           <p className="">{dateToDDMMYYYY(new Date())} {dateToHHMM(new Date())}</p>
                         </div>
                       </div>
                       <div className="col-free p-3">
                         <div className="">
-                          <label className="m-0 font-weight-bold">Receipt Total</label>
+                          <label className="m-0 font-weight-bold">{t('Receipt Total')}</label>
                           <p className="h4 font-weight-bold">{this.props.defaultCurrency} {parseFloat(totalAmount).toFixed(3)}</p>
                         </div>
                         <div className="">
-                          <label className="m-0 font-weight-bold">Telephone</label>
+                          <label className="m-0 font-weight-bold">{t('Telephone')}</label>
                           <p className="">{filteredBranches &&
                             filteredBranches.filter(b => b._id === branch)[0] && filteredBranches.filter(b => b._id === branch)[0].telephone}</p>
                         </div>
@@ -1984,14 +1983,14 @@ class AddMembers extends Component {
                     <div className="bgGray d-flex flex-wrap px-5 py-4 justify-content-between">
                       <div className="">
                         <h6 className="font-weight-bold m-1">
-                          <span className="px-1">ID:</span>
+                          <span className="px-1">{t('ID')}:</span>
                           <span className="px-1">{packageReceipt.memberId}</span>
                         </h6>
                       </div>
                       <h6 className="font-weight-bold m-1">{name}</h6>
                       <div className="">
                         <h6 className="font-weight-bold m-1">
-                          <span className="px-1">Mob:</span>
+                          <span className="px-1">{t('Mob')}:</span>
                           <span className="px-1">{number}</span>
                         </h6>
                       </div>
@@ -2000,9 +1999,9 @@ class AddMembers extends Component {
                       <table className="table">
                         <thead>
                           <tr>
-                            <th>Package Name</th>
-                            <th>From Date</th>
-                            <th>To Date</th>
+                            <th>{t('Package Name')}</th>
+                            <th>{t('From Date')}</th>
+                            <th>{t('To Date')}</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -2014,26 +2013,26 @@ class AddMembers extends Component {
                           </tr>
                           <tr>
                             <td colSpan="4">
-                              <div className="text-right my-1">Amount Total :</div>
+                              <div className="text-right my-1">{t('Amount Total')} :</div>
                               {parseFloat(discount) ?
-                                <div className="text-right my-1">Discount :</div>
+                                <div className="text-right my-1">{t('Discount')} :</div>
                                 : <div></div>}
                               {parseFloat(totalVat) ?
-                                <div className="text-right my-1">VAT{this.state.tax ? `(${this.state.tax} %)` : ''}:</div>
+                                <div className="text-right my-1">{t('VAT')}{this.state.tax ? `(${this.state.tax} %)` : ''}:</div>
                                 : <div></div>}
                               {parseFloat(digital) ?
-                                <div className="text-right my-1">Digital :</div>
+                                <div className="text-right my-1">{t('Digital')} :</div>
                                 : <div></div>}
                               {parseFloat(cash) ?
-                                <div className="text-right my-1">Cash :</div>
+                                <div className="text-right my-1">{t('Cash')} :</div>
                                 : <div></div>}
                               {parseFloat(card) ?
-                                <div className="text-right my-1">Card :</div>
+                                <div className="text-right my-1">{t('Card')} :</div>
                                 : <div></div>}
-                              <div className="text-right my-1">Grand Total :</div>
-                              <div className="text-right my-1">Paid Amount :</div>
+                              <div className="text-right my-1">{t('Grand Total')} :</div>
+                              <div className="text-right my-1">{t('Paid Amount')} :</div>
                               {this.state.cardNumber ?
-                                <div className="text-right my-1">Card last four digit :</div>
+                                <div className="text-right my-1">{t('Card last four digit')} :</div>
                                 : <div></div>}
                             </td>
                             <td className="">
@@ -2074,7 +2073,7 @@ class AddMembers extends Component {
                       <div className="d-flex">
                         <div className="mr-3 text-center">
                           <img src={instaimg} alt="" className="w-30px" />
-                          <h6 className="font-weight-bold mb-0 mt-1">Follow Us</h6>
+                          <h6 className="font-weight-bold mb-0 mt-1">{t('Follow Us')}</h6>
                         </div>
                         <div className="w-50px mr-3">
                           <QRCode value={`http://instagram.com/${filteredBranches &&
@@ -2083,21 +2082,21 @@ class AddMembers extends Component {
                       </div>
                       {/* <h6 className="font-weight-bold">Paid Amount: {this.props.defaultCurrency} {parseFloat(totalAmount).toFixed(3)}</h6> */}
                       {packageReceipt.packageDetails.filter(p => p.packages === packageName && !p.isExpiredPackage)[0] &&
-                        <h6 className="font-weight-bold">Served by: {packageReceipt.packageDetails.filter(p => p.packages === packageName && !p.isExpiredPackage)[0].doneBy.userName}</h6>}
+                        <h6 className="font-weight-bold">{t('Served by')}: {packageReceipt.packageDetails.filter(p => p.packages === packageName && !p.isExpiredPackage)[0].doneBy.userName}</h6>}
                     </div>
                     {/* <div className="text-center px-5">
                       <h5 className="text-muted">Membership cannot be refunded or transferred to others.</h5>
-                      <h5 className="font-weight-bold">Thank You</h5>
+                      <h5 className="font-weight-bold">{t('Thank You')}</h5>
                     </div> */}
                     <div className="d-flex align-items-cenetr justify-content-center">
                       <div className="text-center">
-                        <h6 className="font-weight-bold" >Membership cannot be refunded or transferred to others.</h6>
-                        <h6 className="font-weight-bold">Thank You</h6>
+                        <h6 className="font-weight-bold" >{t('Membership cannot be refunded or transferred to others.')}</h6>
+                        <h6 className="font-weight-bold">{t('Thank You')}</h6>
                       </div>
                     </div>
                     <div className="text-center">
                       {/* <Link to={`/members-details/${packageReceipt._id}`}> */}
-                      <button type="button" className="btn btn-success px-4 py-1 my-2" data-dismiss="modal" onClick={() => this.handlePrint(packageReceipt._id)}>Print Receipt</button>
+                      <button type="button" className="btn btn-success px-4 py-1 my-2" data-dismiss="modal" onClick={() => this.handlePrint(packageReceipt._id)}>{t('Print Receipt')}</button>
                       {/* </Link> */}
                     </div>
                   </div>
@@ -2114,7 +2113,7 @@ class AddMembers extends Component {
               <div style={{ display: "flex", justifyContent: "center" }}>
                 <img src={`/${avatarPath}`} width="200" style={{ width: "100px" }} alt="" />
               </div>
-              <h5 style={{ textAlign: "center", margin: "19px 0" }}>Tax Invoice</h5>
+              <h5 style={{ textAlign: "center", margin: "19px 0" }}>{t('Tax Invoice')}</h5>
               <p style={{ textAlign: "center", margin: "0 0 10px 0" }}>
                 <span>{filteredBranches &&
                   filteredBranches.filter(b => b._id === branch)[0] && filteredBranches.filter(b => b._id === branch)[0].branchName}</span><br />
@@ -2134,8 +2133,8 @@ class AddMembers extends Component {
               </p>
               <div>
                 <p style={{ display: "flex", textAlign: "center", justifyContent: "space-between" }}>
-                  <span>ID: <span style={{ padding: "10px" }}>{packageReceipt.memberId}</span></span>
-                  <span>Mob: <span style={{ padding: "10px" }}>{number}</span></span>
+                  <span>{t('ID:')} <span style={{ padding: "10px" }}>{packageReceipt.memberId}</span></span>
+                  <span>{t('Mob:')} <span style={{ padding: "10px" }}>{number}</span></span>
                 </p>
                 <p style={{ display: "flex", textAlign: "center", justifyContent: "center", marginTop: "0" }}>
                   <span>{name}</span>
@@ -2145,10 +2144,10 @@ class AddMembers extends Component {
               <table style={{ width: "100%" }}>
                 <tbody>
                   <tr style={{ borderTop: "1px dashed #000" }}>
-                    <td>No.</td>
-                    <td>Package Name</td>
-                    <td>From Date</td>
-                    <td>To Date</td>
+                    <td>{t('No.')}</td>
+                    <td>{t('Package Name')}</td>
+                    <td>{t('From Date')}</td>
+                    <td>{t('To Date')}</td>
                   </tr>
                   {/* <tr style={{ borderTop: "1px dashed #000" }}>
                   <td>1</td>
@@ -2168,12 +2167,12 @@ class AddMembers extends Component {
               <table style={{ width: "100%", textAlign: "right", borderTop: "1px dashed #000", borderBottom: "1px dashed #000" }}>
                 <tbody>
                   <tr>
-                    <td style={{ textAlign: "right", padding: "4px 4px 0 4px", width: "100%" }}>Amount Total {this.props.defaultCurrency}: </td>
+                    <td style={{ textAlign: "right", padding: "4px 4px 0 4px", width: "100%" }}>{t('Amount Total')} {this.props.defaultCurrency}: </td>
                     <td style={{ textAlign: "right", padding: "4px 0px 0 0px" }}>{parseFloat(subTotal).toFixed(3)}</td>
                   </tr>
                   {parseFloat(discount) ?
                     <tr>
-                      <td style={{ textAlign: "right", padding: "0 4px", width: "100%" }}>Discount {this.props.defaultCurrency}: </td>
+                      <td style={{ textAlign: "right", padding: "0 4px", width: "100%" }}>{t('Discount')} {this.props.defaultCurrency}: </td>
                       <td style={{ textAlign: "right", padding: "0" }}>{parseFloat(discount).toFixed(3)}</td>
                     </tr>
                     : <tr></tr>}
@@ -2185,39 +2184,39 @@ class AddMembers extends Component {
                     : <tr></tr>} */}
                   {parseFloat(totalVat) ?
                     <tr>
-                      <td style={{ textAlign: "right", padding: "0 4px", width: "100%" }}>VAT {this.props.defaultCurrency}: </td>
+                      <td style={{ textAlign: "right", padding: "0 4px", width: "100%" }}>{t('VAT')} {this.props.defaultCurrency}: </td>
                       <td style={{ textAlign: "right", padding: "0" }}>{parseFloat(totalVat).toFixed(3)}</td>
                     </tr>
                     : <tr></tr>}
                   {parseFloat(digital) ?
                     <tr>
-                      <td style={{ textAlign: "right", padding: "0 4px", width: "100%" }}>Digital {this.props.defaultCurrency}: </td>
+                      <td style={{ textAlign: "right", padding: "0 4px", width: "100%" }}>{t('Digital')} {this.props.defaultCurrency}: </td>
                       <td style={{ textAlign: "right", padding: "0" }}>5{parseFloat(digital).toFixed(3)}</td>
                     </tr>
                     : <tr></tr>}
                   {parseFloat(cash) ?
                     <tr>
-                      <td style={{ textAlign: "right", padding: "0 4px", width: "100%" }}>Cash {this.props.defaultCurrency}: </td>
+                      <td style={{ textAlign: "right", padding: "0 4px", width: "100%" }}>{t('Cash')} {this.props.defaultCurrency}: </td>
                       <td style={{ textAlign: "right", padding: "0" }}>5{parseFloat(cash).toFixed(3)}</td>
                     </tr>
                     : <tr></tr>}
                   {parseFloat(card) ?
                     <tr>
-                      <td style={{ textAlign: "right", padding: "0px 4px 4px 4px", width: "100%" }}>Card {this.props.defaultCurrency}: </td>
+                      <td style={{ textAlign: "right", padding: "0px 4px 4px 4px", width: "100%" }}>{t('Card')} {this.props.defaultCurrency}: </td>
                       <td style={{ textAlign: "right", padding: "0px 0px 4px 0px" }}>{parseFloat(card).toFixed(3)}</td>
                     </tr>
                     : <tr></tr>}
                   <tr>
-                    <td style={{ textAlign: "right", padding: "0px 4px 4px 4px", width: "100%" }}>Grand Total {this.props.defaultCurrency}: </td>
+                    <td style={{ textAlign: "right", padding: "0px 4px 4px 4px", width: "100%" }}>{t('Grand Total')} {this.props.defaultCurrency}: </td>
                     <td style={{ textAlign: "right", padding: "0px 0px 4px 0px" }}>{parseFloat(totalAmount).toFixed(3)}</td>
                   </tr>
                   <tr>
-                    <td style={{ textAlign: "right", padding: "0px 4px 4px 4px", width: "100%" }}>Paid Amount {this.props.defaultCurrency}: </td>
+                    <td style={{ textAlign: "right", padding: "0px 4px 4px 4px", width: "100%" }}>{t('Paid Amount')} {this.props.defaultCurrency}: </td>
                     <td style={{ textAlign: "right", padding: "0px 0px 4px 0px" }}>{parseFloat(totalAmount).toFixed(3)}</td>
                   </tr>
                   {this.state.cardNumber ?
                     <tr>
-                      <td style={{ textAlign: "right", padding: "0px 4px 4px 4px", width: "100%" }}>Card last four digit :</td>
+                      <td style={{ textAlign: "right", padding: "0px 4px 4px 4px", width: "100%" }}>{t('Card last four digit')} :</td>
                       <td style={{ textAlign: "right", padding: "0px 0px 4px 0px" }}>{this.state.cardNumber}</td>
                     </tr>
                     : <tr></tr>}
@@ -2233,13 +2232,13 @@ class AddMembers extends Component {
                     filteredBranches.filter(b => b._id === branch)[0] && filteredBranches.filter(b => b._id === branch)[0].instaId}/`} renderAs='svg' width="50" height="50" />
                 </div>
                 {packageReceipt.packageDetails.filter(p => p.packages === packageName && !p.isExpiredPackage)[0] &&
-                  <span>Served by: {packageReceipt.packageDetails.filter(p => p.packages === packageName && !p.isExpiredPackage)[0].userName}</span>}
+                  <span>{t('Served by')}: {packageReceipt.packageDetails.filter(p => p.packages === packageName && !p.isExpiredPackage)[0].userName}</span>}
               </div>
               <p style={{ display: "flex", margin: "0 0 10px 0" }}>
-                <span>NB:</span>
-                <span style={{ flexGrow: "1", textAlign: "center" }}>Membership cannot be refunded or transferred to others.</span>
+                <span>{t('NB')}:</span>
+                <span style={{ flexGrow: "1", textAlign: "center" }}>{t('Membership cannot be refunded or transferred to others.')}</span>
               </p>
-              <p style={{ textAlign: "center", margin: "0 0 10px 0" }}>Thank You</p>
+              <p style={{ textAlign: "center", margin: "0 0 10px 0" }}>{t('Thank You')}</p>
             </div>
           </div>
         }

@@ -9,6 +9,8 @@ import { getMemberEntrance } from '../../actions/member.action';
 import { dateToDDMMYYYY, dateToHHMM, setTime } from '../../utils/apis/helpers';
 import { changeLanguage } from '../../utils/changeLanguage';
 import { removeLoading, setLoading } from '../../actions/loader.action';
+import gymnagologo from '../../assets/img/gymnago.png'
+import algymlogo from '../../assets/img/al-main-logo.png'
 class CustomerFullView extends Component {
 
   constructor(props) {
@@ -54,18 +56,24 @@ class CustomerFullView extends Component {
       }
       return (
         <div className="pr">
-          <div className="container-fluid bg-primary w-100 d-flex cfvwrap h-100">
+          <div className="container-fluid bg-black w-100 d-flex cfvwrap h-100">
             <div className="row CFV h-100">
-              <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6 p-5 align-self-center text-center h-100 d-flex">
-                <div className="bg-light py-4 w-100 h-100">
+              <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6 p-5 align-self-center text-center h-100 d-flex bg-black">
+                <div className="bg-black py-4 w-100 h-100">
                   <img alt='' src={`/${avatar.path}`} className="CFVPhoto" />
                   {/* <img alt='' src="https://i0.wp.com/post.medicalnewstoday.com/wp-content/uploads/sites/3/2020/03/GettyImages-1092658864_hero-1024x575.jpg?w=1155&h=1528" className="CFVPhoto" /> */}
+                </div>
+                <div className="powered-in-cfv">
+                  <p className="my-1 mx-1 text-white"><small>{t('Powered by')}</small></p>
+                  <a href="https://gymnago.com/" target="_blank" className="mx-1"><img src={gymnagologo} alt='' width="100" height="20" /></a>
                 </div>
               </div>
               <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6 p-0 h-100 rightcnt">
                 <div className="bg-white p-0">
                   <div className="d-flex justify-content-start pt-2 pl-5">
-                    <img alt='' src="/static/media/gymnago.8cf7122d.png" width="250" />
+                    <div className="w-100 d-flex justify-content-end">
+                      <img alt='' src={algymlogo} width="100" height="100"  />
+                    </div>
                     <span className="cursorPointer d-inline-flex align-items-center CFV-ar-text" onClick={() => this.changedLanguage()}>
                       <span className="iconv1 iconv1-globe language-icon px-1" style={{ fontSize: '20px' }}></span>
                       <span className="px-1 SegoeSemiBold">{t('TopBarLanguage')}</span>
@@ -97,7 +105,7 @@ class CustomerFullView extends Component {
                       <div className="d-flex p-2 w-50 mt-3 CFVW100sm">
                         <h3 className="text-danger iconv1 iconv1-biomatric-status font-weight-bold mt-1"> </h3>
                         <div className="px-2">
-                          <h5 className="font-weight-bold text-muted">Status</h5>
+                          <h5 className="font-weight-bold text-muted">{t('Status')}</h5>
                           <h5 className={resultedClass}>{resultedStatus}</h5>
                           {/* no change in this below class so use above {resultedClass} only and comment below line */}
                           {/* <h5 className="bg-orange text-white font-weight-bold px-5 py-2 rounded text-center blinker-1">{t('Freezed')}</h5> */}
@@ -110,7 +118,7 @@ class CustomerFullView extends Component {
                       <div className="d-flex p-2 w-50 mt-0 CFVW100sm">
                         <h3 className="text-danger iconv1 iconv1-biomatric-punch font-weight-bold mt-1"> </h3>
                         <div className="px-2">
-                          <h5 className="font-weight-bold text-muted">Punched At</h5>
+                          <h5 className="font-weight-bold text-muted">{t('Punched At')}</h5>
                           <h5 className="text-danger font-weight-bold dirltrtar">{dateToDDMMYYYY(new Date())}</h5>
                           {/* <h5 className="text-danger font-weight-bold dirltrtar">22/01/1199</h5> */}
                           <label className="text-muted dirltrtar">{dateToHHMM(new Date())}</label>
@@ -134,14 +142,14 @@ class CustomerFullView extends Component {
                       <div className="d-flex p-2 w-50 mt-0 CFVW100sm">
                         <h3 className="text-danger iconv1 iconv1-calander font-weight-bold mt-1"> </h3>
                         <div className="px-2">
-                          <h5 className="font-weight-bold text-muted">Admission Date</h5>
+                          <h5 className="font-weight-bold text-muted">{t('Admission Date')}</h5>
                           <h5 className="text-danger font-weight-bold dirltrtar">{dateToDDMMYYYY(admissionDate)}</h5>
                         </div>
                       </div>
                       <div className="d-flex p-2 w-50 mt-0 CFVW100sm">
                         <h2 className="text-danger iconv1 iconv1-note-main-screen font-weight-bold mt-1"> </h2>
                         <div className="px-2">
-                          <h5 className="font-weight-bold text-muted">Note</h5>
+                          <h5 className="font-weight-bold text-muted">{t('Note')}</h5>
                           <h5 className="text-danger font-weight-bold dirltrtar">{notes}</h5>
                         </div>
                       </div>
@@ -151,14 +159,14 @@ class CustomerFullView extends Component {
                         <div className="d-flex p-2 w-50 mt-0 CFVW100sm">
                           <h3 className="text-danger iconv1 iconv1-calander font-weight-bold mt-1"> </h3>
                           <div className="px-2">
-                            <h5 className="font-weight-bold text-muted">Freeze From</h5>
+                            <h5 className="font-weight-bold text-muted">{t('Freeze From')}</h5>
                             <h5 className="text-danger font-weight-bold dirltrtar">{dateToDDMMYYYY(sortedPackage[0].freezeDate)}</h5>
                           </div>
                         </div>
                         <div className="d-flex p-2 w-50 mt-0 CFVW100sm">
                           <h3 className="text-danger iconv1 iconv1-calander font-weight-bold mt-1"> </h3>
                           <div className="px-2">
-                            <h5 className="font-weight-bold text-muted">Freeze To</h5>
+                            <h5 className="font-weight-bold text-muted">{t('Freeze To')}</h5>
                             <h5 className="text-danger font-weight-bold dirltrtar">
                               {dateToDDMMYYYY(new Date(new Date(sortedPackage[0].reactivationDate).setDate(new Date(sortedPackage[0].reactivationDate).getDate() - 1)))}
                             </h5>
@@ -168,20 +176,20 @@ class CustomerFullView extends Component {
                     }
                   </div>
                 </div>
-                <div className="p-2 d-flex flex-wrap justify-content-between w-100 bg-primary jjjj">
+                <div className="p-2 d-flex flex-wrap justify-content-between w-100 bg-black jjjj">
                   {sortedPackage[0] &&
                     <div className="m-2">
-                      <h5 className="font-weight-bold text-white">Date of Purchase</h5>
+                      <h5 className="font-weight-bold text-white">{t('Date of Purchase')}</h5>
                       <h5 className="text-white font-weight-bold dirltrtar">{dateToDDMMYYYY(sortedPackage[0].dateOfPurchase)}</h5>
                     </div>
                   }
                   <div className="m-2">
-                    <h5 className="font-weight-bold text-white">From Date</h5>
+                    <h5 className="font-weight-bold text-white">{t('From Date')}</h5>
                     <h5 className="text-white font-weight-bold dirltrtar">{dateToDDMMYYYY(sortedPackage[0].startDate)}</h5>
                     {/* <h5 className="text-white font-weight-bold dirltrtar">22/01/2020</h5> */}
                   </div>
                   <div className="m-2">
-                    <h5 className="font-weight-bold text-white">To Date</h5>
+                    <h5 className="font-weight-bold text-white">{t('To Date')}</h5>
                     <h5 className="text-white font-weight-bold dirltrtar">
                       {sortedPackage[0].extendDate ? dateToDDMMYYYY(sortedPackage[0].extendDate) : dateToDDMMYYYY(sortedPackage[0].endDate)}
                     </h5>
@@ -194,7 +202,7 @@ class CustomerFullView extends Component {
         </div>
       )
     } else {
-      return <div>Please place your finger on the device to check status.</div>
+      return <div>{t('Please place your finger on the device to check status.')}</div>
     }
   }
 }

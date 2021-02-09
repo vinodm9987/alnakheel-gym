@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 class parttimepayroll extends Component {
     render() {
+        const { t } = this.props
         return (
             <div className="mainPage p-3">
                 <div className="row">
@@ -66,7 +67,7 @@ class parttimepayroll extends Component {
                                             </div>
                                             <div className="justify-content-sm-end d-flex pt-3 col-12">
                                                 <button type="button" className="btn btn-success mx-1 px-4">Submit</button>
-                                                <button type="button" className="btn btn-danger mx-1 px-4">Cancel</button>
+                                                <button type="button" className="btn btn-danger mx-1 px-4">{t('Cancel')}</button>
                                             </div>
                                         </div>
                                         <h4 className="mb-4 font-weight-bold">Hourly work hours details</h4>
@@ -144,7 +145,7 @@ class parttimepayroll extends Component {
                                             </div>
                                             <div className="justify-content-sm-end d-flex pt-3 col-12">
                                                 <button type="button" className="btn btn-success mx-1 px-4">Submit</button>
-                                                <button type="button" className="btn btn-danger mx-1 px-4">Cancel</button>
+                                                <button type="button" className="btn btn-danger mx-1 px-4">{t('Cancel')}</button>
                                             </div>
                                         </div>
 

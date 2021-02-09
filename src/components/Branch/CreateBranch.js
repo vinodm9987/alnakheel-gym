@@ -330,7 +330,7 @@ class CreateBranch extends Component {
                 <label htmlFor="geocode" className="mx-sm-2 inlineFormLabel type1">{t('Geocode')}</label>
                 <div className={this.state.geocodeE ? "form-control mx-sm-2 inlineFormInputs p-0 d-flex FormInputsError" : "form-control mx-sm-2 inlineFormInputs p-0 d-flex"}>
                   <input type="text" autoComplete="off" className="border-0 px-2 w-100 BgTransparent" id="geocode" value={geocode} onChange={(e) => this.setState(validator(e, 'geocode', 'text', [t('Enter geocode')]))} />
-                  <button type="button" className="btn btn-success btn-sm px-3 mx-1 my-1 text-nowrap" data-toggle="modal" data-target="#MapModal">Get Code</button>
+                  <button type="button" className="btn btn-success btn-sm px-3 mx-1 my-1 text-nowrap" data-toggle="modal" data-target="#MapModal">{t('Get Code')}</button>
                 </div>
                 <div className="errorMessageWrapper">
                   <small className="text-danger mx-sm-2 errorMessage">{this.state.geocodeE}</small>

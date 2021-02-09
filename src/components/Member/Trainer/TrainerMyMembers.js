@@ -103,7 +103,7 @@ class TrainerMyMembers extends Component {
                           <small className="d-block text-primary whiteSpaceNoWrap dirltrtar d-inline-block">{mobileNo}</small>
                         </span>
                         <span className="m-3">
-                          <small className="d-block text-muted whiteSpaceNoWrap">Admission Date</small>
+                          <small className="d-block text-muted whiteSpaceNoWrap">{t('Admission Date')}</small>
                           <small className="d-block text-success whiteSpaceNoWrap">{dateToDDMMYYYY(admissionDate)}</small>
                         </span>
                       </div>

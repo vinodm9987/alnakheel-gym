@@ -62,7 +62,7 @@ class CreateRestore extends Component {
       <div className={this.state.url === '/restore' ? "tab-pane fade show active mt-4" : "tab-pane fade mt-4"} id="menu1" role="tabpanel">
         <div className="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
           <div className="form-group position-relative">
-            <label htmlFor="RestoreName">Restore Name</label>
+            <label htmlFor="RestoreName">{t('Restore Name')}</label>
             <input type="text" autoComplete="off" className={this.state.restoreNameE ? "form-control bg-white FormInputsError" : "form-control bg-white"} id="RestoreName"
               value={restoreName} onChange={(e) => this.setState(validator(e, 'restoreName', 'text', [t('Enter restore name')]))}
             />
@@ -73,12 +73,12 @@ class CreateRestore extends Component {
         </div>
         <div className="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
           <div className="form-group position-relative">
-            <label htmlFor="RestoreDestination">Restore Source</label>
+            <label htmlFor="RestoreDestination">{t('Restore Source')}</label>
             {/* <div className="custom-file-gym form-control">
                 <input type="file" className="custom-file-input-gym" id="customFile" webkitdirectory="" directory=""
                   onChange={(e) => this.selectDestination(e)}
                 />
-                <label className="rightBrowserLabel" htmlFor="customFile">Upload Image</label>
+                <label className="rightBrowserLabel" htmlFor="customFile">{t('Upload Image')}</label>
               </div> */}
             <input type="text" autoComplete="off" className={this.state.restoreDestinationE ? "form-control bg-white FormInputsError" : "form-control bg-white"} id="RestoreDestination"
               value={restoreDestination} onChange={(e) => this.setState(validator(e, 'restoreDestination', 'text', [t('Enter restore destination')]))}
@@ -91,9 +91,9 @@ class CreateRestore extends Component {
         <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
           <div className="justify-content-sm-end d-flex pt-3">
             <button disabled={disableSubmit(this.props.loggedUser, 'Backup and Restore', 'Restore')} type="button" className="btn btn-success mx-1 px-4" onClick={() => this.handleSubmit()}>
-              <span className="iconv1 iconv1-sync"></span> <span className="px-1">Run Restore</span>
+              <span className="iconv1 iconv1-sync"></span> <span className="px-1">{t('Run Restore')}</span>
             </button>
-            <button type="button" className="btn btn-danger mx-1 px-4" onClick={() => this.handleCancel()}>Cancel</button>
+            <button type="button" className="btn btn-danger mx-1 px-4" onClick={() => this.handleCancel()}>{t('Cancel')}</button>
           </div>
         </div>
       </div>

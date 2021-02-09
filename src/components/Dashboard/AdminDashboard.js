@@ -412,7 +412,7 @@ class AdminDashboard extends Component {
                 <h4 className="text-orange">
                   <span className="iconv1 iconv1-info"></span>
                 </h4>
-                <h5 className="text-body">There is no data to show you</h5>
+                <h5 className="text-body">{t('There is no data to show you')}</h5>
               </div>
             }
             {/* <div className="col-12 d-flex flex-wrap align-items-center justify-content-end mt-auto">
@@ -446,7 +446,7 @@ class AdminDashboard extends Component {
           <div className="row m-0 w-100 mw-100 bg-light rounded d-flex align-items-start h-100">
 
             <div className="col-12 d-flex flex-wrap align-items-center justify-content-between py-1 mb-auto">
-              <h6 className="mx-1 my-2 SegoeBold py-1">Total Sales</h6>
+              <h6 className="mx-1 my-2 SegoeBold py-1">{t('Total Sales')}</h6>
               <div className="underline w-100"></div>
             </div>
 
@@ -493,11 +493,11 @@ class AdminDashboard extends Component {
                 <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-9 pt-2">
                   <div className="row">
                     <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-4 pb-2">
-                      <h6>Total Amount</h6>
+                      <h6>{t('Total Amount')}</h6>
                       <h4 className="font-weight-bold dirltrtar text-success">{this.props.defaultCurrency} {totalSells.toFixed(3)}</h4>
                     </div>
                     <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-4 pb-2">
-                      <h6>Payment Type</h6>
+                      <h6>{t('Payment Type')}</h6>
                       <div className="d-flex flex-wrap align-items-center">
                         <span className="position-relative w-100">
                           <select className="bg-white border-secondary border-secondary pr-4 pl-1 w-100" style={{ fontSize: "13px" }}
@@ -515,7 +515,7 @@ class AdminDashboard extends Component {
                       </div>
                     </div>
                     <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-4 pb-2">
-                      <h6>Transaction Type</h6>
+                      <h6>{t('Transaction Type')}</h6>
                       <div className="d-flex flex-wrap align-items-center">
                         <span className="position-relative w-100">
                           <select className="bg-white border-secondary border-secondary pr-4 pl-1 w-100" style={{ fontSize: "13px" }}
@@ -532,11 +532,11 @@ class AdminDashboard extends Component {
                       </div>
                     </div>
                     <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-4 pb-2">
-                      <h6>Packages Amount</h6>
+                      <h6>{t('Packages Amount')}</h6>
                       <h4 className="font-weight-bold dirltrtar text-orange">{this.props.defaultCurrency} {totalPackageSells ? totalPackageSells.toFixed(3) : 0}</h4>
                     </div>
                     <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-4 pb-2">
-                      <h6>POS Amount</h6>
+                      <h6>{t('POS Amount')}</h6>
                       <h4 className="font-weight-bold dirltrtar text-danger">{this.props.defaultCurrency} {totalStockSells ? totalStockSells.toFixed(3) : 0}</h4>
                     </div>
                     {/* <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-4 pb-2">
@@ -547,7 +547,7 @@ class AdminDashboard extends Component {
                       <div className="underline w-100 mt-2 mb-1"></div>
                     </div>
                     <div className="col-12">
-                      <p><small className="font-weight-bold">Sales By Branches</small></p>
+                      <p><small className="font-weight-bold">{t('Sales By Branches')}</small></p>
                       <div className="d-flex flex-wrap pb-3">
                         {branches.map((branch, i) => {
                           return (
@@ -610,7 +610,7 @@ class AdminDashboard extends Component {
           <div className="row m-0 w-100 mw-100 bg-light rounded d-flex align-items-start h-100">
 
             <div className="col-12 d-flex flex-wrap align-items-center justify-content-between py-1 mb-auto">
-              <h6 className="mx-1 my-2 SegoeBold py-1">Pending Installments</h6>
+              <h6 className="mx-1 my-2 SegoeBold py-1">{t('Pending Installments')}</h6>
               <div className="d-flex flex-wrap align-items-center">
                 <span className="position-relative mx-1 my-2">
                   <select className="bg-white border-secondary border-secondary pr-4 pl-1 mw-100" style={{ fontSize: "13px" }}
@@ -684,7 +684,7 @@ class AdminDashboard extends Component {
                           <div className="col w-auto px-2">
                             <div className="row">
                               <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                <h6>Total Amount</h6>
+                                <h6>{t('Total Amount')}</h6>
                                 <h5 className="font-weight-bold dirltrtar text-success">{this.props.defaultCurrency} {totalPendingAmount.toFixed(3)}</h5>
                               </div>
                             </div>
@@ -702,10 +702,10 @@ class AdminDashboard extends Component {
                         <table className="borderRoundSeperateTable tdWhite">
                           <thead>
                             <tr>
-                              <th><small>Member Name</small></th>
-                              <th className="text-center"><small>Amount</small></th>
-                              <th><small>Due Date</small></th>
-                              <th><small>Type</small></th>
+                              <th><small>{t('Member Name')}</small></th>
+                              <th className="text-center"><small>{t('Amount')}</small></th>
+                              <th><small>{t('Due Date')}</small></th>
+                              <th><small>{t('Type')}</small></th>
                               {/* <th></th> */}
                             </tr>
                           </thead>
@@ -746,7 +746,7 @@ class AdminDashboard extends Component {
                       <h4 className="text-orange">
                         <span className="iconv1 iconv1-info"></span>
                       </h4>
-                      <h5 className="text-body">There is no data to show you</h5>
+                      <h5 className="text-body">{t('There is no data to show you')}</h5>
                     </div>
                   }
                   {/* tushar if no-data */}
@@ -757,7 +757,7 @@ class AdminDashboard extends Component {
                   <div className="col-12 px-0 d-flex flex-wrap justify-content-end">
                     <Link to='/pending-installments' className="linkHoverDecLess">
                       <div className="col text-right full-width-576-down">
-                        <button className="btn btn-warning br-50px text-white px-3 btn-sm text-nowrap mt-3 mt-sm-0">View All</button>
+                        <button className="btn btn-warning br-50px text-white px-3 btn-sm text-nowrap mt-3 mt-sm-0">{t('View All')}</button>
                       </div>
                     </Link>
                   </div>

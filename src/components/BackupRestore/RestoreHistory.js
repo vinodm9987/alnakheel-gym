@@ -25,9 +25,9 @@ class RestoreHistory extends Component {
           <table className="borderRoundSeperateTable tdGray">
             <thead>
               <tr>
-                <th>Restore Name</th>
-                <th>Date & Time</th>
-                <th>Source</th>
+                <th>{t('Restore Name')}</th>
+                <th>{t('Date & Time')}</th>
+                <th>{t('Source')}</th>
                 <th>{t('Status')}</th>
               </tr>
             </thead>
@@ -44,7 +44,7 @@ class RestoreHistory extends Component {
                       <div className="m-0 mxw-150px mnw-100px whiteSpaceNormal">{restoreDestination}</div>
                     </td>
                     <td className={status === 'Success' ? "text-primary" : "text-danger"}>{status}</td>
-                    {/* <td className="text-danger">Failed</td> */}
+                    {/* <td className="text-danger">{t('Failed')}</td> */}
                   </tr>
                 )
               })}

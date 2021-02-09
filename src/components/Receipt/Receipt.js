@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 
 class Receipt extends Component {
     render() {
+        const { t } = this.props
         return (
             <div className="pr">
                 <div className="container-fluid bg-white w-100 overflow-auto h-100">
@@ -35,7 +36,7 @@ class Receipt extends Component {
                                     <p className="">578941</p>
                                 </div>
                                 <div className="">
-                                    <label className="m-0 font-weight-bold">Date & Time</label>
+                                    <label className="m-0 font-weight-bold">{t('Date & Time')}</label>
                                     <p className="">20/05/2020 10:05 AM</p>
                                 </div>
                             </div>
@@ -133,7 +134,7 @@ class Receipt extends Component {
                                     <p className="">578941</p>
                                 </div>
                                 <div className="">
-                                    <label className="m-0 font-weight-bold">Date & Time</label>
+                                    <label className="m-0 font-weight-bold">{t('Date & Time')}</label>
                                     <p className="">20/05/2020 10:05 AM</p>
                                 </div>
                             </div>
