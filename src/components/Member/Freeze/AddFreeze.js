@@ -36,7 +36,7 @@ class AddFreeze extends Component {
       amountE: '',
       wantCharge: 'Yes',
       vat: '',
-      taxPercent: 0,
+      taxPercent: '',
       cash: 0,
       card: 0,
       cashE: '', cardE: '',
@@ -262,7 +262,7 @@ class AddFreeze extends Component {
       option: (styles, { isFocused, isSelected }) => ({ ...styles, backgroundColor: isSelected ? 'white' : isFocused ? 'lightblue' : null, color: 'black' }),
     };
 
-    let taxPercentValue = taxPercent ? taxPercent : ((this.props.activeVats && this.props.activeVats.filter(vat => vat.defaultVat)[0]) ? this.props.activeVats.filter(vat => vat.defaultVat)[0].taxPercent : '')
+    let taxPercentValue = taxPercent !== '' ? taxPercent : ((this.props.activeVats && this.props.activeVats.filter(vat => vat.defaultVat)[0]) ? this.props.activeVats.filter(vat => vat.defaultVat)[0].taxPercent : '')
     const subTotal = amount ? parseFloat(amount) : 0
     let totalVat = (subTotal) * taxPercentValue / 100
     const totalAmount = subTotal + totalVat
