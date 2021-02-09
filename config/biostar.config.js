@@ -326,7 +326,7 @@ exports.BIO_STAR_USER_REGISTRATION_URL = "http://127.0.0.1:8795/v2/users";
 exports.BIO_STAR_IP = "http://127.0.0.1:8795/v2";
 
 
-exports.BIO_STAR_MACHINE_ID = "542352205";
+exports.BIO_STAR_MACHINE_ID = "542352209";
 
 
 exports.fingerPrintBody = { enroll_quality: 0, retrieve_raw_image: true };
