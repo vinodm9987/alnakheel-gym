@@ -311,7 +311,9 @@ class PointOfSales extends Component {
       addedStocks.forEach(addedStock => {
         purchaseStock.push({ stockId: addedStock._id, quantity: addedStock.addedQuantity, amount: addedStock.addedPrice })
         actualAmount = actualAmount + addedStock.addedPrice
-        totalVat = totalVat + addedStock.addedPrice * addedStock.vat.taxPercent / 100
+      })
+      addedStocks.forEach(addedStock => {
+        totalVat = totalVat + (addedStock.addedPrice - (discount * addedStock.addedPrice / actualAmount) - (giftcard * addedStock.addedPrice / actualAmount)) * addedStock.vat.taxPercent / 100
       })
       let total = actualAmount - discount - giftcard + totalVat
       if ((parseInt(total) === parseInt((+cash || 0) + (+card || 0) + (+digital || 0) + (+cheque || 0))) && addedStocks.length > 0 && member && branch && !cardE && !cashE && !digitalE) {
