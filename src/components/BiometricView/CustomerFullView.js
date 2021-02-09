@@ -40,7 +40,11 @@ class CustomerFullView extends Component {
     if (this.props.memberEntrance) {
       const { credentialId: { avatar, userName }, mobileNo, admissionDate, gender,
         packageDetails, status, fingerScanStatus, notes } = this.props.memberEntrance
-      const sortedPackage = packageDetails.sort((a, b) => new Date(b.packages.period.periodDays) - new Date(a.packages.period.periodDays))
+      const sortedPackage = packageDetails.filter(packageDetail =>
+        packageDetail.extendDate
+          ? (setTime(packageDetail.startDate) <= setTime(new Date()) && setTime(packageDetail.extendDate) >= setTime(new Date()))
+          : (setTime(packageDetail.startDate) <= setTime(new Date()) && setTime(packageDetail.endDate) >= setTime(new Date()))
+      )
       let resultedStatus, resultedClass
       if (sortedPackage[0] && sortedPackage[0].reactivationDate && setTime(sortedPackage[0].reactivationDate) > setTime(new Date())) {
         resultedStatus = t('Freezed')
@@ -172,7 +176,7 @@ class CustomerFullView extends Component {
                   {sortedPackage[0] &&
                     <div className="m-2">
                       <h5 className="font-weight-bold text-white">Date of Purchase</h5>
-                      <h5 className="text-white font-weight-bold dirltrtar">{dateToDDMMYYYY(sortedPackage[0].dateOfPurchase)}</h5>
+                      <h5 className="text-white font-weight-bold dirltrtar">{dateToDDMMYYYY(sortedPackage[0].dateOfPaid)}</h5>
                     </div>
                   }
                   <div className="m-2">
