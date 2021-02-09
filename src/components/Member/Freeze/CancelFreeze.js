@@ -210,12 +210,12 @@ class CancelFreeze extends Component {
                       <td>{dateToDDMMYYYY(toDate)}</td>
                       <td>{noOfDays} {t('Days')}</td>
                       <td>{dateToDDMMYYYY(reactivationDate)}</td>
-                      <td>{calculateDays(new Date(), toDate)}</td>
+                      <td>{calculateDays(new Date(), returningDate ? returningDate : toDate)}</td>
                       <td>{dateToDDMMYYYY(returningDate)}</td>
                       <td><span className="mx-200-normalwrap">{reason}</span></td>
                       <td>{typeOfFreeze}</td>
                       <td className="text-center">
-                        <button disabled={calculateDays(new Date(), toDate) === 0 ? true : false} type="button" className="btn btn-danger btn-sm w-100px text-white"
+                        <button disabled={(calculateDays(new Date(), toDate) === 0 ? true : false) || typeOfFreeze === 'Canceled'} type="button" className="btn btn-danger btn-sm w-100px text-white"
                           data-toggle="modal" data-target="#CancelFreeze">Cancel</button>
                       </td>
                       {/* <!-- ---------pop up---------- --> */}
