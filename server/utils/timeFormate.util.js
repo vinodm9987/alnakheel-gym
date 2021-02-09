@@ -97,3 +97,22 @@ exports.checkDateInBetween = (check, start, end) => {
     const endDate = new Date(end).getTime();
     return (checkDate <= endDate && checkDate >= startDate);
 };
+
+
+exports.dateToDDMMYYYY = (date) => {
+    var dateStart = new Date(date)
+    if (dateStart instanceof Date && !isNaN(dateStart)) {
+      return `${("0" + (dateStart.getDate())).slice(-2)}/${("0" + (dateStart.getMonth() + 1)).slice(-2)}/${dateStart.getFullYear()}`
+    } else {
+      return ''
+    }
+  }
+  
+  exports.dateToHHMM = (date) => {
+    var dateStart = new Date(date)
+    if (dateStart instanceof Date && !isNaN(dateStart)) {
+      return `${dateStart.toLocaleTimeString('en-US').slice(0, -6)} ${dateStart.toLocaleTimeString('en-US').slice(-2)}`
+    } else {
+      return ''
+    }
+  }
