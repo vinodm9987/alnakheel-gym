@@ -252,8 +252,8 @@ class TrainerInstallment extends Component {
                   <div className="col-12">
                     <div className="row">
                       <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-5">
-                        <h4>Total Pending Amount</h4>
-                        <h2 className="font-weight-bold dirltrtar text-danger">{this.props.defaultCurrency} {totalPendingAmount.toFixed(3)}</h2>
+                        <label className="mb-1">Total Pending Amount</label>
+                        <h5 className="font-weight-bold dirltrtar text-danger">{this.props.defaultCurrency} {totalPendingAmount.toFixed(3)}</h5>
                       </div>
                       <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-7">
                         <div className="row d-block d-sm-flex justify-content-end pt-3">
@@ -308,7 +308,7 @@ class TrainerInstallment extends Component {
                                   <div className="d-flex">
                                     <img alt='' src={`/${avatar.path}`} className="mx-1 rounded-circle w-50px h-50px" />
                                     <div className="mx-1">
-                                      <h5 className="m-0 font-weight-bold">{userName}</h5>
+                                      <h6 className="my-1 font-weight-bold">{userName}</h6>
                                       <span className="text-body font-weight-light dirltrtar d-inline-block">{mobileNo}</span>
                                     </div>
                                   </div>

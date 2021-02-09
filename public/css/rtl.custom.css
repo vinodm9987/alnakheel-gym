@@ -489,11 +489,11 @@ body {
 /* Create Branch */
 @media (min-width: 992px) {
   .CreateBranch label.type1 {
-    width: 116px;
+    width: 121px;
   }
   .CreateBranch label.type1 + .inlineFormInputs,
   .CreateBranch label.type1 ~ .errorMessageWrapper .errorMessage {
-    max-width: calc(100% - 116px - 2rem);
+    max-width: calc(100% - 121px - 2rem);
   }
 }
 

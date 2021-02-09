@@ -1721,6 +1721,15 @@ button.react-calendar__navigation__arrow.react-calendar__navigation__prev2-butto
   transition: all 0.3s linear;
   font-size: 10px;
 }
+.powered-before-login {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  padding-bottom: 4px;
+}
 
 @media (min-width: 992px) {
   .loginRegister .loginRegisterWhiteBox.register-only {
@@ -1870,11 +1879,11 @@ button:focus {
 /* Create Branch */
 @media (min-width: 992px) {
   .CreateBranch label.type1 {
-    width: 119px;
+    width: 124px;
   }
   .CreateBranch label.type1 + .inlineFormInputs,
   .CreateBranch label.type1 ~ .errorMessageWrapper .errorMessage {
-    max-width: calc(100% - 119px - 2rem);
+    max-width: calc(100% - 124px - 2rem);
   }
 }
 
@@ -3786,4 +3795,8 @@ input:focus {
 }
 .PhoneInput input {
   margin-right: 5px;
+}
+
+input:focus {
+  border: 1px solid inherit;
 }

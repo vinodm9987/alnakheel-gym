@@ -373,7 +373,7 @@ class AdminDashboard extends Component {
             {/* tushar if data */}
             {this.props.mostSellingStock.length > 0 ?
               <div className="col-12 d-flex flex-wrap pb-3 align-items-start">
-                <div className="table-responsive scrollbarchrome" style={{ maxHeight: "400px" }}>
+                <div className="table-responsive scrollbarchrome" style={{ height: "400px" }}>
                   <table className="borderRoundSeperateTable tdWhite mostsellingTable">
                     <thead>
                       <tr>
@@ -395,9 +395,10 @@ class AdminDashboard extends Component {
                               </div>
                             </td>
                             <td><small className="mnw-50px whiteSpaceNormal d-inline-block">{branchName}</small></td>
-                            <td><small className="mnw-50px whiteSpaceNormal d-inline-block">{originalQuantity - quantity}</small></td>
+                            <td className="text-center"><small className="mnw-50px whiteSpaceNormal d-inline-block">{originalQuantity - quantity}</small></td>
                             <td className="text-center">
-                              <p className="m-0"><span className="text-warning SegoeBold">{this.props.defaultCurrency} {((originalQuantity - quantity) * sellingPrice).toFixed(3)}</span></p>
+                              <p className="m-0"><span className="text-warning SegoeBold">{this.props.defaultCurrency}</span></p>
+                              <p className="m-0"><span className="text-warning SegoeBold">{((originalQuantity - quantity) * sellingPrice).toFixed(3)}</span></p>
                             </td>
                           </tr>
                         )
@@ -697,12 +698,12 @@ class AdminDashboard extends Component {
                   {/* tushar if data */}
                   {this.props.pendingInstallments.length > 0 ?
                     <div className="col-12 px-0 pb-3">
-                      <div className="table-responsive scrollbarchrome" style={{ maxHeight: "339px" }}>
+                      <div className="table-responsive scrollbarchrome" style={{ height: "339px" }}>
                         <table className="borderRoundSeperateTable tdWhite">
                           <thead>
                             <tr>
                               <th><small>Member Name</small></th>
-                              <th><small>Amount</small></th>
+                              <th className="text-center"><small>Amount</small></th>
                               <th><small>Due Date</small></th>
                               <th><small>Type</small></th>
                               {/* <th></th> */}
@@ -727,10 +728,10 @@ class AdminDashboard extends Component {
                                     <td>{dateToDDMMYYYY(dueDate)}</td>
                                     <td>{type}</td>
                                     {/* <td className="text-center">
-                              <a href="/#" className="dboard-btn-icon-primary">
-                                <span className="iconv1 iconv1-right-small-arrow"></span>
-                              </a>
-                            </td> */}
+                                      <a href="/#" className="dboard-btn-icon-primary">
+                                        <span className="iconv1 iconv1-right-small-arrow"></span>
+                                      </a>
+                                    </td> */}
                                   </tr>
                                 )
                               } else {

@@ -6,9 +6,9 @@ const { logger: { logger }, handler: { successResponseHandler, errorResponseHand
 
 const { Formate: { setTime, checkDateInBetween } } = require('../../utils');
 
-const { memberFreezeNotification, freezeMemberInBioStar } = require('../../worker/freeze')
+const { memberFreezeNotification, freezeMemberInBioStar, checkIsMemberFreezable } = require('../../worker/freeze')
 
-
+const { freezeMember } = require('../../biostar')
 /**
  * models.
 */
@@ -50,7 +50,10 @@ exports.applyFreezeMember = async (req, res) => {
         req.body["fromDate"] = setTime(req.body.fromDate);
         req.body["toDate"] = setTime(req.body.toDate);
         req.body["reactivationDate"] = setTime(req.body.reactivationDate)
-        const exist = await MemberFreezing.find({ memberId: req.body.memberId, status: "Pending" }).count()
+        let memberInfo = await Member.findById(req.body.memberId).lean();
+        const isFreezable = checkIsMemberFreezable(memberInfo.packageDetails, req.body.toDate);
+        const exist = await MemberFreezing.find({ memberId: req.body.memberId, status: "Pending" }).count();
+        if (!isFreezable) return errorResponseHandler(res, 'error', 'Member don not have package on freeze date')
         if (exist) {
             req.responseData = await MemberFreezing.findOne({ memberId: req.body.memberId }).lean()
             const response = await MemberFreezing.findOneAndUpdate({ memberId: req.body.memberId, status: "Pending" }, req.body, { returnNewDocuments: true })
@@ -172,7 +175,7 @@ exports.freezeMember = async (req, res) => {
         }
         let checkLargest = new Date(largest).getTime();
         if (today !== checkLargest) {
-            await freezeMemberInBioStar(item.memberId, startDate, largest);
+            await freezeMember(item.memberId, startDate, largest);
         }
     }
     await memberFreezeNotification(users);
@@ -241,7 +244,7 @@ exports.cancelFreeze = async (req, res) => {
         newCancelFreeze['typeOfFreeze'] = 'Canceled';
         newCancelFreeze['returningDate'] = setTime(req.body.returningDate);
         const response = await newCancelFreeze.save();
-        await freezeMemberInBioStar(userData.memberId, req.body.returningDate, largestEndDate);
+        await freezeMember(userData.memberId, req.body.returningDate, largestEndDate);
         return successResponseHandler(res, response, "success");
     } catch (error) {
         logger.error(error);
