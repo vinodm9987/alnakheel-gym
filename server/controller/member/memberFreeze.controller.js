@@ -240,11 +240,8 @@ exports.cancelFreeze = async (req, res) => {
             let temp = await cancelFreezeUpdate(userData, i, largestEndDate, req.body.returningDate);
             largestEndDate = new Date(temp) > new Date(largestEndDate) ? new Date(temp) : largestEndDate;
         };
-        const newCancelFreeze = new MemberFreezing(req.body);
-        newCancelFreeze['typeOfFreeze'] = 'Canceled';
-        newCancelFreeze['returningDate'] = setTime(req.body.returningDate);
-        const response = await newCancelFreeze.save();
-        await freezeMember(userData.memberId, req.body.returningDate, largestEndDate);
+        await MemberFreezing.findByIdAndUpdate(req.body.id, { typeOfFreeze: 'Canceled', returningDate: setTime(req.body.returningDate) });
+        const response = await freezeMemberInBioStar(userData.memberId, req.body.returningDate, largestEndDate);
         return successResponseHandler(res, response, "success");
     } catch (error) {
         logger.error(error);

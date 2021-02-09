@@ -105,10 +105,10 @@ class CancelFreeze extends Component {
   //   }
   // }
 
-  handleSubmit(memberId) {
+  handleSubmit(memberId, id) {
     const { returningDate, reason } = this.state
     const cancelInfo = {
-      returningDate, reason, memberId
+      returningDate, reason, memberId, id
     }
     this.props.dispatch(cancelFreeze(cancelInfo))
   }
@@ -184,7 +184,7 @@ class CancelFreeze extends Component {
               </thead>
               <tbody>
                 {freezeHistory && getPageWiseData(this.state.pageNumber, freezeHistory, this.state.displayNum).map((freeze, i) => {
-                  const { fromDate, toDate, reactivationDate, memberId: { _id: member, credentialId: { userName, avatar }, memberId }, reason, noOfDays, returningDate, typeOfFreeze } = freeze
+                  const { fromDate, toDate, reactivationDate, memberId: { _id: member, credentialId: { userName, avatar }, memberId }, reason, noOfDays, returningDate, typeOfFreeze, _id } = freeze
                   return (
                     <tr key={i}>
                       {/* <td>
@@ -259,7 +259,7 @@ class CancelFreeze extends Component {
                                   </div>
                                 </div>
                                 <div className="col-12 py-3 d-flex flex-wrap align-items-center justify-content-end">
-                                  <button type="button" data-dismiss="modal" className="btn btn-success px-4" onClick={() => this.handleSubmit(member)}>{t('Submit')}</button>
+                                  <button type="button" data-dismiss="modal" className="btn btn-success px-4" onClick={() => this.handleSubmit(member, _id)}>{t('Submit')}</button>
                                 </div>
                               </div>
                             </div>

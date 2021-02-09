@@ -811,6 +811,16 @@ class AddMembers extends Component {
     }
   }
 
+  setCheque(totalAmount) {
+    this.setState({ showCheque: !this.state.showCheque }, () => {
+      if (this.state.showCheque) {
+        this.setState({ cash: 0, card: 0, digital: 0, cheque: totalAmount, cashE: '', cardE: '', digitalE: '' })
+      } else {
+        this.setState({ cash: 0, card: 0, digital: 0, cheque: 0, cashE: '', cardE: '', digitalE: '' })
+      }
+    })
+  }
+
   setEmergencyNumber(e) {
     const { t } = this.props
     if (e) {
@@ -1774,7 +1784,7 @@ class AddMembers extends Component {
                               <div className="d-flex">
                                 <div className="custom-control custom-checkbox roundedGreenRadioCheck mx-2">
                                   <input type="checkbox" className="custom-control-input" id="check" name="checkorNo"
-                                    checked={this.state.showCheque} onChange={() => this.setState({ showCheque: !this.state.showCheque, cash: 0, card: 0, digital: 0, cheque: 0 })}
+                                    checked={this.state.showCheque} onChange={() => this.setCheque(totalAmount)}
                                   />
                                   <label className="custom-control-label" htmlFor="check">{t('Cheque')}</label>
                                 </div>
