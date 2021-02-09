@@ -6,7 +6,7 @@ const { logger: { logger }, handler: { successResponseHandler, errorResponseHand
 
 const { Formate: { setTime, checkDateInBetween } } = require('../../utils');
 
-const { memberFreezeNotification, freezeMemberInBioStar, checkIsMemberFreezable } = require('../../worker/freeze')
+const { memberFreezeNotification, checkIsMemberFreezable } = require('../../worker/freeze')
 
 const { freezeMember } = require('../../biostar')
 /**
@@ -241,7 +241,7 @@ exports.cancelFreeze = async (req, res) => {
             largestEndDate = new Date(temp) > new Date(largestEndDate) ? new Date(temp) : largestEndDate;
         };
         await MemberFreezing.findByIdAndUpdate(req.body.id, { typeOfFreeze: 'Canceled', returningDate: setTime(req.body.returningDate) });
-        const response = await freezeMemberInBioStar(userData.memberId, req.body.returningDate, largestEndDate);
+        const response = await freezeMember(userData.memberId, req.body.returningDate, largestEndDate);
         return successResponseHandler(res, response, "success");
     } catch (error) {
         logger.error(error);
