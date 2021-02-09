@@ -37,14 +37,14 @@ module.exports = {
     await createBroadcastForMember(mobile, web, message, users);
   },
 
-  checkIsMemberFreezable: async (packagesDetails, to) => {
+  checkIsMemberFreezable:  (packagesDetails, to) => {
     const toTime = new Date(setTime(to)).getTime();
     let isFreezable = false;
     for (const packages of packagesDetails) {
       let packagesEnd = packages.extendDate ?
         new Date(setTime(packages.extendDate)).getTime() :
         new Date(setTime(packages.endDate)).getTime();
-      if (packagesEnd < toTime) {
+      if (packagesEnd > toTime) {
         isFreezable = true;
       } else {
         isFreezable = false;
