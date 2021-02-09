@@ -8,7 +8,7 @@ const { Formate: { setTime, checkDateInBetween } } = require('../../utils');
 
 const { memberFreezeNotification, freezeMemberInBioStar, checkIsMemberFreezable } = require('../../worker/freeze')
 
-
+const { freezeMember } = require('../../biostar')
 /**
  * models.
 */
@@ -175,7 +175,7 @@ exports.freezeMember = async (req, res) => {
         }
         let checkLargest = new Date(largest).getTime();
         if (today !== checkLargest) {
-            await freezeMemberInBioStar(item.memberId, startDate, largest);
+            await freezeMember(item.memberId, startDate, largest);
         }
     }
     await memberFreezeNotification(users);
@@ -244,7 +244,7 @@ exports.cancelFreeze = async (req, res) => {
         newCancelFreeze['typeOfFreeze'] = 'Canceled';
         newCancelFreeze['returningDate'] = setTime(req.body.returningDate);
         const response = await newCancelFreeze.save();
-        await freezeMemberInBioStar(userData.memberId, req.body.returningDate, largestEndDate);
+        await freezeMember(userData.memberId, req.body.returningDate, largestEndDate);
         return successResponseHandler(res, response, "success");
     } catch (error) {
         logger.error(error);
