@@ -489,7 +489,7 @@ class AddFreeze extends Component {
               </div>
 
 
-              {wantCharge === 'Yes' && freezeType === 'Individual' && member && fromDate <= toDate && noOfDays && reason && amount &&
+              {wantCharge === 'Yes' && freezeType === 'Individual' && member && fromDate <= toDate && noOfDays && reason && amount !== '' &&
                 <div className="modal right fade" id="myModal">
                   <div className="modal-dialog">
                     <div className="modal-content">
