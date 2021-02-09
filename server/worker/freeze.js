@@ -8,6 +8,8 @@ const { notificationObjectWithoutToken } = require("../utils/notification")
 const { createBroadcastForMember } = require('../notification/service')
 const { getAllBranch } = require('../service/branch.service');
 const { freezeMember } = require('../biostar');
+const { Formate: { setTime } } = require('../utils');
+
 
 
 module.exports = {
@@ -35,6 +37,21 @@ module.exports = {
     await createBroadcastForMember(mobile, web, message, users);
   },
 
+  checkIsMemberFreezable:  (packagesDetails, to) => {
+    const toTime = new Date(setTime(to)).getTime();
+    let isFreezable = false;
+    for (const packages of packagesDetails) {
+      let packagesEnd = packages.extendDate ?
+        new Date(setTime(packages.extendDate)).getTime() :
+        new Date(setTime(packages.endDate)).getTime();
+      if (packagesEnd > toTime) {
+        isFreezable = true;
+      } else {
+        isFreezable = false;
+      }
+      return isFreezable;
+    }
+  }
 
 
 }

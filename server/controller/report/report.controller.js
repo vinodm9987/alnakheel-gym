@@ -92,7 +92,24 @@ const getActiveMembers = async (body) => {
         packages[packageIndex].count++;
       }
       if (member.branch.toString() === branches[branchIndex]._id.toString() && branchIndex !== -1) {
-        branches[branchIndex].amount = branches[branchIndex].amount + doc.totalAmount
+        if (doc.Installments && doc.Installments.length) {
+          doc.Installments.forEach(installment => {
+            branches[branchIndex].amount += typeof installment.totalAmount === 'number' ? installment.totalAmount : 0
+          })
+        } else {
+          branches[branchIndex].amount += typeof doc.totalAmount === 'number' ? doc.totalAmount : 0
+        }
+        if (doc.trainerDetails && doc.trainerDetails.length) {
+          doc.trainerDetails.forEach(trainerDetail => {
+            if (trainerDetail.Installments && trainerDetail.Installments.length) {
+              trainerDetail.Installments.forEach(installment => {
+                branches[branchIndex].amount += typeof installment.totalAmount === 'number' ? installment.totalAmount : 0
+              })
+            } else {
+              branches[branchIndex].amount += typeof trainerDetail.totalAmount === 'number' ? trainerDetail.totalAmount : 0
+            }
+          })
+        }
       }
     });
   })

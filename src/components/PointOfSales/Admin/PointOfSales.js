@@ -256,6 +256,16 @@ class PointOfSales extends Component {
     }
   }
 
+  setCheque(totalAmount) {
+    this.setState({ showCheque: !this.state.showCheque }, () => {
+      if (this.state.showCheque) {
+        this.setState({ cash: 0, card: 0, digital: 0, cheque: totalAmount, cashE: '', cardE: '', digitalE: '' })
+      } else {
+        this.setState({ cash: 0, card: 0, digital: 0, cheque: 0, cashE: '', cardE: '', digitalE: '' })
+      }
+    })
+  }
+
   verifyPassword() {
     const { password } = this.state
     const { t } = this.props
@@ -311,7 +321,9 @@ class PointOfSales extends Component {
       addedStocks.forEach(addedStock => {
         purchaseStock.push({ stockId: addedStock._id, quantity: addedStock.addedQuantity, amount: addedStock.addedPrice })
         actualAmount = actualAmount + addedStock.addedPrice
-        totalVat = totalVat + addedStock.addedPrice * addedStock.vat.taxPercent / 100
+      })
+      addedStocks.forEach(addedStock => {
+        totalVat = totalVat + (addedStock.addedPrice - (discount * addedStock.addedPrice / actualAmount) - (giftcard * addedStock.addedPrice / actualAmount)) * addedStock.vat.taxPercent / 100
       })
       let total = actualAmount - discount - giftcard + totalVat
       if ((parseInt(total) === parseInt((+cash || 0) + (+card || 0) + (+digital || 0) + (+cheque || 0))) && addedStocks.length > 0 && member && branch && !cardE && !cashE && !digitalE) {
@@ -828,7 +840,7 @@ class PointOfSales extends Component {
                             <div className="d-flex">
                               <div className="custom-control custom-checkbox roundedGreenRadioCheck mx-2">
                                 <input type="checkbox" className="custom-control-input" id="check" name="checkorNo"
-                                  checked={this.state.showCheque} onChange={() => this.setState({ showCheque: !this.state.showCheque, cash: 0, card: 0, digital: 0, cheque: 0 })}
+                                  checked={this.state.showCheque} onChange={() => this.setCheque(total)}
                                 />
                                 <label className="custom-control-label" htmlFor="check">{t('Cheque')}</label>
                               </div>

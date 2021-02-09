@@ -237,6 +237,16 @@ class AddFreeze extends Component {
     }
   }
 
+  setCheque(totalAmount) {
+    this.setState({ showCheque: !this.state.showCheque }, () => {
+      if (this.state.showCheque) {
+        this.setState({ cash: 0, card: 0, digital: 0, cheque: totalAmount, cashE: '', cardE: '', digitalE: '' })
+      } else {
+        this.setState({ cash: 0, card: 0, digital: 0, cheque: 0, cashE: '', cardE: '', digitalE: '' })
+      }
+    })
+  }
+
   setAmount(e) {
     const { t } = this.props
     this.setState({ ...validator(e, 'amount', 'numberText', [t('Enter amount'), t('Enter valid amount')]), ...{ cash: 0, card: 0, digital: 0, cheque: 0 } })
@@ -479,7 +489,7 @@ class AddFreeze extends Component {
               </div>
 
 
-              {wantCharge === 'Yes' && freezeType === 'Individual' && member && fromDate <= toDate && noOfDays && reason && amount &&
+              {wantCharge === 'Yes' && freezeType === 'Individual' && member && fromDate <= toDate && noOfDays && reason && amount !== '' &&
                 <div className="modal right fade" id="myModal">
                   <div className="modal-dialog">
                     <div className="modal-content">
@@ -571,7 +581,7 @@ class AddFreeze extends Component {
                                 <div className="d-flex">
                                   <div className="custom-control custom-checkbox roundedGreenRadioCheck mx-2">
                                     <input type="checkbox" className="custom-control-input" id="check" name="checkorNo"
-                                      checked={this.state.showCheque} onChange={() => this.setState({ showCheque: !this.state.showCheque, cash: 0, card: 0, digital: 0, cheque: 0 })}
+                                      checked={this.state.showCheque} onChange={() => this.setCheque(totalAmount)}
                                     />
                                     <label className="custom-control-label" htmlFor="check">{t('Cheque')}</label>
                                   </div>

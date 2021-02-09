@@ -91,6 +91,11 @@ const stockSellSchema = new Schema({
         type: String,
     },
 
+    chequeAmount: Number,
+    chequeNumber: String,
+    bankName: String,
+    chequeDate: Date,
+
     doneBy: { type: Schema.Types.ObjectId, ref: "Credential" }
 
 }, { timestamps: { createdAt: "created_at", updatedAt: "updated_at" } }, { strict: false });
