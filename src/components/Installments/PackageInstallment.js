@@ -54,7 +54,7 @@ class PackageInstallment extends Component {
       packageAmount: 0
     }
     this.props.dispatch(getSystemYear())
-    this.props.dispatch(getPackageInstallment({ month: parseInt(this.state.pendingMonth), day: this.state.pendingYear }))
+    this.props.dispatch(getPackageInstallment({ month: parseInt(this.state.pendingMonth), year: this.state.pendingYear }))
   }
 
   componentDidUpdate(prevProps) {

@@ -258,6 +258,18 @@ class Orderdetails extends Component {
                                 {parseFloat(orderById.cardAmount) ?
                                   <div className="text-right my-1">Card :</div>
                                   : <div></div>}
+                                {parseFloat(orderById.chequeAmount) ?
+                                  <div className="text-right my-1">Cheque :</div>
+                                  : <div></div>}
+                                {parseFloat(orderById.bankName) ?
+                                  <div className="text-right my-1">Bank Name :</div>
+                                  : <div></div>}
+                                {parseFloat(orderById.chequeNumber) ?
+                                  <div className="text-right my-1">Cheque Number :</div>
+                                  : <div></div>}
+                                {parseFloat(orderById.chequeDate) ?
+                                  <div className="text-right my-1">Cheque Date :</div>
+                                  : <div></div>}
                                 <div className="text-right my-1">Grand Total :</div>
                                 <div className="text-right my-1">Paid Amount :</div>
                                 {orderById.cardNumber ?
@@ -283,6 +295,18 @@ class Orderdetails extends Component {
                                   : <div></div>}
                                 {parseFloat(orderById.cardAmount) ?
                                   <div className="my-1"><span className="invisible">{this.props.defaultCurrency}</span> <span className="px-1">{parseFloat(orderById.cardAmount).toFixed(3)}</span></div>
+                                  : <div></div>}
+                                {parseFloat(orderById.chequeAmount) ?
+                                  <div className="my-1"><span className="invisible">{this.props.defaultCurrency}</span> <span className="px-1">{parseFloat(orderById.chequeAmount).toFixed(3)}</span></div>
+                                  : <div></div>}
+                                {orderById.bankName ?
+                                  <div className="my-1"><span className="invisible">{this.props.defaultCurrency}</span> <span className="px-1">{orderById.bankName}</span></div>
+                                  : <div></div>}
+                                {orderById.chequeNumber ?
+                                  <div className="my-1"><span className="invisible">{this.props.defaultCurrency}</span> <span className="px-1">{orderById.chequeNumber}</span></div>
+                                  : <div></div>}
+                                {orderById.chequeDate ?
+                                  <div className="my-1"><span className="invisible">{this.props.defaultCurrency}</span> <span className="px-1">{orderById.chequeDate}</span></div>
                                   : <div></div>}
                                 <div className="my-1"><span className="">{this.props.defaultCurrency}</span> <span className="px-1">{parseFloat(orderById.totalAmount).toFixed(3)}</span></div>
                                 <div className="my-1"><span className="">{this.props.defaultCurrency}</span> <span className="px-1">{parseFloat(orderById.totalAmount).toFixed(3)}</span></div>
