@@ -1139,11 +1139,23 @@ class BookATrainer extends Component {
                               {parseFloat(card) ?
                                 <div className="text-right my-1">Card :</div>
                                 : <div></div>}
+                              {parseFloat(this.state.cheque) ?
+                                <div className="text-right my-1">Cheque :</div>
+                                : <div></div>}
+                              {parseFloat(this.state.bankName) ?
+                                <div className="text-right my-1">Bank Name :</div>
+                                : <div></div>}
+                              {parseFloat(this.state.chequeNumber) ?
+                                <div className="text-right my-1">Cheque Number :</div>
+                                : <div></div>}
+                              {parseFloat(this.state.chequeDate) ?
+                                <div className="text-right my-1">Cheque Date :</div>
+                                : <div></div>}
                               <div className="text-right my-1">Grand Total :</div>
                               <div className="text-right my-1">Paid Amount :</div>
-                              {/* {this.state.cardNumber ?
-                                  <div className="text-right my-1">{t('Card last four digit')} :</div>
-                                  : <div></div>} */}
+                              {this.state.cardNumber ?
+                                <div className="text-right my-1">{t('Card last four digit')} :</div>
+                                : <div></div>}
                             </td>
                             <td className="">
                               <div className="my-1"><span className="">{this.props.defaultCurrency}</span> <span className="px-1">{parseFloat(subTotal).toFixed(3)}</span></div>
@@ -1162,11 +1174,23 @@ class BookATrainer extends Component {
                               {parseFloat(card) ?
                                 <div className="my-1"><span className="invisible">{this.props.defaultCurrency}</span> <span className="px-1">{parseFloat(card).toFixed(3)}</span></div>
                                 : <div></div>}
+                              {parseFloat(this.state.cheque) ?
+                                <div className="my-1"><span className="invisible">{this.props.defaultCurrency}</span> <span className="px-1">{parseFloat(this.state.cheque).toFixed(3)}</span></div>
+                                : <div></div>}
+                              {this.state.bankName ?
+                                <div className="my-1"><span className="invisible">{this.props.defaultCurrency}</span> <span className="px-1">{this.state.bankName}</span></div>
+                                : <div></div>}
+                              {this.state.chequeNumber ?
+                                <div className="my-1"><span className="invisible">{this.props.defaultCurrency}</span> <span className="px-1">{this.state.chequeNumber}</span></div>
+                                : <div></div>}
+                              {this.state.chequeDate ?
+                                <div className="my-1"><span className="invisible">{this.props.defaultCurrency}</span> <span className="px-1">{this.state.chequeDate}</span></div>
+                                : <div></div>}
                               <div className="my-1"><span className="">{this.props.defaultCurrency}</span> <span className="px-1">{parseFloat(total).toFixed(3)}</span></div>
                               <div className="my-1"><span className="">{this.props.defaultCurrency}</span> <span className="px-1">{parseFloat(total).toFixed(3)}</span></div>
-                              {/* {this.state.cardNumber ?
-                                  <div className="my-1"><span className="invisible">{this.props.defaultCurrency}</span> <span className="px-1">{this.state.cardNumber}</span></div>
-                                  : <div></div>} */}
+                              {this.state.cardNumber ?
+                                <div className="my-1"><span className="invisible">{this.props.defaultCurrency}</span> <span className="px-1">{this.state.cardNumber}</span></div>
+                                : <div></div>}
                             </td>
                           </tr>
                         </tbody>

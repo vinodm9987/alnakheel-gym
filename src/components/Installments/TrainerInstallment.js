@@ -53,7 +53,7 @@ class TrainerInstallment extends Component {
       installmentName: '',
       trainerAmount: 0
     }
-    this.props.dispatch(getTrainerInstallment({ month: parseInt(this.state.pendingMonth), day: this.state.pendingYear }))
+    this.props.dispatch(getTrainerInstallment({ month: parseInt(this.state.pendingMonth), year: this.state.pendingYear }))
   }
 
   componentDidUpdate(prevProps) {
