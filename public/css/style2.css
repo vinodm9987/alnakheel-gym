@@ -203,8 +203,10 @@ Manage Trainers
   background-color: #000 !important;
 }
 .powered-in-cfv {
-  display: block;
+  position: absolute;
+  display: flex;
   left: 50%;
   bottom: 10px;
-  transform: translate(-50px , 0);
+  transform: translate(-50% , 0);
+  align-items: center;
 }
