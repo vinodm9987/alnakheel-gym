@@ -32,7 +32,7 @@ export const changeDueDateOfPackageInstallment = (postData) => dispatch => {
     .post(`${IP}/installment/changeDueDateOfPackageInstallment`, postData)
     .then(res => {
       dispatch({ type: GET_ERROR, payload: res.data })
-      dispatch(getPackageInstallment({ month: new Date().getMonth(), day: new Date().getFullYear() }))
+      dispatch(getPackageInstallment({ month: new Date().getMonth(), year: new Date().getFullYear() }))
     })
     .catch(err =>
       err.response && dispatch({ type: GET_ERROR, payload: err.response.data })
@@ -51,7 +51,7 @@ export const changeDueDateOfTrainerInstallment = (postData) => dispatch => {
     .post(`${IP}/installment/changeDueDateOfTrainerInstallment`, postData)
     .then(res => {
       dispatch({ type: GET_ERROR, payload: res.data })
-      dispatch(getTrainerInstallment({ month: new Date().getMonth(), day: new Date().getFullYear() }))
+      dispatch(getTrainerInstallment({ month: new Date().getMonth(), year: new Date().getFullYear() }))
     })
     .catch(err =>
       err.response && dispatch({ type: GET_ERROR, payload: err.response.data })
@@ -70,7 +70,7 @@ export const payPackageInstallments = (postData) => dispatch => {
     .post(`${IP}/installment/payPackageInstallments`, postData)
     .then(res => {
       dispatch({ type: GET_ERROR, payload: res.data })
-      dispatch(getTrainerInstallment({ month: new Date().getMonth(), day: new Date().getFullYear() }))
+      dispatch(getPackageInstallment({ month: new Date().getMonth(), year: new Date().getFullYear() }))
     })
     .catch(err =>
       err.response && dispatch({ type: GET_ERROR, payload: err.response.data })
@@ -89,7 +89,7 @@ export const payTrainerInstallments = (postData) => dispatch => {
     .post(`${IP}/installment/payTrainerInstallments`, postData)
     .then(res => {
       dispatch({ type: GET_ERROR, payload: res.data })
-      dispatch(getTrainerInstallment({ month: new Date().getMonth(), day: new Date().getFullYear() }))
+      dispatch(getTrainerInstallment({ month: new Date().getMonth(), year: new Date().getFullYear() }))
     })
     .catch(err =>
       err.response && dispatch({ type: GET_ERROR, payload: err.response.data })

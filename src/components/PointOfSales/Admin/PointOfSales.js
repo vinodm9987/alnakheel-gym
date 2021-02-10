@@ -1048,6 +1048,20 @@ class PointOfSales extends Component {
                                 : <div></div>}
                               <div className="text-right my-1">{t('Grand Total')} :</div>
                               <div className="text-right my-1">{t('Paid Amount')} :</div>
+                              {parseFloat(posReceipt.chequeAmount) ?
+                                <div className="text-right my-1">Cheque :</div>
+                                : <div></div>}
+                              {parseFloat(posReceipt.bankName) ?
+                                <div className="text-right my-1">Bank Name :</div>
+                                : <div></div>}
+                              {parseFloat(posReceipt.chequeNumber) ?
+                                <div className="text-right my-1">Cheque Number :</div>
+                                : <div></div>}
+                              {parseFloat(posReceipt.chequeDate) ?
+                                <div className="text-right my-1">Cheque Date :</div>
+                                : <div></div>}
+                              <div className="text-right my-1">Grand Total :</div>
+                              <div className="text-right my-1">Paid Amount :</div>
                               {posReceipt.cardNumber ?
                                 <div className="text-right my-1">{t('Card last four digit')} :</div>
                                 : <div></div>}
@@ -1071,6 +1085,18 @@ class PointOfSales extends Component {
                                 : <div></div>}
                               {parseFloat(posReceipt.cardAmount) ?
                                 <div className="my-1"><span className="invisible">{this.props.defaultCurrency}</span> <span className="px-1">{parseFloat(posReceipt.cardAmount).toFixed(3)}</span></div>
+                                : <div></div>}
+                              {parseFloat(posReceipt.chequeAmount) ?
+                                <div className="my-1"><span className="invisible">{this.props.defaultCurrency}</span> <span className="px-1">{parseFloat(posReceipt.chequeAmount).toFixed(3)}</span></div>
+                                : <div></div>}
+                              {posReceipt.bankName ?
+                                <div className="my-1"><span className="invisible">{this.props.defaultCurrency}</span> <span className="px-1">{posReceipt.bankName}</span></div>
+                                : <div></div>}
+                              {posReceipt.chequeNumber ?
+                                <div className="my-1"><span className="invisible">{this.props.defaultCurrency}</span> <span className="px-1">{posReceipt.chequeNumber}</span></div>
+                                : <div></div>}
+                              {posReceipt.chequeDate ?
+                                <div className="my-1"><span className="invisible">{this.props.defaultCurrency}</span> <span className="px-1">{posReceipt.chequeDate}</span></div>
                                 : <div></div>}
                               <div className="my-1"><span className="">{this.props.defaultCurrency}</span> <span className="px-1">{parseFloat(posReceipt.totalAmount).toFixed(3)}</span></div>
                               <div className="my-1"><span className="">{this.props.defaultCurrency}</span> <span className="px-1">{parseFloat(posReceipt.totalAmount).toFixed(3)}</span></div>
