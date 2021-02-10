@@ -893,7 +893,7 @@ class BookAClass extends Component {
                                 <div className="text-right my-1">Discount :</div>
                                 : <div></div>}
                               {parseFloat(tax) ?
-                                <div className="text-right my-1">VAT{this.state.tax ? `(${this.state.tax} %)` : ''}:</div>
+                                <div className="text-right my-1">VAT{this.state.taxPercent ? `(${this.state.taxPercent} %)` : ''}:</div>
                                 : <div></div>}
                               {parseFloat(digital) ?
                                 <div className="text-right my-1">Digital :</div>
