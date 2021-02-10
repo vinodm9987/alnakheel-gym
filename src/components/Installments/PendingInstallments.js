@@ -32,12 +32,12 @@ class PendingInstallments extends Component {
                     {/* <a href='#menu1' className="nav-item nav-link active" role="tab" data-toggle="tab">Package Installment</a>
                     <a href='#menu2' className="nav-item nav-link" role="tab" data-toggle="tab">Trainer Installment</a> */}
                     <Route exact path='/pending-installments'>
-                      <Link to='/pending-installments' className="nav-item nav-link active" role="tab">Package Installment</Link>
-                      <Link to='/pending-installments/pending-installments-trainer' className="nav-item nav-link" role="tab">Trainer Installment</Link>
+                      <Link to='/pending-installments' className="nav-item nav-link active" role="tab">{t('Package Installment')}</Link>
+                      <Link to='/pending-installments/pending-installments-trainer' className="nav-item nav-link" role="tab">{t('Trainer Installment')}</Link>
                     </Route>
                     <Route exact path='/pending-installments/pending-installments-trainer'>
-                      <Link to='/pending-installments' className="nav-item nav-link" role="tab">Package Installment</Link>
-                      <Link to='/pending-installments/pending-installments-trainer' className="nav-item nav-link active" role="tab">Trainer Installment</Link>
+                      <Link to='/pending-installments' className="nav-item nav-link" role="tab">{t('Package Installment')}</Link>
+                      <Link to='/pending-installments/pending-installments-trainer' className="nav-item nav-link active" role="tab">{t('Trainer Installment')}</Link>
                     </Route>
                   </div>
                 </nav>

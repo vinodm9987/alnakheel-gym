@@ -908,19 +908,19 @@ class BookAClass extends Component {
                               <div className="text-right my-1">{t('Grand Total')} :</div>
                               <div className="text-right my-1">{t('Paid Amount')} :</div>
                               {parseFloat(this.state.cheque) ?
-                                <div className="text-right my-1">Cheque :</div>
+                                <div className="text-right my-1">{t('Cheque')} :</div>
                                 : <div></div>}
                               {parseFloat(this.state.bankName) ?
-                                <div className="text-right my-1">Bank Name :</div>
+                                <div className="text-right my-1">{t('Bank Name')} :</div>
                                 : <div></div>}
                               {parseFloat(this.state.chequeNumber) ?
-                                <div className="text-right my-1">Cheque Number :</div>
+                                <div className="text-right my-1">{t('Cheque Number')} :</div>
                                 : <div></div>}
                               {parseFloat(this.state.chequeDate) ?
-                                <div className="text-right my-1">Cheque Date :</div>
+                                <div className="text-right my-1">{t('Cheque Date')} :</div>
                                 : <div></div>}
-                              <div className="text-right my-1">Grand Total :</div>
-                              <div className="text-right my-1">Paid Amount :</div>
+                              <div className="text-right my-1">{t('Grand Total')} :</div>
+                              <div className="text-right my-1">{t('Paid Amount')} :</div>
                               {this.state.cardNumber ?
                                 <div className="text-right my-1">{t('Card last four digit')} :</div>
                                 : <div></div>}
