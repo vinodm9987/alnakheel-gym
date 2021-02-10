@@ -69,14 +69,14 @@ class CustomerFullView extends Component {
                 </div>
                 <div className="powered-in-cfv">
                   <p className="my-1 mx-1 text-white"><small>{t('Powered by')}</small></p>
-                  <a href="https://gymnago.com/" target="_blank" className="mx-1"><img src={gymnagologo} alt='' width="100" height="20" /></a>
+                  <a href="https://gymnago.com/" target="_blank" rel="noopener noreferrer" className="mx-1"><img src={gymnagologo} alt='' width="100" height="20" /></a>
                 </div>
               </div>
               <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6 p-0 h-100 rightcnt">
                 <div className="bg-white p-0">
                   <div className="d-flex justify-content-start pt-2 pl-5">
                     <div className="w-100 d-flex justify-content-end">
-                      <img alt='' src={algymlogo} width="100" height="100"  />
+                      <img alt='' src={algymlogo} width="100" height="100" />
                     </div>
                     <span className="cursorPointer d-inline-flex align-items-center CFV-ar-text" onClick={() => this.changedLanguage()}>
                       <span className="iconv1 iconv1-globe language-icon px-1" style={{ fontSize: '20px' }}></span>

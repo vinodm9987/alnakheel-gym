@@ -529,7 +529,7 @@ class Register extends Component {
           }
           <div className="powered-before-login">
             <p className="my-1"><small>{t('Powered by')}</small></p>
-                <a href="https://gymnago.com/" target="_blank" className="mx-2"><img src={gymnagologo} alt='' width="100" height="20" /></a>
+            <a href="https://gymnago.com/" target="_blank" rel="noopener noreferrer" className="mx-2"><img src={gymnagologo} alt='' width="100" height="20" /></a>
           </div>
         </div>
       </div>
