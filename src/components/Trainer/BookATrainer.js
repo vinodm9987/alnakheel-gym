@@ -599,7 +599,7 @@ class BookATrainer extends Component {
                 <option value="" hidden>{t('Please Select')}</option>
                 {packageDetailsArr && packageDetailsArr.map((packageDetail, i) => {
                   return (
-                    <option key={i} value={packageDetail.packages._id}>{packageDetail.packages.packageName} ({dateToDDMMYYYY(packageDetail.startDate)})</option>
+                    <option key={i} value={packageDetail._id}>{packageDetail.packages.packageName} ({dateToDDMMYYYY(packageDetail.startDate)})</option>
                   )
                 })}
               </select>
