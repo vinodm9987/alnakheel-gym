@@ -67,7 +67,6 @@ class BookATrainer extends Component {
       trainerReceipt: null,
       trainerPeriodDays: 0,
       packageDaysLeft: 0,
-      posReceipt: null,
       password: '',
       passwordE: '',
       showPass: false,

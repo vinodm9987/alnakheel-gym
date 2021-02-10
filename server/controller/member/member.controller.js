@@ -92,7 +92,7 @@ const memberSearch = (response, search, searchFor) => {
 
 
 exports.updateMemberProfile = (req, res) => {
-    uploadAvatar(req, res, async(error, result) => {
+    uploadAvatar(req, res, async (error, result) => {
         if (error) return errorResponseHandler(res, error, "while uploading profile error occurred !");
         if (req.files.length > 0) await Credential.findByIdAndUpdate(req.params.id, { avatar: req.files[0] })
         req.responseData = await Member.findOne({ credentialId: req.params.id }).populate('credentialId').lean()
@@ -117,7 +117,7 @@ exports.updateMemberProfile = (req, res) => {
  */
 
 
-exports.getAllMember = async(req, res) => {
+exports.getAllMember = async (req, res) => {
     try {
         let search = '',
             searchFor = ''
@@ -164,7 +164,7 @@ exports.getAllActiveMember = (req, res) => {
  * get all actives members of trainer
  */
 
-exports.getAllActiveMemberOfTrainer = async(req, res) => {
+exports.getAllActiveMemberOfTrainer = async (req, res) => {
     Member.find({ status: true, "packageDetails.trainer": req.params.employeeId }).then(response => {
         successResponseHandler(res, response, "successfully get all member of trainer !!");
     }).catch(error => {
@@ -183,7 +183,7 @@ exports.getAllActiveMemberOfTrainer = async(req, res) => {
  */
 
 exports.createNewMember = (req, res) => {
-    uploadAvatar(req, res, async(error, data) => {
+    uploadAvatar(req, res, async (error, data) => {
         if (error)
             return errorResponseHandler(res, error, "while uploading profile error occurred !");
         try {
@@ -258,7 +258,7 @@ exports.createNewMember = (req, res) => {
  */
 
 exports.createNewMemberByAdmin = (req, res) => {
-    uploadAvatar(req, res, async(error, data) => {
+    uploadAvatar(req, res, async (error, data) => {
         if (error) return errorResponseHandler(res, error, "while uploading profile error occurred !");
         try {
             const memberDesignation = await Designation.findOne({ designationName: DESIGNATION[2] })
@@ -335,7 +335,7 @@ exports.createNewMemberByAdmin = (req, res) => {
             const newMemberResponse = await Member.findById(response._id)
                 .populate('credentialId branch').populate('packageDetails.doneBy')
             await auditLogger(req, 'Success')
-            return successResponseHandler(res, {...newMemberResponse, ... { displayReceipt: true } }, "successfully added new member !!");
+            return successResponseHandler(res, { ...newMemberResponse, ... { displayReceipt: true } }, "successfully added new member !!");
         } catch (error) {
             logger.error(error);
             auditLogger(req, 'Failed')
@@ -351,7 +351,7 @@ exports.createNewMemberByAdmin = (req, res) => {
 
 
 
-exports.addMemberFaceRecognition = async(req, res) => {
+exports.addMemberFaceRecognition = async (req, res) => {
     try {
         const { raw_image, templates } = await getFaceRecognitionTemplate()
         const bioObject = { raw_image, templates }
@@ -386,7 +386,7 @@ exports.addMemberFaceRecognition = async(req, res) => {
 };
 
 
-exports.updateFaceRecognition = async(req, res) => {
+exports.updateFaceRecognition = async (req, res) => {
     try {
         await AdminPassword.findOne({ password: req.body.password }).then(async user => {
             if (!user) return errorResponseHandler(res, '', "Your entered password is wrong !");
@@ -416,7 +416,7 @@ exports.updateFaceRecognition = async(req, res) => {
  */
 
 
-exports.updateMemberDetails = async(req, res) => {
+exports.updateMemberDetails = async (req, res) => {
     let isUsedReferralCode = await MemberCode.findOne({ "joinMember.member": req.params.id, "joinMember.status": "Join" }).lean();
     if (isUsedReferralCode) req.body["walletPoints"] = await updateTransaction(isUsedReferralCode, req.params.id);
     let memberAllClassResponse = await MemberClass.find({ member: req.params.id }).populate('classId').lean()
@@ -460,7 +460,7 @@ exports.updateMemberDetails = async(req, res) => {
  *  update member info
  */
 exports.updateMember = (req, res) => {
-    uploadAvatar(req, res, async(error, data) => {
+    uploadAvatar(req, res, async (error, data) => {
         if (error)
             return errorResponseHandler(res, error, "while uploading profile error occurred !");
         try {
@@ -497,7 +497,7 @@ exports.updateMember = (req, res) => {
  *  update member and add package for the first time
  */
 exports.updateMemberAndAddPackage = (req, res) => {
-    uploadAvatar(req, res, async(error, data) => {
+    uploadAvatar(req, res, async (error, data) => {
         if (error)
             return errorResponseHandler(res, error, "while uploading profile error occurred !");
         try {
@@ -559,7 +559,7 @@ exports.updateMemberAndAddPackage = (req, res) => {
             const policy = await checkExpiryOfPolicy();
             if (policy) await addPointOfPolicy(packageDetails[0].totalAmount, response._id);
             auditLogger(req, 'Success')
-            return successResponseHandler(res, {...response, ... { displayReceipt: true } }, "successfully updated Member !!");
+            return successResponseHandler(res, { ...response, ... { displayReceipt: true } }, "successfully updated Member !!");
         } catch (error) {
             logger.error(error);
             auditLogger(req, 'Failed')
@@ -628,7 +628,7 @@ exports.getMemberById = (req, res) => {
  *  get all first registered member
  */
 
-exports.getFirstRegisterMembers = async(req, res) => {
+exports.getFirstRegisterMembers = async (req, res) => {
     try {
         let search = req.body.search.toLowerCase()
         let queryCond = {};
@@ -653,7 +653,7 @@ exports.getFirstRegisterMembers = async(req, res) => {
  *  get all pending registration
  */
 
-exports.getAllPendingMember = async(req, res) => {
+exports.getAllPendingMember = async (req, res) => {
     try {
         let search = req.body.search.toLowerCase()
         let queryCond = {};
@@ -679,7 +679,7 @@ exports.getAllPendingMember = async(req, res) => {
  *  get all active registered member
  */
 
-exports.getActiveRegisterMembers = async(req, res) => {
+exports.getActiveRegisterMembers = async (req, res) => {
     try {
         let search = req.body.search.toLowerCase()
         let queryCond = { 'packageDetails.isExpiredPackage': false };
@@ -702,7 +702,7 @@ exports.getActiveRegisterMembers = async(req, res) => {
  *  get all active registered member with Status flag
  */
 
-exports.getActiveStatusRegisterMembers = async(req, res) => {
+exports.getActiveStatusRegisterMembers = async (req, res) => {
     try {
         let search = req.body.search.toLowerCase()
         let queryCond = {};
@@ -726,7 +726,7 @@ exports.getActiveStatusRegisterMembers = async(req, res) => {
  *  get all active registered member with Status flag and  not expired also
  */
 
-exports.getActiveStatusNotExpiredRegisterMembers = async(req, res) => {
+exports.getActiveStatusNotExpiredRegisterMembers = async (req, res) => {
     try {
         let search = req.body.search.toLowerCase()
         let queryCond = { 'packageDetails.isExpiredPackage': false };
@@ -752,7 +752,7 @@ exports.getActiveStatusNotExpiredRegisterMembers = async(req, res) => {
  */
 
 
-exports.generateToken = async(req, res) => {
+exports.generateToken = async (req, res) => {
     try {
         const email = await Credential.findOne({ email: req.body.email }).lean();
         if (email) errorResponseHandler(res, 'error', 'Email is already in use !')
@@ -776,7 +776,7 @@ exports.generateToken = async(req, res) => {
  *
  */
 
-exports.payAtGymMobile = async(req, res) => {
+exports.payAtGymMobile = async (req, res) => {
     let queryCond = {}
     if (req.headers.userid) req.body.packageDetails["doneBy"] = req.headers.userid;
     req.body.packageDetails["startDate"] = setTime(req.body.packageDetails.startDate);
@@ -797,7 +797,7 @@ exports.payAtGymMobile = async(req, res) => {
         .populate('packageDetails.doneBy')
         .then(response => {
             auditLogger(req, 'Success')
-            successResponseHandler(res, {...response, ... { displayReceipt: true } }, "successfully save the transaction !!");
+            successResponseHandler(res, { ...response, ...{ displayReceipt: true } }, "successfully save the transaction !!");
         }).catch(error => {
             logger.error(error);
             auditLogger(req, 'Failed')
@@ -815,7 +815,7 @@ exports.payAtGymMobile = async(req, res) => {
  *
  */
 
-exports.bookTrainer = async(req, res) => {
+exports.bookTrainer = async (req, res) => {
     try {
         let trainerDetails = req.body.trainerDetails;
         trainerDetails['trainerStart'] = setTime(trainerDetails['trainerStart']);
@@ -835,7 +835,7 @@ exports.bookTrainer = async(req, res) => {
             }
         }
         const response = await member.save();
-        return successResponseHandler(res, response, "Successfully Booked a Trainer!");
+        return successResponseHandler(res, { ...response, ...{ displayReceipt: true } }, "Successfully Booked a Trainer!");
     } catch (error) {
         logger.error(error);
         return errorResponseHandler(res, error, "Failed to Booked a Trainer!");
@@ -852,7 +852,7 @@ exports.bookTrainer = async(req, res) => {
 
 
 
-exports.getBioStarToken = async(req, res) => {
+exports.getBioStarToken = async (req, res) => {
     try {
         let tokenData = await bioStarToken()
         successResponseHandler(res, tokenData, "successfully save the transaction !!");
@@ -870,7 +870,7 @@ exports.getBioStarToken = async(req, res) => {
  */
 
 
-exports.startPackage = async(req, res) => {
+exports.startPackage = async (req, res) => {
     try {
         req.body["startDate"] = setTime(req.body.startDate);
         req.body["endDate"] = setTime(req.body.endDate);
@@ -888,30 +888,30 @@ exports.startPackage = async(req, res) => {
         const userData = await Member.findById(req.body.memberId).populate('credentialId packageDetails.packages').lean();
         const photo = sharp(userData.credentialId.avatar.path).rotate().resize(200).toBuffer()
         let obj = {
-                accessGroupName: userData.packageDetails[0].packages.bioStarInfo.accessGroupName,
-                accessGroupId: userData.packageDetails[0].packages.bioStarInfo.accessGroupId,
-                userGroupId: userData.packageDetails[0].packages.bioStarInfo.userGroupId,
-                endDate: req.body.endDate,
-                memberId: userData.memberId,
-                name: userData.credentialId.userName,
-                email: userData.credentialId.email,
-                newPhoto: photo.toString('base64').replace('data:image/png;base64,', ''),
-                phoneNumber: userData.mobileNo,
-                template0: userData.biometricTemplate.template0,
-                template1: userData.biometricTemplate.template1,
-                startDate: req.body.startDate
-            }
-            // if (memberAllClassResponse.length === 0) {
-            //     if (userData.packageDetails.length )
-            //     new Date(fromTime.setFullYear(2020, 11, 9))
-            //     obj = {
-            //         ...obj, ...{
-            //             accessGroupName: userData.packageDetails[0].packages.bioStarInfo.accessGroupName,
-            //             accessGroupId: userData.packageDetails[0].packages.bioStarInfo.accessGroupId,
-            //             userGroupId: userData.packageDetails[0].packages.bioStarInfo.userGroupId
-            //         }
-            //     }
-            // }
+            accessGroupName: userData.packageDetails[0].packages.bioStarInfo.accessGroupName,
+            accessGroupId: userData.packageDetails[0].packages.bioStarInfo.accessGroupId,
+            userGroupId: userData.packageDetails[0].packages.bioStarInfo.userGroupId,
+            endDate: req.body.endDate,
+            memberId: userData.memberId,
+            name: userData.credentialId.userName,
+            email: userData.credentialId.email,
+            newPhoto: photo.toString('base64').replace('data:image/png;base64,', ''),
+            phoneNumber: userData.mobileNo,
+            template0: userData.biometricTemplate.template0,
+            template1: userData.biometricTemplate.template1,
+            startDate: req.body.startDate
+        }
+        // if (memberAllClassResponse.length === 0) {
+        //     if (userData.packageDetails.length )
+        //     new Date(fromTime.setFullYear(2020, 11, 9))
+        //     obj = {
+        //         ...obj, ...{
+        //             accessGroupName: userData.packageDetails[0].packages.bioStarInfo.accessGroupName,
+        //             accessGroupId: userData.packageDetails[0].packages.bioStarInfo.accessGroupId,
+        //             userGroupId: userData.packageDetails[0].packages.bioStarInfo.userGroupId
+        //         }
+        //     }
+        // }
         userData.packageDetails.forEach(packageDetail => {
             if (new Date(packageDetail.endDate) > new Date(req.body.endDate)) obj.endDate = packageDetail.endDate
         })
@@ -938,7 +938,7 @@ exports.startPackage = async(req, res) => {
  */
 
 
-exports.blackListUser = async(req, res) => {
+exports.blackListUser = async (req, res) => {
     try {
         if (req.body.memberId) {
             let status;
@@ -966,7 +966,7 @@ exports.blackListUser = async(req, res) => {
  * expire list of member
  */
 
-exports.getExpiredMembers = async(req, res) => {
+exports.getExpiredMembers = async (req, res) => {
     try {
         let queryCond = {};
         if (req.body.branch) queryCond["branch"] = req.body.branch;
@@ -993,7 +993,7 @@ exports.getExpiredMembers = async(req, res) => {
 }
 
 
-exports.getAboutToExpireMembers = async(req, res) => {
+exports.getAboutToExpireMembers = async (req, res) => {
     try {
         let queryCond = {};
         let search = req.body.search.toLowerCase()
@@ -1036,7 +1036,7 @@ exports.getAboutToExpireMembers = async(req, res) => {
 };
 
 
-exports.getClassesMembers = async(req, res) => {
+exports.getClassesMembers = async (req, res) => {
     try {
         let search = req.body.search.toLowerCase()
         let queryCond = {};
@@ -1049,7 +1049,7 @@ exports.getClassesMembers = async(req, res) => {
         for (let i = 0; i < pendingMember.length; i++) {
             let classesDetails = await MemberClass.find({ 'member': pendingMember[i]._id.toString() }).populate('classId').lean()
             if (classesDetails.length > 0) {
-                pendingMemberClasses.push({...pendingMember[i], ... { classesDetails } })
+                pendingMemberClasses.push({ ...pendingMember[i], ... { classesDetails } })
             }
         }
         return successResponseHandler(res, pendingMemberClasses, "successfully get all member details !!");
@@ -1060,7 +1060,7 @@ exports.getClassesMembers = async(req, res) => {
 };
 
 
-exports.getCprData = async(req, res) => {
+exports.getCprData = async (req, res) => {
     try {
         const myFileURL = new URL('file:///C:/Users/Administrator/AppData/Local/Temp/2/eRevealerGcc.xml');
         var parser = new xml2js.Parser();
@@ -1076,7 +1076,7 @@ exports.getCprData = async(req, res) => {
 };
 
 
-exports.getMemberByMemberId = async(req, res) => {
+exports.getMemberByMemberId = async (req, res) => {
     try {
         let memberInfo = await Member.findOne({ memberId: +req.body.memberId })
             .populate('credentialId')
