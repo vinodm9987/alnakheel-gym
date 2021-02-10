@@ -51,6 +51,7 @@ class PackageInstallment extends Component {
       subTotal: 0,
       dueDate: new Date(),
       installmentName: '',
+      url: this.props.match.url,
       packageAmount: 0
     }
     this.props.dispatch(getSystemYear())
@@ -60,7 +61,6 @@ class PackageInstallment extends Component {
   componentDidUpdate(prevProps) {
     if (((this.props.verifyPassword && this.props.verifyPassword) !== (prevProps.verifyPassword)) && this.props.verifyPassword === 'verified') {
       const el = findDOMNode(this.refs.openDiscount);
-      console.log("🚀 ~ file: PackageInstallment.js ~ line 57 ~ PackageInstallment ~ componentDidUpdate ~ el", el)
       $(el).click();
     }
   }
@@ -246,7 +246,7 @@ class PackageInstallment extends Component {
     })
 
     return (
-      <div className="tab-pane px-3 fade show active" id="menu1" role="tabpanel">
+      <div className={this.state.url === '/pending-installments' ? "tab-pane fade show active" : "tab-pane fade"} id="menu1" role="tabpanel">
         <div className="row">
           <div className="container-fluid px-4 mt-3">
             <div className="row">

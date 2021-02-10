@@ -51,6 +51,7 @@ class TrainerInstallment extends Component {
       showPass: false,
       dueDate: new Date(),
       installmentName: '',
+      url: this.props.match.url,
       trainerAmount: 0
     }
     this.props.dispatch(getTrainerInstallment({ month: parseInt(this.state.pendingMonth), year: this.state.pendingYear }))
@@ -58,7 +59,8 @@ class TrainerInstallment extends Component {
 
   componentDidUpdate(prevProps) {
     if (((this.props.verifyPassword && this.props.verifyPassword) !== (prevProps.verifyPassword)) && this.props.verifyPassword === 'verified') {
-      const el = findDOMNode(this.refs.openDiscount);
+      console.log("🚀 ~ file: TrainerInstallment.js ~ line 61 ~ TrainerInstallment ~ componentDidUpdate ~ this.props.verifyPassword", this.props.verifyPassword)
+      const el = findDOMNode(this.refs.openDiscount1);
       $(el).click();
     }
   }
@@ -190,7 +192,7 @@ class TrainerInstallment extends Component {
   }
 
   handlePayment(totalAmount, totalVat) {
-    const el = findDOMNode(this.refs.checkoutCloseModal);
+    const el = findDOMNode(this.refs.checkoutCloseModal1);
     const { t } = this.props
     const { packagesDetailsId, installmentId, memberId, dueDate, showCheque, cash, card, digital, cheque, bankName, trainerDetailsId,
       chequeNumber, chequeDate, discount, cardNumber, subTotal, cashE, cardE, digitalE } = this.state
@@ -243,7 +245,7 @@ class TrainerInstallment extends Component {
     })
 
     return (
-      <div className="tab-pane px-3 fade" id="menu2" role="tabpanel">
+      <div className={this.state.url === '/pending-installments/pending-installments-trainer' ? "tab-pane fade show active" : "tab-pane fade"} id="menu2" role="tabpanel">
         <div className="row">
           <div className="container-fluid px-4 mt-3">
             <div className="row">
@@ -406,7 +408,7 @@ class TrainerInstallment extends Component {
             <div className="modal-content">
               <div className="modal-header">
                 <h4 className="modal-title">{t('Payment')}</h4>
-                <button type="button" className="close" data-dismiss="modal" ref='checkoutCloseModal' onClick={() => this.setState({ digital: 0, cash: 0, card: 0 })}><span className="iconv1 iconv1-close"></span></button>
+                <button type="button" className="close" data-dismiss="modal" ref='checkoutCloseModal1' onClick={() => this.setState({ digital: 0, cash: 0, card: 0 })}><span className="iconv1 iconv1-close"></span></button>
               </div>
               <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 px-4 pb-4 pt-4 bg-light rounded-bottom">
                 <div className="table-responsive bg-white px-4 pt-3">
@@ -455,7 +457,7 @@ class TrainerInstallment extends Component {
                 <div className="row mb-1 mt-4">
                   <div className="col-12 col-sm-6 d-flex align-items-center"><h5 className="my-2 font-weight-bold px-1">Payment Method</h5></div>
                   <div className="col-12 col-sm-6 d-flex align-items-center justify-content-end">
-                    <button onClick={(e) => e.preventDefault()} data-toggle="modal" data-target="#passwordAskModal" className="d-flex flex-column align-items-center justify-content-center bg-danger discount-class m-1 linkHoverDecLess rounded-circle text-white cursorPointer border-0">
+                    <button onClick={(e) => e.preventDefault()} data-toggle="modal" data-target="#passwordAskModal1" className="d-flex flex-column align-items-center justify-content-center bg-danger discount-class m-1 linkHoverDecLess rounded-circle text-white cursorPointer border-0">
                       <span className="w-100 text-center">
                         <h3><span className="iconv1 iconv1-discount text-white"></span></h3>
                         <span className="text-white">{t('Discount')}</span>
@@ -597,7 +599,7 @@ class TrainerInstallment extends Component {
         {/* -/ not paid over */}
 
         {/* -/ password ask modal */}
-        <div className="modal fade commonYellowModal" id="passwordAskModal">
+        <div className="modal fade commonYellowModal" id="passwordAskModal1">
           <div className="modal-dialog modal-dialog-centered">
             <div className="modal-content">
               <div className="modal-header">
@@ -634,8 +636,8 @@ class TrainerInstallment extends Component {
         </div>
 
         {/* Popup Discount */}
-        <button type="button" id="Discount2" className="d-none" data-toggle="modal" data-target="#Discount" ref="openDiscount">Open modal</button>
-        <div className="modal fade commonYellowModal" id="Discount" >
+        <button type="button" id="Discount2" className="d-none" data-toggle="modal" data-target="#Discount1" ref="openDiscount1">Open modal</button>
+        <div className="modal fade commonYellowModal" id="Discount1" >
           <div className="modal-dialog modal-dialog-centered">
             <div className="modal-content">
               <div className="modal-header">
@@ -671,9 +673,10 @@ class TrainerInstallment extends Component {
 }
 
 
-function mapStateToProps({ dashboard: { systemYear, pendingInstallments }, currency: { defaultCurrency }, installment: { trainerInstallment }, vat: { activeVats } }) {
+function mapStateToProps({ dashboard: { systemYear, pendingInstallments }, currency: { defaultCurrency }, installment: { trainerInstallment }, vat: { activeVats },
+  privilege: { verifyPassword } }) {
   return {
-    defaultCurrency, pendingInstallments, systemYear, activeVats,
+    defaultCurrency, pendingInstallments, systemYear, activeVats, verifyPassword,
     trainerInstallment: trainerInstallment && trainerInstallment.sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate))
   }
 }
