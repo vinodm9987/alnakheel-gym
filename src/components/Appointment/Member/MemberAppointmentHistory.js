@@ -67,13 +67,13 @@ class MemberAppointmentHistory extends Component {
                   </div>
                   {/* <div className="col w-auto px-1 flexBasis-auto flex-grow-0">
                     <div className="form-group inlineFormGroup">
-                      <label className="mx-sm-2 inlineFormLabel">From Time</label>
+                      <label className="mx-sm-2 inlineFormLabel">{t('From Time')}</label>
                       <input className="form-control mx-sm-2 inlineFormInputs" type="text" autoComplete="off" />
                     </div>
                   </div>
                   <div className="col w-auto px-1 flexBasis-auto flex-grow-0">
                     <div className="form-group inlineFormGroup">
-                      <label className="mx-sm-2 inlineFormLabel">To Time</label>
+                      <label className="mx-sm-2 inlineFormLabel">{t('To Time')}</label>
                       <input className="form-control mx-sm-2 inlineFormInputs" type="text" autoComplete="off" />
                     </div>
                   </div>

@@ -37,7 +37,7 @@ class CustomerAnnouncements extends Component {
       <div className="mainPage p-3 Announcements">
         <div className="row">
           <div className="col-12 pageBreadCrumbs">
-            <span className="crumbText">{t('Home')}</span><span className="mx-2">/</span><span className="crumbText">{t('Communication')}</span><span className="mx-2">/</span><span className="crumbText">{t()}</span>
+            <span className="crumbText">{t('Home')}</span><span className="mx-2">/</span><span className="crumbText">{t('Communication')}</span><span className="mx-2">/</span><span className="crumbText">{t('Announcements')}</span>
           </div>
           <div className="col-12 pageHead">
             <h1>{t('Announcements')}</h1>

@@ -202,7 +202,7 @@ class CancelFreeze extends Component {
                           <img alt='' src={`/${avatar.path}`} className="mx-1 rounded-circle w-50px h-50px" />
                           <div className="mx-1">
                             <h5 className="m-0">{userName}</h5>
-                            <span className="text-primary d-flex"><span>ID</span><span className="mx-1">:</span><span> {memberId}</span></span>
+                            <span className="text-primary d-flex"><span>{t('ID')}</span><span className="mx-1">:</span><span> {memberId}</span></span>
                           </div>
                         </div>
                       </td>
@@ -223,7 +223,7 @@ class CancelFreeze extends Component {
                         <div className="modal-dialog modal-dialog-centered">
                           <div className="modal-content">
                             <div className="modal-header">
-                              <h4 className="modal-title">Cancel Freeze</h4>
+                              <h4 className="modal-title">{t('Cancel Freeze')}</h4>
                               <button type="button" className="close" data-dismiss="modal"><span className="iconv1 iconv1-close"></span></button>
                             </div>
                             <div className="modal-body px-4">
@@ -252,7 +252,7 @@ class CancelFreeze extends Component {
                                 </div>
                                 <div className="col-12">
                                   <div className="form-group position-relative">
-                                    <label>Reason</label>
+                                    <label>{t('Reason')}</label>
                                     <textarea type="text" autoComplete="off" rows="5" className="form-control"
                                       value={this.state.reason} onChange={(e) => this.setState({ reason: e.target.value })}
                                     ></textarea>

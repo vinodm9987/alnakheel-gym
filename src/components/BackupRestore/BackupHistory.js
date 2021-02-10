@@ -113,7 +113,7 @@ class BackupHistory extends Component {
                   <td>3:25 Mins</td>
                   <td><div className="m-0 mxw-85px mnw-85px whiteSpaceNormal">10/02/2020, 10:05 AM</div></td>
                   <td>619 KB</td>
-                  <td><a href='/#' type="button" className="btn btn-primary btn-sm w-100px text-white rounded-50px" data-toggle="modal" data-target="#JobDetailsAutomatic">Details</a>
+                  <td><a href='/#' type="button" className="btn btn-primary btn-sm w-100px text-white rounded-50px" data-toggle="modal" data-target="#JobDetailsAutomatic">{t('Details')}</a>
                   </td>
                 </tr>
               </tbody>

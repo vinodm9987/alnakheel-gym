@@ -47,8 +47,8 @@ class MessageHistory extends Component {
                     <label className="mx-sm-2 inlineFormLabel">{t('Message Category')}</label>
                     <select className="form-control mx-sm-2 inlineFormInputs" value={messageCategory} onChange={(e) => this.handleCategoryFilter(e.target.value, memberCategory)}>
                       <option value="">{t('All')}</option>
-                      <option value="SMS">SMS</option>
-                      <option value="Email">Email</option>
+                      <option value="SMS">{t('SMS')}</option>
+                      <option value="Email">{t('Email')}</option>
                     </select>
                     <span className="iconv1 iconv1-arrow-down selectBoxIcon"></span>
                   </div>
@@ -116,8 +116,7 @@ class MessageHistory extends Component {
                       })}
                       <br />
                       {members.length > 2 &&
-                        <span data-toggle="modal" data-target="#MemberList" className="text-danger mx-2 cursorPointer" onClick={() => this.viewMembers(members)}>
-                          View Members
+                        <span data-toggle="modal" data-target="#MemberList" className="text-danger mx-2 cursorPointer" onClick={() => this.viewMembers(members)}>{t('View Members')}
                         <span className="iconv1 iconv1-arrow-down font-weight-bold mx-1"></span>
                         </span>
                       }

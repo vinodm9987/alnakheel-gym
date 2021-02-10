@@ -255,7 +255,7 @@ class PackageInstallment extends Component {
                   <div className="col-12">
                     <div className="row">
                       <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-5">
-                        <label className="mb-1">Total Pending Amount</label>
+                        <label className="mb-1">{t('Total Pending Amount')}</label>
                         <h5 className="font-weight-bold dirltrtar text-danger">{this.props.defaultCurrency} {totalPendingAmount.toFixed(3)}</h5>
                       </div>
                       <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-7">
@@ -291,13 +291,13 @@ class PackageInstallment extends Component {
                       <table className="borderRoundSeperateTable tdGray">
                         <thead>
                           <tr>
-                            <th>Member Id</th>
-                            <th>Name</th>
-                            <th>Package</th>
-                            <th>Installment</th>
-                            <th>Amount</th>
-                            <th>Due Date</th>
-                            <th className="text-center w-50px">Action</th>
+                            <th>{t('Member Id')}</th>
+                            <th>{t('Name')}</th>
+                            <th>{t('Package')}</th>
+                            <th>{t('Installment')}</th>
+                            <th>{t('Amount')}</th>
+                            <th>{t('Due Date')}</th>
+                            <th className="text-center w-50px">{t('Action')}</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -324,7 +324,7 @@ class PackageInstallment extends Component {
                                   <span className="d-inline-flex">
                                     <button type="button" className="btn btn-success btn-sm w-100px rounded-50px mx-1" data-toggle="modal" data-target="#notYetPaid"
                                       onClick={() => this.setPayment(packageAmount, branch, packagesDetailsId, installmentId, _id, dueDate, installmentName)}
-                                    >Pay</button>
+                                    >{t('Pay')}</button>
                                     <Link type="button" className="btn btn-primary br-50px w-100px btn-sm px-3 mx-1" to={`/members-details/${_id}`}>{t('Details')}</Link>
                                     <span className="bg-success action-icon w-30px h-30px rounded-circle d-flex align-items-center justify-content-center mx-1 text-white pointer" data-toggle="modal" data-target="#Duedate"
                                       onClick={() => this.setState({ changeDueDate: dueDate, packagesDetailsId, installmentId, memberId: _id })}
@@ -362,7 +362,7 @@ class PackageInstallment extends Component {
           <div className="modal-dialog modal-dialog-centered">
             <div className="modal-content">
               <div className="modal-header">
-                <h4 className="modal-title">Edit Due Date</h4>
+                <h4 className="modal-title">{t('Edit Due Date')}</h4>
                 <button type="button" className="close" data-dismiss="modal">
                   <span className="iconv1 iconv1-close"></span>
                 </button>
@@ -372,7 +372,7 @@ class PackageInstallment extends Component {
                   <div className="row">
                     <div className="col-12">
                       <div className="form-group position-relative">
-                        <label>Due date</label>
+                        <label>{t('Due Date')}</label>
                         <MuiPickersUtilsProvider utils={DateFnsUtils}>
                           <DatePicker
                             variant='inline'
@@ -393,7 +393,7 @@ class PackageInstallment extends Component {
                       </div>
                     </div>
                     <div className="col-12 py-3 text-center">
-                      <button type="button" className="btn btn-success" data-dismiss="modal" onClick={() => this.handleSubmit()}>Submit</button>
+                      <button type="button" className="btn btn-success" data-dismiss="modal" onClick={() => this.handleSubmit()}>{t('Submit')}</button>
                     </div>
                   </div>
                 </div>
@@ -456,7 +456,7 @@ class PackageInstallment extends Component {
                   </table>
                 </div>
                 <div className="row mb-1 mt-4">
-                  <div className="col-12 col-sm-6 d-flex align-items-center"><h5 className="my-2 font-weight-bold px-1">Payment Method</h5></div>
+                  <div className="col-12 col-sm-6 d-flex align-items-center"><h5 className="my-2 font-weight-bold px-1">{t('Payment Method')}</h5></div>
                   <div className="col-12 col-sm-6 d-flex align-items-center justify-content-end">
                     <button onClick={(e) => e.preventDefault()} data-toggle="modal" data-target="#passwordAskModal" className="d-flex flex-column align-items-center justify-content-center bg-danger discount-class m-1 linkHoverDecLess rounded-circle text-white cursorPointer border-0">
 
@@ -590,7 +590,7 @@ class PackageInstallment extends Component {
                   {/* if cheque over */}
                   <div className="col-12">
                     <div className="px-sm-1 pt-4 pb-5">
-                      <button type="button" className="btn btn-block btn-success btn-lg" onClick={() => this.handlePayment(totalAmount, totalVat)}>Checkout</button>
+                      <button type="button" className="btn btn-block btn-success btn-lg" onClick={() => this.handlePayment(totalAmount, totalVat)}>{t('Checkout')}</button>
                     </div>
                   </div>
                 </div>
@@ -638,7 +638,7 @@ class PackageInstallment extends Component {
         </div>
 
         {/* Popup Discount */}
-        <button type="button" id="Discount2" className="d-none" data-toggle="modal" data-target="#Discount" ref="openDiscount">Open modal</button>
+        <button type="button" id="Discount2" className="d-none" data-toggle="modal" data-target="#Discount" ref="openDiscount">{t('Open')}</button>
         <div className="modal fade commonYellowModal" id="Discount" >
           <div className="modal-dialog modal-dialog-centered">
             <div className="modal-content">

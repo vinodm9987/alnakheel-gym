@@ -195,7 +195,7 @@ class AdminDashboard extends Component {
                 }}
               />
               {/* <div className="chartcenterData">
-                <p className="m-0">Total</p>
+                <p className="m-0">{t('Total')}</p>
                 <p className="m-0">{total}</p>
               </div> */}
               <div className="col-12 px-0">
@@ -304,7 +304,7 @@ class AdminDashboard extends Component {
                 }}
               />
               {/* <div className="chartcenterData">
-                  <p className="m-0">Total</p>
+                  <p className="m-0">{t('Total')}</p>
                   <p className="m-0">{total}</p>
                 </div> */}
               <div className="col-12 px-0">
@@ -645,7 +645,7 @@ class AdminDashboard extends Component {
                   <div className="col-12">
                     <div className="row">
                       {/* <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
-                        <h6>Total Pending Amount</h6>
+                        <h6>{t('Total Pending Amount')}</h6>
                         <h6 className="font-weight-bold dirltrtar text-danger">$ 87511</h6>
                       </div> */}
                       <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">

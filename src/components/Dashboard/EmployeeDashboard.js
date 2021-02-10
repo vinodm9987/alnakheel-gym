@@ -175,7 +175,7 @@ class EmployeeDashboard extends Component {
                 }}
               />
               {/* <div className="chartcenterData">
-                <p className="m-0">Total</p>
+                <p className="m-0">{t('Total')}</p>
                 <p className="m-0">{total}</p>
               </div> */}
               <div className="col-12 px-0">
@@ -271,7 +271,7 @@ class EmployeeDashboard extends Component {
                 }}
               />
               {/* <div className="chartcenterData">
-                  <p className="m-0">Total</p>
+                  <p className="m-0">{t('Total')}</p>
                   <p className="m-0">{total}</p>
                 </div> */}
               <div className="col-12 px-0">

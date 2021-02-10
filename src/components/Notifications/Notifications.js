@@ -17,6 +17,7 @@ class Notifications extends Component {
   }
 
   render() {
+    const { t } = this.props
     const { userNotifications } = this.props
     const today = new Date()
     const yesterday = new Date()
@@ -37,10 +38,10 @@ class Notifications extends Component {
       <div className="mainPage p-3 Notifications">
         <div className="row">
           <div className="col-12 pageBreadCrumbs">
-            <span className="crumbText">Home</span><span className="mx-2">/</span><span className="crumbText">Notifications</span>
+            <span className="crumbText">{t('Home')}</span><span className="mx-2">/</span><span className="crumbText">{t('Notifications')}</span>
           </div>
           <div className="col-12 pageHead">
-            <h1>Notifications</h1>
+            <h1>{t('Notifications')}</h1>
             <div className="pageHeadLine"></div>
           </div>
 
@@ -48,7 +49,7 @@ class Notifications extends Component {
           {todayData.length > 0 &&
             <div className="container NotificationsContainer">
               <div className="row">
-                <div className="col-12"><h5 className="mt-4 mb-3 font-weight-bold">Today</h5></div>
+                <div className="col-12"><h5 className="mt-4 mb-3 font-weight-bold">{t('Today')}</h5></div>
                 {todayData.map((data, i) => {
                   const { title, webPath, time, date, webIcon } = data
                   const timeDiff = timeDiffCalc(new Date(time), new Date())

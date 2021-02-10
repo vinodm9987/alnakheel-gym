@@ -303,7 +303,7 @@ class RewardPolicy extends Component {
                     </td>
                     <td>{policyCategory}</td>
                     <td className="text-danger">{policyCategory === 'Amount' ? `${this.props.defaultCurrency} ${amount}` : '-'}</td>
-                    <td>{noOfPoints} Points</td>
+                    <td>{noOfPoints} {t('Points')}</td>
                     <td>{dateToDDMMYYYY(startDate)}</td>
                     <td>{dateToDDMMYYYY(endDate)}</td>
                     <td>

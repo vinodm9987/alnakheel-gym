@@ -70,7 +70,7 @@ class CreateBackup extends Component {
             <input type="radio" className="custom-control-input" id="Manual" name="ManualOrAutomatic" checked={backupType === 'Manual'}
               onChange={() => this.setState({ ...this.default, ...{ backupType: 'Manual' } })}
             />
-            <label className="custom-control-label" htmlFor="Manual">Manual</label>
+            <label className="custom-control-label" htmlFor="Manual">{t('Manual')}</label>
           </div>
           <div className="custom-control custom-checkbox roundedGreenRadioCheck mx-2">
             <input type="radio" className="custom-control-input" id="Automatic" name="ManualOrAutomatic" checked={backupType === 'Automatic'}
@@ -137,8 +137,8 @@ class CreateBackup extends Component {
               <div className="modal-content border-0 bg-white">
                 <div className="modal-body text-center p-5">
                   <h6 className=""><b>Do you want to close backup ?</b></h6>
-                  <button type="button" className="btn btn-success px-4 py-1 m-1">Yes</button>
-                  <button type="button" className="btn btn-danger px-4 py-1 m-1">No</button>
+                  <button type="button" className="btn btn-success px-4 py-1 m-1">{t('Yes')}</button>
+                  <button type="button" className="btn btn-danger px-4 py-1 m-1">{t('No')}</button>
                 </div>
               </div>
             </div>
@@ -233,7 +233,7 @@ class CreateBackup extends Component {
             <div className="d-flex flex-wrap">
               <div className="custom-control custom-checkbox roundedBlueRadioCheck m-2">
                 <input type="checkbox" className="custom-control-input" id="All" name="All" />
-                <label className="custom-control-label rounded" htmlFor="All">All</label></div>
+                <label className="custom-control-label rounded" htmlFor="All">{t('ALL')}</label></div>
 
               <div className="custom-control custom-checkbox roundedBlueRadioCheck m-2">
                 <input type="checkbox" className="custom-control-input" id="Monday" name="Monday" />
@@ -320,7 +320,7 @@ class CreateBackup extends Component {
                       <div className="d-flex justify-content-center">
                         <span className="bg-success action-icon w-30px h-30px rounded-circle d-flex align-items-center justify-content-center mx-1 text-white">
                           <span className="iconv1 iconv1-edit"></span></span>
-                        <a type="button" className="btn btn-primary btn-sm w-100px text-white rounded-50px" data-toggle="modal" data-target="#JobDetails">Details</a>
+                        <a type="button" className="btn btn-primary btn-sm w-100px text-white rounded-50px" data-toggle="modal" data-target="#JobDetails">{t('Details')}</a>
                       </div>
                     </td>
                   </tr>
@@ -350,7 +350,7 @@ class CreateBackup extends Component {
                       <div className="d-flex justify-content-center">
                         <span className="bg-success action-icon w-30px h-30px rounded-circle d-flex align-items-center justify-content-center mx-1 text-white">
                           <span className="iconv1 iconv1-edit"></span></span>
-                        <a type="button" className="btn btn-primary btn-sm w-100px text-white rounded-50px" data-toggle="modal" data-target="#JobDetails">Details</a>
+                        <a type="button" className="btn btn-primary btn-sm w-100px text-white rounded-50px" data-toggle="modal" data-target="#JobDetails">{t('Details')}</a>
                       </div>
                     </td>
                   </tr>

@@ -32,25 +32,25 @@ class FreezeMembers extends Component {
                       <Link to='/freeze-members' className="nav-item nav-link active" role="tab">{t('Freeze')}</Link>
                       <Link to='/freeze-members/pending-freeze' className="nav-item nav-link" role="tab">{t('Pending Freeze')}</Link>
                       <Link to='/freeze-members/freeze-history' className="nav-item nav-link" role="tab">{t('Freeze History')}</Link>
-                      <Link to='/freeze-members/cancel-freeze' className="nav-item nav-link" role="tab">Cancel Freeze</Link>
+                      <Link to='/freeze-members/cancel-freeze' className="nav-item nav-link" role="tab">{t('Cancel Freeze')}</Link>
                     </Route>
                     <Route exact path='/freeze-members/pending-freeze'>
                       <Link to='/freeze-members' className="nav-item nav-link" role="tab">{t('Freeze')}</Link>
                       <Link to='/freeze-members/pending-freeze' className="nav-item nav-link active" role="tab">{t('Pending Freeze')}</Link>
                       <Link to='/freeze-members/freeze-history' className="nav-item nav-link" role="tab">{t('Freeze History')}</Link>
-                      <Link to='/freeze-members/cancel-freeze' className="nav-item nav-link" role="tab">Cancel Freeze</Link>
+                      <Link to='/freeze-members/cancel-freeze' className="nav-item nav-link" role="tab">{t('Cancel Freeze')}</Link>
                     </Route>
                     <Route exact path='/freeze-members/freeze-history'>
                       <Link to='/freeze-members' className="nav-item nav-link" role="tab">{t('Freeze')}</Link>
                       <Link to='/freeze-members/pending-freeze' className="nav-item nav-link" role="tab">{t('Pending Freeze')}</Link>
                       <Link to='/freeze-members/freeze-history' className="nav-item nav-link active" role="tab">{t('Freeze History')}</Link>
-                      <Link to='/freeze-members/cancel-freeze' className="nav-item nav-link" role="tab">Cancel Freeze</Link>
+                      <Link to='/freeze-members/cancel-freeze' className="nav-item nav-link" role="tab">{t('Cancel Freeze')}</Link>
                     </Route>
                     <Route exact path='/freeze-members/cancel-freeze'>
                       <Link to='/freeze-members' className="nav-item nav-link" role="tab">{t('Freeze')}</Link>
                       <Link to='/freeze-members/pending-freeze' className="nav-item nav-link" role="tab">{t('Pending Freeze')}</Link>
                       <Link to='/freeze-members/freeze-history' className="nav-item nav-link" role="tab">{t('Freeze History')}</Link>
-                      <Link to='/freeze-members/cancel-freeze' className="nav-item nav-link active" role="tab">Cancel Freeze</Link>
+                      <Link to='/freeze-members/cancel-freeze' className="nav-item nav-link active" role="tab">{t('Cancel Freeze')}</Link>
                     </Route>
                     {/* <a className="nav-item nav-link active" data-toggle="tab" href="#menu1" role="tab">Freeze</a>
                     <a className="nav-item nav-link" data-toggle="tab" href="#menu2" role="tab">Pending Freeze</a>

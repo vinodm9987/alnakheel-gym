@@ -220,19 +220,19 @@ class UserPrivileges extends Component {
                 <div className="my-1 d-flex flex-wrap align-self-center">
                   <div className="custom-control custom-checkbox roundedGreenRadioCheck mx-2">
                     <input type="radio" className="custom-control-input" id="Module" name="ModuleReport" />
-                    <label className="custom-control-label" htmlFor="Module">Modules</label>
+                    <label className="custom-control-label" htmlFor="Module">{t('Modules')}</label>
                   </div>
                   <div className="custom-control custom-checkbox roundedGreenRadioCheck mx-2">
                     <input type="radio" className="custom-control-input" id="Report" name="ModuleReport" />
-                    <label className="custom-control-label" htmlFor="Report">Report</label>
+                    <label className="custom-control-label" htmlFor="Report">{t('Report')}</label>
                   </div>
                 </div>
                 <div className="my-1">
                   <div class="d-flex flex-wrap flex-sm-nowrap">
-                    <label class="mx-sm-2 inlineFormLabel mb-0 pt-1">Report Type</label>
+                    <label class="mx-sm-2 inlineFormLabel mb-0 pt-1">{t('Report Type')}</label>
                     <div class="form-group position-relative mb-0">
                       <select class="form-control mx-sm-2 inlineFormInputs w-100 bg-white">
-                        <option value="" hidden="">Please Select</option>
+                        <option value="" hidden="">{t('Please Select')}</option>
                       </select>
                       <span class="iconv1 iconv1-arrow-down selectBoxIcon"></span>
                     </div>
@@ -317,13 +317,13 @@ class UserPrivileges extends Component {
                       <table className="borderRoundSeperateTable tdGray">
                         <thead>
                           <tr>
-                            <th>Report Names</th>
+                            <th>{t('Report Names')}</th>
                             <th className="text-right">Read</th>
                           </tr>
                         </thead>
                         <tbody>
                           <tr>
-                            <td>New Members</td>
+                            <td>{t('New Members')}</td>
                             <td className="text-right">
                               <div class="custom-control custom-checkbox roundedOrangeRadioCheck">
                                 <input type="checkbox" class="custom-control-input" id="Read" />
@@ -366,7 +366,7 @@ class UserPrivileges extends Component {
                     <label className="mx-sm-2 inlineFormLabel">{t('Designation')}</label>
                     <select className="form-control mx-sm-2 inlineFormInputs bg-white"
                       value={designation} onChange={(e) => this.setState({ designation: e.target.value }, () => this.getUser())}>
-                      <option value="">All</option>
+                      <option value="">{t('ALL')}</option>
                       {this.props.userByDesignationSearch && this.props.userByDesignationSearch.designation.map((designation, i) => {
                         return (
                           <option key={i} value={designation._id}>{designation.designationName}</option>

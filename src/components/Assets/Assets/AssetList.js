@@ -70,7 +70,7 @@ class AssetList extends Component {
                                 <div className="form-group inlineFormGroup">
                                   <label>Location</label>
                                   <select>>
-                                    <option>Please Select</option>
+                                    <option>{t('Please Select')}</option>
                                     <option>India</option>
                                     <option>India</option>
                                     <option>India</option>

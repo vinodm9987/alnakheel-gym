@@ -56,7 +56,7 @@ class CustomerRewardTransactionHistory extends Component {
                       <div className="form-group inlineFormGroup">
                         <label className="mx-sm-2 inlineFormLabel">Reward Type</label>
                         <select className="form-control mx-sm-2 inlineFormInputs">
-                          <option value="">All</option>
+                          <option value="">{t('ALL')}</option>
                           <option value="">Other</option>
                         </select>
                         <span className="iconv1 iconv1-arrow-down selectBoxIcon"></span>
@@ -96,7 +96,7 @@ class CustomerRewardTransactionHistory extends Component {
                           <p className="d-flex m-0 align-items-center">
                             <span className={pointType === '+' ? "text-success pb-1" : "text-danger pb-1"} style={{ zoom: "2" }}>{pointType}</span>
                             {/* <span className="text-danger pb-1" style={{ zoom: "2" }}>-</span> */}
-                            <span className="mx-1">{point} Points</span>
+                            <span className="mx-1">{point} {t('Points')}</span>
                           </p>
                         </td>
                         <td>
@@ -104,7 +104,7 @@ class CustomerRewardTransactionHistory extends Component {
                         </td>
                         <td>
                           <p className="d-flex m-0 align-items-center">
-                            <span className="mx-1">{balancePoint} Points</span>
+                            <span className="mx-1">{balancePoint} {t('Points')}</span>
                           </p>
                         </td>
                         <td>

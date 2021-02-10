@@ -7,12 +7,12 @@ class MemberInstallmentDetails extends Component {
             <div className="mainPage p-3 membersInstallment">
                 <div className="row">
                     <div className="col-12 pageBreadCrumbs">
-                        <span className="crumbText">Home</span><span className="mx-2">/</span><span className="crumbText">Members</span><span className="mx-2">/</span><span className="crumbText">Member Installments Details</span>
+                        <span className="crumbText">{t('Home')}</span><span className="mx-2">/</span><span className="crumbText">{t('Members')}</span><span className="mx-2">/</span><span className="crumbText">{t('Member Installments Details')}</span>
                     </div>
                     <div className="col-12">
                         <div className="row">
                             <div className="col-12 col-sm-12 pageHead">
-                                <h1>Member Installments Details</h1>
+                                <h1>{t('Member Installments Details')}</h1>
                             </div>
                         </div>
                         <div className="pageHeadLine"></div>
@@ -34,19 +34,19 @@ class MemberInstallmentDetails extends Component {
                                                 </span>
                                             </div>
                                             <div className="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-3">
-                                                <label>Package Name</label>
+                                                <label>{t('Package Name')}</label>
                                                 <h5 className="text-warning">One month gold package</h5>
                                             </div>
                                             <div className="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-2">
-                                                <label>Total Amount</label>
+                                                <label>{t('Total Amount')}</label>
                                                 <h5 className="text-danger">$ 300</h5>
                                             </div>
                                             <div className="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-2">
-                                                <label>Paid Amount</label>
+                                                <label>{t('Paid Amount')}</label>
                                                 <h5 className="text-danger">$ 300</h5>
                                             </div>
                                             <div className="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-2">
-                                                <label>Remaining Amount</label>
+                                                <label>{t('Remaining Amount')}</label>
                                                 <h5 className="text-danger">$ 300</h5>
                                             </div>
                                         </div>
@@ -57,7 +57,7 @@ class MemberInstallmentDetails extends Component {
                                 <form className="form-inline row">
                                     <div className="col-12">
                                         <div className="row d-block d-sm-flex justify-content-between pt-5">
-                                            <div className="col w-auto px-1 flexBasis-auto flex-grow-1"><h4 className="px-3">Installment History</h4></div>
+                                            <div className="col w-auto px-1 flexBasis-auto flex-grow-1"><h4 className="px-3">{t('Installment History')}</h4></div>
                                             {/* <div className="col w-auto px-1 flexBasis-auto flex-grow-0">
                                                 <div className="form-group inlineFormGroup">
                                                     <input type="text" autoComplete="off" className="form-control mx-sm-2 badge-pill inlineFormInputs" placeholder="Search"/>
@@ -73,12 +73,12 @@ class MemberInstallmentDetails extends Component {
                                     <table className="borderRoundSeperateTable tdGray">
                                         <thead>
                                             <tr>
-                                                <th>Installment Type</th>
-                                                <th>Amount</th>
-                                                <th>Paid Date</th>
-                                                <th>Due Date</th>
+                                                <th>{t('Installment Type')}</th>
+                                                <th>{t('Amount')}</th>
+                                                <th>{t('Paid Date')}</th>
+                                                <th>{t('Due Date')}</th>
                                                 <th>{t('Status')}</th>
-                                                <th className="text-center">Action</th>
+                                                <th className="text-center">{t('Action')}</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -88,14 +88,14 @@ class MemberInstallmentDetails extends Component {
                                                 <td>19/11/2020</td>
                                                 <td>Nil</td>
                                                 <td>
-                                                    <h5 className="text-success">Paid</h5>
+                                                    <h5 className="text-success">{t('Paid')}</h5>
                                                     {/* if Pending */}
-                                                    {/* <h5 className="text-warning">Pending</h5> */}
+                                                    {/* <h5 className="text-warning">{t('Pending')}</h5> */}
                                                     {/* / if Pending */}
                                                 </td>
                                                 <td className="text-center">
                                                     {/* onclick give active to "addMemberFakePopUp" */}
-                                                    {/* <button type="button" className="btn btn-success btn-sm">Pay Amount</button> */}
+                                                    {/* <button type="button" className="btn btn-success btn-sm">{t('Pay Amount')}</button> */}
                                                     {/* / onclick give active to "addMemberFakePopUp" over */}
                                                 </td>
                                             </tr>
@@ -105,14 +105,14 @@ class MemberInstallmentDetails extends Component {
                                                 <td>Nil</td>
                                                 <td>19/11/2020</td>
                                                 <td>
-                                                    {/* <h5 className="text-success">Paid</h5> */}
+                                                    {/* <h5 className="text-success">{t('Paid')}</h5> */}
                                                     {/* if Pending */}
-                                                    <h5 className="text-warning">Pending</h5>
+                                                    <h5 className="text-warning">{t('Pending')}</h5>
                                                     {/* / if Pending */}
                                                 </td>
                                                 <td className="text-center">
                                                     {/* onclick give active to "addMemberFakePopUp" */}
-                                                    <button type="button" className="btn btn-success btn-sm">Pay Amount</button>
+                                                    <button type="button" className="btn btn-success btn-sm">{t('Pay Amount')}</button>
                                                     {/* / onclick give active to "addMemberFakePopUp" over */}
                                                 </td>
                                             </tr>
@@ -131,7 +131,7 @@ class MemberInstallmentDetails extends Component {
                                         <div className="row p-3">
                                             <div className="commonYellowModal w-100">
                                                 <div className="modal-header">
-                                                    <h4 className="modal-title">Payment</h4>
+                                                    <h4 className="modal-title">{t('Payment')}</h4>
                                                     {/* on click this button remove active from top that div */}
                                                     <button type="button" className="close" ><span className="iconv1 iconv1-close"></span></button>
                                                     {/* / - on click this button remove active from top that div over */}
@@ -143,7 +143,7 @@ class MemberInstallmentDetails extends Component {
                                                         <tbody>
                                                             <tr>
                                                                 <td>
-                                                                    <h5 className="m-0">Total</h5>
+                                                                    <h5 className="m-0">{t('Total')}</h5>
                                                                 </td>
                                                                 <td>
                                                                     <h5 className="m-0"><small className="d-flex justify-content-end">$ 60.00</small></h5>
@@ -151,7 +151,7 @@ class MemberInstallmentDetails extends Component {
                                                             </tr>
                                                             <tr>
                                                                 <td>
-                                                                    <h5 className="m-0">Trainer</h5>
+                                                                    <h5 className="m-0">{t('Trainer')}</h5>
                                                                 </td>
                                                                 <td>
                                                                     <h5 className="m-0"><small className="d-flex justify-content-end">$ 20.00</small></h5>
@@ -167,7 +167,7 @@ class MemberInstallmentDetails extends Component {
                                                             </tr>
                                                             <tr>
                                                                 <td>
-                                                                    <h5 className="m-0">Discount</h5>
+                                                                    <h5 className="m-0">{t('Discount')}</h5>
                                                                 </td>
                                                                 <td>
                                                                     <h5 className="m-0"><small className="d-flex justify-content-end">0.00</small></h5>
@@ -175,7 +175,7 @@ class MemberInstallmentDetails extends Component {
                                                             </tr>
                                                             <tr>
                                                                 <td>
-                                                                    <h5 className="m-0">Tax</h5>
+                                                                    <h5 className="m-0">{t('VAT')}</h5>
                                                                 </td>
                                                                 <td>
                                                                     <h5 className="m-0"><small className="d-flex justify-content-end text-primary">0.00</small></h5>
@@ -188,7 +188,7 @@ class MemberInstallmentDetails extends Component {
                                                             </tr>
                                                             <tr>
                                                                 <td>
-                                                                    <h3 className="m-0">Total Amount</h3>
+                                                                    <h3 className="m-0">{t('Total Amount')}</h3>
                                                                 </td>
                                                                 <td>
                                                                     <h5 className="text-danger d-flex justify-content-end m-0 font-weight-bold dirltrjcs"><span className="mx-1">$</span><span className="mx-1">80.00</span></h5>
@@ -198,18 +198,18 @@ class MemberInstallmentDetails extends Component {
                                                     </table>
                                                 </div>
                                                 <div className="row mb-1 mt-4">
-                                                    <div className="px-3 d-flex align-items-center"><h5 className="my-2 font-weight-bold px-1">Remaining Amount</h5></div>
+                                                    <div className="px-3 d-flex align-items-center"><h5 className="my-2 font-weight-bold px-1">{t('Remaining Amount')}</h5></div>
                                                     <div className="px-3 d-flex align-items-center justify-content-end">
                                                         <h5 className="text-danger d-flex justify-content-end m-0 font-weight-bold dirltrjcs"><span className="mx-1">$</span><span className="mx-1">20.00</span></h5>
                                                     </div>
                                                 </div>
                                                 <div className="row mb-1 mt-4">
-                                                    <div className="col-12 col-sm-6 d-flex align-items-center"><h5 className="my-2 font-weight-bold px-1">Payment Method</h5></div>
+                                                    <div className="col-12 col-sm-6 d-flex align-items-center"><h5 className="my-2 font-weight-bold px-1">{t('Payment Method')}</h5></div>
                                                     <div className="col-12 col-sm-6 d-flex align-items-center justify-content-end">
                                                         <button type="button" data-toggle="modal" data-target="#Discount" className="d-flex flex-column align-items-center justify-content-center bg-danger w-75px h-75px m-1 linkHoverDecLess rounded-circle text-white cursorPointer border-0">
                                                             <span className="w-100 text-center">
                                                                 <h4 className="m-0"><span className="iconv1 iconv1-discount text-white"></span></h4>
-                                                                <small className="text-white">Discount</small>
+                                                                <small className="text-white">{t('Discount')}</small>
                                                             </span>
                                                         </button>
                                                     </div>
@@ -217,7 +217,7 @@ class MemberInstallmentDetails extends Component {
                                                 <div className="row mt-3">
                                                     <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
                                                         <div className="form-group inlineFormGroup mb-3">
-                                                            <label htmlFor="addDigital" className="mx-sm-2 inlineFormLabel mb-1">Digital</label>
+                                                            <label htmlFor="addDigital" className="mx-sm-2 inlineFormLabel mb-1">{t('Digital')}</label>
                                                             <div className="form-control mx-sm-2 inlineFormInputs FormInputsError w-100 p-0 d-flex align-items-center bg-white dirltr">
                                                                 <label htmlFor="addDigital" className="text-danger my-0 mx-1 font-weight-bold">$</label>
                                                                 <input type="number" autoComplete="off" className="border-0 bg-light w-100 h-100 p-1 bg-white" id="addDigital" />
@@ -229,7 +229,7 @@ class MemberInstallmentDetails extends Component {
                                                     </div>
                                                     <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
                                                         <div className="form-group inlineFormGroup mb-3">
-                                                            <label htmlFor="addCash" className="mx-sm-2 inlineFormLabel mb-1">Cash</label>
+                                                            <label htmlFor="addCash" className="mx-sm-2 inlineFormLabel mb-1">{t('Cash')}</label>
                                                             <div className="form-control mx-sm-2 inlineFormInputs FormInputsError w-100 p-0 d-flex align-items-center bg-white dirltr">
                                                                 <label htmlFor="addCash" className="text-danger my-0 mx-1 font-weight-bold">$</label>
                                                                 <input type="number" autoComplete="off" className="border-0 bg-light w-100 h-100 p-1 bg-white" id="addCash" />
@@ -241,7 +241,7 @@ class MemberInstallmentDetails extends Component {
                                                     </div>
                                                     <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
                                                         <div className="form-group inlineFormGroup mb-3">
-                                                            <label htmlFor="addCard" className="mx-sm-2 inlineFormLabel mb-1">Card</label>
+                                                            <label htmlFor="addCard" className="mx-sm-2 inlineFormLabel mb-1">{t('Card')}</label>
                                                             <div className="form-control mx-sm-2 inlineFormInputs FormInputsError w-100 p-0 d-flex align-items-center bg-white dirltr">
                                                                 <label htmlFor="addCard" className="text-danger my-0 mx-1 font-weight-bold">$</label>
                                                                 <input disabled type="number" autoComplete="off" className="border-0 bg-light w-100 h-100 p-1 bg-white" id="addCard" />
@@ -253,7 +253,7 @@ class MemberInstallmentDetails extends Component {
                                                     </div>
                                                     <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
                                                         <div className="form-group inlineFormGroup mb-3">
-                                                            <label htmlFor="addCardNumber" className="mx-sm-2 inlineFormLabel mb-1">Card Number (last 4 digits)</label>
+                                                            <label htmlFor="addCardNumber" className="mx-sm-2 inlineFormLabel mb-1">{t('Card Number (last 4 digits)')}</label>
                                                             <input type="text" autoComplete="off" className="form-control mx-sm-2 inlineFormInputs FormInputsError w-100 p-0 d-flex align-items-center bg-white dirltr" id="addCard4lastno" />
                                                             <div className="errorMessageWrapper">
                                                                 <small className="text-danger mx-sm-2 errorMessage">Err</small>
@@ -266,7 +266,7 @@ class MemberInstallmentDetails extends Component {
                               <div className="d-flex">
                                 <div className="custom-control custom-checkbox roundedGreenRadioCheck mx-2">
                                   <input type="checkbox" className="custom-control-input" id="check" name="checkorNo" />
-                                  <label className="custom-control-label" htmlFor="check">Cheque</label>
+                                  <label className="custom-control-label" htmlFor="check">{t('Cheque')}</label>
                                 </div>
                               </div>
                             </div>
@@ -276,7 +276,7 @@ class MemberInstallmentDetails extends Component {
                             <div className="row">
                               <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
                                 <div className="form-group inlineFormGroup mb-3">
-                                  <label htmlFor="bankName" className="mx-sm-2 inlineFormLabel mb-1">Bank Name</label>
+                                  <label htmlFor="bankName" className="mx-sm-2 inlineFormLabel mb-1">{t('Bank Name')}</label>
                                   <input type="number" autoComplete="off" className="form-control mx-sm-2 inlineFormInputs FormInputsError w-100 py-0 px-2 d-flex align-items-center bg-white dirltr" id="bankName" />
                                   <div className="errorMessageWrapper">
                                     <small className="text-danger mx-sm-2 errorMessage"></small>
@@ -285,7 +285,7 @@ class MemberInstallmentDetails extends Component {
                               </div>
                               <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
                                 <div className="form-group inlineFormGroup mb-3">
-                                  <label htmlFor="CheckNumber" className="mx-sm-2 inlineFormLabel mb-1">Cheque Number</label>
+                                  <label htmlFor="CheckNumber" className="mx-sm-2 inlineFormLabel mb-1">{t('Cheque Number')}</label>
                                   <input type="number" autoComplete="off" className="form-control mx-sm-2 inlineFormInputs FormInputsError w-100 py-0 px-2 d-flex align-items-center bg-white dirltr" id="CheckNumber" />
                                   <div className="errorMessageWrapper">
                                     <small className="text-danger mx-sm-2 errorMessage"></small>
@@ -294,7 +294,7 @@ class MemberInstallmentDetails extends Component {
                               </div>
                               <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
                                 <div className="form-group inlineFormGroup mb-3">
-                                  <label htmlFor="CheckDate" className="mx-sm-2 inlineFormLabel mb-1">Cheque Date</label>
+                                  <label htmlFor="CheckDate" className="mx-sm-2 inlineFormLabel mb-1">{t('Cheque Date')}</label>
                                   <input type="number" autoComplete="off" className="form-control mx-sm-2 inlineFormInputs FormInputsError w-100 p-0 d-flex align-items-center bg-white dirltr" id="CheckDate" />
                                   <div className="errorMessageWrapper">
                                     <small className="text-danger mx-sm-2 errorMessage"></small>
@@ -303,7 +303,7 @@ class MemberInstallmentDetails extends Component {
                               </div>
                               <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
                                 <div className="form-group inlineFormGroup mb-3">
-                                  <label htmlFor="ChequeAmount" className="mx-sm-2 inlineFormLabel mb-1">Cheque Amount</label>
+                                  <label htmlFor="ChequeAmount" className="mx-sm-2 inlineFormLabel mb-1">{t('Cheque Amount')}</label>
                                   {/* here currency comes , so change errorclass for div below */}
                                   <div className="form-control mx-sm-2 inlineFormInputs FormInputsError w-100 p-0 d-flex align-items-center bg-white dirltr">
                                     <label htmlFor="ChequeAmount" className="text-danger my-0 mx-1 font-weight-bold">$</label>
@@ -319,14 +319,14 @@ class MemberInstallmentDetails extends Component {
                           {/* if cheque over */}
                                                     <div className="col-12">
                                                         <div className="px-sm-1 pt-4 pb-5">
-                                                            <button type="button" className="btn btn-block btn-success btn-lg" >Checkout</button>
+                                                            <button type="button" className="btn btn-block btn-success btn-lg" >{t('Checkout')}</button>
                                                         </div>
                                                     </div>
                                                     <div className="modal fade commonYellowModal" id="Discount" >
                                                         <div className="modal-dialog modal-dialog-centered">
                                                             <div className="modal-content">
                                                                 <div className="modal-header">
-                                                                    <h4 className="modal-title">Add Order Discount</h4>
+                                                                    <h4 className="modal-title">{t('Add Order Discount')}</h4>
                                                                     <button type="button" className="close" data-dismiss="modal"><span className="iconv1 iconv1-close"></span></button>
                                                                 </div>
                                                                 <div className="modal-body px-0">
@@ -341,7 +341,7 @@ class MemberInstallmentDetails extends Component {
                                                                             <input type="number" autoComplete="off" className="form-control" placeholder="Enter discount" />
                                                                         </div>
                                                                         <div className="col-12 p-3">
-                                                                            <button type="button" className="btn btn-block btn-success btn-lg" data-dismiss="modal" >Add Discount</button>
+                                                                            <button type="button" className="btn btn-block btn-success btn-lg" data-dismiss="modal" >{t('Add Discount')}</button>
                                                                         </div>
                                                                     </div>
                                                                 </div>

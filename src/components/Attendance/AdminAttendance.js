@@ -69,7 +69,7 @@ class AdminAttendance extends Component {
           </div>
           <div className="col w-auto px-1 flexBasis-auto flex-grow-0">
             <div className="form-group inlineFormGroup flex-nowrap mt-4 pt-2 d-flex">
-              <span onClick={() => this.handleFilter(this.state.branch, '', this.state.search)} className="btn btn-warning btn-sm text-white d-inline-flex align-items-center">ALL</span>
+              <span onClick={() => this.handleFilter(this.state.branch, '', this.state.search)} className="btn btn-warning btn-sm text-white d-inline-flex align-items-center">{t('ALL')}</span>
               <MuiPickersUtilsProvider utils={DateFnsUtils}>
                 <DatePicker
                   variant='inline'
@@ -204,7 +204,7 @@ class AdminAttendance extends Component {
                         <td className="text-center" dir="ltr">{formatAM_PM(doc.timeIn)}</td>
                         <td className="text-center" dir="ltr">{doc.timeOut ? formatAM_PM(doc.timeOut) : 'Not Out Yet'}</td>
                         <td className="text-center" dir="ltr">{doc.timeOut ? countHours(doc.timeIn, doc.timeOut) : 'Not Out Yet'}</td>
-                        <td className="text-center"><Link type="button" className="btn btn-primary btn-sm w-100px rounded-50px text-center" to={`members-details/${doc.memberId._id}`}>Details</Link></td>
+                        <td className="text-center"><Link type="button" className="btn btn-primary btn-sm w-100px rounded-50px text-center" to={`members-details/${doc.memberId._id}`}>{t('Details')}</Link></td>
                       </tr>
                     )
                   })}
@@ -236,7 +236,7 @@ class AdminAttendance extends Component {
       <div className="mainPage p-3 AdminAttendance">
         <div className="row">
           <div className="col-12 pageBreadCrumbs">
-            <span className="crumbText">Home</span><span className="mx-2">/</span><span className="crumbText">Dashboard</span><span className="mx-2">/</span><span className="crumbText">View Attendance</span>
+            <span className="crumbText">{t('Home')}</span><span className="mx-2">/</span><span className="crumbText">Dashboard</span><span className="mx-2">/</span><span className="crumbText">View Attendance</span>
           </div>
           <div className="col-12 pageHead">
             <h1>

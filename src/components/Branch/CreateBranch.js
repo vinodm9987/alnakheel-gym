@@ -600,7 +600,7 @@ class CreateBranch extends Component {
           </div>
         </div>
 
-        <button type="button" id="passwordAskModalBtn2" className="d-none" data-toggle="modal" data-target="#passwordAskModal" ref="passwordModalOpen">Open modal</button>
+        <button type="button" id="passwordAskModalBtn2" className="d-none" data-toggle="modal" data-target="#passwordAskModal" ref="passwordModalOpen">{t('Open')}</button>
         <div className="modal fade commonYellowModal" id="passwordAskModal">
           <div className="modal-dialog modal-dialog-centered">
             <div className="modal-content">

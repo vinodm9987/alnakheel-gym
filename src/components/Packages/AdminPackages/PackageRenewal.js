@@ -758,10 +758,10 @@ class PackageRenewal extends Component {
                           <div key={i} className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 grayBXhere">
                             <div className="lefthere">
                               <div className="loopWhitehere">
-                                <h4 className="displayFlexCls"><span>Installment</span><span className="gaper"></span><span className="mnw-20pxhere">{i + 1}</span></h4>
+                                <h4 className="displayFlexCls"><span>{t('Installment')}</span><span className="gaper"></span><span className="mnw-20pxhere">{i + 1}</span></h4>
                                 <div className="vLinehere"></div>
                                 <div className="valuesetHere">
-                                  <label className="mt-2 mx-1">Value</label>
+                                  <label className="mt-2 mx-1">{t('Value')}</label>
                                   <div className="position-relative d-flex flex-grow-1" dir="ltr">
                                     <span className="OnlyCurrency Uppercase">{this.props.defaultCurrency}</span>
                                     <input type="number" className="form-control inputFieldPaddingCls ar-en-px-2"
@@ -770,7 +770,7 @@ class PackageRenewal extends Component {
                                   </div>
                                 </div>
                                 <div className="datesetHere">
-                                  <label className="mt-2 mx-1 text-nowrap">Due Date</label>
+                                  <label className="mt-2 mx-1 text-nowrap">{t('Due Date')}</label>
                                   <span className="position-relative">
                                     {/* please keep calendaer coming box input plugin */}
                                     <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -1015,7 +1015,7 @@ class PackageRenewal extends Component {
               </div>
 
               {/* Popup Discount */}
-              <button type="button" id="Discount2" className="d-none" data-toggle="modal" data-target="#Discount" ref="openDiscount">Open modal</button>
+              <button type="button" id="Discount2" className="d-none" data-toggle="modal" data-target="#Discount" ref="openDiscount">{t('Open')}</button>
               <div className="modal fade commonYellowModal" id="Discount" >
                 <div className="modal-dialog modal-dialog-centered">
                   <div className="modal-content">
@@ -1076,13 +1076,13 @@ class PackageRenewal extends Component {
 
 
         {/* --------------Receipt Modal-=--------------- */}
-        <button type="button" className="btn btn-primary d-none" data-toggle="modal" data-target="#ReceiptModal" data-backdrop="static" data-keyboard="false" ref="receiptOpenModal">Receipt</button>
+        <button type="button" className="btn btn-primary d-none" data-toggle="modal" data-target="#ReceiptModal" data-backdrop="static" data-keyboard="false" ref="receiptOpenModal">{t('Receipt')}</button>
         {packageReceipt &&
           <div className="modal fade commonYellowModal" id="ReceiptModal">
             <div className="modal-dialog modal-lg" id="ReceiptModal2">
               <div className="modal-content">
                 <div className="modal-header">
-                  <h4 className="modal-title">Receipt</h4>
+                  <h4 className="modal-title">{t('Receipt')}</h4>
                   {/* <Link to={`/members-details/${packageReceipt._id}`}> */}
                   <button type="button" className="close" data-dismiss="modal" ref="receiptCloseModal" onClick={() => this.handleReceiptClose()}><span className="iconv1 iconv1-close"></span></button>
                   {/* </Link> */}
@@ -1096,17 +1096,17 @@ class PackageRenewal extends Component {
                     <div className="row px-5 justify-content-between">
                       <div className="col-free p-3">
                         <div className="mb-3">
-                          <label className="m-0 font-weight-bold">VAT Reg Number</label>
+                          <label className="m-0 font-weight-bold">{t('VAT Reg Number')}</label>
                           <p className="">{packageReceipt.branch.vatRegNo}</p>
                         </div>
                         <div className="">
-                          <label className="m-0 font-weight-bold">Address</label>
+                          <label className="m-0 font-weight-bold">{t('Address')}</label>
                           <p className="whiteSpaceNormal mnw-150px mxw-200px">{packageReceipt.branch.address}</p>
                         </div>
                       </div>
                       <div className="col-free p-3">
                         <div className="mb-3">
-                          <label className="m-0 font-weight-bold">Tax Invoice No</label>
+                          <label className="m-0 font-weight-bold">{t('Tax Invoice No')}</label>
                           <p className="">{packageReceipt.packageDetails.filter(p => p.packages === packages && !p.isExpiredPackage)[0] &&
                             packageReceipt.packageDetails.filter(p => p.packages === packages && !p.isExpiredPackage)[0].orderNo}</p>
                         </div>
@@ -1117,11 +1117,11 @@ class PackageRenewal extends Component {
                       </div>
                       <div className="col-free p-3">
                         <div className="">
-                          <label className="m-0 font-weight-bold">Receipt Total</label>
+                          <label className="m-0 font-weight-bold">{t('Receipt Total')}</label>
                           <p className="h4 font-weight-bold">{this.props.defaultCurrency} {parseFloat(total).toFixed(3)}</p>
                         </div>
                         <div className="">
-                          <label className="m-0 font-weight-bold">Telephone</label>
+                          <label className="m-0 font-weight-bold">{t('Telephone')}</label>
                           <p className="">{packageReceipt.branch.telephone}</p>
                         </div>
                       </div>
@@ -1129,14 +1129,14 @@ class PackageRenewal extends Component {
                     <div className="bgGray d-flex flex-wrap px-5 py-4 justify-content-between">
                       <div className="">
                         <h6 className="font-weight-bold m-1">
-                          <span className="px-1">ID:</span>
+                          <span className="px-1">{t('ID')}:</span>
                           <span className="px-1">{packageReceipt.memberId}</span>
                         </h6>
                       </div>
                       <h6 className="font-weight-bold m-1">{packageReceipt.credentialId.userName}</h6>
                       <div className="">
                         <h6 className="font-weight-bold m-1">
-                          <span className="px-1">Mob:</span>
+                          <span className="px-1">{t('Mob')}:</span>
                           <span className="px-1">{packageReceipt.mobileNo}</span>
                         </h6>
                       </div>
@@ -1159,24 +1159,24 @@ class PackageRenewal extends Component {
                           </tr>
                           <tr>
                             <td colSpan="4">
-                              <div className="text-right my-1">Amount Total :</div>
+                              <div className="text-right my-1">{t('Amount Total')} :</div>
                               {parseFloat(discount) ?
-                                <div className="text-right my-1">Discount :</div>
+                                <div className="text-right my-1">{t('Discount')} :</div>
                                 : <div></div>}
                               {parseFloat(totalVat) ?
-                                <div className="text-right my-1">VAT{this.state.tax ? `(${this.state.tax} %)` : ''}:</div>
+                                <div className="text-right my-1">{t('VAT')}{this.state.tax ? `(${this.state.tax} %)` : ''}:</div>
                                 : <div></div>}
                               {parseFloat(digital) ?
-                                <div className="text-right my-1">Digital :</div>
+                                <div className="text-right my-1">{t('Digital')} :</div>
                                 : <div></div>}
                               {parseFloat(cash) ?
-                                <div className="text-right my-1">Cash :</div>
+                                <div className="text-right my-1">{t('Cash')} :</div>
                                 : <div></div>}
                               {parseFloat(card) ?
-                                <div className="text-right my-1">Card :</div>
+                                <div className="text-right my-1">{t('Card')} :</div>
                                 : <div></div>}
-                              <div className="text-right my-1">Grand Total :</div>
-                              <div className="text-right my-1">Paid Amount :</div>
+                              <div className="text-right my-1">{t('Grand Total')} :</div>
+                              <div className="text-right my-1">{t('Paid Amount')} :</div>
                               {this.state.cardNumber ?
                                 <div className="text-right my-1">{t('Card last four digit')} :</div>
                                 : <div></div>}
@@ -1218,29 +1218,29 @@ class PackageRenewal extends Component {
                       <div className="d-flex">
                         <div className="mr-3 text-center">
                           <img src={instaimg} alt="" className="w-30px" />
-                          <h6 className="font-weight-bold mb-0 mt-1">Follow Us</h6>
+                          <h6 className="font-weight-bold mb-0 mt-1">{t('Follow Us')}</h6>
                         </div>
                         <div className="w-50px mr-3">
                           <QRCode value={`http://instagram.com/${packageReceipt.branch.instaId}/`} renderAs='svg' width="50" height="50" />
                         </div>
                       </div>
-                      {/* <h6 className="font-weight-bold">Paid Amount: {this.props.defaultCurrency} {parseFloat(total).toFixed(3)}</h6> */}
+                      {/* <h6 className="font-weight-bold">{t('Paid Amount')}: {this.props.defaultCurrency} {parseFloat(total).toFixed(3)}</h6> */}
                       {packageReceipt.packageDetails.filter(p => p.packages === packages && !p.isExpiredPackage)[0] &&
                         <h6 className="font-weight-bold">{t('Served by')}: {packageReceipt.packageDetails.filter(p => p.packages === packages && !p.isExpiredPackage)[0].doneBy.userName}</h6>}
                     </div>
                     {/* <div className="text-center px-5">
-                      <h5 className="text-muted">Membership cannot be refunded or transferred to others.</h5>
+                      <h5 className="text-muted">{t('Membership cannot be refunded or transferred to others.')}</h5>
                       <h5 className="font-weight-bold">{t('Thank You')}</h5>
                     </div> */}
                     <div className="d-flex align-items-center justify-content-center">
                       <div className="text-center">
-                        <h6 className="font-weight-bold" >Membership cannot be refunded or transferred to others.</h6>
+                        <h6 className="font-weight-bold" >{t('Membership cannot be refunded or transferred to others.')}</h6>
                         <h6 className="font-weight-bold">{t('Thank You')}</h6>
                       </div>
                     </div>
                     <div className="text-center">
                       {/* <Link to={`/members-details/${packageReceipt._id}`}> */}
-                      <button type="button" className="btn btn-success px-4 py-1 my-2" data-dismiss="modal" onClick={() => this.handlePrint(packageReceipt._id)}>Print Receipt</button>
+                      <button type="button" className="btn btn-success px-4 py-1 my-2" data-dismiss="modal" onClick={() => this.handlePrint(packageReceipt._id)}>{t('Print Receipt')}</button>
                       {/* </Link> */}
                     </div>
                   </div>
@@ -1263,12 +1263,12 @@ class PackageRenewal extends Component {
                 <span>{packageReceipt.branch.address}</span><br />
                 {/* <span>Road/Street 50, Samaheej,</span><br /> */}
                 {/* <span>Block 236, Bahrain,</span><br /> */}
-                <span>Tel : {packageReceipt.branch.telephone}</span><br />
+                <span>{t('Tel')} : {packageReceipt.branch.telephone}</span><br />
               </p>
-              <p style={{ textAlign: "center", margin: "0 0 10px 0" }}>VAT - {packageReceipt.branch.vatRegNo}</p>
+              <p style={{ textAlign: "center", margin: "0 0 10px 0" }}>{t('VAT')} - {packageReceipt.branch.vatRegNo}</p>
               <p style={{ display: "flex", justifyContent: "space-between", margin: "0" }}>
                 <span style={{ padding: "2px", fontSize: "14px" }}>{dateToDDMMYYYY(new Date())} {dateToHHMM(new Date())}</span>
-                <span style={{ padding: "2px", fontSize: "14px" }}>Bill No:{packageReceipt.packageDetails.filter(p => p.packages === packages && !p.isExpiredPackage)[0] &&
+                <span style={{ padding: "2px", fontSize: "14px" }}>{t('Bill No')}:{packageReceipt.packageDetails.filter(p => p.packages === packages && !p.isExpiredPackage)[0] &&
                   packageReceipt.packageDetails.filter(p => p.packages === packages && !p.isExpiredPackage)[0].orderNo}</span>
               </p>
               <p style={{ textAlign: "center", margin: "0" }}>
@@ -1322,7 +1322,7 @@ class PackageRenewal extends Component {
                     : <tr></tr>}
                   {parseFloat(giftcard) ?
                     <tr>
-                      <td style={{ textAlign: "right", padding: "0 4px", width: "100%" }}>Giftcard {this.props.defaultCurrency}: </td>
+                      <td style={{ textAlign: "right", padding: "0 4px", width: "100%" }}>{t('Giftcard')} {this.props.defaultCurrency}: </td>
                       <td style={{ textAlign: "right", padding: "0" }}>{parseFloat(giftcard).toFixed(3)}</td>
                     </tr>
                     : <tr></tr>}
@@ -1370,7 +1370,7 @@ class PackageRenewal extends Component {
                 <div style={{ display: "flex", flexDirection: "row", justifyContent: "center", alignItems: "center" }}>
                   <div style={{ marginRight: "10px", justifyContent: "center" }}>
                     <img src={instaimg} alt="" style={{ width: "30px", height: "30px" }} />
-                    {/* <h6>Follow Us</h6> */}
+                    {/* <h6>{t('Follow Us')}</h6> */}
                   </div>
                   <QRCode value={`http://instagram.com/${packageReceipt.branch.instaId}/`} renderAs='svg' width="50" height="50" />
                 </div>
@@ -1379,7 +1379,7 @@ class PackageRenewal extends Component {
               </div>
               <p style={{ display: "flex", margin: "0 0 10px 0" }}>
                 <span>{t('NB')}:</span>
-                <span style={{ flexGrow: "1", textAlign: "center" }}>Membership cannot be refunded or transferred to others.</span>
+                <span style={{ flexGrow: "1", textAlign: "center" }}>{t('Membership cannot be refunded or transferred to others.')}</span>
               </p>
               <p style={{ textAlign: "center", margin: "0 0 10px 0" }}>{t('Thank You')}</p>
             </div>

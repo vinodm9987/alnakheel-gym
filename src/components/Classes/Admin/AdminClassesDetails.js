@@ -212,7 +212,7 @@ class AdminClassesDetails extends Component {
                                   <td className="text-center">{dateToDDMMYYYY(dateOfPurchase)}</td>
                                   <td className="text-center">
                                     <h6 className={paymentStatus === 'Paid' ? "m-0 text-success font-weight-bold " : "m-0 text-danger font-weight-bold "}>{t(`${paymentStatus}`)}</h6>
-                                    {/* <h5 className="m-0 text-danger">Un Paid</h5> */}
+                                    {/* <h5 className="m-0 text-danger">{t('UnPaid')}</h5> */}
                                   </td>
                                   <td className="text-center">
                                     <h6 className="m-0 font-weight-bold text-body">{t(`${mode}`)}</h6>

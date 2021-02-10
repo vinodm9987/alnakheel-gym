@@ -58,7 +58,7 @@ class PackagesList extends Component {
                       <p className="mt-2 mt-lg-3 mt-xl-4 mb-2 mb-lg-3 mb-xl-4 multiLineTexttruncate">{description}</p>
                       {!disable ?
                         <Link to={`/package-details/${_id}`} className="btn btn-default btn-fluid font-weight-bold mt-auto" style={{ backgroundColor: '#fff', color: '#000' }}>{t('Choose Plan')}</Link>
-                        : <span>Already Registered</span>
+                        : <span>{t('Already Registered')}</span>
                       }
                     </div>
                   </div>
