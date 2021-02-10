@@ -727,8 +727,8 @@ class PackageDetails extends Component {
                       {packageDetails && packageDetails.map((pack) => {
                         const { packages: { packageName }, trainerDetails } = pack
                         return (
-                          trainerDetails && trainerDetails.map((t, j) => {
-                            const { trainerStart, trainerEnd, trainer: { credentialId: { userName, avatar } }, trainerFees: { amount }, Installments } = t
+                          trainerDetails && trainerDetails.map((ta, j) => {
+                            const { trainerStart, trainerEnd, trainer: { credentialId: { userName, avatar } }, trainerFees: { amount }, Installments } = ta
                             return (
                               <tr key={j}>
                                 <td>

@@ -74,7 +74,7 @@ const getActiveMembers = async (body) => {
   if (body.branch) queryCond["branch"] = body.branch;
   let response = await Member.find(queryCond)
     .populate('credentialId').populate("packageDetails.packages")
-    .populate({ path: "packageDetails.trainer", populate: { path: "credentialId" } }).lean()
+    .populate({ path: "packageDetails.trainerDetails.trainer", populate: { path: "credentialId" } }).lean()
   response = response.filter(member => {
     if (body.fromDate && body.toDate) {
       if (new Date(setTime(body.fromDate)) <= member.admissionDate && new Date(setTime(body.toDate)) >= member.admissionDate) {
@@ -149,7 +149,7 @@ const getUpcomingExpiry = async (body) => {
   let queryCond = {};
   if (body.branch) queryCond["branch"] = body.branch
   const members = await Member.find(queryCond).populate('credentialId packageDetails.packages')
-    .populate({ path: "packageDetails.trainer", populate: { path: "credentialId" } }).lean();
+    .populate({ path: "packageDetails.trainerDetails.trainer", populate: { path: "credentialId" } }).lean();
   let packagesResponse = await Package.find({}, 'packageName color').lean();
   let packages = []
   packagesResponse.forEach(ele => {
@@ -184,7 +184,7 @@ const getExpiredMembers = async (body) => {
   queryCond['packageDetails.isExpiredPackage'] = true;
   if (body.branch) queryCond["branch"] = body.branch
   let response = await Member.find(queryCond).populate('credentialId').populate("packageDetails.packages")
-    .populate({ path: "packageDetails.trainer", populate: { path: "credentialId" } }).lean();
+    .populate({ path: "packageDetails.trainerDetails.trainer", populate: { path: "credentialId" } }).lean();
   let packagesResponse = await Package.find({}, 'packageName color').lean();
   let packages = []
   packagesResponse.forEach(ele => {
@@ -284,56 +284,56 @@ const getFreezedMembers = async (body) => {
 }
 
 const getPackageRenewal = async (body) => {
-  let queryCond = {};
-  queryCond['packageDetails.packageRenewal'] = true;
-  if (body.branch) queryCond["branch"] = body.branch
-  let packagesResponse = await Package.find({}, 'packageName color').lean();
-  let packages = []
-  packagesResponse.forEach(ele => {
-    packages.push({ ...ele, ...{ count: 0 } })
-  })
-  let branchResponse = await Branch.find({}, 'branchName').lean();
-  let branches = []
-  branchResponse.forEach(ele => {
-    branches.push({ ...ele, ...{ count: 0 } })
-  })
-  let response = await Member.find(queryCond)
-    .populate('credentialId branch').populate("packageDetails.packages")
-    .populate({ path: "packageDetails.trainer", populate: { path: "credentialId" } }).lean()
-  response.forEach(member => {
-    member.packageDetails = member.packageDetails.filter(pack => pack.packageRenewal)
-  })
-  response.forEach(member => {
-    if (body.fromDate && body.toDate) {
-      member.packageDetails = member.packageDetails.filter(pack => {
-        if (pack.extendDate) {
-          if (new Date(setTime(body.fromDate)) <= pack.extendDate && new Date(setTime(body.toDate)) >= pack.extendDate) {
-            return pack
-          }
-        } else {
-          if (new Date(setTime(body.fromDate)) <= pack.endDate && new Date(setTime(body.toDate)) >= pack.endDate) {
-            return pack
-          }
-        }
-      })
-    }
-  })
-  response = response.filter(member => member.packageDetails.length > 0)
-  response.forEach(member => {
-    member.packageDetails.forEach(doc => {
-      if (doc.packageRenewal) {
-        let branchIndex = branches.findIndex(b => b._id.toString() === member.branch._id.toString())
-        let packageIndex = packages.findIndex(ele => ele._id.toString() === doc.packages._id.toString());
-        if (doc.packages._id.toString() === packages[packageIndex]._id.toString() && packageIndex !== -1) {
-          packages[packageIndex].count++;
-        }
-        if (member.branch._id.toString() === branches[branchIndex]._id.toString() && branchIndex !== -1) {
-          branches[branchIndex].count++;
-        }
-      }
-    });
-  })
-  return { response, packages, branches }
+  // let queryCond = {};
+  // queryCond['packageDetails.packageRenewal'] = true;
+  // if (body.branch) queryCond["branch"] = body.branch
+  // let packagesResponse = await Package.find({}, 'packageName color').lean();
+  // let packages = []
+  // packagesResponse.forEach(ele => {
+  //   packages.push({ ...ele, ...{ count: 0 } })
+  // })
+  // let branchResponse = await Branch.find({}, 'branchName').lean();
+  // let branches = []
+  // branchResponse.forEach(ele => {
+  //   branches.push({ ...ele, ...{ count: 0 } })
+  // })
+  // let response = await Member.find(queryCond)
+  //   .populate('credentialId branch').populate("packageDetails.packages")
+  //   .populate({ path: "packageDetails.trainerDetails.trainer", populate: { path: "credentialId" } }).lean()
+  // response.forEach(member => {
+  //   member.packageDetails = member.packageDetails.filter(pack => pack.packageRenewal)
+  // })
+  // response.forEach(member => {
+  //   if (body.fromDate && body.toDate) {
+  //     member.packageDetails = member.packageDetails.filter(pack => {
+  //       if (pack.extendDate) {
+  //         if (new Date(setTime(body.fromDate)) <= pack.extendDate && new Date(setTime(body.toDate)) >= pack.extendDate) {
+  //           return pack
+  //         }
+  //       } else {
+  //         if (new Date(setTime(body.fromDate)) <= pack.endDate && new Date(setTime(body.toDate)) >= pack.endDate) {
+  //           return pack
+  //         }
+  //       }
+  //     })
+  //   }
+  // })
+  // response = response.filter(member => member.packageDetails.length > 0)
+  // response.forEach(member => {
+  //   member.packageDetails.forEach(doc => {
+  //     if (doc.packageRenewal) {
+  //       let branchIndex = branches.findIndex(b => b._id.toString() === member.branch._id.toString())
+  //       let packageIndex = packages.findIndex(ele => ele._id.toString() === doc.packages._id.toString());
+  //       if (doc.packages._id.toString() === packages[packageIndex]._id.toString() && packageIndex !== -1) {
+  //         packages[packageIndex].count++;
+  //       }
+  //       if (member.branch._id.toString() === branches[branchIndex]._id.toString() && branchIndex !== -1) {
+  //         branches[branchIndex].count++;
+  //       }
+  //     }
+  //   });
+  // })
+  // return { response, packages, branches }
 }
 
 const getPackageType = async (body) => {
@@ -353,7 +353,7 @@ const getPackageType = async (body) => {
   })
   let response = await Member.find(queryCond)
     .populate('credentialId branch').populate("packageDetails.packages")
-    .populate({ path: "packageDetails.trainer", populate: { path: "credentialId" } }).lean()
+    .populate({ path: "packageDetails.trainerDetails.trainer", populate: { path: "credentialId" } }).lean()
   response = response.filter(member => {
     if (body.fromDate && body.toDate) {
       if (new Date(setTime(body.fromDate)) <= member.admissionDate && new Date(setTime(body.toDate)) >= member.admissionDate) {
@@ -382,11 +382,11 @@ const getPackageType = async (body) => {
 const getAssignedTrainers = async (body) => {
   let queryCond = {};
   queryCond["doneFingerAuth"] = true;
-  queryCond['packageDetails.dateOfPurchase'] = { '$exists': true }
-  queryCond['packageDetails.trainerFees'] = { '$exists': true }
+  queryCond['packageDetails.dateOfPaid'] = { '$exists': true }
+  queryCond['packageDetails.trainerDetails.trainerFees'] = { '$exists': true }
 
   if (body.branch) queryCond["branch"] = body.branch
-  if (body.trainerId) queryCond['packageDetails.trainer'] = body.trainerId
+  if (body.trainerId) queryCond['packageDetails.trainerDetails.trainer'] = body.trainerId
 
   let designation = await Designation.findOne({ designationName: DESIGNATION[4] }).lean()
   let trainersResponse = await Employee.find({ designation: designation._id, status: true }, 'credentialId').populate('credentialId').lean();
@@ -400,9 +400,11 @@ const getAssignedTrainers = async (body) => {
     periods.push({ ...ele, ...{ amount: 0 } })
   })
   let response = await Member.find(queryCond)
-    .populate('credentialId branch').populate("packageDetails.packages packageDetails.trainerFees packageDetails.doneBy")
-    .populate({ path: "packageDetails.trainer", populate: { path: "credentialId" } })
-    .populate({ path: "packageDetails.trainerFees", populate: { path: "period" } }).lean()
+    .populate('credentialId branch')
+    .populate('packageDetails.packages packageDetails.doneBy')
+    .populate({ path: "packageDetails.trainerDetails.trainer", populate: { path: "credentialId" } })
+    .populate({ path: "packageDetails.packages", populate: { path: "period" } })
+    .populate({ path: "packageDetails.trainerDetails.trainerFees", populate: { path: "period" } }).lean()
   response.forEach(member => {
     if (body.fromDate && body.toDate) {
       member.packageDetails = member.packageDetails.filter(pack => {
@@ -415,14 +417,34 @@ const getAssignedTrainers = async (body) => {
   response.forEach(member => {
     member.packageDetails.forEach(doc => {
       if (doc.dateOfPurchase && doc.trainerFees) {
-        let periodIndex = periods.findIndex(p => p._id.toString() === doc.trainerFees.period._id.toString())
-        let trainerIndex = trainers.findIndex(ele => ele._id.toString() === doc.trainer._id.toString());
+
         if (doc.trainer._id.toString() === trainers[trainerIndex]._id.toString() && trainerIndex !== -1) {
           trainers[trainerIndex].amount = trainers[trainerIndex].amount + doc.trainerFees.amount
         }
-        if (doc.trainerFees.period._id.toString() === periods[periodIndex]._id.toString() && periodIndex !== -1) {
-          periods[periodIndex].amount = periods[periodIndex].amount + doc.trainerFees.amount
-        }
+
+      }
+      if (doc.trainerDetails && doc.trainerDetails.length) {
+        doc.trainerDetails.forEach(trainerDetail => {
+          let periodIndex = periods.findIndex(p => p._id.toString() === trainerDetail.trainerFees.period._id.toString())
+          let trainerIndex = trainers.findIndex(ele => ele._id.toString() === trainerDetail.trainer._id.toString());
+          if (trainerDetail.Installments && trainerDetail.Installments.length) {
+            trainerDetail.Installments.forEach(installment => {
+              if (trainerDetail.trainer._id.toString() === trainers[trainerIndex]._id.toString() && trainerIndex !== -1) {
+                trainers[trainerIndex].amount += typeof installment.totalAmount === 'number' ? installment.totalAmount : 0
+              }
+              if (trainerDetail.trainerFees.period._id.toString() === periods[periodIndex]._id.toString() && periodIndex !== -1) {
+                periods[periodIndex].amount += typeof installment.totalAmount === 'number' ? installment.totalAmount : 0
+              }
+            })
+          } else {
+            if (trainerDetail.trainer._id.toString() === trainers[trainerIndex]._id.toString() && trainerIndex !== -1) {
+              trainers[trainerIndex].amount += typeof trainerDetail.totalAmount === 'number' ? trainerDetail.totalAmount : 0
+            }
+            if (trainerDetail.trainerFees.period._id.toString() === periods[periodIndex]._id.toString() && periodIndex !== -1) {
+              periods[periodIndex].amount += typeof trainerDetail.totalAmount === 'number' ? trainerDetail.totalAmount : 0
+            }
+          }
+        })
       }
     });
     if (body.trainerId) member.customTrainerId = body.trainerId
@@ -529,10 +551,10 @@ const getGeneralSales = async (body) => {
 
   let totalAmountOfMember = await Member.find(queryCond)
     .populate('credentialId branch').populate("packageDetails.packages packageDetails.doneBy")
-    .populate({ path: "packageDetails.trainer", populate: { path: "credentialId" } }).lean();
+    .populate({ path: "packageDetails.trainerDetails.trainer", populate: { path: "credentialId" } }).lean();
   totalAmountOfMember.forEach(ele => {
     ele.packageDetails = ele.packageDetails.filter(doc => {
-      if (doc.paidStatus === 'Paid') {
+      if (doc.paidStatus === 'Paid' || doc.paidStatus === 'Installment') {
         if (body.fromDate && body.toDate) {
           if (
             new Date(setTime(body.fromDate)) <= (doc.startDate ? doc.startDate : ele.admissionDate) &&

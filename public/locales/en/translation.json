@@ -930,6 +930,8 @@
   "Backup and Restore": "Backup and Restore",
   "Backup": "Backup",
   "Restore": "Restore",
+  "Enter backup name": "Enter backup name",
+  "Enter backup destination": "Enter backup destination",
   "Enter restore name": "Enter restore name",
   "Enter restore destination": "Enter restore destination",
   "Package Type": "Package Type",

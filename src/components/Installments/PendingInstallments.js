@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { withTranslation } from 'react-i18next'
 import { Link, Route } from 'react-router-dom'
 import PackageInstallment from './PackageInstallment'
 import TrainerInstallment from './TrainerInstallment'
@@ -53,4 +54,4 @@ class PendingInstallments extends Component {
   }
 }
 
-export default PendingInstallments
+export default withTranslation()(PendingInstallments)

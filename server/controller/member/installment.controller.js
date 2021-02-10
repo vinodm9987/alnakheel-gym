@@ -10,7 +10,7 @@ const { Member, Employee } = require('../../model');
 
 
 
-exports.getPackageInstallment = async(req, res) => {
+exports.getPackageInstallment = async (req, res) => {
     try {
         const members = await Member.find({})
             .populate('credentialId packageDetails.packages').lean();
@@ -47,7 +47,7 @@ exports.getPackageInstallment = async(req, res) => {
 };
 
 
-exports.getTrainerInstallment = async(req, res) => {
+exports.getTrainerInstallment = async (req, res) => {
     try {
         const members = await Member.find({})
             .populate('credentialId  packageDetails.packages')
@@ -92,7 +92,7 @@ exports.getTrainerInstallment = async(req, res) => {
 
 
 
-exports.changeDueDateOfPackageInstallment = async(req, res) => {
+exports.changeDueDateOfPackageInstallment = async (req, res) => {
     try {
         const dueDate = setTime(req.body.dueDate);
         const member = await Member.findById(req.body.memberId);
@@ -114,7 +114,7 @@ exports.changeDueDateOfPackageInstallment = async(req, res) => {
 };
 
 
-exports.changeDueDateOfTrainerInstallment = async(req, res) => {
+exports.changeDueDateOfTrainerInstallment = async (req, res) => {
     try {
         const dueDate = setTime(req.body.dueDate);
         const member = await Member.findById(req.body.memberId);
@@ -139,7 +139,7 @@ exports.changeDueDateOfTrainerInstallment = async(req, res) => {
     }
 };
 
-exports.payPackageInstallments = async(req, res) => {
+exports.payPackageInstallments = async (req, res) => {
     try {
         const dueDate = setTime(req.body.dueDate);
         const member = await Member.findById(req.body.memberId);
@@ -171,7 +171,7 @@ exports.payPackageInstallments = async(req, res) => {
             }
         }
         const response = await member.save();
-        return successResponseHandler(res, response, "success");
+        return successResponseHandler(res, { ...response, ...{ displayReceipt: true } }, "success");
     } catch (error) {
         logger.error(error);
         return errorResponseHandler(res, error, 'failed');
@@ -179,7 +179,7 @@ exports.payPackageInstallments = async(req, res) => {
 };
 
 
-exports.payTrainerInstallments = async(req, res) => {
+exports.payTrainerInstallments = async (req, res) => {
     try {
         const dueDate = setTime(req.body.dueDate);
         const member = await Member.findById(req.body.memberId);
@@ -215,7 +215,7 @@ exports.payTrainerInstallments = async(req, res) => {
             }
         }
         const response = await member.save();
-        return successResponseHandler(res, response, "success");
+        return successResponseHandler(res, { ...response, ...{ displayReceipt: true } }, "success");
     } catch (error) {
         logger.error(error);
         return errorResponseHandler(res, error, 'failed');
