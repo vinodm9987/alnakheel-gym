@@ -134,6 +134,8 @@ const memberSchema = new Schema({
 
             isExpiredTrainer: { type: Boolean, default: false },
 
+            paidStatus: { type: String, enum: ["Paid", "UnPaid", "Installment"], default: "UnPaid" },
+
             trainerStart: Date,
             trainerEnd: Date,
             trainerExtend: Date,

@@ -835,9 +835,11 @@ exports.bookTrainer = async (req, res) => {
                     if (req.headers.userid) doc["doneBy"] = req.headers.userid;
                 }
             });
+            trainerDetails["paidStatus"] = 'Installment';
         } else {
             trainerDetails["orderNo"] = generateOrderId()
             if (req.headers.userid) trainerDetails["doneBy"] = req.headers.userid;
+            trainerDetails["paidStatus"] = 'Paid';
         }
         const member = await Member.findById(req.body.memberId);
         for (const [i, packages] of member.packageDetails.entries()) {
