@@ -29,7 +29,7 @@
           "Package Start Date",
           "Package End Date",
           "Trainer Name",
-          "Paid Amount"
+          "To Be Paid"
         ],
         "description": "This report will list all Active members who enrolled their fingerprint and started their package Successfully."
       },
@@ -71,7 +71,6 @@
           "Package",
           "Expiry Date",
           "Trainer Name",
-          "Paid Amount",
           "Mobile No",
           "Email ID"
         ],

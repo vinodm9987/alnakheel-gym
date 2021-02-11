@@ -161,7 +161,7 @@ class GraphExport extends Component {
     branches.forEach(branch => total = total + branch.amount)
     const data2 = {
       labels: branches.map(branch => branch.branchName),
-      datasets: [{ data: branches.map(branch => branch.amount), backgroundColor: colors.map(color => color), hoverBackgroundColor: colors.map(color => color) }],
+      datasets: [{ data: branches.map(branch => branch.amount.toFixed(3)), backgroundColor: colors.map(color => color), hoverBackgroundColor: colors.map(color => color) }],
       text: `${t('Total')}`,
       text2: `${total.toFixed(3)}`
     }

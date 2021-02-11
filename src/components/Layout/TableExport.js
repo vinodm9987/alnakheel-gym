@@ -184,8 +184,8 @@ class TableExport extends Component {
           "Email ID": email,
           "Package Start Date": dateToDDMMYYYY(doc.packages.startDate),
           "Package End Date": dateToDDMMYYYY(doc.packages.endDate),
-          "Trainer Name": doc.trainer ? doc.trainer.credentialId.userName : 'NA',
-          "Paid Amount": doc.totalAmount.toFixed(3)
+          "Trainer Name": (doc.trainerDetails && doc.trainerDetails.length && doc.trainerDetails[doc.trainerDetails.length - 1]) ? doc.trainerDetails[doc.trainerDetails.length - 1].trainer.credentialId.userName : 'NA',
+          "To Be Paid": doc.packages.amount.toFixed(3)
         })
         count = count + 1
       })
@@ -229,8 +229,7 @@ class TableExport extends Component {
             "Admission Date": dateToDDMMYYYY(admissionDate),
             "Package": pack.packages.packageName,
             "Expiry Date": dateToDDMMYYYY(endDate),
-            "Trainer Name": pack.trainer ? pack.trainer.credentialId.userName : 'NA',
-            "Paid Amount": pack.totalAmount.toFixed(3),
+            "Trainer Name": (pack.trainerDetails && pack.trainerDetails.length && pack.trainerDetails[pack.trainerDetails.length - 1]) ? pack.trainerDetails[pack.trainerDetails.length - 1].trainer.credentialId.userName : 'NA',
             "Mobile No": mobileNo,
             "Email ID": email
           })
