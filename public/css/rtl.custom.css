@@ -596,3 +596,7 @@ canvas.chartjs-render-monitor {
   left: unset;
   right: 0;
 }
+
+.powered-in-cfv {
+  right: 19px;
+}

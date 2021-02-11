@@ -188,7 +188,7 @@ class FeedbackManual extends Component {
 
         {/* <div className="col-12 col-sm-12 col-md-6 col-lg-6 my-3">
           <div className="form-group inlineFormGroup">
-            <h4 className="font-weight-bold" >Member Name</h4>
+            <h4 className="font-weight-bold" >{t('Member Name')}</h4>
             <input type="text" autoComplete="off" placeholder="Search" className="form-control mx-sm-2 inlineFormInputs" />
             <span className="iconv1 iconv1-search searchBoxIcon"></span>
           </div>

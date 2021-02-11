@@ -221,7 +221,7 @@ class PendingFreeze extends Component {
                           <img alt='' src={`/${avatar.path}`} className="mx-1 rounded-circle w-50px h-50px" />
                           <div className="mx-1">
                             <h5 className="m-0">{userName}</h5>
-                            <span className="text-primary d-flex"><span>ID</span><span className="mx-1">:</span><span> {memberId}</span></span>
+                            <span className="text-primary d-flex"><span>{t('ID')}</span><span className="mx-1">:</span><span> {memberId}</span></span>
                           </div>
                         </div>
                       </td>

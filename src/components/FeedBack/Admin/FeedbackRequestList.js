@@ -189,7 +189,7 @@ class FeedbackRequestList extends Component {
                 }}
               />
               {/* <div className="chartcenterData">
-                <p className="m-0">Total</p>
+                <p className="m-0">{t('Total')}</p>
                 <p className="m-0">{total}</p>
               </div> */}
               <div className="col-12 px-0">
@@ -221,7 +221,7 @@ class FeedbackRequestList extends Component {
                 }}
               />
               {/* <div className="chartcenterData">
-                <p className="m-0">Total</p>
+                <p className="m-0">{t('Total')}</p>
                 <p className="m-0">{total}</p>
               </div> */}
               <div className="col-12 px-0">
@@ -246,7 +246,7 @@ class FeedbackRequestList extends Component {
           <div className="px-4"><h3 className="font-weight-bold">{t('Requests List')}</h3></div>
           <div className="d-flex flex-wrap justify-content-end flex-grow-1 my-3">
             <div className="px-2 pt-4 d-flex flex-nowrap align-items-center pb-3">
-              <span onClick={() => this.resetDate()} className="btn btn-warning btn-sm text-white my-1">ALL</span>
+              <span onClick={() => this.resetDate()} className="btn btn-warning btn-sm text-white my-1">{t('ALL')}</span>
               <div className="position-relative w-200px mw-100">
                 <div className="form-group m-2 position-relative">
                   <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -271,8 +271,8 @@ class FeedbackRequestList extends Component {
                 <select className="form-control inlineFormInputs mnw-150px"
                   value={type} onChange={(e) => this.selectAny(e, 'type')}>
                   <option value="">{t('All')}</option>
-                  <option value="Complaints">Complaints</option>
-                  <option value="Suggestions">Suggestions</option>
+                  <option value="Complaints">{t('Complaints')}</option>
+                  <option value="Suggestions">{t('Suggestions')}</option>
                 </select>
                 <span className="iconv1 iconv1-arrow-down selectBoxIcon"></span>
               </div>
@@ -283,8 +283,8 @@ class FeedbackRequestList extends Component {
                 <select className="form-control inlineFormInputs mnw-150px"
                   value={mode} onChange={(e) => this.selectAny(e, 'mode')}>
                   <option value="">{t('All')}</option>
-                  <option value="Manual">Manual</option>
-                  <option value="Online">Online</option>
+                  <option value="Manual">{t('Manual')}</option>
+                  <option value="Online">{t('Online')}</option>
                 </select>
                 <span className="iconv1 iconv1-arrow-down selectBoxIcon"></span>
               </div></div>
@@ -304,14 +304,14 @@ class FeedbackRequestList extends Component {
                         <h3 className="font-weight-bold">Requests List</h3>
                     </div>
                     <div className="col-12 col-sm-12 col-md-6  col-lg-2">
-                        <p>Date</p>
+                        <p>{t('Date')}</p>
                         <p>20/12/2020</p>
                     </div>
                     <div className="col-12 col-sm-12 col-md-6  col-lg-2">
                         <div className="form-group inlineFormGroup">
-                        <p className="mx-sm-2 inlineFormLabel">Mode</p>
+                        <p className="mx-sm-2 inlineFormLabel">{t('Mode')}</p>
                         <select className="form-control inlineFormInputs mnw-150px">
-                            <option value="">All</option>
+                            <option value="">{t('ALL')}</option>
                         </select>
                         <span className="iconv1 iconv1-arrow-down selectBoxIcon"></span>
                         </div>
@@ -320,7 +320,7 @@ class FeedbackRequestList extends Component {
                         <div className="form-group inlineFormGroup">
                         <p className="mx-sm-2 inlineFormLabel">{t('Type')}</p>
                         <select className="form-control inlineFormInputs mnw-150px">
-                            <option value="">All</option>
+                            <option value="">{t('ALL')}</option>
                         </select>
                         <span className="iconv1 iconv1-arrow-down selectBoxIcon"></span>
                         </div>
@@ -417,14 +417,12 @@ class FeedbackRequestList extends Component {
                       <div className="my-2">
                         <p>{t('Write Your Comments')}</p>
                         <textarea rows="5" className={this.state.adminCommentE ? "form-control mx-sm-2 inlineFormInputs FormInputsError" : "form-control mx-sm-2 inlineFormInputs"} id="Description"
-                          value={adminComment} onChange={(e) => this.setState({ adminComment: e.target.value })}
-                        ></textarea>
+                          value={adminComment} onChange={(e) => this.setState({ adminComment: e.target.value })} ></textarea>
                       </div>
                       : <div className="my-2">
                         <p>{t('Comment')}</p>
                         <textarea disabled rows="5" className="form-control mx-sm-2 inlineFormInputs" id="Description"
-                          value={feedback.adminComment}
-                        ></textarea>
+                          value={feedback.adminComment} ></textarea>
                       </div>
                     }
                   </div>

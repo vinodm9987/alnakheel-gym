@@ -11,7 +11,7 @@ class Messages extends Component {
       <div className="mainPage p-3 Messages">
         <div className="row">
           <div className="col-12 pageBreadCrumbs">
-            <span className="crumbText">{t('Home')}</span><span className="mx-2">/</span><span className="crumbText">{t('Communications')}</span>
+            <span className="crumbText">{t('Home')}</span><span className="mx-2">/</span><span className="crumbText">{t('Communications')}</span><span className="mx-2">/</span><span className="crumbText">{t('Messages')}</span>
           </div>
           <div className="col-12 pageHead">
             <h1>{t('Messages')}</h1>

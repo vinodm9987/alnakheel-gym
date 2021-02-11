@@ -6,13 +6,13 @@ class parttimepayroll extends Component {
             <div className="mainPage p-3">
                 <div className="row">
                     <div className="col-12 pageBreadCrumbs">
-                        <span className="crumbText">Home</span><span className="mx-2">/</span><span className="crumbText">Finance</span>
-                        <span className="mx-2">/</span><span className="crumbText">Payroll</span>
+                        <span className="crumbText">{t('Home')}</span><span className="mx-2">/</span><span className="crumbText">{t('Finance')}</span>
+                        <span className="mx-2">/</span><span className="crumbText">{t('Payroll')}</span>
                     </div>
                     <div className="col-12">
                         <div className="row">
                             <div className="col-12 pageHead">
-                                <h1>Part-Time Working Details</h1>
+                                <h1>{t('Part-Time Working Details')}</h1>
                             </div>
                         </div>
                         <div className="pageHeadLine"></div>
@@ -22,8 +22,8 @@ class parttimepayroll extends Component {
                             <div className="col-12">
                                 <nav className="commonNavForTab">
                                     <div class="nav nav-tabs flex-nowrap overflow-auto" id="nav-tab" role="tablist">
-                                        <a class="nav-item nav-link active" role="tab" data-toggle="tab" href="#menu1">Add Hourly Working Hours</a>
-                                        <a class="nav-item nav-link" role="tab" data-toggle="tab" href="#menu2">Add Hourly Working Hours History</a>
+                                        <a class="nav-item nav-link active" role="tab" data-toggle="tab" href="#menu1">{t('Add Hourly Working Hours')}</a>
+                                        <a class="nav-item nav-link" role="tab" data-toggle="tab" href="#menu2">{t('Add Hourly Working Hours History')}</a>
                                     </div>
                                 </nav>
                                 <div className="tab-content" id="nav-tabContent">
@@ -31,11 +31,11 @@ class parttimepayroll extends Component {
                                         <div class="d-flex w-100 my-3">
                                             <div class="custom-control custom-checkbox roundedGreenRadioCheck mx-2">
                                                 <input type="radio" class="custom-control-input" id="HourlyAmount" name="HourlyAmountOrWorkingHours" checked />
-                                                <label class="custom-control-label" for="HourlyAmount">Hourly Amount</label>
+                                                <label class="custom-control-label" for="HourlyAmount">{t('Hourly Amount')}</label>
                                             </div>
                                             <div class="custom-control custom-checkbox roundedGreenRadioCheck mx-2">
                                                 <input type="radio" class="custom-control-input" id="WorkingHours" name="HourlyAmountOrWorkingHours" />
-                                                <label class="custom-control-label" for="WorkingHours">Working Hours</label>
+                                                <label class="custom-control-label" for="WorkingHours">{t('Working Hours')}</label>
                                             </div>
                                         </div>
 
@@ -43,9 +43,9 @@ class parttimepayroll extends Component {
                                         <div className="row my-4">
                                             <div className="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
                                                 <div className="form-group inlineFormGroup">
-                                                    <label htmlFor="SelectEmployee" className="mx-sm-2 inlineFormLabel">Select Employee</label>
+                                                    <label htmlFor="SelectEmployee" className="mx-sm-2 inlineFormLabel">{t('Select Employee')}</label>
                                                     <select className="form-control mx-sm-2 inlineFormInputs FormInputsError" id="SelectEmployee">
-                                                        <option value="">Please Select</option>
+                                                        <option value="">{t('Please Select')}</option>
                                                     </select>
                                                     <span className="iconv1 iconv1-arrow-down selectBoxIcon"></span>
                                                     <div className="errorMessageWrapper">
@@ -55,7 +55,7 @@ class parttimepayroll extends Component {
                                             </div>
                                             <div className="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
                                                 <div className="form-group inlineFormGroup">
-                                                    <label htmlFor="AmountPerHour" className="mx-sm-2 inlineFormLabel">Amount Per Hour</label>
+                                                    <label htmlFor="AmountPerHour" className="mx-sm-2 inlineFormLabel">{t('Amount Per Hour')}</label>
                                                     <div className="form-control mx-sm-2 inlineFormInputs w-100 p-0 d-flex align-items-center">
                                                         <label for="AmountPerHour" className="text-white bg-danger my-0 pt-1 px-2 font-weight-bold h-100 align-self-center">BHD</label>
                                                         <input type="text" autoComplete="off" placeholder="Enter Amount" className="form-control mx-sm-2 inlineFormInputs FormInputsError border-0" id="CollectFromCash" />
@@ -66,18 +66,18 @@ class parttimepayroll extends Component {
                                                 </div>
                                             </div>
                                             <div className="justify-content-sm-end d-flex pt-3 col-12">
-                                                <button type="button" className="btn btn-success mx-1 px-4">Submit</button>
+                                                <button type="button" className="btn btn-success mx-1 px-4">{t('Submit')}</button>
                                                 <button type="button" className="btn btn-danger mx-1 px-4">{t('Cancel')}</button>
                                             </div>
                                         </div>
-                                        <h4 className="mb-4 font-weight-bold">Hourly work hours details</h4>
+                                        <h4 className="mb-4 font-weight-bold">{t('Hourly work hours details')}</h4>
                                         <div className="table-responsive BckupTable">
                                             <table className="table table-striped">
                                                 <thead>
                                                     <tr>
-                                                        <th>Added Date</th>
-                                                        <th>Employee</th>
-                                                        <th>Amount Per Hour</th>
+                                                        <th>{t('Added Date')}</th>
+                                                        <th>{t('Employee')}</th>
+                                                        <th>{t('Amount Per Hour')}</th>
                                                         <th></th>
                                                     </tr>
                                                 </thead>
@@ -97,7 +97,7 @@ class parttimepayroll extends Component {
                                                                 </div>
                                                             </div>
                                                         </td>
-                                                        <td>BHD 10</td>
+                                                        <td className="dirltrtar">BHD 10</td>
                                                         <td>
                                                             <div className="d-flex justify-content-center">
                                                                 <span className="bg-success action-icon w-30px h-30px rounded-circle d-flex align-items-center justify-content-center mx-1 text-white">
@@ -114,9 +114,9 @@ class parttimepayroll extends Component {
                                         <div className="row my-4">
                                             <div className="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
                                                 <div className="form-group inlineFormGroup">
-                                                    <label htmlFor="SelectEmployee" className="mx-sm-2 inlineFormLabel">Select Employee</label>
+                                                    <label htmlFor="SelectEmployee" className="mx-sm-2 inlineFormLabel">{t('Select Employee')}</label>
                                                     <select className="form-control mx-sm-2 inlineFormInputs FormInputsError" id="SelectEmployee">
-                                                        <option value="">Please Select</option>
+                                                        <option value="">{t('Please Select')}</option>
                                                     </select>
                                                     <span className="iconv1 iconv1-arrow-down selectBoxIcon"></span>
                                                     <div className="errorMessageWrapper">
@@ -126,7 +126,7 @@ class parttimepayroll extends Component {
                                             </div>
                                             <div className="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-3">
                                                 <div class="form-group position-relative">
-                                                    <label for="Date">Date</label>
+                                                    <label for="Date">{t('Date')}</label>
                                                     <input disabled="" type="" autoComplete="off" class="form-control mx-sm-2 inlineFormInputs FormInputsError" id="Date" />
                                                     <span class="iconv1 iconv1-calendar dateBoxIcon"></span>
                                                     <div className="errorMessageWrapper">
@@ -136,7 +136,7 @@ class parttimepayroll extends Component {
                                             </div>
                                             <div className="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-3">
                                                 <div class="form-group position-relative">
-                                                    <label for="WorkedHoursPerDay"> Worked Hours Per Day</label>
+                                                    <label for="WorkedHoursPerDay">{t('Worked Hours Per Day')}</label>
                                                     <input disabled="" type="" autoComplete="off" class="form-control mx-sm-2 inlineFormInputs FormInputsError" id="Date" />
                                                     <div className="errorMessageWrapper">
                                                         <small className="text-danger mx-sm-2 errorMessage">Err</small>
@@ -144,7 +144,7 @@ class parttimepayroll extends Component {
                                                 </div>
                                             </div>
                                             <div className="justify-content-sm-end d-flex pt-3 col-12">
-                                                <button type="button" className="btn btn-success mx-1 px-4">Submit</button>
+                                                <button type="button" className="btn btn-success mx-1 px-4">{t('Submit')}</button>
                                                 <button type="button" className="btn btn-danger mx-1 px-4">{t('Cancel')}</button>
                                             </div>
                                         </div>
@@ -153,13 +153,13 @@ class parttimepayroll extends Component {
                                     </div>
                                     <div className="tab-pane fade" id="menu2" role="tabpanel">
                                         <div className="d-flex flex-wrap justify-content-between mt-5">
-                                            <h5 className="font-weight-bold align-self-center">Hourly work hours history</h5>
+                                            <h5 className="font-weight-bold align-self-center">{t('Hourly work hours history')}</h5>
                                             <div className="row">
                                                 <div className="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-3">
                                                     <div className="form-group position-relative">
-                                                        <label htmlFor="SelectEmployee" className="mx-sm-2 inlineFormLabel">Employee</label>
+                                                        <label htmlFor="SelectEmployee" className="mx-sm-2 inlineFormLabel">{t('Employee')}</label>
                                                         <select className="form-control  inlineFormInputs" id="SelectEmployee">
-                                                            <option value="">Please Select</option>
+                                                            <option value="">{t('Please Select')}</option>
                                                         </select>
                                                         <span className="iconv1 iconv1-arrow-down selectBoxIcon r27px"></span>
 
@@ -167,7 +167,7 @@ class parttimepayroll extends Component {
                                                 </div>
                                                 <div className="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-3">
                                                     <div class="form-group position-relative">
-                                                        <label for="FromTime">From Time</label>
+                                                        <label for="FromTime">{t('From Time')}</label>
                                                         <input disabled="" type="" autoComplete="off" class="form-control  inlineFormInputs" id="FromTime" />
                                                         <span class="iconv1 iconv1-calendar dateBoxIcon r27px"></span>
 
@@ -175,7 +175,7 @@ class parttimepayroll extends Component {
                                                 </div>
                                                 <div className="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-3">
                                                     <div class="form-group position-relative">
-                                                        <label for="ToTime">To Time</label>
+                                                        <label for="ToTime">{t('To Time')}</label>
                                                         <input disabled="" type="" autoComplete="off" class="form-control  inlineFormInputs" id="ToTime" />
                                                         <span class="iconv1 iconv1-calendar dateBoxIcon r27px"></span>
 
@@ -183,7 +183,7 @@ class parttimepayroll extends Component {
                                                 </div>
                                                 <div className="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-3">
                                                     <div class="form-group position-relative">
-                                                        <label for="SearchMembers">Search Members</label>
+                                                        <label for="SearchMembers">{t('Search Members')}</label>
                                                         <input type="text" autoComplete="off" className="form-control  badge-pill inlineFormInputs" />
                                                         <span className="iconv1 iconv1-search searchBoxIcon r27px"></span>
                                                     </div>
@@ -208,11 +208,11 @@ class parttimepayroll extends Component {
                                                                 </div>
                                                             </div>
                                                             <div className="m-1">
-                                                                <h6 className="text-muted m-0">Designation</h6>
+                                                                <h6 className="text-muted m-0">{t('Designation')}</h6>
                                                                 <h5 className="font-weight-bold m-0">IT Manager</h5>
                                                             </div>
                                                             <div className="m-1">
-                                                                <h6 className="text-muted m-0">Branch</h6>
+                                                                <h6 className="text-muted m-0">{t('Branch')}</h6>
                                                                 <h5 className="font-weight-bold m-0">Muharraq</h5>
                                                             </div>
                                                             <div class="mb-0 justifiy-content-end">
@@ -230,9 +230,9 @@ class parttimepayroll extends Component {
                                                                 <table class="table table-bordered border-0 cardTablePTP text-center">
                                                                     <thead>
                                                                         <tr>
-                                                                            <th className="text-danger">Date</th>
-                                                                            <th className="text-danger">Worked Hours Per Day</th>
-                                                                            <th className="text-danger">Total Amount</th>
+                                                                            <th className="text-danger">{t('Date')}</th>
+                                                                            <th className="text-danger">{t('Worked Hours Per Day')}</th>
+                                                                            <th className="text-danger">{t('Total Amount')}</th>
                                                                         </tr>
                                                                     </thead>
                                                                     <tbody>
@@ -254,7 +254,7 @@ class parttimepayroll extends Component {
                                                                         <tr>
                                                                             <td colspan="2" className="border-0"></td>
                                                                             <td className="border-0">
-                                                                                <span className="h5 text-muted">Grand Total</span>
+                                                                                <span className="h5 text-muted">{t('Grand Total')}</span>
                                                                                 <span className="h5 text-danger mx-1"><b>BHD 160</b></span>
                                                                             </td>
                                                                         </tr>
@@ -282,11 +282,11 @@ class parttimepayroll extends Component {
                                                                 </div>
                                                             </div>
                                                             <div className="m-1">
-                                                                <h6 className="text-muted m-0">Designation</h6>
+                                                                <h6 className="text-muted m-0">{t('Designation')}</h6>
                                                                 <h5 className="font-weight-bold m-0">IT Manager</h5>
                                                             </div>
                                                             <div className="m-1">
-                                                                <h6 className="text-muted m-0">Branch</h6>
+                                                                <h6 className="text-muted m-0">{t('Branch')}</h6>
                                                                 <h5 className="font-weight-bold m-0">Muharraq</h5>
                                                             </div>
                                                             <div class="mb-0 justifiy-content-end">
@@ -302,9 +302,9 @@ class parttimepayroll extends Component {
                                                                 <table class="table table-bordered border-0 cardTablePTP text-center">
                                                                     <thead>
                                                                         <tr>
-                                                                            <th className="text-danger">Date</th>
-                                                                            <th className="text-danger">Worked Hours Per Day</th>
-                                                                            <th className="text-danger">Total Amount</th>
+                                                                            <th className="text-danger">{t('Date')}</th>
+                                                                            <th className="text-danger">{t('Worked Hours Per Day')}</th>
+                                                                            <th className="text-danger">{t('Total Amount')}</th>
                                                                         </tr>
                                                                     </thead>
                                                                     <tbody>
@@ -326,7 +326,7 @@ class parttimepayroll extends Component {
                                                                         <tr>
                                                                             <td colspan="2" className="border-0"></td>
                                                                             <td className="border-0">
-                                                                                <span className="h5 text-muted">Grand Total</span>
+                                                                                <span className="h5 text-muted">{t('Grand Total')}</span>
                                                                                 <span className="h5 text-danger mx-1"><b>BHD 160</b></span>
                                                                             </td>
                                                                         </tr>

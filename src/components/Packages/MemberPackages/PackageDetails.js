@@ -162,7 +162,7 @@ class PackageDetails extends Component {
                 {/* {branch && this.props.activeVats && this.props.activeVats.length > 0 &&
                   <div className="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
                     <div className="form-group inlineFormGroup">
-                      <label htmlFor="VAT" className="mx-sm-2 inlineFormLabel type2">VAT</label>
+                      <label htmlFor="VAT" className="mx-sm-2 inlineFormLabel type2">{t('VAT')}</label>
                       <div className="form-group">
                         {this.props.activeVats && this.props.activeVats.map((vat, i) => {
                           const { vatName, taxPercent, defaultVat, _id } = vat

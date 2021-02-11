@@ -8,6 +8,7 @@ import {
 import axios from 'axios'
 
 const CheckoutForm = ({ stripe, defaultCurrency, amount }) => {
+  const { t } = this.props
 
   // const [receiptUrl, setReceiptUrl] = useState('')
   const [disable, setDisable] = useState(false)
@@ -49,21 +50,21 @@ const CheckoutForm = ({ stripe, defaultCurrency, amount }) => {
 
   return (
     <div className="checkout-form">
-      <p>Amount: {defaultCurrency}{amount}</p>
+      <p>{t('Amount')}: {defaultCurrency}{amount}</p>
       <label>
-        Card details
+        {t('Card details')}
           <CardNumberElement />
       </label>
       <label>
-        Expiration date
+        {t('Expiration date')}
           <CardExpiryElement />
       </label>
       <label>
-        CVC
+        {t('CVC')}
           <CardCVCElement />
       </label>
       <button disabled={disable} type="submit" className="order-button" onClick={handleSubmit}>
-        Pay
+        {t('Pay')}
         </button>
     </div>
   )

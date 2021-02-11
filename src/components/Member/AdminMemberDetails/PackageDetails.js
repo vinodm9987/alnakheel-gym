@@ -672,8 +672,8 @@ class PackageDetails extends Component {
                         <th>{t('To Date')}</th>
                         <th>{t('Amount')}</th>
                         {/* <th>{t('Trainer')}</th> */}
-                        <th className="text-center">Installments</th>
-                        <th className="text-center">Action</th>
+                        <th className="text-center">{t('Installments')}</th>
+                        <th className="text-center">{t('Action')}</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -695,7 +695,7 @@ class PackageDetails extends Component {
                             {paidStatus === 'Installment'
                               ? <td className="text-center">
                                 <span className="badge badge-pill badge-primary px-3 py-2 cursorPointer" data-toggle="modal" data-target="#InstallmentDetails"
-                                  onClick={() => this.setInstallments(Installments, amount, packageName)}>Payment Details</span>
+                                  onClick={() => this.setInstallments(Installments, amount, packageName)}>{t('Payment Details')}</span>
                               </td>
                               : <td className="text-center">NA</td>
                             }
@@ -727,8 +727,8 @@ class PackageDetails extends Component {
                       {packageDetails && packageDetails.map((pack) => {
                         const { packages: { packageName }, trainerDetails } = pack
                         return (
-                          trainerDetails && trainerDetails.map((t, j) => {
-                            const { trainerStart, trainerEnd, trainer: { credentialId: { userName, avatar } }, trainerFees: { amount }, Installments } = t
+                          trainerDetails && trainerDetails.map((ta, j) => {
+                            const { trainerStart, trainerEnd, trainer: { credentialId: { userName, avatar } }, trainerFees: { amount }, Installments } = ta
                             return (
                               <tr key={j}>
                                 <td>
@@ -743,7 +743,7 @@ class PackageDetails extends Component {
                                 <td className="text-danger font-weight-bold"><span>{this.props.defaultCurrency}</span><span className="pl-1"></span><span>{amount}</span></td>
                                 <td className="text-center">
                                   <span className="badge badge-pill badge-primary px-3 py-2 cursorPointer" data-toggle="modal" data-target="#InstallmentDetails1"
-                                    onClick={() => this.setTrainerInstallments(Installments, amount, userName)}>Payment Details</span>
+                                    onClick={() => this.setTrainerInstallments(Installments, amount, userName)}>{t('Payment Details')}</span>
                                 </td>
                               </tr>
                             )
@@ -765,7 +765,7 @@ class PackageDetails extends Component {
               <div className="modal-dialog modal-lg modal-dialog-centered">
                 <div className="modal-content">
                   <div className="modal-header">
-                    <h4 className="modal-title">Payment Details</h4>
+                    <h4 className="modal-title">{t('Payment Details')}</h4>
                     <button type="button" className="close align-self-center" data-dismiss="modal"><span className="iconv1 iconv1-close"></span></button>
                   </div>
                   <div className="modal-body px-4">
@@ -775,27 +775,27 @@ class PackageDetails extends Component {
                         <h6 className="text-danger">{this.state.installmentPackageName}</h6>
                       </div>
                       <div className="m-1">
-                        <h6 className="font-weight-bold mb-1">Total Amount</h6>
+                        <h6 className="font-weight-bold mb-1">{t('Total Amount')}</h6>
                         <h6 className="text-danger"><b>{this.props.defaultCurrency} {this.state.installmentTotalAmount}</b></h6>
                       </div>
                       <div className="m-1">
-                        <h6 className="font-weight-bold mb-1">Paid Amount</h6>
+                        <h6 className="font-weight-bold mb-1">{t('Paid Amount')}</h6>
                         <h6 className="text-danger"><b>{this.props.defaultCurrency} {this.state.installmentPaidAmount}</b></h6>
                       </div>
                       <div className="m-1">
-                        <h6 className="font-weight-bold mb-1">Remaining Amount</h6>
+                        <h6 className="font-weight-bold mb-1">{t('Remaining Amount')}</h6>
                         <h6 className="text-danger"><b>{this.props.defaultCurrency} {this.state.installmentRemainAmount}</b></h6>
                       </div>
                     </div>
-                    <h5 className="m-1 py-3"><b>Installment History</b></h5>
+                    <h5 className="m-1 py-3"><b>{t('Installment History')}</b></h5>
                     <div className="table-responsive">
                       <table className="table table-striped InstallmentTable">
                         <thead>
                           <tr className="border">
-                            <th>Installment Type</th>
-                            <th>Amount</th>
-                            <th>Due Date</th>
-                            <th>Paid Date</th>
+                            <th>{t('Installment Type')}</th>
+                            <th>{t('Amount')}</th>
+                            <th>{t('Due Date')}</th>
+                            <th>{t('Paid Date')}</th>
                             <th>{t('Status')}</th>
                           </tr>
                         </thead>
@@ -807,7 +807,7 @@ class PackageDetails extends Component {
                                 <td className="text-danger font-weight-bold">{this.props.defaultCurrency} {installment.actualAmount ? installment.actualAmount : installment.totalAmount}</td>
                                 <td>{dateToDDMMYYYY(installment.dueDate)}</td>
                                 <td>{dateToDDMMYYYY(installment.dateOfPaid)}</td>
-                                {installment.paidStatus === 'Paid' ? <td className="text-success font-weight-bold">Paid</td> : <td className="text-danger font-weight-bold">Pending</td>}
+                                {installment.paidStatus === 'Paid' ? <td className="text-success font-weight-bold">{t('Paid')}</td> : <td className="text-danger font-weight-bold">{t('Pending')}</td>}
                               </tr>
                             )
                           })}
@@ -825,37 +825,37 @@ class PackageDetails extends Component {
               <div className="modal-dialog modal-lg modal-dialog-centered">
                 <div className="modal-content">
                   <div className="modal-header">
-                    <h4 className="modal-title">Payment Details</h4>
+                    <h4 className="modal-title">{t('Payment Details')}</h4>
                     <button type="button" className="close align-self-center" data-dismiss="modal"><span className="iconv1 iconv1-close"></span></button>
                   </div>
                   <div className="modal-body px-4">
                     <div className="d-flex flex-wrap justify-content-between p-1">
                       <div className="m-1">
-                        <h6 className="font-weight-bold mb-1">Trainer Name</h6>
+                        <h6 className="font-weight-bold mb-1">{t('Trainer Name')}</h6>
                         <h6 className="text-danger">{this.state.installmentTrainerName}</h6>
                       </div>
                       <div className="m-1">
-                        <h6 className="font-weight-bold mb-1">Total Amount</h6>
+                        <h6 className="font-weight-bold mb-1">{t('Total Amount')}</h6>
                         <h6 className="text-danger"><b>{this.props.defaultCurrency} {this.state.installmentTotalAmount}</b></h6>
                       </div>
                       <div className="m-1">
-                        <h6 className="font-weight-bold mb-1">Paid Amount</h6>
+                        <h6 className="font-weight-bold mb-1">{t('Paid Amount')}</h6>
                         <h6 className="text-danger"><b>{this.props.defaultCurrency} {this.state.installmentPaidAmount}</b></h6>
                       </div>
                       <div className="m-1">
-                        <h6 className="font-weight-bold mb-1">Remaining Amount</h6>
+                        <h6 className="font-weight-bold mb-1">{t('Remaining Amount')}</h6>
                         <h6 className="text-danger"><b>{this.props.defaultCurrency} {this.state.installmentRemainAmount}</b></h6>
                       </div>
                     </div>
-                    <h5 className="m-1 py-3"><b>Installment History</b></h5>
+                    <h5 className="m-1 py-3"><b>{t('Installment History')}</b></h5>
                     <div className="table-responsive">
                       <table className="table table-striped InstallmentTable">
                         <thead>
                           <tr className="border">
-                            <th>Installment Type</th>
-                            <th>Amount</th>
-                            <th>Due Date</th>
-                            <th>Paid Date</th>
+                            <th>{t('Installment Type')}</th>
+                            <th>{t('Amount')}</th>
+                            <th>{t('Due Date')}</th>
+                            <th>{t('Paid Date')}</th>
                             <th>{t('Status')}</th>
                           </tr>
                         </thead>
@@ -867,7 +867,7 @@ class PackageDetails extends Component {
                                 <td className="text-danger font-weight-bold">{this.props.defaultCurrency} {installment.actualAmount ? installment.actualAmount : installment.totalAmount}</td>
                                 <td>{dateToDDMMYYYY(installment.dueDate)}</td>
                                 <td>{dateToDDMMYYYY(installment.dateOfPaid)}</td>
-                                {installment.paidStatus === 'Paid' ? <td className="text-success font-weight-bold">Paid</td> : <td className="text-danger font-weight-bold">Pending</td>}
+                                {installment.paidStatus === 'Paid' ? <td className="text-success font-weight-bold">{t('Paid')}</td> : <td className="text-danger font-weight-bold">{t('Pending')}</td>}
                               </tr>
                             )
                           })}

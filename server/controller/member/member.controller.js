@@ -777,18 +777,22 @@ exports.generateToken = async (req, res) => {
 
 exports.payAtGymMobile = async (req, res) => {
     let queryCond = {}
-    if (req.headers.userid) req.body.packageDetails["doneBy"] = req.headers.userid;
     req.body.packageDetails["startDate"] = setTime(req.body.packageDetails.startDate);
     req.body.packageDetails["endDate"] = setTime(req.body.packageDetails.endDate);
-    req.body.packageDetails["orderNo"] = generateOrderId()
     req.body.packageDetails["dateOfPaid"] = setTime(new Date());
     req.body.packageDetails["timeOfPaid"] = new Date();
-    if (req.body.packageDetails.Installments) {
-        req.body.packageDetails.Installments.map(doc => {
-            doc.dateOfPaid = setTime(new Date())
-            doc.timeOfPaid = new Date();
-            return doc;
+    if (req.body.packageDetails.Installments && req.body.packageDetails.Installments.length) {
+        req.body.packageDetails.Installments.map((doc, i) => {
+            if (i === 0) {
+                doc.dateOfPaid = setTime(new Date())
+                doc.timeOfPaid = new Date();
+                doc["orderNo"] = generateOrderId()
+                if (req.headers.userid) doc["doneBy"] = req.headers.userid;
+            }
         });
+    } else {
+        req.body.packageDetails["orderNo"] = generateOrderId()
+        if (req.headers.userid) req.body.packageDetails["doneBy"] = req.headers.userid;
     }
     req.responseData = await Member.findById(req.params.id).populate('credentialId').lean()
     Member.findByIdAndUpdate(req.params.id, { $push: { packageDetails: req.body.packageDetails }, $set: queryCond })
@@ -821,11 +825,18 @@ exports.bookTrainer = async (req, res) => {
         trainerDetails['trainerEnd'] = setTime(trainerDetails['trainerEnd']);
         trainerDetails["dateOfPaid"] = setTime(new Date());
         trainerDetails["timeOfPaid"] = new Date();
-        if (trainerDetails.Installments) {
-            req.body.trainerDetails.Installments.forEach(doc => {
-                doc.dateOfPaid = setTime(new Date())
-                doc.timeOfPaid = new Date();
+        if (trainerDetails.Installments && trainerDetails.Installments.length) {
+            req.body.trainerDetails.Installments.forEach((doc, i) => {
+                if (i === 0) {
+                    doc.dateOfPaid = setTime(new Date())
+                    doc.timeOfPaid = new Date();
+                    doc["orderNo"] = generateOrderId()
+                    if (req.headers.userid) doc["doneBy"] = req.headers.userid;
+                }
             });
+        } else {
+            trainerDetails["orderNo"] = generateOrderId()
+            if (req.headers.userid) trainerDetails["doneBy"] = req.headers.userid;
         }
         const member = await Member.findById(req.body.memberId);
         for (const [i, packages] of member.packageDetails.entries()) {
@@ -833,7 +844,10 @@ exports.bookTrainer = async (req, res) => {
                 member.packageDetails[i].trainerDetails.push(trainerDetails);
             }
         }
-        const response = await member.save();
+        await member.save();
+        const response = await Member.findById(req.body.memberId)
+            .populate('credentialId branch')
+            .populate('packageDetails.doneBy')
         return successResponseHandler(res, { ...response, ...{ displayReceipt: true } }, "Successfully Booked a Trainer!");
     } catch (error) {
         logger.error(error);

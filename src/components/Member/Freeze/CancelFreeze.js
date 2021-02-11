@@ -19,7 +19,9 @@ class CancelFreeze extends Component {
       reason: '',
       freezeHistory: [],
       selectAll: false,
-      isUpdated: false
+      isUpdated: false,
+      member: '',
+      freezeId: ''
     }
     this.state = this.default
     this.props.dispatch(getFreezeHistory({ search: this.state.search, date: this.state.date }))
@@ -105,10 +107,10 @@ class CancelFreeze extends Component {
   //   }
   // }
 
-  handleSubmit(memberId, id) {
-    const { returningDate, reason } = this.state
+  handleSubmit() {
+    const { returningDate, reason, member, freezeId } = this.state
     const cancelInfo = {
-      returningDate, reason, memberId, id
+      returningDate, reason, memberId: member, id: freezeId
     }
     this.props.dispatch(cancelFreeze(cancelInfo))
   }
@@ -202,7 +204,7 @@ class CancelFreeze extends Component {
                           <img alt='' src={`/${avatar.path}`} className="mx-1 rounded-circle w-50px h-50px" />
                           <div className="mx-1">
                             <h5 className="m-0">{userName}</h5>
-                            <span className="text-primary d-flex"><span>ID</span><span className="mx-1">:</span><span> {memberId}</span></span>
+                            <span className="text-primary d-flex"><span>{t('ID')}</span><span className="mx-1">:</span><span> {memberId}</span></span>
                           </div>
                         </div>
                       </td>
@@ -216,63 +218,66 @@ class CancelFreeze extends Component {
                       <td>{typeOfFreeze}</td>
                       <td className="text-center">
                         <button disabled={(calculateDays(new Date(), toDate) === 0 ? true : false) || typeOfFreeze === 'Canceled'} type="button" className="btn btn-danger btn-sm w-100px text-white"
-                          data-toggle="modal" data-target="#CancelFreeze">{t('Cancel')}</button>
+                          data-toggle="modal" data-target="#CancelFreeze"
+                          onClick={() => this.setState({ member, freezeId: _id })}>{t('Cancel')}</button>
                       </td>
-                      {/* <!-- ---------pop up---------- --> */}
-                      <div className="modal fade commonYellowModal" id="CancelFreeze">
-                        <div className="modal-dialog modal-dialog-centered">
-                          <div className="modal-content">
-                            <div className="modal-header">
-                              <h4 className="modal-title">Cancel Freeze</h4>
-                              <button type="button" className="close" data-dismiss="modal"><span className="iconv1 iconv1-close"></span></button>
-                            </div>
-                            <div className="modal-body px-4">
-                              <div className="row">
-                                <div className="col-sm-12 col-xs-12 col-md-12 col-lg-12 col-xl-12">
-                                  <label>Returning Date</label>
-                                  <div className="form-group position-relative">
-                                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                                      <DatePicker
-                                        variant='inline'
-                                        InputProps={{
-                                          disableUnderline: true,
-                                        }}
-                                        autoOk
-                                        minDate={new Date()}
-                                        className="form-control pl-2 pt-2"
-                                        invalidDateMessage=''
-                                        minDateMessage=''
-                                        format="dd/MM/yyyy"
-                                        value={this.state.returningDate}
-                                        onChange={(e) => this.setState(validator(e, 'returningDate', 'date', []))}
-                                      />
-                                    </MuiPickersUtilsProvider>
-                                    <span className="iconv1 iconv1-calander dateBoxIcon"></span>
-                                  </div>
-                                </div>
-                                <div className="col-12">
-                                  <div className="form-group position-relative">
-                                    <label>Reason</label>
-                                    <textarea type="text" autoComplete="off" rows="5" className="form-control"
-                                      value={this.state.reason} onChange={(e) => this.setState({ reason: e.target.value })}
-                                    ></textarea>
-                                  </div>
-                                </div>
-                                <div className="col-12 py-3 d-flex flex-wrap align-items-center justify-content-end">
-                                  <button type="button" data-dismiss="modal" className="btn btn-success px-4" onClick={() => this.handleSubmit(member, _id)}>{t('Submit')}</button>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      {/* <!-- ------------pop up End----------- --> */}
                     </tr>
                   )
                 })}
               </tbody>
             </table>
           </div>
+
+          {/* <!-- ---------pop up---------- --> */}
+          <div className="modal fade commonYellowModal" id="CancelFreeze">
+            <div className="modal-dialog modal-dialog-centered">
+              <div className="modal-content">
+                <div className="modal-header">
+                  <h4 className="modal-title">{t('Cancel Freeze')}</h4>
+                  <button type="button" className="close" data-dismiss="modal"><span className="iconv1 iconv1-close"></span></button>
+                </div>
+                <div className="modal-body px-4">
+                  <div className="row">
+                    <div className="col-sm-12 col-xs-12 col-md-12 col-lg-12 col-xl-12">
+                      <label>Returning Date</label>
+                      <div className="form-group position-relative">
+                        <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                          <DatePicker
+                            variant='inline'
+                            InputProps={{
+                              disableUnderline: true,
+                            }}
+                            autoOk
+                            minDate={new Date()}
+                            className="form-control pl-2 pt-2"
+                            invalidDateMessage=''
+                            minDateMessage=''
+                            format="dd/MM/yyyy"
+                            value={this.state.returningDate}
+                            onChange={(e) => this.setState(validator(e, 'returningDate', 'date', []))}
+                          />
+                        </MuiPickersUtilsProvider>
+                        <span className="iconv1 iconv1-calander dateBoxIcon"></span>
+                      </div>
+                    </div>
+                    <div className="col-12">
+                      <div className="form-group position-relative">
+                        <label>{t('Reason')}</label>
+                        <textarea type="text" autoComplete="off" rows="5" className="form-control"
+                          value={this.state.reason} onChange={(e) => this.setState({ reason: e.target.value })}
+                        ></textarea>
+                      </div>
+                    </div>
+                    <div className="col-12 py-3 d-flex flex-wrap align-items-center justify-content-end">
+                      <button type="button" data-dismiss="modal" className="btn btn-success px-4" onClick={() => this.handleSubmit()}>{t('Submit')}</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          {/* <!-- ------------pop up End----------- --> */}
+
         </div>
       </div>
     )

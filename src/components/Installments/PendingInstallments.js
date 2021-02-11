@@ -1,21 +1,24 @@
 import React, { Component } from 'react'
+import { withTranslation } from 'react-i18next'
+import { Link, Route } from 'react-router-dom'
 import PackageInstallment from './PackageInstallment'
 import TrainerInstallment from './TrainerInstallment'
 
 class PendingInstallments extends Component {
   render() {
+    const { t } = this.props
     return (
       <div className="mainPage p-3 membersInstallment">
         <div className="row">
           <div className="col-12 pageBreadCrumbs">
-            <span className="crumbText">Home</span><span className="mx-2">/</span><span className="crumbText">Dashboard</span><span className="mx-2">/</span><span className="crumbText">Pending Installments</span>
+            <span className="crumbText">{t('Home')}</span><span className="mx-2">/</span><span className="crumbText">{t('Pending Installments')}</span>
           </div>
           <div className="col-12">
             <div className="row">
               <div className="col-12 col-sm-12 pageHead">
                 <h1>
                   <span className="px-1"></span>
-                  <span>Pending Installments</span>
+                  <span>{t('Pending Installments')}</span>
                 </h1>
               </div>
             </div>
@@ -26,13 +29,21 @@ class PendingInstallments extends Component {
               <div className="col-12">
                 <nav className="commonNavForTab">
                   <div className="nav nav-tabs flex-nowrap overflow-auto" id="nav-tab" role="tablist">
-                    <a href='#menu1' className="nav-item nav-link active" role="tab" data-toggle="tab">Package Installment</a>
-                    <a href='#menu2' className="nav-item nav-link" role="tab" data-toggle="tab">Trainer Installment</a>
+                    {/* <a href='#menu1' className="nav-item nav-link active" role="tab" data-toggle="tab">Package Installment</a>
+                    <a href='#menu2' className="nav-item nav-link" role="tab" data-toggle="tab">Trainer Installment</a> */}
+                    <Route exact path='/pending-installments'>
+                      <Link to='/pending-installments' className="nav-item nav-link active" role="tab">{t('Package Installment')}</Link>
+                      <Link to='/pending-installments/pending-installments-trainer' className="nav-item nav-link" role="tab">{t('Trainer Installment')}</Link>
+                    </Route>
+                    <Route exact path='/pending-installments/pending-installments-trainer'>
+                      <Link to='/pending-installments' className="nav-item nav-link" role="tab">{t('Package Installment')}</Link>
+                      <Link to='/pending-installments/pending-installments-trainer' className="nav-item nav-link active" role="tab">{t('Trainer Installment')}</Link>
+                    </Route>
                   </div>
                 </nav>
                 <div className="tab-content" id="nav-tabContent">
-                  <PackageInstallment />
-                  <TrainerInstallment />
+                  <Route exact path='/pending-installments' component={PackageInstallment} />
+                  <Route path='/pending-installments/pending-installments-trainer' component={TrainerInstallment} />
                 </div>
               </div>
             </div>
@@ -43,4 +54,4 @@ class PendingInstallments extends Component {
   }
 }
 
-export default PendingInstallments
+export default withTranslation()(PendingInstallments)

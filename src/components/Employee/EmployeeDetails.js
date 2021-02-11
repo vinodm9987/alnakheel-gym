@@ -189,7 +189,7 @@ class EmployeeDetails extends Component {
                                         <span className="iconv1 iconv1-biomatric-phone text-warning mr-2" style={{ fontSize: "30px" }}></span>
                                       </div>
                                       <div>
-                                        <label className="mb-0 font-weight-bold">Phone</label>
+                                        <label className="mb-0 font-weight-bold">{t('Phone')}</label>
                                         <h6 className="dirltrtar">{mobileNo}</h6>
                                       </div>
                                     </div>
@@ -200,7 +200,7 @@ class EmployeeDetails extends Component {
                                         <span className="iconv1 iconv1-calander text-warning mr-2" style={{ fontSize: "40px" }}></span>
                                       </div>
                                       <div>
-                                        <label className="mb-0 font-weight-bold">Date of birth</label>
+                                        <label className="mb-0 font-weight-bold">{t('Date of birth')}</label>
                                         <h6>{dateToDDMMYYYY(dateOfBirth)}</h6>
                                       </div>
                                     </div>
@@ -211,7 +211,7 @@ class EmployeeDetails extends Component {
                                         <span className="iconv1 iconv1-email text-warning mr-2" style={{ fontSize: "45px" }}></span>
                                       </div>
                                       <div>
-                                        <label className="mb-0 font-weight-bold">Email</label>
+                                        <label className="mb-0 font-weight-bold">{t('Email')}</label>
                                         <h6 className="wordBreakBreakAll">{email}</h6>
                                       </div>
                                     </div>
@@ -230,31 +230,31 @@ class EmployeeDetails extends Component {
                                 </thead>
                                 <tbody>
                                   <tr>
-                                    <td className="text-nowrap bg-white border-bottom" style={{ width: "25%" }}>Personal Id</td>
+                                    <td className="text-nowrap bg-white border-bottom" style={{ width: "25%" }}>{t('Personal Id')}</td>
                                     <td className="bg-white border-bottom">{personalId}</td>
                                   </tr>
                                   <tr>
-                                    <td className="text-nowrap bg-white border-bottom" style={{ width: "25%" }}>Gender</td>
+                                    <td className="text-nowrap bg-white border-bottom" style={{ width: "25%" }}>{t('Gender')}</td>
                                     <td className="bg-white border-bottom">{gender}</td>
                                   </tr>
                                   <tr>
-                                    <td className="text-nowrap bg-white border-bottom" style={{ width: "25%" }}>Joining Date</td>
+                                    <td className="text-nowrap bg-white border-bottom" style={{ width: "25%" }}>{t('Joining Date')}</td>
                                     <td className="bg-white border-bottom">{dateToDDMMYYYY(joiningDate)}</td>
                                   </tr>
                                   <tr>
-                                    <td className="text-nowrap bg-white border-bottom" style={{ width: "25%" }}>Address</td>
+                                    <td className="text-nowrap bg-white border-bottom" style={{ width: "25%" }}>{t('Address')}</td>
                                     <td className="bg-white border-bottom">{address}</td>
                                   </tr>
                                   <tr>
-                                    <td className="text-nowrap bg-white border-bottom" style={{ width: "25%" }}>Employee Type</td>
+                                    <td className="text-nowrap bg-white border-bottom" style={{ width: "25%" }}>{t('Employee Type')}</td>
                                     <td className="bg-white border-bottom">{employeeType}</td>
                                   </tr>
                                   <tr>
-                                    <td className="text-nowrap bg-white border-bottom" style={{ width: "25%" }}>Branch</td>
+                                    <td className="text-nowrap bg-white border-bottom" style={{ width: "25%" }}>{t('Branch')}</td>
                                     <td className="bg-white border-bottom">{branch.map(b => b.branchName).join(', ')}</td>
                                   </tr>
                                   <tr>
-                                    <td className="text-nowrap bg-white border-bottom" style={{ width: "25%" }}>Nationality</td>
+                                    <td className="text-nowrap bg-white border-bottom" style={{ width: "25%" }}>{t('Nationality')}</td>
                                     <td className="bg-white border-bottom">{nationality}</td>
                                   </tr>
                                 </tbody>
@@ -294,7 +294,7 @@ class EmployeeDetails extends Component {
                         </div>
                       </div> */}
                       <form className="row form-inline">
-                        <button type="button" id="passwordAskModalBtn2" className="d-none" data-toggle="modal" data-target="#passwordAskModal" ref="passwordModalOpen">Open modal</button>
+                        <button type="button" id="passwordAskModalBtn2" className="d-none" data-toggle="modal" data-target="#passwordAskModal" ref="passwordModalOpen">{t('Open')}</button>
                         <div className="modal fade commonYellowModal" id="passwordAskModal">
                           <div className="modal-dialog modal-dialog-centered">
                             <div className="modal-content">

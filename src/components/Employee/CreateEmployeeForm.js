@@ -613,8 +613,8 @@ class CreateEmployeeForm extends Component {
                     <select className={this.state.employeeTypeE ? "form-control mx-sm-2 inlineFormInputs FormInputsError" : "form-control mx-sm-2 inlineFormInputs"}
                       value={employeeType} onChange={(e) => this.setState(validator(e, 'employeeType', 'text', [t('Enter employee type')]))} id="employeeType">
                       <option value="" hidden>{t('Please Select')}</option>
-                      <option value="Full Time">Full Time</option>
-                      <option value="Part Time">Part Time</option>
+                      <option value="Full Time">{t('Full Time')}</option>
+                      <option value="Part Time">{t('Part Time')}</option>
                     </select>
                     <span className="iconv1 iconv1-arrow-down selectBoxIcon"></span>
                     <div className="errorMessageWrapper">

@@ -54,11 +54,11 @@ class WorkoutsList extends Component {
                 <div className="row d-block d-sm-flex justify-content-end pt-5">
                   {/* <div className="col w-auto px-1 flexBasis-auto flex-grow-0">
                         <div className="form-group inlineFormGroup">
-                            <label className="mx-sm-2 inlineFormLabel">Payment</label>
+                            <label className="mx-sm-2 inlineFormLabel">{t('Payment')}</label>
                             <select className="form-control mx-sm-2 inlineFormInputs">
-                                <option value="">All</option>
-                                <option value="">Cash</option>
-                                <option value="">Card</option>
+                                <option value="">{t('ALL')}</option>
+                                <option value="">{t('Cash')}</option>
+                                <option value="">{t('Card')}</option>
                             </select>
                             <span className="iconv1 iconv1-arrow-down selectBoxIcon"></span>
                         </div>

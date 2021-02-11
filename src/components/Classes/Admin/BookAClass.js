@@ -437,6 +437,7 @@ class BookAClass extends Component {
   }
 
   addGiftcard(subTotalGiftCard) {
+    const { t } = this.props
     if (this.state.member) {
       subTotalGiftCard && this.setState({ subTotalGiftCard, cash: 0, card: 0, digital: 0, cheque: 0 }, () => {
         if (this.state.text !== this.state.redeemCode) {
@@ -447,7 +448,7 @@ class BookAClass extends Component {
         }
       })
     } else {
-      this.props.dispatch({ type: GET_ALERT_ERROR, payload: 'Please select member first' })
+      this.props.dispatch({ type: GET_ALERT_ERROR, payload: t('Please select member first') })
     }
   }
 
@@ -748,7 +749,7 @@ class BookAClass extends Component {
               </div>
 
               {/* Popup Discount */}
-              <button type="button" id="Discount2" className="d-none" data-toggle="modal" data-target="#Discount" ref="openDiscount">Open modal</button>
+              <button type="button" id="Discount2" className="d-none" data-toggle="modal" data-target="#Discount" ref="openDiscount">{t('Open')}</button>
               <div className="modal fade commonYellowModal" id="Discount" >
                 <div className="modal-dialog modal-dialog-centered">
                   <div className="modal-content">
@@ -807,13 +808,13 @@ class BookAClass extends Component {
           </div>
         </div>
         {/* --------------Receipt Modal-=--------------- */}
-        <button type="button" className="btn btn-primary d-none" data-toggle="modal" data-target="#ReceiptModal" data-backdrop="static" data-keyboard="false" ref="receiptOpenModal">Receipt</button>
+        <button type="button" className="btn btn-primary d-none" data-toggle="modal" data-target="#ReceiptModal" data-backdrop="static" data-keyboard="false" ref="receiptOpenModal">{t('Receipt')}</button>
         {classReceipt &&
           <div className="modal fade commonYellowModal" id="ReceiptModal">
             <div className="modal-dialog modal-lg" id="ReceiptModal2">
               <div className="modal-content">
                 <div className="modal-header">
-                  <h4 className="modal-title">Receipt</h4>
+                  <h4 className="modal-title">{t('Receipt')}</h4>
                   {/* <Link to={`/members-details/${classReceipt._id}`}> */}
                   <button type="button" className="close" data-dismiss="modal" ref="receiptCloseModal" onClick={() => this.handleReceiptClose()}><span className="iconv1 iconv1-close"></span></button>
                   {/* </Link> */}
@@ -827,19 +828,19 @@ class BookAClass extends Component {
                     <div className="row px-5 justify-content-between">
                       <div className="col-free p-3">
                         <div className="mb-3">
-                          <label className="m-0 font-weight-bold">VAT Reg Number</label>
+                          <label className="m-0 font-weight-bold">{t('VAT Reg Number')}</label>
                           <p className="">{this.props.branches && this.props.branches.filter(b => b._id === branch)[0] &&
                             this.props.branches.filter(b => b._id === branch)[0].vatRegNo}</p>
                         </div>
                         <div className="">
-                          <label className="m-0 font-weight-bold">Address</label>
+                          <label className="m-0 font-weight-bold">{t('Address')}</label>
                           <p className="whiteSpaceNormal mnw-150px mxw-200px">{this.props.branches && this.props.branches.filter(b => b._id === branch)[0] &&
                             this.props.branches.filter(b => b._id === branch)[0].address}</p>
                         </div>
                       </div>
                       <div className="col-free p-3">
                         <div className="mb-3">
-                          <label className="m-0 font-weight-bold">Tax Invoice No</label>
+                          <label className="m-0 font-weight-bold">{t('Tax Invoice No')}</label>
                           <p className="">{classReceipt.orderNo}</p>
                         </div>
                         <div className="">
@@ -849,11 +850,11 @@ class BookAClass extends Component {
                       </div>
                       <div className="col-free p-3">
                         <div className="">
-                          <label className="m-0 font-weight-bold">Receipt Total</label>
+                          <label className="m-0 font-weight-bold">{t('Receipt Total')}</label>
                           <p className="h4 font-weight-bold">{this.props.defaultCurrency} {parseFloat(total).toFixed(3)}</p>
                         </div>
                         <div className="">
-                          <label className="m-0 font-weight-bold">Telephone</label>
+                          <label className="m-0 font-weight-bold">{t('Telephone')}</label>
                           <p className="">{this.props.branches && this.props.branches.filter(b => b._id === branch)[0] &&
                             this.props.branches.filter(b => b._id === branch)[0].telephone}</p>
                         </div>
@@ -862,14 +863,14 @@ class BookAClass extends Component {
                     <div className="bgGray d-flex flex-wrap px-5 py-4 justify-content-between">
                       <div className="">
                         <h6 className="font-weight-bold m-1">
-                          <span className="px-1">ID:</span>
+                          <span className="px-1">{t('ID')}:</span>
                           <span className="px-1">{member.memberId}</span>
                         </h6>
                       </div>
                       <h6 className="font-weight-bold m-1">{member.credentialId.userName}</h6>
                       <div className="">
                         <h6 className="font-weight-bold m-1">
-                          <span className="px-1">Mob:</span>
+                          <span className="px-1">{t('Mob')}:</span>
                           <span className="px-1">{member.mobileNo}</span>
                         </h6>
                       </div>
@@ -878,7 +879,7 @@ class BookAClass extends Component {
                       <table className="table">
                         <thead>
                           <tr>
-                            <th>Class Name</th>
+                            <th>{t('Class Name')}</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -888,36 +889,36 @@ class BookAClass extends Component {
                           </tr>
                           <tr>
                             <td colSpan="4">
-                              <div className="text-right my-1">Amount Total :</div>
+                              <div className="text-right my-1">{t('Amount Total')} :</div>
                               {parseFloat(discount) ?
-                                <div className="text-right my-1">Discount :</div>
+                                <div className="text-right my-1">{t('Discount')} :</div>
                                 : <div></div>}
                               {parseFloat(tax) ?
-                                <div className="text-right my-1">VAT{this.state.taxPercent ? `(${this.state.taxPercent} %)` : ''}:</div>
+                                <div className="text-right my-1">{t('VAT')}{this.state.taxPercent ? `(${this.state.taxPercent} %)` : ''}:</div>
                                 : <div></div>}
                               {parseFloat(digital) ?
-                                <div className="text-right my-1">Digital :</div>
+                                <div className="text-right my-1">{t('Digital')} :</div>
                                 : <div></div>}
                               {parseFloat(cash) ?
-                                <div className="text-right my-1">Cash :</div>
+                                <div className="text-right my-1">{t('Cash')} :</div>
                                 : <div></div>}
                               {parseFloat(card) ?
-                                <div className="text-right my-1">Card :</div>
+                                <div className="text-right my-1">{t('Card')} :</div>
                                 : <div></div>}
                               {parseFloat(this.state.cheque) ?
-                                <div className="text-right my-1">Cheque :</div>
+                                <div className="text-right my-1">{t('Cheque')} :</div>
                                 : <div></div>}
                               {parseFloat(this.state.bankName) ?
-                                <div className="text-right my-1">Bank Name :</div>
+                                <div className="text-right my-1">{t('Bank Name')} :</div>
                                 : <div></div>}
                               {parseFloat(this.state.chequeNumber) ?
-                                <div className="text-right my-1">Cheque Number :</div>
+                                <div className="text-right my-1">{t('Cheque Number')} :</div>
                                 : <div></div>}
                               {parseFloat(this.state.chequeDate) ?
-                                <div className="text-right my-1">Cheque Date :</div>
+                                <div className="text-right my-1">{t('Cheque Date')} :</div>
                                 : <div></div>}
-                              <div className="text-right my-1">Grand Total :</div>
-                              <div className="text-right my-1">Paid Amount :</div>
+                              <div className="text-right my-1">{t('Grand Total')} :</div>
+                              <div className="text-right my-1">{t('Paid Amount')} :</div>
                               {this.state.cardNumber ?
                                 <div className="text-right my-1">{t('Card last four digit')} :</div>
                                 : <div></div>}
@@ -969,11 +970,11 @@ class BookAClass extends Component {
                         this.props.branches.filter(b => b._id === branch)[0].instaId}/`} renderAs='svg' />
                     </div> */}
                     <div className="d-flex flex-wrap justify-content-between my-2">
-                      {/* <h6 className="font-weight-bold">Paid Amount: {this.props.defaultCurrency} {parseFloat(total).toFixed(3)}</h6> */}
+                      {/* <h6 className="font-weight-bold">{t('Paid Amount')}: {this.props.defaultCurrency} {parseFloat(total).toFixed(3)}</h6> */}
                       <div className="d-flex align-items-center">
                         <div className="mr-3 text-center">
                           <img src={instaimg} alt="" className="w-30px" />
-                          <h6 className="font-weight-bold mb-0 mt-1">Follow Us</h6>
+                          <h6 className="font-weight-bold mb-0 mt-1">{t('Follow Us')}</h6>
                         </div>
                         <div className="w-50px mr-3">
                           <QRCode value={`http://instagram.com/${this.props.branches && this.props.branches.filter(b => b._id === branch)[0] &&
@@ -983,18 +984,18 @@ class BookAClass extends Component {
                       {this.props.loggedUser && <h6 className="font-weight-bold">{t('Served by')}: {this.props.loggedUser.userName}</h6>}
                     </div>
                     {/* <div className="text-center px-5">
-                      <h5 className="text-muted">Membership cannot be refunded or transferred to others.</h5>
+                      <h5 className="text-muted">{t('Membership cannot be refunded or transferred to others.')}</h5>
                       <h5 className="font-weight-bold">{t('Thank You')}</h5>
                     </div> */}
                     <div className="d-flex align-items-center justify-content-center">
                       <div className="text-center">
-                        <h6 className="font-weight-bold" >Membership cannot be refunded or transferred to others.</h6>
+                        <h6 className="font-weight-bold" >{t('Membership cannot be refunded or transferred to others.')}</h6>
                         <h6 className="font-weight-bold">{t('Thank You')}</h6>
                       </div>
                     </div>
                     <div className="text-center">
                       {/* <Link to={`/members-details/${classReceipt._id}`}> */}
-                      <button type="button" className="btn btn-success px-4 py-1 my-2" data-dismiss="modal" onClick={() => this.handlePrint(classReceipt._id)}>Print Receipt</button>
+                      <button type="button" className="btn btn-success px-4 py-1 my-2" data-dismiss="modal" onClick={() => this.handlePrint(classReceipt._id)}>{t('Print Receipt')}</button>
                       {/* </Link> */}
                     </div>
                   </div>
@@ -1019,14 +1020,14 @@ class BookAClass extends Component {
                   this.props.branches.filter(b => b._id === branch)[0].address}</span><br />
                 {/* <span>Road/Street 50, Samaheej,</span><br /> */}
                 {/* <span>Block 236, Bahrain,</span><br /> */}
-                <span>Tel : {this.props.branches && this.props.branches.filter(b => b._id === branch)[0] &&
+                <span>{t('Tel')} : {this.props.branches && this.props.branches.filter(b => b._id === branch)[0] &&
                   this.props.branches.filter(b => b._id === branch)[0].telephone}</span><br />
               </p>
-              <p style={{ textAlign: "center", margin: "0 0 10px 0" }}>VAT Reg No - {this.props.branches && this.props.branches.filter(b => b._id === branch)[0] &&
+              <p style={{ textAlign: "center", margin: "0 0 10px 0" }}>{t('VAT Reg No')} - {this.props.branches && this.props.branches.filter(b => b._id === branch)[0] &&
                 this.props.branches.filter(b => b._id === branch)[0].vatRegNo}</p>
               <p style={{ display: "flex", justifyContent: "space-between", margin: "0" }}>
                 <span style={{ padding: "2px", fontSize: "14px" }}>{dateToDDMMYYYY(new Date())} {dateToHHMM(new Date())}</span>
-                <span style={{ padding: "2px", fontSize: "14px" }}>Bill No:{classReceipt.orderNo}</span>
+                <span style={{ padding: "2px", fontSize: "14px" }}>{t('Bill No')}:{classReceipt.orderNo}</span>
               </p>
               {member &&
                 <div>
@@ -1044,7 +1045,7 @@ class BookAClass extends Component {
                 <tbody>
                   <tr style={{ borderTop: "1px dashed #000" }}>
                     <td>{t('No.')}</td>
-                    <td>CLASS NAME</td>
+                    <td>{t('CLASS NAME')}</td>
                   </tr>
                   {/* <tr style={{ borderTop: "1px dashed #000" }}>
                   <td>1</td>
@@ -1073,7 +1074,7 @@ class BookAClass extends Component {
                     : <tr></tr>}
                   {parseFloat(giftcard) ?
                     <tr>
-                      <td style={{ textAlign: "right", padding: "0 4px", width: "100%" }}>Giftcard {this.props.defaultCurrency}: </td>
+                      <td style={{ textAlign: "right", padding: "0 4px", width: "100%" }}>{t('Giftcard')} {this.props.defaultCurrency}: </td>
                       <td style={{ textAlign: "right", padding: "0" }}>{parseFloat(giftcard).toFixed(3)}</td>
                     </tr>
                     : <tr></tr>}
@@ -1101,6 +1102,30 @@ class BookAClass extends Component {
                       <td style={{ textAlign: "right", padding: "0px 0px 4px 0px" }}>{parseFloat(card).toFixed(3)}</td>
                     </tr>
                     : <tr></tr>}
+                  {parseFloat(this.state.cheque) ?
+                    <tr>
+                      <td style={{ textAlign: "right", padding: "0px 4px 4px 4px", width: "100%" }}>{t('Cheque')} {this.props.defaultCurrency}: </td>
+                      <td style={{ textAlign: "right", padding: "0px 0px 4px 0px" }}>{parseFloat(this.state.cheque).toFixed(3)}</td>
+                    </tr>
+                    : <tr></tr>}
+                  {this.state.bankName ?
+                    <tr>
+                      <td style={{ textAlign: "right", padding: "0px 4px 4px 4px", width: "100%" }}>{t('Bank Name')} {this.props.defaultCurrency}: </td>
+                      <td style={{ textAlign: "right", padding: "0px 0px 4px 0px" }}>{this.state.bankName}</td>
+                    </tr>
+                    : <tr></tr>}
+                  {this.state.chequeNumber ?
+                    <tr>
+                      <td style={{ textAlign: "right", padding: "0px 4px 4px 4px", width: "100%" }}>{t('Cheque Number')} {this.props.defaultCurrency}: </td>
+                      <td style={{ textAlign: "right", padding: "0px 0px 4px 0px" }}>{this.state.chequeNumber}</td>
+                    </tr>
+                    : <tr></tr>}
+                  {this.state.chequeDate ?
+                    <tr>
+                      <td style={{ textAlign: "right", padding: "0px 4px 4px 4px", width: "100%" }}>{t('Cheque Date')} {this.props.defaultCurrency}: </td>
+                      <td style={{ textAlign: "right", padding: "0px 0px 4px 0px" }}>{this.state.chequeDate}</td>
+                    </tr>
+                    : <tr></tr>}
                   <tr>
                     <td style={{ textAlign: "right", padding: "0px 4px 4px 4px", width: "100%" }}>{t('Grand Total')} {this.props.defaultCurrency}: </td>
                     <td style={{ textAlign: "right", padding: "0px 0px 4px 0px" }}>{parseFloat(total).toFixed(3)}</td>
@@ -1121,7 +1146,7 @@ class BookAClass extends Component {
                 <div style={{ display: "flex", flexDirection: "row", justifyContent: "center", alignItems: "center" }}>
                   <div style={{ marginRight: "10px", justifyContent: "center" }}>
                     <img src={instaimg} alt="" style={{ width: "30px", height: "30px" }} />
-                    {/* <h6>Follow Us</h6> */}
+                    {/* <h6>{t('Follow Us')}</h6> */}
                   </div>
                   <QRCode value={`http://instagram.com/${this.props.branches && this.props.branches.filter(b => b._id === branch)[0] &&
                     this.props.branches.filter(b => b._id === branch)[0].instaId}/`} renderAs='svg' width="50" height="50" />
@@ -1130,7 +1155,7 @@ class BookAClass extends Component {
               </div>
               <p style={{ display: "flex", margin: "0 0 10px 0" }}>
                 <span>{t('NB')}:</span>
-                <span style={{ flexGrow: "1", textAlign: "center" }}>Membership cannot be refunded or transferred to others.</span>
+                <span style={{ flexGrow: "1", textAlign: "center" }}>{t('Membership cannot be refunded or transferred to others.')}</span>
               </p>
               <p style={{ textAlign: "center", margin: "0 0 10px 0" }}>{t('Thank You')}</p>
             </div>

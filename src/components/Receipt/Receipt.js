@@ -7,14 +7,14 @@ class Receipt extends Component {
             <div className="pr">
                 <div className="container-fluid bg-white w-100 overflow-auto h-100">
                     {/* ------Tushar this for Receipt Pop up Print---------- */}
-                    {/* <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#receiptModal">Receipt</button>
+                    {/* <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#receiptModal">{t('Receipt')}</button>
                     <div class="modal" id="receiptModal">
                         <div class="modal-dialog">
                             <div class="modal-content border-0 bg-white">
                                 <div class="modal-body text-center">
                                     <h6 className=""><b>Do you want to print a Receipt ?</b></h6>
-                                    <button type="button" class="btn btn-success px-4 py-1 m-1">Yes</button>
-                                    <button type="button" class="btn btn-danger px-4 py-1 m-1">No</button>
+                                    <button type="button" class="btn btn-success px-4 py-1 m-1">{t('Yes')}</button>
+                                    <button type="button" class="btn btn-danger px-4 py-1 m-1">{t('No')}</button>
                                 </div>
                             </div>
                         </div>
@@ -27,12 +27,12 @@ class Receipt extends Component {
                         </div>
                         <div className="row px-5">
                             <div className="col-12 col-sm-12 col-md-5 col-lg-5 col-xl-5 p-3">
-                                <label className="m-0 font-weight-bold">Address</label>
+                                <label className="m-0 font-weight-bold">{t('Address')}</label>
                                 <p className="whiteSpaceNormal mnw-150px mxw-250px">GymnaGo Galali, P.O.Box:50839,Kingdom of Bharain PH:342569874</p>
                             </div>
                             <div className="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 p-3">
                                 <div className="mb-3">
-                                    <label className="m-0 font-weight-bold">Receipt No</label>
+                                    <label className="m-0 font-weight-bold">{t('Receipt No')}</label>
                                     <p className="">578941</p>
                                 </div>
                                 <div className="">
@@ -42,7 +42,7 @@ class Receipt extends Component {
                             </div>
                             <div className="col-12 col-sm-12 col-md-3 col-lg-3 col-xl-3 p-3">
                                 <div className="text-md-right">
-                                    <label className="m-0">Receipt Total</label>
+                                    <label className="m-0">{t('Receipt Total')}</label>
                                     <p className="h4 font-weight-bold">BHD 15.00</p>
                                 </div>
                             </div>
@@ -50,14 +50,14 @@ class Receipt extends Component {
                         <div className="bgGray d-flex flex-wrap px-5 py-4 justify-content-between">
                             <div className="">
                                 <h6 className="font-weight-bold m-1">
-                                    <span className="px-1">ID:</span>
+                                    <span className="px-1">{t('ID')}:</span>
                                     <span className="px-1">23154</span>
                                 </h6>
                             </div>
                             <h6 className="font-weight-bold m-1">Mohammed Al Mulla</h6>
                             <div className="">
                                 <h6 className="font-weight-bold m-1">
-                                    <span className="px-1">Mob:</span>
+                                    <span className="px-1">{t('Mob')}:</span>
                                     <span className="px-1">7894561230</span>
                                 </h6>
                             </div>
@@ -66,11 +66,11 @@ class Receipt extends Component {
                             <table class="table">
                                 <thead>
                                     <tr>
-                                        <th>No</th>
-                                        <th>Description</th>
-                                        <th>Price</th>
-                                        <th>Qty</th>
-                                        <th>Total</th>
+                                        <th>{t('No')}</th>
+                                        <th>{t('Description')}</th>
+                                        <th>{t('Price')}</th>
+                                        <th>{t('Qty')}</th>
+                                        <th>{t('Total')}</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -90,11 +90,11 @@ class Receipt extends Component {
                                     </tr>
                                     <tr>
                                         <td colspan="4">
-                                            <div className="text-right my-1">Amount Total :</div>
-                                            <div className="text-right my-1">Discount :</div>
-                                            <div className="text-right my-1">Gift Card :</div>
-                                            <div className="text-right my-1">Tax (5%) :</div>
-                                            <div className="text-right my-1">Grand Total :</div>
+                                            <div className="text-right my-1">{t('Amount Total')} :</div>
+                                            <div className="text-right my-1">{t('Discount')} :</div>
+                                            <div className="text-right my-1">{t('Gift Card')} :</div>
+                                            <div className="text-right my-1">{t('VAT')} (5%) :</div>
+                                            <div className="text-right my-1">{t('Grand Total')} :</div>
                                         </td>
                                         <td className="">
                                             <div className="my-1"><span className="">BHD</span> <span className="px-1">1.2</span></div>
@@ -108,12 +108,12 @@ class Receipt extends Component {
                             </table>
                         </div>
                         <div className="d-flex flex-wrap justify-content-between my-4">
-                            <h6 className="font-weight-bold">Paid Amount: BHD 15.00</h6>
-                            <h6 className="font-weight-bold">Served by: Bahgabati Rao</h6>
+                            <h6 className="font-weight-bold">{t('Paid Amount')}: BHD 15.00</h6>
+                            <h6 className="font-weight-bold">{t('Served by')}: Bahgabati Rao</h6>
                         </div>
                         <div className="text-center px-5">
-                            <h5 className="text-muted">The receipt amount will not be refunded in any case.</h5>
-                            <h5 className="font-weight-bold">Thank You</h5>
+                            <h5 className="text-muted">{t('The receipt amount will not be refunded in any case.')}</h5>
+                            <h5 className="font-weight-bold">{t('Thank You')}</h5>
                         </div>
                     </div>
                     {/* -------This is for Point of Slaes Receipt ENd------------ */}
@@ -125,12 +125,12 @@ class Receipt extends Component {
                         </div>
                         <div className="row px-5">
                             <div className="col-12 col-sm-12 col-md-5 col-lg-5 col-xl-5 p-3">
-                                <label className="m-0 font-weight-bold">Address</label>
+                                <label className="m-0 font-weight-bold">{t('Address')}</label>
                                 <p className="whiteSpaceNormal mnw-150px mxw-250px">GymnaGo Galali, P.O.Box:50839,Kingdom of Bharain PH:342569874</p>
                             </div>
                             <div className="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 p-3">
                                 <div className="mb-3">
-                                    <label className="m-0 font-weight-bold">Receipt No</label>
+                                    <label className="m-0 font-weight-bold">{t('Receipt No')}</label>
                                     <p className="">578941</p>
                                 </div>
                                 <div className="">
@@ -140,7 +140,7 @@ class Receipt extends Component {
                             </div>
                             <div className="col-12 col-sm-12 col-md-3 col-lg-3 col-xl-3 p-3">
                                 <div className="text-md-right">
-                                    <label className="m-0">Receipt Total</label>
+                                    <label className="m-0">{t('Receipt Total')}</label>
                                     <p className="h4 font-weight-bold">BHD 15.00</p>
                                 </div>
                             </div>
@@ -148,14 +148,14 @@ class Receipt extends Component {
                         <div className="bgGray d-flex flex-wrap px-5 py-4 justify-content-between">
                             <div className="">
                                 <h6 className="font-weight-bold m-1">
-                                    <span className="px-1">ID:</span>
+                                    <span className="px-1">{t('ID')}:</span>
                                     <span className="px-1">23154</span>
                                 </h6>
                             </div>
                             <h6 className="font-weight-bold m-1">Mohammed Al Mulla</h6>
                             <div className="">
                                 <h6 className="font-weight-bold m-1">
-                                    <span className="px-1">Mob:</span>
+                                    <span className="px-1">{t('Mob')}:</span>
                                     <span className="px-1">7894561230</span>
                                 </h6>
                             </div>
@@ -164,10 +164,10 @@ class Receipt extends Component {
                             <table class="table">
                                 <thead>
                                     <tr>
-                                        <th>No</th>
-                                        <th>Description</th>
-                                        <th>From Date</th>
-                                        <th>To Date</th>
+                                        <th>{t('No')}</th>
+                                        <th>{t('Description')}</th>
+                                        <th>{t('From Date')}</th>
+                                        <th>{t('To Date')}</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -179,11 +179,11 @@ class Receipt extends Component {
                                     </tr>
                                     <tr>
                                         <td colspan="3">
-                                            <div className="text-right my-1">Amount Total :</div>
-                                            <div className="text-right my-1">Discount :</div>
-                                            <div className="text-right my-1">Gift Card :</div>
-                                            <div className="text-right my-1">Tax (5%) :</div>
-                                            <div className="text-right my-1">Grand Total :</div>
+                                            <div className="text-right my-1">{t('Amount Total')} :</div>
+                                            <div className="text-right my-1">{t('Discount')} :</div>
+                                            <div className="text-right my-1">{t('Gift Card')} :</div>
+                                            <div className="text-right my-1">{t('VAT')} (5%) :</div>
+                                            <div className="text-right my-1">{t('Grand Total')} :</div>
                                         </td>
                                         <td className="">
                                             <div className="my-1"><span className="">BHD</span> <span className="px-1">1.2</span></div>
@@ -197,12 +197,12 @@ class Receipt extends Component {
                             </table>
                         </div>
                         <div className="d-flex flex-wrap justify-content-between my-4">
-                            <h6 className="font-weight-bold">Paid Amount: BHD 15.00</h6>
-                            <h6 className="font-weight-bold">Served by: Bahgabati Rao</h6>
+                            <h6 className="font-weight-bold">{t('Paid Amount')}: BHD 15.00</h6>
+                            <h6 className="font-weight-bold">{t('Served by')}: Bahgabati Rao</h6>
                         </div>
                         <div className="text-center px-5">
-                            <h5 className="text-muted">The receipt amount will not be refunded in any case.</h5>
-                            <h5 className="font-weight-bold">Thank You</h5>
+                            <h5 className="text-muted">{t('The receipt amount will not be refunded in any case.')}</h5>
+                            <h5 className="font-weight-bold">{t('Thank You')}</h5>
                         </div>
                     </div>
 

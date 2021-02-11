@@ -156,9 +156,9 @@ class TrainerClassSchedule extends Component {
               <div className="bg-light py-2 my-2">
                 <nav className="commonNavForPill">
                   <div className="nav nav-pills flex-nowrap overflow-auto whiteSpaceNoWrap" role="tablist" style={{zoom: '0.9'}}>
-                    <a className="borderRound mx-2 px-4 nav-item nav-link active" data-toggle="tab" href="#menu1" onClick={() => this.handleDateFilter('day')}>Day</a>
-                    <a className="borderRound mx-2 px-4 nav-item nav-link" data-toggle="tab" href="#menu2" onClick={() => this.handleDateFilter('week')}>Week</a>
-                    <a className="borderRound mx-2 px-4 nav-item nav-link" data-toggle="tab" href="#menu3" onClick={() => this.handleDateFilter('month')}>Month</a>
+                    <a className="borderRound mx-2 px-4 nav-item nav-link active" data-toggle="tab" href="#menu1" onClick={() => this.handleDateFilter('day')}>{t('Day')}</a>
+                    <a className="borderRound mx-2 px-4 nav-item nav-link" data-toggle="tab" href="#menu2" onClick={() => this.handleDateFilter('week')}>{t('Week')}</a>
+                    <a className="borderRound mx-2 px-4 nav-item nav-link" data-toggle="tab" href="#menu3" onClick={() => this.handleDateFilter('month')}>{t('Month')}</a>
                   </div>
                 </nav>
               </div>

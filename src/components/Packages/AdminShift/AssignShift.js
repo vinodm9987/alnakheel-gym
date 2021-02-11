@@ -401,7 +401,7 @@ class AssignShift extends Component {
                   <div className="col w-auto px-1 flexBasis-auto flex-grow-0 d-flex flex-wrap">
                     <div className="col w-auto px-1 flexBasis-auto flex-grow-0">
                       <div className="form-group inlineFormGroup flex-nowrap">
-                        <span onClick={() => this.resetDate()} className="btn btn-warning btn-sm text-white my-1">ALL</span>
+                        <span onClick={() => this.resetDate()} className="btn btn-warning btn-sm text-white my-1">{t('ALL')}</span>
                         <MuiPickersUtilsProvider utils={DateFnsUtils}>
                           <DatePicker
                             variant='inline'

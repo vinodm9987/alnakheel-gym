@@ -89,6 +89,7 @@ class BookATrainer extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
+    const { t } = this.props
     if (this.props.errors !== prevProps.errors) {
       if (Object.keys(this.props.errors).length !== 0 && !this.props.errors.error) {
         if (this.props.errors.response && this.props.errors.response.displayReceipt) {
@@ -109,7 +110,7 @@ class BookATrainer extends Component {
       if (prevState.subTotalGiftCard >= this.props.amountByRedeemCode.giftCard.amount) {
         this.setState({ giftcard: this.props.amountByRedeemCode.giftCard.amount, redeemCode: this.props.amountByRedeemCode.redeemCode, memberTransactionId: this.props.amountByRedeemCode._id })
       } else {
-        this.props.dispatch({ type: GET_ALERT_ERROR, payload: 'Sorry gift card is not valid on this transaction' })
+        this.props.dispatch({ type: GET_ALERT_ERROR, payload: t('Sorry gift card is not valid on this transaction') })
       }
     }
     if (((this.props.verifyPassword && this.props.verifyPassword) !== (prevProps.verifyPassword)) && this.props.verifyPassword === 'verified') {
@@ -145,7 +146,7 @@ class BookATrainer extends Component {
         branch: this.state.member.branch
       }, () => {
         if (!this.state.packageDetails.length) {
-          this.props.dispatch({ type: GET_ALERT_ERROR, payload: 'Either this member trainer is not expired or the package is expired. Please check in member details.' })
+          this.props.dispatch({ type: GET_ALERT_ERROR, payload: t('Either this member trainer is not expired or the package is expired. Please check in member details.') })
         }
         this.props.dispatch(getAllVat({ branch: this.state.branch }))
         this.props.dispatch(getUniqueTrainerByBranch(this.state.branch))
@@ -410,6 +411,7 @@ class BookATrainer extends Component {
   }
 
   addGiftcard(subTotalGiftCard) {
+    const { t } = this.props
     if (this.state.member) {
       subTotalGiftCard && this.setState({ subTotalGiftCard, cash: 0, card: 0, digital: 0, cheque: 0 }, () => {
         if (this.state.text !== this.state.redeemCode) {
@@ -420,7 +422,7 @@ class BookATrainer extends Component {
         }
       })
     } else {
-      this.props.dispatch({ type: GET_ALERT_ERROR, payload: 'Please select member first' })
+      this.props.dispatch({ type: GET_ALERT_ERROR, payload: t('Please select member first') })
     }
   }
 
@@ -711,7 +713,7 @@ class BookATrainer extends Component {
                   >
                     <span style={{ fontSize: "26px", lineHeight: "0.8" }}>+</span>
                     <span className="gaper"></span>
-                    <span>Add Installment</span>
+                    <span>{t('Add Installment')}</span>
                   </button>
                 </div>
               }
@@ -726,10 +728,10 @@ class BookATrainer extends Component {
                             <div key={i} className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 grayBXhere">
                               <div className="lefthere">
                                 <div className="loopWhitehere">
-                                  <h4 className="displayFlexCls"><span>Installment</span><span className="gaper"></span><span className="mnw-20pxhere">{i + 1}</span></h4>
+                                  <h4 className="displayFlexCls"><span>{t('Installment')}</span><span className="gaper"></span><span className="mnw-20pxhere">{i + 1}</span></h4>
                                   <div className="vLinehere"></div>
                                   <div className="valuesetHere">
-                                    <label className="mt-2 mx-1">Value</label>
+                                    <label className="mt-2 mx-1">{t('Value')}</label>
                                     <div className="position-relative d-flex flex-grow-1" dir="ltr">
                                       <span className="OnlyCurrency Uppercase">{this.props.defaultCurrency}</span>
                                       <input type="text" className="form-control inputFieldPaddingCls ar-en-px-2"
@@ -738,7 +740,7 @@ class BookATrainer extends Component {
                                     </div>
                                   </div>
                                   <div className="datesetHere">
-                                    <label className="mt-2 mx-1 text-nowrap">Due Date</label>
+                                    <label className="mt-2 mx-1 text-nowrap">{t('Due Date')}</label>
                                     <span className="position-relative">
                                       {/* please keep calendaer coming box input plugin */}
                                       <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -980,7 +982,7 @@ class BookATrainer extends Component {
               </div>
 
               {/* Popup Discount */}
-              <button type="button" id="Discount2" className="d-none" data-toggle="modal" data-target="#Discount" ref="openDiscount">Open modal</button>
+              <button type="button" id="Discount2" className="d-none" data-toggle="modal" data-target="#Discount" ref="openDiscount">{t('Open')}</button>
               <div className="modal fade commonYellowModal" id="Discount" >
                 <div className="modal-dialog modal-dialog-centered">
                   <div className="modal-content">
@@ -1041,13 +1043,13 @@ class BookATrainer extends Component {
 
 
         {/* --------------Receipt Modal-=--------------- */}
-        <button type="button" className="btn btn-primary d-none" data-toggle="modal" data-target="#ReceiptModal" data-backdrop="static" data-keyboard="false" ref="receiptOpenModal">Receipt</button>
+        <button type="button" className="btn btn-primary d-none" data-toggle="modal" data-target="#ReceiptModal" data-backdrop="static" data-keyboard="false" ref="receiptOpenModal">{t('Receipt')}</button>
         {trainerReceipt &&
           <div className="modal fade commonYellowModal" id="ReceiptModal">
             <div className="modal-dialog modal-lg" id="ReceiptModal2">
               <div className="modal-content">
                 <div className="modal-header">
-                  <h4 className="modal-title">Receipt</h4>
+                  <h4 className="modal-title">{t('Receipt')}</h4>
                   {/* <Link to={`/members-details/${trainerReceipt._id}`}> */}
                   <button type="button" className="close" data-dismiss="modal" ref="receiptCloseModal" onClick={() => this.handleReceiptClose()}><span className="iconv1 iconv1-close"></span></button>
                   {/* </Link> */}
@@ -1061,17 +1063,17 @@ class BookATrainer extends Component {
                     <div className="row px-5 justify-content-between">
                       <div className="col-free p-3">
                         <div className="mb-3">
-                          <label className="m-0 font-weight-bold">VAT Reg Number</label>
+                          <label className="m-0 font-weight-bold">{t('VAT Reg Number')}</label>
                           <p className="">{trainerReceipt.branch.vatRegNo}</p>
                         </div>
                         <div className="">
-                          <label className="m-0 font-weight-bold">Address</label>
+                          <label className="m-0 font-weight-bold">{t('Address')}</label>
                           <p className="whiteSpaceNormal mnw-150px mxw-200px">{trainerReceipt.branch.address}</p>
                         </div>
                       </div>
                       <div className="col-free p-3">
                         <div className="mb-3">
-                          <label className="m-0 font-weight-bold">Tax Invoice No</label>
+                          <label className="m-0 font-weight-bold">{t('Tax Invoice No')}</label>
                           <p className="">{trainerReceipt.packageDetails.filter(p => p._id === oldPackageId)[0] &&
                             trainerReceipt.packageDetails.filter(p => p._id === oldPackageId)[0].trainerDetails.slice(-1)[0] &&
                             trainerReceipt.packageDetails.filter(p => p._id === oldPackageId)[0].trainerDetails.slice(-1)[0].orderNo}</p>
@@ -1083,11 +1085,11 @@ class BookATrainer extends Component {
                       </div>
                       <div className="col-free p-3">
                         <div className="">
-                          <label className="m-0 font-weight-bold">Receipt Total</label>
+                          <label className="m-0 font-weight-bold">{t('Receipt Total')}</label>
                           <p className="h4 font-weight-bold">{this.props.defaultCurrency} {parseFloat(total).toFixed(3)}</p>
                         </div>
                         <div className="">
-                          <label className="m-0 font-weight-bold">Telephone</label>
+                          <label className="m-0 font-weight-bold">{t('Telephone')}</label>
                           <p className="">{trainerReceipt.branch.telephone}</p>
                         </div>
                       </div>
@@ -1095,14 +1097,14 @@ class BookATrainer extends Component {
                     <div className="bgGray d-flex flex-wrap px-5 py-4 justify-content-between">
                       <div className="">
                         <h6 className="font-weight-bold m-1">
-                          <span className="px-1">ID:</span>
+                          <span className="px-1">{t('ID')}:</span>
                           <span className="px-1">{trainerReceipt.memberId}</span>
                         </h6>
                       </div>
                       <h6 className="font-weight-bold m-1">{trainerReceipt.credentialId.userName}</h6>
                       <div className="">
                         <h6 className="font-weight-bold m-1">
-                          <span className="px-1">Mob:</span>
+                          <span className="px-1">{t('Mob')}:</span>
                           <span className="px-1">{trainerReceipt.mobileNo}</span>
                         </h6>
                       </div>
@@ -1111,8 +1113,8 @@ class BookATrainer extends Component {
                       <table className="table">
                         <thead>
                           <tr>
-                            <th>Trainer Name</th>
-                            <th>Period</th>
+                            <th>{t('Trainer Name')}</th>
+                            <th>{t('Period')}</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -1123,36 +1125,39 @@ class BookATrainer extends Component {
                           </tr>
                           <tr>
                             <td colSpan="4">
-                              <div className="text-right my-1">Amount Total :</div>
+                              <div className="text-right my-1">{t('Amount Total')} :</div>
                               {parseFloat(discount) ?
-                                <div className="text-right my-1">Discount :</div>
+                                <div className="text-right my-1">{t('Discount')} :</div>
                                 : <div></div>}
                               {parseFloat(totalVat) ?
-                                <div className="text-right my-1">VAT{this.state.tax ? `(${this.state.tax} %)` : ''}:</div>
+                                <div className="text-right my-1">{t('VAT')}{this.state.tax ? `(${this.state.tax} %)` : ''}:</div>
                                 : <div></div>}
                               {parseFloat(digital) ?
-                                <div className="text-right my-1">Digital :</div>
+                                <div className="text-right my-1">{t('Digital')} :</div>
                                 : <div></div>}
                               {parseFloat(cash) ?
-                                <div className="text-right my-1">Cash :</div>
+                                <div className="text-right my-1">{t('Cash')} :</div>
                                 : <div></div>}
                               {parseFloat(card) ?
-                                <div className="text-right my-1">Card :</div>
+                                <div className="text-right my-1">{t('Card')} :</div>
+                                : <div></div>}
+                              {this.state.cardNumber ?
+                                <div className="text-right my-1">{t('Card last four digit')} :</div>
                                 : <div></div>}
                               {parseFloat(this.state.cheque) ?
-                                <div className="text-right my-1">Cheque :</div>
+                                <div className="text-right my-1">{t('Cheque')} :</div>
                                 : <div></div>}
                               {parseFloat(this.state.bankName) ?
-                                <div className="text-right my-1">Bank Name :</div>
+                                <div className="text-right my-1">{t('Bank Name')} :</div>
                                 : <div></div>}
                               {parseFloat(this.state.chequeNumber) ?
-                                <div className="text-right my-1">Cheque Number :</div>
+                                <div className="text-right my-1">{t('Cheque Number')} :</div>
                                 : <div></div>}
                               {parseFloat(this.state.chequeDate) ?
-                                <div className="text-right my-1">Cheque Date :</div>
+                                <div className="text-right my-1">{t('Cheque Date')} :</div>
                                 : <div></div>}
-                              <div className="text-right my-1">Grand Total :</div>
-                              <div className="text-right my-1">Paid Amount :</div>
+                              <div className="text-right my-1">{t('Grand Total')} :</div>
+                              <div className="text-right my-1">{t('Paid Amount')} :</div>
                               {this.state.cardNumber ?
                                 <div className="text-right my-1">{t('Card last four digit')} :</div>
                                 : <div></div>}
@@ -1200,29 +1205,29 @@ class BookATrainer extends Component {
                       <div className="d-flex align-items-start">
                         <div className="mr-3 text-center">
                           <img src={instaimg} alt="" className="w-30px" />
-                          <h6 className="font-weight-bold mb-0 mt-1">Follow Us</h6>
+                          <h6 className="font-weight-bold mb-0 mt-1">{t('Follow Us')}</h6>
                         </div>
                         <div className="w-50px mr-3">
                           {/* tushar qr code not given already so i commented. this place will be used for that */}
                           <QRCode value={`http://instagram.com/${trainerReceipt.branch.instaId}/`} renderAs='svg' width="50" height="50" />
                         </div>
                       </div>
-                      {/* <h6 className="font-weight-bold">Paid Amount: {this.props.defaultCurrency} {parseFloat(total).toFixed(3)}</h6> */}
+                      {/* <h6 className="font-weight-bold">{t('Paid Amount')}: {this.props.defaultCurrency} {parseFloat(total).toFixed(3)}</h6> */}
                       {this.props.loggedUser && <h6 className="font-weight-bold">{t('Served by')}: {this.props.loggedUser.userName}</h6>}
                     </div>
                     {/* <div className="text-center px-5">
-                      <h5 className="text-muted">Membership cannot be refunded or transferred to others.</h5>
+                      <h5 className="text-muted">{t('Membership cannot be refunded or transferred to others.')}</h5>
                       <h5 className="font-weight-bold">{t('Thank You')}</h5>
                     </div> */}
                     <div className="d-flex align-items-center justify-content-center">
                       <div className="text-center">
-                        <h6 className="font-weight-bold" >Membership cannot be refunded or transferred to others.</h6>
+                        <h6 className="font-weight-bold">{t('Membership cannot be refunded or transferred to others.')}</h6>
                         <h6 className="font-weight-bold">{t('Thank You')}</h6>
                       </div>
                     </div>
                     <div className="text-center">
                       {/* <Link to={`/members-details/${trainerReceipt._id}`}> */}
-                      <button type="button" className="btn btn-success px-4 py-1 my-2" data-dismiss="modal" onClick={() => this.handlePrint(trainerReceipt._id)}>Print Receipt</button>
+                      <button type="button" className="btn btn-success px-4 py-1 my-2" data-dismiss="modal" onClick={() => this.handlePrint(trainerReceipt._id)}>{t('Print Receipt')}</button>
                       {/* </Link> */}
                     </div>
                   </div>
@@ -1245,12 +1250,12 @@ class BookATrainer extends Component {
                 <span>{trainerReceipt.branch.address}</span><br />
                 {/* <span>Road/Street 50, Samaheej,</span><br /> */}
                 {/* <span>Block 236, Bahrain,</span><br /> */}
-                <span>Tel : {trainerReceipt.branch.telephone}</span><br />
+                <span>{t('Tel')} : {trainerReceipt.branch.telephone}</span><br />
               </p>
-              <p style={{ textAlign: "center", margin: "0 0 10px 0" }}>VAT - {trainerReceipt.branch.vatRegNo}</p>
+              <p style={{ textAlign: "center", margin: "0 0 10px 0" }}>{t('VAT')} - {trainerReceipt.branch.vatRegNo}</p>
               <p style={{ display: "flex", justifyContent: "space-between", margin: "0" }}>
                 <span style={{ padding: "2px", fontSize: "14px" }}>{dateToDDMMYYYY(new Date())} {dateToHHMM(new Date())}</span>
-                <span style={{ padding: "2px", fontSize: "14px" }}>Bill No:{trainerReceipt.orderNo}</span>
+                <span style={{ padding: "2px", fontSize: "14px" }}>{t('Bill No')}:{trainerReceipt.orderNo}</span>
               </p>
               <div>
                 <p style={{ display: "flex", textAlign: "center", justifyContent: "space-between" }}>
@@ -1266,8 +1271,8 @@ class BookATrainer extends Component {
                 <tbody>
                   <tr style={{ borderTop: "1px dashed #000" }}>
                     <td>{t('No.')}</td>
-                    <td>TRAINER NAME</td>
-                    <td>PERIOD</td>
+                    <td>{t('Trainer Name')}</td>
+                    <td>{t('Period')}</td>
                   </tr>
                   {/* <tr style={{ borderTop: "1px dashed #000" }}>
                   <td>1</td>
@@ -1319,6 +1324,30 @@ class BookATrainer extends Component {
                       <td style={{ textAlign: "right", padding: "0px 0px 4px 0px" }}>{parseFloat(card).toFixed(3)}</td>
                     </tr>
                     : <tr></tr>}
+                  {parseFloat(this.state.cheque) ?
+                    <tr>
+                      <td style={{ textAlign: "right", padding: "0px 4px 4px 4px", width: "100%" }}>{t('Cheque')} {this.props.defaultCurrency}: </td>
+                      <td style={{ textAlign: "right", padding: "0px 0px 4px 0px" }}>{parseFloat(this.state.cheque).toFixed(3)}</td>
+                    </tr>
+                    : <tr></tr>}
+                  {this.state.bankName ?
+                    <tr>
+                      <td style={{ textAlign: "right", padding: "0px 4px 4px 4px", width: "100%" }}>{t('Bank Name')} {this.props.defaultCurrency}: </td>
+                      <td style={{ textAlign: "right", padding: "0px 0px 4px 0px" }}>{this.state.bankName}</td>
+                    </tr>
+                    : <tr></tr>}
+                  {this.state.chequeNumber ?
+                    <tr>
+                      <td style={{ textAlign: "right", padding: "0px 4px 4px 4px", width: "100%" }}>{t('Cheque Number')} {this.props.defaultCurrency}: </td>
+                      <td style={{ textAlign: "right", padding: "0px 0px 4px 0px" }}>{this.state.chequeNumber}</td>
+                    </tr>
+                    : <tr></tr>}
+                  {this.state.chequeDate ?
+                    <tr>
+                      <td style={{ textAlign: "right", padding: "0px 4px 4px 4px", width: "100%" }}>{t('Cheque Date')} {this.props.defaultCurrency}: </td>
+                      <td style={{ textAlign: "right", padding: "0px 0px 4px 0px" }}>{this.state.chequeDate}</td>
+                    </tr>
+                    : <tr></tr>}
                   <tr>
                     <td style={{ textAlign: "right", padding: "0px 4px 4px 4px", width: "100%" }}>{t('Grand Total')} {this.props.defaultCurrency}: </td>
                     <td style={{ textAlign: "right", padding: "0px 0px 4px 0px" }}>{parseFloat(total).toFixed(3)}</td>
@@ -1339,7 +1368,7 @@ class BookATrainer extends Component {
                 <div style={{ display: "flex", flexDirection: "row", justifyContent: "center", alignItems: "center" }}>
                   <div style={{ marginRight: "10px", justifyContent: "center" }}>
                     <img src={instaimg} alt="" style={{ width: "30px", height: "30px" }} />
-                    {/* <h6>Follow Us</h6> */}
+                    {/* <h6>{t('Follow Us')}</h6> */}
                   </div>
                   <QRCode value={`http://instagram.com/${trainerReceipt.branch.instaId}/`} renderAs='svg' width="50" height="50" />
                 </div>
@@ -1347,7 +1376,7 @@ class BookATrainer extends Component {
               </div>
               <p style={{ display: "flex", margin: "0 0 10px 0" }}>
                 <span>{t('NB')}:</span>
-                <span style={{ flexGrow: "1", textAlign: "center" }}>Membership cannot be refunded or transferred to others.</span>
+                <span style={{ flexGrow: "1", textAlign: "center" }}>{t('Membership cannot be refunded or transferred to others.')}</span>
               </p>
               <p style={{ textAlign: "center", margin: "0 0 10px 0" }}>{t('Thank You')}</p>
             </div>

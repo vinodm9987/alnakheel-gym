@@ -243,8 +243,7 @@ class CreateMessage extends Component {
             <div className="form-group inlineFormGroup align-items-start">
               <label htmlFor="WriteMessage" className="mx-sm-2 inlineFormLabel">{t('Write Message')}</label>
               <textarea className={this.state.messageE ? "form-control mx-sm-2 inlineFormInputs FormInputsError" : "form-control mx-sm-2 inlineFormInputs"} rows="4" id="WriteMessage"
-                value={message} onChange={(e) => this.setState(validator(e, 'message', 'text', [t('Enter message')]))}
-              ></textarea>
+                value={message} onChange={(e) => this.setState(validator(e, 'message', 'text', [t('Enter message')]))} ></textarea>
               <div className="errorMessageWrapper">
                 <small className="text-danger mx-sm-2 errorMessage">{this.state.messageE}</small>
               </div>

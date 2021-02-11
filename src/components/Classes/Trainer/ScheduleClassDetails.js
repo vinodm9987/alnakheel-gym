@@ -136,7 +136,7 @@ class ScheduleClassDetails extends Component {
                               <img alt="" src={`/${credentialId.avatar.path}`} className="mx-1 rounded-circle w-50px h-50px" />
                               <div className="m-2">
                                 <h6 className="m-0"><b>{credentialId.userName}</b></h6>
-                                <span className="text-primary font-weight-bold">ID : {memberId}</span>
+                                <span className="text-primary font-weight-bold">{t('ID')} : {memberId}</span>
                               </div>
                             </div>
                           </td>

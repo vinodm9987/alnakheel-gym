@@ -85,8 +85,11 @@ class CustomerFullView extends Component {
                     </span>
                   </div>
                   <div className="px-5 pt-1">
-                    <div className="d-flex flex-wrap justify-content-between">
-                      <div className="w-50 p-2">
+                    <div className="d-flex flex-wrap justify-content-start">
+                      <div class="cfw-cus-img p-2">
+                        <img alt="" src={algymlogo} width="124" height="124" style={{ marginTop: "25px" }} />
+                      </div>
+                      <div className="cfw-cus-img-right p-2">
                         <h2 className="font-weight-bold CVF-Name">{userName}</h2>
                         <h5 className="text-body font-weight-bold">{gender}</h5>
                         <h4 className="text-orange font-weight-bold pb-0 blinker-1">{fingerScanStatus}</h4>
@@ -94,9 +97,6 @@ class CustomerFullView extends Component {
                       <h5 className="text-body font-weight-bold">Male</h5>
                       <h4 className="text-orange font-weight-bold pb-0 blinker-1">Fingerprint successfully</h4> */}
                         {/* <h4 className="text-danger font-weight-bold pb-0 blinker-1">Fingerprint successfully</h4> */}
-                      </div>
-                      <div class="w-50 p-2">
-                        <img alt="" src={algymlogo} width="124" height="124" style={{ marginTop: "25px" }} />
                       </div>
                       <div className="d-flex p-2 w-50 mt-3 CFVW100sm">
                         <h4 className="text-danger iconv1 iconv1-biomatric-phone font-weight-bold mt-1 CFV-iconv1-biomatric-phone"> </h4>
