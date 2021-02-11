@@ -569,10 +569,36 @@ const getGeneralSales = async (body) => {
     })
     ele.transactionType = "Packages"
     ele.packageDetails.forEach(doc => {
-      transactionType[0].amount += +doc.totalAmount
       let branchIndex = branches.findIndex(b => b._id.toString() === ele.branch._id.toString())
-      if (ele.branch._id.toString() === branches[branchIndex]._id.toString() && branchIndex !== -1) {
-        branches[branchIndex].amount += +doc.totalAmount
+      if (doc.Installments && doc.Installments.length) {
+        doc.Installments.forEach(installment => {
+          transactionType[0].amount += typeof installment.totalAmount === 'number' ? installment.totalAmount : 0
+          if (ele.branch._id.toString() === branches[branchIndex]._id.toString() && branchIndex !== -1) {
+            branches[branchIndex].amount += typeof installment.totalAmount === 'number' ? installment.totalAmount : 0
+          }
+        })
+      } else {
+        transactionType[0].amount += typeof doc.totalAmount === 'number' ? doc.totalAmount : 0
+        if (ele.branch._id.toString() === branches[branchIndex]._id.toString() && branchIndex !== -1) {
+          branches[branchIndex].amount += typeof doc.totalAmount === 'number' ? doc.totalAmount : 0
+        }
+      }
+      if (doc.trainerDetails && doc.trainerDetails.length) {
+        doc.trainerDetails.forEach(trainerDetail => {
+          if (trainerDetail.Installments && trainerDetail.Installments.length) {
+            trainerDetail.Installments.forEach(installment => {
+              transactionType[0].amount += typeof installment.totalAmount === 'number' ? installment.totalAmount : 0
+              if (ele.branch._id.toString() === branches[branchIndex]._id.toString() && branchIndex !== -1) {
+                branches[branchIndex].amount += typeof installment.totalAmount === 'number' ? installment.totalAmount : 0
+              }
+            })
+          } else {
+            transactionType[0].amount += typeof trainerDetail.totalAmount === 'number' ? trainerDetail.totalAmount : 0
+            if (ele.branch._id.toString() === branches[branchIndex]._id.toString() && branchIndex !== -1) {
+              branches[branchIndex].amount += typeof trainerDetail.totalAmount === 'number' ? trainerDetail.totalAmount : 0
+            }
+          }
+        })
       }
     })
   })
@@ -600,7 +626,7 @@ const getPackageSales = async (body) => {
     .populate({ path: "packageDetails.trainer", populate: { path: "credentialId" } }).lean();
   totalAmountOfMember.forEach(ele => {
     ele.packageDetails = ele.packageDetails.filter(doc => {
-      if (doc.paidStatus === 'Paid') {
+      if (doc.paidStatus === 'Paid' || doc.paidStatus === 'Installment') {
         if (body.fromDate && body.toDate) {
           if (
             new Date(setTime(body.fromDate)) <= (doc.startDate ? doc.startDate : ele.admissionDate) &&
@@ -616,12 +642,44 @@ const getPackageSales = async (body) => {
     ele.transactionType = "Packages"
     ele.packageDetails.forEach(doc => {
       let branchIndex = branches.findIndex(b => b._id.toString() === ele.branch._id.toString())
-      if (ele.branch._id.toString() === branches[branchIndex]._id.toString() && branchIndex !== -1) {
-        branches[branchIndex].amount += +doc.totalAmount
-      }
       let packageIndex = packages.findIndex(ele => ele._id.toString() === doc.packages._id.toString());
-      if (doc.packages._id.toString() === packages[packageIndex]._id.toString() && packageIndex !== -1) {
-        packages[packageIndex].amount += +doc.totalAmount;
+      if (doc.Installments && doc.Installments.length) {
+        doc.Installments.forEach(installment => {
+          if (doc.packages._id.toString() === packages[packageIndex]._id.toString() && packageIndex !== -1) {
+            packages[packageIndex].amount += typeof installment.totalAmount === 'number' ? installment.totalAmount : 0
+          }
+          if (ele.branch._id.toString() === branches[branchIndex]._id.toString() && branchIndex !== -1) {
+            branches[branchIndex].amount += typeof installment.totalAmount === 'number' ? installment.totalAmount : 0
+          }
+        })
+      } else {
+        if (doc.packages._id.toString() === packages[packageIndex]._id.toString() && packageIndex !== -1) {
+          packages[packageIndex].amount += typeof doc.totalAmount === 'number' ? doc.totalAmount : 0
+        }
+        if (ele.branch._id.toString() === branches[branchIndex]._id.toString() && branchIndex !== -1) {
+          branches[branchIndex].amount += typeof doc.totalAmount === 'number' ? doc.totalAmount : 0
+        }
+      }
+      if (doc.trainerDetails && doc.trainerDetails.length) {
+        doc.trainerDetails.forEach(trainerDetail => {
+          if (trainerDetail.Installments && trainerDetail.Installments.length) {
+            trainerDetail.Installments.forEach(installment => {
+              if (doc.packages._id.toString() === packages[packageIndex]._id.toString() && packageIndex !== -1) {
+                packages[packageIndex].amount += typeof installment.totalAmount === 'number' ? installment.totalAmount : 0
+              }
+              if (ele.branch._id.toString() === branches[branchIndex]._id.toString() && branchIndex !== -1) {
+                branches[branchIndex].amount += typeof installment.totalAmount === 'number' ? installment.totalAmount : 0
+              }
+            })
+          } else {
+            if (doc.packages._id.toString() === packages[packageIndex]._id.toString() && packageIndex !== -1) {
+              packages[packageIndex].amount += typeof trainerDetail.totalAmount === 'number' ? trainerDetail.totalAmount : 0
+            }
+            if (ele.branch._id.toString() === branches[branchIndex]._id.toString() && branchIndex !== -1) {
+              branches[branchIndex].amount += typeof trainerDetail.totalAmount === 'number' ? trainerDetail.totalAmount : 0
+            }
+          }
+        })
       }
     })
   })
@@ -836,10 +894,36 @@ const getSalesByPaymentMethod = async (body) => {
       ele.transactionType = "Packages"
       ele.paymentMethod = body.paymentMethod
       ele.packageDetails.forEach(doc => {
-        transactionType[0].amount += (body.paymentMethod === 'Cash' ? (+doc.cashAmount ? +doc.cashAmount : 0) : body.paymentMethod === 'Card' ? (+doc.cardAmount ? +doc.cardAmount : 0) : (+doc.digitalAmount ? +doc.digitalAmount : 0))
         let branchIndex = branches.findIndex(b => b._id.toString() === ele.branch._id.toString())
-        if (ele.branch._id.toString() === branches[branchIndex]._id.toString() && branchIndex !== -1) {
-          branches[branchIndex].amount += (body.paymentMethod === 'Cash' ? (+doc.cashAmount ? +doc.cashAmount : 0) : body.paymentMethod === 'Card' ? (+doc.cardAmount ? +doc.cardAmount : 0) : (+doc.digitalAmount ? +doc.digitalAmount : 0))
+        if (doc.Installments && doc.Installments.length) {
+          doc.Installments.forEach(installment => {
+            transactionType[0].amount += (body.paymentMethod === 'Cash' ? (+installment.cashAmount ? +installment.cashAmount : 0) : body.paymentMethod === 'Card' ? (+installment.cardAmount ? +installment.cardAmount : 0) : body.paymentMethod === 'Digital' ? (+installment.digitalAmount ? +installment.digitalAmount : 0) : (+installment.chequeAmount ? +installment.chequeAmount : 0))
+            if (ele.branch._id.toString() === branches[branchIndex]._id.toString() && branchIndex !== -1) {
+              branches[branchIndex].amount += (body.paymentMethod === 'Cash' ? (+installment.cashAmount ? +installment.cashAmount : 0) : body.paymentMethod === 'Card' ? (+installment.cardAmount ? +installment.cardAmount : 0) : body.paymentMethod === 'Digital' ? (+installment.digitalAmount ? +installment.digitalAmount : 0) : (+installment.chequeAmount ? +installment.chequeAmount : 0))
+            }
+          })
+        } else {
+          transactionType[0].amount += (body.paymentMethod === 'Cash' ? (+doc.cashAmount ? +doc.cashAmount : 0) : body.paymentMethod === 'Card' ? (+doc.cardAmount ? +doc.cardAmount : 0) : body.paymentMethod === 'Digital' ? (+doc.digitalAmount ? +doc.digitalAmount : 0) : (+doc.chequeAmount ? +doc.chequeAmount : 0))
+          if (ele.branch._id.toString() === branches[branchIndex]._id.toString() && branchIndex !== -1) {
+            branches[branchIndex].amount += (body.paymentMethod === 'Cash' ? (+doc.cashAmount ? +doc.cashAmount : 0) : body.paymentMethod === 'Card' ? (+doc.cardAmount ? +doc.cardAmount : 0) : body.paymentMethod === 'Digital' ? (+doc.digitalAmount ? +doc.digitalAmount : 0) : (+doc.chequeAmount ? +doc.chequeAmount : 0))
+          }
+        }
+        if (doc.trainerDetails && doc.trainerDetails.length) {
+          doc.trainerDetails.forEach(trainerDetail => {
+            if (trainerDetail.Installments && trainerDetail.Installments.length) {
+              trainerDetail.Installments.forEach(installment => {
+                transactionType[0].amount += (body.paymentMethod === 'Cash' ? (+installment.cashAmount ? +installment.cashAmount : 0) : body.paymentMethod === 'Card' ? (+installment.cardAmount ? +installment.cardAmount : 0) : body.paymentMethod === 'Digital' ? (+installment.digitalAmount ? +installment.digitalAmount : 0) : (+installment.chequeAmount ? +installment.chequeAmount : 0))
+                if (ele.branch._id.toString() === branches[branchIndex]._id.toString() && branchIndex !== -1) {
+                  branches[branchIndex].amount += (body.paymentMethod === 'Cash' ? (+installment.cashAmount ? +installment.cashAmount : 0) : body.paymentMethod === 'Card' ? (+installment.cardAmount ? +installment.cardAmount : 0) : body.paymentMethod === 'Digital' ? (+installment.digitalAmount ? +installment.digitalAmount : 0) : (+installment.chequeAmount ? +installment.chequeAmount : 0))
+                }
+              })
+            } else {
+              transactionType[0].amount += (body.paymentMethod === 'Cash' ? (+trainerDetail.cashAmount ? +trainerDetail.cashAmount : 0) : body.paymentMethod === 'Card' ? (+trainerDetail.cardAmount ? +trainerDetail.cardAmount : 0) : body.paymentMethod === 'Digital' ? (+trainerDetail.digitalAmount ? +trainerDetail.digitalAmount : 0) : (+trainerDetail.chequeAmount ? +trainerDetail.chequeAmount : 0))
+              if (ele.branch._id.toString() === branches[branchIndex]._id.toString() && branchIndex !== -1) {
+                branches[branchIndex].amount += (body.paymentMethod === 'Cash' ? (+trainerDetail.cashAmount ? +trainerDetail.cashAmount : 0) : body.paymentMethod === 'Card' ? (+trainerDetail.cardAmount ? +trainerDetail.cardAmount : 0) : body.paymentMethod === 'Digital' ? (+trainerDetail.digitalAmount ? +trainerDetail.digitalAmount : 0) : (+trainerDetail.chequeAmount ? +trainerDetail.chequeAmount : 0))
+              }
+            }
+          })
         }
       })
     })
@@ -852,7 +936,7 @@ const getSalesByPaymentMethod = async (body) => {
 const getTodaySalesByStaff = async (body) => {
   let queryCond = {};
   let transactionType = [{ transactionName: "Packages", amount: 0 }, { transactionName: "POS", amount: 0 }, { transactionName: "Classes", amount: 0 }]
-  let paymentMethod = [{ paymentName: "Digital", amount: 0 }, { paymentName: "Cash", amount: 0 }, { paymentName: "Card", amount: 0 }]
+  let paymentMethod = [{ paymentName: "Digital", amount: 0 }, { paymentName: "Cash", amount: 0 }, { paymentName: "Card", amount: 0 }, { paymentName: "Cheque", amount: 0 }]
 
   let totalAmountOfStockSell = [], memberClasses = [], totalAmountOfMember = []
 
@@ -872,6 +956,7 @@ const getTodaySalesByStaff = async (body) => {
       paymentMethod[0].amount += (+doc.digitalAmount ? +doc.digitalAmount : 0)
       paymentMethod[1].amount += (+doc.cashAmount ? +doc.cashAmount : 0)
       paymentMethod[2].amount += (+doc.cardAmount ? +doc.cardAmount : 0)
+      paymentMethod[3].amount += (+doc.chequeAmount ? +doc.chequeAmount : 0)
       doc.transactionType = "POS"
     })
   }
@@ -897,6 +982,7 @@ const getTodaySalesByStaff = async (body) => {
       paymentMethod[0].amount += (+doc.digitalAmount ? +doc.digitalAmount : 0)
       paymentMethod[1].amount += (+doc.cashAmount ? +doc.cashAmount : 0)
       paymentMethod[2].amount += (+doc.cardAmount ? +doc.cardAmount : 0)
+      paymentMethod[3].amount += (+doc.chequeAmount ? +doc.chequeAmount : 0)
       doc.transactionType = "Classes"
     })
   }
@@ -918,10 +1004,40 @@ const getTodaySalesByStaff = async (body) => {
       })
       ele.transactionType = "Packages"
       ele.packageDetails.forEach(doc => {
-        transactionType[0].amount += +doc.totalAmount
-        paymentMethod[0].amount += (+doc.digitalAmount ? +doc.digitalAmount : 0)
-        paymentMethod[1].amount += (+doc.cashAmount ? +doc.cashAmount : 0)
-        paymentMethod[2].amount += (+doc.cardAmount ? +doc.cardAmount : 0)
+        if (doc.Installments && doc.Installments.length) {
+          doc.Installments.forEach(installment => {
+            transactionType[0].amount += typeof installment.totalAmount === 'number' ? installment.totalAmount : 0
+            paymentMethod[0].amount += (+installment.digitalAmount ? +installment.digitalAmount : 0)
+            paymentMethod[1].amount += (+installment.cashAmount ? +installment.cashAmount : 0)
+            paymentMethod[2].amount += (+installment.cardAmount ? +installment.cardAmount : 0)
+            paymentMethod[3].amount += (+installment.chequeAmount ? +installment.chequeAmount : 0)
+          })
+        } else {
+          transactionType[0].amount += typeof doc.totalAmount === 'number' ? doc.totalAmount : 0
+          paymentMethod[0].amount += (+doc.digitalAmount ? +doc.digitalAmount : 0)
+          paymentMethod[1].amount += (+doc.cashAmount ? +doc.cashAmount : 0)
+          paymentMethod[2].amount += (+doc.cardAmount ? +doc.cardAmount : 0)
+          paymentMethod[3].amount += (+doc.chequeAmount ? +doc.chequeAmount : 0)
+        }
+        if (doc.trainerDetails && doc.trainerDetails.length) {
+          doc.trainerDetails.forEach(trainerDetail => {
+            if (trainerDetail.Installments && trainerDetail.Installments.length) {
+              trainerDetail.Installments.forEach(installment => {
+                transactionType[0].amount += typeof installment.totalAmount === 'number' ? installment.totalAmount : 0
+                paymentMethod[0].amount += (+installment.digitalAmount ? +installment.digitalAmount : 0)
+                paymentMethod[1].amount += (+installment.cashAmount ? +installment.cashAmount : 0)
+                paymentMethod[2].amount += (+installment.cardAmount ? +installment.cardAmount : 0)
+                paymentMethod[3].amount += (+installment.chequeAmount ? +installment.chequeAmount : 0)
+              })
+            } else {
+              transactionType[0].amount += typeof trainerDetail.totalAmount === 'number' ? trainerDetail.totalAmount : 0
+              paymentMethod[0].amount += (+trainerDetail.digitalAmount ? +trainerDetail.digitalAmount : 0)
+              paymentMethod[1].amount += (+trainerDetail.cashAmount ? +trainerDetail.cashAmount : 0)
+              paymentMethod[2].amount += (+trainerDetail.cardAmount ? +trainerDetail.cardAmount : 0)
+              paymentMethod[3].amount += (+trainerDetail.chequeAmount ? +trainerDetail.chequeAmount : 0)
+            }
+          })
+        }
       })
     })
   }
@@ -1305,7 +1421,7 @@ const getVatReport = async (body) => {
       .lean();
     totalAmountOfMember.forEach(ele => {
       ele.packageDetails = ele.packageDetails.filter(doc => {
-        if (doc.paidStatus === 'Paid') {
+        if (doc.paidStatus === 'Paid' || doc.paidStatus === 'Installment') {
           if (body.fromDate && body.toDate) {
             if (
               new Date(setTime(body.fromDate)) <= (doc.startDate ? doc.startDate : ele.admissionDate) &&
