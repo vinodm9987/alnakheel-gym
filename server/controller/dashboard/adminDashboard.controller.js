@@ -264,8 +264,8 @@ exports.getPendingInstallments = async (req, res) => {
                             const dueDate = new Date(setTime(installment.dueDate)).getTime();
                             const todayMonth = new Date(dueDate).getMonth();
                             const thisYear = new Date(dueDate).getFullYear();
-                            const monthConditions = req.body.month ? req.body.month === todayMonth : true;
-                            const yearConditions = req.body.year ? req.body.year === thisYear : true;
+                            const monthConditions = typeof req.body.month  === 'number'? req.body.month === todayMonth : false;
+                            const yearConditions = typeof req.body.year  === 'number'? req.body.year === thisYear : false;
                             if (monthConditions && yearConditions && installment.paidStatus !== 'Paid') {
                                 const memberObj = Object.assign({}, member);
                                 memberObj['trainerAmount'] = installment.actualAmount;
