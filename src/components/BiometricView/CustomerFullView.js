@@ -184,21 +184,25 @@ class CustomerFullView extends Component {
                   {sortedPackage[0] &&
                     <div className="m-2">
                       <h5 className="font-weight-bold text-white">{t('Date of Purchase')}</h5>
-                      <h5 className="text-white font-weight-bold dirltrtar">{dateToDDMMYYYY(sortedPackage[0].dateOfPurchase)}</h5>
+                      <h5 className="text-white font-weight-bold dirltrtar">{dateToDDMMYYYY(sortedPackage[0].dateOfPaid)}</h5>
                     </div>
                   }
-                  <div className="m-2">
-                    <h5 className="font-weight-bold text-white">{t('From Date')}</h5>
-                    <h5 className="text-white font-weight-bold dirltrtar">{dateToDDMMYYYY(sortedPackage[0].startDate)}</h5>
-                    {/* <h5 className="text-white font-weight-bold dirltrtar">22/01/2020</h5> */}
-                  </div>
-                  <div className="m-2">
-                    <h5 className="font-weight-bold text-white">{t('To Date')}</h5>
-                    <h5 className="text-white font-weight-bold dirltrtar">
-                      {sortedPackage[0].extendDate ? dateToDDMMYYYY(sortedPackage[0].extendDate) : dateToDDMMYYYY(sortedPackage[0].endDate)}
-                    </h5>
-                    {/* <h5 className="text-white font-weight-bold dirltrtar">22/01/2020</h5> */}
-                  </div>
+                  {sortedPackage[0] &&
+                    <div className="m-2">
+                      <h5 className="font-weight-bold text-white">{t('From Date')}</h5>
+                      <h5 className="text-white font-weight-bold dirltrtar">{dateToDDMMYYYY(sortedPackage[0].startDate)}</h5>
+                      {/* <h5 className="text-white font-weight-bold dirltrtar">22/01/2020</h5> */}
+                    </div>
+                  }
+                  {sortedPackage[0] &&
+                    <div className="m-2">
+                      <h5 className="font-weight-bold text-white">{t('To Date')}</h5>
+                      <h5 className="text-white font-weight-bold dirltrtar">
+                        {sortedPackage[0].extendDate ? dateToDDMMYYYY(sortedPackage[0].extendDate) : dateToDDMMYYYY(sortedPackage[0].endDate)}
+                      </h5>
+                      {/* <h5 className="text-white font-weight-bold dirltrtar">22/01/2020</h5> */}
+                    </div>
+                  }
                 </div>
               </div>
             </div>
