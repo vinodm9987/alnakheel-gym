@@ -173,10 +173,9 @@ class FeedbackManual extends Component {
         <div className="col-12 col-sm-12 col-md-6 col-lg-5 d-block d-sm-flex justify-content-start pt-4">
           <label htmlFor="Description" className="mx-sm-2 inlineFormLabel mt-1">{t('Description')}</label>
           <textarea rows="5" className={this.state.descriptionE ? "form-control mx-sm-2 inlineFormInputs FormInputsError" : "form-control mx-sm-2 inlineFormInputs"} id="Description"
-            value={description} onChange={(e) => this.setState(validator(e, 'description', 'text', [t('Enter description')]))}
-          ></textarea>
-          <div className="errorMessageWrapper">
-            <small className="text-danger mx-sm-2 errorMessage">{this.state.descriptionE}</small>
+            value={description} onChange={(e) => this.setState(validator(e, 'description', 'text', [t('Enter description')]))} ></textarea>
+          <div className="errorMessageWrapper px-2">
+            <small className="text-danger mx-sm-2 errorMessage px-4">{this.state.descriptionE}</small>
           </div>
         </div>
         <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">

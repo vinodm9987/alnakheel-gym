@@ -62,7 +62,7 @@ class MemberSideBar extends Component {
               </div>
               <div className="col-6 p-0">
                 <small><span>:<span className="mx-1"></span><span
-                  className="text-danger font-weight-bold">{dateToDDMMYYYY(admissionDate)}</span></span></small>
+                  className="text-danger font-weight-bold d-inline-block">{dateToDDMMYYYY(admissionDate)}</span></span></small>
               </div>
               <div className="col-6 p-0 text-right text-xl-left">
                 <small><span className="text-secondary">{t('Phone')}</span></small>
@@ -76,47 +76,47 @@ class MemberSideBar extends Component {
               </div>
               <div className="col-6 p-0">
                 <small><span className="d-flex">:<span className="mx-1"></span><span
-                  className="wordBreakBreakAll">{email}</span></span></small>
+                  className="wordBreakBreakAll d-inline-block">{email}</span></span></small>
               </div>
               <div className="col-6 p-0 text-right text-xl-left">
                 <small><span className="text-secondary">{t('Personal ID')}</span></small>
               </div>
               <div className="col-6 p-0">
-                <small><span>:<span className="mx-1"></span><span>{personalId}</span></span></small>
+                <small><span>:<span className="mx-1"></span><span className="d-inline-block">{personalId}</span></span></small>
               </div>
               <div className="col-6 p-0 text-right text-xl-left">
                 <small><span className="text-secondary">{t('Date of Birth')}</span></small>
               </div>
               <div className="col-6 p-0">
                 <small><span>:<span
-                  className="mx-1"></span><span>{dateToDDMMYYYY(dateOfBirth)}</span></span></small>
+                  className="mx-1"></span><span className="d-inline-block">{dateToDDMMYYYY(dateOfBirth)}</span></span></small>
               </div>
               <div className="col-6 p-0 text-right text-xl-left">
                 <small><span className="text-secondary">{t('Nationality')}</span></small>
               </div>
               <div className="col-6 p-0">
                 <small><span>:<span
-                  className="mx-1"></span><span>{nationality}</span></span></small>
+                  className="mx-1"></span><span className="d-inline-block">{nationality}</span></span></small>
               </div>
               <div className="col-6 p-0 text-right text-xl-left">
                 <small><span className="text-secondary">{t('Gender')}</span></small>
               </div>
               <div className="col-6 p-0">
                 <small><span>:<span
-                  className="mx-1"></span><span>{gender}</span></span></small>
+                  className="mx-1"></span><span className="d-inline-block">{gender}</span></span></small>
               </div>
               <div className="col-6 p-0 text-right text-xl-left">
                 <small><span className="text-secondary">{t('Age')}</span></small>
               </div>
               <div className="col-6 p-0">
-                <small><span>:<span className="mx-1"></span><span>{calculateDOB(dateOfBirth)}</span></span></small>
+                <small><span>:<span className="mx-1"></span><span className="d-inline-block">{calculateDOB(dateOfBirth)}</span></span></small>
               </div>
               <div className="col-6 p-0 text-right text-xl-left">
                 <small><span className="text-secondary">{t('Branch')}</span></small>
               </div>
               <div className="col-6 p-0">
                 <small><span>:<span
-                  className="mx-1"></span><span>{branchName}</span></span></small>
+                  className="mx-1"></span><span className="d-inline-block">{branchName}</span></span></small>
               </div>
               {/* tushar here spacing issue dummy branch name created today demo there india  */}
               {/* <div className="col-6 p-0">
@@ -127,7 +127,7 @@ class MemberSideBar extends Component {
                 <small><span className="text-secondary">{t('Notes')}</span></small>
               </div>
               <div className="col-6 p-0">
-                <small><span>:<span className="mx-1"></span><span>{notes}</span></span></small>
+                <small><span>:<span className="mx-1"></span><span className="d-inline-block">{notes}</span></span></small>
               </div>
             </div>
           </div>

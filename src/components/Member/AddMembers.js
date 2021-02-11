@@ -1669,7 +1669,7 @@ class AddMembers extends Component {
               </div>
 
               <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                <div className={this.state.showPay ? "addMemberFakePopUp active" : "addMemberFakePopUp"}>
+                <div className={this.state.showPay ? "addMemberFakePopUp active" : "addMemberFakePopUp active"}>
                   {/* Make active by above submit button like this */}
                   {/* <div className="addMemberFakePopUp active"> */}
                   {/* / - Make active by above submit button like this over */}
@@ -1754,7 +1754,7 @@ class AddMembers extends Component {
                           <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
                             <div className="form-group inlineFormGroup mb-3">
                               <label htmlFor="addCash" className="mx-sm-2 inlineFormLabel mb-1">{t('Cash')}</label>
-                              <div className="form-control w-100 p-0 d-flex align-items-center bg-white dirltr">
+                              <div className="form-control mx-sm-2 inlineFormInputs w-100 p-0 d-flex align-items-center bg-white dirltr">
                                 <label htmlFor="addCash" className="text-danger my-0 mx-1 font-weight-bold">{this.props.defaultCurrency}</label>
                                 <input type="number" autoComplete="off" className="border-0 bg-light w-100 h-100 p-1 bg-white" id="addCash" value={cash} onChange={(e) => this.setCash(e, totalLeftAfterDigital)} />
                               </div>
@@ -1764,7 +1764,7 @@ class AddMembers extends Component {
                           <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
                             <div className="form-group inlineFormGroup mb-3">
                               <label htmlFor="addCard" className="mx-sm-2 inlineFormLabel mb-1">{t('Card')}</label>
-                              <div className="form-control w-100 p-0 d-flex align-items-center bg-white dirltr">
+                              <div className="form-control mx-sm-2 inlineFormInputs w-100 p-0 d-flex align-items-center bg-white dirltr">
                                 <label htmlFor="addCard" className="text-danger my-0 mx-1 font-weight-bold">{this.props.defaultCurrency}</label>
                                 <input type="number" autoComplete="off" className="border-0 bg-light w-100 h-100 p-1 bg-white" id="addCard" value={card} onChange={(e) => this.setCard(e, totalLeftAfterCash)} />
                               </div>
@@ -1774,7 +1774,7 @@ class AddMembers extends Component {
                           <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
                             <div className="form-group inlineFormGroup mb-3">
                               <label htmlFor="addCardNumber" className="mx-sm-2 inlineFormLabel mb-1">{t('Card Number (last 4 digits)')}</label>
-                              <input type="text" autoComplete="off" className="form-control bg-white" id="addCard4lastno" value={this.state.cardNumber} onChange={(e) => this.setCardNumber(e)} />
+                              <input type="text" autoComplete="off" className="form-control bg-white inlineFormInputs mx-sm-2" id="addCard4lastno" value={this.state.cardNumber} onChange={(e) => this.setCardNumber(e)} />
                             </div>
                           </div>
                           <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
