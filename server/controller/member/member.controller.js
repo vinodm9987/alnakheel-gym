@@ -1023,7 +1023,7 @@ exports.getAboutToExpireMembers = async (req, res) => {
                 if (members[i].packageDetails[j].extendDate) {
                     endDate = members[i].packageDetails[j].extendDate;
                 }
-                if (new Date(convertToDate(endDate)).setDate(new Date(convertToDate(endDate)).getDate() - 2) <= today && today < new Date(convertToDate(endDate))) {
+                if (today.getTime() === new Date(endDate).setDate(new Date(endDate).getDate() - 1)) {
                     aboutToExpire = true;
                 }
             }
