@@ -19,7 +19,9 @@ class CancelFreeze extends Component {
       reason: '',
       freezeHistory: [],
       selectAll: false,
-      isUpdated: false
+      isUpdated: false,
+      member: '',
+      freezeId: ''
     }
     this.state = this.default
     this.props.dispatch(getFreezeHistory({ search: this.state.search, date: this.state.date }))
@@ -105,10 +107,10 @@ class CancelFreeze extends Component {
   //   }
   // }
 
-  handleSubmit(memberId, id) {
-    const { returningDate, reason } = this.state
+  handleSubmit() {
+    const { returningDate, reason, member, freezeId } = this.state
     const cancelInfo = {
-      returningDate, reason, memberId, id
+      returningDate, reason, memberId: member, id: freezeId
     }
     this.props.dispatch(cancelFreeze(cancelInfo))
   }
@@ -216,10 +218,18 @@ class CancelFreeze extends Component {
                       <td>{typeOfFreeze}</td>
                       <td className="text-center">
                         <button disabled={calculateDays(new Date(), toDate) === 0 ? true : false} type="button" className="btn btn-danger btn-sm w-100px text-white"
-                          data-toggle="modal" data-target="#CancelFreeze">{t('Cancel')}</button>
+                          data-toggle="modal" data-target="#CancelFreeze"
+                          onClick={() => this.setState({member, freezeId: _id})}>{t('Cancel')}</button>
                       </td>
-                      {/* <!-- ---------pop up---------- --> */}
-                      <div className="modal fade commonYellowModal" id="CancelFreeze">
+                    </tr>
+                  )
+                })}
+              </tbody>
+            </table>
+          </div>
+
+{/* <!-- ---------pop up---------- --> */}
+<div className="modal fade commonYellowModal" id="CancelFreeze">
                         <div className="modal-dialog modal-dialog-centered">
                           <div className="modal-content">
                             <div className="modal-header">
@@ -259,7 +269,7 @@ class CancelFreeze extends Component {
                                   </div>
                                 </div>
                                 <div className="col-12 py-3 d-flex flex-wrap align-items-center justify-content-end">
-                                  <button type="button" data-dismiss="modal" className="btn btn-success px-4" onClick={() => this.handleSubmit(member, _id)}>{t('Submit')}</button>
+                                  <button type="button" data-dismiss="modal" className="btn btn-success px-4" onClick={() => this.handleSubmit()}>{t('Submit')}</button>
                                 </div>
                               </div>
                             </div>
@@ -267,12 +277,7 @@ class CancelFreeze extends Component {
                         </div>
                       </div>
                       {/* <!-- ------------pop up End----------- --> */}
-                    </tr>
-                  )
-                })}
-              </tbody>
-            </table>
-          </div>
+
         </div>
       </div>
     )
