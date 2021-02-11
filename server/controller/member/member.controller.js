@@ -288,6 +288,7 @@ exports.createNewMemberByAdmin = (req, res) => {
             } else {
                 packageDetails[0]["dateOfPaid"] = setTime(new Date())
             }
+            packageDetails[0]["dateOfPaid"] = setTime(new Date())
             packageDetails[0]["startDate"] = setTime(packageDetails[0].startDate);
             packageDetails[0]["endDate"] = setTime(packageDetails[0].endDate);
             packageDetails[0]["orderNo"] = generateOrderId()
