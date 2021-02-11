@@ -395,7 +395,6 @@ exports.updateFaceRecognition = async (req, res) => {
                 const userData = await Member.findById(req.body.memberId).lean()
                 const bioObject = { raw_image, templates, memberId: userData.memberId, }
                 await updateFaceRecognition(bioObject)
-                await Member.findByIdAndUpdate(req.body.memberId, { biometricTemplate: bioObject }, { new: true })
                 const newResponse = await Member.findById(req.body.memberId).populate('credentialId branch')
                     .populate({ path: "packageDetails.trainerDetails.trainer", populate: { path: "credentialId" } })
                     .populate({ path: "packageDetails.packages", populate: { path: "period" } })
