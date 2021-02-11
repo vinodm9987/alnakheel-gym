@@ -288,6 +288,7 @@ exports.createNewMemberByAdmin = (req, res) => {
             } else {
                 packageDetails[0]["dateOfPaid"] = setTime(new Date())
             }
+            packageDetails[0]["dateOfPaid"] = setTime(new Date())
             packageDetails[0]["startDate"] = setTime(packageDetails[0].startDate);
             packageDetails[0]["endDate"] = setTime(packageDetails[0].endDate);
             packageDetails[0]["orderNo"] = generateOrderId()
@@ -1022,7 +1023,7 @@ exports.getAboutToExpireMembers = async (req, res) => {
                 if (members[i].packageDetails[j].extendDate) {
                     endDate = members[i].packageDetails[j].extendDate;
                 }
-                if (new Date(convertToDate(endDate)).setDate(new Date(convertToDate(endDate)).getDate() - 2) <= today && today < new Date(convertToDate(endDate))) {
+                if (today.getTime() === new Date(endDate).setDate(new Date(endDate).getDate() - 1)) {
                     aboutToExpire = true;
                 }
             }
