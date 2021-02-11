@@ -1046,8 +1046,6 @@ class PointOfSales extends Component {
                               {parseFloat(posReceipt.cardAmount) ?
                                 <div className="text-right my-1">{t('Card')} :</div>
                                 : <div></div>}
-                              <div className="text-right my-1">{t('Grand Total')} :</div>
-                              <div className="text-right my-1">{t('Paid Amount')} :</div>
                               {parseFloat(posReceipt.chequeAmount) ?
                                 <div className="text-right my-1">{t('Cheque')} :</div>
                                 : <div></div>}

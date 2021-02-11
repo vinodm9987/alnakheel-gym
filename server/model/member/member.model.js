@@ -64,6 +64,31 @@ const memberSchema = new Schema({
 
         paidStatus: { type: String, enum: ["Paid", "UnPaid", "Installment"], default: "UnPaid" },
 
+        paidType: { type: String, enum: ["Online", "Offline"] },
+        dateOfPaid: Date,
+        timeOfPaid: Date,
+
+        cardNumber: String,
+        cashAmount: Number,
+        cardAmount: Number,
+        vatAmount: Number,
+        discount: Number,
+
+        digitalAmount: Number,
+        chequeAmount: Number,
+        chequeNumber: String,
+        bankName: String,
+        chequeDate: Date,
+
+        totalAmount: Number,
+        actualAmount: Number,
+        paypalObject: Object,
+        freezeDate: Date,
+        reactivationDate: Date,
+
+        orderNo: String,
+        doneBy: { type: Schema.Types.ObjectId, ref: "Credential" },
+
         Installments: [{
 
             installmentName: String,
@@ -92,30 +117,10 @@ const memberSchema = new Schema({
 
             totalAmount: Number,
             actualAmount: Number,
+            orderNo: String,
+            doneBy: { type: Schema.Types.ObjectId, ref: "Credential" },
 
         }],
-
-        paidType: { type: String, enum: ["Online", "Offline"] },
-        dateOfPaid: Date,
-        timeOfPaid: Date,
-
-        cardNumber: String,
-        cashAmount: Number,
-        cardAmount: Number,
-        vatAmount: Number,
-        discount: Number,
-
-        digitalAmount: Number,
-        chequeAmount: Number,
-        chequeNumber: String,
-        bankName: String,
-        chequeDate: Date,
-
-        totalAmount: Number,
-        actualAmount: Number,
-        paypalObject: Object,
-        freezeDate: Date,
-        reactivationDate: Date,
 
         /** 
          * trainer fields
@@ -134,6 +139,25 @@ const memberSchema = new Schema({
             trainerExtend: Date,
 
             orderNo: String,
+            doneBy: { type: Schema.Types.ObjectId, ref: "Credential" },
+
+            paidType: { type: String, enum: ["Online", "Offline"] },
+            dateOfPaid: Date,
+
+            cardNumber: String,
+            cashAmount: Number,
+            cardAmount: Number,
+            vatAmount: Number,
+            discount: Number,
+
+            digitalAmount: Number,
+            chequeAmount: Number,
+            chequeNumber: String,
+            bankName: String,
+            chequeDate: Date,
+
+            totalAmount: Number,
+            actualAmount: Number,
 
             Installments: [{
 
@@ -160,34 +184,13 @@ const memberSchema = new Schema({
                 chequeDate: Date,
 
                 totalAmount: Number,
-                actualAmount: Number
+                actualAmount: Number,
+                orderNo: String,
+                doneBy: { type: Schema.Types.ObjectId, ref: "Credential" },
 
             }],
 
-            paidType: { type: String, enum: ["Online", "Offline"] },
-            dateOfPaid: Date,
-
-            cardNumber: String,
-            cashAmount: Number,
-            cardAmount: Number,
-            vatAmount: Number,
-            discount: Number,
-
-            digitalAmount: Number,
-            chequeAmount: Number,
-            chequeNumber: String,
-            bankName: String,
-            chequeDate: Date,
-
-            totalAmount: Number,
-            actualAmount: Number
-
         }],
-
-
-        orderNo: String,
-
-        doneBy: { type: Schema.Types.ObjectId, ref: "Credential" },
 
     }],
 

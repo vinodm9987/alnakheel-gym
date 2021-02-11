@@ -1141,11 +1141,9 @@ class BookATrainer extends Component {
                               {parseFloat(card) ?
                                 <div className="text-right my-1">{t('Card')} :</div>
                                 : <div></div>}
-                              <div className="text-right my-1">{t('Grand Total')} :</div>
-                              <div className="text-right my-1">{t('Paid Amount')} :</div>
-                              {/* {this.state.cardNumber ?
-                                  <div className="text-right my-1">{t('Card last four digit')} :</div>
-                                  : <div></div>} */}
+                              {this.state.cardNumber ?
+                                <div className="text-right my-1">{t('Card last four digit')} :</div>
+                                : <div></div>}
                               {parseFloat(this.state.cheque) ?
                                 <div className="text-right my-1">{t('Cheque')} :</div>
                                 : <div></div>}

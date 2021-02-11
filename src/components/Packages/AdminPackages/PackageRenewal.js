@@ -1175,8 +1175,6 @@ class PackageRenewal extends Component {
                               {parseFloat(card) ?
                                 <div className="text-right my-1">{t('Card')} :</div>
                                 : <div></div>}
-                              <div className="text-right my-1">{t('Grand Total')} :</div>
-                              <div className="text-right my-1">{t('Paid Amount')} :</div>
                               {parseFloat(this.state.cheque) ?
                                 <div className="text-right my-1">{t('Cheque')} :</div>
                                 : <div></div>}
@@ -1374,6 +1372,30 @@ class PackageRenewal extends Component {
                     <tr>
                       <td style={{ textAlign: "right", padding: "0px 4px 4px 4px", width: "100%" }}>{t('Card')} {this.props.defaultCurrency}: </td>
                       <td style={{ textAlign: "right", padding: "0px 0px 4px 0px" }}>{parseFloat(card).toFixed(3)}</td>
+                    </tr>
+                    : <tr></tr>}
+                  {parseFloat(this.state.cheque) ?
+                    <tr>
+                      <td style={{ textAlign: "right", padding: "0px 4px 4px 4px", width: "100%" }}>{t('Cheque')} {this.props.defaultCurrency}: </td>
+                      <td style={{ textAlign: "right", padding: "0px 0px 4px 0px" }}>{parseFloat(this.state.cheque).toFixed(3)}</td>
+                    </tr>
+                    : <tr></tr>}
+                  {this.state.bankName ?
+                    <tr>
+                      <td style={{ textAlign: "right", padding: "0px 4px 4px 4px", width: "100%" }}>{t('Bank Name')} {this.props.defaultCurrency}: </td>
+                      <td style={{ textAlign: "right", padding: "0px 0px 4px 0px" }}>{this.state.bankName}</td>
+                    </tr>
+                    : <tr></tr>}
+                  {this.state.chequeNumber ?
+                    <tr>
+                      <td style={{ textAlign: "right", padding: "0px 4px 4px 4px", width: "100%" }}>{t('Cheque Number')} {this.props.defaultCurrency}: </td>
+                      <td style={{ textAlign: "right", padding: "0px 0px 4px 0px" }}>{this.state.chequeNumber}</td>
+                    </tr>
+                    : <tr></tr>}
+                  {this.state.chequeDate ?
+                    <tr>
+                      <td style={{ textAlign: "right", padding: "0px 4px 4px 4px", width: "100%" }}>{t('Cheque Date')} {this.props.defaultCurrency}: </td>
+                      <td style={{ textAlign: "right", padding: "0px 0px 4px 0px" }}>{this.state.chequeDate}</td>
                     </tr>
                     : <tr></tr>}
                   <tr>

@@ -905,8 +905,6 @@ class BookAClass extends Component {
                               {parseFloat(card) ?
                                 <div className="text-right my-1">{t('Card')} :</div>
                                 : <div></div>}
-                              <div className="text-right my-1">{t('Grand Total')} :</div>
-                              <div className="text-right my-1">{t('Paid Amount')} :</div>
                               {parseFloat(this.state.cheque) ?
                                 <div className="text-right my-1">{t('Cheque')} :</div>
                                 : <div></div>}
