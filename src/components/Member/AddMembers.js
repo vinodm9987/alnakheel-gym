@@ -1274,7 +1274,7 @@ class AddMembers extends Component {
                   <div className="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
                     <div className="form-group align-items-start">
                       <label htmlFor="Notes">{t('Notes')}</label>
-                      <textarea className="form-control bg-white" placeholder="Enter Your Notes!" rows="4" id="Notes"
+                      <textarea className="form-control bg-white" placeholder={t('Enter Your Notes!')} rows="4" id="Notes"
                         value={notes} onChange={(e) => this.setState({ notes: e.target.value })}
                       ></textarea>
                     </div>
