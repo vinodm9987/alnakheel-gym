@@ -63,7 +63,7 @@ class CustomerFullView extends Component {
           <div className="container-fluid bg-black w-100 d-flex cfvwrap h-100">
             <div className="row CFV h-100">
               <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6 p-5 align-self-center text-center h-100 d-flex bg-black">
-                <div className="bg-black py-4 w-100 h-100">
+                <div className="bg-black py-5 w-100 h-100">
                   <img alt='' src={`/${avatar.path}`} className="CFVPhoto" />
                   {/* <img alt='' src="https://i0.wp.com/post.medicalnewstoday.com/wp-content/uploads/sites/3/2020/03/GettyImages-1092658864_hero-1024x575.jpg?w=1155&h=1528" className="CFVPhoto" /> */}
                 </div>
@@ -90,7 +90,7 @@ class CustomerFullView extends Component {
                         <img alt="" src={algymlogo} width="124" height="124" style={{ marginTop: "25px" }} />
                       </div>
                       <div className="cfw-cus-img-right p-2">
-                        <h2 className="font-weight-bold CVF-Name">{userName}</h2>
+                        <h2 className="font-weight-bold CVF-Name mt-3">{userName}</h2>
                         <h5 className="text-body font-weight-bold">{gender}</h5>
                         <h4 className="text-orange font-weight-bold pb-0 blinker-1">{fingerScanStatus}</h4>
                         {/* <h2 className="font-weight-bold CVF-Name">Ansar</h2>
