@@ -588,7 +588,7 @@ class AddClass extends Component {
               }
               {/* ------------------------ */}
 
-              <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
+              <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6 add-class-special-col">
                 <div className="col-12 subHead pb-3 px-4">
                   <h5 className="font-weight-bold">{t('Duration')}</h5>
                 </div>
@@ -646,7 +646,7 @@ class AddClass extends Component {
                 </div>
               </div>
 
-              <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
+              <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6 add-class-special-col">
                 <div className="col-12 subHead pb-3 px-4">
                   <h5 className="font-weight-bold">{t('Class Time')}</h5>
                   {/* translte tushar */}

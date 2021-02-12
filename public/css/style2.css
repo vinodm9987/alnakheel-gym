@@ -223,3 +223,6 @@ li.headingLI.list-group-item:hover {
   width: calc(100% - 132px);
   flex: 1 2 calc(100% - 132px);
 }
+.k-animation-container {
+  direction: ltr;
+}
