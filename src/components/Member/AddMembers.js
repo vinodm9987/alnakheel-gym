@@ -1669,7 +1669,7 @@ class AddMembers extends Component {
               </div>
 
               <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                <div className={this.state.showPay ? "addMemberFakePopUp active" : "addMemberFakePopUp active"}>
+                <div className={this.state.showPay ? "addMemberFakePopUp active" : "addMemberFakePopUp"}>
                   {/* Make active by above submit button like this */}
                   {/* <div className="addMemberFakePopUp active"> */}
                   {/* / - Make active by above submit button like this over */}
