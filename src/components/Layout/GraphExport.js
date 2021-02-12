@@ -394,12 +394,12 @@ class GraphExport extends Component {
     periods.forEach(t => totalPeriod += t.amount)
     const data1 = {
       labels: trainers.map(trainer => trainer.credentialId.userName),
-      datasets: [{ data: trainers.map(t => t.amount), backgroundColor: trainerColors.map(color => color), hoverBackgroundColor: trainerColors.map(color => color) }],
+      datasets: [{ data: trainers.map(t => t.amount.toFixed(3)), backgroundColor: trainerColors.map(color => color), hoverBackgroundColor: trainerColors.map(color => color) }],
       text: `${this.props.defaultCurrency} ${totalTrainer.toFixed(3)}`
     }
     const data2 = {
       labels: periods.map(period => period.periodName),
-      datasets: [{ data: periods.map(p => p.amount), backgroundColor: periodColors.map(color => color), hoverBackgroundColor: periodColors.map(color => color) }],
+      datasets: [{ data: periods.map(p => p.amount.toFixed(3)), backgroundColor: periodColors.map(color => color), hoverBackgroundColor: periodColors.map(color => color) }],
       text: `${this.props.defaultCurrency} ${totalPeriod.toFixed(3)}`
     }
     graphDatas.push({ name: 'Trainer Sales by Trainers', type: 'doughnut', data: data1, total: response.length })
@@ -419,13 +419,13 @@ class GraphExport extends Component {
     branches.forEach(t => totalBranch += t.amount)
     const data1 = {
       labels: transactionType.map(transaction => transaction.transactionName),
-      datasets: [{ data: transactionType.map(transaction => transaction.amount.toFixed(3)), backgroundColor: ['#28a745', '#dc3545', 'yellow'], hoverBackgroundColor: ['#28a745', '#dc3545', 'yellow'] }],
+      datasets: [{ data: transactionType.map(transaction => transaction.amount && transaction.amount.toFixed(3)), backgroundColor: ['#28a745', '#dc3545', 'yellow'], hoverBackgroundColor: ['#28a745', '#dc3545', 'yellow'] }],
       text: `${t('Total')}`,
       text2: `${this.props.defaultCurrency} ${totalTransaction.toFixed(3)}`
     }
     const data2 = {
       labels: branches.map(branch => branch.branchName),
-      datasets: [{ data: branches.map(branch => branch.amount.toFixed(3)), backgroundColor: colors.map(color => color), hoverBackgroundColor: colors.map(color => color) }],
+      datasets: [{ data: branches.map(branch => branch.amount && branch.amount.toFixed(3)), backgroundColor: colors.map(color => color), hoverBackgroundColor: colors.map(color => color) }],
       text: `${t('Total')}`,
       text2: `${this.props.defaultCurrency} ${totalBranch.toFixed(3)}`
     }
