@@ -365,12 +365,12 @@ const getPackageType = async (body) => {
   })
   response.forEach(member => {
     member.packageDetails.forEach(doc => {
-      let branchIndex = branches.findIndex(b => b._id.toString() === member.branch.toString())
+      let branchIndex = branches.findIndex(b => b._id.toString() === member.branch._id.toString())
       let packageIndex = packages.findIndex(ele => ele._id.toString() === doc.packages._id.toString());
       if (doc.packages._id.toString() === packages[packageIndex]._id.toString() && packageIndex !== -1) {
         packages[packageIndex].count++;
       }
-      if (member.branch.toString() === branches[branchIndex]._id.toString() && branchIndex !== -1) {
+      if (member.branch._id.toString() === branches[branchIndex]._id.toString() && branchIndex !== -1) {
         branches[branchIndex].count++
       }
     });
@@ -401,14 +401,14 @@ const getAssignedTrainers = async (body) => {
   })
   let response = await Member.find(queryCond)
     .populate('credentialId branch')
-    .populate('packageDetails.packages packageDetails.doneBy')
+    .populate('packageDetails.packages packageDetails.doneBy packageDetails.trainerDetails.doneBy packageDetails.trainerDetails.installments.doneBy')
     .populate({ path: "packageDetails.trainerDetails.trainer", populate: { path: "credentialId" } })
     .populate({ path: "packageDetails.packages", populate: { path: "period" } })
     .populate({ path: "packageDetails.trainerDetails.trainerFees", populate: { path: "period" } }).lean()
   response.forEach(member => {
     if (body.fromDate && body.toDate) {
       member.packageDetails = member.packageDetails.filter(pack => {
-        if (new Date(setTime(body.fromDate)) <= pack.dateOfPurchase && new Date(setTime(body.toDate)) >= pack.dateOfPurchase) {
+        if (new Date(setTime(body.fromDate)) <= pack.dateOfPaid && new Date(setTime(body.toDate)) >= pack.dateOfPaid) {
           return pack
         }
       })
@@ -416,13 +416,6 @@ const getAssignedTrainers = async (body) => {
   })
   response.forEach(member => {
     member.packageDetails.forEach(doc => {
-      if (doc.dateOfPurchase && doc.trainerFees) {
-
-        if (doc.trainer._id.toString() === trainers[trainerIndex]._id.toString() && trainerIndex !== -1) {
-          trainers[trainerIndex].amount = trainers[trainerIndex].amount + doc.trainerFees.amount
-        }
-
-      }
       if (doc.trainerDetails && doc.trainerDetails.length) {
         doc.trainerDetails.forEach(trainerDetail => {
           let periodIndex = periods.findIndex(p => p._id.toString() === trainerDetail.trainerFees.period._id.toString())
@@ -550,8 +543,11 @@ const getGeneralSales = async (body) => {
   })
 
   let totalAmountOfMember = await Member.find(queryCond)
-    .populate('credentialId branch').populate("packageDetails.packages packageDetails.doneBy")
-    .populate({ path: "packageDetails.trainerDetails.trainer", populate: { path: "credentialId" } }).lean();
+  .populate('credentialId branch')
+  .populate('packageDetails.packages packageDetails.doneBy packageDetails.trainerDetails.doneBy packageDetails.trainerDetails.installments.doneBy')
+  .populate({ path: "packageDetails.trainerDetails.trainer", populate: { path: "credentialId" } })
+  .populate({ path: "packageDetails.packages", populate: { path: "period" } })
+  .populate({ path: "packageDetails.trainerDetails.trainerFees", populate: { path: "period" } }).lean()
   totalAmountOfMember.forEach(ele => {
     ele.packageDetails = ele.packageDetails.filter(doc => {
       if (doc.paidStatus === 'Paid' || doc.paidStatus === 'Installment') {
