@@ -5,7 +5,7 @@ import React, { Component } from 'react';
 import { withTranslation } from 'react-i18next';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { getFreezeHistory } from '../../../actions/freeze.action';
+import { getPendingFreezeMember, memberFreezeUpdate } from '../../../actions/freeze.action';
 import { dateToDDMMYYYY, getPageWiseData, validator } from '../../../utils/apis/helpers';
 import Pagination from '../../Layout/Pagination';
 
@@ -19,25 +19,32 @@ class FreezeHistory extends Component {
       date: new Date(),
     }
     this.state = this.default
-    this.props.dispatch(getFreezeHistory({ search: this.state.search, date: this.state.date, typeOfFreeze: 'Froze' }))
+    this.props.dispatch(getPendingFreezeMember({ search: this.state.search, date: this.state.date }))
   }
 
   handleDate(e) {
     this.setState({ ...validator(e, 'date', 'date', []) }, () => {
-      this.props.dispatch(getFreezeHistory({ search: this.state.search, date: this.state.date, typeOfFreeze: 'Froze' }))
+      this.props.dispatch(getPendingFreezeMember({ search: this.state.search, date: this.state.date }))
     })
   }
 
   resetDate() {
     this.setState({ date: '' }, () => {
-      this.props.dispatch(getFreezeHistory({ search: this.state.search, date: this.state.date, typeOfFreeze: 'Froze' }))
+      this.props.dispatch(getPendingFreezeMember({ search: this.state.search, date: this.state.date }))
     })
   }
 
   handleSearch(e) {
     this.setState({ search: e.target.value }, () => {
-      window.dispatchWithDebounce(getFreezeHistory)({ search: this.state.search, date: this.state.date, typeOfFreeze: 'Froze' })
+      window.dispatchWithDebounce(getPendingFreezeMember)({ search: this.state.search, date: this.state.date })
     })
+  }
+
+  handleCheckBox(e, freezeId) {
+    const obj = {
+      status: e.target.checked
+    }
+    this.props.dispatch(memberFreezeUpdate(freezeId, obj))
   }
 
   render() {
@@ -93,12 +100,13 @@ class FreezeHistory extends Component {
                   <th>{t('Reactivation Date')}</th>
                   <th>{t('Reason')}</th>
                   <th>{t('Amount')}</th>
+                  <th>{t('Status')}</th>
                   <th></th>
                 </tr>
               </thead>
               <tbody>
-                {this.props.freezeHistory && getPageWiseData(this.state.pageNumber, this.props.freezeHistory, this.state.displayNum).map((freeze, i) => {
-                  const { fromDate, toDate, reactivationDate, memberId: { _id: member, credentialId: { userName, avatar }, memberId }, reason, noOfDays, totalAmount } = freeze
+                {this.props.pendingFreeze && getPageWiseData(this.state.pageNumber, this.props.pendingFreeze, this.state.displayNum).map((freeze, i) => {
+                  const { fromDate, toDate, reactivationDate, memberId: { _id: member, credentialId: { userName, avatar }, memberId }, reason, noOfDays, totalAmount, typeOfFreeze, _id } = freeze
                   return (
                     <tr key={i}>
                       <td>
@@ -116,8 +124,20 @@ class FreezeHistory extends Component {
                       <td>{dateToDDMMYYYY(reactivationDate)}</td>
                       <td><span className="mx-200-normalwrap">{reason}</span></td>
                       <td>{totalAmount ? `${this.props.defaultCurrency} ${totalAmount.toFixed(3)}` : 'NA'}</td>
+                      <td>{typeOfFreeze}</td>
                       <td className="text-center">
                         <Link type="button" className="btn btn-primary btn-sm w-100px rounded-50px text-white" to={`/members-details/${member}`}>{t('Details')}</Link>
+                      </td>
+                      <td className="text-center">
+                        <label className="switch">
+                          <input disabled={typeOfFreeze !== 'Pending'} type="checkbox" checked={typeOfFreeze === 'Pending'} onChange={(e) => this.handleCheckBox(e, _id)} />
+                          <span className="slider round"></span>
+                        </label>
+                      </td>
+                      <td>
+                        <Link to={{ pathname: "/freeze-members", freezeProps: JSON.stringify(freeze) }} className="btn btn-success btn-sm br-50 p-2 d-inline-flex align-items-center justify-content-center" style={{ zoom: '0.75' }}>
+                          <span className="iconv1 iconv1-edit"></span>
+                        </Link>
                       </td>
                     </tr>
                   )
@@ -126,11 +146,11 @@ class FreezeHistory extends Component {
             </table>
           </div>
           {/*Pagination Start*/}
-          {this.props.freezeHistory &&
+          {this.props.pendingFreeze &&
             <Pagination
               pageNumber={this.state.pageNumber ? this.state.pageNumber : 1}
               getPageNumber={(pageNumber) => this.setState({ pageNumber })}
-              fullData={this.props.freezeHistory}
+              fullData={this.props.pendingFreeze}
               displayNumber={(displayNum) => this.setState({ displayNum })}
               displayNum={this.state.displayNum ? this.state.displayNum : 5}
             />
@@ -142,9 +162,9 @@ class FreezeHistory extends Component {
   }
 }
 
-function mapStateToProps({ freeze: { freezeHistory }, currency: { defaultCurrency } }) {
+function mapStateToProps({ freeze: { pendingFreeze }, currency: { defaultCurrency } }) {
   return {
-    freezeHistory: freezeHistory && freezeHistory.sort((a, b) => new Date(a.fromDate) - new Date(b.fromDate)),
+    pendingFreeze: pendingFreeze && pendingFreeze.sort((a, b) => new Date(a.fromDate) - new Date(b.fromDate)),
     defaultCurrency
   }
 }

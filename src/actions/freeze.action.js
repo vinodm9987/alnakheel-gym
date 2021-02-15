@@ -115,3 +115,21 @@ export const cancelFreeze = (postData) => dispatch => {
       dispatch({ type: CLEAR_ERRORS })
     }, 5000))
 }
+
+export const memberFreezeUpdate = (id, postData) => dispatch => {
+  dispatch(setLoading());
+  axios
+    .post(`${IP}/member/memberFreezeUpdate/${id}`, postData)
+    .then(res => {
+      dispatch(getPendingFreezeMember({ search: '', date: '' }))
+      dispatch({ type: GET_ERROR, payload: res.data })
+    })
+    .catch(err =>
+      err.response && dispatch({ type: GET_ERROR, payload: err.response.data })
+    ).then(() => setTimeout(() => {
+      dispatch(removeLoading())
+    }, 1000))
+    .then(() => setTimeout(() => {
+      dispatch({ type: CLEAR_ERRORS })
+    }, 5000))
+}

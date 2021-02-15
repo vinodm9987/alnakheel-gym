@@ -7,7 +7,7 @@ import { findDOMNode } from 'react-dom';
 import { withTranslation } from 'react-i18next';
 import { connect } from 'react-redux';
 import Select from 'react-select';
-import { applyFreezeAllMember, applyFreezeMember } from '../../../actions/freeze.action';
+import { applyFreezeAllMember, applyFreezeMember, memberFreezeUpdate } from '../../../actions/freeze.action';
 import { getActiveStatusNotExpiredRegisterMembers } from '../../../actions/member.action';
 import { getAllVat } from '../../../actions/vat.action';
 import { calculateDays, dateToDDMMYYYY, validator } from '../../../utils/apis/helpers';
@@ -17,7 +17,7 @@ class AddFreeze extends Component {
 
   constructor(props) {
     super(props)
-    this.default = {
+    this.defaultCancel = {
       url: this.props.match.url,
       freezeType: 'Individual',
       member: '',
@@ -51,7 +51,87 @@ class AddFreeze extends Component {
       bankNameE: '',
       chequeNumberE: '',
       chequeDateE: '',
-      chequeE: ''
+      chequeE: '',
+      freezeId: '',
+    }
+    if (this.props.location.freezeProps) {
+      const { fromDate, toDate, reactivationDate, memberId, reason, noOfDays, _id } = JSON.parse(this.props.location.freezeProps)
+      this.default = {
+        url: this.props.match.url,
+        freezeType: 'Individual',
+        member: memberId,
+        fromDate: new Date(fromDate),
+        toDate: new Date(toDate),
+        noOfDays: noOfDays,
+        reactivationDate: new Date(reactivationDate),
+        reason: reason,
+        memberE: '',
+        fromDateE: '',
+        toDateE: '',
+        noOfDaysE: '',
+        reactivationDateE: '',
+        reasonE: '',
+        amount: '',
+        amountE: '',
+        wantCharge: 'No',
+        vat: '',
+        taxPercent: '',
+        cash: 0,
+        card: 0,
+        cashE: '', cardE: '',
+        digital: 0,
+        digitalE: '',
+        cardNumber: '',
+        showCheque: false,
+        bankName: '',
+        chequeNumber: '',
+        chequeDate: '',
+        cheque: 0,
+        bankNameE: '',
+        chequeNumberE: '',
+        chequeDateE: '',
+        chequeE: '',
+        freezeId: _id,
+      }
+      this.props.dispatch(getAllVat({ branch: memberId.branch }))
+    } else {
+      this.default = {
+        url: this.props.match.url,
+        freezeType: 'Individual',
+        member: '',
+        fromDate: new Date(),
+        toDate: new Date(),
+        noOfDays: 1,
+        reactivationDate: new Date().setDate(new Date().getDate() + 1),
+        reason: '',
+        memberE: '',
+        fromDateE: '',
+        toDateE: '',
+        noOfDaysE: '',
+        reactivationDateE: '',
+        reasonE: '',
+        amount: '',
+        amountE: '',
+        wantCharge: 'Yes',
+        vat: '',
+        taxPercent: '',
+        cash: 0,
+        card: 0,
+        cashE: '', cardE: '',
+        digital: 0,
+        digitalE: '',
+        cardNumber: '',
+        showCheque: false,
+        bankName: '',
+        chequeNumber: '',
+        chequeDate: '',
+        cheque: 0,
+        bankNameE: '',
+        chequeNumberE: '',
+        chequeDateE: '',
+        chequeE: '',
+        freezeId: '',
+      }
     }
     this.state = this.default
     this.props.dispatch(getActiveStatusNotExpiredRegisterMembers({ search: '' }))
@@ -60,11 +140,11 @@ class AddFreeze extends Component {
   componentDidUpdate(prevProps) {
     if (this.props.errors !== prevProps.errors) {
       if (Object.keys(this.props.errors).length !== 0 && !this.props.errors.error) {
-        this.setState(this.default)
+        this.setState(this.defaultCancel)
       }
     }
     if (this.props.t !== prevProps.t) {
-      this.setState(this.default)
+      this.setState(this.defaultCancel)
     }
   }
 
@@ -80,7 +160,7 @@ class AddFreeze extends Component {
   handleSubmit(totalAmount, totalVat) {
     const el = findDOMNode(this.refs.paymentSummaryClose);
     const { t } = this.props
-    const { freezeType, member, fromDate, toDate, noOfDays, reason, reactivationDate, noOfDaysE, amount, wantCharge, cash, card, cashE, cardE, cardNumber, digital, digitalE, cheque } = this.state
+    const { freezeType, member, fromDate, toDate, noOfDays, reason, reactivationDate, noOfDaysE, amount, wantCharge, cash, card, cashE, cardE, cardNumber, digital, digitalE, cheque, freezeId } = this.state
     if (freezeType === 'Individual') {
       if (member && fromDate <= toDate && noOfDays && reason && !noOfDaysE) {
         const freezeInfo = {
@@ -110,7 +190,11 @@ class AddFreeze extends Component {
             if (!card) this.setState({ cardE: t('Enter amount') })
           }
         } else {
-          this.props.dispatch(applyFreezeMember(freezeInfo))
+          if (freezeId) {
+            this.props.dispatch(memberFreezeUpdate(freezeInfo))
+          } else {
+            this.props.dispatch(applyFreezeMember(freezeInfo))
+          }
         }
       } else {
         if (!member) this.setState({ memberE: t('Select member') })
@@ -137,7 +221,7 @@ class AddFreeze extends Component {
   }
 
   handleCancel() {
-    this.setState(this.default)
+    this.setState(this.defaultCancel)
   }
 
   customSearch(options, search) {
@@ -254,7 +338,7 @@ class AddFreeze extends Component {
 
   render() {
     const { t } = this.props
-    const { freezeType, member, fromDate, toDate, noOfDays, reactivationDate, reason, wantCharge, amount, cash, card, taxPercent, digital } = this.state
+    const { freezeType, member, fromDate, toDate, noOfDays, reactivationDate, reason, wantCharge, amount, cash, card, taxPercent, digital, freezeId } = this.state
 
     const formatOptionLabel = ({ credentialId: { userName, avatar, email }, memberId }) => {
       return (
@@ -292,13 +376,13 @@ class AddFreeze extends Component {
                       <label className="mx-sm-2 inlineFormLabel mb-2">{t('Freeze Members')}</label>
                       <div className="d-flex w-100">
                         <div className="custom-control custom-checkbox roundedGreenRadioCheck mx-2">
-                          <input type="radio" className="custom-control-input" id="All" name="AllOrIndividual"
+                          <input disabled={freezeId} type="radio" className="custom-control-input" id="All" name="AllOrIndividual"
                             checked={freezeType === 'All'} onChange={() => this.setState({ freezeType: 'All' })}
                           />
                           <label className="custom-control-label" htmlFor="All">{t('All')}</label>
                         </div>
                         <div className="custom-control custom-checkbox roundedGreenRadioCheck mx-2">
-                          <input type="radio" className="custom-control-input" id="Individual" name="AllOrIndividual"
+                          <input disabled={freezeId} type="radio" className="custom-control-input" id="Individual" name="AllOrIndividual"
                             checked={freezeType === 'Individual'} onChange={() => this.setState({ freezeType: 'Individual' })}
                           />
                           <label className="custom-control-label" htmlFor="Individual">{t('Individual')}</label>
@@ -327,6 +411,7 @@ class AddFreeze extends Component {
                           filterOption={this.customSearch}
                           styles={colourStyles}
                           placeholder={t('Please Select')}
+                          isDisabled={freezeId}
                         />
                         <div className="errorMessageWrapper">
                           <small className="text-danger mx-sm-2 errorMessage">{this.state.memberE}</small>
@@ -423,7 +508,7 @@ class AddFreeze extends Component {
                       </div>
                     </div>
                   </div>
-                  {freezeType === 'Individual' &&
+                  {freezeType === 'Individual' && !freezeId &&
                     <div className="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
                       <div className=" d-flex flex-wrap px-2 py-4 mt-1">
                         <h6 className="my-2">{t('Do you want to charge?')}</h6>
@@ -439,7 +524,7 @@ class AddFreeze extends Component {
                       </div>
                     </div>
                   }
-                  {wantCharge === 'Yes' && freezeType === 'Individual' &&
+                  {wantCharge === 'Yes' && freezeType === 'Individual' && !freezeId &&
                     <div className="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-4">
                       <div className="form-group inlineFormGroup">
                         <label htmlFor="amount" className="mx-sm-2 inlineFormLabel mb-2">{t('Enter Value')}</label>
@@ -456,7 +541,7 @@ class AddFreeze extends Component {
                     </div>
                   }
                   {/* -------------------------- */}
-                  {member && member.branch && this.props.activeVats && this.props.activeVats.length > 0 && wantCharge === 'Yes' && freezeType === 'Individual' &&
+                  {member && member.branch && this.props.activeVats && this.props.activeVats.length > 0 && wantCharge === 'Yes' && freezeType === 'Individual' && !freezeId &&
                     <div className="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
                       <div className="form-group inlineFormGroup">
                         <label htmlFor="VAT" className="mx-sm-2 inlineFormLabel type2">{t('VAT')}</label>
@@ -483,7 +568,7 @@ class AddFreeze extends Component {
               <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
                 <div className="justify-content-sm-end d-flex pt-3">
                   <button disabled={disableSubmit(this.props.loggedUser, 'Members', 'FreezeMembers')}
-                    data-toggle="modal" data-target="#myModal" type="button" className="btn btn-success mx-1 px-4" onClick={() => this.handleCheckout(totalAmount, totalVat)}>{t('Submit')}</button>
+                    data-toggle="modal" data-target="#myModal" type="button" className="btn btn-success mx-1 px-4" onClick={() => this.handleCheckout(totalAmount, totalVat)}>{freezeId ? t('Update') : t('Submit')}</button>
                   <button type="button" className="btn btn-danger mx-1 px-4" onClick={() => this.handleCancel()}>{t('Cancel')}</button>
                 </div>
               </div>
