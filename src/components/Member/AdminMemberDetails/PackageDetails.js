@@ -746,18 +746,17 @@ class PackageDetails extends Component {
                                 <td className="dirltrtar">{dateToDDMMYYYY(trainerEnd)}</td>
                                 <td className="text-danger font-weight-bold"><span>{this.props.defaultCurrency}</span><span className="pl-1"></span><span>{amount}</span></td>
                                 {/* tushar if installment */}
-                                {/* <td className="text-center">
-                                  <span className="badge badge-pill badge-primary px-3 py-2 cursorPointer" data-toggle="modal" data-target="#InstallmentDetails1"
-                                    onClick={() => this.setTrainerInstallments(Installments, amount, userName)}>{t('Payment Details')}</span>
-                                </td> */}
-                                {/* -/ tushar if installment over */}
-                                {/* -/ tushar if no installment */}
-                                <td className="text-center">
-                                  {/* <span className="iconv1 iconv1-eye bg-success tableDownloadViewIcons" data-toggle="modal" data-target="#ReceiptModal"
+                                {Installments.length > 0
+                                  ? <td className="text-center">
+                                    <span className="badge badge-pill badge-primary px-3 py-2 cursorPointer" data-toggle="modal" data-target="#InstallmentDetails1"
+                                      onClick={() => this.setTrainerInstallments(Installments, amount, userName)}>{t('Payment Details')}</span>
+                                  </td>
+                                  : <td className="text-center">
+                                    {/* <span className="iconv1 iconv1-eye bg-success tableDownloadViewIcons" data-toggle="modal" data-target="#ReceiptModal"
                                   onClick={() => this.setState({ orderById: order })}></span> */}
-                                  <span className="iconv1 iconv1-eye bg-success tableDownloadViewIcons" data-toggle="modal" data-target="#ReceiptModal" ></span>
-                                </td>
-                                {/* -/ tushar if no installment over */}
+                                    <span className="iconv1 iconv1-eye bg-success tableDownloadViewIcons" data-toggle="modal" data-target="#ReceiptModal" ></span>
+                                  </td>
+                                }
                               </tr>
                             )
                           })

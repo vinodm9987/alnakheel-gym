@@ -490,104 +490,23 @@ class TableExport extends Component {
   tableForGeneralSales(datas) {
     let tabledData = []
     let count = 1
-    let totalPaidAmount = 0, totalCash = 0, totalCard = 0, totalDigital = 0, totalCheque = 0
+    let totalPaidAmount = 0, totalCash = 0, totalCard = 0, totalDigital = 0, totalCheque = 0, totalDiscount = 0
     datas && datas.forEach(data => {
       if (data.transactionType === 'Packages') {
         const { memberId, credentialId: { userName }, branch, packageDetails, admissionDate, mobileNo, transactionType } = data
         packageDetails.forEach(doc => {
           if (doc.Installments && doc.Installments.length) {
             doc.Installments.forEach(installment => {
-              totalPaidAmount += (installment.totalAmount ? +installment.totalAmount : 0)
-              totalCash += (installment.cashAmount ? +installment.cashAmount : 0)
-              totalCard += (installment.cardAmount ? +installment.cardAmount : 0)
-              totalDigital += (installment.digitalAmount ? +installment.digitalAmount : 0)
-              totalCheque += (installment.chequeAmount ? +installment.chequeAmount : 0)
-              tabledData.push({
-                "SNo": count,
-                "Receipt No.": installment.orderNo,
-                "Date & Time": `${dateToDDMMYYYY(doc.dateOfPaid)} ${dateToHHMM(doc.timeOfPaid)}`,
-                "Member ID": memberId,
-                "Member Name": userName,
-                "Admission Date": dateToDDMMYYYY(admissionDate),
-                "Mobile No": mobileNo,
-                // "Email ID": email,
-                "Branch": branch.branchName,
-                "Transaction Type": transactionType,
-                "Name": `${doc.packages.packageName} (${installment.installmentName})`,
-                "Paid Amount": installment.totalAmount ? `${installment.totalAmount.toFixed(3)}` : '0.000',
-                "Cash": installment.cashAmount ? `${installment.cashAmount.toFixed(3)}` : `0.000`,
-                "Card": installment.cardAmount ? `${installment.cardAmount.toFixed(3)}` : `0.000`,
-                "Digital": installment.digitalAmount ? `${installment.digitalAmount.toFixed(3)}` : `0.000`,
-                "Cheque": installment.chequeAmount ? `${installment.chequeAmount.toFixed(3)}` : `0.000`,
-                "Done By": installment.doneBy ? installment.doneBy.userName : 'NA'
-              })
-              count = count + 1
-            })
-          } else {
-            totalPaidAmount += (doc.totalAmount ? +doc.totalAmount : 0)
-            totalCash += (doc.cashAmount ? +doc.cashAmount : 0)
-            totalCard += (doc.cardAmount ? +doc.cardAmount : 0)
-            totalDigital += (doc.digitalAmount ? +doc.digitalAmount : 0)
-            tabledData.push({
-              "SNo": count,
-              "Receipt No.": doc.orderNo,
-              "Date & Time": `${dateToDDMMYYYY(doc.dateOfPaid)} ${dateToHHMM(doc.timeOfPaid)}`,
-              "Member ID": memberId,
-              "Member Name": userName,
-              "Admission Date": dateToDDMMYYYY(admissionDate),
-              "Mobile No": mobileNo,
-              // "Email ID": email,
-              "Branch": branch.branchName,
-              "Transaction Type": transactionType,
-              "Name": doc.packages.packageName,
-              "Paid Amount": doc.totalAmount ? `${doc.totalAmount.toFixed(3)}` : '0.000',
-              "Cash": doc.cashAmount ? `${doc.cashAmount.toFixed(3)}` : `0.000`,
-              "Card": doc.cardAmount ? `${doc.cardAmount.toFixed(3)}` : `0.000`,
-              "Digital": doc.digitalAmount ? `${doc.digitalAmount.toFixed(3)}` : `0.000`,
-              "Cheque": doc.chequeAmount ? `${doc.chequeAmount.toFixed(3)}` : `0.000`,
-              "Done By": doc.doneBy ? doc.doneBy.userName : 'NA'
-            })
-            count = count + 1
-          }
-          if (doc.trainerDetails && doc.trainerDetails.length) {
-            doc.trainerDetails.forEach(trainerDetail => {
-              if (trainerDetail.Installments && trainerDetail.Installments.length) {
-                trainerDetail.Installments.forEach(installment => {
-                  totalPaidAmount += (installment.totalAmount ? +installment.totalAmount : 0)
-                  totalCash += (installment.cashAmount ? +installment.cashAmount : 0)
-                  totalCard += (installment.cardAmount ? +installment.cardAmount : 0)
-                  totalDigital += (installment.digitalAmount ? +installment.digitalAmount : 0)
-                  totalCheque += (installment.chequeAmount ? +installment.chequeAmount : 0)
-                  tabledData.push({
-                    "SNo": count,
-                    "Receipt No.": installment.orderNo,
-                    "Date & Time": `${dateToDDMMYYYY(doc.dateOfPaid)} ${dateToHHMM(doc.timeOfPaid)}`,
-                    "Member ID": memberId,
-                    "Member Name": userName,
-                    "Admission Date": dateToDDMMYYYY(admissionDate),
-                    "Mobile No": mobileNo,
-                    // "Email ID": email,
-                    "Branch": branch.branchName,
-                    "Transaction Type": transactionType,
-                    "Name": `${trainerDetail.trainer.credentialId.userName} (${installment.installmentName})`,
-                    "Paid Amount": installment.totalAmount ? `${installment.totalAmount.toFixed(3)}` : '0.000',
-                    "Cash": installment.cashAmount ? `${installment.cashAmount.toFixed(3)}` : `0.000`,
-                    "Card": installment.cardAmount ? `${installment.cardAmount.toFixed(3)}` : `0.000`,
-                    "Digital": installment.digitalAmount ? `${installment.digitalAmount.toFixed(3)}` : `0.000`,
-                    "Cheque": installment.chequeAmount ? `${installment.chequeAmount.toFixed(3)}` : `0.000`,
-                    "Done By": installment.doneBy ? installment.doneBy.userName : 'NA'
-                  })
-                  count = count + 1
-                })
-              } else {
-                totalPaidAmount += (trainerDetail.totalAmount ? +trainerDetail.totalAmount : 0)
-                totalCash += (trainerDetail.cashAmount ? +trainerDetail.cashAmount : 0)
-                totalCard += (trainerDetail.cardAmount ? +trainerDetail.cardAmount : 0)
-                totalDigital += (trainerDetail.digitalAmount ? +trainerDetail.digitalAmount : 0)
-                totalCheque += (trainerDetail.chequeAmount ? +trainerDetail.chequeAmount : 0)
+              if (installment.paidStatus === 'Paid') {
+                totalPaidAmount += (installment.totalAmount ? +installment.totalAmount : 0)
+                totalCash += (installment.cashAmount ? +installment.cashAmount : 0)
+                totalCard += (installment.cardAmount ? +installment.cardAmount : 0)
+                totalDigital += (installment.digitalAmount ? +installment.digitalAmount : 0)
+                totalCheque += (installment.chequeAmount ? +installment.chequeAmount : 0)
+                totalDiscount += (installment.discount ? +installment.discount : 0)
                 tabledData.push({
                   "SNo": count,
-                  "Receipt No.": trainerDetail.orderNo,
+                  "Receipt No.": installment.orderNo,
                   "Date & Time": `${dateToDDMMYYYY(doc.dateOfPaid)} ${dateToHHMM(doc.timeOfPaid)}`,
                   "Member ID": memberId,
                   "Member Name": userName,
@@ -596,27 +515,125 @@ class TableExport extends Component {
                   // "Email ID": email,
                   "Branch": branch.branchName,
                   "Transaction Type": transactionType,
-                  "Name": trainerDetail.trainer.credentialId.userName,
-                  "Paid Amount": trainerDetail.totalAmount ? `${trainerDetail.totalAmount.toFixed(3)}` : '0.000',
-                  "Cash": trainerDetail.cashAmount ? `${trainerDetail.cashAmount.toFixed(3)}` : `0.000`,
-                  "Card": trainerDetail.cardAmount ? `${trainerDetail.cardAmount.toFixed(3)}` : `0.000`,
-                  "Digital": trainerDetail.digitalAmount ? `${trainerDetail.digitalAmount.toFixed(3)}` : `0.000`,
-                  "Cheque": trainerDetail.chequeAmount ? `${trainerDetail.chequeAmount.toFixed(3)}` : `0.000`,
-                  "Done By": trainerDetail.doneBy ? trainerDetail.doneBy.userName : 'NA'
+                  "Name": `${doc.packages.packageName} (${installment.installmentName})`,
+                  "Paid Amount": installment.totalAmount ? `${installment.totalAmount.toFixed(3)}` : '0.000',
+                  "Discount": installment.discount ? `${installment.discount.toFixed(3)}` : `0.000`,
+                  "Cash": installment.cashAmount ? `${installment.cashAmount.toFixed(3)}` : `0.000`,
+                  "Card": installment.cardAmount ? `${installment.cardAmount.toFixed(3)}` : `0.000`,
+                  "Digital": installment.digitalAmount ? `${installment.digitalAmount.toFixed(3)}` : `0.000`,
+                  "Cheque": installment.chequeAmount ? `${installment.chequeAmount.toFixed(3)}` : `0.000`,
+                  "Done By": installment.doneBy ? installment.doneBy.userName : 'NA'
                 })
                 count = count + 1
+              }
+            })
+          } else {
+            if (doc.paidStatus === 'Paid' || doc.paidStatus === 'Installment') {
+              totalPaidAmount += (doc.totalAmount ? +doc.totalAmount : 0)
+              totalCash += (doc.cashAmount ? +doc.cashAmount : 0)
+              totalCard += (doc.cardAmount ? +doc.cardAmount : 0)
+              totalDigital += (doc.digitalAmount ? +doc.digitalAmount : 0)
+              totalCheque += (doc.chequeAmount ? +doc.chequeAmount : 0)
+              totalDiscount += (doc.discount ? +doc.discount : 0)
+              tabledData.push({
+                "SNo": count,
+                "Receipt No.": doc.orderNo,
+                "Date & Time": `${dateToDDMMYYYY(doc.dateOfPaid)} ${dateToHHMM(doc.timeOfPaid)}`,
+                "Member ID": memberId,
+                "Member Name": userName,
+                "Admission Date": dateToDDMMYYYY(admissionDate),
+                "Mobile No": mobileNo,
+                // "Email ID": email,
+                "Branch": branch.branchName,
+                "Transaction Type": transactionType,
+                "Name": doc.packages.packageName,
+                "Paid Amount": doc.totalAmount ? `${doc.totalAmount.toFixed(3)}` : '0.000',
+                "Discount": doc.discount ? `${doc.discount.toFixed(3)}` : `0.000`,
+                "Cash": doc.cashAmount ? `${doc.cashAmount.toFixed(3)}` : `0.000`,
+                "Card": doc.cardAmount ? `${doc.cardAmount.toFixed(3)}` : `0.000`,
+                "Digital": doc.digitalAmount ? `${doc.digitalAmount.toFixed(3)}` : `0.000`,
+                "Cheque": doc.chequeAmount ? `${doc.chequeAmount.toFixed(3)}` : `0.000`,
+                "Done By": doc.doneBy ? doc.doneBy.userName : 'NA'
+              })
+              count = count + 1
+            }
+          }
+          if (doc.trainerDetails && doc.trainerDetails.length) {
+            doc.trainerDetails.forEach(trainerDetail => {
+              if (trainerDetail.Installments && trainerDetail.Installments.length) {
+                trainerDetail.Installments.forEach(installment => {
+                  if (installment.paidStatus === 'Paid') {
+                    totalPaidAmount += (installment.totalAmount ? +installment.totalAmount : 0)
+                    totalCash += (installment.cashAmount ? +installment.cashAmount : 0)
+                    totalCard += (installment.cardAmount ? +installment.cardAmount : 0)
+                    totalDigital += (installment.digitalAmount ? +installment.digitalAmount : 0)
+                    totalCheque += (installment.chequeAmount ? +installment.chequeAmount : 0)
+                    totalDiscount += (installment.discount ? +installment.discount : 0)
+                    tabledData.push({
+                      "SNo": count,
+                      "Receipt No.": installment.orderNo,
+                      "Date & Time": `${dateToDDMMYYYY(doc.dateOfPaid)} ${dateToHHMM(doc.timeOfPaid)}`,
+                      "Member ID": memberId,
+                      "Member Name": userName,
+                      "Admission Date": dateToDDMMYYYY(admissionDate),
+                      "Mobile No": mobileNo,
+                      // "Email ID": email,
+                      "Branch": branch.branchName,
+                      "Transaction Type": transactionType,
+                      "Name": `${trainerDetail.trainer.credentialId.userName} (${installment.installmentName})`,
+                      "Paid Amount": installment.totalAmount ? `${installment.totalAmount.toFixed(3)}` : '0.000',
+                      "Discount": installment.discount ? `${installment.discount.toFixed(3)}` : `0.000`,
+                      "Cash": installment.cashAmount ? `${installment.cashAmount.toFixed(3)}` : `0.000`,
+                      "Card": installment.cardAmount ? `${installment.cardAmount.toFixed(3)}` : `0.000`,
+                      "Digital": installment.digitalAmount ? `${installment.digitalAmount.toFixed(3)}` : `0.000`,
+                      "Cheque": installment.chequeAmount ? `${installment.chequeAmount.toFixed(3)}` : `0.000`,
+                      "Done By": installment.doneBy ? installment.doneBy.userName : 'NA'
+                    })
+                    count = count + 1
+                  }
+                })
+              } else {
+                if (trainerDetail.paidStatus === 'Paid' || trainerDetail.paidStatus === 'Installment') {
+                  totalPaidAmount += (trainerDetail.totalAmount ? +trainerDetail.totalAmount : 0)
+                  totalCash += (trainerDetail.cashAmount ? +trainerDetail.cashAmount : 0)
+                  totalCard += (trainerDetail.cardAmount ? +trainerDetail.cardAmount : 0)
+                  totalDigital += (trainerDetail.digitalAmount ? +trainerDetail.digitalAmount : 0)
+                  totalCheque += (trainerDetail.chequeAmount ? +trainerDetail.chequeAmount : 0)
+                  totalDiscount += (trainerDetail.discount ? +trainerDetail.discount : 0)
+                  tabledData.push({
+                    "SNo": count,
+                    "Receipt No.": trainerDetail.orderNo,
+                    "Date & Time": `${dateToDDMMYYYY(doc.dateOfPaid)} ${dateToHHMM(doc.timeOfPaid)}`,
+                    "Member ID": memberId,
+                    "Member Name": userName,
+                    "Admission Date": dateToDDMMYYYY(admissionDate),
+                    "Mobile No": mobileNo,
+                    // "Email ID": email,
+                    "Branch": branch.branchName,
+                    "Transaction Type": transactionType,
+                    "Name": trainerDetail.trainer.credentialId.userName,
+                    "Paid Amount": trainerDetail.totalAmount ? `${trainerDetail.totalAmount.toFixed(3)}` : '0.000',
+                    "Discount": trainerDetail.discount ? `${trainerDetail.discount.toFixed(3)}` : `0.000`,
+                    "Cash": trainerDetail.cashAmount ? `${trainerDetail.cashAmount.toFixed(3)}` : `0.000`,
+                    "Card": trainerDetail.cardAmount ? `${trainerDetail.cardAmount.toFixed(3)}` : `0.000`,
+                    "Digital": trainerDetail.digitalAmount ? `${trainerDetail.digitalAmount.toFixed(3)}` : `0.000`,
+                    "Cheque": trainerDetail.chequeAmount ? `${trainerDetail.chequeAmount.toFixed(3)}` : `0.000`,
+                    "Done By": trainerDetail.doneBy ? trainerDetail.doneBy.userName : 'NA'
+                  })
+                  count = count + 1
+                }
               }
             })
           }
         })
       } else if (data.transactionType === 'POS') {
-        const { customerDetails: { member }, transactionType, branch, totalAmount, cashAmount, cardAmount, digitalAmount, chequeAmount, dateOfPurchase, created_at } = data
+        const { customerDetails: { member }, transactionType, branch, totalAmount, cashAmount, cardAmount, digitalAmount, chequeAmount, discount, dateOfPurchase, created_at } = data
         totalPaidAmount += (totalAmount ? +totalAmount : 0)
         totalCash += (cashAmount ? +cashAmount : 0)
         totalCard += (cardAmount ? +cardAmount : 0)
         totalDigital += (digitalAmount ? +digitalAmount : 0)
         totalCheque += (chequeAmount ? +chequeAmount : 0)
-
+        totalDiscount += (discount ? +discount : 0)
         if (member) {
           const { memberId, credentialId: { userName }, admissionDate, mobileNo } = member
           tabledData.push({
@@ -630,7 +647,9 @@ class TableExport extends Component {
             // "Email ID": email ? email : 'NA',
             "Branch": branch.branchName,
             "Transaction Type": transactionType,
+            "Name": 'NA',
             "Paid Amount": `${totalAmount.toFixed(3)}`,
+            "Discount": discount ? `${discount.toFixed(3)}` : `0.000`,
             "Cash": `${cashAmount.toFixed(3)}`,
             "Card": `${cardAmount.toFixed(3)}`,
             "Digital": digitalAmount ? `${digitalAmount.toFixed(3)}` : `0.000`,
@@ -649,7 +668,9 @@ class TableExport extends Component {
             // "Email ID": 'NA',
             "Branch": branch.branchName,
             "Transaction Type": transactionType,
+            "Name": 'NA',
             "Paid Amount": `${totalAmount.toFixed(3)}`,
+            "Discount": discount ? `${discount.toFixed(3)}` : `0.000`,
             "Cash": `${cashAmount.toFixed(3)}`,
             "Card": `${cardAmount.toFixed(3)}`,
             "Digital": digitalAmount ? `${digitalAmount.toFixed(3)}` : `0.000`,
@@ -659,11 +680,13 @@ class TableExport extends Component {
         }
         count = count + 1
       } else if (data.transactionType === 'Classes') {
-        const { member: { memberId, credentialId: { userName }, branch, admissionDate, mobileNo }, transactionType, totalAmount, cashAmount, cardAmount, digitalAmount, chequeAmount, dateOfPurchase, created_at } = data
+        const { member: { memberId, credentialId: { userName }, branch, admissionDate, mobileNo }, transactionType, totalAmount, cashAmount, cardAmount, digitalAmount, chequeAmount, discount, dateOfPurchase, created_at } = data
         totalPaidAmount += (totalAmount ? +totalAmount : 0)
         totalCash += (cashAmount ? +cashAmount : 0)
         totalCard += (cardAmount ? +cardAmount : 0)
         totalDigital += (digitalAmount ? +digitalAmount : 0)
+        totalCheque += (chequeAmount ? +chequeAmount : 0)
+        totalDiscount += (discount ? +discount : 0)
         tabledData.push({
           "SNo": count,
           "Receipt No.": data.orderNo,
@@ -675,7 +698,9 @@ class TableExport extends Component {
           // "Email ID": email,
           "Branch": branch.branchName,
           "Transaction Type": transactionType,
+          "Name": 'NA',
           "Paid Amount": totalAmount ? `${totalAmount.toFixed(3)}` : '0.000',
+          "Discount": discount ? `${discount.toFixed(3)}` : `0.000`,
           "Cash": cashAmount ? `${cashAmount.toFixed(3)}` : '0.000',
           "Card": cardAmount ? `${cardAmount.toFixed(3)}` : '0.000',
           "Digital": digitalAmount ? `${digitalAmount.toFixed(3)}` : `0.000`,
@@ -696,7 +721,9 @@ class TableExport extends Component {
       // "Email ID": email,
       "Branch": '',
       "Transaction Type": 'Grand Total',
+      "Name": '',
       "Paid Amount": `${this.props.defaultCurrency} ${totalPaidAmount.toFixed(3)}`,
+      "Discount": `${this.props.defaultCurrency} ${totalDiscount.toFixed(3)}`,
       "Cash": `${this.props.defaultCurrency} ${totalCash.toFixed(3)}`,
       "Card": `${this.props.defaultCurrency} ${totalCard.toFixed(3)}`,
       "Digital": `${this.props.defaultCurrency} ${totalDigital.toFixed(3)}`,
@@ -709,39 +736,140 @@ class TableExport extends Component {
   tableForPackageSales(datas) {
     let tabledData = []
     let count = 1
-    let totalPackageAmount = 0, totalTrainerAmount = 0, totalPaidAmount = 0, totalCash = 0, totalCard = 0, totalDigital = 0
+    let totalPaidAmount = 0, totalCash = 0, totalCard = 0, totalDigital = 0, totalCheque = 0, totalDiscount = 0
     datas && datas.forEach(data => {
       const { memberId, credentialId: { userName }, branch, packageDetails, admissionDate, mobileNo, transactionType } = data
       packageDetails.forEach(doc => {
-
-        totalPackageAmount += (doc.packages.amount ? +doc.packages.amount : 0)
-        totalTrainerAmount += ((doc.actualAmount - doc.packages.amount) ? +(doc.actualAmount - doc.packages.amount) : 0)
-        totalPaidAmount += (doc.totalAmount ? +doc.totalAmount : 0)
-        totalCash += (doc.cashAmount ? +doc.cashAmount : 0)
-        totalCard += (doc.cardAmount ? +doc.cardAmount : 0)
-        totalDigital += (doc.digitalAmount ? +doc.digitalAmount : 0)
-
-        tabledData.push({
-          "SNo": count,
-          "Receipt No.": doc.orderNo,
-          "Date & Time": `${dateToDDMMYYYY(doc.dateOfPurchase)} ${dateToHHMM(doc.timeOfPurchase)}`,
-          "Member ID": memberId,
-          "Member Name": userName,
-          "Admission Date": dateToDDMMYYYY(admissionDate),
-          "Mobile No": mobileNo,
-          // "Email ID": email,
-          "Branch": branch.branchName,
-          "Package": doc.packages.packageName,
-          "Transaction Type": transactionType,
-          "Package Amount": `${doc.packages.amount.toFixed(3)}`,
-          "Trainer Amount": `${(doc.actualAmount - doc.packages.amount).toFixed(3)}`,
-          "Paid Amount": `${doc.totalAmount.toFixed(3)}`,
-          "Cash": doc.cashAmount ? `${doc.cashAmount.toFixed(3)}` : `0.000`,
-          "Card": doc.cardAmount ? `${doc.cardAmount.toFixed(3)}` : `0.000`,
-          "Digital": doc.digitalAmount ? `${doc.digitalAmount.toFixed(3)}` : `0.000`,
-          "Done By": doc.doneBy ? doc.doneBy.userName : 'NA'
-        })
-        count = count + 1
+        if (doc.Installments && doc.Installments.length) {
+          doc.Installments.forEach(installment => {
+            if (installment.paidStatus === 'Paid') {
+              totalPaidAmount += (installment.totalAmount ? +installment.totalAmount : 0)
+              totalCash += (installment.cashAmount ? +installment.cashAmount : 0)
+              totalCard += (installment.cardAmount ? +installment.cardAmount : 0)
+              totalDigital += (installment.digitalAmount ? +installment.digitalAmount : 0)
+              totalCheque += (installment.chequeAmount ? +installment.chequeAmount : 0)
+              totalDiscount += (installment.discount ? +installment.discount : 0)
+              tabledData.push({
+                "SNo": count,
+                "Receipt No.": installment.orderNo,
+                "Date & Time": `${dateToDDMMYYYY(doc.dateOfPaid)} ${dateToHHMM(doc.timeOfPaid)}`,
+                "Member ID": memberId,
+                "Member Name": userName,
+                "Admission Date": dateToDDMMYYYY(admissionDate),
+                "Mobile No": mobileNo,
+                // "Email ID": email,
+                "Branch": branch.branchName,
+                "Transaction Type": transactionType,
+                "Name": `${doc.packages.packageName} (${installment.installmentName})`,
+                "Paid Amount": installment.totalAmount ? `${installment.totalAmount.toFixed(3)}` : '0.000',
+                "Discount": installment.discount ? `${installment.discount.toFixed(3)}` : `0.000`,
+                "Cash": installment.cashAmount ? `${installment.cashAmount.toFixed(3)}` : `0.000`,
+                "Card": installment.cardAmount ? `${installment.cardAmount.toFixed(3)}` : `0.000`,
+                "Digital": installment.digitalAmount ? `${installment.digitalAmount.toFixed(3)}` : `0.000`,
+                "Cheque": installment.chequeAmount ? `${installment.chequeAmount.toFixed(3)}` : `0.000`,
+                "Done By": installment.doneBy ? installment.doneBy.userName : 'NA'
+              })
+              count = count + 1
+            }
+          })
+        } else {
+          if (doc.paidStatus === 'Paid' || doc.paidStatus === 'Installment') {
+            totalPaidAmount += (doc.totalAmount ? +doc.totalAmount : 0)
+            totalCash += (doc.cashAmount ? +doc.cashAmount : 0)
+            totalCard += (doc.cardAmount ? +doc.cardAmount : 0)
+            totalDigital += (doc.digitalAmount ? +doc.digitalAmount : 0)
+            totalCheque += (doc.chequeAmount ? +doc.chequeAmount : 0)
+            totalDiscount += (doc.discount ? +doc.discount : 0)
+            tabledData.push({
+              "SNo": count,
+              "Receipt No.": doc.orderNo,
+              "Date & Time": `${dateToDDMMYYYY(doc.dateOfPaid)} ${dateToHHMM(doc.timeOfPaid)}`,
+              "Member ID": memberId,
+              "Member Name": userName,
+              "Admission Date": dateToDDMMYYYY(admissionDate),
+              "Mobile No": mobileNo,
+              // "Email ID": email,
+              "Branch": branch.branchName,
+              "Transaction Type": transactionType,
+              "Name": doc.packages.packageName,
+              "Paid Amount": doc.totalAmount ? `${doc.totalAmount.toFixed(3)}` : '0.000',
+              "Discount": doc.discount ? `${doc.discount.toFixed(3)}` : `0.000`,
+              "Cash": doc.cashAmount ? `${doc.cashAmount.toFixed(3)}` : `0.000`,
+              "Card": doc.cardAmount ? `${doc.cardAmount.toFixed(3)}` : `0.000`,
+              "Digital": doc.digitalAmount ? `${doc.digitalAmount.toFixed(3)}` : `0.000`,
+              "Cheque": doc.chequeAmount ? `${doc.chequeAmount.toFixed(3)}` : `0.000`,
+              "Done By": doc.doneBy ? doc.doneBy.userName : 'NA'
+            })
+            count = count + 1
+          }
+        }
+        if (doc.trainerDetails && doc.trainerDetails.length) {
+          doc.trainerDetails.forEach(trainerDetail => {
+            if (trainerDetail.Installments && trainerDetail.Installments.length) {
+              trainerDetail.Installments.forEach(installment => {
+                if (installment.paidStatus === 'Paid') {
+                  totalPaidAmount += (installment.totalAmount ? +installment.totalAmount : 0)
+                  totalCash += (installment.cashAmount ? +installment.cashAmount : 0)
+                  totalCard += (installment.cardAmount ? +installment.cardAmount : 0)
+                  totalDigital += (installment.digitalAmount ? +installment.digitalAmount : 0)
+                  totalCheque += (installment.chequeAmount ? +installment.chequeAmount : 0)
+                  totalDiscount += (installment.discount ? +installment.discount : 0)
+                  tabledData.push({
+                    "SNo": count,
+                    "Receipt No.": installment.orderNo,
+                    "Date & Time": `${dateToDDMMYYYY(doc.dateOfPaid)} ${dateToHHMM(doc.timeOfPaid)}`,
+                    "Member ID": memberId,
+                    "Member Name": userName,
+                    "Admission Date": dateToDDMMYYYY(admissionDate),
+                    "Mobile No": mobileNo,
+                    // "Email ID": email,
+                    "Branch": branch.branchName,
+                    "Transaction Type": transactionType,
+                    "Name": `${trainerDetail.trainer.credentialId.userName} (${installment.installmentName})`,
+                    "Paid Amount": installment.totalAmount ? `${installment.totalAmount.toFixed(3)}` : '0.000',
+                    "Discount": installment.discount ? `${installment.discount.toFixed(3)}` : `0.000`,
+                    "Cash": installment.cashAmount ? `${installment.cashAmount.toFixed(3)}` : `0.000`,
+                    "Card": installment.cardAmount ? `${installment.cardAmount.toFixed(3)}` : `0.000`,
+                    "Digital": installment.digitalAmount ? `${installment.digitalAmount.toFixed(3)}` : `0.000`,
+                    "Cheque": installment.chequeAmount ? `${installment.chequeAmount.toFixed(3)}` : `0.000`,
+                    "Done By": installment.doneBy ? installment.doneBy.userName : 'NA'
+                  })
+                  count = count + 1
+                }
+              })
+            } else {
+              if (trainerDetail.paidStatus === 'Paid' || trainerDetail.paidStatus === 'Installment') {
+                totalPaidAmount += (trainerDetail.totalAmount ? +trainerDetail.totalAmount : 0)
+                totalCash += (trainerDetail.cashAmount ? +trainerDetail.cashAmount : 0)
+                totalCard += (trainerDetail.cardAmount ? +trainerDetail.cardAmount : 0)
+                totalDigital += (trainerDetail.digitalAmount ? +trainerDetail.digitalAmount : 0)
+                totalCheque += (trainerDetail.chequeAmount ? +trainerDetail.chequeAmount : 0)
+                totalDiscount += (trainerDetail.discount ? +trainerDetail.discount : 0)
+                tabledData.push({
+                  "SNo": count,
+                  "Receipt No.": trainerDetail.orderNo,
+                  "Date & Time": `${dateToDDMMYYYY(doc.dateOfPaid)} ${dateToHHMM(doc.timeOfPaid)}`,
+                  "Member ID": memberId,
+                  "Member Name": userName,
+                  "Admission Date": dateToDDMMYYYY(admissionDate),
+                  "Mobile No": mobileNo,
+                  // "Email ID": email,
+                  "Branch": branch.branchName,
+                  "Transaction Type": transactionType,
+                  "Name": trainerDetail.trainer.credentialId.userName,
+                  "Paid Amount": trainerDetail.totalAmount ? `${trainerDetail.totalAmount.toFixed(3)}` : '0.000',
+                  "Discount": trainerDetail.discount ? `${trainerDetail.discount.toFixed(3)}` : `0.000`,
+                  "Cash": trainerDetail.cashAmount ? `${trainerDetail.cashAmount.toFixed(3)}` : `0.000`,
+                  "Card": trainerDetail.cardAmount ? `${trainerDetail.cardAmount.toFixed(3)}` : `0.000`,
+                  "Digital": trainerDetail.digitalAmount ? `${trainerDetail.digitalAmount.toFixed(3)}` : `0.000`,
+                  "Cheque": trainerDetail.chequeAmount ? `${trainerDetail.chequeAmount.toFixed(3)}` : `0.000`,
+                  "Done By": trainerDetail.doneBy ? trainerDetail.doneBy.userName : 'NA'
+                })
+                count = count + 1
+              }
+            }
+          })
+        }
       })
     })
     tabledData.push({
@@ -754,14 +882,14 @@ class TableExport extends Component {
       "Mobile No": '',
       // "Email ID": email,
       "Branch": '',
-      "Package": '',
       "Transaction Type": 'Grand Total',
-      "Package Amount": `${this.props.defaultCurrency} ${totalPackageAmount.toFixed(3)}`,
-      "Trainer Amount": `${this.props.defaultCurrency} ${totalTrainerAmount.toFixed(3)}`,
+      "Name": 'NA',
       "Paid Amount": `${this.props.defaultCurrency} ${totalPaidAmount.toFixed(3)}`,
+      "Discount": `${this.props.defaultCurrency} ${totalDiscount.toFixed(3)}`,
       "Cash": `${this.props.defaultCurrency} ${totalCash.toFixed(3)}`,
       "Card": `${this.props.defaultCurrency} ${totalCard.toFixed(3)}`,
       "Digital": `${this.props.defaultCurrency} ${totalDigital.toFixed(3)}`,
+      "Cheque": `${this.props.defaultCurrency} ${totalCheque.toFixed(3)}`,
       "Done By": ''
     })
     return tabledData
@@ -770,9 +898,9 @@ class TableExport extends Component {
   tableForItemSales(datas) {
     let tabledData = []
     let count = 1
-    let totalFullAmount = 0, totalDiscountAmount = 0, totalPaidAmount = 0, totalCash = 0, totalCard = 0, totalDigital = 0
+    let totalFullAmount = 0, totalDiscountAmount = 0, totalPaidAmount = 0, totalCash = 0, totalCard = 0, totalDigital = 0, totalCheque = 0
     datas && datas.forEach(data => {
-      const { customerDetails: { member }, branch, totalAmount, cashAmount, cardAmount, digitalAmount, dateOfPurchase, created_at, actualAmount, discount, purchaseStock } = data
+      const { customerDetails: { member }, branch, totalAmount, cashAmount, cardAmount, digitalAmount, chequeAmount, dateOfPurchase, created_at, actualAmount, discount, purchaseStock } = data
       let itemNames = purchaseStock.map(stock => stock.stockId.itemName).join(', ')
       let quantities = purchaseStock.map(stock => stock.quantity).join(', ')
 
@@ -782,6 +910,7 @@ class TableExport extends Component {
       totalCash += (cashAmount ? +cashAmount : 0)
       totalCard += (cardAmount ? +cardAmount : 0)
       totalDigital += (digitalAmount ? +digitalAmount : 0)
+      totalCheque += (chequeAmount ? +chequeAmount : 0)
 
       if (member) {
         const { memberId, credentialId: { userName }, admissionDate, mobileNo } = member
@@ -803,6 +932,7 @@ class TableExport extends Component {
           "Cash": `${cashAmount.toFixed(3)}`,
           "Card": `${cardAmount.toFixed(3)}`,
           "Digital": digitalAmount ? `${digitalAmount.toFixed(3)}` : `0.000`,
+          "Cheque": chequeAmount ? `${chequeAmount.toFixed(3)}` : `0.000`,
           "Done By": data.doneBy ? data.doneBy.userName : 'NA'
         })
       } else {
@@ -824,6 +954,7 @@ class TableExport extends Component {
           "Cash": `${cashAmount.toFixed(3)}`,
           "Card": `${cardAmount.toFixed(3)}`,
           "Digital": digitalAmount ? `${digitalAmount.toFixed(3)}` : `0.000`,
+          "Cheque": chequeAmount ? `${chequeAmount.toFixed(3)}` : `0.000`,
           "Done By": data.doneBy ? data.doneBy.userName : 'NA'
         })
       }
@@ -847,6 +978,7 @@ class TableExport extends Component {
       "Cash": `${this.props.defaultCurrency} ${totalCash.toFixed(3)}`,
       "Card": `${this.props.defaultCurrency} ${totalCard.toFixed(3)}`,
       "Digital": `${this.props.defaultCurrency} ${totalDigital.toFixed(3)}`,
+      "Cheque": `${this.props.defaultCurrency} ${totalCheque.toFixed(3)}`,
       "Done By": ''
     })
     return tabledData
@@ -855,9 +987,9 @@ class TableExport extends Component {
   tableForClassesSales(datas) {
     let tabledData = []
     let count = 1
-    let totalFullAmount = 0, totalPaidAmount = 0, totalCash = 0, totalCard = 0, totalDigital = 0
+    let totalFullAmount = 0, totalPaidAmount = 0, totalCash = 0, totalCard = 0, totalDigital = 0, totalCheque = 0, totalDiscount = 0
     datas && datas.forEach(data => {
-      const { member: { memberId, credentialId: { userName }, branch, mobileNo }, amount, totalAmount, cashAmount,
+      const { member: { memberId, credentialId: { userName }, branch, mobileNo }, amount, totalAmount, cashAmount, chequeAmount, discount,
         cardAmount, digitalAmount, dateOfPurchase, created_at, classId: { className, startDate, trainer: { credentialId: { userName: trainerName } } } } = data
 
       totalFullAmount += (amount ? +amount : 0)
@@ -865,6 +997,8 @@ class TableExport extends Component {
       totalCash += (cashAmount ? +cashAmount : 0)
       totalCard += (cardAmount ? +cardAmount : 0)
       totalDigital += (digitalAmount ? +digitalAmount : 0)
+      totalCheque += (chequeAmount ? +chequeAmount : 0)
+      totalDiscount += (discount ? +discount : 0)
 
       tabledData.push({
         "SNo": count,
@@ -880,9 +1014,11 @@ class TableExport extends Component {
         "Start Date": dateToDDMMYYYY(startDate),
         "Amount": `${amount.toFixed(3)}`,
         "Paid Amount": `${totalAmount.toFixed(3)}`,
+        "Discount": discount ? `${discount.toFixed(3)}` : `0.000`,
         "Cash": `${cashAmount.toFixed(3)}`,
         "Card": `${cardAmount.toFixed(3)}`,
         "Digital": digitalAmount ? `${digitalAmount.toFixed(3)}` : `0.000`,
+        "Cheque": chequeAmount ? `${chequeAmount.toFixed(3)}` : `0.000`,
         "Done By": data.doneBy ? data.doneBy.userName : 'NA'
       })
       count = count + 1
@@ -901,9 +1037,11 @@ class TableExport extends Component {
       "Start Date": `Grand Total`,
       "Amount": `${this.props.defaultCurrency} ${totalFullAmount.toFixed(3)}`,
       "Paid Amount": `${this.props.defaultCurrency} ${totalPaidAmount.toFixed(3)}`,
+      "Discount": `${this.props.defaultCurrency} ${totalDiscount.toFixed(3)}`,
       "Cash": `${this.props.defaultCurrency} ${totalCash.toFixed(3)}`,
       "Card": `${this.props.defaultCurrency} ${totalCard.toFixed(3)}`,
       "Digital": `${this.props.defaultCurrency} ${totalDigital.toFixed(3)}`,
+      "Cheque": `${this.props.defaultCurrency} ${totalCheque.toFixed(3)}`,
       "Done By": ''
     })
     return tabledData
@@ -1014,48 +1152,159 @@ class TableExport extends Component {
     let totalPaidAmount = 0
     datas && datas.forEach(data => {
       if (data.transactionType === 'Packages') {
-        const { memberId, credentialId: { userName }, branch, packageDetails, mobileNo, transactionType, paymentMethod } = data
+        const { memberId, credentialId: { userName }, branch, packageDetails, mobileNo, paymentMethod } = data
         packageDetails.forEach(doc => {
           let displayAmount = 0
-          if (paymentMethod === 'Cash') {
-            displayAmount = (+doc.cashAmount ? +doc.cashAmount : 0)
-            totalPaidAmount += (doc.cashAmount ? +doc.cashAmount : 0)
-          } else if (paymentMethod === 'Card') {
-            displayAmount = (+doc.cardAmount ? doc.cardAmount : 0)
-            totalPaidAmount += (doc.cardAmount ? +doc.cardAmount : 0)
+          if (doc.Installments && doc.Installments.length) {
+            doc.Installments.forEach(installment => {
+              if (installment.paidStatus === 'Paid') {
+                if (paymentMethod === 'Cash') {
+                  displayAmount = (+installment.cashAmount ? +installment.cashAmount : 0)
+                  totalPaidAmount += (installment.cashAmount ? +installment.cashAmount : 0)
+                } else if (paymentMethod === 'Card') {
+                  displayAmount = (+installment.cardAmount ? installment.cardAmount : 0)
+                  totalPaidAmount += (installment.cardAmount ? +installment.cardAmount : 0)
+                } else if (paymentMethod === 'Digital') {
+                  displayAmount = (+installment.digitalAmount ? +installment.digitalAmount : 0)
+                  totalPaidAmount += (installment.digitalAmount ? +installment.digitalAmount : 0)
+                } else {
+                  displayAmount = (+installment.chequeAmount ? +installment.chequeAmount : 0)
+                  totalPaidAmount += (installment.chequeAmount ? +installment.chequeAmount : 0)
+                }
+                tabledData.push({
+                  "SNo": count,
+                  "Receipt No.": installment.orderNo,
+                  "Date & Time": `${dateToDDMMYYYY(doc.dateOfPaid)} ${dateToHHMM(doc.timeOfPaid)}`,
+                  "Member ID": memberId,
+                  "Member Name": userName,
+                  "Mobile No": mobileNo,
+                  // "Email ID": email,
+                  "Branch": branch.branchName,
+                  "Transaction Type": 'Packages',
+                  "Payment Method": paymentMethod,
+                  "Paid Amount": `${displayAmount.toFixed(3)}`,
+                  "Done By": installment.doneBy ? installment.doneBy.userName : 'NA'
+                })
+                count = count + 1
+              }
+            })
           } else {
-            displayAmount = (+doc.digitalAmount ? +doc.digitalAmount : 0)
-            totalPaidAmount += (doc.digitalAmount ? +doc.digitalAmount : 0)
+            if (doc.paidStatus === 'Paid' || doc.paidStatus === 'Installment') {
+              if (paymentMethod === 'Cash') {
+                displayAmount = (+doc.cashAmount ? +doc.cashAmount : 0)
+                totalPaidAmount += (doc.cashAmount ? +doc.cashAmount : 0)
+              } else if (paymentMethod === 'Card') {
+                displayAmount = (+doc.cardAmount ? doc.cardAmount : 0)
+                totalPaidAmount += (doc.cardAmount ? +doc.cardAmount : 0)
+              } else if (paymentMethod === 'Digital') {
+                displayAmount = (+doc.digitalAmount ? +doc.digitalAmount : 0)
+                totalPaidAmount += (doc.digitalAmount ? +doc.digitalAmount : 0)
+              } else {
+                displayAmount = (+doc.chequeAmount ? +doc.chequeAmount : 0)
+                totalPaidAmount += (doc.chequeAmount ? +doc.chequeAmount : 0)
+              }
+              tabledData.push({
+                "SNo": count,
+                "Receipt No.": doc.orderNo,
+                "Date & Time": `${dateToDDMMYYYY(doc.dateOfPaid)} ${dateToHHMM(doc.timeOfPaid)}`,
+                "Member ID": memberId,
+                "Member Name": userName,
+                "Mobile No": mobileNo,
+                // "Email ID": email,
+                "Branch": branch.branchName,
+                "Transaction Type": 'Packages',
+                "Payment Method": paymentMethod,
+                "Paid Amount": displayAmount ? `${displayAmount.toFixed(3)}` : '0.000',
+                "Done By": doc.doneBy ? doc.doneBy.userName : 'NA'
+              })
+              count = count + 1
+            }
           }
-
-          tabledData.push({
-            "SNo": count,
-            "Receipt No.": doc.orderNo,
-            "Date & Time": `${dateToDDMMYYYY(doc.dateOfPurchase)} ${dateToHHMM(doc.timeOfPurchase)}`,
-            "Member ID": memberId,
-            "Member Name": userName,
-            "Mobile No": mobileNo,
-            // "Email ID": email,
-            "Branch": branch.branchName,
-            "Transaction Type": transactionType,
-            "Payment Method": paymentMethod,
-            "Paid Amount": `${displayAmount.toFixed(3)}`,
-            "Done By": doc.doneBy ? doc.doneBy.userName : 'NA'
-          })
-          count = count + 1
+          if (doc.trainerDetails && doc.trainerDetails.length) {
+            doc.trainerDetails.forEach(trainerDetail => {
+              if (trainerDetail.Installments && trainerDetail.Installments.length) {
+                trainerDetail.Installments.forEach(installment => {
+                  if (installment.paidStatus === 'Paid') {
+                    if (paymentMethod === 'Cash') {
+                      displayAmount = (+installment.cashAmount ? +installment.cashAmount : 0)
+                      totalPaidAmount += (installment.cashAmount ? +installment.cashAmount : 0)
+                    } else if (paymentMethod === 'Card') {
+                      displayAmount = (+installment.cardAmount ? installment.cardAmount : 0)
+                      totalPaidAmount += (installment.cardAmount ? +installment.cardAmount : 0)
+                    } else if (paymentMethod === 'Digital') {
+                      displayAmount = (+installment.digitalAmount ? +installment.digitalAmount : 0)
+                      totalPaidAmount += (installment.digitalAmount ? +installment.digitalAmount : 0)
+                    } else {
+                      displayAmount = (+installment.chequeAmount ? +installment.chequeAmount : 0)
+                      totalPaidAmount += (installment.chequeAmount ? +installment.chequeAmount : 0)
+                    }
+                    tabledData.push({
+                      "SNo": count,
+                      "Receipt No.": installment.orderNo,
+                      "Date & Time": `${dateToDDMMYYYY(doc.dateOfPaid)} ${dateToHHMM(doc.timeOfPaid)}`,
+                      "Member ID": memberId,
+                      "Member Name": userName,
+                      "Mobile No": mobileNo,
+                      // "Email ID": email,
+                      "Branch": branch.branchName,
+                      "Transaction Type": 'Trainers',
+                      "Payment Method": paymentMethod,
+                      "Paid Amount": displayAmount ? `${displayAmount.toFixed(3)}` : '0.000',
+                      "Done By": installment.doneBy ? installment.doneBy.userName : 'NA'
+                    })
+                    count = count + 1
+                  }
+                })
+              } else {
+                if (trainerDetail.paidStatus === 'Paid' || trainerDetail.paidStatus === 'Installment') {
+                  if (paymentMethod === 'Cash') {
+                    displayAmount = (+trainerDetail.cashAmount ? +trainerDetail.cashAmount : 0)
+                    totalPaidAmount += (trainerDetail.cashAmount ? +trainerDetail.cashAmount : 0)
+                  } else if (paymentMethod === 'Card') {
+                    displayAmount = (+trainerDetail.cardAmount ? trainerDetail.cardAmount : 0)
+                    totalPaidAmount += (trainerDetail.cardAmount ? +trainerDetail.cardAmount : 0)
+                  } else if (paymentMethod === 'Digital') {
+                    displayAmount = (+trainerDetail.digitalAmount ? +trainerDetail.digitalAmount : 0)
+                    totalPaidAmount += (trainerDetail.digitalAmount ? +trainerDetail.digitalAmount : 0)
+                  } else {
+                    displayAmount = (+trainerDetail.chequeAmount ? +trainerDetail.chequeAmount : 0)
+                    totalPaidAmount += (trainerDetail.chequeAmount ? +trainerDetail.chequeAmount : 0)
+                  }
+                  tabledData.push({
+                    "SNo": count,
+                    "Receipt No.": trainerDetail.orderNo,
+                    "Date & Time": `${dateToDDMMYYYY(doc.dateOfPaid)} ${dateToHHMM(doc.timeOfPaid)}`,
+                    "Member ID": memberId,
+                    "Member Name": userName,
+                    "Mobile No": mobileNo,
+                    // "Email ID": email,
+                    "Branch": branch.branchName,
+                    "Transaction Type": 'Trainers',
+                    "Payment Method": paymentMethod,
+                    "Paid Amount": displayAmount ? `${displayAmount.toFixed(3)}` : '0.000',
+                    "Done By": trainerDetail.doneBy ? trainerDetail.doneBy.userName : 'NA'
+                  })
+                  count = count + 1
+                }
+              }
+            })
+          }
         })
       } else if (data.transactionType === 'POS') {
-        const { customerDetails: { member }, transactionType, branch, cashAmount, cardAmount, digitalAmount, dateOfPurchase, created_at, paymentMethod } = data
+        const { customerDetails: { member }, transactionType, branch, cashAmount, cardAmount, digitalAmount, chequeAmount, dateOfPurchase, created_at, paymentMethod } = data
         let displayAmount = 0
         if (paymentMethod === 'Cash') {
-          displayAmount = +cashAmount
+          displayAmount = (+cashAmount ? +cashAmount : 0)
           totalPaidAmount += (cashAmount ? +cashAmount : 0)
         } else if (paymentMethod === 'Card') {
-          displayAmount = +cardAmount
+          displayAmount = (+cardAmount ? +cardAmount : 0)
           totalPaidAmount += (cardAmount ? +cardAmount : 0)
-        } else {
+        } else if (paymentMethod === 'Digital') {
           displayAmount = (+digitalAmount ? +digitalAmount : 0)
           totalPaidAmount += (digitalAmount ? +digitalAmount : 0)
+        } else {
+          displayAmount = (+chequeAmount ? +chequeAmount : 0)
+          totalPaidAmount += (chequeAmount ? +chequeAmount : 0)
         }
         if (member) {
           const { memberId, credentialId: { userName }, mobileNo } = member
@@ -1091,17 +1340,20 @@ class TableExport extends Component {
         }
         count = count + 1
       } else if (data.transactionType === 'Classes') {
-        const { member: { memberId, credentialId: { userName }, branch, mobileNo }, transactionType, cashAmount, cardAmount, digitalAmount, dateOfPurchase, created_at, paymentMethod } = data
+        const { member: { memberId, credentialId: { userName }, branch, mobileNo }, transactionType, cashAmount, cardAmount, digitalAmount, chequeAmount, dateOfPurchase, created_at, paymentMethod } = data
         let displayAmount = 0
         if (paymentMethod === 'Cash') {
-          displayAmount = +cashAmount
+          displayAmount = (+cashAmount ? +cashAmount : 0)
           totalPaidAmount += (cashAmount ? +cashAmount : 0)
         } else if (paymentMethod === 'Card') {
-          displayAmount = +cardAmount
+          displayAmount = (+cardAmount ? +cardAmount : 0)
           totalPaidAmount += (cardAmount ? +cardAmount : 0)
-        } else {
+        } else if (paymentMethod === 'Digital') {
           displayAmount = (+digitalAmount ? +digitalAmount : 0)
           totalPaidAmount += (digitalAmount ? +digitalAmount : 0)
+        } else {
+          displayAmount = (+chequeAmount ? +chequeAmount : 0)
+          totalPaidAmount += (chequeAmount ? +chequeAmount : 0)
         }
         tabledData.push({
           "SNo": count,
