@@ -543,11 +543,11 @@ const getGeneralSales = async (body) => {
   })
 
   let totalAmountOfMember = await Member.find(queryCond)
-  .populate('credentialId branch')
-  .populate('packageDetails.packages packageDetails.doneBy packageDetails.trainerDetails.doneBy packageDetails.trainerDetails.installments.doneBy')
-  .populate({ path: "packageDetails.trainerDetails.trainer", populate: { path: "credentialId" } })
-  .populate({ path: "packageDetails.packages", populate: { path: "period" } })
-  .populate({ path: "packageDetails.trainerDetails.trainerFees", populate: { path: "period" } }).lean()
+    .populate('credentialId branch')
+    .populate('packageDetails.packages packageDetails.doneBy packageDetails.trainerDetails.doneBy packageDetails.trainerDetails.installments.doneBy')
+    .populate({ path: "packageDetails.trainerDetails.trainer", populate: { path: "credentialId" } })
+    .populate({ path: "packageDetails.packages", populate: { path: "period" } })
+    .populate({ path: "packageDetails.trainerDetails.trainerFees", populate: { path: "period" } }).lean()
   totalAmountOfMember.forEach(ele => {
     ele.packageDetails = ele.packageDetails.filter(doc => {
       if (doc.paidStatus === 'Paid' || doc.paidStatus === 'Installment') {
@@ -618,8 +618,11 @@ const getPackageSales = async (body) => {
   })
 
   let totalAmountOfMember = await Member.find(queryCond)
-    .populate('credentialId branch packageDetails.trainerFees').populate("packageDetails.packages packageDetails.doneBy")
-    .populate({ path: "packageDetails.trainer", populate: { path: "credentialId" } }).lean();
+  .populate('credentialId branch')
+  .populate('packageDetails.packages packageDetails.doneBy packageDetails.trainerDetails.doneBy packageDetails.trainerDetails.installments.doneBy')
+  .populate({ path: "packageDetails.trainerDetails.trainer", populate: { path: "credentialId" } })
+  .populate({ path: "packageDetails.packages", populate: { path: "period" } })
+  .populate({ path: "packageDetails.trainerDetails.trainerFees", populate: { path: "period" } }).lean()
   totalAmountOfMember.forEach(ele => {
     ele.packageDetails = ele.packageDetails.filter(doc => {
       if (doc.paidStatus === 'Paid' || doc.paidStatus === 'Installment') {
@@ -832,12 +835,12 @@ const getSalesByPaymentMethod = async (body) => {
       }
     })
     totalAmountOfStockSell.forEach(doc => {
-      transactionType[1].amount += (body.paymentMethod === 'Cash' ? +doc.cashAmount : body.paymentMethod === 'Card' ? +doc.cardAmount : (+doc.digitalAmount ? +doc.digitalAmount : 0))
+      transactionType[1].amount += (body.paymentMethod === 'Cash' ? +doc.cashAmount : body.paymentMethod === 'Card' ? +doc.cardAmount : body.paymentMethod === 'Digital' ? (+doc.digitalAmount ? +doc.digitalAmount : 0) : (+doc.chequeAmount ? +doc.chequeAmount : 0))
       doc.transactionType = "POS"
       doc.paymentMethod = body.paymentMethod
       let branchIndex = branches.findIndex(b => b._id.toString() === doc.branch._id.toString())
       if (doc.branch._id.toString() === branches[branchIndex]._id.toString() && branchIndex !== -1) {
-        branches[branchIndex].amount += (body.paymentMethod === 'Cash' ? +doc.cashAmount : body.paymentMethod === 'Card' ? +doc.cardAmount : (+doc.digitalAmount ? +doc.digitalAmount : 0))
+        branches[branchIndex].amount += (body.paymentMethod === 'Cash' ? +doc.cashAmount : body.paymentMethod === 'Card' ? +doc.cardAmount : body.paymentMethod === 'Digital' ? (+doc.digitalAmount ? +doc.digitalAmount : 0) : (+doc.chequeAmount ? +doc.chequeAmount : 0))
       }
     })
   }
@@ -858,23 +861,26 @@ const getSalesByPaymentMethod = async (body) => {
       }
     })
     memberClasses.forEach(doc => {
-      transactionType[2].amount += (body.paymentMethod === 'Cash' ? +doc.cashAmount : body.paymentMethod === 'Card' ? +doc.cardAmount : (+doc.digitalAmount ? +doc.digitalAmount : 0))
+      transactionType[2].amount += (body.paymentMethod === 'Cash' ? +doc.cashAmount : body.paymentMethod === 'Card' ? +doc.cardAmount : body.paymentMethod === 'Digital' ? (+doc.digitalAmount ? +doc.digitalAmount : 0) : (+doc.chequeAmount ? +doc.chequeAmount : 0))
       doc.transactionType = "Classes"
       doc.paymentMethod = body.paymentMethod
       let branchIndex = branches.findIndex(b => b._id.toString() === doc.member.branch._id.toString())
       if (doc.member.branch._id.toString() === branches[branchIndex]._id.toString() && branchIndex !== -1) {
-        branches[branchIndex].amount += (body.paymentMethod === 'Cash' ? +doc.cashAmount : body.paymentMethod === 'Card' ? +doc.cardAmount : (+doc.digitalAmount ? +doc.digitalAmount : 0))
+        branches[branchIndex].amount += (body.paymentMethod === 'Cash' ? +doc.cashAmount : body.paymentMethod === 'Card' ? +doc.cardAmount : body.paymentMethod === 'Digital' ? (+doc.digitalAmount ? +doc.digitalAmount : 0) : (+doc.chequeAmount ? +doc.chequeAmount : 0))
       }
     })
   }
 
   if (body.transactionType === 'Packages' || body.transactionType === '') {
     totalAmountOfMember = await Member.find(queryCond)
-      .populate('credentialId branch').populate("packageDetails.packages packageDetails.doneBy")
-      .populate({ path: "packageDetails.trainer", populate: { path: "credentialId" } }).lean();
+      .populate('credentialId branch')
+  .populate('packageDetails.packages packageDetails.doneBy packageDetails.trainerDetails.doneBy packageDetails.trainerDetails.installments.doneBy')
+  .populate({ path: "packageDetails.trainerDetails.trainer", populate: { path: "credentialId" } })
+  .populate({ path: "packageDetails.packages", populate: { path: "period" } })
+  .populate({ path: "packageDetails.trainerDetails.trainerFees", populate: { path: "period" } }).lean()
     totalAmountOfMember.forEach(ele => {
       ele.packageDetails = ele.packageDetails.filter(doc => {
-        if (doc.paidStatus === 'Paid') {
+        if (doc.paidStatus === 'Paid' || doc.paidStatus === 'Installment') {
           if (body.fromDate && body.toDate) {
             if (
               new Date(setTime(body.fromDate)) <= (doc.startDate ? doc.startDate : ele.admissionDate) &&

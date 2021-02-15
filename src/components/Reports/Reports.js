@@ -307,6 +307,7 @@ class Reports extends Component {
               <option value="Digital">{t('Digital')}</option>
               <option value="Cash">{t('Cash')}</option>
               <option value="Card">{t('Card')}</option>
+              <option value="Cheque">{t('Cheque')}</option>
             </select>
             <span className="iconv1 iconv1-arrow-down float-right iconspostion"></span>
             <div className="errorMessageWrapper">
