@@ -606,14 +606,14 @@ class PackageDetails extends Component {
                                       autoOk
                                       invalidDateMessage=''
                                       minDateMessage=''
-                                      className={this.state.chequeDateE ? "form-control mx-sm-2 inlineFormInputs FormInputsError w-100 p-0 d-flex align-items-center bg-white dirltr" : "form-control mx-sm-2 inlineFormInputs w-100 p-0 d-flex align-items-center bg-white dirltr"}
+                                      className={this.state.chequeDateE ? "form-control pl-2 bg-white mx-sm-2 inlineFormInputs FormInputsError dirltr" : "form-control pl-2 bg-white mx-sm-2 inlineFormInputs dirltr"}
                                       minDate={new Date()}
                                       format="dd/MM/yyyy"
                                       value={this.state.chequeDate}
                                       onChange={(e) => this.setState(validator(e, 'chequeDate', 'date', []))}
                                     />
                                   </MuiPickersUtilsProvider>
-                                  <span className="icon-date dateBoxIcon"></span>
+                                  <span class="iconv1 iconv1-calander dateBoxIcon"></span>
                                   <div className="errorMessageWrapper">
                                     <small className="text-danger mx-sm-2 errorMessage"></small>
                                   </div>
@@ -918,7 +918,7 @@ class PackageDetails extends Component {
 
 
           {/* --------------Receipt Modal-=--------------- */}
-        {/* {orderById &&
+          {/* {orderById &&
           <div className="modal fade commonYellowModal" id="ReceiptModal">
             <div className="modal-dialog modal-lg" id="ReceiptModal2">
               <div className="modal-content">
@@ -1115,9 +1115,9 @@ class PackageDetails extends Component {
             </div>
           </div>
         } */}
-        {/* --------------Receipt Modal Ends-=--------------- */}
+          {/* --------------Receipt Modal Ends-=--------------- */}
 
-        {/* {orderById &&
+          {/* {orderById &&
           <div className="PageBillWrapper d-none">
             <div style={{ width: "450px", padding: "15px", margin: "auto" }} id="newPrint">
               <div style={{ display: "flex", justifyContent: "center" }}>

@@ -980,14 +980,14 @@ class PackageRenewal extends Component {
                             autoOk
                             invalidDateMessage=''
                             minDateMessage=''
-                            className={this.state.chequeDateE ? "form-control mx-sm-2 inlineFormInputs FormInputsError w-100 p-0 d-flex align-items-center bg-white dirltr" : "form-control mx-sm-2 inlineFormInputs w-100 p-0 d-flex align-items-center bg-white dirltr"}
+                            className={this.state.chequeDateE ? "form-control pl-2 bg-white mx-sm-2 inlineFormInputs FormInputsError dirltr" : "form-control pl-2 bg-white mx-sm-2 inlineFormInputs dirltr"}
                             minDate={new Date()}
                             format="dd/MM/yyyy"
                             value={this.state.chequeDate}
                             onChange={(e) => this.setState(validator(e, 'chequeDate', 'date', []))}
                           />
                         </MuiPickersUtilsProvider>
-                        <span className="icon-date dateBoxIcon"></span>
+                        <span class="iconv1 iconv1-calander dateBoxIcon"></span>
                         <div className="errorMessageWrapper">
                           <small className="text-danger mx-sm-2 errorMessage"></small>
                         </div>

@@ -1094,5 +1094,16 @@
   "Please select member first": "الرجاء تحديد العضو أولاً",
   "Manage Trainers": "إدارة المدربين",
   "Select Period": "اختر المدة",
-  "Manage Trainers List": "إدارة قائمة المُدربين"
+  "Manage Trainers List": "إدارة قائمة المُدربين",
+  "Book A Trainer": "Book A Trainer",
+  "Audit Logs": "Audit Logs",
+  "Old Data": "Old Data",
+  "New Data": "New Data",
+  "IP Address": "IP Address",
+  "Event": "Event",
+  "Enter Your Notes!": "Enter Your Notes!",
+  "Instagram Id": "Instagram id",
+  "Branch Photo": "Branch Photo",
+  "Audit Logs Data": "Audit Logs Data",
+  "IP Location": "IP Location"
 }

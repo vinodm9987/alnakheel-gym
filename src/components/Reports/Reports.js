@@ -122,7 +122,7 @@ class Reports extends Component {
     const { reportType, reportName, branch, fromDate, toDate, staffName, paymentMethod, transactionType, packageId, trainerId } = this.state
     if (reportName === 'End of Shift Report' || reportName === 'Today Sales By Staff') {
       if (reportType && reportName && staffName && branch) {
-        const reportInfo = { reportType, reportName, branch, fromDate, toDate, paymentMethod, transactionType, packageId, trainerId, staffName }
+        const reportInfo = { reportType, reportName, branch, fromDate, toDate, paymentMethod, transactionType, packageId, trainerId: trainerId._id, staffName }
         this.props.dispatch(getReport(reportInfo))
       } else {
         if (!reportType) this.setState({ reportTypeE: t('Select type') })
@@ -132,7 +132,7 @@ class Reports extends Component {
       }
     } else {
       if (reportType && reportName && fromDate <= toDate) {
-        const reportInfo = { reportType, reportName, branch, fromDate, toDate, paymentMethod, transactionType, packageId, trainerId }
+        const reportInfo = { reportType, reportName, branch, fromDate, toDate, paymentMethod, transactionType, packageId, trainerId: trainerId._id }
         this.props.dispatch(getReport(reportInfo))
       } else {
         if (!reportType) this.setState({ reportTypeE: t('Select type') })

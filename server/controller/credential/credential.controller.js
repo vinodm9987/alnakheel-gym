@@ -213,7 +213,7 @@ exports.login = async (req, res) => {
 
 exports.logout = async (req, res) => {
     if (req.headers.userid) {
-        const isExist = await Credential.findByIdy(req.headers.userid).lean();
+        const isExist = await Credential.findById(req.headers.userid).lean();
         if (isExist) { auditLogger(req, 'Success') }
         else
             return successResponseHandler(res, '', "successfully logout !")

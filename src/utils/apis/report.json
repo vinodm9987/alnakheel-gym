@@ -132,7 +132,6 @@
         "name": "Package Type",
         "headers": [
           "SNo",
-          "Receipt No.",
           "Date & Time",
           "Member ID",
           "Member Name",
@@ -142,8 +141,7 @@
           "Package",
           "Start Date",
           "End Date",
-          "Paid Amount",
-          "Done By"
+          "To Be Paid"
         ],
         "description": "This report will list all members who registered for packages for specific period."
       },
@@ -183,10 +181,12 @@
           "Mobile No",
           "Branch",
           "Transaction Type",
+          "Name",
           "Paid Amount",
           "Cash",
           "Card",
           "Digital",
+          "Cheque",
           "Done By"
         ],
         "description": "This report will show branches general sales for specific period."

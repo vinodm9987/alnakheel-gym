@@ -364,11 +364,11 @@ body {
 }
 @media (min-width: 1200px) {
   .AddClass label.type2 {
-    width: 62px;
+    width: 79px;
   }
   .AddClass label.type2 + .inlineFormInputs,
   .AddClass label.type2 ~ .errorMessageWrapper .errorMessage {
-    max-width: calc(100% - 62px - 2rem);
+    max-width: calc(100% - 79px - 2rem);
   }
   .AddClass label.type3 {
     width: 92px;
