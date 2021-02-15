@@ -59,7 +59,6 @@ module.exports = {
             const expiryDate = new Date(setTime(response[i].expiryDate)).getTime();
             let expiryMonth = new Date(setTime(response[i].expiryDate))
                 .setMonth(new Date(response[i].expiryDate).getMonth() - 1);
-            let expiryDate = new Date(response[i].expiryDate).getTime();
             if (expiryMonth === today) {
                 try { await stockExpired(itemName, branchName) }
                 catch (error) { logger.error(error); }
