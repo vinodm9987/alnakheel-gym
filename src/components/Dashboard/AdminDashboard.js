@@ -323,11 +323,13 @@ class AdminDashboard extends Component {
                       </div>
                     </div>
                     {/* tusar button */}
-                    <Link to='/admin-attendance' className="linkHoverDecLess ml-auto mr-3 mt-5">
-                      <div className="col-12 px-0">
-                        <button className="btn btn-warning br-50px text-white px-3 btn-sm text-nowrap mt-3 mt-sm-0">{t('View All Attendance')}</button>
-                      </div>
-                    </Link>
+                    {this.props.dashboardAttendance.length > 0 &&
+                      <Link to='/admin-attendance' className="linkHoverDecLess ml-auto mr-3 mt-5">
+                        <div className="col-12 px-0">
+                          <button className="btn btn-warning br-50px text-white px-3 btn-sm text-nowrap mt-3 mt-sm-0">{t('View All Attendance')}</button>
+                        </div>
+                      </Link>
+                    }
                   </div>
                 </div>
               </div>
@@ -422,11 +424,13 @@ class AdminDashboard extends Component {
             <div className="col-12">
               <div className="row pb-2">
                 <div className="col-12 px-0 d-flex flex-wrap justify-content-end">
-                  <Link to='/#' className="linkHoverDecLess">
-                    <div className="col text-right full-width-576-down">
-                      <button className="btn btn-warning br-50px text-white px-3 btn-sm text-nowrap mt-3 mt-sm-0">{t('View All')}</button>
-                    </div>
-                  </Link>
+                  {this.props.mostSellingStock.length > 0 &&
+                    <Link to='/#' className="linkHoverDecLess">
+                      <div className="col text-right full-width-576-down">
+                        <button className="btn btn-warning br-50px text-white px-3 btn-sm text-nowrap mt-3 mt-sm-0">{t('View All')}</button>
+                      </div>
+                    </Link>
+                  }
                 </div>
               </div>
             </div>
@@ -771,11 +775,13 @@ class AdminDashboard extends Component {
               <div className="col-12 px-0">
                 <div className="row pb-2">
                   <div className="col-12 px-0 d-flex flex-wrap justify-content-end">
-                    <Link to='/pending-installments' className="linkHoverDecLess">
-                      <div className="col text-right full-width-576-down">
-                        <button className="btn btn-warning br-50px text-white px-3 btn-sm text-nowrap mt-3 mt-sm-0">{t('View All')}</button>
-                      </div>
-                    </Link>
+                    {this.props.pendingInstallments.length > 0 &&
+                      <Link to='/pending-installments' className="linkHoverDecLess">
+                        <div className="col text-right full-width-576-down">
+                          <button className="btn btn-warning br-50px text-white px-3 btn-sm text-nowrap mt-3 mt-sm-0">{t('View All')}</button>
+                        </div>
+                      </Link>
+                    }
                   </div>
                 </div>
               </div>

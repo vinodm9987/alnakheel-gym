@@ -543,11 +543,11 @@ const getGeneralSales = async (body) => {
   })
 
   let totalAmountOfMember = await Member.find(queryCond)
-  .populate('credentialId branch')
-  .populate('packageDetails.packages packageDetails.doneBy packageDetails.trainerDetails.doneBy packageDetails.trainerDetails.installments.doneBy')
-  .populate({ path: "packageDetails.trainerDetails.trainer", populate: { path: "credentialId" } })
-  .populate({ path: "packageDetails.packages", populate: { path: "period" } })
-  .populate({ path: "packageDetails.trainerDetails.trainerFees", populate: { path: "period" } }).lean()
+    .populate('credentialId branch')
+    .populate('packageDetails.packages packageDetails.doneBy packageDetails.trainerDetails.doneBy packageDetails.trainerDetails.installments.doneBy')
+    .populate({ path: "packageDetails.trainerDetails.trainer", populate: { path: "credentialId" } })
+    .populate({ path: "packageDetails.packages", populate: { path: "period" } })
+    .populate({ path: "packageDetails.trainerDetails.trainerFees", populate: { path: "period" } }).lean()
   totalAmountOfMember.forEach(ele => {
     ele.packageDetails = ele.packageDetails.filter(doc => {
       if (doc.paidStatus === 'Paid' || doc.paidStatus === 'Installment') {

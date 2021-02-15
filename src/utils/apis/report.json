@@ -183,6 +183,7 @@
           "Transaction Type",
           "Name",
           "Paid Amount",
+          "Discount",
           "Cash",
           "Card",
           "Digital",
@@ -202,14 +203,13 @@
           "Admission Date",
           "Mobile No",
           "Branch",
-          "Package",
           "Transaction Type",
-          "Package Amount",
-          "Trainer Amount",
           "Paid Amount",
+          "Discount",
           "Cash",
           "Card",
           "Digital",
+          "Cheque",
           "Done By"
         ],
         "description": "This report will show branches Package sales for specific period."
@@ -230,9 +230,11 @@
           "Total Amount",
           "Discount Amount",
           "Paid Amount",
+          "Discount",
           "Cash",
           "Card",
           "Digital",
+          "Cheque",
           "Done By"
         ],
         "description": "This report will show branches item sales for specific period."
@@ -252,9 +254,11 @@
           "Start Date",
           "Amount",
           "Paid Amount",
+          "Discount",
           "Cash",
           "Card",
           "Digital",
+          "Cheque",
           "Done By"
         ],
         "description": "This report will show branches classes sales for specific period."
