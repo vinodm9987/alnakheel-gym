@@ -124,7 +124,15 @@ exports.getPendingFreezeMember = async (req, res) => {
 
 
 
-
+exports.memberFreezeUpdate = async (req, res) => {
+    MemberFreezing.findByIdAndUpdate(req.params.id, req.body, { new: true })
+        .then(response => {
+            return successResponseHandler(res, response, "successfully updated freeze Member !")
+        }).catch(error => {
+            logger.error(error);
+            errorResponseHandler(res, error, "failed to update freeze Member !");
+        });
+};
 
 
 exports.removeMemberFreeze = (req, res) => {

@@ -13,6 +13,8 @@ const MemberFreezeSchema = new Schema({
 
     cardNumber: String, vatAmount: Number, returningDate: Date,
 
+    status: { type: Boolean, default: true },
+
     typeOfFreeze: { type: String, enum: ['Pending', 'Froze', 'Canceled'], default: 'Pending' },
 
 }, { timestamps: { createdAt: "created_at", updatedAt: "updated_at" } }, { strict: false });

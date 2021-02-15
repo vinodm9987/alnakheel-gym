@@ -263,22 +263,9 @@ exports.createNewMemberByAdmin = (req, res) => {
         try {
             const memberDesignation = await Designation.findOne({ designationName: DESIGNATION[2] })
             const {
-                mobileNo,
-                gender,
-                dateOfBirth,
-                nationality,
-                userName,
-                email,
-                personalId,
-                branch,
-                height,
-                weight,
-                packageDetails,
-                questions,
-                relationship,
-                emergencyNumber,
-                referralCode,
-                notes
+                mobileNo, gender, dateOfBirth, nationality, userName, email,
+                personalId, branch, height, weight, packageDetails, relationship,
+                emergencyNumber, referralCode, notes
             } = JSON.parse(req.body.data);
             if (req.headers.userid) {
                 packageDetails[0]["doneBy"] = req.headers.userid;
@@ -299,24 +286,12 @@ exports.createNewMemberByAdmin = (req, res) => {
             }
             const { memberCounter } = await createId('memberCounter');
             const member = new Member({
-                mobileNo,
-                gender,
-                dateOfBirth,
-                nationality,
-                personalId,
-                height,
-                weight,
-                branch,
-                packageDetails,
-                questions,
-                relationship,
-                emergencyNumber,
-                startWeight: weight,
-                notes
+                mobileNo, gender, dateOfBirth, nationality, personalId, height,
+                weight, branch, packageDetails, relationship,
+                emergencyNumber, startWeight: weight, notes
             });
             const credential = new Credential({
-                userName,
-                email,
+                userName, email,
                 designation: memberDesignation._id,
                 userId: member._id,
                 designationName: DESIGNATION[2]
@@ -468,7 +443,7 @@ exports.updateMember = (req, res) => {
             let newObj = { mobileNo, gender, dateOfBirth, nationality, personalId, branch, height, weight, emergencyNumber, relationship, notes };
             req.responseData = await Member.findById(memberId).populate('credentialId').lean()
             if (userName || email) {
-                let obj = { userName, email }
+                let obj = { userName, email, memberId: req.responseData.memberId }
                 if (req.files.length > 0) obj["avatar"] = req.files[0];
                 await Credential.findByIdAndUpdate(credentialId, obj)
             }
@@ -881,73 +856,6 @@ exports.getBioStarToken = async (req, res) => {
 
 
 
-/**
- *  start the package of member
- */
-
-
-exports.startPackage = async (req, res) => {
-    try {
-        req.body["startDate"] = setTime(req.body.startDate);
-        req.body["endDate"] = setTime(req.body.endDate);
-        req.body["trainerStart"] = setTime(req.body.trainerStart);
-        req.body["trainerEnd"] = setTime(req.body.trainerEnd);
-        await Member.update({ 'packageDetails._id': req.body.packageDetailId }, {
-            $set: {
-                'packageDetails.$.startDate': req.body.startDate,
-                'packageDetails.$.endDate': req.body.endDate,
-                'packageDetails.$.trainerDetails.$.trainerStart': req.body.trainerStart,
-                'packageDetails.$.trainerDetails.$.trainerEnd': req.body.trainerEnd
-            }
-        });
-        let memberAllClassResponse = await MemberClass.find({ member: req.body.memberId }).populate('classId').lean()
-        const userData = await Member.findById(req.body.memberId).populate('credentialId packageDetails.packages').lean();
-        const photo = sharp(userData.credentialId.avatar.path).rotate().resize(200).toBuffer()
-        let obj = {
-            accessGroupName: userData.packageDetails[0].packages.bioStarInfo.accessGroupName,
-            accessGroupId: userData.packageDetails[0].packages.bioStarInfo.accessGroupId,
-            userGroupId: userData.packageDetails[0].packages.bioStarInfo.userGroupId,
-            endDate: req.body.endDate,
-            memberId: userData.memberId,
-            name: userData.credentialId.userName,
-            email: userData.credentialId.email,
-            newPhoto: photo.toString('base64').replace('data:image/png;base64,', ''),
-            phoneNumber: userData.mobileNo,
-            template0: userData.biometricTemplate.template0,
-            template1: userData.biometricTemplate.template1,
-            startDate: req.body.startDate
-        }
-        // if (memberAllClassResponse.length === 0) {
-        //     if (userData.packageDetails.length )
-        //     new Date(fromTime.setFullYear(2020, 11, 9))
-        //     obj = {
-        //         ...obj, ...{
-        //             accessGroupName: userData.packageDetails[0].packages.bioStarInfo.accessGroupName,
-        //             accessGroupId: userData.packageDetails[0].packages.bioStarInfo.accessGroupId,
-        //             userGroupId: userData.packageDetails[0].packages.bioStarInfo.userGroupId
-        //         }
-        //     }
-        // }
-        userData.packageDetails.forEach(packageDetail => {
-            if (new Date(packageDetail.endDate) > new Date(req.body.endDate)) obj.endDate = packageDetail.endDate
-        })
-        memberAllClassResponse.forEach(memberClass => {
-            if (new Date(memberClass.classId.startDate) < new Date(obj.startDate)) obj.startDate = memberClass.classId.startDate
-            if (new Date(memberClass.classId.endDate) > new Date(obj.endDate)) obj.endDate = memberClass.classId.endDate
-        })
-        if (userData.packageDetails.length > 1) await updateMemberInBioStar(obj);
-        else await addMemberInBioStar(obj);
-        const newResponse = await Member.findById(req.body.memberId).populate('credentialId branch')
-            .populate({ path: "packageDetails.trainerDetails.trainer", populate: { path: "credentialId" } })
-            .populate({ path: "packageDetails.packages", populate: { path: "period" } })
-            .populate({ path: "packageDetails.trainerDetails.trainerFees", populate: { path: "period" } }).lean()
-        if (req.body.trainer) { await newMemberAssign(req.body.trainer); }
-        successResponseHandler(res, newResponse, "successfully save the transaction !!");
-    } catch (error) {
-        logger.error(error);
-        errorResponseHandler(res, error, "Exception while send code !");
-    }
-};
 
 /**
  * black list user from account
@@ -956,18 +864,20 @@ exports.startPackage = async (req, res) => {
 
 exports.blackListUser = async (req, res) => {
     try {
+        let status;
+        if (req.body.status) status = "IN"
+        else status = 'AC';
         if (req.body.memberId) {
-            let status;
-            if (req.body.status) status = "IN"
-            else status = 'AC';
             await disableMember(req.body.memberId, status)
             req.responseData = await Member.findById(req.params.id).populate('credentialId').lean()
             let response = await Member.findByIdAndUpdate(req.params.id, { status: !req.body.status })
             auditLogger(req, 'Success')
             successResponseHandler(res, response, "successfully operation done on member")
         } else {
-            let response = await Employee.findByIdAndUpdate(req.params.id, { status: !req.body.status })
-            successResponseHandler(res, response, "successfully operation done on Employee")
+            await disableMember('E' + req.body.employeeId, status)
+            req.responseData = await Employee.findByIdAndUpdate(req.params.id, { status: !req.body.status })
+            auditLogger(req, 'Success')
+            successResponseHandler(res, [], "successfully operation done on Employee")
         }
     } catch (error) {
         logger.error(error);
