@@ -10,6 +10,10 @@ const { Formate: { setTime, formateBioStarDate } } = require('../utils');
 
 const { updateMemberInAllBranches } = require('../service/branch.service');
 
+const { memberFreezeNotification, memberFreeze } = require('../worker/freeze')
+
+const { freezeMember } = require('../biostar');
+
 
 module.exports = {
 
@@ -153,5 +157,29 @@ module.exports = {
             startDate: formateBioStarDate(startDate),
         };
         return obj;
-    }
+    },
+
+
+    freezeMember: async () => {
+        const today = new Date(new Date().setHours(0, 0, 0, 0));
+        const member = await MemberFreezing.find({ typeOfFreeze: 'Pending', fromDate: today }).lean();
+        const users = member.map(doc => { return doc.memberId });
+        for (const item of member) {
+            let memberInfo = await Member.findById(item.memberId);
+            let startDate = new Date(item.reactivation).toISOString();
+            let largest = setTime(new Date());
+            let today = new Date(setTime(new Date())).getTime();
+            for (const [i] of memberInfo.packageDetails.entries()) {
+                let temp = await memberFreeze(memberInfo, i, largest, item.days, item._id, startDate);
+                largest = new Date(temp) > new Date(largest) ? new Date(temp) : largest;
+            }
+            let checkLargest = new Date(largest).getTime();
+            if (today !== checkLargest) {
+                await freezeMember(item.memberId, startDate, largest);
+            }
+        }
+        await memberFreezeNotification(users);
+    },
+
+
 };

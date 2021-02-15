@@ -10,7 +10,7 @@ const {
 
 
 const { applyFreezeMember, applyFreezeAllMember, getPendingFreezeMember,
-    freezeMember, getFreezeHistory, removeMemberFreeze, cancelFreeze } = require('../controller/member/memberFreeze.controller');
+    getFreezeHistory, removeMemberFreeze, cancelFreeze } = require('../controller/member/memberFreeze.controller');
 
 
 const { addWaterInTake, getMemberWaterInTake, updateMemberWaterInTake } = require('../controller/member/waterInTake.controller');
@@ -123,8 +123,6 @@ exports.routes = (express, app) => {
     router.post('/applyFreezeAllMember', applyFreezeAllMember);
 
     router.post('/getPendingFreezeMember', getPendingFreezeMember);
-
-    router.post('/freezeMember', freezeMember);
 
     router.post('/getFreezeHistory', getFreezeHistory);
 
