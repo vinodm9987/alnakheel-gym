@@ -55,12 +55,15 @@ exports.applyFreezeMember = async (req, res) => {
         const exist = await MemberFreezing.find({ memberId: req.body.memberId, status: "Pending" }).count();
         if (!isFreezable) return errorResponseHandler(res, 'error', 'Member do not have package on freeze date')
         if (exist) {
-            req.responseData = await MemberFreezing.findOne({ memberId: req.body.memberId }).lean()
-            const response = await MemberFreezing.findOneAndUpdate({ memberId: req.body.memberId, status: "Pending" }, req.body, { returnNewDocuments: true })
+            req.responseData = await MemberFreezing
+                .findOne({ memberId: req.body.memberId }).lean()
+            const response = await MemberFreezing
+                .findOneAndUpdate({ memberId: req.body.memberId, status: "Pending" }, req.body, { returnNewDocuments: true })
             auditLogger(req, 'Success')
             return successResponseHandler(res, response, "successfully updated freeze Member !")
         } else {
-            const completeExist = await MemberFreezing.find({ memberId: req.body.memberId, status: "Completed", toDate: { $gte: req.body.fromDate } }).count()
+            const completeExist = await MemberFreezing
+                .find({ memberId: req.body.memberId, status: "Completed", toDate: { $gte: req.body.fromDate } }).count()
             if (!completeExist) {
                 const newRecord = new MemberFreezing(req.body);
                 const newResponse = await newRecord.save()

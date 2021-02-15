@@ -118,7 +118,7 @@ module.exports = {
 
     checkFreezeMember: async () => {
         const response = await MemberFreezing
-            .find({ fromDate: setTime(new Date()) }).count();
+            .find({ fromDate: setTime(new Date()), status: 'Pending' }).count();
         await freezeAction(response)
     },
 
