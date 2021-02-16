@@ -421,7 +421,7 @@ class AdminDashboard extends Component {
               <a href="/#" className="text-success mx-1 my-3 SegoeBold linkHoverDecLess cursorPointer"><small>View All</small></a>
             </div> */}
 
-            <div className="col-12">
+            {/* <div className="col-12">
               <div className="row pb-2">
                 <div className="col-12 px-0 d-flex flex-wrap justify-content-end">
                   {this.props.mostSellingStock.length > 0 &&
@@ -433,7 +433,7 @@ class AdminDashboard extends Component {
                   }
                 </div>
               </div>
-            </div>
+            </div> */}
 
           </div>
         </div>
