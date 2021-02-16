@@ -54,7 +54,7 @@ exports.applyFreezeMember = async (req, res) => {
         req.body["reactivationDate"] = setTime(req.body.reactivationDate)
         let memberInfo = await Member.findById(req.body.memberId).lean();
         const isFreezable = checkIsMemberFreezable(memberInfo.packageDetails, req.body.toDate);
-        const exist = await MemberFreezing.find({ memberId: req.body.memberId, status: "Pending" }).count();
+        const exist = await MemberFreezing.find({ memberId: req.body.memberId, typeOfFreeze: "Pending" }).count();
         req.responseData = exist;
         if (!isFreezable) return errorResponseHandler(res, 'error', 'Member do not have package for freeze ')
         if (exist) {
@@ -108,7 +108,7 @@ exports.applyFreezeAllMember = async (req, res) => {
 exports.getPendingFreezeMember = async (req, res) => {
     try {
         let queryCond = {};
-        queryCond["status"] = "Pending";
+        queryCond["typeOfFreeze"] = { $in: ["Pending", "Froze"] };
         if (req.body.date) queryCond["fromDate"] = setTime(req.body.date);
         let search = req.body.search.toLowerCase()
         let response = await MemberFreezing.find(queryCond)
@@ -122,9 +122,34 @@ exports.getPendingFreezeMember = async (req, res) => {
     }
 };
 
+exports.getFreezeHistory = async (req, res) => {
+    try {
+        let queryCond = {};
+        queryCond["typeOfFreeze"] = { $in: ["Canceled", "Froze"] };
+        if (req.body.date) queryCond["reactivationDate"] = setTime(req.body.date);
+        if (req.body.typeOfFreeze) queryCond["typeOfFreeze"] = req.body.typeOfFreeze;
+        const response = await MemberFreezing.find(queryCond).populate('memberId')
+            .populate({ path: 'memberId', populate: { path: 'credentialId' } }).lean();
+        const search = req.body.search.toLowerCase();
+        let newResponse = memberSearch(response, search);
+        return successResponseHandler(res, newResponse, 'successfully get freeze history !');
+    } catch (error) {
+        logger.error(error);
+        return errorResponseHandler(res, error, 'failed to get freeze history!');
+    }
+};
+
 
 
 exports.memberFreezeUpdate = async (req, res) => {
+    req.body["fromDate"] && (req.body["fromDate"] = setTime(req.body.fromDate));
+    req.body["toDate"] && (req.body["toDate"] = setTime(req.body.toDate));
+    req.body["reactivationDate"] && (req.body["reactivationDate"] = setTime(req.body.reactivationDate))
+    if (req.body.fromDate) {
+        let memberInfo = await Member.findById(req.body.memberId).lean();
+        const isFreezable = checkIsMemberFreezable(memberInfo.packageDetails, req.body.toDate);
+        if (!isFreezable) return errorResponseHandler(res, isFreezable, 'Member do not have package for freeze');
+    }
     MemberFreezing.findByIdAndUpdate(req.params.id, req.body, { new: true })
         .then(response => {
             return successResponseHandler(res, response, "successfully updated freeze Member !")
@@ -199,19 +224,3 @@ const cancelFreezeUpdate = async (member, i, largest, returningDate) => {
 
 
 
-exports.getFreezeHistory = async (req, res) => {
-    try {
-        let queryCond = {};
-        queryCond["status"] = "Completed";
-        if (req.body.date) queryCond["reactivationDate"] = setTime(req.body.date);
-        if (req.body.typeOfFreeze) queryCond["typeOfFreeze"] = req.body.typeOfFreeze;
-        const response = await MemberFreezing.find(queryCond).populate('memberId')
-            .populate({ path: 'memberId', populate: { path: 'credentialId' } }).lean();
-        const search = req.body.search.toLowerCase();
-        let newResponse = memberSearch(response, search);
-        return successResponseHandler(res, newResponse, 'successfully get freeze history !');
-    } catch (error) {
-        logger.error(error);
-        return errorResponseHandler(res, error, 'failed to get freeze history!');
-    }
-};
