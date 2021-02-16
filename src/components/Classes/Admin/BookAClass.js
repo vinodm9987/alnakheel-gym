@@ -362,7 +362,8 @@ class BookAClass extends Component {
 
   handleSubmit(total) {
     const { t } = this.props
-    const { branch, classes, member, amount, cash, card, cardE, discount, tax, giftcard, cardNumber, memberTransactionId, cashE, digital, digitalE, cheque } = this.state
+    const { branch, classes, member, amount, cash, card, cardE, discount, tax, giftcard, cardNumber, memberTransactionId, cashE, digital, digitalE,
+      cheque, bankName, chequeNumber, chequeDate } = this.state
     if (branch && classes && member && (parseInt(total) === parseInt((+cash || 0) + (+card || 0) + (+digital || 0) + (+cheque || 0))) && !cardE && !cashE && !digitalE) {
       const bookClassInfo = {
         member: member._id,
@@ -376,6 +377,8 @@ class BookAClass extends Component {
         cardAmount: card ? card : 0,
         digitalAmount: digital ? digital : 0,
         cardNumber,
+        chequeAmount: cheque ? parseFloat(cheque) : 0,
+        bankName: bankName, chequeNumber: chequeNumber, chequeDate: chequeDate,
         memberTransactionId,
         userId: this.props.loggedUser ? this.props.loggedUser._id : ''
       }

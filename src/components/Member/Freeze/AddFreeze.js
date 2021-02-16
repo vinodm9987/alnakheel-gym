@@ -160,7 +160,8 @@ class AddFreeze extends Component {
   handleSubmit(totalAmount, totalVat) {
     const el = findDOMNode(this.refs.paymentSummaryClose);
     const { t } = this.props
-    const { freezeType, member, fromDate, toDate, noOfDays, reason, reactivationDate, noOfDaysE, amount, wantCharge, cash, card, cashE, cardE, cardNumber, digital, digitalE, cheque, freezeId } = this.state
+    const { freezeType, member, fromDate, toDate, noOfDays, reason, reactivationDate, noOfDaysE, amount, wantCharge, cash, card, cashE, cardE, cardNumber, digital, digitalE, cheque,
+      freezeId, bankName, chequeNumber, chequeDate } = this.state
     if (freezeType === 'Individual') {
       if (member && fromDate <= toDate && noOfDays && reason && !noOfDaysE) {
         const freezeInfo = {
@@ -181,6 +182,10 @@ class AddFreeze extends Component {
             freezeInfo.digitalAmount = digital ? parseFloat(digital) : 0
             freezeInfo.cardNumber = cardNumber
             freezeInfo.vatAmount = totalVat
+            freezeInfo.chequeAmount = cheque ? parseFloat(cheque) : 0
+            freezeInfo.bankName = bankName
+            freezeInfo.chequeNumber = chequeNumber
+            freezeInfo.chequeDate = chequeDate
             this.props.dispatch(applyFreezeMember(freezeInfo))
             $(el).click();
           } else {
