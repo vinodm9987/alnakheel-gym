@@ -121,7 +121,7 @@ export const memberFreezeUpdate = (id, postData) => dispatch => {
   axios
     .post(`${IP}/member/memberFreezeUpdate/${id}`, postData)
     .then(res => {
-      dispatch(getPendingFreezeMember({ search: '', date: '' }))
+      dispatch(getPendingFreezeMember({ search: '', date: new Date() }))
       dispatch({ type: GET_ERROR, payload: res.data })
     })
     .catch(err =>
