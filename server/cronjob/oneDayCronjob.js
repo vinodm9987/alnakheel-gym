@@ -20,8 +20,8 @@ exports.oneDayCronJob = () => {
             logger.error(error);
         }
     });
-    // 00 */1 * * *
-    cronjob.schedule("* * * * *", async () => {
+
+    cronjob.schedule("00 */1 * * *", async () => {
         try {
             await freezeMember();
         } catch (error) {
