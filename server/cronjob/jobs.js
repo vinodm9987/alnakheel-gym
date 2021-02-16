@@ -162,7 +162,7 @@ module.exports = {
 
     freezeMember: async () => {
         const today = new Date(new Date().setHours(0, 0, 0, 0));
-        const member = await MemberFreezing.find({ typeOfFreeze: 'Pending', fromDate: today }).lean();
+        const member = await MemberFreezing.find({ typeOfFreeze: 'Pending', status: true, fromDate: today }).lean();
         const users = member.map(doc => { return doc.memberId });
         for (const item of member) {
             let memberInfo = await Member.findById(item.memberId);

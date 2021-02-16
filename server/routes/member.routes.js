@@ -128,7 +128,7 @@ exports.routes = (express, app) => {
 
     router.post('/cancelFreeze', cancelFreeze);
 
-    router.post('/memberFreezeUpdate', memberFreezeUpdate);
+    router.post('/memberFreezeUpdate/:id', memberFreezeUpdate);
 
 
 
