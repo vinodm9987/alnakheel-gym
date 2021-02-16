@@ -2,13 +2,13 @@ const {
     logger: { logger },
     handler: { successResponseHandler, errorResponseHandler },
 } = require('../../../config');
-const { Formate: { setTime } } = require('../../utils');
+const { Formate: { setTime }, IdGenerator: { generateOrderId } } = require('../../utils');
 
 
 const { Member, Employee } = require('../../model');
 
 
-
+const { disableMember } = require('../../biostar')
 
 exports.getPackageInstallment = async (req, res) => {
     try {
@@ -64,8 +64,8 @@ exports.getTrainerInstallment = async (req, res) => {
                             const dueDate = new Date(setTime(installment.dueDate));
                             const todayMonth = new Date(dueDate).getMonth();
                             const thisYear = new Date(dueDate).getFullYear();
-                            const monthConditions = typeof req.body.month === 'number'? req.body.month === todayMonth : false;
-                            const yearConditions = typeof req.body.year === 'number'? req.body.year === thisYear : false;
+                            const monthConditions = typeof req.body.month === 'number' ? req.body.month === todayMonth : false;
+                            const yearConditions = typeof req.body.year === 'number' ? req.body.year === thisYear : false;
                             if (monthConditions && yearConditions && installment.paidStatus !== 'Paid') {
                                 const memberObj = Object.assign({}, member);
                                 delete memberObj.packageDetails;
@@ -95,7 +95,8 @@ exports.getTrainerInstallment = async (req, res) => {
 exports.changeDueDateOfPackageInstallment = async (req, res) => {
     try {
         const dueDate = setTime(req.body.dueDate);
-        const member = await Member.findById(req.body.memberId);
+        const member = await Member.findByIdAndUpdate(req.body.memberId, { status: true });
+        await disableMember(member.memberId, 'AC')
         for (const [i, packages] of member.packageDetails.entries()) {
             if (packages._id.toString() === req.body.packagesDetailsId) {
                 for (const [j, installment] of member.packageDetails[i].Installments.entries()) {
@@ -142,7 +143,8 @@ exports.changeDueDateOfTrainerInstallment = async (req, res) => {
 exports.payPackageInstallments = async (req, res) => {
     try {
         const dueDate = setTime(req.body.dueDate);
-        const member = await Member.findById(req.body.memberId);
+        const member = await Member.findByIdAndUpdate(req.body.memberId, { status: true });
+        await disableMember(member.memberId, 'AC')
         let obj = Object.assign({}, {});
         for (const [i, packages] of member.packageDetails.entries()) {
             if (packages._id.toString() === req.body.packagesDetailsId && packages.Installments) {
