@@ -313,7 +313,8 @@ class PointOfSales extends Component {
 
   handleSubmit() {
     const { t } = this.props
-    const { cash, card, digital, addedStocks, customerStatus, member, discount, giftcard, memberTransactionId, branch, cashE, cardE, digitalE, cardNumber, cheque } = this.state
+    const { cash, card, digital, addedStocks, customerStatus, member, discount, giftcard, memberTransactionId, branch, cashE, cardE, digitalE, cardNumber,
+      cheque, bankName, chequeNumber, chequeDate } = this.state
     if (customerStatus === 'Member') {
       let purchaseStock = []
       let actualAmount = 0
@@ -343,6 +344,8 @@ class PointOfSales extends Component {
           cardAmount: card ? card : 0,
           digitalAmount: digital ? digital : 0,
           cardNumber,
+          chequeAmount: cheque ? parseFloat(cheque) : 0,
+          bankName: bankName, chequeNumber: chequeNumber, chequeDate: chequeDate,
           memberTransactionId
         }
         this.props.dispatch(addStockSell(stockSellsInfo))
@@ -380,6 +383,8 @@ class PointOfSales extends Component {
           cardAmount: card ? card : 0,
           digitalAmount: digital ? digital : 0,
           cardNumber,
+          chequeAmount: cheque ? parseFloat(cheque) : 0,
+          bankName: bankName, chequeNumber: chequeNumber, chequeDate: chequeDate,
           paymentType: 'POS'
         }
         this.props.dispatch(addStockSell(stockSellsInfo))
