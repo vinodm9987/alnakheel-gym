@@ -164,7 +164,7 @@ const getUpcomingExpiry = async (body) => {
       if (members[i].packageDetails[j].extendDate) {
         endDate = members[i].packageDetails[j].extendDate;
       }
-      if (new Date(setTime(endDate)).setDate(new Date(setTime(endDate)).getDate() - 7) <= today && today < new Date(setTime(endDate))) {
+      if (today.getTime() === new Date(endDate).setDate(new Date(endDate).getDate() - 1)) {
         aboutToExpire = true;
         let packageIndex = packages.findIndex(ele => ele._id.toString() === members[i].packageDetails[j].packages._id.toString());
         if (members[i].packageDetails[j].packages._id.toString() === packages[packageIndex]._id.toString() && packageIndex !== -1) {
@@ -183,7 +183,8 @@ const getExpiredMembers = async (body) => {
   let queryCond = {};
   queryCond['packageDetails.isExpiredPackage'] = true;
   if (body.branch) queryCond["branch"] = body.branch
-  let response = await Member.find(queryCond).populate('credentialId').populate("packageDetails.packages")
+  let response = await Member.find(queryCond)
+    .populate('credentialId').populate("packageDetails.packages")
     .populate({ path: "packageDetails.trainerDetails.trainer", populate: { path: "credentialId" } }).lean();
   let packagesResponse = await Package.find({}, 'packageName color').lean();
   let packages = []
@@ -618,11 +619,11 @@ const getPackageSales = async (body) => {
   })
 
   let totalAmountOfMember = await Member.find(queryCond)
-  .populate('credentialId branch')
-  .populate('packageDetails.packages packageDetails.doneBy packageDetails.trainerDetails.doneBy packageDetails.trainerDetails.installments.doneBy')
-  .populate({ path: "packageDetails.trainerDetails.trainer", populate: { path: "credentialId" } })
-  .populate({ path: "packageDetails.packages", populate: { path: "period" } })
-  .populate({ path: "packageDetails.trainerDetails.trainerFees", populate: { path: "period" } }).lean()
+    .populate('credentialId branch')
+    .populate('packageDetails.packages packageDetails.doneBy packageDetails.trainerDetails.doneBy packageDetails.trainerDetails.installments.doneBy')
+    .populate({ path: "packageDetails.trainerDetails.trainer", populate: { path: "credentialId" } })
+    .populate({ path: "packageDetails.packages", populate: { path: "period" } })
+    .populate({ path: "packageDetails.trainerDetails.trainerFees", populate: { path: "period" } }).lean()
   totalAmountOfMember.forEach(ele => {
     ele.packageDetails = ele.packageDetails.filter(doc => {
       if (doc.paidStatus === 'Paid' || doc.paidStatus === 'Installment') {
@@ -874,10 +875,10 @@ const getSalesByPaymentMethod = async (body) => {
   if (body.transactionType === 'Packages' || body.transactionType === '') {
     totalAmountOfMember = await Member.find(queryCond)
       .populate('credentialId branch')
-  .populate('packageDetails.packages packageDetails.doneBy packageDetails.trainerDetails.doneBy packageDetails.trainerDetails.installments.doneBy')
-  .populate({ path: "packageDetails.trainerDetails.trainer", populate: { path: "credentialId" } })
-  .populate({ path: "packageDetails.packages", populate: { path: "period" } })
-  .populate({ path: "packageDetails.trainerDetails.trainerFees", populate: { path: "period" } }).lean()
+      .populate('packageDetails.packages packageDetails.doneBy packageDetails.trainerDetails.doneBy packageDetails.trainerDetails.installments.doneBy')
+      .populate({ path: "packageDetails.trainerDetails.trainer", populate: { path: "credentialId" } })
+      .populate({ path: "packageDetails.packages", populate: { path: "period" } })
+      .populate({ path: "packageDetails.trainerDetails.trainerFees", populate: { path: "period" } }).lean()
     totalAmountOfMember.forEach(ele => {
       ele.packageDetails = ele.packageDetails.filter(doc => {
         if (doc.paidStatus === 'Paid' || doc.paidStatus === 'Installment') {

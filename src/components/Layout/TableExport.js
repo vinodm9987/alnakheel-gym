@@ -221,7 +221,7 @@ class TableExport extends Component {
         if (pack.extendDate) {
           endDate = pack.extendDate;
         }
-        if (new Date(setTime(endDate)).setDate(new Date(setTime(endDate)).getDate() - 7) <= today && today < new Date(setTime(endDate))) {
+        if (today.getTime() === new Date(endDate).setDate(new Date(endDate).getDate() - 1)) {
           tabledData.push({
             "SNo": count,
             "Member ID": memberId,
@@ -254,9 +254,9 @@ class TableExport extends Component {
             "Admission Date": dateToDDMMYYYY(admissionDate),
             "Package": pack.packages.packageName,
             "Expired Date": pack.extendDate ? dateToDDMMYYYY(pack.extendDate) : dateToDDMMYYYY(pack.endDate),
-            "Trainer Name": pack.trainer ? pack.trainer.credentialId.userName : 'NA',
-            "Paid Amount": pack.totalAmount.toFixed(3),
-            "Any Valid Package": packageDetails.filter(doc => !doc.isExpiredPackage)[0] ? packageDetails.filter(doc => !doc.isExpiredPackage)[0].packages.packageName : 'NA',
+            "Trainer Name": (pack.trainerDetails && pack.trainerDetails.length && pack.trainerDetails[pack.trainerDetails.length - 1]) ? pack.trainerDetails[pack.trainerDetails.length - 1].trainer.credentialId.userName : 'NA',
+            "To Be Paid": pack.packages.amount.toFixed(3),
+            // "Any Valid Package": packageDetails.filter(doc => !doc.isExpiredPackage)[0] ? packageDetails.filter(doc => !doc.isExpiredPackage)[0].packages.packageName : 'NA',
             "Mobile No": mobileNo,
             "Email ID": email
           })

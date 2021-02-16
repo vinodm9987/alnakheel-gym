@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { Doughnut } from 'react-chartjs-2'
 import { withTranslation } from 'react-i18next'
 import { connect } from 'react-redux'
-import { calculateDays, countHoursGraph, dateToDDMMYYYY, setTime } from '../../utils/apis/helpers'
+import { calculateDays, countHoursGraph, dateToDDMMYYYY } from '../../utils/apis/helpers'
 
 class GraphExport extends Component {
 
@@ -213,9 +213,9 @@ class GraphExport extends Component {
         if (pack.extendDate) {
           endDate = pack.extendDate;
         }
-        if (new Date(setTime(endDate)).setDate(new Date(setTime(endDate)).getDate() - 7) <= today && today < new Date(setTime(endDate))) {
+        if (today.getTime() === new Date(endDate).setDate(new Date(endDate).getDate() - 1)) {
           const days = calculateDays(endDate, new Date())
-          if (days <= 7) {
+          if (days <= 1) {
             week++
           }
         }
@@ -224,12 +224,12 @@ class GraphExport extends Component {
     const data1 = {
       labels: packages.map(pack => pack.packageName),
       datasets: [{ data: packages.map(pack => pack.count), backgroundColor: packages.map(pack => pack.color), hoverBackgroundColor: packages.map(pack => pack.color) }],
-      text: `${t('Total')} ${response.length}`
+      text: `${t('Total')} ${week}`
     }
     const data2 = {
-      labels: ['Within A Week'],
+      labels: ['Within A Day'],
       datasets: [{ data: [week], backgroundColor: ['#28a745'], hoverBackgroundColor: ['#28a745'] }],
-      text: `${t('Total')} ${response.length}`
+      text: `${t('Total')} ${week}`
     }
     graphDatas.push({ name: 'Upcoming Expiry by Packages', type: 'doughnut', data: data1, total: response.length })
     graphDatas.push({ name: 'Upcoming Expiry by Remaining Period', type: 'doughnut', data: data2, total: response.length })

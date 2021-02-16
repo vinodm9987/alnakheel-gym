@@ -54,8 +54,7 @@
           "Package",
           "Expired Date",
           "Trainer Name",
-          "Paid Amount",
-          "Any Valid Package",
+          "To Be Paid",
           "Mobile No",
           "Email ID"
         ],
@@ -107,26 +106,6 @@
           "Amount"
         ],
         "description": "This report will list all Freezed members for specific period."
-      },
-      {
-        "name": "Package Renewal",
-        "headers": [
-          "SNo",
-          "Receipt No.",
-          "Date & Time",
-          "Member ID",
-          "Member Name",
-          "Admission Date",
-          "Mobile No",
-          "Branch",
-          "Package",
-          "Trainer Name",
-          "Start Date",
-          "End Date",
-          "Paid Amount",
-          "Renewed By"
-        ],
-        "description": "This report will list all members who renewed their Packages for specific period."
       },
       {
         "name": "Package Type",
