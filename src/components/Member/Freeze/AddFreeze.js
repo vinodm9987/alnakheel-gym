@@ -191,7 +191,7 @@ class AddFreeze extends Component {
           }
         } else {
           if (freezeId) {
-            this.props.dispatch(memberFreezeUpdate(freezeInfo))
+            this.props.dispatch(memberFreezeUpdate(freezeId, freezeInfo))
           } else {
             this.props.dispatch(applyFreezeMember(freezeInfo))
           }
