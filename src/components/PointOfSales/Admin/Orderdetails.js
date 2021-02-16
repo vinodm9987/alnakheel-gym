@@ -450,28 +450,28 @@ class Orderdetails extends Component {
                         <td style={{ textAlign: "right", padding: "0px 0px 4px 0px" }}>{parseFloat(orderById.cardAmount).toFixed(3)}</td>
                       </tr>
                       : <tr></tr>}
-                    {parseFloat(this.state.cheque) ?
+                    {parseFloat(orderById.cheque) ?
                       <tr>
                         <td style={{ textAlign: "right", padding: "0px 4px 4px 4px", width: "100%" }}>{t('Cheque')} {this.props.defaultCurrency}: </td>
-                        <td style={{ textAlign: "right", padding: "0px 0px 4px 0px" }}>{parseFloat(this.state.cheque).toFixed(3)}</td>
+                        <td style={{ textAlign: "right", padding: "0px 0px 4px 0px" }}>{parseFloat(orderById.cheque).toFixed(3)}</td>
                       </tr>
                       : <tr></tr>}
-                    {this.state.bankName ?
+                    {orderById.bankName ?
                       <tr>
                         <td style={{ textAlign: "right", padding: "0px 4px 4px 4px", width: "100%" }}>{t('Bank Name')} {this.props.defaultCurrency}: </td>
-                        <td style={{ textAlign: "right", padding: "0px 0px 4px 0px" }}>{this.state.bankName}</td>
+                        <td style={{ textAlign: "right", padding: "0px 0px 4px 0px" }}>{orderById.bankName}</td>
                       </tr>
                       : <tr></tr>}
-                    {this.state.chequeNumber ?
+                    {orderById.chequeNumber ?
                       <tr>
                         <td style={{ textAlign: "right", padding: "0px 4px 4px 4px", width: "100%" }}>{t('Cheque Number')} {this.props.defaultCurrency}: </td>
-                        <td style={{ textAlign: "right", padding: "0px 0px 4px 0px" }}>{this.state.chequeNumber}</td>
+                        <td style={{ textAlign: "right", padding: "0px 0px 4px 0px" }}>{orderById.chequeNumber}</td>
                       </tr>
                       : <tr></tr>}
-                    {this.state.chequeDate ?
+                    {orderById.chequeDate ?
                       <tr>
                         <td style={{ textAlign: "right", padding: "0px 4px 4px 4px", width: "100%" }}>{t('Cheque Date')} {this.props.defaultCurrency}: </td>
-                        <td style={{ textAlign: "right", padding: "0px 0px 4px 0px" }}>{this.state.chequeDate}</td>
+                        <td style={{ textAlign: "right", padding: "0px 0px 4px 0px" }}>{orderById.chequeDate}</td>
                       </tr>
                       : <tr></tr>}
                     <tr>

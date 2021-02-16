@@ -1254,28 +1254,28 @@ class PointOfSales extends Component {
                       <td style={{ textAlign: "right", padding: "0px 0px 4px 0px" }}>{parseFloat(posReceipt.cardAmount).toFixed(3)}</td>
                     </tr>
                     : <tr></tr>}
-                  {parseFloat(this.state.cheque) ?
+                  {parseFloat(posReceipt.cheque) ?
                     <tr>
                       <td style={{ textAlign: "right", padding: "0px 4px 4px 4px", width: "100%" }}>{t('Cheque')} {this.props.defaultCurrency}: </td>
-                      <td style={{ textAlign: "right", padding: "0px 0px 4px 0px" }}>{parseFloat(this.state.cheque).toFixed(3)}</td>
+                      <td style={{ textAlign: "right", padding: "0px 0px 4px 0px" }}>{parseFloat(posReceipt.cheque).toFixed(3)}</td>
                     </tr>
                     : <tr></tr>}
-                  {this.state.bankName ?
+                  {posReceipt.bankName ?
                     <tr>
                       <td style={{ textAlign: "right", padding: "0px 4px 4px 4px", width: "100%" }}>{t('Bank Name')} {this.props.defaultCurrency}: </td>
-                      <td style={{ textAlign: "right", padding: "0px 0px 4px 0px" }}>{this.state.bankName}</td>
+                      <td style={{ textAlign: "right", padding: "0px 0px 4px 0px" }}>{posReceipt.bankName}</td>
                     </tr>
                     : <tr></tr>}
-                  {this.state.chequeNumber ?
+                  {posReceipt.chequeNumber ?
                     <tr>
                       <td style={{ textAlign: "right", padding: "0px 4px 4px 4px", width: "100%" }}>{t('Cheque Number')} {this.props.defaultCurrency}: </td>
-                      <td style={{ textAlign: "right", padding: "0px 0px 4px 0px" }}>{this.state.chequeNumber}</td>
+                      <td style={{ textAlign: "right", padding: "0px 0px 4px 0px" }}>{posReceipt.chequeNumber}</td>
                     </tr>
                     : <tr></tr>}
-                  {this.state.chequeDate ?
+                  {posReceipt.chequeDate ?
                     <tr>
                       <td style={{ textAlign: "right", padding: "0px 4px 4px 4px", width: "100%" }}>{t('Cheque Date')} {this.props.defaultCurrency}: </td>
-                      <td style={{ textAlign: "right", padding: "0px 0px 4px 0px" }}>{this.state.chequeDate}</td>
+                      <td style={{ textAlign: "right", padding: "0px 0px 4px 0px" }}>{posReceipt.chequeDate}</td>
                     </tr>
                     : <tr></tr>}
                   <tr>

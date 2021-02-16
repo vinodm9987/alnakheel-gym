@@ -182,8 +182,8 @@ class TableExport extends Component {
           "Admission Date": dateToDDMMYYYY(admissionDate),
           "Mobile No": mobileNo,
           "Email ID": email,
-          "Package Start Date": dateToDDMMYYYY(doc.packages.startDate),
-          "Package End Date": dateToDDMMYYYY(doc.packages.endDate),
+          "Package Start Date": dateToDDMMYYYY(doc.startDate),
+          "Package End Date": dateToDDMMYYYY(doc.endDate),
           "Trainer Name": (doc.trainerDetails && doc.trainerDetails.length && doc.trainerDetails[doc.trainerDetails.length - 1]) ? doc.trainerDetails[doc.trainerDetails.length - 1].trainer.credentialId.userName : 'NA',
           "To Be Paid": doc.packages.amount.toFixed(3)
         })
