@@ -44,6 +44,7 @@ class FreezeHistory extends Component {
     const obj = {
       status: e.target.checked
     }
+    console.log("🚀 ~ file: FreezeHistory.js ~ line 47 ~ FreezeHistory ~ handleCheckBox ~ obj", obj)
     this.props.dispatch(memberFreezeUpdate(freezeId, obj))
   }
 
@@ -106,7 +107,7 @@ class FreezeHistory extends Component {
               </thead>
               <tbody>
                 {this.props.pendingFreeze && getPageWiseData(this.state.pageNumber, this.props.pendingFreeze, this.state.displayNum).map((freeze, i) => {
-                  const { fromDate, toDate, reactivationDate, memberId: { _id: member, credentialId: { userName, avatar }, memberId }, reason, noOfDays, totalAmount, typeOfFreeze, _id } = freeze
+                  const { fromDate, toDate, reactivationDate, memberId: { _id: member, credentialId: { userName, avatar }, memberId }, reason, noOfDays, totalAmount, typeOfFreeze, status, _id } = freeze
                   return (
                     <tr key={i}>
                       <td>
@@ -129,15 +130,19 @@ class FreezeHistory extends Component {
                         <Link type="button" className="btn btn-primary btn-sm w-100px rounded-50px text-white" to={`/members-details/${member}`}>{t('Details')}</Link>
                       </td>
                       <td className="text-center">
-                        <label className="switch">
-                          <input disabled={typeOfFreeze !== 'Pending'} type="checkbox" checked={typeOfFreeze === 'Pending'} onChange={(e) => this.handleCheckBox(e, _id)} />
-                          <span className="slider round"></span>
-                        </label>
+                        {typeOfFreeze === 'Pending' && status &&
+                          <label className="switch">
+                            <input disabled={!status} type="checkbox" checked={status} onChange={(e) => this.handleCheckBox(e, _id)} />
+                            <span className="slider round"></span>
+                          </label>
+                        }
                       </td>
                       <td>
-                        <Link to={{ pathname: "/freeze-members", freezeProps: JSON.stringify(freeze) }} className="btn btn-success btn-sm br-50 p-2 d-inline-flex align-items-center justify-content-center" style={{ zoom: '0.75' }}>
-                          <span className="iconv1 iconv1-edit"></span>
-                        </Link>
+                        {typeOfFreeze === 'Pending' && status &&
+                          <Link to={{ pathname: "/freeze-members", freezeProps: JSON.stringify(freeze) }} className="btn btn-success btn-sm br-50 p-2 d-inline-flex align-items-center justify-content-center" style={{ zoom: '0.75' }}>
+                            <span className="iconv1 iconv1-edit"></span>
+                          </Link>
+                        }
                       </td>
                     </tr>
                   )
