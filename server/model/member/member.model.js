@@ -10,7 +10,9 @@ const memberSchema = new Schema({
      */
 
     memberId: Number,
+
     dateOfBirth: Date,
+
     nationality: String,
 
     mobileNo: { type: String, required: [true, 'Mobile no is required !'] },

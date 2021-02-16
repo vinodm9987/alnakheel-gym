@@ -12,7 +12,7 @@ const { updateMemberInAllBranches } = require('../service/branch.service');
 
 const { memberFreezeNotification, memberFreeze } = require('../worker/freeze')
 
-const { freezeMember } = require('../biostar');
+const { freezeMember, disableMember } = require('../biostar');
 
 
 module.exports = {
@@ -180,6 +180,25 @@ module.exports = {
         }
         await memberFreezeNotification(users);
     },
+
+    checkInstallmentsPending: async () => {
+        const members = await Member.find({ status: true, doneFingerAuth: true }).lean();
+        const today = new Date(setTime(new Date())).getTime();
+        for (const [i, member] of members.entries()) {
+            for (const packages of member.packageDetails.entries()) {
+                if (packages.Installments && packages.Installments.length) {
+                    for (const installment of packages.Installments.entries()) {
+                        let dueDate = new Date(setTime(installment.dueDate)).getTime();
+                        if (dueDate === today && installment.paidStatus === 'UnPaid') {
+                            members[i].status = false;
+                            await members.save();
+                            await disableMember(members[i].memberId, 'IN');
+                        }
+                    }
+                }
+            }
+        }
+    }
 
 
 };

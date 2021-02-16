@@ -1016,4 +1016,4 @@ exports.getMemberByMemberId = async (req, res) => {
         logger.error(error);
         errorResponseHandler(res, error, "Exception while getting member details !");
     }
-}
+};
