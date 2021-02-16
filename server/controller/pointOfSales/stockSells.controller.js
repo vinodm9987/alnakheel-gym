@@ -104,7 +104,9 @@ exports.addStockSell = async (req, res) => {
         newStockSell["dateOfPurchase"] = setTime(new Date())
         newStockSell.save().then(async response => {
             for (let i = 0; i < stocks.length; i++) {
-                await Stocks.findByIdAndUpdate(stocks[i].stockId, { $inc: { quantity: -stocks[i].quantity, noOfTimeSell: 1 } })
+                const stock = await Stocks.findByIdAndUpdate(stocks[i].stockId, { $inc: { quantity: -stocks[i].quantity, noOfTimeSell: 1 } }, { new: true }).populate('branch');
+                if (+stock.quantity === stock.originalQuantity - Math.round(+stock.originalQuantity / 100 * 90)) { await stockQuantity(stock.itemName, stock.branch.branchName) }
+                if (+stock.quantity === 0) { await stockFinish(stock.itemName, stock.branch.branchName) }
             }
             auditLogger(req, 'Success')
             return successResponseHandler(res, { ...response, ...{ displayReceipt: true } }, "successfully added new StockSell !!");
