@@ -166,16 +166,16 @@ module.exports = {
         const users = member.map(doc => { return doc.memberId });
         for (const item of member) {
             let memberInfo = await Member.findById(item.memberId);
-            let startDate = new Date(item.reactivation).toISOString();
+            let startDate = new Date(item.reactivationDate).toISOString();
             let largest = setTime(new Date());
             let today = new Date(setTime(new Date())).getTime();
             for (const [i] of memberInfo.packageDetails.entries()) {
-                let temp = await memberFreeze(memberInfo, i, largest, item.days, item._id, startDate);
+                let temp = await memberFreeze(memberInfo, i, largest, item.noOfDays, item._id, startDate);
                 largest = new Date(temp) > new Date(largest) ? new Date(temp) : largest;
             }
             let checkLargest = new Date(largest).getTime();
             if (today !== checkLargest) {
-                await freezeMember(item.memberId, startDate, largest);
+                await freezeMember(memberInfo.memberId, startDate, largest);
             }
         }
         await memberFreezeNotification(users);
