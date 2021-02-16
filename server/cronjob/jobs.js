@@ -8,11 +8,9 @@ const { Member, Stocks, Contract, Employee, MemberFreezing, Assets } = require('
 
 const { Formate: { setTime, formateBioStarDate } } = require('../utils');
 
-const { updateMemberInAllBranches } = require('../service/branch.service');
-
 const { memberFreezeNotification, memberFreeze } = require('../worker/freeze')
 
-const { freezeMember, disableMember } = require('../biostar');
+const { freezeMember, disableMember, updateMemberInBioStar } = require('../biostar');
 
 
 module.exports = {
@@ -121,7 +119,7 @@ module.exports = {
 
     checkFreezeMember: async () => {
         const response = await MemberFreezing
-            .find({ fromDate: setTime(new Date()), status: 'Pending' }).count();
+            .find({ fromDate: setTime(new Date()), typeOfFreeze: 'Pending' }).count();
         await freezeAction(response)
     },
 
@@ -137,7 +135,7 @@ module.exports = {
                     const endDate = packages.extendDate ? packages.extendDate : packages.endDate
                     const obj = module.exports.makeBioStarObject
                         (member, packages.packages.bioStarInfo, packages.startDate, endDate);
-                    await updateMemberInAllBranches(obj)
+                    await updateMemberInBioStar(obj)
                 }
             }
         }
@@ -182,16 +180,16 @@ module.exports = {
     },
 
     checkInstallmentsPending: async () => {
-        const members = await Member.find({ status: true, doneFingerAuth: true }).lean();
+        const members = await Member.find({ status: true, doneFingerAuth: true });
         const today = new Date(setTime(new Date())).getTime();
         for (const [i, member] of members.entries()) {
-            for (const packages of member.packageDetails.entries()) {
+            for (const packages of member.packageDetails) {
                 if (packages.Installments && packages.Installments.length) {
-                    for (const installment of packages.Installments.entries()) {
+                    for (const installment of packages.Installments) {
                         let dueDate = new Date(setTime(installment.dueDate)).getTime();
                         if (dueDate === today && installment.paidStatus === 'UnPaid') {
                             members[i].status = false;
-                            await members.save();
+                            await members[i].save();
                             await disableMember(members[i].memberId, 'IN');
                         }
                     }
