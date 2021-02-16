@@ -360,13 +360,13 @@ class OrderHistory extends Component {
                               {parseFloat(orderById.chequeAmount) ?
                                 <div className="text-right my-1">{t('Cheque')} :</div>
                                 : <div></div>}
-                              {parseFloat(orderById.bankName) ?
+                              {orderById.bankName ?
                                 <div className="text-right my-1">{t('Bank Name')} :</div>
                                 : <div></div>}
-                              {parseFloat(orderById.chequeNumber) ?
+                              {orderById.chequeNumber ?
                                 <div className="text-right my-1">{t('Cheque Number')} :</div>
                                 : <div></div>}
-                              {parseFloat(orderById.chequeDate) ?
+                              {orderById.chequeDate ?
                                 <div className="text-right my-1">{t('Cheque Date')} :</div>
                                 : <div></div>}
                               <div className="text-right my-1">{t('Grand Total')} :</div>
@@ -405,7 +405,7 @@ class OrderHistory extends Component {
                                 <div className="my-1"><span className="invisible">{this.props.defaultCurrency}</span> <span className="px-1">{orderById.chequeNumber}</span></div>
                                 : <div></div>}
                               {orderById.chequeDate ?
-                                <div className="my-1"><span className="invisible">{this.props.defaultCurrency}</span> <span className="px-1">{orderById.chequeDate}</span></div>
+                                <div className="my-1"><span className="invisible">{this.props.defaultCurrency}</span> <span className="px-1">{dateToDDMMYYYY(orderById.chequeDate)}</span></div>
                                 : <div></div>}
                               <div className="my-1"><span className="">{this.props.defaultCurrency}</span> <span className="px-1">{parseFloat(orderById.totalAmount).toFixed(3)}</span></div>
                               <div className="my-1"><span className="">{this.props.defaultCurrency}</span> <span className="px-1">{parseFloat(orderById.totalAmount).toFixed(3)}</span></div>
@@ -579,7 +579,7 @@ class OrderHistory extends Component {
                   {orderById.chequeDate ?
                     <tr>
                       <td style={{ textAlign: "right", padding: "0px 4px 4px 4px", width: "100%" }}>{t('Cheque Date')} {this.props.defaultCurrency}: </td>
-                      <td style={{ textAlign: "right", padding: "0px 0px 4px 0px" }}>{orderById.chequeDate}</td>
+                      <td style={{ textAlign: "right", padding: "0px 0px 4px 0px" }}>{dateToDDMMYYYY(orderById.chequeDate)}</td>
                     </tr>
                     : <tr></tr>}
                   <tr>

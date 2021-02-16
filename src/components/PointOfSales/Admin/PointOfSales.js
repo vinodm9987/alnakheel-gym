@@ -1054,13 +1054,13 @@ class PointOfSales extends Component {
                               {parseFloat(posReceipt.chequeAmount) ?
                                 <div className="text-right my-1">{t('Cheque')} :</div>
                                 : <div></div>}
-                              {parseFloat(posReceipt.bankName) ?
+                              {posReceipt.bankName ?
                                 <div className="text-right my-1">{t('Bank Name')} :</div>
                                 : <div></div>}
-                              {parseFloat(posReceipt.chequeNumber) ?
+                              {posReceipt.chequeNumber ?
                                 <div className="text-right my-1">{t('Cheque Number')} :</div>
                                 : <div></div>}
-                              {parseFloat(posReceipt.chequeDate) ?
+                              {posReceipt.chequeDate ?
                                 <div className="text-right my-1">{t('Cheque Date')} :</div>
                                 : <div></div>}
                               <div className="text-right my-1">{t('Grand Total')} :</div>
@@ -1099,7 +1099,7 @@ class PointOfSales extends Component {
                                 <div className="my-1"><span className="invisible">{this.props.defaultCurrency}</span> <span className="px-1">{posReceipt.chequeNumber}</span></div>
                                 : <div></div>}
                               {posReceipt.chequeDate ?
-                                <div className="my-1"><span className="invisible">{this.props.defaultCurrency}</span> <span className="px-1">{posReceipt.chequeDate}</span></div>
+                                <div className="my-1"><span className="invisible">{this.props.defaultCurrency}</span> <span className="px-1">{dateToDDMMYYYY(posReceipt.chequeDate)}</span></div>
                                 : <div></div>}
                               <div className="my-1"><span className="">{this.props.defaultCurrency}</span> <span className="px-1">{parseFloat(posReceipt.totalAmount).toFixed(3)}</span></div>
                               <div className="my-1"><span className="">{this.props.defaultCurrency}</span> <span className="px-1">{parseFloat(posReceipt.totalAmount).toFixed(3)}</span></div>
@@ -1280,7 +1280,7 @@ class PointOfSales extends Component {
                   {posReceipt.chequeDate ?
                     <tr>
                       <td style={{ textAlign: "right", padding: "0px 4px 4px 4px", width: "100%" }}>{t('Cheque Date')} {this.props.defaultCurrency}: </td>
-                      <td style={{ textAlign: "right", padding: "0px 0px 4px 0px" }}>{posReceipt.chequeDate}</td>
+                      <td style={{ textAlign: "right", padding: "0px 0px 4px 0px" }}>{dateToDDMMYYYY(posReceipt.chequeDate)}</td>
                     </tr>
                     : <tr></tr>}
                   <tr>

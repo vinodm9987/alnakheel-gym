@@ -1178,13 +1178,13 @@ class PackageRenewal extends Component {
                               {parseFloat(this.state.cheque) ?
                                 <div className="text-right my-1">{t('Cheque')} :</div>
                                 : <div></div>}
-                              {parseFloat(this.state.bankName) ?
+                              {this.state.bankName ?
                                 <div className="text-right my-1">{t('Bank Name')} :</div>
                                 : <div></div>}
-                              {parseFloat(this.state.chequeNumber) ?
+                              {this.state.chequeNumber ?
                                 <div className="text-right my-1">{t('Cheque Number')} :</div>
                                 : <div></div>}
-                              {parseFloat(this.state.chequeDate) ?
+                              {this.state.chequeDate ?
                                 <div className="text-right my-1">{t('Cheque Date')} :</div>
                                 : <div></div>}
                               <div className="text-right my-1">{t('Grand Total')} :</div>
@@ -1220,7 +1220,7 @@ class PackageRenewal extends Component {
                                 <div className="my-1"><span className="invisible">{this.props.defaultCurrency}</span> <span className="px-1">{this.state.chequeNumber}</span></div>
                                 : <div></div>}
                               {this.state.chequeDate ?
-                                <div className="my-1"><span className="invisible">{this.props.defaultCurrency}</span> <span className="px-1">{this.state.chequeDate}</span></div>
+                                <div className="my-1"><span className="invisible">{this.props.defaultCurrency}</span> <span className="px-1">{dateToDDMMYYYY(this.state.chequeDate)}</span></div>
                                 : <div></div>}
                               <div className="my-1"><span className="">{this.props.defaultCurrency}</span> <span className="px-1">{parseFloat(total).toFixed(3)}</span></div>
                               <div className="my-1"><span className="">{this.props.defaultCurrency}</span> <span className="px-1">{parseFloat(total).toFixed(3)}</span></div>
@@ -1395,7 +1395,7 @@ class PackageRenewal extends Component {
                   {this.state.chequeDate ?
                     <tr>
                       <td style={{ textAlign: "right", padding: "0px 4px 4px 4px", width: "100%" }}>{t('Cheque Date')} {this.props.defaultCurrency}: </td>
-                      <td style={{ textAlign: "right", padding: "0px 0px 4px 0px" }}>{this.state.chequeDate}</td>
+                      <td style={{ textAlign: "right", padding: "0px 0px 4px 0px" }}>{dateToDDMMYYYY(this.state.chequeDate)}</td>
                     </tr>
                     : <tr></tr>}
                   <tr>

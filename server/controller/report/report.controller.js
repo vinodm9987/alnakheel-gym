@@ -554,8 +554,8 @@ const getGeneralSales = async (body) => {
       if (doc.paidStatus === 'Paid' || doc.paidStatus === 'Installment') {
         if (body.fromDate && body.toDate) {
           if (
-            new Date(setTime(body.fromDate)) <= (doc.startDate ? doc.startDate : ele.admissionDate) &&
-            new Date(setTime(body.toDate)) >= (doc.startDate ? doc.startDate : ele.admissionDate)
+            new Date(setTime(body.fromDate)) <= (doc.dateOfPaid ? doc.dateOfPaid : ele.admissionDate) &&
+            new Date(setTime(body.toDate)) >= (doc.dateOfPaid ? doc.dateOfPaid : ele.admissionDate)
           ) {
             return doc
           }
