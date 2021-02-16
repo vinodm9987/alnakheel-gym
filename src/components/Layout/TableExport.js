@@ -6,7 +6,7 @@ import { dateToDDMMYYYY, dateToHHMM, countHours, getPageWiseData, setTime, calcu
 import Pagination from './Pagination'
 import { connect } from 'react-redux'
 import { generateReport } from '../../utils/pdf'
-import gymlogo from '../../assets/img/main-logo.jpg'
+import gymlogo from '../../assets/img/al-main-logo.png'
 
 class TableExport extends Component {
 
