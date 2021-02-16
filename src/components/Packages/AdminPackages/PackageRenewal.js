@@ -948,7 +948,7 @@ class PackageRenewal extends Component {
                     <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
                       <div className="form-group inlineFormGroup mb-3">
                         <label htmlFor="bankName" className="mx-sm-2 inlineFormLabel mb-1">{t('Bank Name')}</label>
-                        <input type="text" autoComplete="off" className={this.state.bankNameE ? "form-control mx-sm-2 inlineFormInputs FormInputsError w-100 py-0 px-2 d-flex align-items-center bg-white dirltr" : "form-control mx-sm-2 inlineFormInputs w-100 py-0 px-2 d-flex align-items-center bg-white dirltr"}
+                        <input type="text" autoComplete="off" className={this.state.bankNameE ? "form-control mx-sm-2 inlineFormInputs FormInputsError w-100 py-0 px-2 d-flex align-items-center bg-white" : "form-control mx-sm-2 inlineFormInputs w-100 py-0 px-2 d-flex align-items-center bg-white"}
                           id="bankName"
                           value={this.state.bankName} onChange={(e) => this.setState({ bankName: e.target.value })}
                         />
@@ -980,7 +980,7 @@ class PackageRenewal extends Component {
                             autoOk
                             invalidDateMessage=''
                             minDateMessage=''
-                            className={this.state.chequeDateE ? "form-control pl-2 bg-white mx-sm-2 inlineFormInputs FormInputsError dirltr" : "form-control pl-2 bg-white mx-sm-2 inlineFormInputs dirltr"}
+                            className={this.state.chequeDateE ? "form-control pl-2 bg-white mx-sm-2 inlineFormInputs FormInputsError" : "form-control pl-2 bg-white mx-sm-2 inlineFormInputs"}
                             minDate={new Date()}
                             format="dd/MM/yyyy"
                             value={this.state.chequeDate}
