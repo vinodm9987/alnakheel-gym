@@ -550,20 +550,36 @@ const getGeneralSales = async (body) => {
     .populate({ path: "packageDetails.packages", populate: { path: "period" } })
     .populate({ path: "packageDetails.trainerDetails.trainerFees", populate: { path: "period" } }).lean()
   totalAmountOfMember.forEach(ele => {
-    ele.packageDetails = ele.packageDetails.filter(doc => {
-      if (doc.paidStatus === 'Paid' || doc.paidStatus === 'Installment') {
-        if (body.fromDate && body.toDate) {
-          if (
-            new Date(setTime(body.fromDate)) <= (doc.dateOfPaid ? doc.dateOfPaid : ele.admissionDate) &&
-            new Date(setTime(body.toDate)) >= (doc.dateOfPaid ? doc.dateOfPaid : ele.admissionDate)
-          ) {
-            return doc
+    ele.packageDetails.forEach((doc, i) => {
+      if (doc.Installments && doc.Installments.length) {
+        doc.Installments.forEach(installment => {
+          if (installment.paidStatus === 'Paid' && new Date(setTime(body.fromDate)) <= installment.dateOfPaid && new Date(setTime(body.toDate)) >= installment.dateOfPaid) {
+            installment.display = true
           }
-        } else {
-          return doc
+        })
+      } else {
+        if (new Date(setTime(body.fromDate)) <= doc.dateOfPaid && new Date(setTime(body.toDate)) >= doc.dateOfPaid) {
+          doc.display = true
         }
       }
+      if (doc.trainerDetails && doc.trainerDetails.length) {
+        doc.trainerDetails.forEach(trainerDetail => {
+          if (trainerDetail.Installments && trainerDetail.Installments.length) {
+            trainerDetail.Installments = trainerDetail.Installments.forEach(installment => {
+              if (installment.paidStatus === 'Paid' && new Date(setTime(body.fromDate)) <= installment.dateOfPaid && new Date(setTime(body.toDate)) >= installment.dateOfPaid) {
+                installment.display = true
+              }
+            })
+          } else {
+            if (new Date(setTime(body.fromDate)) <= trainerDetail.dateOfPaid && new Date(setTime(body.toDate)) >= trainerDetail.dateOfPaid) {
+              trainerDetail.display = true
+            }
+          }
+        })
+      }
     })
+  })
+  totalAmountOfMember.forEach(ele => {
     ele.transactionType = "Packages"
     ele.packageDetails.forEach(doc => {
       let branchIndex = branches.findIndex(b => b._id.toString() === ele.branch._id.toString())
