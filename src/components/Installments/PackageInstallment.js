@@ -1045,9 +1045,9 @@ class PackageInstallment extends Component {
 
 
 function mapStateToProps({ dashboard: { systemYear, pendingInstallments }, currency: { defaultCurrency }, installment: { packageInstallment }, vat: { activeVats },
-  privilege: { verifyPassword }, auth: { loggedUser } }) {
+  privilege: { verifyPassword }, auth: { loggedUser }, errors, }) {
   return {
-    defaultCurrency, pendingInstallments, systemYear, activeVats, verifyPassword, loggedUser,
+    defaultCurrency, pendingInstallments, systemYear, activeVats, verifyPassword, loggedUser, errors,
     packageInstallment: packageInstallment && packageInstallment.sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate))
   }
 }

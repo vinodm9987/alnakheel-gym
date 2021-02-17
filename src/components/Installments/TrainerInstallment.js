@@ -1038,9 +1038,9 @@ class TrainerInstallment extends Component {
 
 
 function mapStateToProps({ dashboard: { systemYear, pendingInstallments }, currency: { defaultCurrency }, installment: { trainerInstallment }, vat: { activeVats },
-  privilege: { verifyPassword } }) {
+  privilege: { verifyPassword }, errors, }) {
   return {
-    defaultCurrency, pendingInstallments, systemYear, activeVats, verifyPassword,
+    defaultCurrency, pendingInstallments, systemYear, activeVats, verifyPassword, errors,
     trainerInstallment: trainerInstallment && trainerInstallment.sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate))
   }
 }
