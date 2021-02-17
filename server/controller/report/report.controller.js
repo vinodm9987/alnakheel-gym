@@ -550,16 +550,26 @@ const getGeneralSales = async (body) => {
     .populate({ path: "packageDetails.packages", populate: { path: "period" } })
     .populate({ path: "packageDetails.trainerDetails.trainerFees", populate: { path: "period" } }).lean()
   totalAmountOfMember.forEach(ele => {
+    ele.transactionType = "Packages"
     ele.packageDetails.forEach((doc, i) => {
+      let branchIndex = branches.findIndex(b => b._id.toString() === ele.branch._id.toString())
       if (doc.Installments && doc.Installments.length) {
         doc.Installments.forEach(installment => {
           if (installment.paidStatus === 'Paid' && new Date(setTime(body.fromDate)) <= installment.dateOfPaid && new Date(setTime(body.toDate)) >= installment.dateOfPaid) {
             installment.display = true
+            transactionType[0].amount += typeof installment.totalAmount === 'number' ? installment.totalAmount : 0
+            if (ele.branch._id.toString() === branches[branchIndex]._id.toString() && branchIndex !== -1) {
+              branches[branchIndex].amount += typeof installment.totalAmount === 'number' ? installment.totalAmount : 0
+            }
           }
         })
       } else {
         if (new Date(setTime(body.fromDate)) <= doc.dateOfPaid && new Date(setTime(body.toDate)) >= doc.dateOfPaid) {
           doc.display = true
+          transactionType[0].amount += typeof doc.totalAmount === 'number' ? doc.totalAmount : 0
+          if (ele.branch._id.toString() === branches[branchIndex]._id.toString() && branchIndex !== -1) {
+            branches[branchIndex].amount += typeof doc.totalAmount === 'number' ? doc.totalAmount : 0
+          }
         }
       }
       if (doc.trainerDetails && doc.trainerDetails.length) {
@@ -568,47 +578,19 @@ const getGeneralSales = async (body) => {
             trainerDetail.Installments = trainerDetail.Installments.forEach(installment => {
               if (installment.paidStatus === 'Paid' && new Date(setTime(body.fromDate)) <= installment.dateOfPaid && new Date(setTime(body.toDate)) >= installment.dateOfPaid) {
                 installment.display = true
+                transactionType[0].amount += typeof installment.totalAmount === 'number' ? installment.totalAmount : 0
+                if (ele.branch._id.toString() === branches[branchIndex]._id.toString() && branchIndex !== -1) {
+                  branches[branchIndex].amount += typeof installment.totalAmount === 'number' ? installment.totalAmount : 0
+                }
               }
             })
           } else {
             if (new Date(setTime(body.fromDate)) <= trainerDetail.dateOfPaid && new Date(setTime(body.toDate)) >= trainerDetail.dateOfPaid) {
               trainerDetail.display = true
-            }
-          }
-        })
-      }
-    })
-  })
-  totalAmountOfMember.forEach(ele => {
-    ele.transactionType = "Packages"
-    ele.packageDetails.forEach(doc => {
-      let branchIndex = branches.findIndex(b => b._id.toString() === ele.branch._id.toString())
-      if (doc.Installments && doc.Installments.length) {
-        doc.Installments.forEach(installment => {
-          transactionType[0].amount += typeof installment.totalAmount === 'number' ? installment.totalAmount : 0
-          if (ele.branch._id.toString() === branches[branchIndex]._id.toString() && branchIndex !== -1) {
-            branches[branchIndex].amount += typeof installment.totalAmount === 'number' ? installment.totalAmount : 0
-          }
-        })
-      } else {
-        transactionType[0].amount += typeof doc.totalAmount === 'number' ? doc.totalAmount : 0
-        if (ele.branch._id.toString() === branches[branchIndex]._id.toString() && branchIndex !== -1) {
-          branches[branchIndex].amount += typeof doc.totalAmount === 'number' ? doc.totalAmount : 0
-        }
-      }
-      if (doc.trainerDetails && doc.trainerDetails.length) {
-        doc.trainerDetails.forEach(trainerDetail => {
-          if (trainerDetail.Installments && trainerDetail.Installments.length) {
-            trainerDetail.Installments.forEach(installment => {
-              transactionType[0].amount += typeof installment.totalAmount === 'number' ? installment.totalAmount : 0
+              transactionType[0].amount += typeof trainerDetail.totalAmount === 'number' ? trainerDetail.totalAmount : 0
               if (ele.branch._id.toString() === branches[branchIndex]._id.toString() && branchIndex !== -1) {
-                branches[branchIndex].amount += typeof installment.totalAmount === 'number' ? installment.totalAmount : 0
+                branches[branchIndex].amount += typeof trainerDetail.totalAmount === 'number' ? trainerDetail.totalAmount : 0
               }
-            })
-          } else {
-            transactionType[0].amount += typeof trainerDetail.totalAmount === 'number' ? trainerDetail.totalAmount : 0
-            if (ele.branch._id.toString() === branches[branchIndex]._id.toString() && branchIndex !== -1) {
-              branches[branchIndex].amount += typeof trainerDetail.totalAmount === 'number' ? trainerDetail.totalAmount : 0
             }
           }
         })
