@@ -497,7 +497,7 @@ class TableExport extends Component {
         packageDetails.forEach(doc => {
           if (doc.Installments && doc.Installments.length) {
             doc.Installments.forEach(installment => {
-              if (installment.paidStatus === 'Paid') {
+              if (installment.paidStatus === 'Paid' && installment.display) {
                 totalPaidAmount += (installment.totalAmount ? +installment.totalAmount : 0)
                 totalCash += (installment.cashAmount ? +installment.cashAmount : 0)
                 totalCard += (installment.cardAmount ? +installment.cardAmount : 0)
@@ -528,7 +528,7 @@ class TableExport extends Component {
               }
             })
           } else {
-            if (doc.paidStatus === 'Paid' || doc.paidStatus === 'Installment') {
+            if ((doc.paidStatus === 'Paid' || doc.paidStatus === 'Installment') && doc.display) {
               totalPaidAmount += (doc.totalAmount ? +doc.totalAmount : 0)
               totalCash += (doc.cashAmount ? +doc.cashAmount : 0)
               totalCard += (doc.cardAmount ? +doc.cardAmount : 0)
@@ -562,7 +562,7 @@ class TableExport extends Component {
             doc.trainerDetails.forEach(trainerDetail => {
               if (trainerDetail.Installments && trainerDetail.Installments.length) {
                 trainerDetail.Installments.forEach(installment => {
-                  if (installment.paidStatus === 'Paid') {
+                  if (installment.paidStatus === 'Paid' && installment.display) {
                     totalPaidAmount += (installment.totalAmount ? +installment.totalAmount : 0)
                     totalCash += (installment.cashAmount ? +installment.cashAmount : 0)
                     totalCard += (installment.cardAmount ? +installment.cardAmount : 0)
@@ -593,7 +593,7 @@ class TableExport extends Component {
                   }
                 })
               } else {
-                if (trainerDetail.paidStatus === 'Paid' || trainerDetail.paidStatus === 'Installment') {
+                if ((trainerDetail.paidStatus === 'Paid' || trainerDetail.paidStatus === 'Installment') && trainerDetail.display) {
                   totalPaidAmount += (trainerDetail.totalAmount ? +trainerDetail.totalAmount : 0)
                   totalCash += (trainerDetail.cashAmount ? +trainerDetail.cashAmount : 0)
                   totalCard += (trainerDetail.cardAmount ? +trainerDetail.cardAmount : 0)
@@ -742,7 +742,7 @@ class TableExport extends Component {
       packageDetails.forEach(doc => {
         if (doc.Installments && doc.Installments.length) {
           doc.Installments.forEach(installment => {
-            if (installment.paidStatus === 'Paid') {
+            if (installment.paidStatus === 'Paid' && installment.display) {
               totalPaidAmount += (installment.totalAmount ? +installment.totalAmount : 0)
               totalCash += (installment.cashAmount ? +installment.cashAmount : 0)
               totalCard += (installment.cardAmount ? +installment.cardAmount : 0)
@@ -773,7 +773,7 @@ class TableExport extends Component {
             }
           })
         } else {
-          if (doc.paidStatus === 'Paid' || doc.paidStatus === 'Installment') {
+          if ((doc.paidStatus === 'Paid' || doc.paidStatus === 'Installment') && doc.display) {
             totalPaidAmount += (doc.totalAmount ? +doc.totalAmount : 0)
             totalCash += (doc.cashAmount ? +doc.cashAmount : 0)
             totalCard += (doc.cardAmount ? +doc.cardAmount : 0)
@@ -807,7 +807,7 @@ class TableExport extends Component {
           doc.trainerDetails.forEach(trainerDetail => {
             if (trainerDetail.Installments && trainerDetail.Installments.length) {
               trainerDetail.Installments.forEach(installment => {
-                if (installment.paidStatus === 'Paid') {
+                if (installment.paidStatus === 'Paid' && installment.display) {
                   totalPaidAmount += (installment.totalAmount ? +installment.totalAmount : 0)
                   totalCash += (installment.cashAmount ? +installment.cashAmount : 0)
                   totalCard += (installment.cardAmount ? +installment.cardAmount : 0)
@@ -838,7 +838,7 @@ class TableExport extends Component {
                 }
               })
             } else {
-              if (trainerDetail.paidStatus === 'Paid' || trainerDetail.paidStatus === 'Installment') {
+              if ((trainerDetail.paidStatus === 'Paid' || trainerDetail.paidStatus === 'Installment') && trainerDetail.display) {
                 totalPaidAmount += (trainerDetail.totalAmount ? +trainerDetail.totalAmount : 0)
                 totalCash += (trainerDetail.cashAmount ? +trainerDetail.cashAmount : 0)
                 totalCard += (trainerDetail.cardAmount ? +trainerDetail.cardAmount : 0)
@@ -1157,7 +1157,7 @@ class TableExport extends Component {
           let displayAmount = 0
           if (doc.Installments && doc.Installments.length) {
             doc.Installments.forEach(installment => {
-              if (installment.paidStatus === 'Paid') {
+              if (installment.paidStatus === 'Paid' && installment.display) {
                 if (paymentMethod === 'Cash') {
                   displayAmount = (+installment.cashAmount ? +installment.cashAmount : 0)
                   totalPaidAmount += (installment.cashAmount ? +installment.cashAmount : 0)
@@ -1189,7 +1189,7 @@ class TableExport extends Component {
               }
             })
           } else {
-            if (doc.paidStatus === 'Paid' || doc.paidStatus === 'Installment') {
+            if ((doc.paidStatus === 'Paid' || doc.paidStatus === 'Installment') && doc.display) {
               if (paymentMethod === 'Cash') {
                 displayAmount = (+doc.cashAmount ? +doc.cashAmount : 0)
                 totalPaidAmount += (doc.cashAmount ? +doc.cashAmount : 0)
@@ -1224,7 +1224,7 @@ class TableExport extends Component {
             doc.trainerDetails.forEach(trainerDetail => {
               if (trainerDetail.Installments && trainerDetail.Installments.length) {
                 trainerDetail.Installments.forEach(installment => {
-                  if (installment.paidStatus === 'Paid') {
+                  if (installment.paidStatus === 'Paid' && installment.display) {
                     if (paymentMethod === 'Cash') {
                       displayAmount = (+installment.cashAmount ? +installment.cashAmount : 0)
                       totalPaidAmount += (installment.cashAmount ? +installment.cashAmount : 0)
@@ -1256,7 +1256,7 @@ class TableExport extends Component {
                   }
                 })
               } else {
-                if (trainerDetail.paidStatus === 'Paid' || trainerDetail.paidStatus === 'Installment') {
+                if ((trainerDetail.paidStatus === 'Paid' || trainerDetail.paidStatus === 'Installment') && trainerDetail.display) {
                   if (paymentMethod === 'Cash') {
                     displayAmount = (+trainerDetail.cashAmount ? +trainerDetail.cashAmount : 0)
                     totalPaidAmount += (trainerDetail.cashAmount ? +trainerDetail.cashAmount : 0)
