@@ -623,58 +623,56 @@ const getPackageSales = async (body) => {
     .populate({ path: "packageDetails.packages", populate: { path: "period" } })
     .populate({ path: "packageDetails.trainerDetails.trainerFees", populate: { path: "period" } }).lean()
   totalAmountOfMember.forEach(ele => {
-    ele.packageDetails = ele.packageDetails.filter(doc => {
-      if (doc.paidStatus === 'Paid' || doc.paidStatus === 'Installment') {
-        if (body.fromDate && body.toDate) {
-          if (
-            new Date(setTime(body.fromDate)) <= (doc.startDate ? doc.startDate : ele.admissionDate) &&
-            new Date(setTime(body.toDate)) >= (doc.startDate ? doc.startDate : ele.admissionDate)
-          ) {
-            return doc
-          }
-        } else {
-          return doc
-        }
-      }
-    })
     ele.transactionType = "Packages"
-    ele.packageDetails.forEach(doc => {
+    ele.packageDetails.forEach((doc, i) => {
       let branchIndex = branches.findIndex(b => b._id.toString() === ele.branch._id.toString())
       let packageIndex = packages.findIndex(ele => ele._id.toString() === doc.packages._id.toString());
       if (doc.Installments && doc.Installments.length) {
         doc.Installments.forEach(installment => {
-          if (doc.packages._id.toString() === packages[packageIndex]._id.toString() && packageIndex !== -1) {
-            packages[packageIndex].amount += typeof installment.totalAmount === 'number' ? installment.totalAmount : 0
-          }
-          if (ele.branch._id.toString() === branches[branchIndex]._id.toString() && branchIndex !== -1) {
-            branches[branchIndex].amount += typeof installment.totalAmount === 'number' ? installment.totalAmount : 0
+          if (installment.paidStatus === 'Paid' && new Date(setTime(body.fromDate)) <= installment.dateOfPaid && new Date(setTime(body.toDate)) >= installment.dateOfPaid) {
+            installment.display = true
+            if (doc.packages._id.toString() === packages[packageIndex]._id.toString() && packageIndex !== -1) {
+              packages[packageIndex].amount += typeof installment.totalAmount === 'number' ? installment.totalAmount : 0
+            }
+            if (ele.branch._id.toString() === branches[branchIndex]._id.toString() && branchIndex !== -1) {
+              branches[branchIndex].amount += typeof installment.totalAmount === 'number' ? installment.totalAmount : 0
+            }
           }
         })
       } else {
-        if (doc.packages._id.toString() === packages[packageIndex]._id.toString() && packageIndex !== -1) {
-          packages[packageIndex].amount += typeof doc.totalAmount === 'number' ? doc.totalAmount : 0
-        }
-        if (ele.branch._id.toString() === branches[branchIndex]._id.toString() && branchIndex !== -1) {
-          branches[branchIndex].amount += typeof doc.totalAmount === 'number' ? doc.totalAmount : 0
+        if (new Date(setTime(body.fromDate)) <= doc.dateOfPaid && new Date(setTime(body.toDate)) >= doc.dateOfPaid) {
+          doc.display = true
+          if (doc.packages._id.toString() === packages[packageIndex]._id.toString() && packageIndex !== -1) {
+            packages[packageIndex].amount += typeof doc.totalAmount === 'number' ? doc.totalAmount : 0
+          }
+          if (ele.branch._id.toString() === branches[branchIndex]._id.toString() && branchIndex !== -1) {
+            branches[branchIndex].amount += typeof doc.totalAmount === 'number' ? doc.totalAmount : 0
+          }
         }
       }
       if (doc.trainerDetails && doc.trainerDetails.length) {
         doc.trainerDetails.forEach(trainerDetail => {
           if (trainerDetail.Installments && trainerDetail.Installments.length) {
-            trainerDetail.Installments.forEach(installment => {
-              if (doc.packages._id.toString() === packages[packageIndex]._id.toString() && packageIndex !== -1) {
-                packages[packageIndex].amount += typeof installment.totalAmount === 'number' ? installment.totalAmount : 0
-              }
-              if (ele.branch._id.toString() === branches[branchIndex]._id.toString() && branchIndex !== -1) {
-                branches[branchIndex].amount += typeof installment.totalAmount === 'number' ? installment.totalAmount : 0
+            trainerDetail.Installments = trainerDetail.Installments.forEach(installment => {
+              if (installment.paidStatus === 'Paid' && new Date(setTime(body.fromDate)) <= installment.dateOfPaid && new Date(setTime(body.toDate)) >= installment.dateOfPaid) {
+                installment.display = true
+                if (doc.packages._id.toString() === packages[packageIndex]._id.toString() && packageIndex !== -1) {
+                  packages[packageIndex].amount += typeof installment.totalAmount === 'number' ? installment.totalAmount : 0
+                }
+                if (ele.branch._id.toString() === branches[branchIndex]._id.toString() && branchIndex !== -1) {
+                  branches[branchIndex].amount += typeof installment.totalAmount === 'number' ? installment.totalAmount : 0
+                }
               }
             })
           } else {
-            if (doc.packages._id.toString() === packages[packageIndex]._id.toString() && packageIndex !== -1) {
-              packages[packageIndex].amount += typeof trainerDetail.totalAmount === 'number' ? trainerDetail.totalAmount : 0
-            }
-            if (ele.branch._id.toString() === branches[branchIndex]._id.toString() && branchIndex !== -1) {
-              branches[branchIndex].amount += typeof trainerDetail.totalAmount === 'number' ? trainerDetail.totalAmount : 0
+            if (new Date(setTime(body.fromDate)) <= trainerDetail.dateOfPaid && new Date(setTime(body.toDate)) >= trainerDetail.dateOfPaid) {
+              trainerDetail.display = true
+              if (doc.packages._id.toString() === packages[packageIndex]._id.toString() && packageIndex !== -1) {
+                packages[packageIndex].amount += typeof trainerDetail.totalAmount === 'number' ? trainerDetail.totalAmount : 0
+              }
+              if (ele.branch._id.toString() === branches[branchIndex]._id.toString() && branchIndex !== -1) {
+                branches[branchIndex].amount += typeof trainerDetail.totalAmount === 'number' ? trainerDetail.totalAmount : 0
+              }
             }
           }
         })
@@ -878,50 +876,48 @@ const getSalesByPaymentMethod = async (body) => {
       .populate({ path: "packageDetails.packages", populate: { path: "period" } })
       .populate({ path: "packageDetails.trainerDetails.trainerFees", populate: { path: "period" } }).lean()
     totalAmountOfMember.forEach(ele => {
-      ele.packageDetails = ele.packageDetails.filter(doc => {
-        if (doc.paidStatus === 'Paid' || doc.paidStatus === 'Installment') {
-          if (body.fromDate && body.toDate) {
-            if (
-              new Date(setTime(body.fromDate)) <= (doc.startDate ? doc.startDate : ele.admissionDate) &&
-              new Date(setTime(body.toDate)) >= (doc.startDate ? doc.startDate : ele.admissionDate)
-            ) {
-              return doc
-            }
-          } else {
-            return doc
-          }
-        }
-      })
       ele.transactionType = "Packages"
       ele.paymentMethod = body.paymentMethod
-      ele.packageDetails.forEach(doc => {
+      ele.packageDetails.forEach((doc, i) => {
         let branchIndex = branches.findIndex(b => b._id.toString() === ele.branch._id.toString())
         if (doc.Installments && doc.Installments.length) {
           doc.Installments.forEach(installment => {
-            transactionType[0].amount += (body.paymentMethod === 'Cash' ? (+installment.cashAmount ? +installment.cashAmount : 0) : body.paymentMethod === 'Card' ? (+installment.cardAmount ? +installment.cardAmount : 0) : body.paymentMethod === 'Digital' ? (+installment.digitalAmount ? +installment.digitalAmount : 0) : (+installment.chequeAmount ? +installment.chequeAmount : 0))
-            if (ele.branch._id.toString() === branches[branchIndex]._id.toString() && branchIndex !== -1) {
-              branches[branchIndex].amount += (body.paymentMethod === 'Cash' ? (+installment.cashAmount ? +installment.cashAmount : 0) : body.paymentMethod === 'Card' ? (+installment.cardAmount ? +installment.cardAmount : 0) : body.paymentMethod === 'Digital' ? (+installment.digitalAmount ? +installment.digitalAmount : 0) : (+installment.chequeAmount ? +installment.chequeAmount : 0))
+            if (installment.paidStatus === 'Paid' && new Date(setTime(body.fromDate)) <= installment.dateOfPaid && new Date(setTime(body.toDate)) >= installment.dateOfPaid) {
+              installment.display = true
+              transactionType[0].amount += (body.paymentMethod === 'Cash' ? (+installment.cashAmount ? +installment.cashAmount : 0) : body.paymentMethod === 'Card' ? (+installment.cardAmount ? +installment.cardAmount : 0) : body.paymentMethod === 'Digital' ? (+installment.digitalAmount ? +installment.digitalAmount : 0) : (+installment.chequeAmount ? +installment.chequeAmount : 0))
+              if (ele.branch._id.toString() === branches[branchIndex]._id.toString() && branchIndex !== -1) {
+                branches[branchIndex].amount += (body.paymentMethod === 'Cash' ? (+installment.cashAmount ? +installment.cashAmount : 0) : body.paymentMethod === 'Card' ? (+installment.cardAmount ? +installment.cardAmount : 0) : body.paymentMethod === 'Digital' ? (+installment.digitalAmount ? +installment.digitalAmount : 0) : (+installment.chequeAmount ? +installment.chequeAmount : 0))
+              }
             }
           })
         } else {
-          transactionType[0].amount += (body.paymentMethod === 'Cash' ? (+doc.cashAmount ? +doc.cashAmount : 0) : body.paymentMethod === 'Card' ? (+doc.cardAmount ? +doc.cardAmount : 0) : body.paymentMethod === 'Digital' ? (+doc.digitalAmount ? +doc.digitalAmount : 0) : (+doc.chequeAmount ? +doc.chequeAmount : 0))
-          if (ele.branch._id.toString() === branches[branchIndex]._id.toString() && branchIndex !== -1) {
-            branches[branchIndex].amount += (body.paymentMethod === 'Cash' ? (+doc.cashAmount ? +doc.cashAmount : 0) : body.paymentMethod === 'Card' ? (+doc.cardAmount ? +doc.cardAmount : 0) : body.paymentMethod === 'Digital' ? (+doc.digitalAmount ? +doc.digitalAmount : 0) : (+doc.chequeAmount ? +doc.chequeAmount : 0))
+          if (new Date(setTime(body.fromDate)) <= doc.dateOfPaid && new Date(setTime(body.toDate)) >= doc.dateOfPaid) {
+            doc.display = true
+            transactionType[0].amount += (body.paymentMethod === 'Cash' ? (+doc.cashAmount ? +doc.cashAmount : 0) : body.paymentMethod === 'Card' ? (+doc.cardAmount ? +doc.cardAmount : 0) : body.paymentMethod === 'Digital' ? (+doc.digitalAmount ? +doc.digitalAmount : 0) : (+doc.chequeAmount ? +doc.chequeAmount : 0))
+            if (ele.branch._id.toString() === branches[branchIndex]._id.toString() && branchIndex !== -1) {
+              branches[branchIndex].amount += (body.paymentMethod === 'Cash' ? (+doc.cashAmount ? +doc.cashAmount : 0) : body.paymentMethod === 'Card' ? (+doc.cardAmount ? +doc.cardAmount : 0) : body.paymentMethod === 'Digital' ? (+doc.digitalAmount ? +doc.digitalAmount : 0) : (+doc.chequeAmount ? +doc.chequeAmount : 0))
+            }
           }
         }
         if (doc.trainerDetails && doc.trainerDetails.length) {
           doc.trainerDetails.forEach(trainerDetail => {
             if (trainerDetail.Installments && trainerDetail.Installments.length) {
-              trainerDetail.Installments.forEach(installment => {
-                transactionType[0].amount += (body.paymentMethod === 'Cash' ? (+installment.cashAmount ? +installment.cashAmount : 0) : body.paymentMethod === 'Card' ? (+installment.cardAmount ? +installment.cardAmount : 0) : body.paymentMethod === 'Digital' ? (+installment.digitalAmount ? +installment.digitalAmount : 0) : (+installment.chequeAmount ? +installment.chequeAmount : 0))
-                if (ele.branch._id.toString() === branches[branchIndex]._id.toString() && branchIndex !== -1) {
-                  branches[branchIndex].amount += (body.paymentMethod === 'Cash' ? (+installment.cashAmount ? +installment.cashAmount : 0) : body.paymentMethod === 'Card' ? (+installment.cardAmount ? +installment.cardAmount : 0) : body.paymentMethod === 'Digital' ? (+installment.digitalAmount ? +installment.digitalAmount : 0) : (+installment.chequeAmount ? +installment.chequeAmount : 0))
+              trainerDetail.Installments = trainerDetail.Installments.forEach(installment => {
+                if (installment.paidStatus === 'Paid' && new Date(setTime(body.fromDate)) <= installment.dateOfPaid && new Date(setTime(body.toDate)) >= installment.dateOfPaid) {
+                  installment.display = true
+                  transactionType[0].amount += (body.paymentMethod === 'Cash' ? (+installment.cashAmount ? +installment.cashAmount : 0) : body.paymentMethod === 'Card' ? (+installment.cardAmount ? +installment.cardAmount : 0) : body.paymentMethod === 'Digital' ? (+installment.digitalAmount ? +installment.digitalAmount : 0) : (+installment.chequeAmount ? +installment.chequeAmount : 0))
+                  if (ele.branch._id.toString() === branches[branchIndex]._id.toString() && branchIndex !== -1) {
+                    branches[branchIndex].amount += (body.paymentMethod === 'Cash' ? (+installment.cashAmount ? +installment.cashAmount : 0) : body.paymentMethod === 'Card' ? (+installment.cardAmount ? +installment.cardAmount : 0) : body.paymentMethod === 'Digital' ? (+installment.digitalAmount ? +installment.digitalAmount : 0) : (+installment.chequeAmount ? +installment.chequeAmount : 0))
+                  }
                 }
               })
             } else {
-              transactionType[0].amount += (body.paymentMethod === 'Cash' ? (+trainerDetail.cashAmount ? +trainerDetail.cashAmount : 0) : body.paymentMethod === 'Card' ? (+trainerDetail.cardAmount ? +trainerDetail.cardAmount : 0) : body.paymentMethod === 'Digital' ? (+trainerDetail.digitalAmount ? +trainerDetail.digitalAmount : 0) : (+trainerDetail.chequeAmount ? +trainerDetail.chequeAmount : 0))
-              if (ele.branch._id.toString() === branches[branchIndex]._id.toString() && branchIndex !== -1) {
-                branches[branchIndex].amount += (body.paymentMethod === 'Cash' ? (+trainerDetail.cashAmount ? +trainerDetail.cashAmount : 0) : body.paymentMethod === 'Card' ? (+trainerDetail.cardAmount ? +trainerDetail.cardAmount : 0) : body.paymentMethod === 'Digital' ? (+trainerDetail.digitalAmount ? +trainerDetail.digitalAmount : 0) : (+trainerDetail.chequeAmount ? +trainerDetail.chequeAmount : 0))
+              if (new Date(setTime(body.fromDate)) <= trainerDetail.dateOfPaid && new Date(setTime(body.toDate)) >= trainerDetail.dateOfPaid) {
+                trainerDetail.display = true
+                transactionType[0].amount += (body.paymentMethod === 'Cash' ? (+trainerDetail.cashAmount ? +trainerDetail.cashAmount : 0) : body.paymentMethod === 'Card' ? (+trainerDetail.cardAmount ? +trainerDetail.cardAmount : 0) : body.paymentMethod === 'Digital' ? (+trainerDetail.digitalAmount ? +trainerDetail.digitalAmount : 0) : (+trainerDetail.chequeAmount ? +trainerDetail.chequeAmount : 0))
+                if (ele.branch._id.toString() === branches[branchIndex]._id.toString() && branchIndex !== -1) {
+                  branches[branchIndex].amount += (body.paymentMethod === 'Cash' ? (+trainerDetail.cashAmount ? +trainerDetail.cashAmount : 0) : body.paymentMethod === 'Card' ? (+trainerDetail.cardAmount ? +trainerDetail.cardAmount : 0) : body.paymentMethod === 'Digital' ? (+trainerDetail.digitalAmount ? +trainerDetail.digitalAmount : 0) : (+trainerDetail.chequeAmount ? +trainerDetail.chequeAmount : 0))
+                }
               }
             }
           })
