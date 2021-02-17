@@ -410,7 +410,7 @@ class SideNavBar extends Component {
                 <li className="secondaryLevelMenuList"><NavLink to='/message' onClick={() => this.handleActiveSubTab()}>{t('Messages')}</NavLink></li>
               </ul>
             </li>
-            <li className="primaryLevelMenuList">
+            {/* <li className="primaryLevelMenuList">
               <NavLink to='' onClick={this.handleClick}>
                 <span className="iconv1 iconv1-menu-rewards"><span className="path1"></span><span className="path2"></span><span className="path3"></span><span className="path4"></span><span className="path5"></span><span className="path6"></span></span>
                 <p>{t('Rewards')}</p>
@@ -420,7 +420,7 @@ class SideNavBar extends Component {
                 <li className="secondaryLevelMenuList"><NavLink to='/reward-policy' onClick={() => this.handleActiveSubTab()}>{t('Reward Policy')}</NavLink></li>
                 <li className="secondaryLevelMenuList"><NavLink to='/reward-transaction-history' onClick={() => this.handleActiveSubTab()}>{t('Reward Transaction History')}</NavLink></li>
               </ul>
-            </li>
+            </li> */}
             <li className="primaryLevelMenuList">
               <NavLink to='' onClick={this.handleClick}>
                 <span className="iconv1 iconv1-backup-and-restore-menu"><span className="path1"></span><span className="path2"></span><span className="path3"></span></span>
