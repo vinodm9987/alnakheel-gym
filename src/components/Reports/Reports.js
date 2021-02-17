@@ -379,7 +379,7 @@ class Reports extends Component {
           reportName !== 'Employee Details' &&
           reportName !== 'Today Sales By Staff'
         ) &&
-          <div className="col-12 col-sm-12 col-md-4 col-lg-3 col-xl-2 py-3">
+          <div className="col-12 col-sm-12 col-md-4 col-lg-3 col-xl-2 pt-3">
             <label htmlFor="FromDate"><b>{reportName === 'End of Shift Report' ? t('Date') : t('From Date')}</b></label>
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
               <DatePicker
@@ -388,7 +388,7 @@ class Reports extends Component {
                   disableUnderline: true,
                 }}
                 autoOk
-                className={this.state.fromDateE ? "form-control FormInputsError" : "form-control"}
+                className={this.state.fromDateE ? "MuiFormControl-root MuiTextField-root form-control pl-2 border pt-1 FormInputsError" : "MuiFormControl-root MuiTextField-root form-control pl-2 border pt-1"}
                 invalidDateMessage=''
                 minDateMessage=''
                 maxDate={reportName !== 'Booked Appointments By Members' &&
@@ -400,7 +400,7 @@ class Reports extends Component {
                 id="fromDate"
               />
             </MuiPickersUtilsProvider>
-            <span className="iconv1 iconv1-calander float-right iconspostion"></span>
+            <span class="iconv1 iconv1-calander dateBoxIcon"></span>
             <div className="errorMessageWrapper">
               <small className="text-danger errorMessage">{this.state.fromDateE}</small>
             </div>
@@ -415,7 +415,7 @@ class Reports extends Component {
           reportName !== 'Employee Details' &&
           reportName !== 'Today Sales By Staff'
         ) &&
-          <div className="col-12 col-sm-12 col-md-4 col-lg-3 col-xl-2 py-3">
+          <div className="col-12 col-sm-12 col-md-4 col-lg-3 col-xl-2 pt-3">
             <label htmlFor="ToDa<b>te"><b>{t('To Date')}</b></label>
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
               <DatePicker
@@ -424,7 +424,7 @@ class Reports extends Component {
                   disableUnderline: true,
                 }}
                 autoOk
-                className={this.state.toDateE ? "form-control FormInputsError" : "form-control"}
+                className={this.state.toDateE ? "MuiFormControl-root MuiTextField-root form-control pl-2 border pt-1 FormInputsError" : "MuiFormControl-root MuiTextField-root form-control pl-2 border pt-1"}
                 invalidDateMessage=''
                 minDateMessage=''
                 minDate={fromDate}
@@ -437,7 +437,7 @@ class Reports extends Component {
                 id="toDate"
               />
             </MuiPickersUtilsProvider>
-            <span className="iconv1 iconv1-calander float-right iconspostion"></span>
+            <span class="iconv1 iconv1-calander dateBoxIcon"></span>
             <div className="errorMessageWrapper">
               <small className="text-danger errorMessage">{this.state.toDateE}</small>
             </div>

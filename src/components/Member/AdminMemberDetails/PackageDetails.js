@@ -997,14 +997,16 @@ class PackageDetails extends Component {
                           <thead>
                             <tr>
                               <th>{t('Name')}</th>
+                              <th className="w-50px"></th>
                             </tr>
                           </thead>
                           <tbody>
                             <tr>
                               <td>{this.state.installmentPackageName} {installmentReceipt.installmentName ? installmentReceipt.installmentName : ''}</td>
+                              <td></td>
                             </tr>
                             <tr>
-                              <td colSpan="4">
+                              <td>
                                 <div className="text-right my-1">{t('Amount Total')} :</div>
                                 {parseFloat(installmentReceipt.discount) ?
                                   <div className="text-right my-1">{t('Discount')} :</div>

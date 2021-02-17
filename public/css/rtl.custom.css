@@ -351,7 +351,7 @@ body {
   .AddClass label.type3,
   .AddClass label.type2,
   .AddClass label.type1 {
-    width: 142px;
+    width: 149px;
   }
   .AddClass label.type3 + .inlineFormInputs,
   .AddClass label.type2 + .inlineFormInputs,
@@ -359,7 +359,7 @@ body {
   .AddClass label.type3 ~ .errorMessageWrapper .errorMessage,
   .AddClass label.type2 ~ .errorMessageWrapper .errorMessage,
   .AddClass label.type1 ~ .errorMessageWrapper .errorMessage {
-    max-width: calc(100% - 142px - 2rem);
+    max-width: calc(100% - 149px - 2rem);
   }
 }
 @media (min-width: 1200px) {
@@ -382,11 +382,11 @@ body {
 /* AddStock */
 @media (min-width: 992px) {
   .AddStock .type1 {
-    width: 141px;
+    width: 149px;
   }
   .AddStock .type1 + .inlineFormInputs,
   .AddStock .type1 ~ .errorMessageWrapper .errorMessage {
-    max-width: calc(100% - 141px - 2rem);
+    max-width: calc(100% - 149px - 2rem);
   }
 }
 
@@ -599,4 +599,16 @@ canvas.chartjs-render-monitor {
 
 .powered-in-cfv {
   right: 19px;
+}
+
+.putImageInlineFormField {
+  right: auto;
+  left: 10px;
+}
+
+@media (min-width: 992px) {
+  .putImageInlineFormField {
+    right: 198px;
+    left: auto;
+  }
 }

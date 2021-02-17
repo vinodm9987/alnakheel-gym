@@ -51,7 +51,13 @@ class Orderdetails extends Component {
               <div className="pageHeadLine"></div>
             </div>
             <div className="col-12 d-flex justify-content-between align-items-center pt-4">
-              <h4 className="mr-3 my-1"><span className="font-weight-bold">{t('Order')}</span><span className="px-2 text-primary font-weight-bold">#{orderNo}</span><small className="text-body">{dateToDDMMYYYY(dateOfPurchase)}, {dateToHHMM(created_at)}</small></h4>
+              <h4 className="mr-3 my-1 ">
+                <span className="font-weight-bold">{t('Order')}</span>
+                <span className="px-2 text-primary font-weight-bold d-inline-block dirltrtar">#{orderNo}</span>
+                <small className="text-body d-inline-block dirltrtar">{dateToDDMMYYYY(dateOfPurchase)}</small>
+                <small className="text-body d-inline-block dirltrtar mr-1">.</small>
+                <small className="text-body d-inline-block dirltrtar">{dateToHHMM(created_at)}</small>
+              </h4>
               {/* <div className="d-flex my-1">
                 <span>Delivery</span>
                 <div className="position-relative px-3">
@@ -71,7 +77,7 @@ class Orderdetails extends Component {
                     <tr>
                       <th><span className="px-3">{t('Item')}</span></th>
                       <th>{t('Price')}</th>
-                      <th></th>
+                      <th>{t('Qty')}</th>
                     </tr>
                   </thead>
                   <tbody>

@@ -275,7 +275,7 @@ class CreateOffers extends Component {
             <thead>
               <tr>
                 <th>{t('Offer Name')}</th>
-                <th className="text-center">{t('Product Name')}</th>
+                <th>{t('Product Name')}</th>
                 <th className="text-center">{t('Actual Price')}</th>
                 <th className="text-center">{t('Offer Percentage')}</th>
                 <th className="text-center">{t('Start Date')}</th>
