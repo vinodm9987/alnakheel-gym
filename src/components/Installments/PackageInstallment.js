@@ -909,15 +909,10 @@ class PackageInstallment extends Component {
                 {/* <span>Block 236, Bahrain,</span><br /> */}
                 <span>{t('Tel')} : {packageReceipt.branch.telephone}</span><br />
               </p>
-              <p style={{ textAlign: "center", margin: "0 0 10px 0" }}>{t('VAT')} - {packageReceipt.branch.vatRegNo}</p>
+              <p style={{ textAlign: "center", margin: "0 0 10px 0" }}>{t('VAT Reg No')} - {packageReceipt.branch.vatRegNo}</p>
               <p style={{ display: "flex", justifyContent: "space-between", margin: "0" }}>
                 <span style={{ padding: "2px", fontSize: "14px" }}>{dateToDDMMYYYY(new Date())} {dateToHHMM(new Date())}</span>
                 <span style={{ padding: "2px", fontSize: "14px" }}>{t('Bill No')}:{obj.orderNo}</span>
-              </p>
-              <p style={{ textAlign: "center", margin: "0" }}>
-                <span style={{ padding: "0 2px" }}>{packageReceipt.memberId}</span>
-                <span style={{ padding: "0 2px" }}>{packageReceipt.credentialId.userName}</span>
-                <span style={{ padding: "0 2px" }}>{packageReceipt.mobileNo}</span>
               </p>
               <div>
                 <p style={{ display: "flex", textAlign: "center", justifyContent: "space-between" }}>

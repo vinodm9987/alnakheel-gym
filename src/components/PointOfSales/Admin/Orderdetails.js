@@ -368,7 +368,7 @@ class Orderdetails extends Component {
                   {/* <span>Block 236, Bahrain,</span><br /> */}
                   <span>{t('Tel')} : {orderById.branch.telephone}</span><br />
                 </p>
-                <p style={{ textAlign: "center", margin: "0 0 10px 0" }}>{t('VAT')} - {orderById.branch.vatRegNo}</p>
+                <p style={{ textAlign: "center", margin: "0 0 10px 0" }}>{t('VAT Reg No')} - {orderById.branch.vatRegNo}</p>
                 <p style={{ display: "flex", justifyContent: "space-between", margin: "0" }}>
                   <span style={{ paddingRight: "4px", fontSize: "14px", whiteSpace: "nowrap" }}>{dateToDDMMYYYY(orderById.dateOfPurchase)} {dateToHHMM(orderById.created_at)}</span>
                   <span style={{ paddingLeft: "4px", fontSize: "14px", whiteSpace: "nowrap" }}>{t('Bill No')}:{orderById.orderNo}</span>
@@ -464,19 +464,19 @@ class Orderdetails extends Component {
                       : <tr></tr>}
                     {orderById.bankName ?
                       <tr>
-                        <td style={{ textAlign: "right", padding: "0px 4px 4px 4px", width: "100%" }}>{t('Bank Name')} {this.props.defaultCurrency}: </td>
+                        <td style={{ textAlign: "right", padding: "0px 4px 4px 4px", width: "100%" }}>{t('Bank Name')} : </td>
                         <td style={{ textAlign: "right", padding: "0px 0px 4px 0px" }}>{orderById.bankName}</td>
                       </tr>
                       : <tr></tr>}
                     {orderById.chequeNumber ?
                       <tr>
-                        <td style={{ textAlign: "right", padding: "0px 4px 4px 4px", width: "100%" }}>{t('Cheque Number')} {this.props.defaultCurrency}: </td>
+                        <td style={{ textAlign: "right", padding: "0px 4px 4px 4px", width: "100%" }}>{t('Cheque Number')} : </td>
                         <td style={{ textAlign: "right", padding: "0px 0px 4px 0px" }}>{orderById.chequeNumber}</td>
                       </tr>
                       : <tr></tr>}
                     {orderById.chequeDate ?
                       <tr>
-                        <td style={{ textAlign: "right", padding: "0px 4px 4px 4px", width: "100%" }}>{t('Cheque Date')} {this.props.defaultCurrency}: </td>
+                        <td style={{ textAlign: "right", padding: "0px 4px 4px 4px", width: "100%" }}>{t('Cheque Date')} : </td>
                         <td style={{ textAlign: "right", padding: "0px 0px 4px 0px" }}>{dateToDDMMYYYY(orderById.chequeDate)}</td>
                       </tr>
                       : <tr></tr>}

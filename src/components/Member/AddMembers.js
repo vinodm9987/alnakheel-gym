@@ -2115,8 +2115,7 @@ class AddMembers extends Component {
                         </div>
                       </div>
                       {/* <h6 className="font-weight-bold">{t('Paid Amount')}: {this.props.defaultCurrency} {parseFloat(totalAmount).toFixed(3)}</h6> */}
-                      {packageReceipt.packageDetails.filter(p => p.packages === packageName && !p.isExpiredPackage)[0] &&
-                        <h6 className="font-weight-bold">{t('Served by')}: {packageReceipt.packageDetails.filter(p => p.packages === packageName && !p.isExpiredPackage)[0].doneBy.userName}</h6>}
+                      {this.props.loggedUser && <h6 className="font-weight-bold">{t('Served by')}: {this.props.loggedUser.userName}</h6>}
                     </div>
                     {/* <div className="text-center px-5">
                       <h5 className="text-muted">{t('Membership cannot be refunded or transferred to others.')}</h5>
@@ -2158,7 +2157,7 @@ class AddMembers extends Component {
                 <span>{t('Tel')} : {filteredBranches &&
                   filteredBranches.filter(b => b._id === branch)[0] && filteredBranches.filter(b => b._id === branch)[0].telephone}</span><br />
               </p>
-              <p style={{ textAlign: "center", margin: "0 0 10px 0" }}>{t('VAT')} - {filteredBranches &&
+              <p style={{ textAlign: "center", margin: "0 0 10px 0" }}>{t('VAT Reg No')} - {filteredBranches &&
                 filteredBranches.filter(b => b._id === branch)[0] && filteredBranches.filter(b => b._id === branch)[0].vatRegNo}</p>
               <p style={{ display: "flex", justifyContent: "space-between", margin: "0" }}>
                 <span style={{ padding: "2px", fontSize: "14px" }}>{dateToDDMMYYYY(new Date())} {dateToHHMM(new Date())}</span>
@@ -2248,19 +2247,19 @@ class AddMembers extends Component {
                     : <tr></tr>}
                   {this.state.bankName ?
                     <tr>
-                      <td style={{ textAlign: "right", padding: "0px 4px 4px 4px", width: "100%" }}>{t('Bank Name')} {this.props.defaultCurrency}: </td>
+                      <td style={{ textAlign: "right", padding: "0px 4px 4px 4px", width: "100%" }}>{t('Bank Name')} : </td>
                       <td style={{ textAlign: "right", padding: "0px 0px 4px 0px" }}>{this.state.bankName}</td>
                     </tr>
                     : <tr></tr>}
                   {this.state.chequeNumber ?
                     <tr>
-                      <td style={{ textAlign: "right", padding: "0px 4px 4px 4px", width: "100%" }}>{t('Cheque Number')} {this.props.defaultCurrency}: </td>
+                      <td style={{ textAlign: "right", padding: "0px 4px 4px 4px", width: "100%" }}>{t('Cheque Number')} : </td>
                       <td style={{ textAlign: "right", padding: "0px 0px 4px 0px" }}>{this.state.chequeNumber}</td>
                     </tr>
                     : <tr></tr>}
                   {this.state.chequeDate ?
                     <tr>
-                      <td style={{ textAlign: "right", padding: "0px 4px 4px 4px", width: "100%" }}>{t('Cheque Date')} {this.props.defaultCurrency}: </td>
+                      <td style={{ textAlign: "right", padding: "0px 4px 4px 4px", width: "100%" }}>{t('Cheque Date')} : </td>
                       <td style={{ textAlign: "right", padding: "0px 0px 4px 0px" }}>{dateToDDMMYYYY(this.state.chequeDate)}</td>
                     </tr>
                     : <tr></tr>}
@@ -2289,8 +2288,7 @@ class AddMembers extends Component {
                   <QRCode value={`http://instagram.com/${filteredBranches &&
                     filteredBranches.filter(b => b._id === branch)[0] && filteredBranches.filter(b => b._id === branch)[0].instaId}/`} renderAs='svg' width="50" height="50" />
                 </div>
-                {packageReceipt.packageDetails.filter(p => p.packages === packageName && !p.isExpiredPackage)[0] &&
-                  <span>{t('Served by')}: {packageReceipt.packageDetails.filter(p => p.packages === packageName && !p.isExpiredPackage)[0].userName}</span>}
+                {this.props.loggedUser && <span>{t('Served by')}: {this.props.loggedUser.userName}</span>}
               </div>
               <p style={{ display: "flex", margin: "0 0 10px 0" }}>
                 <span>{t('NB')}:</span>

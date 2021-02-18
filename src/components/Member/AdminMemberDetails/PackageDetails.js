@@ -1215,19 +1215,19 @@ class PackageDetails extends Component {
                       : <tr></tr>}
                     {installmentReceipt.bankName ?
                       <tr>
-                        <td style={{ textAlign: "right", padding: "0px 4px 4px 4px", width: "100%" }}>{t('Bank Name')} {this.props.defaultCurrency}: </td>
+                        <td style={{ textAlign: "right", padding: "0px 4px 4px 4px", width: "100%" }}>{t('Bank Name')} : </td>
                         <td style={{ textAlign: "right", padding: "0px 0px 4px 0px" }}>{installmentReceipt.bankName}</td>
                       </tr>
                       : <tr></tr>}
                     {installmentReceipt.chequeNumber ?
                       <tr>
-                        <td style={{ textAlign: "right", padding: "0px 4px 4px 4px", width: "100%" }}>{t('Cheque Number')} {this.props.defaultCurrency}: </td>
+                        <td style={{ textAlign: "right", padding: "0px 4px 4px 4px", width: "100%" }}>{t('Cheque Number')} : </td>
                         <td style={{ textAlign: "right", padding: "0px 0px 4px 0px" }}>{installmentReceipt.chequeNumber}</td>
                       </tr>
                       : <tr></tr>}
                     {installmentReceipt.chequeDate ?
                       <tr>
-                        <td style={{ textAlign: "right", padding: "0px 4px 4px 4px", width: "100%" }}>{t('Cheque Date')} {this.props.defaultCurrency}: </td>
+                        <td style={{ textAlign: "right", padding: "0px 4px 4px 4px", width: "100%" }}>{t('Cheque Date')} : </td>
                         <td style={{ textAlign: "right", padding: "0px 0px 4px 0px" }}>{dateToDDMMYYYY(installmentReceipt.chequeDate)}</td>
                       </tr>
                       : <tr></tr>}

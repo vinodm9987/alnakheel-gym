@@ -1170,7 +1170,7 @@ class PointOfSales extends Component {
                 <span>{t('Tel')} : {filteredBranches && filteredBranches.filter(b => b._id === branch)[0] &&
                   filteredBranches.filter(b => b._id === branch)[0].telephone}</span><br />
               </p>
-              <p style={{ textAlign: "center", margin: "0 0 10px 0" }}>{t('VAT')} - {filteredBranches && filteredBranches.filter(b => b._id === branch)[0] &&
+              <p style={{ textAlign: "center", margin: "0 0 10px 0" }}>{t('VAT Reg No')} - {filteredBranches && filteredBranches.filter(b => b._id === branch)[0] &&
                 filteredBranches.filter(b => b._id === branch)[0].vatRegNo}</p>
               <p style={{ display: "flex", justifyContent: "space-between", margin: "0" }}>
                 <span style={{ padding: "2px", fontSize: "14px" }}>{dateToDDMMYYYY(posReceipt.dateOfPurchase)} {dateToHHMM(posReceipt.created_at)}</span>
@@ -1267,19 +1267,19 @@ class PointOfSales extends Component {
                     : <tr></tr>}
                   {posReceipt.bankName ?
                     <tr>
-                      <td style={{ textAlign: "right", padding: "0px 4px 4px 4px", width: "100%" }}>{t('Bank Name')} {this.props.defaultCurrency}: </td>
+                      <td style={{ textAlign: "right", padding: "0px 4px 4px 4px", width: "100%" }}>{t('Bank Name')} : </td>
                       <td style={{ textAlign: "right", padding: "0px 0px 4px 0px" }}>{posReceipt.bankName}</td>
                     </tr>
                     : <tr></tr>}
                   {posReceipt.chequeNumber ?
                     <tr>
-                      <td style={{ textAlign: "right", padding: "0px 4px 4px 4px", width: "100%" }}>{t('Cheque Number')} {this.props.defaultCurrency}: </td>
+                      <td style={{ textAlign: "right", padding: "0px 4px 4px 4px", width: "100%" }}>{t('Cheque Number')} : </td>
                       <td style={{ textAlign: "right", padding: "0px 0px 4px 0px" }}>{posReceipt.chequeNumber}</td>
                     </tr>
                     : <tr></tr>}
                   {posReceipt.chequeDate ?
                     <tr>
-                      <td style={{ textAlign: "right", padding: "0px 4px 4px 4px", width: "100%" }}>{t('Cheque Date')} {this.props.defaultCurrency}: </td>
+                      <td style={{ textAlign: "right", padding: "0px 4px 4px 4px", width: "100%" }}>{t('Cheque Date')} : </td>
                       <td style={{ textAlign: "right", padding: "0px 0px 4px 0px" }}>{dateToDDMMYYYY(posReceipt.chequeDate)}</td>
                     </tr>
                     : <tr></tr>}
