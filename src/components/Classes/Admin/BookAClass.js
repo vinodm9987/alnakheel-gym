@@ -1090,13 +1090,13 @@ class BookAClass extends Component {
                   {parseFloat(digital) ?
                     <tr>
                       <td style={{ textAlign: "right", padding: "0 4px", width: "100%" }}>{t('Digital')} {this.props.defaultCurrency}: </td>
-                      <td style={{ textAlign: "right", padding: "0" }}>5{parseFloat(digital).toFixed(3)}</td>
+                      <td style={{ textAlign: "right", padding: "0" }}>{parseFloat(digital).toFixed(3)}</td>
                     </tr>
                     : <tr></tr>}
                   {parseFloat(cash) ?
                     <tr>
                       <td style={{ textAlign: "right", padding: "0 4px", width: "100%" }}>{t('Cash')} {this.props.defaultCurrency}: </td>
-                      <td style={{ textAlign: "right", padding: "0" }}>5{parseFloat(cash).toFixed(3)}</td>
+                      <td style={{ textAlign: "right", padding: "0" }}>{parseFloat(cash).toFixed(3)}</td>
                     </tr>
                     : <tr></tr>}
                   {parseFloat(card) ?

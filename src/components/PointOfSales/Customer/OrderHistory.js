@@ -543,13 +543,13 @@ class OrderHistory extends Component {
                   {parseFloat(orderById.digitalAmount) ?
                     <tr>
                       <td style={{ textAlign: "right", padding: "0 4px", width: "100%" }}>{t('Digital')} {this.props.defaultCurrency}: </td>
-                      <td style={{ textAlign: "right", padding: "0" }}>5{parseFloat(orderById.digitalAmount).toFixed(3)}</td>
+                      <td style={{ textAlign: "right", padding: "0" }}>{parseFloat(orderById.digitalAmount).toFixed(3)}</td>
                     </tr>
                     : <tr></tr>}
                   {parseFloat(orderById.cashAmount) ?
                     <tr>
                       <td style={{ textAlign: "right", padding: "0 4px", width: "100%" }}>{t('Cash')} {this.props.defaultCurrency}: </td>
-                      <td style={{ textAlign: "right", padding: "0" }}>5{parseFloat(orderById.cashAmount).toFixed(3)}</td>
+                      <td style={{ textAlign: "right", padding: "0" }}>{parseFloat(orderById.cashAmount).toFixed(3)}</td>
                     </tr>
                     : <tr></tr>}
                   {parseFloat(orderById.cardAmount) ?

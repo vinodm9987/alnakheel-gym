@@ -1244,13 +1244,13 @@ class PointOfSales extends Component {
                   {parseFloat(posReceipt.digitalAmount) ?
                     <tr>
                       <td style={{ textAlign: "right", padding: "0 4px", width: "100%" }}>{t('Digital')} {this.props.defaultCurrency}: </td>
-                      <td style={{ textAlign: "right", padding: "0" }}>5{parseFloat(posReceipt.digitalAmount).toFixed(3)}</td>
+                      <td style={{ textAlign: "right", padding: "0" }}>{parseFloat(posReceipt.digitalAmount).toFixed(3)}</td>
                     </tr>
                     : <tr></tr>}
                   {parseFloat(posReceipt.cashAmount) ?
                     <tr>
                       <td style={{ textAlign: "right", padding: "0 4px", width: "100%" }}>{t('Cash')} {this.props.defaultCurrency}: </td>
-                      <td style={{ textAlign: "right", padding: "0" }}>5{parseFloat(posReceipt.cashAmount).toFixed(3)}</td>
+                      <td style={{ textAlign: "right", padding: "0" }}>{parseFloat(posReceipt.cashAmount).toFixed(3)}</td>
                     </tr>
                     : <tr></tr>}
                   {parseFloat(posReceipt.cardAmount) ?

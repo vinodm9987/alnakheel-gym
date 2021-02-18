@@ -959,13 +959,13 @@ class TrainerInstallment extends Component {
                   {parseFloat(obj.digitalAmount) ?
                     <tr>
                       <td style={{ textAlign: "right", padding: "0 4px", width: "100%" }}>{t('Digital')} {this.props.defaultCurrency}: </td>
-                      <td style={{ textAlign: "right", padding: "0" }}>5{parseFloat(obj.digitalAmount).toFixed(3)}</td>
+                      <td style={{ textAlign: "right", padding: "0" }}>{parseFloat(obj.digitalAmount).toFixed(3)}</td>
                     </tr>
                     : <tr></tr>}
                   {parseFloat(obj.cashAmount) ?
                     <tr>
                       <td style={{ textAlign: "right", padding: "0 4px", width: "100%" }}>{t('Cash')} {this.props.defaultCurrency}: </td>
-                      <td style={{ textAlign: "right", padding: "0" }}>5{parseFloat(obj.cashAmount).toFixed(3)}</td>
+                      <td style={{ textAlign: "right", padding: "0" }}>{parseFloat(obj.cashAmount).toFixed(3)}</td>
                     </tr>
                     : <tr></tr>}
                   {parseFloat(obj.cardAmount) ?

@@ -1192,13 +1192,13 @@ class PackageDetails extends Component {
                     {parseFloat(installmentReceipt.digitalAmount) ?
                       <tr>
                         <td style={{ textAlign: "right", padding: "0 4px", width: "100%" }}>{t('Digital')} {this.props.defaultCurrency}: </td>
-                        <td style={{ textAlign: "right", padding: "0" }}>5{parseFloat(installmentReceipt.digitalAmount).toFixed(3)}</td>
+                        <td style={{ textAlign: "right", padding: "0" }}>{parseFloat(installmentReceipt.digitalAmount).toFixed(3)}</td>
                       </tr>
                       : <tr></tr>}
                     {parseFloat(installmentReceipt.cashAmount) ?
                       <tr>
                         <td style={{ textAlign: "right", padding: "0 4px", width: "100%" }}>{t('Cash')} {this.props.defaultCurrency}: </td>
-                        <td style={{ textAlign: "right", padding: "0" }}>5{parseFloat(installmentReceipt.cashAmount).toFixed(3)}</td>
+                        <td style={{ textAlign: "right", padding: "0" }}>{parseFloat(installmentReceipt.cashAmount).toFixed(3)}</td>
                       </tr>
                       : <tr></tr>}
                     {parseFloat(installmentReceipt.cardAmount) ?
