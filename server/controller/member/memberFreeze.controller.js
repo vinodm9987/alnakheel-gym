@@ -23,10 +23,10 @@ const { auditLogger } = require('../../middleware/auditlog.middleware');
 const memberSearch = (response, search) => {
     let newResponse = response.filter((doc) => {
         if (search) {
-            let temp = doc.credentialId.email ? doc.credentialId.email.toLowerCase() : '';
-            let temp1 = doc.credentialId.userName.toLowerCase();
-            let temp2 = doc.personalId.toLowerCase();
-            let temp3 = doc.mobileNo.toString();
+            let temp = doc.memberId.credentialId.email ? doc.memberId.credentialId.email.toLowerCase() : '';
+            let temp1 = doc.memberId.credentialId.userName.toLowerCase();
+            let temp2 = doc.memberId.personalId.toLowerCase();
+            let temp3 = doc.memberId.mobileNo.toString();
             if (temp.includes(search) || temp1.includes(search) ||
                 temp2.includes(search) || temp3.includes(search)) {
                 return doc
