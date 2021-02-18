@@ -177,7 +177,7 @@ exports.payPackageInstallments = async (req, res) => {
         await member.save();
         const response = await Member.findById(req.body.memberId)
             .populate('credentialId branch packageDetails.packages packageDetails.doneBy')
-        return successResponseHandler(res, { ...response, ...{ displayReceipt: true, orderNo: obj.orderNo } }, "success");
+        return successResponseHandler(res, { ...response, ...{ displayReceipt: true, obj: obj } }, "success");
     } catch (error) {
         logger.error(error);
         return errorResponseHandler(res, error, 'failed');
@@ -226,7 +226,7 @@ exports.payTrainerInstallments = async (req, res) => {
         const response = await Member.findById(req.body.memberId)
             .populate('credentialId branch')
             .populate('packageDetails.doneBy')
-        return successResponseHandler(res, { ...response, ...{ displayReceipt: true, orderNo: obj.orderNo } }, "success");
+        return successResponseHandler(res, { ...response, ...{ displayReceipt: true, obj: obj } }, "success");
     } catch (error) {
         logger.error(error);
         return errorResponseHandler(res, error, 'failed');

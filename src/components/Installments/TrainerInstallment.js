@@ -55,7 +55,8 @@ class TrainerInstallment extends Component {
       installmentName: '',
       url: this.props.match.url,
       packageReceipt: null,
-      trainerAmount: 0
+      trainerAmount: 0,
+      obj: null
     }
     this.props.dispatch(getTrainerInstallment({ month: parseInt(this.state.pendingMonth), year: this.state.pendingYear }))
   }
@@ -65,7 +66,8 @@ class TrainerInstallment extends Component {
       if (Object.keys(this.props.errors).length !== 0 && !this.props.errors.error) {
         if (this.props.errors.response && this.props.errors.response.displayReceipt) {
           let packageReceipt = this.props.errors.response._doc
-          this.setState({ ...{ packageReceipt } }, () => {
+          let obj = this.props.errors.response.obj
+          this.setState({ ...{ packageReceipt, obj } }, () => {
             const el = findDOMNode(this.refs.receiptOpenModal);
             $(el).click();
           })
@@ -255,7 +257,7 @@ class TrainerInstallment extends Component {
 
   render() {
     const { t } = this.props
-    const { pendingMonth, pendingYear, digital, cash, card, discount, discountMethod, count, subTotal, packageReceipt, trainerName, installmentName } = this.state
+    const { pendingMonth, pendingYear, digital, cash, card, discount, discountMethod, count, subTotal, packageReceipt, trainerName, installmentName, obj } = this.state
     let systemYears = []
     if (this.props.systemYear) {
       for (let i = new Date(this.props.systemYear.year).getFullYear(); i <= new Date().getFullYear(); i++) {
@@ -725,7 +727,7 @@ class TrainerInstallment extends Component {
                       <div className="col-free p-3">
                         <div className="mb-3">
                           <label className="m-0 font-weight-bold">{t('Tax Invoice No')}</label>
-                          <p className="">{packageReceipt.orderNo}</p>
+                          <p className="">{obj.orderNo}</p>
                         </div>
                         <div className="">
                           <label className="m-0 font-weight-bold">{t('Date & Time')}</label>
@@ -772,19 +774,19 @@ class TrainerInstallment extends Component {
                           <tr>
                             <td colSpan="4">
                               <div className="text-right my-1">{t('Amount Total')} :</div>
-                              {parseFloat(discount) ?
+                              {parseFloat(obj.discount) ?
                                 <div className="text-right my-1">{t('Discount')} :</div>
                                 : <div></div>}
                               {parseFloat(totalVat) ?
                                 <div className="text-right my-1">{t('VAT')}{this.state.tax ? `(${this.state.tax} %)` : ''}:</div>
                                 : <div></div>}
-                              {parseFloat(digital) ?
+                              {parseFloat(obj.digitalAmount) ?
                                 <div className="text-right my-1">{t('Digital')} :</div>
                                 : <div></div>}
-                              {parseFloat(cash) ?
+                              {parseFloat(obj.cashAmount) ?
                                 <div className="text-right my-1">{t('Cash')} :</div>
                                 : <div></div>}
-                              {parseFloat(card) ?
+                              {parseFloat(obj.cardAmount) ?
                                 <div className="text-right my-1">{t('Card')} :</div>
                                 : <div></div>}
                               {parseFloat(this.state.cheque) ?
@@ -807,20 +809,20 @@ class TrainerInstallment extends Component {
                             </td>
                             <td className="">
                               <div className="my-1"><span className="">{this.props.defaultCurrency}</span> <span className="px-1">{parseFloat(subTotal).toFixed(3)}</span></div>
-                              {parseFloat(discount) ?
-                                <div className="my-1"><span className="invisible">{this.props.defaultCurrency}</span> <span className="px-1">{parseFloat(discount).toFixed(3)}</span></div>
+                              {parseFloat(obj.discount) ?
+                                <div className="my-1"><span className="invisible">{this.props.defaultCurrency}</span> <span className="px-1">{parseFloat(obj.discount).toFixed(3)}</span></div>
                                 : <div></div>}
                               {parseFloat(totalVat) ?
                                 <div className="my-1"><span className="invisible">{this.props.defaultCurrency}</span> <span className="px-1">{parseFloat(totalVat).toFixed(3)}</span></div>
                                 : <div></div>}
-                              {parseFloat(digital) ?
-                                <div className="my-1"><span className="invisible">{this.props.defaultCurrency}</span> <span className="px-1">{parseFloat(digital).toFixed(3)}</span></div>
+                              {parseFloat(obj.digitalAmount) ?
+                                <div className="my-1"><span className="invisible">{this.props.defaultCurrency}</span> <span className="px-1">{parseFloat(obj.digitalAmount).toFixed(3)}</span></div>
                                 : <div></div>}
-                              {parseFloat(cash) ?
-                                <div className="my-1"><span className="invisible">{this.props.defaultCurrency}</span> <span className="px-1">{parseFloat(cash).toFixed(3)}</span></div>
+                              {parseFloat(obj.cashAmount) ?
+                                <div className="my-1"><span className="invisible">{this.props.defaultCurrency}</span> <span className="px-1">{parseFloat(obj.cashAmount).toFixed(3)}</span></div>
                                 : <div></div>}
-                              {parseFloat(card) ?
-                                <div className="my-1"><span className="invisible">{this.props.defaultCurrency}</span> <span className="px-1">{parseFloat(card).toFixed(3)}</span></div>
+                              {parseFloat(obj.cardAmount) ?
+                                <div className="my-1"><span className="invisible">{this.props.defaultCurrency}</span> <span className="px-1">{parseFloat(obj.cardAmount).toFixed(3)}</span></div>
                                 : <div></div>}
                               {parseFloat(this.state.cheque) ?
                                 <div className="my-1"><span className="invisible">{this.props.defaultCurrency}</span> <span className="px-1">{parseFloat(this.state.cheque).toFixed(3)}</span></div>
@@ -834,8 +836,8 @@ class TrainerInstallment extends Component {
                               {this.state.chequeDate ?
                                 <div className="my-1"><span className="invisible">{this.props.defaultCurrency}</span> <span className="px-1">{dateToDDMMYYYY(this.state.chequeDate)}</span></div>
                                 : <div></div>}
-                              <div className="my-1"><span className="">{this.props.defaultCurrency}</span> <span className="px-1">{parseFloat(totalAmount).toFixed(3)}</span></div>
-                              <div className="my-1"><span className="">{this.props.defaultCurrency}</span> <span className="px-1">{parseFloat(totalAmount).toFixed(3)}</span></div>
+                              <div className="my-1"><span className="">{this.props.defaultCurrency}</span> <span className="px-1">{parseFloat(obj.totalAmount).toFixed(3)}</span></div>
+                              <div className="my-1"><span className="">{this.props.defaultCurrency}</span> <span className="px-1">{parseFloat(obj.totalAmount).toFixed(3)}</span></div>
                               {this.state.cardNumber ?
                                 <div className="my-1"><span className="invisible">{this.props.defaultCurrency}</span> <span className="px-1">{this.state.cardNumber}</span></div>
                                 : <div></div>}
@@ -903,7 +905,7 @@ class TrainerInstallment extends Component {
               <p style={{ textAlign: "center", margin: "0 0 10px 0" }}>{t('VAT')} - {packageReceipt.branch.vatRegNo}</p>
               <p style={{ display: "flex", justifyContent: "space-between", margin: "0" }}>
                 <span style={{ padding: "2px", fontSize: "14px" }}>{dateToDDMMYYYY(new Date())} {dateToHHMM(new Date())}</span>
-                <span style={{ padding: "2px", fontSize: "14px" }}>{t('Bill No')}:{packageReceipt.orderNo}</span>
+                <span style={{ padding: "2px", fontSize: "14px" }}>{t('Bill No')}:{obj.orderNo}</span>
               </p>
               <p style={{ textAlign: "center", margin: "0" }}>
                 <span style={{ padding: "0 2px" }}>{packageReceipt.memberId}</span>
@@ -942,10 +944,10 @@ class TrainerInstallment extends Component {
                     <td style={{ textAlign: "right", padding: "4px 4px 0 4px", width: "100%" }}>{t('Amount Total')} {this.props.defaultCurrency}: </td>
                     <td style={{ textAlign: "right", padding: "4px 0px 0 0px" }}>{parseFloat(subTotal).toFixed(3)}</td>
                   </tr>
-                  {parseFloat(discount) ?
+                  {parseFloat(obj.discount) ?
                     <tr>
                       <td style={{ textAlign: "right", padding: "0 4px", width: "100%" }}>{t('Discount')} {this.props.defaultCurrency}: </td>
-                      <td style={{ textAlign: "right", padding: "0" }}>{parseFloat(discount).toFixed(3)}</td>
+                      <td style={{ textAlign: "right", padding: "0" }}>{parseFloat(obj.discount).toFixed(3)}</td>
                     </tr>
                     : <tr></tr>}
                   {parseFloat(totalVat) ?
@@ -954,22 +956,22 @@ class TrainerInstallment extends Component {
                       <td style={{ textAlign: "right", padding: "0" }}>{parseFloat(totalVat).toFixed(3)}</td>
                     </tr>
                     : <tr></tr>}
-                  {parseFloat(digital) ?
+                  {parseFloat(obj.digitalAmount) ?
                     <tr>
                       <td style={{ textAlign: "right", padding: "0 4px", width: "100%" }}>{t('Digital')} {this.props.defaultCurrency}: </td>
-                      <td style={{ textAlign: "right", padding: "0" }}>5{parseFloat(digital).toFixed(3)}</td>
+                      <td style={{ textAlign: "right", padding: "0" }}>5{parseFloat(obj.digitalAmount).toFixed(3)}</td>
                     </tr>
                     : <tr></tr>}
-                  {parseFloat(cash) ?
+                  {parseFloat(obj.cashAmount) ?
                     <tr>
                       <td style={{ textAlign: "right", padding: "0 4px", width: "100%" }}>{t('Cash')} {this.props.defaultCurrency}: </td>
-                      <td style={{ textAlign: "right", padding: "0" }}>5{parseFloat(cash).toFixed(3)}</td>
+                      <td style={{ textAlign: "right", padding: "0" }}>5{parseFloat(obj.cashAmount).toFixed(3)}</td>
                     </tr>
                     : <tr></tr>}
-                  {parseFloat(card) ?
+                  {parseFloat(obj.cardAmount) ?
                     <tr>
                       <td style={{ textAlign: "right", padding: "0px 4px 4px 4px", width: "100%" }}>{t('Card')} {this.props.defaultCurrency}: </td>
-                      <td style={{ textAlign: "right", padding: "0px 0px 4px 0px" }}>{parseFloat(card).toFixed(3)}</td>
+                      <td style={{ textAlign: "right", padding: "0px 0px 4px 0px" }}>{parseFloat(obj.cardAmount).toFixed(3)}</td>
                     </tr>
                     : <tr></tr>}
                   {parseFloat(this.state.cheque) ?
@@ -998,11 +1000,11 @@ class TrainerInstallment extends Component {
                     : <tr></tr>}
                   <tr>
                     <td style={{ textAlign: "right", padding: "0px 4px 4px 4px", width: "100%" }}>{t('Grand Total')} {this.props.defaultCurrency}: </td>
-                    <td style={{ textAlign: "right", padding: "0px 0px 4px 0px" }}>{parseFloat(totalAmount).toFixed(3)}</td>
+                    <td style={{ textAlign: "right", padding: "0px 0px 4px 0px" }}>{parseFloat(obj.totalAmount).toFixed(3)}</td>
                   </tr>
                   <tr>
                     <td style={{ textAlign: "right", padding: "0px 4px 4px 4px", width: "100%" }}>{t('Paid Amount')} {this.props.defaultCurrency}: </td>
-                    <td style={{ textAlign: "right", padding: "0px 0px 4px 0px" }}>{parseFloat(totalAmount).toFixed(3)}</td>
+                    <td style={{ textAlign: "right", padding: "0px 0px 4px 0px" }}>{parseFloat(obj.totalAmount).toFixed(3)}</td>
                   </tr>
                   {this.state.cardNumber ?
                     <tr>
