@@ -504,7 +504,7 @@ class AddMembers extends Component {
   }
 
   handlePrint(id) {
-    this.props.history.push(`/members-details/${id}/biometrics`)
+    // this.props.history.push(`/members-details/${id}/biometrics`)
     var w = window.open('', 'new div', 'height=400,width=600');
     var printOne = $('#newPrint').html();
     w.document.body.innerHTML = printOne
