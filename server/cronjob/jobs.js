@@ -105,11 +105,10 @@ module.exports = {
         const response = await Employee.find({}).populate("credentialId").lean();
         for (let i = 0; i < response.length; i++) {
             const { _id, visaDetails, credentialId: { userName } } = response[i];
-            const pastMonth = new Date().setHours(0, 0, 0, 0);
+            const today = new Date().setHours(0, 0, 0, 0);
             if (visaDetails && visaDetails.expiryDate) {
-                let expiryMonth = new Date(visaDetails.expiryDate)
-                    .setMonth(new Date(visaDetails.expiryDate).getMonth() - 1);
-                if (expiryMonth === pastMonth) {
+                let expiryMonth = new Date(visaDetails.expiryDate).setHours(0, 0, 0, 0);
+                if (expiryMonth === today) {
                     try { await employeeVisaExpiry(userName, _id) }
                     catch (error) { logger.error(error); }
                 }
