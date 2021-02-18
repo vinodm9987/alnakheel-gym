@@ -61,10 +61,13 @@ exports.applyFreezeMember = async (req, res) => {
             auditLogger(req, 'Success');
             return errorResponseHandler(res, exist, "member is already under pending freeze date , kindly updated it.!")
         } else {
+            req.body["orderNo"] = generateOrderId()
+            if (req.headers.userid) req.body["doneBy"] = req.headers.userid;
             const newRecord = new MemberFreezing(req.body);
             const newResponse = await newRecord.save()
+            let response = await MemberFreezing.findById(newResponse._id).populate('memberId memberId.branch doneBy memberId.credentialId')
             auditLogger(req, 'Success')
-            return successResponseHandler(res, newResponse, "successfully freeze Member !")
+            return successResponseHandler(res, { ...response, ...{ displayReceipt: true } }, "successfully freeze Member !")
         }
     } catch (error) {
         logger.error(error);

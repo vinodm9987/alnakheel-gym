@@ -954,7 +954,7 @@ class BookATrainer extends Component {
                             onChange={(e) => this.setState(validator(e, 'chequeDate', 'date', []))}
                           />
                         </MuiPickersUtilsProvider>
-                        <span class="iconv1 iconv1-calander dateBoxIcon"></span>
+                        <span className="iconv1 iconv1-calander dateBoxIcon"></span>
                         <div className="errorMessageWrapper">
                           <small className="text-danger mx-sm-2 errorMessage"></small>
                         </div>

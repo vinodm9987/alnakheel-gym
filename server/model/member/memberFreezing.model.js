@@ -17,6 +17,10 @@ const MemberFreezeSchema = new Schema({
 
     typeOfFreeze: { type: String, enum: ['Pending', 'Froze', 'Canceled'], default: 'Pending' },
 
+    orderNo: String,
+
+    doneBy: { type: Schema.Types.ObjectId, ref: "Credential" },
+
 }, { timestamps: { createdAt: "created_at", updatedAt: "updated_at" } }, { strict: false });
 
 
