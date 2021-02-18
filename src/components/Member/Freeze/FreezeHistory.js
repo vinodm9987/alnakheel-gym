@@ -130,15 +130,15 @@ class FreezeHistory extends Component {
                         <Link type="button" className="btn btn-primary btn-sm w-100px rounded-50px text-white" to={`/members-details/${member}`}>{t('Details')}</Link>
                       </td>
                       <td className="text-center">
-                        {typeOfFreeze === 'Pending' && status &&
+                        {typeOfFreeze === 'Pending' &&
                           <label className="switch">
-                            <input disabled={!status} type="checkbox" checked={status} onChange={(e) => this.handleCheckBox(e, _id)} />
+                            <input type="checkbox" checked={status} onChange={(e) => this.handleCheckBox(e, _id)} />
                             <span className="slider round"></span>
                           </label>
                         }
                       </td>
                       <td>
-                        {typeOfFreeze === 'Pending' && status &&
+                        {typeOfFreeze === 'Pending' &&
                           <Link to={{ pathname: "/freeze-members", freezeProps: JSON.stringify(freeze) }} className="btn btn-success btn-sm br-50 p-2 d-inline-flex align-items-center justify-content-center" style={{ zoom: '0.75' }}>
                             <span className="iconv1 iconv1-edit"></span>
                           </Link>
