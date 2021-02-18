@@ -663,7 +663,7 @@ class BookATrainer extends Component {
                       onChange={(e) => this.setStartDate(e)}
                     />
                   </MuiPickersUtilsProvider>
-                  <span class="iconv1 iconv1-calander dateBoxIcon"></span>
+                  <span className="iconv1 iconv1-calander dateBoxIcon"></span>
                   <div className="errorMessageWrapper">
                     <small className="text-danger mx-sm-2 errorMessage">{this.state.startDateE}</small>
                   </div>

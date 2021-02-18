@@ -34,6 +34,7 @@ class PackageDetails extends Component {
     cardNumberE: '',
     Installments: [],
     installmentTotalAmount: 0,
+    installmentToBePaid: 0,
     installmentPaidAmount: 0,
     installmentRemainAmount: 0,
     installmentPackageName: '',
@@ -68,34 +69,39 @@ class PackageDetails extends Component {
   }
 
   setInstallments(Installments, installmentTotalAmount, installmentPackageName) {
-    let paidAmount = 0
+    let paidAmount = 0, toBePaid = 0
     if (Installments && Installments.length) {
       Installments.forEach((installment) => {
         if (installment.paidStatus === 'Paid') {
-          paidAmount += installment.actualAmount ? installment.actualAmount : installment.totalAmount
+          paidAmount += installment.totalAmount
+          toBePaid += installment.actualAmount
         }
       })
     }
-    let remainAmount = parseFloat(installmentTotalAmount) - parseFloat(paidAmount)
+    let remainAmount = parseFloat(installmentTotalAmount) - parseFloat(toBePaid)
     if (Installments && Installments.length) {
-      this.setState({ Installments, installmentTotalAmount, installmentPaidAmount: paidAmount, installmentRemainAmount: remainAmount, installmentPackageName })
+      this.setState({
+        Installments, installmentTotalAmount, installmentToBePaid: toBePaid, installmentPaidAmount: paidAmount,
+        installmentRemainAmount: remainAmount, installmentPackageName
+      })
     }
   }
 
 
   setTrainerInstallments(Installments, installmentTotalAmount, installmentTrainerName, installmentPackageName) {
-    let paidAmount = 0
+    let paidAmount = 0, toBePaid = 0
     if (Installments && Installments.length) {
       Installments.forEach((installment) => {
         if (installment.paidStatus === 'Paid') {
-          paidAmount += installment.actualAmount ? installment.actualAmount : installment.totalAmount
+          paidAmount += installment.totalAmount
+          toBePaid += installment.actualAmount
         }
       })
     }
-    let remainAmount = parseFloat(installmentTotalAmount) - parseFloat(paidAmount)
+    let remainAmount = parseFloat(installmentTotalAmount) - parseFloat(toBePaid)
     if (Installments && Installments.length) {
       this.setState({
-        Installments, installmentTotalAmount, installmentPaidAmount: paidAmount, installmentRemainAmount: remainAmount,
+        Installments, installmentTotalAmount, installmentToBePaid: toBePaid, installmentPaidAmount: paidAmount, installmentRemainAmount: remainAmount,
         installmentTrainerName, installmentPackageName: `${installmentTrainerName}-${installmentPackageName}`
       })
     }
@@ -807,6 +813,10 @@ class PackageDetails extends Component {
                         <h6 className="text-danger"><b>{this.props.defaultCurrency} {this.state.installmentTotalAmount}</b></h6>
                       </div>
                       <div className="m-1">
+                        <h6 className="font-weight-bold mb-1">{t('To Be Paid')}</h6>
+                        <h6 className="text-danger"><b>{this.props.defaultCurrency} {this.state.installmentToBePaid}</b></h6>
+                      </div>
+                      <div className="m-1">
                         <h6 className="font-weight-bold mb-1">{t('Paid Amount')}</h6>
                         <h6 className="text-danger"><b>{this.props.defaultCurrency} {this.state.installmentPaidAmount}</b></h6>
                       </div>
@@ -874,6 +884,10 @@ class PackageDetails extends Component {
                       <div className="m-1">
                         <h6 className="font-weight-bold mb-1">{t('Total Amount')}</h6>
                         <h6 className="text-danger"><b>{this.props.defaultCurrency} {this.state.installmentTotalAmount}</b></h6>
+                      </div>
+                      <div className="m-1">
+                        <h6 className="font-weight-bold mb-1">{t('To Be Paid')}</h6>
+                        <h6 className="text-danger"><b>{this.props.defaultCurrency} {this.state.installmentToBePaid}</b></h6>
                       </div>
                       <div className="m-1">
                         <h6 className="font-weight-bold mb-1">{t('Paid Amount')}</h6>
