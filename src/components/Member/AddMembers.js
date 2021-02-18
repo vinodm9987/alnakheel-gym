@@ -2130,7 +2130,7 @@ class AddMembers extends Component {
                     </div>
                     <div className="text-center">
                       {/* <Link to={`/members-details/${packageReceipt._id}`}> */}
-                      <button type="button" className="btn btn-success px-4 py-1 my-2" data-dismiss="modal" onClick={() => this.handlePrint(packageReceipt._id)}>{t('Print Receipt')}</button>
+                      <button type="button" className="btn btn-success px-4 py-1 my-2" onClick={() => this.handlePrint(packageReceipt._id)}>{t('Print Receipt')}</button>
                       {/* </Link> */}
                     </div>
                   </div>
