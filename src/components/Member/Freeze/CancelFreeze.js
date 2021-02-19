@@ -6,6 +6,7 @@ import { withTranslation } from 'react-i18next';
 import { connect } from 'react-redux';
 import { cancelFreeze, getFreezeHistory } from '../../../actions/freeze.action';
 import { calculateDays, dateToDDMMYYYY, getPageWiseData, setTime, validator } from '../../../utils/apis/helpers';
+import Pagination from '../../Layout/Pagination';
 
 class CancelFreeze extends Component {
 
@@ -217,7 +218,7 @@ class CancelFreeze extends Component {
                       <td><span className="mx-200-normalwrap">{reason}</span></td>
                       <td>{typeOfFreeze}</td>
                       <td className="text-center">
-                        <button disabled={(calculateDays(new Date(), toDate) === 0 ? true : false) || typeOfFreeze === 'Canceled'} type="button" className="btn btn-danger btn-sm w-100px text-white"
+                        <button disabled={(setTime(new Date()) > setTime(toDate) ? true : false) || typeOfFreeze === 'Canceled'} type="button" className="btn btn-danger btn-sm w-100px text-white"
                           data-toggle="modal" data-target="#CancelFreeze"
                           onClick={() => this.setState({ member, freezeId: _id })}>{t('Cancel')}</button>
                       </td>
@@ -227,6 +228,18 @@ class CancelFreeze extends Component {
               </tbody>
             </table>
           </div>
+
+          {/*Pagination Start*/}
+          {freezeHistory &&
+            <Pagination
+              pageNumber={this.state.pageNumber ? this.state.pageNumber : 1}
+              getPageNumber={(pageNumber) => this.setState({ pageNumber })}
+              fullData={freezeHistory}
+              displayNumber={(displayNum) => this.setState({ displayNum })}
+              displayNum={this.state.displayNum ? this.state.displayNum : 5}
+            />
+          }
+          {/* Pagination End // displayNumber={5} */}
 
           {/* <!-- ---------pop up---------- --> */}
           <div className="modal fade commonYellowModal" id="CancelFreeze">
