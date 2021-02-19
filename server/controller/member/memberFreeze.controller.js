@@ -4,7 +4,7 @@
 
 const { logger: { logger }, handler: { successResponseHandler, errorResponseHandler } } = require('../../../config');
 
-const { Formate: { setTime } } = require('../../utils');
+const { Formate: { setTime }, IdGenerator: { generateOrderId } } = require('../../utils');
 
 const { checkIsMemberFreezable } = require('../../worker/freeze')
 
@@ -12,7 +12,9 @@ const { freezeMember } = require('../../biostar');
 
 
 /**
+ * 
  * models.
+ * 
 */
 
 const { MemberFreezing, Member } = require('../../model');
