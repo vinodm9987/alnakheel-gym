@@ -5,7 +5,7 @@ import React, { Component } from 'react';
 import { withTranslation } from 'react-i18next';
 import { connect } from 'react-redux';
 import { cancelFreeze, getFreezeHistory } from '../../../actions/freeze.action';
-import { calculateDays, dateToDDMMYYYY, getPageWiseData, validator } from '../../../utils/apis/helpers';
+import { calculateDays, dateToDDMMYYYY, getPageWiseData, setTime, validator } from '../../../utils/apis/helpers';
 
 class CancelFreeze extends Component {
 
