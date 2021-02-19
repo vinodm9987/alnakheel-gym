@@ -69,7 +69,11 @@ exports.applyFreezeMember = async (req, res) => {
             const newResponse = await newRecord.save()
             let response = await MemberFreezing.findById(newResponse._id).populate('memberId memberId.branch doneBy memberId.credentialId')
             auditLogger(req, 'Success')
-            return successResponseHandler(res, { ...response, ...{ displayReceipt: true } }, "successfully freeze Member !")
+            if (req.body.wantCharge === 'Yes') {
+                return successResponseHandler(res, { ...response, ...{ displayReceipt: true } }, "successfully freeze Member !")
+            } else {
+                return successResponseHandler(res, { ...response, ...{ displayReceipt: false } }, "successfully freeze Member !")
+            }
         }
     } catch (error) {
         logger.error(error);
