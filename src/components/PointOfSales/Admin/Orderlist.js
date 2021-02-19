@@ -29,7 +29,7 @@ class Orderlist extends Component {
   }
 
   handlePrint() {
-    var w = window.open('', 'new div', 'width=400,height=600');
+    var w = window.open('', 'new div', 'width=450,height=600');
     var printOne = $('#newPrint').html();
     w.document.body.innerHTML = printOne
     w.window.print();
@@ -396,7 +396,7 @@ class Orderlist extends Component {
 
         {orderById &&
           <div className="PageBillWrapper d-none" id="newPrint">
-            <div style={{ width: "80mm", padding: "4px", margin: "auto" }}>
+            <div style={{ width: "100mm", padding: "4px", margin: "auto" }}>
               <div style={{ display: "flex", justifyContent: "center" }}>
                 {/* <img src={orderById.branch.avatar ? `/${orderById.branch.avatar.path}` : ''} width="200" style={{ width: "100px" }} alt="" /> */}
                 <img src={algymlogo} width="200" style={{ width: "100px" }} alt="" />
@@ -433,11 +433,11 @@ class Orderlist extends Component {
               <table style={{ width: "100%", fontSize: "14px" }}>
                 <tbody>
                   <tr>
-                    <td style={{ borderTop: "1px dashed #000", borderBottom: "1px dashed #000" }}>{t('No.')}</td>
+                    <td style={{ borderTop: "1px dashed #000", borderBottom: "1px dashed #000", width: "50px" }}>{t('No.')}</td>
                     <td style={{ borderTop: "1px dashed #000", borderBottom: "1px dashed #000" }}>{t('Description')}</td>
-                    <td style={{ borderTop: "1px dashed #000", borderBottom: "1px dashed #000", textAlign: "center" }}>{t('Price')}</td>
-                    <td style={{ borderTop: "1px dashed #000", borderBottom: "1px dashed #000", textAlign: "center" }}>{t('Qty')}</td>
-                    <td style={{ borderTop: "1px dashed #000", borderBottom: "1px dashed #000", textAlign: "center" }}>{t('Total')}</td>
+                    <td style={{ borderTop: "1px dashed #000", borderBottom: "1px dashed #000", width: "50px", textAlign: "center" }}>{t('Price')}</td>
+                    <td style={{ borderTop: "1px dashed #000", borderBottom: "1px dashed #000", width: "50px", textAlign: "center" }}>{t('Qty')}</td>
+                    <td style={{ borderTop: "1px dashed #000", borderBottom: "1px dashed #000", width: "50px", textAlign: "center" }}>{t('Total')}</td>
                   </tr>
                   {/* <tr style={{ borderTop: "1px dashed #000" }}>
                   <td>1</td>
