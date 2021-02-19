@@ -456,10 +456,10 @@ class Orderdetails extends Component {
                         <td style={{ textAlign: "right", padding: "0px 0px 4px 0px" }}>{parseFloat(orderById.cardAmount).toFixed(3)}</td>
                       </tr>
                       : <tr></tr>}
-                    {parseFloat(orderById.cheque) ?
+                    {parseFloat(orderById.chequeAmount) ?
                       <tr>
                         <td style={{ textAlign: "right", padding: "0px 4px 4px 4px", width: "100%" }}>{t('Cheque')} {this.props.defaultCurrency}: </td>
-                        <td style={{ textAlign: "right", padding: "0px 0px 4px 0px" }}>{parseFloat(orderById.cheque).toFixed(3)}</td>
+                        <td style={{ textAlign: "right", padding: "0px 0px 4px 0px" }}>{parseFloat(orderById.chequeAmount).toFixed(3)}</td>
                       </tr>
                       : <tr></tr>}
                     {orderById.bankName ?
