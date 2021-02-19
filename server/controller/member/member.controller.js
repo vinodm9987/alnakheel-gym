@@ -49,7 +49,8 @@ const {
     Employee,
     MemberCode,
     MemberClass,
-    AdminPassword
+    AdminPassword,
+    Counter
 } = require('../../model');
 
 const { auditLogger } = require('../../middleware/auditlog.middleware');
@@ -315,6 +316,8 @@ exports.createNewMemberByAdmin = (req, res) => {
         } catch (error) {
             logger.error(error);
             auditLogger(req, 'Failed')
+            let counter = await Counter.findOne({});
+            await Counter.findByIdAndUpdate(counter._id, { $inc: { 'memberCounter': -1 } }).lean();
             if (error.message.indexOf('duplicate key error') !== -1)
                 return errorResponseHandler(res, error, "Email is already exist !");
             else
