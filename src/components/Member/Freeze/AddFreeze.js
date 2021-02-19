@@ -14,6 +14,7 @@ import { calculateDays, dateToDDMMYYYY, validator, dateToHHMM } from '../../../u
 import { disableSubmit } from '../../../utils/disableButton';
 import instaimg from '../../../assets/img/insta.jpg'
 import QRCode from 'qrcode.react';
+import { PRODIP } from '../../../config'
 
 class AddFreeze extends Component {
 
@@ -979,7 +980,7 @@ class AddFreeze extends Component {
           <div className="PageBillWrapper d-none">
             <div style={{ width: "450px", padding: "15px", margin: "auto" }} id="newPrint">
               <div style={{ display: "flex", justifyContent: "center" }}>
-                <img src={packageReceipt.memberId.branch.avatar ? `/${packageReceipt.memberId.branch.avatar.path}` : ''} width="200" style={{ width: "100px" }} alt="" />
+                <img src={packageReceipt.memberId.branch.avatar ? `${PRODIP}/${packageReceipt.memberId.branch.avatar.path}` : ''} width="200" style={{ width: "100px" }} alt="" />
               </div>
               <h5 style={{ textAlign: "center", margin: "19px 0" }}>{t('Tax Invoice')}</h5>
               <p style={{ textAlign: "center", margin: "0 0 10px 0" }}>

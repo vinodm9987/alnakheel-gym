@@ -23,6 +23,7 @@ import profilePic from '../../assets/img/profilePic.png'
 import Nationality from '../../utils/apis/country.json';
 import { calculateDOB, dateToDDMMYYYY, dateToHHMM, scrollToTop, setTime, validator } from '../../utils/apis/helpers';
 import { disableSubmit } from '../../utils/disableButton';
+import { PRODIP } from '../../config'
 
 class AddMembers extends Component {
 
@@ -2144,7 +2145,11 @@ class AddMembers extends Component {
           <div className="PageBillWrapper d-none" id="newPrint">
             <div style={{ width: "80mm", padding: "4px", margin: "auto" }}>
               <div style={{ display: "flex", justifyContent: "center" }}>
+<<<<<<< HEAD
                 <img src={`/${avatarPath}`} width="100" style={{ width: "100px" }} alt="" />
+=======
+                <img src={`${PRODIP}/${avatarPath}`} width="200" style={{ width: "100px" }} alt="" />
+>>>>>>> c22ea07aed94c3c3798004e9a7403e2637b6f8e2
               </div>
               <h5 style={{ textAlign: "center", margin: "19px 0px 9px 0px", fontSize: "19px" }}>{t('Tax Invoice')}</h5>
               <p style={{ textAlign: "center", margin: "0 0 10px 0", fontSize: "14px" }}>

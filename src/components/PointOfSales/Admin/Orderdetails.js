@@ -7,6 +7,7 @@ import { getStockSellById } from '../../../actions/pos.action'
 // import instaimg from '../../../assets'
 import instaimg from '../../../assets/img/insta.jpg'
 import { dateToDDMMYYYY, dateToHHMM } from '../../../utils/apis/helpers'
+import { PRODIP } from '../../../config'
 
 class Orderdetails extends Component {
 
@@ -358,7 +359,7 @@ class Orderdetails extends Component {
             <div className="PageBillWrapper d-none">
               <div style={{ width: "450px", padding: "15px", margin: "auto" }} id="newPrint">
                 <div style={{ display: "flex", justifyContent: "center" }}>
-                  <img src={orderById.branch.avatar ? `/${orderById.branch.avatar.path}` : ''} width="200" style={{ width: "100px" }} alt="" />
+                  <img src={orderById.branch.avatar ? `${PRODIP}/${orderById.branch.avatar.path}` : ''} width="200" style={{ width: "100px" }} alt="" />
                 </div>
                 <h5 style={{ textAlign: "center", margin: "19px 0" }}>{t('Tax Invoice')}</h5>
                 <p style={{ textAlign: "center", margin: "0 0 10px 0" }}>

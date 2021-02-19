@@ -15,6 +15,7 @@ import instaimg from '../../../assets/img/insta.jpg'
 import { dateToDDMMYYYY, dateToHHMM, setTime, validator } from '../../../utils/apis/helpers';
 import DateFnsUtils from '@date-io/date-fns';
 import { DatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
+import { PRODIP } from '../../../config'
 
 class PointOfSales extends Component {
 
@@ -1157,7 +1158,7 @@ class PointOfSales extends Component {
           <div className="PageBillWrapper d-none">
             <div style={{ width: "450px", padding: "15px", margin: "auto" }} id="newPrint">
               <div style={{ display: "flex", justifyContent: "center" }}>
-                <img src={`/${avatarPath}`} width="200" style={{ width: "100px" }} alt="" />
+                <img src={`${PRODIP}/${avatarPath}`} width="200" style={{ width: "100px" }} alt="" />
               </div>
               <h5 style={{ textAlign: "center", margin: "19px 0" }}>{t('Tax Invoice')}</h5>
               <p style={{ textAlign: "center", margin: "0 0 10px 0" }}>
