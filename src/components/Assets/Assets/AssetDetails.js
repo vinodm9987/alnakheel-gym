@@ -68,7 +68,7 @@ class AssetDetails extends Component {
   downloadPdf() {
     const doc = new jsPDF()
     doc.autoTable({ html: '#myTable' })
-    doc.save('table.pdf')
+    doc.save(`Repair_details_${dateToDDMMYYYY(new Date())}.pdf`)
   }
 
   render() {
@@ -232,7 +232,7 @@ class AssetDetails extends Component {
                 {repairLog.length > 0 &&
                   <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 pt-3 tableTypeStriped">
                     <div className="table-responsive">
-                      <table className="table table-striped">
+                      <table className="table table-striped" id="myTable">
                         <thead className="border bg-light">
                           <tr>
                             {/* <th className="text-dark">Supplier</th> */}
@@ -297,7 +297,7 @@ class AssetDetails extends Component {
                   <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 d-flex align-items-center justify-content-end">
                     <div className="d-flex align-items-center pt-1">
                       <span className="mr-1">{t('Export')}</span>
-                      <CSVLink data={repairLog} headers={headers}>
+                      <CSVLink data={repairLog} headers={headers} filename={`Repair_details_${dateToDDMMYYYY(new Date())}.csv`}>
                         <span className="iconv1 iconv1-excel mr-1"><span className="path1"></span><span className="path2"></span><span className="path3"></span><span className="path4"></span><span className="path5"></span><span className="path6"></span><span className="path7"></span><span className="path8"></span><span className="path9"></span><span className="path10"></span></span>
                       </CSVLink>
                       <span className="iconv1 iconv1-pdf" onClick={() => this.downloadPdf()}><span className="path1"></span><span className="path2"></span><span className="path3"></span><span className="path4"></span><span className="path5"></span><span className="path6"></span><span className="path7"></span></span>
