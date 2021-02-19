@@ -772,15 +772,15 @@ class PackageInstallment extends Component {
                       <table className="table">
                         <thead>
                           <tr>
-                            <th>{t('Package Name')}</th>
+                            <th colSpan="4">{t('Package Name')}</th>
                           </tr>
                         </thead>
                         <tbody>
                           <tr>
-                            <td>{packageName} ({installmentName})</td>
+                            <td colSpan="2">{packageName} ({installmentName})</td>
                           </tr>
                           <tr>
-                            <td colSpan="4">
+                            <td>
                               <div className="text-right my-1">{t('Amount Total')} :</div>
                               {parseFloat(obj.discount) ?
                                 <div className="text-right my-1">{t('Discount')} :</div>
