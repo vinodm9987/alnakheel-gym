@@ -5,7 +5,7 @@ import React, { Component } from 'react';
 import { withTranslation } from 'react-i18next';
 import { connect } from 'react-redux';
 import { cancelFreeze, getFreezeHistory } from '../../../actions/freeze.action';
-import { calculateDays, dateToDDMMYYYY, getPageWiseData, validator } from '../../../utils/apis/helpers';
+import { calculateDays, dateToDDMMYYYY, getPageWiseData, setTime, validator } from '../../../utils/apis/helpers';
 
 class CancelFreeze extends Component {
 
@@ -212,7 +212,7 @@ class CancelFreeze extends Component {
                       <td>{dateToDDMMYYYY(toDate)}</td>
                       <td>{noOfDays} {t('Days')}</td>
                       <td>{dateToDDMMYYYY(reactivationDate)}</td>
-                      <td>{calculateDays(new Date(), returningDate ? returningDate : toDate)}</td>
+                      <td>{calculateDays(new Date(), returningDate ? setTime(returningDate) >= setTime(new Date()) ? returningDate : new Date() : toDate)}</td>
                       <td>{dateToDDMMYYYY(returningDate)}</td>
                       <td><span className="mx-200-normalwrap">{reason}</span></td>
                       <td>{typeOfFreeze}</td>
