@@ -638,7 +638,7 @@ exports.getAllPendingMember = async (req, res) => {
         queryCond["doneFingerAuth"] = false;
         queryCond["isPackageSelected"] = false;
         if (req.body.branch) queryCond["branch"] = req.body.branch
-        let response = await Member.find(queryCond).populate('credentialId branch').populate("packageDetails.packages").lean()
+        let response = await Member.find(queryCond, { faceRecognitionTemplate: 0 }).populate('credentialId branch').populate("packageDetails.packages").lean()
         let newResponse = memberSearch(response, search, req.body.searchFor);
         return successResponseHandler(res, newResponse, "successfully get all member details !!");
     } catch (error) {
@@ -663,7 +663,7 @@ exports.getActiveRegisterMembers = async (req, res) => {
         let queryCond = { 'packageDetails.isExpiredPackage': false };
         queryCond["doneFingerAuth"] = true;
         if (req.body.branch) queryCond["branch"] = req.body.branch;
-        let response = await Member.find(queryCond).populate('credentialId branch').populate("packageDetails.packages").lean()
+        let response = await Member.find(queryCond, { faceRecognitionTemplate: 0 }).populate('credentialId branch').populate("packageDetails.packages").lean()
         let newResponse = memberSearch(response, search, req.body.searchFor);
         return successResponseHandler(res, newResponse, "successfully get all member details !!");
     } catch (error) {
@@ -687,7 +687,7 @@ exports.getActiveStatusRegisterMembers = async (req, res) => {
         queryCond["doneFingerAuth"] = true;
         queryCond["status"] = true;
         if (req.body.branch) queryCond["branch"] = req.body.branch;
-        let response = await Member.find(queryCond)
+        let response = await Member.find(queryCond, { faceRecognitionTemplate: 0 })
             .populate('credentialId').populate("packageDetails.packages")
             .populate({ path: 'packageDetails.trainer', populate: { path: "credentialId" } }).lean()
         let newResponse = memberSearch(response, search, req.body.searchFor);
@@ -712,7 +712,7 @@ exports.getActiveStatusNotExpiredRegisterMembers = async (req, res) => {
         queryCond["doneFingerAuth"] = true;
         queryCond["status"] = true;
         if (req.body.branch) queryCond["branch"] = req.body.branch;
-        let response = await Member.find(queryCond)
+        let response = await Member.find(queryCond, { faceRecognitionTemplate: 0 })
             .populate('credentialId').populate("packageDetails.packages")
             .populate({ path: 'packageDetails.trainer', populate: { path: "credentialId" } }).lean()
         let newResponse = memberSearch(response, search, req.body.searchFor);
@@ -872,7 +872,7 @@ exports.blackListUser = async (req, res) => {
         else status = 'AC';
         if (req.body.memberId) {
             await disableMember(req.body.memberId, status)
-            req.responseData = await Member.findById(req.params.id).populate('credentialId').lean()
+            req.responseData = await Member.findById(req.params.id, { faceRecognitionTemplate: 0 }).populate('credentialId').lean()
             let response = await Member.findByIdAndUpdate(req.params.id, { status: !req.body.status })
             auditLogger(req, 'Success')
             successResponseHandler(res, response, "successfully operation done on member")
@@ -901,7 +901,7 @@ exports.getExpiredMembers = async (req, res) => {
         if (req.body.branch) queryCond["branch"] = req.body.branch;
         queryCond['packageDetails.isExpiredPackage'] = true;
         let search = req.body.search.toLowerCase()
-        let response = await Member.find(queryCond)
+        let response = await Member.find(queryCond, { faceRecognitionTemplate: 0 })
             .populate('credentialId').populate("packageDetails.packages branch").lean()
         let newResponse = response.filter(doc => {
             if (search) {
@@ -928,7 +928,7 @@ exports.getAboutToExpireMembers = async (req, res) => {
         let search = req.body.search.toLowerCase()
         if (req.body.trainer) queryCond["packageDetails"] = { $elemMatch: { trainer: req.body.trainer } };
         if (req.body.branch) queryCond["branch"] = req.body.branch;
-        const members = await Member.find(queryCond).populate('credentialId packageDetails.packages branch');
+        const members = await Member.find(queryCond, { faceRecognitionTemplate: 0 }).populate('credentialId packageDetails.packages branch');
         const expiredMembers = [];
         for (let i = 0; i < members.length; i++) {
             let aboutToExpire = false;
@@ -972,7 +972,7 @@ exports.getClassesMembers = async (req, res) => {
         queryCond["doneFingerAuth"] = false;
         queryCond["isPackageSelected"] = false;
         if (req.body.branch) queryCond["branch"] = req.body.branch
-        let pendingMember = await Member.find(queryCond).populate('credentialId branch').lean()
+        let pendingMember = await Member.find(queryCond, { faceRecognitionTemplate: 0 }).populate('credentialId branch').lean()
         pendingMember = memberSearch(pendingMember, search);
         let pendingMemberClasses = []
         for (let i = 0; i < pendingMember.length; i++) {
@@ -1007,7 +1007,7 @@ exports.getCprData = async (req, res) => {
 
 exports.getMemberByMemberId = async (req, res) => {
     try {
-        let memberInfo = await Member.findOne({ memberId: +req.body.memberId })
+        let memberInfo = await Member.findOne({ memberId: +req.body.memberId }, { faceRecognitionTemplate: 0 })
             .populate('credentialId')
             .populate({ path: "packageDetails.packages", populate: { path: "period" } }).lean()
         memberInfo["fingerScanStatus"] = req.body.fingerScanStatus
