@@ -152,12 +152,14 @@ class AssignShift extends Component {
   handleEdit(employeeShift) {
     scrollToTop()
     this.setState({
-      employee: employeeShift.employee,
-      shift: employeeShift.shift._id,
-      branch: employeeShift.branch._id,
-      fromDate: new Date(employeeShift.fromDate),
-      toDate: new Date(employeeShift.toDate),
-      employeeShiftId: employeeShift._id
+      ...this.default, ...{
+        employee: employeeShift.employee,
+        shift: employeeShift.shift._id,
+        branch: employeeShift.branch._id,
+        fromDate: new Date(employeeShift.fromDate),
+        toDate: new Date(employeeShift.toDate),
+        employeeShiftId: employeeShift._id
+      }
     }, () => {
       this.props.dispatch(getAllEmployeeShiftByIdAndBranch({ employeeId: this.state.employee._id, branch: this.state.branch }))
     })

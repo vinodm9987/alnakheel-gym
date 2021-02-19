@@ -455,7 +455,7 @@ class AdminDashboard extends Component {
       const totalSells = (totalStockSells ? totalStockSells : 0) + (totalClassSells ? totalClassSells : 0) + (totalPackageSells ? totalPackageSells : 0)
       const data = {
         labels: ['POS', 'Classes', 'Packages'],
-        datasets: [{ data: [(totalStockSells ? totalStockSells : 0), (totalClassSells ? totalClassSells : 0), (totalPackageSells ? totalPackageSells : 0)], backgroundColor: ['orange', 'red', 'blue'], hoverBackgroundColor: ['orange', 'red', 'blue'] }],
+        datasets: [{ data: [(totalStockSells ? totalStockSells.toFixed(3) : 0), (totalClassSells ? totalClassSells.toFixed(3) : 0), (totalPackageSells ? totalPackageSells.toFixed(3) : 0)], backgroundColor: ['orange', 'red', 'blue'], hoverBackgroundColor: ['orange', 'red', 'blue'] }],
         text: `${t('Total')} ${totalSells.toFixed(3)}`
       };
       return (

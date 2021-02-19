@@ -65,9 +65,11 @@ class AddRoom extends Component {
   handleEdit(room) {
     scrollToTop()
     this.setState({
-      roomName: room.roomName,
-      branch: room.branch._id,
-      roomId: room._id
+      ...this.default, ...{
+        roomName: room.roomName,
+        branch: room.branch._id,
+        roomId: room._id
+      }
     })
   }
 

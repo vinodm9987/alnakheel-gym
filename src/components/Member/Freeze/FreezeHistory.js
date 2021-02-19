@@ -44,7 +44,6 @@ class FreezeHistory extends Component {
     const obj = {
       status: e.target.checked
     }
-    console.log("🚀 ~ file: FreezeHistory.js ~ line 47 ~ FreezeHistory ~ handleCheckBox ~ obj", obj)
     this.props.dispatch(memberFreezeUpdate(freezeId, obj))
   }
 

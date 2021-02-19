@@ -239,21 +239,23 @@ class AddClass extends Component {
     this.props.dispatch(getAllVat({ branch: c.branch._id }))
     this.props.dispatch(getAllRoomByBranch({ branch: c.branch._id }))
     this.setState({
-      className: c.className,
-      trainer: c.trainer,
-      amount: c.amount.toFixed(3),
-      branch: c.branch._id,
-      room: c.room._id,
-      capacity: c.capacity,
-      description: c.description,
-      image: c.image,
-      color: c.color,
-      startDate: new Date(c.startDate),
-      endDate: new Date(c.endDate),
-      startTime: new Date(c.startTime),
-      endTime: new Date(c.endTime),
-      classDays,
-      classId: c._id
+      ...this.default, ...{
+        className: c.className,
+        trainer: c.trainer,
+        amount: c.amount.toFixed(3),
+        branch: c.branch._id,
+        room: c.room._id,
+        capacity: c.capacity,
+        description: c.description,
+        image: c.image,
+        color: c.color,
+        startDate: new Date(c.startDate),
+        endDate: new Date(c.endDate),
+        startTime: new Date(c.startTime),
+        endTime: new Date(c.endTime),
+        classDays,
+        classId: c._id
+      }
     })
   }
 
@@ -725,25 +727,25 @@ class AddClass extends Component {
                 </div>
                 {/* <div className="row">
                   <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12"> */}
-                    <div className="form-group inlineFormGroup">
-                      <label className="mx-sm-2 inlineFormLabel type3">{t('Days')}</label>
-                      <Select
-                        formatOptionLabel={formatOptionLabelDays}
-                        options={classDays}
-                        value={''}
-                        className={this.state.classDaysE ? "form-control graySelect mx-sm-2 inlineFormInputs FormInputsError h-auto w-100 p-0" : "form-control graySelect mx-sm-2 inlineFormInputs h-auto w-100 p-0"}
-                        onChange={(e) => this.selectClassDays(e)}
-                        isSearchable={false}
-                        isClearable={false}
-                        styles={colourStyles}
-                        placeholder={t('Select days')}
-                        closeMenuOnSelect={false}
-                      />
-                      <div className="errorMessageWrapper">
-                        <small className="text-danger mx-sm-2 errorMessage">{this.state.classDaysE}</small>
-                      </div>
-                    </div>
-                  {/* </div>
+                <div className="form-group inlineFormGroup">
+                  <label className="mx-sm-2 inlineFormLabel type3">{t('Days')}</label>
+                  <Select
+                    formatOptionLabel={formatOptionLabelDays}
+                    options={classDays}
+                    value={''}
+                    className={this.state.classDaysE ? "form-control graySelect mx-sm-2 inlineFormInputs FormInputsError h-auto w-100 p-0" : "form-control graySelect mx-sm-2 inlineFormInputs h-auto w-100 p-0"}
+                    onChange={(e) => this.selectClassDays(e)}
+                    isSearchable={false}
+                    isClearable={false}
+                    styles={colourStyles}
+                    placeholder={t('Select days')}
+                    closeMenuOnSelect={false}
+                  />
+                  <div className="errorMessageWrapper">
+                    <small className="text-danger mx-sm-2 errorMessage">{this.state.classDaysE}</small>
+                  </div>
+                </div>
+                {/* </div>
                 </div> */}
               </div>
               {/* see design */}

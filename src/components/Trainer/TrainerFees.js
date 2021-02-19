@@ -99,12 +99,14 @@ class TrainerFees extends Component {
   handleEdit(trainerFee) {
     scrollToTop()
     this.setState({
-      trainerName: trainerFee.trainerName,
-      branchs: trainerFee.trainerName.branch,
-      period: trainerFee.period._id,
-      branch: trainerFee.branch._id,
-      amount: trainerFee.amount,
-      trainerFeesId: trainerFee._id
+      ...this.default, ...{
+        trainerName: trainerFee.trainerName,
+        branchs: trainerFee.trainerName.branch,
+        period: trainerFee.period._id,
+        branch: trainerFee.branch._id,
+        amount: trainerFee.amount,
+        trainerFeesId: trainerFee._id
+      }
     })
   }
 

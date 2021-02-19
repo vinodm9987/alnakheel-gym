@@ -128,10 +128,12 @@ class CreateSystemAdmin extends Component {
   handleEdit(systemAdmin) {
     scrollToTop()
     this.setState({
-      userName: systemAdmin.userName,
-      email: systemAdmin.email,
-      userPhoto: systemAdmin.avatar,
-      adminId: systemAdmin._id
+      ...this.default, ...{
+        userName: systemAdmin.userName,
+        email: systemAdmin.email,
+        userPhoto: systemAdmin.avatar,
+        adminId: systemAdmin._id
+      }
     })
   }
 

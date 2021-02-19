@@ -90,9 +90,11 @@ class CreatePeriod extends Component {
   handleEdit(period) {
     scrollToTop()
     this.setState({
-      name: period.periodName,
-      days: period.periodDays,
-      periodId: period._id
+      ...this.default, ...{
+        name: period.periodName,
+        days: period.periodDays,
+        periodId: period._id
+      }
     })
   }
 

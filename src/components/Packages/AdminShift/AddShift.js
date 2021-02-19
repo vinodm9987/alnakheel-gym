@@ -95,12 +95,14 @@ class AddShift extends Component {
   handleEdit(shift) {
     scrollToTop()
     this.setState({
-      shiftName: shift.shiftName,
-      branch: shift.branch && shift.branch._id,
-      fromTime: new Date(shift.fromTime),
-      toTime: new Date(shift.toTime),
-      color: shift.color,
-      shiftId: shift._id
+      ...this.default, ...{
+        shiftName: shift.shiftName,
+        branch: shift.branch && shift.branch._id,
+        fromTime: new Date(shift.fromTime),
+        toTime: new Date(shift.toTime),
+        color: shift.color,
+        shiftId: shift._id
+      }
     })
   }
 

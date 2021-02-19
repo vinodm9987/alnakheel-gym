@@ -85,8 +85,10 @@ class CreateDesignation extends Component {
   handleEdit(designation) {
     scrollToTop()
     this.setState({
-      name: designation.designationName,
-      designationId: designation._id
+      ...this.default, ...{
+        name: designation.designationName,
+        designationId: designation._id
+      }
     })
   }
 
