@@ -18,6 +18,7 @@ import { GET_ALERT_ERROR } from '../../actions/types';
 import { getAllVat } from '../../actions/vat.action';
 import instaimg from '../../assets/img/insta.jpg'
 import { calculateDays, dateToDDMMYYYY, dateToHHMM, setTime, validator } from '../../utils/apis/helpers';
+import { PRODIP } from '../../config'
 
 class BookATrainer extends Component {
 
@@ -1239,7 +1240,7 @@ class BookATrainer extends Component {
           <div className="PageBillWrapper d-none">
             <div style={{ width: "450px", padding: "15px", margin: "auto" }} id="newPrint">
               <div style={{ display: "flex", justifyContent: "center" }}>
-                <img src={trainerReceipt.branch.avatar ? `/${trainerReceipt.branch.avatar.path}` : ''} width="200" style={{ width: "100px" }} alt="" />
+                <img src={trainerReceipt.branch.avatar ? `${PRODIP}/${trainerReceipt.branch.avatar.path}` : ''} width="200" style={{ width: "100px" }} alt="" />
               </div>
               <h5 style={{ textAlign: "center", margin: "19px 0" }}>{t('Tax Invoice')}</h5>
               <p style={{ textAlign: "center", margin: "0 0 10px 0" }}>
