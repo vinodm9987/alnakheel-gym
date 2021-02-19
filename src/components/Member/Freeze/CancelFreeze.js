@@ -212,7 +212,7 @@ class CancelFreeze extends Component {
                       <td>{dateToDDMMYYYY(toDate)}</td>
                       <td>{noOfDays} {t('Days')}</td>
                       <td>{dateToDDMMYYYY(reactivationDate)}</td>
-                      <td>{calculateDays(new Date(), returningDate ? returningDate : toDate)}</td>
+                      <td>{calculateDays(new Date(), returningDate ? setTime(returningDate) >= setTime(new Date()) ? returningDate : new Date() : toDate)}</td>
                       <td>{dateToDDMMYYYY(returningDate)}</td>
                       <td><span className="mx-200-normalwrap">{reason}</span></td>
                       <td>{typeOfFreeze}</td>
