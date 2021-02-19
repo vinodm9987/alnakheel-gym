@@ -28,7 +28,7 @@ class Orderlist extends Component {
   }
 
   handlePrint() {
-    var w = window.open('', 'new div', 'height=400,width=600');
+    var w = window.open('', 'new div', 'width=400,height=600');
     var printOne = $('#newPrint').html();
     w.document.body.innerHTML = printOne
     w.window.print();
@@ -394,44 +394,48 @@ class Orderlist extends Component {
         {/* --------------Receipt Modal Ends-=--------------- */}
 
         {orderById &&
-          <div className="PageBillWrapper d-none">
-            <div style={{ width: "450px", padding: "15px", margin: "auto" }} id="newPrint">
+          <div className="PageBillWrapper d-none" id="newPrint">
+            <div style={{ width: "80mm", padding: "4px", margin: "auto" }}>
               <div style={{ display: "flex", justifyContent: "center" }}>
                 <img src={orderById.branch.avatar ? `/${orderById.branch.avatar.path}` : ''} width="200" style={{ width: "100px" }} alt="" />
               </div>
-              <h5 style={{ textAlign: "center", margin: "19px 0" }}>{t('Tax Invoice')}</h5>
-              <p style={{ textAlign: "center", margin: "0 0 10px 0" }}>
+              <h5 style={{ textAlign: "center", margin: "19px 0px 9px 0px", fontSize: "19px" }}>{t('Tax Invoice')}</h5>
+              <p style={{ textAlign: "center", margin: "0 0 10px 0", fontSize: "14px" }}>
                 <span>{orderById.branch.branchName}</span><br />
                 <span>{orderById.branch.address}</span><br />
                 {/* <span>Road/Street 50, Samaheej,</span><br /> */}
                 {/* <span>Block 236, Bahrain,</span><br /> */}
-                <span>{t('Tel')} : {orderById.branch.telephone}</span><br />
               </p>
-              <p style={{ textAlign: "center", margin: "0 0 10px 0" }}>{t('VAT Reg No')} - {orderById.branch.vatRegNo}</p>
-              <p style={{ display: "flex", justifyContent: "space-between", margin: "0" }}>
-                <span style={{ paddingRight: "4px", fontSize: "14px", whiteSpace: "nowrap" }}>{dateToDDMMYYYY(orderById.dateOfPurchase)} {dateToHHMM(orderById.created_at)}</span>
-                <span style={{ paddingLeft: "4px", fontSize: "14px", whiteSpace: "nowrap" }}>{t('Bill No')}:{orderById.orderNo}</span>
+              <p style={{ textAlign: "center", margin: "0 0 10px 0", fontSize: "14px" }}>{t('Tel')} : {orderById.branch.telephone}</p>
+              <p style={{ textAlign: "center", margin: "0 0 10px 0", fontSize: "14px" }}>{t('VAT Reg No')} - {orderById.branch.vatRegNo}</p>
+              <p style={{ display: "flex", justifyContent: "space-between", margin: "0", fontSize: "14px" }}>
+                <span>{dateToDDMMYYYY(orderById.dateOfPurchase)} {dateToHHMM(orderById.created_at)}</span>
+                <span style={{ width: "4px", height: "4px" }}></span>
+                <span>{t('Bill No')} : {orderById.orderNo}</span>
               </p>
               {orderById.customerDetails.member &&
                 <div>
-                  <p style={{ display: "flex", textAlign: "center", justifyContent: "space-between" }}>
-                    <span>{t('ID:')} <span style={{ padding: "10px" }}>{orderById.customerDetails.member.memberId}</span></span>
-                    <span>{t('Mob:')} <span style={{ padding: "10px" }}>{orderById.customerDetails.member.mobileNo}</span></span>
+                  <p style={{ display: "flex", textAlign: "center", justifyContent: "space-between", fontSize: "14px" }}>
+                    <span style={{ display: "flex" }}>
+                      <span>{t('ID')}</span><span style={{ padding: "0 4px" }}>:</span><span>{orderById.customerDetails.member.memberId}</span>
+                    </span>
+                    <span style={{ display: "flex" }}>
+                      <span>{t('Mob')}</span><span style={{ padding: "0 4px" }}>:</span><span>{orderById.customerDetails.member.mobileNo}</span>
+                    </span>
                   </p>
-                  <p style={{ display: "flex", textAlign: "center", justifyContent: "center", marginTop: "0" }}>
+                  <p style={{ display: "flex", textAlign: "center", justifyContent: "center", margin: "0 0 10px 0", fontSize: "14px" }}>
                     <span>{orderById.customerDetails.member.credentialId.userName}</span>
                   </p>
                 </div>
               }
-              {/* <p style={{ textAlign: "right", margin: "0 0 10px 0" }}>66988964</p> */}
-              <table style={{ width: "100%" }}>
+              <table style={{ width: "100%", fontSize: "14px" }}>
                 <tbody>
-                  <tr style={{ borderTop: "1px dashed #000" }}>
-                    <td>{t('No.')}</td>
-                    <td>{t('Description')}</td>
-                    <td>{t('Price')}</td>
-                    <td>{t('Qty')}</td>
-                    <td>{t('Total')}</td>
+                  <tr>
+                    <td style={{ borderTop: "1px dashed #000", borderBottom: "1px dashed #000" }}>{t('No.')}</td>
+                    <td style={{ borderTop: "1px dashed #000", borderBottom: "1px dashed #000" }}>{t('Description')}</td>
+                    <td style={{ borderTop: "1px dashed #000", borderBottom: "1px dashed #000", textAlign: "center" }}>{t('Price')}</td>
+                    <td style={{ borderTop: "1px dashed #000", borderBottom: "1px dashed #000", textAlign: "center" }}>{t('Qty')}</td>
+                    <td style={{ borderTop: "1px dashed #000", borderBottom: "1px dashed #000", textAlign: "center" }}>{t('Total')}</td>
                   </tr>
                   {/* <tr style={{ borderTop: "1px dashed #000" }}>
                   <td>1</td>
@@ -445,59 +449,59 @@ class Orderlist extends Component {
                       <tr key={i}>
                         <td>{i + 1}</td>
                         <td>{stockId.itemName}</td>
-                        <td>{this.props.defaultCurrency} {(parseFloat(amount) / quantity).toFixed(3)}</td>
-                        <td>{quantity}</td>
-                        <td>{this.props.defaultCurrency} {parseFloat(amount).toFixed(3)}</td>
+                        <td style={{ textAlign: "center" }}>{this.props.defaultCurrency} {(parseFloat(amount) / quantity).toFixed(3)}</td>
+                        <td style={{ textAlign: "center" }}>{quantity}</td>
+                        <td style={{ textAlign: "center" }}>{this.props.defaultCurrency} {parseFloat(amount).toFixed(3)}</td>
                       </tr>
                     )
                   })}
                 </tbody>
               </table>
-              <table style={{ width: "100%", textAlign: "right", borderTop: "1px dashed #000", borderBottom: "1px dashed #000" }}>
+              <table style={{ width: "100%", textAlign: "right", borderTop: "1px dashed #000", borderBottom: "1px dashed #000", fontSize: "14px" }}>
                 <tbody>
                   <tr>
-                    <td style={{ textAlign: "right", padding: "4px 4px 0 4px", width: "100%" }}>{t('Amount Total')} {this.props.defaultCurrency}: </td>
+                    <td style={{ textAlign: "right", padding: "4px 4px 0 4px", width: "100%" }}>{t('Amount Total')} {this.props.defaultCurrency} : </td>
                     <td style={{ textAlign: "right", padding: "4px 0px 0 0px" }}>{parseFloat(orderById.actualAmount).toFixed(3)}</td>
                   </tr>
                   {parseFloat(orderById.discount) ?
                     <tr>
-                      <td style={{ textAlign: "right", padding: "0 4px", width: "100%" }}>{t('Discount')} {this.props.defaultCurrency}: </td>
+                      <td style={{ textAlign: "right", padding: "0 4px", width: "100%" }}>{t('Discount')} {this.props.defaultCurrency} : </td>
                       <td style={{ textAlign: "right", padding: "0" }}>{parseFloat(orderById.discount).toFixed(3)}</td>
                     </tr>
                     : <tr></tr>}
                   {parseFloat(orderById.giftcard) ?
                     <tr>
-                      <td style={{ textAlign: "right", padding: "0 4px", width: "100%" }}>{t('Giftcard')} {this.props.defaultCurrency}: </td>
+                      <td style={{ textAlign: "right", padding: "0 4px", width: "100%" }}>{t('Giftcard')} {this.props.defaultCurrency} : </td>
                       <td style={{ textAlign: "right", padding: "0" }}>{parseFloat(orderById.giftcard).toFixed(3)}</td>
                     </tr>
                     : <tr></tr>}
                   {parseFloat(orderById.vatAmount) ?
                     <tr>
-                      <td style={{ textAlign: "right", padding: "0 4px", width: "100%" }}>{t('VAT')} {this.props.defaultCurrency}: </td>
+                      <td style={{ textAlign: "right", padding: "0 4px", width: "100%" }}>{t('VAT')} {this.props.defaultCurrency} : </td>
                       <td style={{ textAlign: "right", padding: "0" }}>{parseFloat(orderById.vatAmount).toFixed(3)}</td>
                     </tr>
                     : <tr></tr>}
                   {parseFloat(orderById.digitalAmount) ?
                     <tr>
-                      <td style={{ textAlign: "right", padding: "0 4px", width: "100%" }}>{t('Digital')} {this.props.defaultCurrency}: </td>
+                      <td style={{ textAlign: "right", padding: "0 4px", width: "100%" }}>{t('Digital')} {this.props.defaultCurrency} : </td>
                       <td style={{ textAlign: "right", padding: "0" }}>{parseFloat(orderById.digitalAmount).toFixed(3)}</td>
                     </tr>
                     : <tr></tr>}
                   {parseFloat(orderById.cashAmount) ?
                     <tr>
-                      <td style={{ textAlign: "right", padding: "0 4px", width: "100%" }}>{t('Cash')} {this.props.defaultCurrency}: </td>
+                      <td style={{ textAlign: "right", padding: "0 4px", width: "100%" }}>{t('Cash')} {this.props.defaultCurrency} : </td>
                       <td style={{ textAlign: "right", padding: "0" }}>{parseFloat(orderById.cashAmount).toFixed(3)}</td>
                     </tr>
                     : <tr></tr>}
                   {parseFloat(orderById.cardAmount) ?
                     <tr>
-                      <td style={{ textAlign: "right", padding: "0px 4px 4px 4px", width: "100%" }}>{t('Card')} {this.props.defaultCurrency}: </td>
+                      <td style={{ textAlign: "right", padding: "0px 4px 4px 4px", width: "100%" }}>{t('Card')} {this.props.defaultCurrency} : </td>
                       <td style={{ textAlign: "right", padding: "0px 0px 4px 0px" }}>{parseFloat(orderById.cardAmount).toFixed(3)}</td>
                     </tr>
                     : <tr></tr>}
                   {parseFloat(orderById.chequeAmount) ?
                     <tr>
-                      <td style={{ textAlign: "right", padding: "0px 4px 4px 4px", width: "100%" }}>{t('Cheque')} {this.props.defaultCurrency}: </td>
+                      <td style={{ textAlign: "right", padding: "0px 4px 4px 4px", width: "100%" }}>{t('Cheque')} {this.props.defaultCurrency} : </td>
                       <td style={{ textAlign: "right", padding: "0px 0px 4px 0px" }}>{parseFloat(orderById.chequeAmount).toFixed(3)}</td>
                     </tr>
                     : <tr></tr>}
@@ -520,16 +524,16 @@ class Orderlist extends Component {
                     </tr>
                     : <tr></tr>}
                   <tr>
-                    <td style={{ textAlign: "right", padding: "0px 4px 4px 4px", width: "100%" }}>{t('Grand Total')} {this.props.defaultCurrency}: </td>
+                    <td style={{ textAlign: "right", padding: "0px 4px 4px 4px", width: "100%" }}>{t('Grand Total')} {this.props.defaultCurrency} : </td>
                     <td style={{ textAlign: "right", padding: "0px 0px 4px 0px" }}>{parseFloat(orderById.totalAmount).toFixed(3)}</td>
                   </tr>
                   <tr>
-                    <td style={{ textAlign: "right", padding: "0px 4px 4px 4px", width: "100%" }}>{t('Paid Amount')} {this.props.defaultCurrency}: </td>
+                    <td style={{ textAlign: "right", padding: "0px 4px 4px 4px", width: "100%" }}>{t('Paid Amount')} {this.props.defaultCurrency} : </td>
                     <td style={{ textAlign: "right", padding: "0px 0px 4px 0px" }}>{parseFloat(orderById.totalAmount).toFixed(3)}</td>
                   </tr>
                   {orderById.cardNumber ?
                     <tr>
-                      <td style={{ textAlign: "right", padding: "0px 4px 4px 4px", width: "100%" }}>{t('Card last four digit')} :</td>
+                      <td style={{ textAlign: "right", padding: "0px 4px 4px 4px", width: "100%" }}>{t('Card last four digit')} : </td>
                       <td style={{ textAlign: "right", padding: "0px 0px 4px 0px" }}>{orderById.cardNumber}</td>
                     </tr>
                     : <tr></tr>}
@@ -543,13 +547,13 @@ class Orderlist extends Component {
                   </div>
                   <QRCode value={`http://instagram.com/${orderById.branch.instaId}/`} renderAs='svg' width="50" height="50" />
                 </div>
-                {orderById.doneBy && <span>{t('Served by')}: {orderById.doneBy.userName}</span>}
+                {orderById.doneBy && <span style={{ fontSize: "14px" }}>{t('Served by')} : {orderById.doneBy.userName}</span>}
               </div>
-              <p style={{ display: "flex", margin: "0 0 10px 0" }}>
+              <p style={{ display: "flex", margin: "0 0 10px 0", fontSize: "14px" }}>
                 <span>{t('NB')}:</span>
                 <span style={{ flexGrow: "1", textAlign: "center" }}>{t('Membership cannot be refunded or transferred to others.')}</span>
               </p>
-              <p style={{ textAlign: "center", margin: "0 0 10px 0" }}>{t('Thank You')}</p>
+              <p style={{ textAlign: "center", margin: "0 0 10px 0", fontSize: "14px" }}>{t('Thank You')}</p>
             </div>
           </div>
         }

@@ -3,7 +3,8 @@ const cronjob = require('node-cron');
 const { logger: { logger } } = require('../../config');
 
 const { checkPackageExpiry, checkStockExpiry, upgradeMember, checkAssetsExpiry,
-    checkContractExpiry, checkVisaExpiry, checkFreezeMember, freezeMember, checkInstallmentsPending } = require('./jobs')
+    checkContractExpiry, checkVisaExpiry, checkFreezeMember,
+    freezeMember, checkInstallmentsPending } = require('./jobs')
 
 exports.oneDayCronJob = () => {
 
