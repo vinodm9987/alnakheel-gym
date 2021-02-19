@@ -183,6 +183,7 @@
           "Mobile No",
           "Branch",
           "Transaction Type",
+          "Name",
           "Paid Amount",
           "Discount",
           "Cash",
