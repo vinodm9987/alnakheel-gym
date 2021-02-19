@@ -1124,7 +1124,7 @@ class BookATrainer extends Component {
                               trainerPeriods.filter(trainerFee => trainerFee.period._id === period)[0].period.periodName}</td>
                           </tr>
                           <tr>
-                            <td colSpan="4">
+                            <td>
                               <div className="text-right my-1">{t('Amount Total')} :</div>
                               {parseFloat(discount) ?
                                 <div className="text-right my-1">{t('Discount')} :</div>

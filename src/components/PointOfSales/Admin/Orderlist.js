@@ -396,9 +396,9 @@ class Orderlist extends Component {
 
         {orderById &&
           <div className="PageBillWrapper d-none" id="newPrint">
-            <div style={{ width: "100mm", padding: "4px", margin: "auto" }}>
+            <div style={{ width: "80mm", padding: "4px", margin: "auto" }}>
               <div style={{ display: "flex", justifyContent: "center" }}>
-                <img src={orderById.branch.avatar ? `${PRODIP}/${orderById.branch.avatar.path}` : ''} width="200" style={{ width: "100px" }} alt="" />
+                <img src={orderById.branch.avatar ? `${PRODIP}/${orderById.branch.avatar.path}` : ''} width="100" style={{ width: "100px" }} alt="" />
                 {/* <img src={algymlogo} width="200" style={{ width: "100px" }} alt="" /> */}
               </div>
               <h5 style={{ textAlign: "center", margin: "19px 0px 9px 0px", fontSize: "19px" }}>{t('Tax Invoice')}</h5>
