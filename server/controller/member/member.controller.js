@@ -480,22 +480,10 @@ exports.updateMemberAndAddPackage = (req, res) => {
             return errorResponseHandler(res, error, "while uploading profile error occurred !");
         try {
             const {
-                mobileNo,
-                gender,
-                dateOfBirth,
-                nationality,
-                userName,
-                email,
-                personalId,
-                branch,
-                height,
-                weight,
-                emergencyNumber,
-                relationship,
-                memberId,
-                credentialId,
-                notes,
-                packageDetails
+                mobileNo, gender, dateOfBirth, nationality,
+                userName, email, personalId, branch, height,
+                weight, emergencyNumber, relationship,
+                memberId, credentialId, notes, packageDetails
             } = JSON.parse(req.body.data);
             if (req.headers.userid) {
                 packageDetails[0]["doneBy"] = req.headers.userid
@@ -507,19 +495,9 @@ exports.updateMemberAndAddPackage = (req, res) => {
             if (isUsedReferralCode) req.body["walletPoints"] = await updateTransaction(isUsedReferralCode, memberId);
             let memberAllClassResponse = await MemberClass.find({ member: req.params.id }).populate('classId').lean()
             let newObj = {
-                mobileNo,
-                gender,
-                dateOfBirth,
-                nationality,
-                personalId,
-                branch,
-                height,
-                weight,
-                emergencyNumber,
-                relationship,
-                notes,
-                packageDetails,
-                isPackageSelected: true
+                mobileNo, gender, dateOfBirth, nationality, personalId,
+                branch, height, weight, emergencyNumber, relationship,
+                notes, packageDetails, isPackageSelected: true
             }
             if (memberAllClassResponse.length === 0) {
                 const { memberCounter } = await createId('memberCounter');
