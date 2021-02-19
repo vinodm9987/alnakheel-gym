@@ -8,7 +8,6 @@ import { getOrderHistory } from '../../../actions/pos.action'
 import instaimg from '../../../assets/img/insta.jpg'
 import { dateToDDMMYYYY, dateToHHMM, getPageWiseData } from '../../../utils/apis/helpers'
 import Pagination from '../../Layout/Pagination'
-import algymlogo from '../../../assets/img/al-main-logo.png'
 import { PRODIP } from '../../../config'
 
 class Orderlist extends Component {
