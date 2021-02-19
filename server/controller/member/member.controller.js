@@ -274,7 +274,10 @@ exports.createNewMemberByAdmin = (req, res) => {
             if (packageDetails[0].Installments && packageDetails[0].Installments.length) {
                 packageDetails[0].Installments[0].dateOfPaid = setTime(new Date())
                 packageDetails[0].Installments[0].timeOfPaid = new Date();
-                packageDetails[0].Installments[0]["orderNo"] = generateOrderId()
+                packageDetails[0].Installments[0]["orderNo"] = generateOrderId();
+                if (packageDetails[0].Installments[0].chequeDate) {
+                    packageDetails[0].Installments[0]["chequeDate"] = setTime(packageDetails[0].Installments[0].chequeDate);
+                }
                 if (req.headers.userid) packageDetails[0].Installments[0]["doneBy"] = req.headers.userid;
             } else {
                 packageDetails[0]["dateOfPaid"] = setTime(new Date())
