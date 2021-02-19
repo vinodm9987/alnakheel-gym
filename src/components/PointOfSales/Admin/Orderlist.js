@@ -8,6 +8,7 @@ import { getOrderHistory } from '../../../actions/pos.action'
 import instaimg from '../../../assets/img/insta.jpg'
 import { dateToDDMMYYYY, dateToHHMM, getPageWiseData } from '../../../utils/apis/helpers'
 import Pagination from '../../Layout/Pagination'
+import algymlogo from '../../../assets/img/al-main-logo.png'
 
 class Orderlist extends Component {
 
@@ -397,7 +398,8 @@ class Orderlist extends Component {
           <div className="PageBillWrapper d-none" id="newPrint">
             <div style={{ width: "80mm", padding: "4px", margin: "auto" }}>
               <div style={{ display: "flex", justifyContent: "center" }}>
-                <img src={orderById.branch.avatar ? `/${orderById.branch.avatar.path}` : ''} width="200" style={{ width: "100px" }} alt="" />
+                {/* <img src={orderById.branch.avatar ? `/${orderById.branch.avatar.path}` : ''} width="200" style={{ width: "100px" }} alt="" /> */}
+                <img src={algymlogo} width="200" style={{ width: "100px" }} alt="" />
               </div>
               <h5 style={{ textAlign: "center", margin: "19px 0px 9px 0px", fontSize: "19px" }}>{t('Tax Invoice')}</h5>
               <p style={{ textAlign: "center", margin: "0 0 10px 0", fontSize: "14px" }}>
