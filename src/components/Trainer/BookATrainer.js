@@ -76,7 +76,7 @@ class BookATrainer extends Component {
       showCheque: false,
       bankName: '',
       chequeNumber: '',
-      chequeDate: '',
+      chequeDate: new Date(),
       cheque: 0,
       bankNameE: '',
       chequeNumberE: '',
@@ -1252,7 +1252,9 @@ class BookATrainer extends Component {
               <p style={{ textAlign: "center", margin: "0 0 10px 0" }}>{t('VAT Reg No')} - {trainerReceipt.branch.vatRegNo}</p>
               <p style={{ display: "flex", justifyContent: "space-between", margin: "0" }}>
                 <span style={{ padding: "2px", fontSize: "14px" }}>{dateToDDMMYYYY(new Date())} {dateToHHMM(new Date())}</span>
-                <span style={{ padding: "2px", fontSize: "14px" }}>{t('Bill No')}:{trainerReceipt.orderNo}</span>
+                <span style={{ padding: "2px", fontSize: "14px" }}>{t('Bill No')}:{trainerReceipt.packageDetails.filter(p => p._id === oldPackageId)[0] &&
+                  trainerReceipt.packageDetails.filter(p => p._id === oldPackageId)[0].trainerDetails.slice(-1)[0] &&
+                  trainerReceipt.packageDetails.filter(p => p._id === oldPackageId)[0].trainerDetails.slice(-1)[0].orderNo}</span>
               </p>
               <div>
                 <p style={{ display: "flex", textAlign: "center", justifyContent: "space-between" }}>
@@ -1267,7 +1269,6 @@ class BookATrainer extends Component {
               <table style={{ width: "100%" }}>
                 <tbody>
                   <tr style={{ borderTop: "1px dashed #000" }}>
-                    <td>{t('No.')}</td>
                     <td>{t('Trainer Name')}</td>
                     <td>{t('Period')}</td>
                   </tr>
@@ -1278,7 +1279,6 @@ class BookATrainer extends Component {
                   <td>13-Sep-20</td>
                 </tr> */}
                   <tr>
-                    <td>1</td>
                     <td>{trainer && trainer.credentialId.userName}</td>
                     <td>{trainerPeriods.filter(trainerFee => trainerFee.period._id === period)[0] &&
                       trainerPeriods.filter(trainerFee => trainerFee.period._id === period)[0].period.periodName}</td>

@@ -55,7 +55,7 @@ class PointOfSales extends Component {
       showCheque: false,
       bankName: '',
       chequeNumber: '',
-      chequeDate: '',
+      chequeDate: new Date(),
       cheque: 0,
       bankNameE: '',
       chequeNumberE: '',
@@ -1259,10 +1259,10 @@ class PointOfSales extends Component {
                       <td style={{ textAlign: "right", padding: "0px 0px 4px 0px" }}>{parseFloat(posReceipt.cardAmount).toFixed(3)}</td>
                     </tr>
                     : <tr></tr>}
-                  {parseFloat(posReceipt.cheque) ?
+                  {parseFloat(posReceipt.chequeAmount) ?
                     <tr>
                       <td style={{ textAlign: "right", padding: "0px 4px 4px 4px", width: "100%" }}>{t('Cheque')} {this.props.defaultCurrency}: </td>
-                      <td style={{ textAlign: "right", padding: "0px 0px 4px 0px" }}>{parseFloat(posReceipt.cheque).toFixed(3)}</td>
+                      <td style={{ textAlign: "right", padding: "0px 0px 4px 0px" }}>{parseFloat(posReceipt.chequeAmount).toFixed(3)}</td>
                     </tr>
                     : <tr></tr>}
                   {posReceipt.bankName ?

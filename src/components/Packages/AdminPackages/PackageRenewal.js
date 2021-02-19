@@ -80,7 +80,7 @@ class PackageRenewal extends Component {
       showCheque: false,
       bankName: '',
       chequeNumber: '',
-      chequeDate: '',
+      chequeDate: new Date(),
       cheque: 0,
       bankNameE: '',
       chequeNumberE: '',
@@ -1308,7 +1308,6 @@ class PackageRenewal extends Component {
               <table style={{ width: "100%" }}>
                 <tbody>
                   <tr style={{ borderTop: "1px dashed #000" }}>
-                    <td>{t('No.')}</td>
                     <td>{t('Package Name')}</td>
                     <td>{t('From Date')}</td>
                     <td>{t('To Date')}</td>
@@ -1417,8 +1416,7 @@ class PackageRenewal extends Component {
                   </div>
                   <QRCode value={`http://instagram.com/${packageReceipt.branch.instaId}/`} renderAs='svg' width="50" height="50" />
                 </div>
-                {packageReceipt.packageDetails.filter(p => p.packages === packages && !p.isExpiredPackage)[0] &&
-                  <span>{t('Served by')}: {packageReceipt.packageDetails.filter(p => p.packages === packages && !p.isExpiredPackage)[0].userName}</span>}
+                {this.props.loggedUser && <span>{t('Served by')}: {this.props.loggedUser.userName}</span>}
               </div>
               <p style={{ display: "flex", margin: "0 0 10px 0" }}>
                 <span>{t('NB')}:</span>

@@ -42,7 +42,7 @@ class PackageDetails extends Component {
     showCheque: false,
     bankName: '',
     chequeNumber: '',
-    chequeDate: '',
+    chequeDate: new Date(),
     cheque: 0,
     bankNameE: '',
     chequeNumberE: '',
@@ -1207,10 +1207,10 @@ class PackageDetails extends Component {
                         <td style={{ textAlign: "right", padding: "0px 0px 4px 0px" }}>{parseFloat(installmentReceipt.cardAmount).toFixed(3)}</td>
                       </tr>
                       : <tr></tr>}
-                    {parseFloat(installmentReceipt.cheque) ?
+                    {parseFloat(installmentReceipt.chequeAmount) ?
                       <tr>
                         <td style={{ textAlign: "right", padding: "0px 4px 4px 4px", width: "100%" }}>{t('Cheque')} {this.props.defaultCurrency}: </td>
-                        <td style={{ textAlign: "right", padding: "0px 0px 4px 0px" }}>{parseFloat(installmentReceipt.cheque).toFixed(3)}</td>
+                        <td style={{ textAlign: "right", padding: "0px 0px 4px 0px" }}>{parseFloat(installmentReceipt.chequeAmount).toFixed(3)}</td>
                       </tr>
                       : <tr></tr>}
                     {installmentReceipt.bankName ?

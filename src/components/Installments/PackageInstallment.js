@@ -25,7 +25,7 @@ class PackageInstallment extends Component {
       showCheque: false,
       bankName: '',
       chequeNumber: '',
-      chequeDate: '',
+      chequeDate: new Date(),
       cheque: 0,
       bankNameE: '',
       chequeNumberE: '',
