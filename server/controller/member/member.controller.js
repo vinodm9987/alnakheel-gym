@@ -587,6 +587,7 @@ exports.getMemberById = (req, res) => {
         .populate({ path: "packageDetails.trainerDetails.trainer", populate: { path: "credentialId" } })
         .populate({ path: "packageDetails.packages", populate: { path: "period" } })
         .populate({ path: "packageDetails.trainerDetails.trainerFees", populate: { path: "period" } }).lean()
+        .populate({ path: "packageDetails.trainerDetails.Installments.doneBy", }).lean()
         .then(response => {
             successResponseHandler(res, response, "successfully get  member details by id !!");
         }).catch(error => {
