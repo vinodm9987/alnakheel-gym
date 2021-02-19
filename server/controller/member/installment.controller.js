@@ -166,10 +166,9 @@ exports.payPackageInstallments = async (req, res) => {
                         obj['actualAmount'] = req.body.actualAmount;
                         obj['paidStatus'] = 'Paid';
                         obj['dueDate'] = dueDate;
-                        obj['installmentName'] = req.body.installmentName;
                         obj["orderNo"] = generateOrderId()
                         if (req.headers.userid) obj["doneBy"] = req.headers.userid;
-                        member.packageDetails[i].Installments[k] = obj
+                        member.packageDetails[i].Installments[k] = { ...member.packageDetails[i].Installments[k].toJSON(), ...obj };
                     }
                 }
             }
