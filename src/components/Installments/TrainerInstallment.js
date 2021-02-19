@@ -77,8 +77,7 @@ class TrainerInstallment extends Component {
       }
     }
     if (((this.props.verifyPassword && this.props.verifyPassword) !== (prevProps.verifyPassword)) && this.props.verifyPassword === 'verified') {
-      console.log("🚀 ~ file: TrainerInstallment.js ~ line 61 ~ TrainerInstallment ~ componentDidUpdate ~ this.props.verifyPassword", this.props.verifyPassword)
-      const el = findDOMNode(this.refs.openDiscount1);
+      const el = findDOMNode(this.refs.openDiscount);
       $(el).click();
     }
   }
