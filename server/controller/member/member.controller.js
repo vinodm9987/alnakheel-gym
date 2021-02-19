@@ -273,6 +273,9 @@ exports.createNewMemberByAdmin = (req, res) => {
             }
             if (packageDetails[0].Installments && packageDetails[0].Installments.length) {
                 packageDetails[0].Installments[0].dateOfPaid = setTime(new Date())
+                packageDetails[0].Installments[0].timeOfPaid = new Date();
+                packageDetails[0].Installments[0]["orderNo"] = generateOrderId()
+                if (req.headers.userid) packageDetails[0].Installments[0]["doneBy"] = req.headers.userid;
             } else {
                 packageDetails[0]["dateOfPaid"] = setTime(new Date())
             }
@@ -561,7 +564,8 @@ exports.getMemberByCredentialId = (req, res) => {
 exports.getMemberById = (req, res) => {
     Member.findById(req.params.id)
         .populate('credentialId branch')
-        .populate('packageDetails.packages packageDetails.doneBy packageDetails.trainerDetails.doneBy packageDetails.trainerDetails.installments.doneBy')
+        .populate('packageDetails.packages packageDetails.doneBy packageDetails.trainerDetails.doneBy')
+        .populate('packageDetails.Installments.doneBy')
         .populate({ path: "packageDetails.trainerDetails.trainer", populate: { path: "credentialId" } })
         .populate({ path: "packageDetails.packages", populate: { path: "period" } })
         .populate({ path: "packageDetails.trainerDetails.trainerFees", populate: { path: "period" } }).lean()
