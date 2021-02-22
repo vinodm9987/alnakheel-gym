@@ -76,9 +76,14 @@ class TableExport extends Component {
     const { reportName, fromDate, toDate, branchName, description, branchImage } = this.props
     const language = this.props.i18n.language
     if (reportName === 'Current Stock Details' || reportName === 'Upcoming Expiry') {
-      getDataUri(branchImage ? branchImage : gymlogo, tabledData, reportName, null, null, branchName, description, language, generateReport)
+      branchImage
+        ? getDataUri(branchImage, tabledData, reportName, null, null, branchName, description, language, generateReport)
+        : generateReport(gymlogo, tabledData, reportName, null, null, branchName, description, language)
     } else {
-      getDataUri(branchImage ? branchImage : gymlogo, tabledData, reportName, fromDate, toDate, branchName, description, language, generateReport)
+      branchImage
+        ? getDataUri(branchImage, tabledData, reportName, fromDate, toDate, branchName, description, language, generateReport)
+        : generateReport(gymlogo, tabledData, reportName, fromDate, toDate, branchName, description, language)
+
     }
   }
 

@@ -32,7 +32,7 @@ class Reports extends Component {
       fromDateE: '',
       toDateE: '',
       ReportNames: [],
-      branchName: '',
+      branchName: 'All',
       description: '',
       staffName: '',
       staffNameE: '',
@@ -145,7 +145,7 @@ class Reports extends Component {
   handleCancel() {
     this.setState({
       reportType: '', reportName: '', branch: '', fromDate: new Date(), toDate: new Date(), reportTypeE: '', reportNameE: '', branchE: '',
-      fromDateE: '', toDateE: '', ReportNames: [], branchName: '', description: '', staffName: '', staffNameE: '', paymentMethod: 'Digital',
+      fromDateE: '', toDateE: '', ReportNames: [], branchName: 'All', description: '', staffName: '', staffNameE: '', paymentMethod: 'Digital',
       paymentMethodE: '', transactionType: '', transactionTypeE: '', packageId: '', packageIdE: '', trainerId: '', trainerIdE: '',
     })
     this.props.dispatch({ type: REMOVE_REPORT, payload: {} })
@@ -419,7 +419,7 @@ class Reports extends Component {
                   id="fromDate"
                 />
               </MuiPickersUtilsProvider>
-              <span class="iconv1 iconv1-calander dateBoxIcon"></span>
+              <span className="iconv1 iconv1-calander dateBoxIcon"></span>
               <div className="errorMessageWrapper">
                 <small className="text-danger errorMessage">{this.state.fromDateE}</small>
               </div>
@@ -458,7 +458,7 @@ class Reports extends Component {
                   id="toDate"
                 />
               </MuiPickersUtilsProvider>
-              <span class="iconv1 iconv1-calander dateBoxIcon"></span>
+              <span className="iconv1 iconv1-calander dateBoxIcon"></span>
               <div className="errorMessageWrapper">
                 <small className="text-danger errorMessage">{this.state.toDateE}</small>
               </div>
