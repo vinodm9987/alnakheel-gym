@@ -301,7 +301,7 @@ exports.updateStatusOfEmployee = async (req, res) => {
 
 exports.getAllMemberOfTrainer = async (req, res) => {
     try {
-        let queryCond = { 'packageDetails.isExpiredPackage': false };
+        let queryCond = {};
         queryCond['packageDetails.startDate'] = { '$exists': true }
         queryCond["doneFingerAuth"] = true;
         queryCond["status"] = true
