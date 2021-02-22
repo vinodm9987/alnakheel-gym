@@ -116,12 +116,6 @@ module.exports = {
         }
     },
 
-    checkFreezeMember: async () => {
-        const response = await MemberFreezing
-            .find({ fromDate: setTime(new Date()), typeOfFreeze: 'Pending' }).count();
-        await freezeAction(response)
-    },
-
 
 
     upgradeMember: async () => {
