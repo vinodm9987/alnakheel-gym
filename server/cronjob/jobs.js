@@ -72,9 +72,9 @@ module.exports = {
     },
 
     checkAssetsExpiry: async () => {
-        const response = await Assets.find({ status: true }).populate('branch').lean();
+        const response = await Assets.find({ status: true }).populate('assetBranch').lean();
         for (let i = 0; i < response.length; i++) {
-            const { _id, warranty, dateOfPurchase, assetName, branch: { branchName } } = response[i];
+            const { _id, warranty, dateOfPurchase, assetName, assetBranch: { branchName } } = response[i];
             const today = new Date().setHours(0, 0, 0, 0);
             let warrantyDate = new Date(new Date(dateOfPurchase).setMonth(new Date(dateOfPurchase).getMonth() + +warranty));
             let warrantyMonthDate = new Date(new Date(warrantyDate).setMonth(new Date(warrantyDate).getMonth() - 1));
