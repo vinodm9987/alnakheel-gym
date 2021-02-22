@@ -437,7 +437,7 @@ class Reports extends Component {
         ) &&
           <div className="col-12 col-sm-12 col-md-4 col-lg-3 col-xl-2 pt-3">
             <div className="form-group position-relative">
-              <label htmlFor="ToDa<b>te"><b>{t('To Date')}</b></label>
+              <label htmlFor="ToDate"><b>{t('To Date')}</b></label>
               <MuiPickersUtilsProvider utils={DateFnsUtils}>
                 <DatePicker
                   variant='inline'

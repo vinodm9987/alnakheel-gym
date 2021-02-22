@@ -4,7 +4,6 @@ import { dateToDDMMYYYY, dateToHHMM } from './apis/helpers';
 import domtoimage from 'dom-to-image'
 
 export const generateReport = (image, tabledData, reportName, fromDate, toDate, branchName, description, language) => {
-  console.log("🚀 ~ file: pdf.js ~ line 7 ~ generateReport ~ image", image, branchName)
   const totalPagesExp = '{total_pages_count_string}';
   let pdf = new jsPdf('l', 'pt', 'a4');
   const pageWidth = pdf.internal.pageSize.getWidth();
