@@ -1011,104 +1011,102 @@ class BookAClass extends Component {
         {/* --------------Receipt Modal Ends-=--------------- */}
 
         {classReceipt &&
-          <div className="PageBillWrapper d-none">
-            <div style={{ width: "450px", padding: "15px", margin: "auto" }} id="newPrint">
+          <div className="PageBillWrapper d-none" id="newPrint">
+            <div style={{ width: "80mm", padding: "4px", margin: "auto" }}>
               <div style={{ display: "flex", justifyContent: "center" }}>
-                <img src={`${PRODIP}/${avatarPath}`} width="200" style={{ width: "100px" }} alt="" />
+                <img src={`${PRODIP}/${avatarPath}`} width="100" style={{ width: "100px" }} alt="" />
               </div>
-              <h5 style={{ textAlign: "center", margin: "19px 0" }}>{t('Tax Invoice')}</h5>
-              <p style={{ textAlign: "center", margin: "0 0 10px 0" }}>
+              <h5 style={{ textAlign: "center", margin: "19px 0px 9px 0px", fontSize: "19px" }}>{t('Tax Invoice')}</h5>
+              <p style={{ textAlign: "center", margin: "0 0 10px 0", fontSize: "14px" }}>
                 <span>{this.props.branches && this.props.branches.filter(b => b._id === branch)[0] &&
                   this.props.branches.filter(b => b._id === branch)[0].branchName}</span><br />
                 <span>{this.props.branches && this.props.branches.filter(b => b._id === branch)[0] &&
-                  this.props.branches.filter(b => b._id === branch)[0].address}</span><br />
-                {/* <span>Road/Street 50, Samaheej,</span><br /> */}
-                {/* <span>Block 236, Bahrain,</span><br /> */}
+                  this.props.branches.filter(b => b._id === branch)[0].address}</span>
+              </p>
+              <p style={{ textAlign: "center", margin: "0 0 10px 0", fontSize: "14px" }}>
                 <span>{t('Tel')} : {this.props.branches && this.props.branches.filter(b => b._id === branch)[0] &&
                   this.props.branches.filter(b => b._id === branch)[0].telephone}</span><br />
               </p>
-              <p style={{ textAlign: "center", margin: "0 0 10px 0" }}>{t('VAT Reg No')} - {this.props.branches && this.props.branches.filter(b => b._id === branch)[0] &&
+              <p style={{ textAlign: "center", margin: "0 0 10px 0", fontSize: "14px" }}>{t('VAT Reg No')} - {this.props.branches && this.props.branches.filter(b => b._id === branch)[0] &&
                 this.props.branches.filter(b => b._id === branch)[0].vatRegNo}</p>
-              <p style={{ display: "flex", justifyContent: "space-between", margin: "0" }}>
-                <span style={{ padding: "2px", fontSize: "14px" }}>{dateToDDMMYYYY(new Date())} {dateToHHMM(new Date())}</span>
-                <span style={{ padding: "2px", fontSize: "14px" }}>{t('Bill No')}:{classReceipt.orderNo}</span>
+              <p style={{ display: "flex", justifyContent: "space-between", margin: "0", fontSize: "14px" }}>
+                <span>{dateToDDMMYYYY(new Date())} {dateToHHMM(new Date())}</span>
+                <span style={{ width: "4px", height: "4px" }}></span>
+                <span>{t('Bill No')} : {classReceipt.orderNo}</span>
               </p>
               {member &&
                 <div>
-                  <p style={{ display: "flex", textAlign: "center", justifyContent: "space-between" }}>
-                    <span>{t('ID:')} <span style={{ padding: "10px" }}>{member.memberId}</span></span>
-                    <span>{t('Mob:')} <span style={{ padding: "10px" }}>{member.mobileNo}</span></span>
+                  <p style={{ display: "flex", textAlign: "center", justifyContent: "space-between", fontSize: "14px" }}>
+                    <span style={{ display: "flex" }}>
+                      <span>{t('ID')}</span><span style={{ padding: "0 4px" }}>:</span><span>{member.memberId}</span>
+                    </span>
+                    <span style={{ display: "flex" }}>
+                      <span>{t('Mob')}</span><span style={{ padding: "0 4px" }}>:</span><span>{member.mobileNo}</span>
+                    </span>
                   </p>
-                  <p style={{ display: "flex", textAlign: "center", justifyContent: "center", marginTop: "0" }}>
+                  <p style={{ display: "flex", textAlign: "center", justifyContent: "center", marginTop: "0", fontSize: "14px" }}>
                     <span>{member.credentialId.userName}</span>
                   </p>
                 </div>
               }
-              {/* <p style={{ textAlign: "right", margin: "0 0 10px 0" }}>66988964</p> */}
-              <table style={{ width: "100%" }}>
+              <table style={{ width: "100%", fontSize: "14px" }}>
                 <tbody>
-                  <tr style={{ borderTop: "1px dashed #000" }}>
-                    <td>{t('No.')}</td>
-                    <td>{t('CLASS NAME')}</td>
-                  </tr>
-                  {/* <tr style={{ borderTop: "1px dashed #000" }}>
-                  <td>1</td>
-                  <td>3 Month</td>
-                  <td>26-Dec-19</td>
-                  <td>13-Sep-20</td>
-                </tr> */}
                   <tr>
-                    <td>1</td>
-                    <td>{this.props.classesByBranch && this.props.classesByBranch.filter(c => c._id === classes)[0] &&
+                    <td style={{ borderTop: "1px dashed #000", borderBottom: "1px dashed #000", width: "50px" }}>{t('No.')}</td>
+                    <td style={{ borderTop: "1px dashed #000", borderBottom: "1px dashed #000" }}>{t('CLASS NAME')}</td>
+                  </tr>
+                  <tr>
+                    <td style={{ borderTop: "1px dashed #000", borderBottom: "1px dashed #000", width: "50px" }}>1</td>
+                    <td style={{ borderTop: "1px dashed #000", borderBottom: "1px dashed #000" }}>{this.props.classesByBranch && this.props.classesByBranch.filter(c => c._id === classes)[0] &&
                       this.props.classesByBranch.filter(c => c._id === classes)[0].className}</td>
                   </tr>
                 </tbody>
               </table>
-              <table style={{ width: "100%", textAlign: "right", borderTop: "1px dashed #000", borderBottom: "1px dashed #000" }}>
+              <table style={{ width: "100%", textAlign: "right", borderTop: "1px dashed #000", borderBottom: "1px dashed #000", fontSize: "14px" }}>
                 <tbody>
                   <tr>
-                    <td style={{ textAlign: "right", padding: "4px 4px 0 4px", width: "100%" }}>{t('Amount Total')} {this.props.defaultCurrency}: </td>
+                    <td style={{ textAlign: "right", padding: "4px 4px 0 4px", width: "100%" }}>{t('Amount Total')} {this.props.defaultCurrency} : </td>
                     <td style={{ textAlign: "right", padding: "4px 0px 0 0px" }}>{parseFloat(subTotal).toFixed(3)}</td>
                   </tr>
                   {parseFloat(discount) ?
                     <tr>
-                      <td style={{ textAlign: "right", padding: "0 4px", width: "100%" }}>{t('Discount')} {this.props.defaultCurrency}: </td>
+                      <td style={{ textAlign: "right", padding: "0 4px", width: "100%" }}>{t('Discount')} {this.props.defaultCurrency} : </td>
                       <td style={{ textAlign: "right", padding: "0" }}>{parseFloat(discount).toFixed(3)}</td>
                     </tr>
                     : <tr></tr>}
                   {parseFloat(giftcard) ?
                     <tr>
-                      <td style={{ textAlign: "right", padding: "0 4px", width: "100%" }}>{t('Giftcard')} {this.props.defaultCurrency}: </td>
+                      <td style={{ textAlign: "right", padding: "0 4px", width: "100%" }}>{t('Giftcard')} {this.props.defaultCurrency} : </td>
                       <td style={{ textAlign: "right", padding: "0" }}>{parseFloat(giftcard).toFixed(3)}</td>
                     </tr>
                     : <tr></tr>}
                   {parseFloat(tax) ?
                     <tr>
-                      <td style={{ textAlign: "right", padding: "0 4px", width: "100%" }}>{t('VAT')} {this.props.defaultCurrency}: </td>
+                      <td style={{ textAlign: "right", padding: "0 4px", width: "100%" }}>{t('VAT')} {this.props.defaultCurrency} : </td>
                       <td style={{ textAlign: "right", padding: "0" }}>{parseFloat(tax).toFixed(3)}</td>
                     </tr>
                     : <tr></tr>}
                   {parseFloat(digital) ?
                     <tr>
-                      <td style={{ textAlign: "right", padding: "0 4px", width: "100%" }}>{t('Digital')} {this.props.defaultCurrency}: </td>
+                      <td style={{ textAlign: "right", padding: "0 4px", width: "100%" }}>{t('Digital')} {this.props.defaultCurrency} : </td>
                       <td style={{ textAlign: "right", padding: "0" }}>{parseFloat(digital).toFixed(3)}</td>
                     </tr>
                     : <tr></tr>}
                   {parseFloat(cash) ?
                     <tr>
-                      <td style={{ textAlign: "right", padding: "0 4px", width: "100%" }}>{t('Cash')} {this.props.defaultCurrency}: </td>
+                      <td style={{ textAlign: "right", padding: "0 4px", width: "100%" }}>{t('Cash')} {this.props.defaultCurrency} : </td>
                       <td style={{ textAlign: "right", padding: "0" }}>{parseFloat(cash).toFixed(3)}</td>
                     </tr>
                     : <tr></tr>}
                   {parseFloat(card) ?
                     <tr>
-                      <td style={{ textAlign: "right", padding: "0px 4px 4px 4px", width: "100%" }}>{t('Card')} {this.props.defaultCurrency}: </td>
+                      <td style={{ textAlign: "right", padding: "0px 4px 4px 4px", width: "100%" }}>{t('Card')} {this.props.defaultCurrency} : </td>
                       <td style={{ textAlign: "right", padding: "0px 0px 4px 0px" }}>{parseFloat(card).toFixed(3)}</td>
                     </tr>
                     : <tr></tr>}
                   {parseFloat(this.state.cheque) ?
                     <tr>
-                      <td style={{ textAlign: "right", padding: "0px 4px 4px 4px", width: "100%" }}>{t('Cheque')} {this.props.defaultCurrency}: </td>
+                      <td style={{ textAlign: "right", padding: "0px 4px 4px 4px", width: "100%" }}>{t('Cheque')} {this.props.defaultCurrency} : </td>
                       <td style={{ textAlign: "right", padding: "0px 0px 4px 0px" }}>{parseFloat(this.state.cheque).toFixed(3)}</td>
                     </tr>
                     : <tr></tr>}
@@ -1131,37 +1129,36 @@ class BookAClass extends Component {
                     </tr>
                     : <tr></tr>}
                   <tr>
-                    <td style={{ textAlign: "right", padding: "0px 4px 4px 4px", width: "100%" }}>{t('Grand Total')} {this.props.defaultCurrency}: </td>
+                    <td style={{ textAlign: "right", padding: "0px 4px 4px 4px", width: "100%" }}>{t('Grand Total')} {this.props.defaultCurrency} : </td>
                     <td style={{ textAlign: "right", padding: "0px 0px 4px 0px" }}>{parseFloat(total).toFixed(3)}</td>
                   </tr>
                   <tr>
-                    <td style={{ textAlign: "right", padding: "0px 4px 4px 4px", width: "100%" }}>{t('Paid Amount')} {this.props.defaultCurrency}: </td>
+                    <td style={{ textAlign: "right", padding: "0px 4px 4px 4px", width: "100%" }}>{t('Paid Amount')} {this.props.defaultCurrency} : </td>
                     <td style={{ textAlign: "right", padding: "0px 0px 4px 0px" }}>{parseFloat(total).toFixed(3)}</td>
                   </tr>
                   {this.state.cardNumber ?
                     <tr>
-                      <td style={{ textAlign: "right", padding: "0px 4px 4px 4px", width: "100%" }}>{t('Card last four digit')} :</td>
+                      <td style={{ textAlign: "right", padding: "0px 4px 4px 4px", width: "100%" }}>{t('Card last four digit')} : </td>
                       <td style={{ textAlign: "right", padding: "0px 0px 4px 0px" }}>{this.state.cardNumber}</td>
                     </tr>
                     : <tr></tr>}
                 </tbody>
               </table>
-              <div style={{ display: "flex", justifyContent: "space-between", margin: "10px 0" }}>
+              <div style={{ display: "flex", justifyContent: "space-between", margin: "10px 0", fontSize: "14px" }}>
                 <div style={{ display: "flex", flexDirection: "row", justifyContent: "center", alignItems: "center" }}>
                   <div style={{ marginRight: "10px", justifyContent: "center" }}>
                     <img src={instaimg} alt="" style={{ width: "30px", height: "30px" }} />
-                    {/* <h6>{t('Follow Us')}</h6> */}
                   </div>
                   <QRCode value={`http://instagram.com/${this.props.branches && this.props.branches.filter(b => b._id === branch)[0] &&
                     this.props.branches.filter(b => b._id === branch)[0].instaId}/`} renderAs='svg' width="50" height="50" />
                 </div>
-                {this.props.loggedUser && <span>{t('Served by')}: {this.props.loggedUser.userName}</span>}
+                {this.props.loggedUser && <span>{t('Served by')} : {this.props.loggedUser.userName}</span>}
               </div>
-              <p style={{ display: "flex", margin: "0 0 10px 0" }}>
+              <p style={{ display: "flex", margin: "0 0 10px 0", fontSize: "14px" }}>
                 <span>{t('NB')}:</span>
                 <span style={{ flexGrow: "1", textAlign: "center" }}>{t('Membership cannot be refunded or transferred to others.')}</span>
               </p>
-              <p style={{ textAlign: "center", margin: "0 0 10px 0" }}>{t('Thank You')}</p>
+              <p style={{ textAlign: "center", margin: "0 0 10px 0", fontSize: "14px" }}>{t('Thank You')}</p>
             </div>
           </div>
         }

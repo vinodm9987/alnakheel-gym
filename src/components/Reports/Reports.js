@@ -203,115 +203,127 @@ class Reports extends Component {
     return (
       <div className="row">
         <div className="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 py-3">
-          <label htmlFor="ReportType"><b>{t('Report Type')}</b></label>
-          <select className={this.state.reportTypeE ? "form-control FormInputsError" : "form-control"} id="ReportType"
-            value={reportType} onChange={(e) => this.setType(e, filteredReportTypes)} >
-            <option value="" hidden>{t('Please Select')}</option>
-            {filteredReportTypes && filteredReportTypes.map((report, i) => {
-              return (
-                <option key={i} value={report.reportType}>{t(report.reportType)}</option>
-              )
-            })}
-          </select>
-          <span className="iconv1 iconv1-arrow-down float-right iconspostion"></span>
-          <div className="errorMessageWrapper">
-            <small className="text-danger errorMessage">{this.state.reportTypeE}</small>
-          </div>
-        </div>
-        <div className="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 py-3">
-          <label htmlFor="ReportName"><b>{t('Report Name')}</b></label>
-          <select className={this.state.reportNameE ? "form-control FormInputsError" : "form-control"} id="ReportName"
-            value={reportName} onChange={(e) => this.setName(e)} >
-            <option value="" hidden>{t('Please Select')}</option>
-            {ReportNames && ReportNames.map((r, i) => {
-              if (this.state.staffName) {
-                if (r.read) {
-                  return (
-                    <option key={i} value={r.name}>{t(r.name)}</option>
-                  )
-                } else {
-                  return null
-                }
-              } else {
+          <div className="form-group position-relative">
+            <label htmlFor="ReportType"><b>{t('Report Type')}</b></label>
+            <select className={this.state.reportTypeE ? "form-control FormInputsError" : "form-control"} id="ReportType"
+              value={reportType} onChange={(e) => this.setType(e, filteredReportTypes)} >
+              <option value="" hidden>{t('Please Select')}</option>
+              {filteredReportTypes && filteredReportTypes.map((report, i) => {
                 return (
-                  <option key={i} value={r.name}>{t(r.name)}</option>
-                )
-              }
-            })}
-          </select>
-          <span className="iconv1 iconv1-arrow-down float-right iconspostion"></span>
-          <div className="errorMessageWrapper">
-            <small className="text-danger errorMessage">{this.state.reportNameE}</small>
-          </div>
-        </div>
-        {reportName !== 'Today Sales By Staff' &&
-          <div className="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 py-3">
-            <label htmlFor="Branch"><b>{t('Branch')}</b></label>
-            <select className={this.state.branchE ? "form-control FormInputsError" : "form-control"} id="Branch"
-              value={branch} onChange={(e) => this.setBranch(e)}>
-              <option value="">{t('All')}</option>
-              {this.props.branchResponse && this.props.branchResponse.map((branch, i) => {
-                return (
-                  <option key={i} value={branch._id}>{branch.branchName}</option>
+                  <option key={i} value={report.reportType}>{t(report.reportType)}</option>
                 )
               })}
             </select>
             <span className="iconv1 iconv1-arrow-down float-right iconspostion"></span>
             <div className="errorMessageWrapper">
-              <small className="text-danger errorMessage">{this.state.branchE}</small>
+              <small className="text-danger errorMessage">{this.state.reportTypeE}</small>
+            </div>
+          </div>
+        </div>
+        <div className="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 py-3">
+          <div className="form-group position-relative">
+            <label htmlFor="ReportName"><b>{t('Report Name')}</b></label>
+            <select className={this.state.reportNameE ? "form-control FormInputsError" : "form-control"} id="ReportName"
+              value={reportName} onChange={(e) => this.setName(e)} >
+              <option value="" hidden>{t('Please Select')}</option>
+              {ReportNames && ReportNames.map((r, i) => {
+                if (this.state.staffName) {
+                  if (r.read) {
+                    return (
+                      <option key={i} value={r.name}>{t(r.name)}</option>
+                    )
+                  } else {
+                    return null
+                  }
+                } else {
+                  return (
+                    <option key={i} value={r.name}>{t(r.name)}</option>
+                  )
+                }
+              })}
+            </select>
+            <span className="iconv1 iconv1-arrow-down float-right iconspostion"></span>
+            <div className="errorMessageWrapper">
+              <small className="text-danger errorMessage">{this.state.reportNameE}</small>
+            </div>
+          </div>
+        </div>
+        {reportName !== 'Today Sales By Staff' &&
+          <div className="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 py-3">
+            <div className="form-group position-relative">
+              <label htmlFor="Branch"><b>{t('Branch')}</b></label>
+              <select className={this.state.branchE ? "form-control FormInputsError" : "form-control"} id="Branch"
+                value={branch} onChange={(e) => this.setBranch(e)}>
+                <option value="">{t('All')}</option>
+                {this.props.branchResponse && this.props.branchResponse.map((branch, i) => {
+                  return (
+                    <option key={i} value={branch._id}>{branch.branchName}</option>
+                  )
+                })}
+              </select>
+              <span className="iconv1 iconv1-arrow-down float-right iconspostion"></span>
+              <div className="errorMessageWrapper">
+                <small className="text-danger errorMessage">{this.state.branchE}</small>
+              </div>
             </div>
           </div>
         }
         {reportName === 'Today Sales By Staff' &&
           <div className="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 py-3">
-            <label htmlFor="Branch"><b>{t('Branch')}</b></label>
-            <select className={this.state.branchE ? "form-control FormInputsError" : "form-control"} id="Branch"
-              value={branch} onChange={(e) => this.setBranch(e)}>
-              {branches && branches.map((doc, i) => {
-                return (
-                  <option key={i} value={doc._id}>{doc.branchName}</option>
-                )
-              })}
-            </select>
-            <span className="iconv1 iconv1-arrow-down float-right iconspostion"></span>
-            <div className="errorMessageWrapper">
-              <small className="text-danger errorMessage">{this.state.branchE}</small>
+            <div className="form-group position-relative">
+              <label htmlFor="Branch"><b>{t('Branch')}</b></label>
+              <select className={this.state.branchE ? "form-control FormInputsError" : "form-control"} id="Branch"
+                value={branch} onChange={(e) => this.setBranch(e)}>
+                {branches && branches.map((doc, i) => {
+                  return (
+                    <option key={i} value={doc._id}>{doc.branchName}</option>
+                  )
+                })}
+              </select>
+              <span className="iconv1 iconv1-arrow-down float-right iconspostion"></span>
+              <div className="errorMessageWrapper">
+                <small className="text-danger errorMessage">{this.state.branchE}</small>
+              </div>
             </div>
           </div>
         }
         {reportName === 'End of Shift Report' &&
           <div className="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 py-3">
-            <label htmlFor="Branch"><b>{t('Staff Name')}</b></label>
-            <Select
-              formatOptionLabel={formatOptionLabel}
-              className={this.state.staffNameE ? "form-control graySelect mx-sm-2 inlineFormInputs FormInputsError h-auto w-100 p-0" : "form-control graySelect mx-sm-2 inlineFormInputs h-auto w-100 p-0"}
-              value={staffName}
-              onChange={(e) => this.setState({ ...validator(e, 'staffName', 'select', [t('Select staff name')]) })}
-              isSearchable={true}
-              isClearable={true}
-              filterOption={this.customSearch}
-              styles={colourStyles}
-              options={[]}
-              placeholder={t('Please Select')}
-            />
-            <div className="errorMessageWrapper">
-              <small className="text-danger mx-sm-2 errorMessage">{this.state.staffNameE}</small>
+            <div className="form-group position-relative">
+              <label htmlFor="Branch"><b>{t('Staff Name')}</b></label>
+              <Select
+                formatOptionLabel={formatOptionLabel}
+                className={this.state.staffNameE ? "form-control graySelect mx-sm-2 inlineFormInputs FormInputsError h-auto w-100 p-0" : "form-control graySelect mx-sm-2 inlineFormInputs h-auto w-100 p-0"}
+                value={staffName}
+                onChange={(e) => this.setState({ ...validator(e, 'staffName', 'select', [t('Select staff name')]) })}
+                isSearchable={true}
+                isClearable={true}
+                filterOption={this.customSearch}
+                styles={colourStyles}
+                options={[]}
+                placeholder={t('Please Select')}
+              />
+              <div className="errorMessageWrapper">
+                <small className="text-danger mx-sm-2 errorMessage">{this.state.staffNameE}</small>
+              </div>
             </div>
           </div>
         }
         {reportName === 'Sales By Payment Method' &&
           <div className="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 py-3">
-            <label htmlFor="PaymentMethod"><b>{t('Payment Method')}</b></label>
-            <select className={this.state.paymentMethodE ? "form-control FormInputsError" : "form-control"} id="PaymentMethod"
-              value={paymentMethod} onChange={(e) => this.setPaymentMethod(e)}>
-              <option value="Digital">{t('Digital')}</option>
-              <option value="Cash">{t('Cash')}</option>
-              <option value="Card">{t('Card')}</option>
-              <option value="Cheque">{t('Cheque')}</option>
-            </select>
-            <span className="iconv1 iconv1-arrow-down float-right iconspostion"></span>
-            <div className="errorMessageWrapper">
-              <small className="text-danger errorMessage">{this.state.paymentMethodE}</small>
+            <div className="form-group position-relative">
+              <label htmlFor="PaymentMethod"><b>{t('Payment Method')}</b></label>
+              <select className={this.state.paymentMethodE ? "form-control FormInputsError" : "form-control"} id="PaymentMethod"
+                value={paymentMethod} onChange={(e) => this.setPaymentMethod(e)}>
+                <option value="Digital">{t('Digital')}</option>
+                <option value="Cash">{t('Cash')}</option>
+                <option value="Card">{t('Card')}</option>
+                <option value="Cheque">{t('Cheque')}</option>
+              </select>
+              <span className="iconv1 iconv1-arrow-down float-right iconspostion"></span>
+              <div className="errorMessageWrapper">
+                <small className="text-danger errorMessage">{this.state.paymentMethodE}</small>
+              </div>
             </div>
           </div>
         }
@@ -319,55 +331,61 @@ class Reports extends Component {
           reportName === 'Vat Report' ||
           reportName === 'Today Sales By Staff') &&
           <div className="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 py-3">
-            <label htmlFor="TransactionType"><b>{t('Transaction Type')}</b></label>
-            <select className={this.state.transactionTypeE ? "form-control FormInputsError" : "form-control"} id="TransactionType"
-              value={transactionType} onChange={(e) => this.setTransactionType(e)}>
-              <option value="">{t('All')}</option>
-              <option value="Packages">{t('Packages')}</option>
-              <option value="Classes">{t('Classes')}</option>
-              <option value="POS">{t('POS')}</option>
-            </select>
-            <span className="iconv1 iconv1-arrow-down float-right iconspostion"></span>
-            <div className="errorMessageWrapper">
-              <small className="text-danger errorMessage">{this.state.transactionTypeE}</small>
+            <div className="form-group position-relative">
+              <label htmlFor="TransactionType"><b>{t('Transaction Type')}</b></label>
+              <select className={this.state.transactionTypeE ? "form-control FormInputsError" : "form-control"} id="TransactionType"
+                value={transactionType} onChange={(e) => this.setTransactionType(e)}>
+                <option value="">{t('All')}</option>
+                <option value="Packages">{t('Packages')}</option>
+                <option value="Classes">{t('Classes')}</option>
+                <option value="POS">{t('POS')}</option>
+              </select>
+              <span className="iconv1 iconv1-arrow-down float-right iconspostion"></span>
+              <div className="errorMessageWrapper">
+                <small className="text-danger errorMessage">{this.state.transactionTypeE}</small>
+              </div>
             </div>
           </div>
         }
         {reportName === 'Package Type' &&
           <div className="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 py-3">
-            <label htmlFor="PackageType"><b>{t('Package Type')}</b></label>
-            <select className="form-control" id="PackageType"
-              value={packageId} onChange={(e) => this.setPackageType(e)}>
-              <option value="">{t('All')}</option>
-              {this.props.packageResponse && this.props.packageResponse.map((packageId, i) => {
-                return (
-                  <option key={i} value={packageId._id}>{packageId.packageName}</option>
-                )
-              })}
-            </select>
-            <span className="iconv1 iconv1-arrow-down float-right iconspostion"></span>
-            <div className="errorMessageWrapper">
-              <small className="text-danger errorMessage">{this.state.packageIdE}</small>
+            <div className="form-group position-relative">
+              <label htmlFor="PackageType"><b>{t('Package Type')}</b></label>
+              <select className="form-control" id="PackageType"
+                value={packageId} onChange={(e) => this.setPackageType(e)}>
+                <option value="">{t('All')}</option>
+                {this.props.packageResponse && this.props.packageResponse.map((packageId, i) => {
+                  return (
+                    <option key={i} value={packageId._id}>{packageId.packageName}</option>
+                  )
+                })}
+              </select>
+              <span className="iconv1 iconv1-arrow-down float-right iconspostion"></span>
+              <div className="errorMessageWrapper">
+                <small className="text-danger errorMessage">{this.state.packageIdE}</small>
+              </div>
             </div>
           </div>
         }
         {reportName === 'Assigned Trainers' &&
           <div className="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 py-3">
-            <label htmlFor="Branch"><b>{t('Trainer Name')}</b></label>
-            <Select
-              formatOptionLabel={formatOptionLabel}
-              className="form-control graySelect mx-sm-2 inlineFormInputs h-auto w-100 p-0"
-              value={trainerId}
-              onChange={(e) => this.setTrainerName(e)}
-              isSearchable={true}
-              isClearable={true}
-              filterOption={this.customSearch}
-              styles={colourStyles}
-              options={this.props.activeTrainer}
-              placeholder={t('All')}
-            />
-            <div className="errorMessageWrapper">
-              <small className="text-danger mx-sm-2 errorMessage">{this.state.trainerIdE}</small>
+            <div className="form-group position-relative">
+              <label htmlFor="Branch"><b>{t('Trainer Name')}</b></label>
+              <Select
+                formatOptionLabel={formatOptionLabel}
+                className="form-control graySelect mx-sm-2 inlineFormInputs h-auto w-100 p-0"
+                value={trainerId}
+                onChange={(e) => this.setTrainerName(e)}
+                isSearchable={true}
+                isClearable={true}
+                filterOption={this.customSearch}
+                styles={colourStyles}
+                options={this.props.activeTrainer}
+                placeholder={t('All')}
+              />
+              <div className="errorMessageWrapper">
+                <small className="text-danger mx-sm-2 errorMessage">{this.state.trainerIdE}</small>
+              </div>
             </div>
           </div>
         }
@@ -380,29 +398,31 @@ class Reports extends Component {
           reportName !== 'Today Sales By Staff'
         ) &&
           <div className="col-12 col-sm-12 col-md-4 col-lg-3 col-xl-2 pt-3">
-            <label htmlFor="FromDate"><b>{reportName === 'End of Shift Report' ? t('Date') : t('From Date')}</b></label>
-            <MuiPickersUtilsProvider utils={DateFnsUtils}>
-              <DatePicker
-                variant='inline'
-                InputProps={{
-                  disableUnderline: true,
-                }}
-                autoOk
-                className={this.state.fromDateE ? "MuiFormControl-root MuiTextField-root form-control pl-2 border pt-1 FormInputsError" : "MuiFormControl-root MuiTextField-root form-control pl-2 border pt-1"}
-                invalidDateMessage=''
-                minDateMessage=''
-                maxDate={reportName !== 'Booked Appointments By Members' &&
-                  reportName !== 'Booked Appointments Status' &&
-                  reportName !== 'Booked Appointments By Visitors' ? new Date() : new Date().setFullYear(new Date().getFullYear() + 1)}
-                format="dd/MM/yyyy"
-                value={fromDate}
-                onChange={(e) => this.handleDate(e, 'fromDate')}
-                id="fromDate"
-              />
-            </MuiPickersUtilsProvider>
-            <span class="iconv1 iconv1-calander dateBoxIcon"></span>
-            <div className="errorMessageWrapper">
-              <small className="text-danger errorMessage">{this.state.fromDateE}</small>
+            <div className="form-group position-relative">
+              <label htmlFor="FromDate"><b>{reportName === 'End of Shift Report' ? t('Date') : t('From Date')}</b></label>
+              <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                <DatePicker
+                  variant='inline'
+                  InputProps={{
+                    disableUnderline: true,
+                  }}
+                  autoOk
+                  className={this.state.fromDateE ? "MuiFormControl-root MuiTextField-root form-control pl-2 border pt-1 FormInputsError" : "MuiFormControl-root MuiTextField-root form-control pl-2 border pt-1"}
+                  invalidDateMessage=''
+                  minDateMessage=''
+                  maxDate={reportName !== 'Booked Appointments By Members' &&
+                    reportName !== 'Booked Appointments Status' &&
+                    reportName !== 'Booked Appointments By Visitors' ? new Date() : new Date().setFullYear(new Date().getFullYear() + 1)}
+                  format="dd/MM/yyyy"
+                  value={fromDate}
+                  onChange={(e) => this.handleDate(e, 'fromDate')}
+                  id="fromDate"
+                />
+              </MuiPickersUtilsProvider>
+              <span class="iconv1 iconv1-calander dateBoxIcon"></span>
+              <div className="errorMessageWrapper">
+                <small className="text-danger errorMessage">{this.state.fromDateE}</small>
+              </div>
             </div>
           </div>
         }
@@ -416,30 +436,32 @@ class Reports extends Component {
           reportName !== 'Today Sales By Staff'
         ) &&
           <div className="col-12 col-sm-12 col-md-4 col-lg-3 col-xl-2 pt-3">
-            <label htmlFor="ToDa<b>te"><b>{t('To Date')}</b></label>
-            <MuiPickersUtilsProvider utils={DateFnsUtils}>
-              <DatePicker
-                variant='inline'
-                InputProps={{
-                  disableUnderline: true,
-                }}
-                autoOk
-                className={this.state.toDateE ? "MuiFormControl-root MuiTextField-root form-control pl-2 border pt-1 FormInputsError" : "MuiFormControl-root MuiTextField-root form-control pl-2 border pt-1"}
-                invalidDateMessage=''
-                minDateMessage=''
-                minDate={fromDate}
-                maxDate={reportName !== 'Booked Appointments By Members' &&
-                  reportName !== 'Booked Appointments Status' &&
-                  reportName !== 'Booked Appointments By Visitors' ? new Date() : new Date().setFullYear(new Date().getFullYear() + 1)}
-                format="dd/MM/yyyy"
-                value={toDate}
-                onChange={(e) => this.handleDate(e, 'toDate')}
-                id="toDate"
-              />
-            </MuiPickersUtilsProvider>
-            <span class="iconv1 iconv1-calander dateBoxIcon"></span>
-            <div className="errorMessageWrapper">
-              <small className="text-danger errorMessage">{this.state.toDateE}</small>
+            <div className="form-group position-relative">
+              <label htmlFor="ToDa<b>te"><b>{t('To Date')}</b></label>
+              <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                <DatePicker
+                  variant='inline'
+                  InputProps={{
+                    disableUnderline: true,
+                  }}
+                  autoOk
+                  className={this.state.toDateE ? "MuiFormControl-root MuiTextField-root form-control pl-2 border pt-1 FormInputsError" : "MuiFormControl-root MuiTextField-root form-control pl-2 border pt-1"}
+                  invalidDateMessage=''
+                  minDateMessage=''
+                  minDate={fromDate}
+                  maxDate={reportName !== 'Booked Appointments By Members' &&
+                    reportName !== 'Booked Appointments Status' &&
+                    reportName !== 'Booked Appointments By Visitors' ? new Date() : new Date().setFullYear(new Date().getFullYear() + 1)}
+                  format="dd/MM/yyyy"
+                  value={toDate}
+                  onChange={(e) => this.handleDate(e, 'toDate')}
+                  id="toDate"
+                />
+              </MuiPickersUtilsProvider>
+              <span class="iconv1 iconv1-calander dateBoxIcon"></span>
+              <div className="errorMessageWrapper">
+                <small className="text-danger errorMessage">{this.state.toDateE}</small>
+              </div>
             </div>
           </div>
         }

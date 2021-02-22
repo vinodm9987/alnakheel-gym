@@ -388,11 +388,33 @@ class TableExport extends Component {
             if (customTrainerId && trainerDetail.trainer._id === customTrainerId) {
               if (trainerDetail.Installments && trainerDetail.Installments.length) {
                 trainerDetail.Installments.forEach(installment => {
-                  totalPaidAmount += (installment.totalAmount ? +installment.totalAmount : 0)
+                  if (installment.paidStatus === 'Paid' && installment.display) {
+                    totalPaidAmount += (installment.totalAmount ? +installment.totalAmount : 0)
+                    tabledData.push({
+                      "SNo": count,
+                      "Receipt No.": installment.orderNo,
+                      "Date & Time": `${dateToDDMMYYYY(installment.dateOfPaid)} ${dateToHHMM(installment.timeOfPaid)}`,
+                      "Member ID": memberId,
+                      "Member Name": credentialId.userName,
+                      "Branch": branch.branchName,
+                      "Package": doc.packages.packageName,
+                      "Trainer Name": `${trainerDetail.trainer.credentialId.userName} (${installment.installmentName})`,
+                      "Period": trainerDetail.trainerFees.period.periodName,
+                      "Start Date": trainerDetail.trainerStart ? dateToDDMMYYYY(trainerDetail.trainerStart) : 'Not Started Yet',
+                      "End Date": trainerDetail.trainerEnd ? trainerDetail.trainerExtend ? dateToDDMMYYYY(trainerDetail.trainerExtend) : dateToDDMMYYYY(trainerDetail.trainerEnd) : 'Not Started Yet',
+                      "Paid Amount": installment.totalAmount ? +installment.totalAmount.toFixed(3) : 0,
+                      "Done By": installment.doneBy ? installment.doneBy.userName : 'NA'
+                    })
+                    count = count + 1
+                  }
+                })
+              } else {
+                if ((trainerDetail.paidStatus === 'Paid' || trainerDetail.paidStatus === 'Installment') && trainerDetail.display) {
+                  totalPaidAmount += (trainerDetail.totalAmount ? +trainerDetail.totalAmount : 0)
                   tabledData.push({
                     "SNo": count,
-                    "Receipt No.": installment.orderNo,
-                    "Date & Time": `${dateToDDMMYYYY(installment.dateOfPaid)} ${dateToHHMM(installment.timeOfPaid)}`,
+                    "Receipt No.": trainerDetail.orderNo,
+                    "Date & Time": `${dateToDDMMYYYY(trainerDetail.dateOfPaid)} ${dateToHHMM(trainerDetail.timeOfPaid)}`,
                     "Member ID": memberId,
                     "Member Name": credentialId.userName,
                     "Branch": branch.branchName,
@@ -401,38 +423,42 @@ class TableExport extends Component {
                     "Period": trainerDetail.trainerFees.period.periodName,
                     "Start Date": trainerDetail.trainerStart ? dateToDDMMYYYY(trainerDetail.trainerStart) : 'Not Started Yet',
                     "End Date": trainerDetail.trainerEnd ? trainerDetail.trainerExtend ? dateToDDMMYYYY(trainerDetail.trainerExtend) : dateToDDMMYYYY(trainerDetail.trainerEnd) : 'Not Started Yet',
-                    "Paid Amount": installment.totalAmount ? +installment.totalAmount.toFixed(3) : 0,
-                    "Done By": installment.doneBy ? installment.doneBy.userName : 'NA'
+                    "Paid Amount": trainerDetail.totalAmount ? +trainerDetail.totalAmount.toFixed(3) : 0,
+                    "Done By": trainerDetail.doneBy ? trainerDetail.doneBy.userName : 'NA'
                   })
                   count = count + 1
-                })
-              } else {
-                totalPaidAmount += (trainerDetail.totalAmount ? +trainerDetail.totalAmount : 0)
-                tabledData.push({
-                  "SNo": count,
-                  "Receipt No.": trainerDetail.orderNo,
-                  "Date & Time": `${dateToDDMMYYYY(trainerDetail.dateOfPaid)} ${dateToHHMM(trainerDetail.timeOfPaid)}`,
-                  "Member ID": memberId,
-                  "Member Name": credentialId.userName,
-                  "Branch": branch.branchName,
-                  "Package": doc.packages.packageName,
-                  "Trainer Name": trainerDetail.trainer.credentialId.userName,
-                  "Period": trainerDetail.trainerFees.period.periodName,
-                  "Start Date": trainerDetail.trainerStart ? dateToDDMMYYYY(trainerDetail.trainerStart) : 'Not Started Yet',
-                  "End Date": trainerDetail.trainerEnd ? trainerDetail.trainerExtend ? dateToDDMMYYYY(trainerDetail.trainerExtend) : dateToDDMMYYYY(trainerDetail.trainerEnd) : 'Not Started Yet',
-                  "Paid Amount": trainerDetail.totalAmount ? +trainerDetail.totalAmount.toFixed(3) : 0,
-                  "Done By": trainerDetail.doneBy ? trainerDetail.doneBy.userName : 'NA'
-                })
-                count = count + 1
+                }
               }
             } else {
               if (trainerDetail.Installments && trainerDetail.Installments.length) {
                 trainerDetail.Installments.forEach(installment => {
-                  totalPaidAmount += (installment.totalAmount ? +installment.totalAmount : 0)
+                  if (installment.paidStatus === 'Paid' && installment.display) {
+                    totalPaidAmount += (installment.totalAmount ? +installment.totalAmount : 0)
+                    tabledData.push({
+                      "SNo": count,
+                      "Receipt No.": installment.orderNo,
+                      "Date & Time": `${dateToDDMMYYYY(installment.dateOfPaid)} ${dateToHHMM(installment.timeOfPaid)}`,
+                      "Member ID": memberId,
+                      "Member Name": credentialId.userName,
+                      "Branch": branch.branchName,
+                      "Package": doc.packages.packageName,
+                      "Trainer Name": `${trainerDetail.trainer.credentialId.userName} (${installment.installmentName})`,
+                      "Period": trainerDetail.trainerFees.period.periodName,
+                      "Start Date": trainerDetail.trainerStart ? dateToDDMMYYYY(trainerDetail.trainerStart) : 'Not Started Yet',
+                      "End Date": trainerDetail.trainerEnd ? trainerDetail.trainerExtend ? dateToDDMMYYYY(trainerDetail.trainerExtend) : dateToDDMMYYYY(trainerDetail.trainerEnd) : 'Not Started Yet',
+                      "Paid Amount": installment.totalAmount ? +installment.totalAmount.toFixed(3) : 0,
+                      "Done By": installment.doneBy ? installment.doneBy.userName : 'NA'
+                    })
+                    count = count + 1
+                  }
+                })
+              } else {
+                if ((trainerDetail.paidStatus === 'Paid' || trainerDetail.paidStatus === 'Installment') && trainerDetail.display) {
+                  totalPaidAmount += (trainerDetail.totalAmount ? +trainerDetail.totalAmount : 0)
                   tabledData.push({
                     "SNo": count,
-                    "Receipt No.": installment.orderNo,
-                    "Date & Time": `${dateToDDMMYYYY(installment.dateOfPaid)} ${dateToHHMM(installment.timeOfPaid)}`,
+                    "Receipt No.": trainerDetail.orderNo,
+                    "Date & Time": `${dateToDDMMYYYY(trainerDetail.dateOfPaid)} ${dateToHHMM(trainerDetail.timeOfPaid)}`,
                     "Member ID": memberId,
                     "Member Name": credentialId.userName,
                     "Branch": branch.branchName,
@@ -441,29 +467,11 @@ class TableExport extends Component {
                     "Period": trainerDetail.trainerFees.period.periodName,
                     "Start Date": trainerDetail.trainerStart ? dateToDDMMYYYY(trainerDetail.trainerStart) : 'Not Started Yet',
                     "End Date": trainerDetail.trainerEnd ? trainerDetail.trainerExtend ? dateToDDMMYYYY(trainerDetail.trainerExtend) : dateToDDMMYYYY(trainerDetail.trainerEnd) : 'Not Started Yet',
-                    "Paid Amount": installment.totalAmount ? +installment.totalAmount.toFixed(3) : 0,
-                    "Done By": installment.doneBy ? installment.doneBy.userName : 'NA'
+                    "Paid Amount": trainerDetail.totalAmount ? +trainerDetail.totalAmount.toFixed(3) : 0,
+                    "Done By": trainerDetail.doneBy ? trainerDetail.doneBy.userName : 'NA'
                   })
                   count = count + 1
-                })
-              } else {
-                totalPaidAmount += (trainerDetail.totalAmount ? +trainerDetail.totalAmount : 0)
-                tabledData.push({
-                  "SNo": count,
-                  "Receipt No.": trainerDetail.orderNo,
-                  "Date & Time": `${dateToDDMMYYYY(trainerDetail.dateOfPaid)} ${dateToHHMM(trainerDetail.timeOfPaid)}`,
-                  "Member ID": memberId,
-                  "Member Name": credentialId.userName,
-                  "Branch": branch.branchName,
-                  "Package": doc.packages.packageName,
-                  "Trainer Name": trainerDetail.trainer.credentialId.userName,
-                  "Period": trainerDetail.trainerFees.period.periodName,
-                  "Start Date": trainerDetail.trainerStart ? dateToDDMMYYYY(trainerDetail.trainerStart) : 'Not Started Yet',
-                  "End Date": trainerDetail.trainerEnd ? trainerDetail.trainerExtend ? dateToDDMMYYYY(trainerDetail.trainerExtend) : dateToDDMMYYYY(trainerDetail.trainerEnd) : 'Not Started Yet',
-                  "Paid Amount": trainerDetail.totalAmount ? +trainerDetail.totalAmount.toFixed(3) : 0,
-                  "Done By": trainerDetail.doneBy ? trainerDetail.doneBy.userName : 'NA'
-                })
-                count = count + 1
+                }
               }
             }
           })

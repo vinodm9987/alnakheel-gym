@@ -402,19 +402,10 @@ const getAssignedTrainers = async (body) => {
   })
   let response = await Member.find(queryCond)
     .populate('credentialId branch')
-    .populate('packageDetails.packages packageDetails.doneBy packageDetails.trainerDetails.doneBy packageDetails.trainerDetails.installments.doneBy')
+    .populate('packageDetails.packages packageDetails.doneBy packageDetails.trainerDetails.doneBy packageDetails.trainerDetails.Installments.doneBy')
     .populate({ path: "packageDetails.trainerDetails.trainer", populate: { path: "credentialId" } })
     .populate({ path: "packageDetails.packages", populate: { path: "period" } })
     .populate({ path: "packageDetails.trainerDetails.trainerFees", populate: { path: "period" } }).lean()
-  response.forEach(member => {
-    if (body.fromDate && body.toDate) {
-      member.packageDetails = member.packageDetails.filter(pack => {
-        if (new Date(setTime(body.fromDate)) <= pack.dateOfPaid && new Date(setTime(body.toDate)) >= pack.dateOfPaid) {
-          return pack
-        }
-      })
-    }
-  })
   response.forEach(member => {
     member.packageDetails.forEach(doc => {
       if (doc.trainerDetails && doc.trainerDetails.length) {
@@ -423,19 +414,25 @@ const getAssignedTrainers = async (body) => {
           let trainerIndex = trainers.findIndex(ele => ele._id.toString() === trainerDetail.trainer._id.toString());
           if (trainerDetail.Installments && trainerDetail.Installments.length) {
             trainerDetail.Installments.forEach(installment => {
-              if (trainerDetail.trainer._id.toString() === trainers[trainerIndex]._id.toString() && trainerIndex !== -1) {
-                trainers[trainerIndex].amount += typeof installment.totalAmount === 'number' ? installment.totalAmount : 0
-              }
-              if (trainerDetail.trainerFees.period._id.toString() === periods[periodIndex]._id.toString() && periodIndex !== -1) {
-                periods[periodIndex].amount += typeof installment.totalAmount === 'number' ? installment.totalAmount : 0
+              if (installment.paidStatus === 'Paid' && new Date(setTime(body.fromDate)) <= installment.dateOfPaid && new Date(setTime(body.toDate)) >= installment.dateOfPaid) {
+                installment.display = true
+                if (trainerDetail.trainer._id.toString() === trainers[trainerIndex]._id.toString() && trainerIndex !== -1) {
+                  trainers[trainerIndex].amount += typeof installment.totalAmount === 'number' ? installment.totalAmount : 0
+                }
+                if (trainerDetail.trainerFees.period._id.toString() === periods[periodIndex]._id.toString() && periodIndex !== -1) {
+                  periods[periodIndex].amount += typeof installment.totalAmount === 'number' ? installment.totalAmount : 0
+                }
               }
             })
           } else {
-            if (trainerDetail.trainer._id.toString() === trainers[trainerIndex]._id.toString() && trainerIndex !== -1) {
-              trainers[trainerIndex].amount += typeof trainerDetail.totalAmount === 'number' ? trainerDetail.totalAmount : 0
-            }
-            if (trainerDetail.trainerFees.period._id.toString() === periods[periodIndex]._id.toString() && periodIndex !== -1) {
-              periods[periodIndex].amount += typeof trainerDetail.totalAmount === 'number' ? trainerDetail.totalAmount : 0
+            if ((trainerDetail.paidStatus === 'Paid' || trainerDetail.paidStatus === 'Installment') && new Date(setTime(body.fromDate)) <= trainerDetail.dateOfPaid && new Date(setTime(body.toDate)) >= trainerDetail.dateOfPaid) {
+              trainerDetail.display = true
+              if (trainerDetail.trainer._id.toString() === trainers[trainerIndex]._id.toString() && trainerIndex !== -1) {
+                trainers[trainerIndex].amount += typeof trainerDetail.totalAmount === 'number' ? trainerDetail.totalAmount : 0
+              }
+              if (trainerDetail.trainerFees.period._id.toString() === periods[periodIndex]._id.toString() && periodIndex !== -1) {
+                periods[periodIndex].amount += typeof trainerDetail.totalAmount === 'number' ? trainerDetail.totalAmount : 0
+              }
             }
           }
         })
@@ -545,7 +542,7 @@ const getGeneralSales = async (body) => {
 
   let totalAmountOfMember = await Member.find(queryCond)
     .populate('credentialId branch')
-    .populate('packageDetails.packages packageDetails.doneBy packageDetails.trainerDetails.doneBy packageDetails.trainerDetails.installments.doneBy')
+    .populate('packageDetails.packages packageDetails.doneBy packageDetails.Installments.doneBy packageDetails.trainerDetails.doneBy packageDetails.trainerDetails.Installments.doneBy')
     .populate({ path: "packageDetails.trainerDetails.trainer", populate: { path: "credentialId" } })
     .populate({ path: "packageDetails.packages", populate: { path: "period" } })
     .populate({ path: "packageDetails.trainerDetails.trainerFees", populate: { path: "period" } }).lean()
@@ -618,7 +615,7 @@ const getPackageSales = async (body) => {
 
   let totalAmountOfMember = await Member.find(queryCond)
     .populate('credentialId branch')
-    .populate('packageDetails.packages packageDetails.doneBy packageDetails.trainerDetails.doneBy packageDetails.trainerDetails.installments.doneBy')
+    .populate('packageDetails.packages packageDetails.doneBy packageDetails.Installments.doneBy packageDetails.trainerDetails.doneBy packageDetails.trainerDetails.Installments.doneBy')
     .populate({ path: "packageDetails.trainerDetails.trainer", populate: { path: "credentialId" } })
     .populate({ path: "packageDetails.packages", populate: { path: "period" } })
     .populate({ path: "packageDetails.trainerDetails.trainerFees", populate: { path: "period" } }).lean()
@@ -871,7 +868,7 @@ const getSalesByPaymentMethod = async (body) => {
   if (body.transactionType === 'Packages' || body.transactionType === '') {
     totalAmountOfMember = await Member.find(queryCond)
       .populate('credentialId branch')
-      .populate('packageDetails.packages packageDetails.doneBy packageDetails.trainerDetails.doneBy packageDetails.trainerDetails.installments.doneBy')
+      .populate('packageDetails.packages packageDetails.doneBy packageDetails.Installments.doneBy packageDetails.trainerDetails.doneBy packageDetails.trainerDetails.Installments.doneBy')
       .populate({ path: "packageDetails.trainerDetails.trainer", populate: { path: "credentialId" } })
       .populate({ path: "packageDetails.packages", populate: { path: "period" } })
       .populate({ path: "packageDetails.trainerDetails.trainerFees", populate: { path: "period" } }).lean()

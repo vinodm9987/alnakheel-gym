@@ -2150,7 +2150,7 @@ class AddMembers extends Component {
               <h5 style={{ textAlign: "center", margin: "19px 0px 9px 0px", fontSize: "19px" }}>{t('Tax Invoice')}</h5>
               <p style={{ textAlign: "center", margin: "0 0 10px 0", fontSize: "14px" }}>
                 <span>{filteredBranches &&
-                  filteredBranches.filter(b => b._id === branch)[0] && filteredBranches.filter(b => b._id === branch)[0].branchName}</span><br/>
+                  filteredBranches.filter(b => b._id === branch)[0] && filteredBranches.filter(b => b._id === branch)[0].branchName}</span><br />
                 <span>{filteredBranches &&
                   filteredBranches.filter(b => b._id === branch)[0] && filteredBranches.filter(b => b._id === branch)[0].address}</span>
               </p>
@@ -2166,14 +2166,14 @@ class AddMembers extends Component {
                   packageReceipt.packageDetails.filter(p => p.packages === packageName && !p.isExpiredPackage)[0].orderNo}</span>
               </p>
               <div>
-                  <p style={{ display: "flex", textAlign: "center", justifyContent: "space-between", fontSize: "14px" }}>
-                    <span style={{ display: "flex" }}>
-                      <span>{t('ID')}</span><span style={{ padding: "0 4px" }}>:</span><span>{packageReceipt.memberId}</span>
-                    </span>
-                    <span style={{ display: "flex" }}>
-                      <span>{t('Mob')}</span><span style={{ padding: "0 4px" }}>:</span><span>{number}</span>
-                    </span>
-                  </p>
+                <p style={{ display: "flex", textAlign: "center", justifyContent: "space-between", fontSize: "14px" }}>
+                  <span style={{ display: "flex" }}>
+                    <span>{t('ID')}</span><span style={{ padding: "0 4px" }}>:</span><span>{packageReceipt.memberId}</span>
+                  </span>
+                  <span style={{ display: "flex" }}>
+                    <span>{t('Mob')}</span><span style={{ padding: "0 4px" }}>:</span><span>{number}</span>
+                  </span>
+                </p>
                 <p style={{ display: "flex", textAlign: "center", justifyContent: "center", marginTop: "0", fontSize: "14px" }}>
                   <span>{name}</span>
                 </p>
