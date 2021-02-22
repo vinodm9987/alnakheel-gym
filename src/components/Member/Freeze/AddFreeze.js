@@ -205,6 +205,7 @@ class AddFreeze extends Component {
             freezeInfo.bankName = bankName
             freezeInfo.chequeNumber = chequeNumber
             freezeInfo.chequeDate = chequeDate
+            freezeInfo.wantCharge = 'Yes'
             this.props.dispatch(applyFreezeMember(freezeInfo))
             $(el).click();
           } else {
@@ -786,7 +787,7 @@ class AddFreeze extends Component {
 
         {/* --------------Receipt Modal-=--------------- */}
         <button type="button" className="btn btn-primary d-none" data-toggle="modal" data-target="#ReceiptModal" data-backdrop="static" data-keyboard="false" ref="receiptOpenModal">{t('Receipt')}</button>
-        {packageReceipt && freezeType === 'Individual' && wantCharge === 'Yes' &&
+        {packageReceipt &&
           <div className="modal fade commonYellowModal" id="ReceiptModal">
             <div className="modal-dialog modal-lg" id="ReceiptModal2">
               <div className="modal-content">
@@ -976,7 +977,7 @@ class AddFreeze extends Component {
         }
         {/* --------------Receipt Modal Ends-=--------------- */}
 
-        {packageReceipt && freezeType === 'Individual' && wantCharge === 'Yes' &&
+        {packageReceipt &&
           <div className="PageBillWrapper d-none">
             <div style={{ width: "450px", padding: "15px", margin: "auto" }} id="newPrint">
               <div style={{ display: "flex", justifyContent: "center" }}>
