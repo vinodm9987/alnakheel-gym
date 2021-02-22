@@ -197,7 +197,7 @@ exports.cancelFreeze = async (req, res) => {
         };
         await MemberFreezing.findByIdAndUpdate(req.body.id, { typeOfFreeze: 'Canceled', returningDate: setTime(req.body.returningDate) });
         await freezeMember(userData.memberId, req.body.returningDate, largestEndDate);
-        return successResponseHandler(res, '', "success");
+        return successResponseHandler(res, '', "Successfully freeze cancel !");
     } catch (error) {
         logger.error(error);
         return errorResponseHandler(res, error, 'failed to get freeze history!');
