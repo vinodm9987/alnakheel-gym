@@ -179,22 +179,27 @@ module.exports = {
     },
 
     checkInstallmentsPending: async () => {
-        const members = await Member.find({ status: true, doneFingerAuth: true });
-        const today = new Date(setTime(new Date())).getTime();
-        for (const [i, member] of members.entries()) {
-            for (const packages of member.packageDetails) {
-                if (packages.Installments && packages.Installments.length) {
-                    for (const installment of packages.Installments) {
-                        let dueDate = new Date(setTime(installment.dueDate)).getTime();
-                        if (dueDate === today && installment.paidStatus === 'UnPaid') {
-                            members[i].status = false;
-                            await members[i].save();
-                            await disableMember(members[i].memberId, 'IN');
+        try {
+            const members = await Member.find({ status: true, doneFingerAuth: true });
+            const today = new Date(setTime(new Date())).getTime();
+            for (const [i, member] of members.entries()) {
+                for (const packages of member.packageDetails) {
+                    if (packages.Installments && packages.Installments.length) {
+                        for (const installment of packages.Installments) {
+                            let dueDate = new Date(setTime(installment.dueDate)).getTime();
+                            if (dueDate === today && installment.paidStatus === 'UnPaid') {
+                                members[i].status = false;
+                                await members[i].save();
+                                await disableMember(members[i].memberId, 'IN');
+                            }
                         }
                     }
                 }
             }
+        } catch (error) {
+            logger.error(error);
         }
+
     }
 
 
