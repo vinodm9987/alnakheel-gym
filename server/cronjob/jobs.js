@@ -1,8 +1,8 @@
 const { logger: { logger } } = require('../../config');
 
-const { memberExpired, memberAboutToExpiry, stockExpired, stockExpiry,
-    contractExpired, contractExpiry, employeeVisaExpiry, freezeAction,
-    assetsExpiry, assetsExpired } = require('../notification/helper');
+const { memberExpired, memberAboutToExpiry, stockExpired,
+    stockExpiry, contractExpired, contractExpiry,
+    employeeVisaExpiry, assetsExpiry, assetsExpired } = require('../notification/helper');
 
 const { Member, Stocks, Contract, Employee, MemberFreezing, Assets } = require('../model');
 
