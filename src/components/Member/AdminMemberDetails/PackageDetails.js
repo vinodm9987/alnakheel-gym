@@ -40,6 +40,8 @@ class PackageDetails extends Component {
     installmentRemainAmount: 0,
     installmentPackageName: '',
     installmentTrainerName: '',
+    installmentStartDate: new Date(),
+    installmentEndDate: new Date(),
     showCheque: false,
     bankName: '',
     chequeNumber: '',
@@ -69,7 +71,7 @@ class PackageDetails extends Component {
     return false;
   }
 
-  setInstallments(Installments, installmentTotalAmount, installmentPackageName) {
+  setInstallments(Installments, installmentTotalAmount, installmentPackageName, installmentStartDate, installmentEndDate) {
     let paidAmount = 0, toBePaid = 0
     if (Installments && Installments.length) {
       Installments.forEach((installment) => {
@@ -83,13 +85,13 @@ class PackageDetails extends Component {
     if (Installments && Installments.length) {
       this.setState({
         Installments, installmentTotalAmount, installmentToBePaid: toBePaid, installmentPaidAmount: paidAmount,
-        installmentRemainAmount: remainAmount, installmentPackageName
+        installmentRemainAmount: remainAmount, installmentPackageName, installmentStartDate, installmentEndDate
       })
     }
   }
 
 
-  setTrainerInstallments(Installments, installmentTotalAmount, installmentTrainerName, installmentPackageName) {
+  setTrainerInstallments(Installments, installmentTotalAmount, installmentTrainerName, installmentPackageName, installmentStartDate, installmentEndDate) {
     let paidAmount = 0, toBePaid = 0
     if (Installments && Installments.length) {
       Installments.forEach((installment) => {
@@ -103,7 +105,7 @@ class PackageDetails extends Component {
     if (Installments && Installments.length) {
       this.setState({
         Installments, installmentTotalAmount, installmentToBePaid: toBePaid, installmentPaidAmount: paidAmount, installmentRemainAmount: remainAmount,
-        installmentTrainerName, installmentPackageName: `${installmentTrainerName}-${installmentPackageName}`
+        installmentTrainerName, installmentPackageName: `${installmentTrainerName}-${installmentPackageName}`, installmentStartDate, installmentEndDate
       })
     }
   }
@@ -716,13 +718,13 @@ class PackageDetails extends Component {
                             {paidStatus === 'Installment'
                               ? <td className="text-center">
                                 <span className="badge badge-pill badge-primary px-3 py-2 cursorPointer" data-toggle="modal" data-target="#InstallmentDetails"
-                                  onClick={() => this.setInstallments(Installments, amount, packageName)}>{t('Payment Details')}</span>
+                                  onClick={() => this.setInstallments(Installments, amount, packageName, startDate, endDate)}>{t('Payment Details')}</span>
                               </td>
                               : <td className="text-center">
                                 {/* <span className="iconv1 iconv1-eye bg-success tableDownloadViewIcons" data-toggle="modal" data-target="#ReceiptModal"
                                 onClick={() => this.setState({ installmentReceipt: order })}></span> */}
                                 <span className="iconv1 iconv1-eye bg-success tableDownloadViewIcons" data-toggle="modal" data-target="#ReceiptModal"
-                                  onClick={() => this.setState({ installmentReceipt: pack, installmentPackageName: packageName })} ></span>
+                                  onClick={() => this.setState({ installmentReceipt: pack, installmentPackageName: packageName, installmentStartDate: startDate, installmentEndDate: endDate })} ></span>
                               </td>
                             }
                           </tr>
@@ -771,13 +773,13 @@ class PackageDetails extends Component {
                                 {Installments.length > 0
                                   ? <td className="text-center">
                                     <span className="badge badge-pill badge-primary px-3 py-2 cursorPointer" data-toggle="modal" data-target="#InstallmentDetails1"
-                                      onClick={() => this.setTrainerInstallments(Installments, amount, userName, packageName)}>{t('Payment Details')}</span>
+                                      onClick={() => this.setTrainerInstallments(Installments, amount, userName, packageName, trainerStart, trainerEnd)}>{t('Payment Details')}</span>
                                   </td>
                                   : <td className="text-center">
                                     {/* <span className="iconv1 iconv1-eye bg-success tableDownloadViewIcons" data-toggle="modal" data-target="#ReceiptModal"
                                   onClick={() => this.setState({ installmentReceipt: order })}></span> */}
                                     <span className="iconv1 iconv1-eye bg-success tableDownloadViewIcons" data-toggle="modal" data-target="#ReceiptModal"
-                                      onClick={() => this.setState({ installmentReceipt: ta, installmentPackageName: `${userName}-${packageName}` })} ></span>
+                                      onClick={() => this.setState({ installmentReceipt: ta, installmentPackageName: `${userName}-${packageName}`, installmentStartDate: trainerStart, installmentEndDate: trainerEnd })} ></span>
                                   </td>
                                 }
                               </tr>
@@ -1012,13 +1014,15 @@ class PackageDetails extends Component {
                           <thead>
                             <tr>
                               <th>{t('Name')}</th>
-                              <th className="w-50px"></th>
+                              <th className="w-50px">{t('From Date')}</th>
+                              <th className="w-50px">{t('To Date')}</th>
                             </tr>
                           </thead>
                           <tbody>
                             <tr>
                               <td>{this.state.installmentPackageName} {installmentReceipt.installmentName ? installmentReceipt.installmentName : ''}</td>
-                              <td></td>
+                              <td>{dateToDDMMYYYY(this.state.installmentStartDate)}</td>
+                              <td>{dateToDDMMYYYY(this.state.installmentEndDate)}</td>
                             </tr>
                             <tr>
                               <td>
@@ -1167,9 +1171,13 @@ class PackageDetails extends Component {
                   <tbody>
                     <tr>
                       <td style={{ borderTop: "1px dashed #000", borderBottom: "1px dashed #000" }}>{t('Name')}</td>
+                      <td style={{ borderTop: "1px dashed #000", borderBottom: "1px dashed #000", width: "50px", textAlign: "center" }}>{t('From Date')}</td>
+                      <td style={{ borderTop: "1px dashed #000", borderBottom: "1px dashed #000", width: "50px", textAlign: "center" }}>{t('To Date')}</td>
                     </tr>
                     <tr>
                       <td>{this.state.installmentPackageName} {installmentReceipt.installmentName ? installmentReceipt.installmentName : ''}</td>
+                      <td style={{ textAlign: "center" }}>{dateToDDMMYYYY(this.state.installmentStartDate)}</td>
+                      <td style={{ textAlign: "center" }}>{dateToDDMMYYYY(this.state.installmentEndDate)}</td>
                     </tr>
                   </tbody>
                 </table>
