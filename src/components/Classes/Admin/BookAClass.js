@@ -1036,15 +1036,15 @@ class BookAClass extends Component {
               </p>
               {member &&
                 <div>
-                  <p style={{ display: "flex", textAlign: "center", justifyContent: "space-between", fontSize: "14px" }}>
-                    <span style={{ display: "flex" }}>
-                      <span>{t('ID')}</span><span style={{ padding: "0 4px" }}>:</span><span>{member.memberId}</span>
-                    </span>
+                  <p style={{ display: "flex", textAlign: "center", justifyContent: "center", margin: "10px 0", fontSize: "14px" }}>
                     <span style={{ display: "flex" }}>
                       <span>{t('Mob')}</span><span style={{ padding: "0 4px" }}>:</span><span>{member.mobileNo}</span>
                     </span>
                   </p>
-                  <p style={{ display: "flex", textAlign: "center", justifyContent: "center", marginTop: "0", fontSize: "14px" }}>
+                  <p style={{ display: "flex", textAlign: "center", justifyContent: "space-between", margin: "0 0 10px 0", fontSize: "14px" }}>
+                    <span style={{ display: "flex" }}>
+                      <span>{t('ID')}</span><span style={{ padding: "0 4px" }}>:</span><span>{member.memberId}</span>
+                    </span>
                     <span>{member.credentialId.userName}</span>
                   </p>
                 </div>

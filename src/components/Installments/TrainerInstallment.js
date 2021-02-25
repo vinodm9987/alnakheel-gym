@@ -890,7 +890,7 @@ class TrainerInstallment extends Component {
 
         {packageReceipt &&
           <div className="PageBillWrapper d-none" id="newPrint">
-          <div style={{ width: "80mm", padding: "4px", margin: "auto" }}>
+            <div style={{ width: "80mm", padding: "4px", margin: "auto" }}>
               <div style={{ display: "flex", justifyContent: "center" }}>
                 <img src={packageReceipt.branch.avatar ? `${PRODIP}/${packageReceipt.branch.avatar.path}` : ''} width="100" style={{ width: "100px" }} alt="" />
               </div>
@@ -909,23 +909,18 @@ class TrainerInstallment extends Component {
                 <span>{t('Bill No')} : {obj.orderNo}</span>
               </p>
               <div>
-                <p style={{ display: "flex", textAlign: "center", justifyContent: "space-between" }}>
-                  <span>{t('ID:')} <span style={{ padding: "10px" }}>{packageReceipt.memberId}</span></span>
-                  <span>{t('Mob:')} <span style={{ padding: "10px" }}>{packageReceipt.mobileNo}</span></span>
+                <p style={{ display: "flex", textAlign: "center", justifyContent: "center", margin: "10px 0", fontSize: "14px" }}>
+                  <span style={{ display: "flex" }}>
+                    <span>{t('Mob')}</span><span style={{ padding: "0 4px" }}>:</span><span>{packageReceipt.mobileNo}</span>
+                  </span>
                 </p>
-                  <p style={{ display: "flex", textAlign: "center", justifyContent: "space-between", fontSize: "14px" }}>
-                    <span style={{ display: "flex" }}>
-                      <span>{t('ID')}</span><span style={{ padding: "0 4px" }}>:</span><span>{packageReceipt.memberId}</span>
-                    </span>
-                    <span style={{ display: "flex" }}>
-                      <span>{t('Mob')}</span><span style={{ padding: "0 4px" }}>:</span><span>{packageReceipt.mobileNo}</span>
-                    </span>
-                  </p>
-                <p style={{ display: "flex", textAlign: "center", justifyContent: "center", marginTop: "0", fontSize: "14px" }}>
+                <p style={{ display: "flex", textAlign: "center", justifyContent: "space-between", margin: "0 0 10px 0", fontSize: "14px" }}>
+                  <span style={{ display: "flex" }}>
+                    <span>{t('ID')}</span><span style={{ padding: "0 4px" }}>:</span><span>{packageReceipt.memberId}</span>
+                  </span>
                   <span>{packageReceipt.credentialId.userName}</span>
                 </p>
               </div>
-              {/* <p style={{ textAlign: "right", margin: "0 0 10px 0" }}>66988964</p> */}
               <table style={{ width: "100%", fontSize: "14px" }}>
                 <tbody>
                   <tr>

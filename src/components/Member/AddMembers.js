@@ -2166,19 +2166,18 @@ class AddMembers extends Component {
                   packageReceipt.packageDetails.filter(p => p.packages === packageName && !p.isExpiredPackage)[0].orderNo}</span>
               </p>
               <div>
-                <p style={{ display: "flex", textAlign: "center", justifyContent: "space-between", fontSize: "14px" }}>
-                  <span style={{ display: "flex" }}>
-                    <span>{t('ID')}</span><span style={{ padding: "0 4px" }}>:</span><span>{packageReceipt.memberId}</span>
-                  </span>
+                <p style={{ display: "flex", textAlign: "center", justifyContent: "center", margin: "10px 0", fontSize: "14px" }}>
                   <span style={{ display: "flex" }}>
                     <span>{t('Mob')}</span><span style={{ padding: "0 4px" }}>:</span><span>{number}</span>
                   </span>
                 </p>
-                <p style={{ display: "flex", textAlign: "center", justifyContent: "center", marginTop: "0", fontSize: "14px" }}>
+                <p style={{ display: "flex", textAlign: "center", justifyContent: "space-between", margin: "0 0 10px 0", fontSize: "14px" }}>
+                  <span style={{ display: "flex" }}>
+                    <span>{t('ID')}</span><span style={{ padding: "0 4px" }}>:</span><span>{packageReceipt.memberId}</span>
+                  </span>
                   <span>{name}</span>
                 </p>
               </div>
-              {/* <p style={{ textAlign: "right", margin: "0 0 10px 0" }}>66988964</p> */}
               <table style={{ width: "100%", fontSize: "14px" }}>
                 <tbody>
                   <tr style={{ borderTop: "1px dashed #000" }}>

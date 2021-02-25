@@ -417,15 +417,15 @@ class Orderlist extends Component {
               </p>
               {orderById.customerDetails.member &&
                 <div>
-                  <p style={{ display: "flex", textAlign: "center", justifyContent: "space-between", fontSize: "14px" }}>
-                    <span style={{ display: "flex" }}>
-                      <span>{t('ID')}</span><span style={{ padding: "0 4px" }}>:</span><span>{orderById.customerDetails.member.memberId}</span>
-                    </span>
+                  <p style={{ display: "flex", textAlign: "center", justifyContent: "center", margin: "10px 0", fontSize: "14px" }}>
                     <span style={{ display: "flex" }}>
                       <span>{t('Mob')}</span><span style={{ padding: "0 4px" }}>:</span><span>{orderById.customerDetails.member.mobileNo}</span>
                     </span>
                   </p>
-                  <p style={{ display: "flex", textAlign: "center", justifyContent: "center", margin: "0 0 10px 0", fontSize: "14px" }}>
+                  <p style={{ display: "flex", textAlign: "center", justifyContent: "space-between", margin: "0 0 10px 0", fontSize: "14px" }}>
+                    <span style={{ display: "flex" }}>
+                      <span>{t('ID')}</span><span style={{ padding: "0 4px" }}>:</span><span>{orderById.customerDetails.member.memberId}</span>
+                    </span>
                     <span>{orderById.customerDetails.member.credentialId.userName}</span>
                   </p>
                 </div>
