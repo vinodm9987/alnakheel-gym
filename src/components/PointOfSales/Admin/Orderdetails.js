@@ -390,7 +390,6 @@ class Orderdetails extends Component {
                     </p>
                   </div>
                 }
-                {/* <p style={{ textAlign: "right", margin: "0 0 10px 0" }}>66988964</p> */}
                 <table style={{ width: "100%", fontSize: "14px" }}>
                   <tbody>
                     <tr>
