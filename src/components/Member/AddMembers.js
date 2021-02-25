@@ -2049,7 +2049,7 @@ class AddMembers extends Component {
                               {this.state.chequeNumber ?
                                 <div className="text-right my-1">{t('Cheque Number')} :</div>
                                 : <div></div>}
-                              {this.state.chequeDate ?
+                              {(this.state.chequeDate && parseFloat(this.state.cheque)) ?
                                 <div className="text-right my-1">{t('Cheque Date')} :</div>
                                 : <div></div>}
                               <div className="text-right my-1">{t('Grand Total')} :</div>
@@ -2084,7 +2084,7 @@ class AddMembers extends Component {
                               {this.state.chequeNumber ?
                                 <div className="my-1"><span className="invisible">{this.props.defaultCurrency}</span> <span className="px-1">{this.state.chequeNumber}</span></div>
                                 : <div></div>}
-                              {this.state.chequeDate ?
+                              {(this.state.chequeDate && parseFloat(this.state.cheque)) ?
                                 <div className="my-1"><span className="invisible">{this.props.defaultCurrency}</span> <span className="px-1">{dateToDDMMYYYY(this.state.chequeDate)}</span></div>
                                 : <div></div>}
                               <div className="my-1"><span className="">{this.props.defaultCurrency}</span> <span className="px-1">{parseFloat(totalAmount).toFixed(3)}</span></div>
@@ -2255,7 +2255,7 @@ class AddMembers extends Component {
                       <td style={{ textAlign: "right", padding: "0px 0px 4px 0px" }}>{this.state.chequeNumber}</td>
                     </tr>
                     : <tr></tr>}
-                  {this.state.chequeDate ?
+                  {(this.state.chequeDate && parseFloat(this.state.cheque)) ?
                     <tr>
                       <td style={{ textAlign: "right", padding: "0px 4px 4px 4px", width: "100%" }}>{t('Cheque Date')} : </td>
                       <td style={{ textAlign: "right", padding: "0px 0px 4px 0px" }}>{dateToDDMMYYYY(this.state.chequeDate)}</td>
