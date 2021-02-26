@@ -346,7 +346,7 @@ class PointOfSales extends Component {
           digitalAmount: digital ? digital : 0,
           cardNumber,
           chequeAmount: cheque ? parseFloat(cheque) : 0,
-          bankName: bankName, chequeNumber: chequeNumber, chequeDate: chequeDate,
+          bankName: bankName, chequeNumber: chequeNumber, chequeDate: cheque ? chequeDate : '',
           memberTransactionId
         }
         this.props.dispatch(addStockSell(stockSellsInfo))
@@ -385,7 +385,7 @@ class PointOfSales extends Component {
           digitalAmount: digital ? digital : 0,
           cardNumber,
           chequeAmount: cheque ? parseFloat(cheque) : 0,
-          bankName: bankName, chequeNumber: chequeNumber, chequeDate: chequeDate,
+          bankName: bankName, chequeNumber: chequeNumber, chequeDate: cheque ? chequeDate : '',
           paymentType: 'POS'
         }
         this.props.dispatch(addStockSell(stockSellsInfo))
