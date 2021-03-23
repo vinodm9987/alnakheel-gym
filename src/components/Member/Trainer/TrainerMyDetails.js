@@ -11,18 +11,19 @@ import { connect } from 'react-redux'
 
 class TrainerMyDetails extends Component {
   render() {
+    const { t } = this.props
     return (
       <div className="mainPage p-3 TrainerMyDetails">
         <div className="row">
           <div className="col-12 pageBreadCrumbs">
-            <span className="crumbText">Home</span>
+            <span className="crumbText">{t('Home')}</span>
             <span className="mx-2">/</span>
-            <span className="crumbText">My Members</span>
+            <span className="crumbText">{t('My Members')}</span>
             <span className="mx-2">/</span>
-            <span className="crumbText">Member Details</span>
+            <span className="crumbText">{t('Member Details')}</span>
           </div>
           <div className="col-12 pageHead">
-            <h1>Member Details</h1>
+            <h1>{t('Member Details')}</h1>
             <div className="pageHeadLine"></div>
           </div>
           <div className="col-12 mt-4">
@@ -43,10 +44,10 @@ class TrainerMyDetails extends Component {
                       </div> */}
                       <div className="px-4">
                         <Link to={{ pathname: "/manage-workouts", memberData: JSON.stringify(this.props.memberById && this.props.memberById) }}>
-                          <button className="btn btn-success badge-pill m-2 py-2 px-4 text-white" href="">+ Add Workouts</button>
+                          <button className="btn btn-success badge-pill m-2 py-2 px-4 text-white" href="">+ {t('Add Workouts')}</button>
                         </Link>
                         <Link to={{ pathname: "/manage-diet-plans", memberData: JSON.stringify(this.props.memberById && this.props.memberById) }}>
-                          <button className="btn btn-primary badge-pill m-2  py-2 px-4 text-white" href="">+ Add Dietplans</button>
+                          <button className="btn btn-primary badge-pill m-2  py-2 px-4 text-white" href="">+ {t('Add Dietplans')}</button>
                         </Link>
                       </div>
                     </div>
@@ -68,8 +69,8 @@ class TrainerMyDetails extends Component {
                         </div> */}
                         <nav className="commonNavForTab">
                           <div className="nav nav-tabs flex-nowrap overflow-auto" id="nav-tab" role="tablist">
-                            <a className="nav-item nav-link active font-weight-bold" data-toggle="tab" href="#menu1" role="tab">Workouts</a>
-                            <a className="nav-item nav-link font-weight-bold" data-toggle="tab" href="#menu2" role="tab">Dietplans</a>
+                            <a className="nav-item nav-link active font-weight-bold" data-toggle="tab" href="#menu1" role="tab">{t('Workouts')}</a>
+                            <a className="nav-item nav-link font-weight-bold" data-toggle="tab" href="#menu2" role="tab">{t('Dietplans')}</a>
                           </div>
                         </nav>
                         <div className="col-12">

@@ -418,9 +418,9 @@ class App extends Component {
           <Route path='/add-designation' component={CreateDesignation} />
 
           {/* Rewards */}
-          <Route path='/giftcard' component={GiftCards} />
+          {/* <Route path='/giftcard' component={GiftCards} />
           <Route path='/reward-policy' component={RewardPolicy} />
-          <Route path='/reward-transaction-history' component={RewardTransactionHistory} />
+          <Route path='/reward-transaction-history' component={RewardTransactionHistory} /> */}
 
           {/* Info */}
           <Route path='/admin-attendance' component={AdminAttendance} />

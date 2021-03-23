@@ -152,12 +152,14 @@ class AssignShift extends Component {
   handleEdit(employeeShift) {
     scrollToTop()
     this.setState({
-      employee: employeeShift.employee,
-      shift: employeeShift.shift._id,
-      branch: employeeShift.branch._id,
-      fromDate: new Date(employeeShift.fromDate),
-      toDate: new Date(employeeShift.toDate),
-      employeeShiftId: employeeShift._id
+      ...this.default, ...{
+        employee: employeeShift.employee,
+        shift: employeeShift.shift._id,
+        branch: employeeShift.branch._id,
+        fromDate: new Date(employeeShift.fromDate),
+        toDate: new Date(employeeShift.toDate),
+        employeeShiftId: employeeShift._id
+      }
     }, () => {
       this.props.dispatch(getAllEmployeeShiftByIdAndBranch({ employeeId: this.state.employee._id, branch: this.state.branch }))
     })
@@ -214,12 +216,12 @@ class AssignShift extends Component {
   render() {
     const { t } = this.props
     const { employee, shift, branch, fromDate, toDate, employeeShiftId, markedDates } = this.state
-    const formatOptionLabel = ({ credentialId: { userName, avatar, email }, memberId }) => {
+    const formatOptionLabel = ({ credentialId: { userName, avatar, email }, employeeId }) => {
       return (
         <div className="d-flex align-items-center">
           <img alt='' src={`/${avatar.path}`} className="rounded-circle mx-1 w-30px h-30px" />
           <div className="w-100">
-            <small className="whiteSpaceNormal d-block" style={{ lineHeight: '1', fontWeight: 'bold' }}>{userName} ({memberId})</small>
+            <small className="whiteSpaceNormal d-block" style={{ lineHeight: '1', fontWeight: 'bold' }}>{userName} ({employeeId})</small>
             <small className="whiteSpaceNormal d-block" style={{ lineHeight: '1' }}>{email}</small>
           </div>
         </div>
@@ -401,7 +403,7 @@ class AssignShift extends Component {
                   <div className="col w-auto px-1 flexBasis-auto flex-grow-0 d-flex flex-wrap">
                     <div className="col w-auto px-1 flexBasis-auto flex-grow-0">
                       <div className="form-group inlineFormGroup flex-nowrap">
-                        <span onClick={() => this.resetDate()} className="btn btn-warning btn-sm text-white my-1">ALL</span>
+                        <span onClick={() => this.resetDate()} className="btn btn-warning btn-sm text-white my-1">{t('ALL')}</span>
                         <MuiPickersUtilsProvider utils={DateFnsUtils}>
                           <DatePicker
                             variant='inline'

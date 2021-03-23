@@ -65,7 +65,7 @@ class DietPlan extends Component {
                                 <th>{t('Diet Session')}</th>
                                 <th>{t('QTY/Grams')}</th>
                                 <th>{t('Calories')}</th>
-                                <th>{t('Speciafications')}</th>
+                                <th>{t('Specifications')}</th>
                               </tr>
                             </thead>
                             <tbody>

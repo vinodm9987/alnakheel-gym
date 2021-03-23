@@ -195,7 +195,7 @@ class AdminDashboard extends Component {
                 }}
               />
               {/* <div className="chartcenterData">
-                <p className="m-0">Total</p>
+                <p className="m-0">{t('Total')}</p>
                 <p className="m-0">{total}</p>
               </div> */}
               <div className="col-12 px-0">
@@ -292,7 +292,7 @@ class AdminDashboard extends Component {
               <div className="underline w-100"></div>
             </div>
 
-            <div className="col-12 d-flex flex-wrap align-items-center justify-content-between py-1">
+            <div className="col-12 d-flex flex-wrap align-items-center justify-content-between pb-1 pt-5" style={{ height: "460px" }}>
               <Doughnut
                 data={data}
                 options={{
@@ -304,14 +304,14 @@ class AdminDashboard extends Component {
                 }}
               />
               {/* <div className="chartcenterData">
-                  <p className="m-0">Total</p>
+                  <p className="m-0">{t('Total')}</p>
                   <p className="m-0">{total}</p>
                 </div> */}
               <div className="col-12 px-0">
                 <div className="row pt-3 pb-2">
                   <div className="col-12 px-0 d-flex flex-wrap">
-                    <div className="col overflow-auto mxh-200px full-width-576-down">
-                      <div className="row">
+                    <div className="col-12 overflow-auto mxh-200px">
+                      <div className="row justify-content-center pb-5 pt-4">
                         {this.props.dashboardAttendance.map((type, i) => {
                           return (
                             <div key={i} className="px-3 d-flex">
@@ -323,11 +323,13 @@ class AdminDashboard extends Component {
                       </div>
                     </div>
                     {/* tusar button */}
-                    <Link to='/admin-attendance' className="linkHoverDecLess">
-                      <div className="col text-right full-width-576-down">
-                        <button className="btn btn-warning br-50px text-white px-3 btn-sm text-nowrap mt-3 mt-sm-0">{t('View All Attendance')}</button>
-                      </div>
-                    </Link>
+                    {this.props.dashboardAttendance.length > 0 &&
+                      <Link to='/admin-attendance' className="linkHoverDecLess ml-auto mr-3 mt-5">
+                        <div className="col-12 px-0">
+                          <button className="btn btn-warning br-50px text-white px-3 btn-sm text-nowrap mt-3 mt-sm-0">{t('View All Attendance')}</button>
+                        </div>
+                      </Link>
+                    }
                   </div>
                 </div>
               </div>
@@ -418,6 +420,21 @@ class AdminDashboard extends Component {
             {/* <div className="col-12 d-flex flex-wrap align-items-center justify-content-end mt-auto">
               <a href="/#" className="text-success mx-1 my-3 SegoeBold linkHoverDecLess cursorPointer"><small>View All</small></a>
             </div> */}
+
+            {/* <div className="col-12">
+              <div className="row pb-2">
+                <div className="col-12 px-0 d-flex flex-wrap justify-content-end">
+                  {this.props.mostSellingStock.length > 0 &&
+                    <Link to='/#' className="linkHoverDecLess">
+                      <div className="col text-right full-width-576-down">
+                        <button className="btn btn-warning br-50px text-white px-3 btn-sm text-nowrap mt-3 mt-sm-0">{t('View All')}</button>
+                      </div>
+                    </Link>
+                  }
+                </div>
+              </div>
+            </div> */}
+
           </div>
         </div>
       )
@@ -438,7 +455,7 @@ class AdminDashboard extends Component {
       const totalSells = (totalStockSells ? totalStockSells : 0) + (totalClassSells ? totalClassSells : 0) + (totalPackageSells ? totalPackageSells : 0)
       const data = {
         labels: ['POS', 'Classes', 'Packages'],
-        datasets: [{ data: [(totalStockSells ? totalStockSells : 0), (totalClassSells ? totalClassSells : 0), (totalPackageSells ? totalPackageSells : 0)], backgroundColor: ['orange', 'red', 'blue'], hoverBackgroundColor: ['orange', 'red', 'blue'] }],
+        datasets: [{ data: [(totalStockSells ? totalStockSells.toFixed(3) : 0), (totalClassSells ? totalClassSells.toFixed(3) : 0), (totalPackageSells ? totalPackageSells.toFixed(3) : 0)], backgroundColor: ['orange', 'red', 'blue'], hoverBackgroundColor: ['orange', 'red', 'blue'] }],
         text: `${t('Total')} ${totalSells.toFixed(3)}`
       };
       return (
@@ -540,14 +557,14 @@ class AdminDashboard extends Component {
                       <h4 className="font-weight-bold dirltrtar text-danger">{this.props.defaultCurrency} {totalStockSells ? totalStockSells.toFixed(3) : 0}</h4>
                     </div>
                     {/* <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-4 pb-2">
-                                <h6>Classes Amount</h6>
-                                <h4 className="font-weight-bold dirltrtar text-danger">{this.props.defaultCurrency} 87511</h4>
-                              </div> */}
+                      <h6>Classes Amount</h6>
+                      <h4 className="font-weight-bold dirltrtar text-danger">{this.props.defaultCurrency} 87511</h4>
+                    </div> */}
                     <div className="col-12">
                       <div className="underline w-100 mt-2 mb-1"></div>
                     </div>
                     <div className="col-12">
-                      <p><small className="font-weight-bold">{t('Sales By Branches')}</small></p>
+                      <p className="my-2"><small className="font-weight-bold">{t('Sales By Branches')}</small></p>
                       <div className="d-flex flex-wrap pb-3">
                         {branches.map((branch, i) => {
                           return (
@@ -645,7 +662,7 @@ class AdminDashboard extends Component {
                   <div className="col-12">
                     <div className="row">
                       {/* <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
-                        <h6>Total Pending Amount</h6>
+                        <h6>{t('Total Pending Amount')}</h6>
                         <h6 className="font-weight-bold dirltrtar text-danger">$ 87511</h6>
                       </div> */}
                       <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
@@ -724,7 +741,10 @@ class AdminDashboard extends Component {
                                         </div>
                                       </div>
                                     </td>
-                                    <td><p className="text-warning SegoeBold m-0 dirltrtar">{this.props.defaultCurrency} {type === 'Trainer' ? trainerAmount.toFixed(3) : packageAmount.toFixed(3)}</p></td>
+                                    <td>
+                                      <p className="text-warning SegoeBold m-0 dirltrtar text-center">{this.props.defaultCurrency}</p>
+                                      <p className="text-warning SegoeBold m-0 dirltrtar text-center">{type === 'Trainer' ? trainerAmount.toFixed(3) : packageAmount.toFixed(3)}</p>
+                                    </td>
                                     <td>{dateToDDMMYYYY(dueDate)}</td>
                                     <td>{type}</td>
                                     {/* <td className="text-center">
@@ -753,13 +773,15 @@ class AdminDashboard extends Component {
                 </div>
               </div>
               <div className="col-12 px-0">
-                <div className="row pt-3 pb-2">
+                <div className="row pb-2">
                   <div className="col-12 px-0 d-flex flex-wrap justify-content-end">
-                    <Link to='/pending-installments' className="linkHoverDecLess">
-                      <div className="col text-right full-width-576-down">
-                        <button className="btn btn-warning br-50px text-white px-3 btn-sm text-nowrap mt-3 mt-sm-0">{t('View All')}</button>
-                      </div>
-                    </Link>
+                    {this.props.pendingInstallments.length > 0 &&
+                      <Link to='/pending-installments' className="linkHoverDecLess">
+                        <div className="col text-right full-width-576-down">
+                          <button className="btn btn-warning br-50px text-white px-3 btn-sm text-nowrap mt-3 mt-sm-0">{t('View All')}</button>
+                        </div>
+                      </Link>
+                    }
                   </div>
                 </div>
               </div>

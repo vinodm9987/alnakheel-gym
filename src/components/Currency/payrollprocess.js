@@ -1,17 +1,18 @@
 import React, { Component } from 'react'
 class payrollprocess extends Component {
     render() {
+        const { t } = this.props
         return (
             <div className="mainPage p-3">
                 <div className="row">
                     <div className="col-12 pageBreadCrumbs">
-                        <span className="crumbText">Home</span><span className="mx-2">/</span><span className="crumbText">Finance</span>
-                        <span className="mx-2">/</span><span className="crumbText">Payroll</span>
+                        <span className="crumbText">{t('Home')}</span><span className="mx-2">/</span><span className="crumbText">{t('Finance')}</span>
+                        <span className="mx-2">/</span><span className="crumbText">{t('Payroll')}</span>
                     </div>
                     <div className="col-12">
                         <div className="row">
                             <div className="col-12 pageHead">
-                                <h1>Payroll Processing</h1>
+                                <h1>{t('Payroll Processing')}</h1>
                             </div>
                         </div>
                         <div className="pageHeadLine"></div>
@@ -21,52 +22,52 @@ class payrollprocess extends Component {
                             <div className="col-12">
                                 <nav className="commonNavForTab">
                                     <div className="nav nav-tabs flex-nowrap overflow-auto" id="nav-tab" role="tablist">
-                                        <a className="nav-item nav-link active" role="tab" data-toggle="tab" href="#menu1">Generate Payroll</a>
-                                        <a className="nav-item nav-link" role="tab" data-toggle="tab" href="#menu2">Payroll History</a>
+                                        <a className="nav-item nav-link active" role="tab" data-toggle="tab" href="#menu1">{t('Generate Payroll')}</a>
+                                        <a className="nav-item nav-link" role="tab" data-toggle="tab" href="#menu2">{t('Payroll History')}</a>
                                     </div>
                                 </nav>
                                 <div className="tab-content" id="nav-tabContent">
                                     <div className="tab-pane fade show active" id="menu1" role="tabpanel">
                                         <div className="d-flex flex-wrap justify-content-between bg-light rounded p-3 my-4 border">
                                             <div className="form-group position-relative m-1">
-                                                <label htmlFor="FromeDate" className="mx-sm-2 inlineFormLabel">Frome Date</label>
+                                                <label htmlFor="FromeDate" className="mx-sm-2 inlineFormLabel">{t('From Date')}</label>
                                                 <select className="form-control  inlineFormInputs bg-white" id="FromeDate">
-                                                    <option value="">Please Select</option>
+                                                    <option value="">{t('Please Select')}</option>
                                                 </select>
                                                 <span className="iconv1 iconv1-calander selectBoxIcon r27px"></span>
                                             </div>
                                             <div className="form-group position-relative m-1">
-                                                <label htmlFor="ToDate" className="mx-sm-2 inlineFormLabel">To Date</label>
+                                                <label htmlFor="ToDate" className="mx-sm-2 inlineFormLabel">{t('To Date')}</label>
                                                 <select className="form-control  inlineFormInputs bg-white" id="ToDate">
-                                                    <option value="">Please Select</option>
+                                                    <option value="">{t('Please Select')}</option>
                                                 </select>
                                                 <span className="iconv1 iconv1-calander selectBoxIcon r27px"></span>
                                             </div>
                                             <div className="form-group m-1">
-                                                <label htmlFor="NoofDays" className="mx-sm-2 inlineFormLabel">No Of Days</label>
+                                                <label htmlFor="NoofDays" className="mx-sm-2 inlineFormLabel">{t('No Of Days')}</label>
                                                 <h3 className="mb-0 text-danger text-center"><b>30</b></h3>
                                             </div>
                                             <div className="align-self-center m-1">
                                                 <h4 className="mb-0"><b>October 2020</b></h4>
                                             </div>
                                             <div className="align-self-center m-1">
-                                                <button type="button" className="btn btn-success mx-1 px-4"><span className="mx-1 iconv1 iconv1-sync"></span><span className="mx-1">Run Payroll</span></button>
+                                                <button type="button" className="btn btn-success mx-1 px-4"><span className="mx-1 iconv1 iconv1-sync"></span><span className="mx-1">{t('Run Payroll')}</span></button>
                                             </div>
                                         </div>
                                         <div className="d-flex w-100 my-3">
                                             <div className="custom-control custom-checkbox roundedGreenRadioCheck mx-2">
                                                 <input type="radio" className="custom-control-input" id="FullTime" name="FullTimeOrPartTime" checked />
-                                                <label className="custom-control-label" for="FullTime">Full Time</label>
+                                                <label className="custom-control-label" for="FullTime">{t('Full Time')}</label>
                                             </div>
                                             <div className="custom-control custom-checkbox roundedGreenRadioCheck mx-2">
                                                 <input type="radio" className="custom-control-input" id="PartTime" name="FullTimeOrPartTime" />
-                                                <label className="custom-control-label" for="PartTime">Working Hours</label>
+                                                <label className="custom-control-label" for="PartTime">{t('Working Hours')}</label>
                                             </div>
                                         </div>
                                         <div className="row border">
                                             <div className="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-3 p-0 bgGray">
                                                 <ul className="list-group PrPLI">
-                                                    <li className="headingLI list-group-item font-weight-bold"><b>Employes</b></li>
+                                                    <li className="headingLI list-group-item font-weight-bold"><b>{t('Employees')}</b></li>
                                                     <li className="list-group-item active d-flex justify-content-between">
                                                         <h6 className="">First item </h6>
                                                         <h6 className="iconv1 iconv1-right-small-arrow"> </h6>
@@ -81,10 +82,10 @@ class payrollprocess extends Component {
                                                     <table className="table table-bordered prpTable">
                                                         <thead>
                                                             <tr>
-                                                                <th>Earnings</th>
-                                                                <th>Amount</th>
-                                                                <th>Deductions</th>
-                                                                <th>Amount</th>
+                                                                <th>{t('Earnings')}</th>
+                                                                <th>{t('Amount')}</th>
+                                                                <th>{t('Deductions')}</th>
+                                                                <th>{t('Amount')}</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
@@ -115,7 +116,7 @@ class payrollprocess extends Component {
                                                         </tbody>
                                                     </table>
                                                     <div className="text-right mx-3">
-                                                        <h6 className="font-weight-bold text-muted">Net Pay:<span className="mx-2 text-dark">$ 2500.00</span>
+                                                        <h6 className="font-weight-bold text-muted">{t('Net Pay')}:<span className="mx-2 text-dark">$ 2500.00</span>
                                                         </h6>
                                                     </div>
                                                 </div>
@@ -124,29 +125,29 @@ class payrollprocess extends Component {
                                     </div>
                                     <div className="tab-pane fade" id="menu2" role="tabpanel">
                                         <div className="d-xl-flex flex-wrap justify-content-between mt-5">
-                                            <h5 className="font-weight-bold align-self-center">Payroll history</h5>
+                                            <h5 className="font-weight-bold align-self-center">{t('Payroll History')}</h5>
                                             <div className="row">
                                                 <div className="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-4">
                                                     <div className="form-group position-relative">
-                                                        <label htmlFor="JobType" className="mx-sm-2 inlineFormLabel">Job Type</label>
+                                                        <label htmlFor="JobType" className="mx-sm-2 inlineFormLabel">{t('Job Type')}</label>
                                                         <select className="form-control  inlineFormInputs" id="JobType">
-                                                            <option value="">Please Select</option>
+                                                            <option value="">{t('Please Select')}</option>
                                                         </select>
                                                         <span className="iconv1 iconv1-arrow-down selectBoxIcon r27px"></span>
                                                     </div>
                                                 </div>
                                                 <div className="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-4">
                                                     <div className="form-group position-relative">
-                                                        <label htmlFor="Month" className="mx-sm-2 inlineFormLabel">Month</label>
+                                                        <label htmlFor="Month" className="mx-sm-2 inlineFormLabel">{t('Month')}</label>
                                                         <select className="form-control  inlineFormInputs" id="Month">
-                                                            <option value="">Please Select</option>
+                                                            <option value="">{t('Please Select')}</option>
                                                         </select>
                                                         <span className="iconv1 iconv1-arrow-down selectBoxIcon r27px"></span>
                                                     </div>
                                                 </div>
                                                 <div className="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-4">
                                                     <div className="form-group position-relative">
-                                                        <label for="SearchMembers">Search Members</label>
+                                                        <label for="SearchMembers">{t('Search Members')}</label>
                                                         <input type="text" autocomplete="off" className="form-control  badge-pill inlineFormInputs" />
                                                         <span className="iconv1 iconv1-search searchBoxIcon r27px"></span>
                                                     </div>
@@ -157,12 +158,12 @@ class payrollprocess extends Component {
                                             <table className="borderRoundSeperateTable tdGray">
                                                 <thead>
                                                     <tr>
-                                                        <th>Employee</th>
-                                                        <th>Designation</th>
-                                                        <th>Month</th>
-                                                        <th>NO Of Days</th>
-                                                        <th>Earnings Total</th>
-                                                        <th>Deductions Total</th>
+                                                        <th>{t('Employee')}</th>
+                                                        <th>{t('Designation')}</th>
+                                                        <th>{t('Month')}</th>
+                                                        <th>{t('No Of Days')}</th>
+                                                        <th>{t('Earnings Total')}</th>
+                                                        <th>{t('Deductions Total')}</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -185,7 +186,7 @@ class payrollprocess extends Component {
                                                         <td>October</td>
                                                         <td>30</td>
                                                         <td>$ 15000.00</td>
-                                                        <td><button type="button" className="btn btn-success mx-1 px-4">Details</button></td>
+                                                        <td><button type="button" className="btn btn-success mx-1 px-4">{t('Details')}</button></td>
                                                     </tr>
                                                 </tbody>
                                             </table>

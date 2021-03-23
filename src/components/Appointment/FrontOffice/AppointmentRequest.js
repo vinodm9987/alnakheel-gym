@@ -223,7 +223,7 @@ class AppointmentRequest extends Component {
                               <img src={`/${member.credentialId.avatar.path}`} alt='' className="mx-1 rounded-circle w-50px h-50px" />
                               <div className="mx-1">
                                 <h5 className="m-0 SegoeSemiBold">{member.credentialId.userName}</h5>
-                                <h6 className="dirltrtar my-0">ID : {member.memberId}</h6>
+                                <h6 className="dirltrtar my-0">{t('ID')} : {member.memberId}</h6>
                               </div>
                             </div>
                           }
@@ -265,7 +265,7 @@ class AppointmentRequest extends Component {
                               {/* <img src={`/${member.credentialId.avatar.path}`} alt='' className="mx-1 rounded-circle w-50px h-50px" /> */}
                               <div className="mx-1">
                                 <h5 className="m-0 SegoeSemiBold">{visitorName}</h5>
-                                {/* <h6 className="dirltrtar my-0">ID : {member.memberId}</h6> */}
+                                {/* <h6 className="dirltrtar my-0">{t('ID')} : {member.memberId}</h6> */}
                               </div>
                             </div>
                         </td>

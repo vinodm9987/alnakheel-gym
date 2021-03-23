@@ -92,7 +92,7 @@ exports.addPackage = async (req, res) => {
             newPackage["startDate"] = setTime(startDate);
             newPackage["endDate"] = setTime(endDate);
             newPackage["image"] = req.files[0];
-            newPackage["bioStarInfo"] =  await addPackage(packageName, 0, 1439);
+            newPackage["bioStarInfo"] = await addPackage(packageName, 0, 1439);
             let response = await newPackage.save()
             let newResponse = await Package.findById(response._id).populate('accessBranches salesBranches').lean()
             let periodData = await Period.findById(response.period).lean()
@@ -140,10 +140,10 @@ exports.updatePackage = async (req, res) => {
         try {
             const { packageName, amount, period, startDate, endDate, description, salesBranches, accessBranches, color, fromTime, toTime } = JSON.parse(req.body.data)
             const data = { packageName, amount, period, startDate, endDate, description, color, fromTime, toTime, salesBranches, accessBranches }
-            const packageData = await Package.findById(req.params.id).lean()
             data["startDate"] = setTime(startDate);
             data["endDate"] = setTime(endDate);
             if (req.files.length > 0) data["image"] = req.files[0];
+            await updatePackage(packageName, 0, 1439)
             req.responseData = await Package.findById(req.params.id).lean()
             const response = await Package.findByIdAndUpdate(req.params.id, data, { new: true }).populate('period accessBranches salesBranches').lean()
             auditLogger(req, 'Success')

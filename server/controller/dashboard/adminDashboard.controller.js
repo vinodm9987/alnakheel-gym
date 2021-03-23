@@ -238,7 +238,7 @@ exports.getDashboardTotalSales = async (req, res) => {
 
 exports.getPendingInstallments = async (req, res) => {
     try {
-        const members = await Member.find({}).populate('credentialId').lean();
+        const members = await Member.find({}, { faceRecognitionTemplate: 0 }).populate('credentialId').lean();
         let response = [];
         for (const member of members) {
             for (const packages of member.packageDetails) {
@@ -264,8 +264,8 @@ exports.getPendingInstallments = async (req, res) => {
                             const dueDate = new Date(setTime(installment.dueDate)).getTime();
                             const todayMonth = new Date(dueDate).getMonth();
                             const thisYear = new Date(dueDate).getFullYear();
-                            const monthConditions = req.body.month ? req.body.month === todayMonth : true;
-                            const yearConditions = req.body.year ? req.body.year === thisYear : true;
+                            const monthConditions = typeof req.body.month === 'number' ? req.body.month === todayMonth : false;
+                            const yearConditions = typeof req.body.year === 'number' ? req.body.year === thisYear : false;
                             if (monthConditions && yearConditions && installment.paidStatus !== 'Paid') {
                                 const memberObj = Object.assign({}, member);
                                 memberObj['trainerAmount'] = installment.actualAmount;

@@ -85,8 +85,8 @@ export const removeMemberFreeze = (postData) => dispatch => {
   axios
     .post(`${IP}/member/removeMemberFreeze`, postData)
     .then(res => {
-      dispatch(getPendingFreezeMember({ search: '', date: '' }))
       dispatch({ type: GET_ERROR, payload: res.data })
+      dispatch(getPendingFreezeMember({ search: '', date: '' }))
     })
     .catch(err =>
       err.response && dispatch({ type: GET_ERROR, payload: err.response.data })
@@ -103,8 +103,26 @@ export const cancelFreeze = (postData) => dispatch => {
   axios
     .post(`${IP}/member/cancelFreeze`, postData)
     .then(res => {
-      dispatch(getFreezeHistory({ search: '', date: '' }))
       dispatch({ type: GET_ERROR, payload: res.data })
+      dispatch(getFreezeHistory({ search: '', date: '' }))
+    })
+    .catch(err =>
+      err.response && dispatch({ type: GET_ERROR, payload: err.response.data })
+    ).then(() => setTimeout(() => {
+      dispatch(removeLoading())
+    }, 1000))
+    .then(() => setTimeout(() => {
+      dispatch({ type: CLEAR_ERRORS })
+    }, 5000))
+}
+
+export const memberFreezeUpdate = (id, postData) => dispatch => {
+  dispatch(setLoading());
+  axios
+    .post(`${IP}/member/memberFreezeUpdate/${id}`, postData)
+    .then(res => {
+      dispatch({ type: GET_ERROR, payload: res.data })
+      dispatch(getPendingFreezeMember({ search: '', date: new Date() }))
     })
     .catch(err =>
       err.response && dispatch({ type: GET_ERROR, payload: err.response.data })

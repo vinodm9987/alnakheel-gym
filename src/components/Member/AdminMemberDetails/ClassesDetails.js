@@ -40,7 +40,7 @@ class ClassesDetails extends Component {
           <div className="col-12">
             <ul className="row px-0">
               {customerClassesDetails && customerClassesDetails.map((classes, i) => {
-                const { classId: { startDate, endDate, className, trainer: { credentialId: { userName, avatar }, mobileNo } }, classStartDate, member, _id } = classes
+                const { classId: { startDate, endDate, className, trainer: { credentialId: { userName, avatar }, mobileNo } }, classStartDate } = classes
                 if (classStartDate && new Date().setHours(0, 0, 0, 0) <= new Date(endDate).setHours(0, 0, 0, 0)) {
                   return (
                     <li key={i} className="d-block col-12 px-0">
@@ -94,7 +94,7 @@ class ClassesDetails extends Component {
                       <div className="row">
                         <div className="col-12 col-lg-6">
                           <h5 className="">{className}</h5>
-                          <button className="btn btn-success btn-sm px-3 m-1" onClick={() => this.handleStartClass(member._id, _id, member.doneFingerAuth)}>Start Class</button>
+                          {/* <button className="btn btn-success btn-sm px-3 m-1" onClick={() => this.handleStartClass(member._id, _id, member.doneFingerAuth)}>Start Class</button> */}
                         </div>
                         <div className="col-12 col-lg-6 d-flex align-items-stretch">
                           <div className="border border-info rounded alert-primary w-100 d-flex align-items-center">

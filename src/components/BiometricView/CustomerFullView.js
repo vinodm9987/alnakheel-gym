@@ -63,7 +63,7 @@ class CustomerFullView extends Component {
           <div className="container-fluid bg-black w-100 d-flex cfvwrap h-100">
             <div className="row CFV h-100">
               <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6 p-5 align-self-center text-center h-100 d-flex bg-black">
-                <div className="bg-black py-4 w-100 h-100">
+                <div className="bg-black py-5 w-100 h-100">
                   <img alt='' src={`/${avatar.path}`} className="CFVPhoto" />
                   {/* <img alt='' src="https://i0.wp.com/post.medicalnewstoday.com/wp-content/uploads/sites/3/2020/03/GettyImages-1092658864_hero-1024x575.jpg?w=1155&h=1528" className="CFVPhoto" /> */}
                 </div>
@@ -75,9 +75,6 @@ class CustomerFullView extends Component {
               <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6 p-0 h-100 rightcnt">
                 <div className="bg-white p-0">
                   <div className="d-flex justify-content-start pt-2 pl-5">
-                    <div className="w-100 d-flex justify-content-end">
-                      <img alt='' src={algymlogo} width="100" height="100" />
-                    </div>
                     <span className="cursorPointer d-inline-flex align-items-center CFV-ar-text" onClick={() => this.changedLanguage()}>
                       <span className="iconv1 iconv1-globe language-icon px-1" style={{ fontSize: '20px' }}></span>
                       <span className="px-1 SegoeSemiBold">{t('TopBarLanguage')}</span>
@@ -88,9 +85,12 @@ class CustomerFullView extends Component {
                     </span>
                   </div>
                   <div className="px-5 pt-1">
-                    <div className="d-flex flex-wrap justify-content-between">
-                      <div className="w-100 pl-2">
-                        <h2 className="font-weight-bold CVF-Name">{userName}</h2>
+                    <div className="d-flex flex-wrap justify-content-start">
+                      <div class="cfw-cus-img p-2">
+                        <img alt="" src={algymlogo} width="124" height="124" style={{ marginTop: "25px" }} />
+                      </div>
+                      <div className="cfw-cus-img-right p-2">
+                        <h2 className="font-weight-bold CVF-Name mt-3">{userName}</h2>
                         <h5 className="text-body font-weight-bold">{gender}</h5>
                         <h4 className="text-orange font-weight-bold pb-0 blinker-1">{fingerScanStatus}</h4>
                         {/* <h2 className="font-weight-bold CVF-Name">Ansar</h2>
@@ -184,21 +184,25 @@ class CustomerFullView extends Component {
                   {sortedPackage[0] &&
                     <div className="m-2">
                       <h5 className="font-weight-bold text-white">{t('Date of Purchase')}</h5>
-                      <h5 className="text-white font-weight-bold dirltrtar">{dateToDDMMYYYY(sortedPackage[0].dateOfPurchase)}</h5>
+                      <h5 className="text-white font-weight-bold dirltrtar">{dateToDDMMYYYY(sortedPackage[0].dateOfPaid)}</h5>
                     </div>
                   }
-                  <div className="m-2">
-                    <h5 className="font-weight-bold text-white">{t('From Date')}</h5>
-                    <h5 className="text-white font-weight-bold dirltrtar">{dateToDDMMYYYY(sortedPackage[0].startDate)}</h5>
-                    {/* <h5 className="text-white font-weight-bold dirltrtar">22/01/2020</h5> */}
-                  </div>
-                  <div className="m-2">
-                    <h5 className="font-weight-bold text-white">{t('To Date')}</h5>
-                    <h5 className="text-white font-weight-bold dirltrtar">
-                      {sortedPackage[0].extendDate ? dateToDDMMYYYY(sortedPackage[0].extendDate) : dateToDDMMYYYY(sortedPackage[0].endDate)}
-                    </h5>
-                    {/* <h5 className="text-white font-weight-bold dirltrtar">22/01/2020</h5> */}
-                  </div>
+                  {sortedPackage[0] &&
+                    <div className="m-2">
+                      <h5 className="font-weight-bold text-white">{t('From Date')}</h5>
+                      <h5 className="text-white font-weight-bold dirltrtar">{dateToDDMMYYYY(sortedPackage[0].startDate)}</h5>
+                      {/* <h5 className="text-white font-weight-bold dirltrtar">22/01/2020</h5> */}
+                    </div>
+                  }
+                  {sortedPackage[0] &&
+                    <div className="m-2">
+                      <h5 className="font-weight-bold text-white">{t('To Date')}</h5>
+                      <h5 className="text-white font-weight-bold dirltrtar">
+                        {sortedPackage[0].extendDate ? dateToDDMMYYYY(sortedPackage[0].extendDate) : dateToDDMMYYYY(sortedPackage[0].endDate)}
+                      </h5>
+                      {/* <h5 className="text-white font-weight-bold dirltrtar">22/01/2020</h5> */}
+                    </div>
+                  }
                 </div>
               </div>
             </div>

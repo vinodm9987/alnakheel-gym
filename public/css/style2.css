@@ -1,146 +1,151 @@
- .iconspostion{
-    margin: -29px 10px;
-    pointer-events: none;
+.iconspostion {
+  margin: -29px 10px;
+  pointer-events: none;
 }
- .form-control{
-   padding: .375rem 1.75rem .375rem 0.75rem;
-   background: #f7f8f9;
-   border: 1px solid #ced1d2;
+.form-control {
+  padding: 0.375rem 1.75rem 0.375rem 0.75rem;
+  background: #f7f8f9;
+  border: 1px solid #ced1d2;
 }
-.reports .exportOutlinebtn{
-    cursor: pointer;
-    border-color: orange;
-    color: orange;
+.reports .exportOutlinebtn {
+  cursor: pointer;
+  border-color: orange;
+  color: orange;
 }
 .btn:focus {
-    outline: none;
-    box-shadow: none;
-  }
-.reports .tableHead{
-    border: 1px solid #e6eef0;
+  outline: none;
+  box-shadow: none;
+}
+.reports .tableHead {
+  border: 1px solid #e6eef0;
 }
 .reports .tableHead td {
-    vertical-align: middle;
+  vertical-align: middle;
 }
-.reports .tableHead td , th{
-   font-size: 15px;
-   font-weight: 600;
+.reports .tableHead td,
+th {
+  font-size: 15px;
+  font-weight: 600;
 }
-.ShowingPages{
-    padding: 0px 25px 0 10px;
-    background: #5d78ff;
+.ShowingPages {
+  padding: 0px 25px 0 10px;
+  background: #5d78ff;
 }
-.ShowingPagesicon{
-    margin: 0 0 0 -20px;
-    pointer-events: none;
+.ShowingPagesicon {
+  margin: 0 0 0 -20px;
+  pointer-events: none;
 }
-@media screen and (max-width:500px){
-    .headName{
-        display: block !important;
-    }
-}
-
-.tableDownloadViewIcons{
-    color: white;
-    padding: 5px;
-    border-radius: 25px;
-    cursor: pointer;
-    margin: 0 5px;
+@media screen and (max-width: 500px) {
+  .headName {
+    display: block !important;
+  }
 }
 
-.selectInline{
-    width: 60px;
-    padding: 0 6px;
-    background: orange;
-    color: white;
-    border: orange;
-    cursor: pointer;
+.tableDownloadViewIcons {
+  color: white;
+  border-radius: 50%;
+  cursor: pointer;
+  margin: 0 5px;
+  width: 26px;
+  height: 26px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.selectInline {
+  width: 60px;
+  padding: 0 6px;
+  background: orange;
+  color: white;
+  border: orange;
+  cursor: pointer;
 }
 /* Common Pill */
 .CustomerDashboard .commonNavForPill a,
 .commonNavForTab a.nav-link:focus,
 .commonNavForTab a.nav-link:hover {
   color: #495057;
-  background:none !important;
+  background: none !important;
   white-space: nowrap;
 }
 
-.multiLineTexttruncate{
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
-    overflow: hidden;
+.multiLineTexttruncate {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
 }
 /* //------------
 Manage Trainers
 ------------// */
 .ManageTrainers .tableTypeStriped .table thead th {
-    color:black;
-    background: rgba(0, 0, 0, 0.05);
+  color: black;
+  background: rgba(0, 0, 0, 0.05);
 }
 .ManageTrainers .tableTypeStriped .table thead {
-    border: 1px solid transparent;
-    border-bottom-color: #ccc;
-    border-top: 1px solid #ccc;
-    border-left: 1px solid #ccc;
-    border-right: 1px solid #ccc;
+  border: 1px solid transparent;
+  border-bottom-color: #ccc;
+  border-top: 1px solid #ccc;
+  border-left: 1px solid #ccc;
+  border-right: 1px solid #ccc;
 }
 
 .Messages .borderRoundSeperateTable td {
-    padding: 5px 15px !important;
+  padding: 5px 15px !important;
 }
-.h-20px{
-    height: 20px;
+.h-20px {
+  height: 20px;
 }
-.w-20px{
-    width: 20px;
+.w-20px {
+  width: 20px;
 }
 /* .Messages #MemberList .table-responsive{
     height: 400px;
 } */
 
 @media (min-width: 768px) {
-    .modal-dialog-700 {
-      max-width: 700px;
-    }
+  .modal-dialog-700 {
+    max-width: 700px;
   }
+}
 /* --Image--- */
 
 .up-img {
-    height: 40px;
-    width: 40px;
-    border-radius: 50%;
-  }
-  .tb-title {
-    width: 105px;
-    padding-left: 7px;
-    white-space: normal;
-    min-width: 180px;
-  }
-  .stud-name {
-    color: #228cce;
-    font-weight: bold;
-    margin: 2px 0 4px 0;
-  }
-  .stud-id {
-    color: #989898;
-    margin: 0;
-  }
-  .tb {
-    display: flex;
-  }
-  .mxw-85px{
-    max-width: 85px;
-  } 
-  .mnw-85px{
-    min-width: 85px;
-  }
-  .r27px{
-    right: 27px;
-  }
-  /*------ Part Time Payment----- */
-  .cardTablePTP {
-    white-space: nowrap;
+  height: 40px;
+  width: 40px;
+  border-radius: 50%;
+}
+.tb-title {
+  width: 105px;
+  padding-left: 7px;
+  white-space: normal;
+  min-width: 180px;
+}
+.stud-name {
+  color: #228cce;
+  font-weight: bold;
+  margin: 2px 0 4px 0;
+}
+.stud-id {
+  color: #989898;
+  margin: 0;
+}
+.tb {
+  display: flex;
+}
+.mxw-85px {
+  max-width: 85px;
+}
+.mnw-85px {
+  min-width: 85px;
+}
+.r27px {
+  right: 27px;
+}
+/*------ Part Time Payment----- */
+.cardTablePTP {
+  white-space: nowrap;
 }
 .PrPLI li.list-group-item {
   background-color: #ededed;
@@ -148,51 +153,50 @@ Manage Trainers
   border-right: 0px !important;
   border-left: 0px !important;
 }
-.PrPLI li.list-group-item:hover{
+.PrPLI li.list-group-item:hover {
   background-color: #ffffff;
-
 }
 .PrPLI .list-group-item.active {
   z-index: 2;
-  color:black !important;
-  background-color:#ffffff !important;
-  border-color: rgba(0,0,0,.125) !important;
+  color: black !important;
+  background-color: #ffffff !important;
+  border-color: rgba(0, 0, 0, 0.125) !important;
 }
-.PrPLI .headingLI li.list-group-item:hover{
+.PrPLI .headingLI li.list-group-item:hover {
   background-color: none !important;
   cursor: none !important;
-  }
-  li.headingLI.list-group-item:hover {
-    background: #ededed !important;
-    cursor: auto;
 }
-.table-bordered .prpTable{
+li.headingLI.list-group-item:hover {
+  background: #ededed !important;
+  cursor: auto;
+}
+.table-bordered .prpTable {
   border: 1px solid #dee2e6 !important;
 }
-.table-responsive>.table-bordered{
+.table-responsive > .table-bordered {
   border: 1px solid #dee2e6 !important;
 }
 .prpTable tbody td {
   border-top: 0px !important;
   border: 0px !important;
-  border-right: 1px solid #dee2e6!important;
+  border-right: 1px solid #dee2e6 !important;
   border-left: 1px solid #dee2e6 !important;
 }
-.bgLightaqublue{
+.bgLightaqublue {
   background: #fcfdff;
 }
-.ppdTable tbody td{
+.ppdTable tbody td {
   background: #ffffff !important;
 }
-.prpdTable th{
+.prpdTable th {
   border: 0px solid #dee2e6 !important;
 }
-@media screen and (max-width:576px){
-.MCTabWidth{
-  width: 100%;
+@media screen and (max-width: 576px) {
+  .MCTabWidth {
+    width: 100%;
+  }
 }
-}
-.w-140px{
+.w-140px {
   width: 140px;
 }
 .InstallmentTable th {
@@ -203,8 +207,22 @@ Manage Trainers
   background-color: #000 !important;
 }
 .powered-in-cfv {
-  display: block;
-  left: 50%;
-  bottom: 10px;
-  transform: translate(-50px , 0);
+  position: absolute;
+  display: flex;
+  left: 19px;
+  bottom: 29px;
+  align-items: center;
+}
+.cfw-cus-img {
+  width: 132px;
+  max-width: 132px;
+  min-width: 132px;
+  flex: 0 0 132px;
+}
+.cfw-cus-img-right {
+  width: calc(100% - 132px);
+  flex: 1 2 calc(100% - 132px);
+}
+.k-animation-container {
+  direction: ltr;
 }

@@ -176,7 +176,7 @@ class UserTabBar extends Component {
                     <span className="ml-1 mr-4 text-muted"><small>Settings</small></span>
                   </a>
                 </li> */}
-                <div onClick={() => this.handleLogout()} className="my-2 text-body d-flex align-items-center cursorPointer border-top">
+                <div onClick={() => this.handleLogout()} className="my-2 text-body d-flex align-items-center cursorPointer">
                   <span className="iconv1 iconv1-identity ml-4 mr-1 text-muted"></span>
                   <span className="ml-1 mr-4 text-muted"><small>{t('Logout')}</small></span>
                 </div>

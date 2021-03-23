@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { Doughnut } from 'react-chartjs-2'
 import { withTranslation } from 'react-i18next'
 import { connect } from 'react-redux'
-import { calculateDays, countHoursGraph, dateToDDMMYYYY, setTime } from '../../utils/apis/helpers'
+import { calculateDays, countHoursGraph, dateToDDMMYYYY } from '../../utils/apis/helpers'
 
 class GraphExport extends Component {
 
@@ -80,7 +80,7 @@ class GraphExport extends Component {
             }}
           />
           {/* <div className="chartcenterData">
-                <p className="m-0">Total</p>
+                <p className="m-0">{t('Total')}</p>
                 <p className="m-0">{total}</p>
               </div> */}
           <div className="col-12 px-0">
@@ -161,7 +161,7 @@ class GraphExport extends Component {
     branches.forEach(branch => total = total + branch.amount)
     const data2 = {
       labels: branches.map(branch => branch.branchName),
-      datasets: [{ data: branches.map(branch => branch.amount), backgroundColor: colors.map(color => color), hoverBackgroundColor: colors.map(color => color) }],
+      datasets: [{ data: branches.map(branch => branch.amount.toFixed(3)), backgroundColor: colors.map(color => color), hoverBackgroundColor: colors.map(color => color) }],
       text: `${t('Total')}`,
       text2: `${total.toFixed(3)}`
     }
@@ -213,9 +213,9 @@ class GraphExport extends Component {
         if (pack.extendDate) {
           endDate = pack.extendDate;
         }
-        if (new Date(setTime(endDate)).setDate(new Date(setTime(endDate)).getDate() - 7) <= today && today < new Date(setTime(endDate))) {
+        if (today.getTime() === new Date(endDate).setDate(new Date(endDate).getDate() - 1)) {
           const days = calculateDays(endDate, new Date())
-          if (days <= 7) {
+          if (days <= 1) {
             week++
           }
         }
@@ -224,12 +224,12 @@ class GraphExport extends Component {
     const data1 = {
       labels: packages.map(pack => pack.packageName),
       datasets: [{ data: packages.map(pack => pack.count), backgroundColor: packages.map(pack => pack.color), hoverBackgroundColor: packages.map(pack => pack.color) }],
-      text: `${t('Total')} ${response.length}`
+      text: `${t('Total')} ${week}`
     }
     const data2 = {
-      labels: ['Within A Week'],
+      labels: ['Within A Day'],
       datasets: [{ data: [week], backgroundColor: ['#28a745'], hoverBackgroundColor: ['#28a745'] }],
-      text: `${t('Total')} ${response.length}`
+      text: `${t('Total')} ${week}`
     }
     graphDatas.push({ name: 'Upcoming Expiry by Packages', type: 'doughnut', data: data1, total: response.length })
     graphDatas.push({ name: 'Upcoming Expiry by Remaining Period', type: 'doughnut', data: data2, total: response.length })
@@ -394,12 +394,12 @@ class GraphExport extends Component {
     periods.forEach(t => totalPeriod += t.amount)
     const data1 = {
       labels: trainers.map(trainer => trainer.credentialId.userName),
-      datasets: [{ data: trainers.map(t => t.amount), backgroundColor: trainerColors.map(color => color), hoverBackgroundColor: trainerColors.map(color => color) }],
+      datasets: [{ data: trainers.map(t => t.amount.toFixed(3)), backgroundColor: trainerColors.map(color => color), hoverBackgroundColor: trainerColors.map(color => color) }],
       text: `${this.props.defaultCurrency} ${totalTrainer.toFixed(3)}`
     }
     const data2 = {
       labels: periods.map(period => period.periodName),
-      datasets: [{ data: periods.map(p => p.amount), backgroundColor: periodColors.map(color => color), hoverBackgroundColor: periodColors.map(color => color) }],
+      datasets: [{ data: periods.map(p => p.amount.toFixed(3)), backgroundColor: periodColors.map(color => color), hoverBackgroundColor: periodColors.map(color => color) }],
       text: `${this.props.defaultCurrency} ${totalPeriod.toFixed(3)}`
     }
     graphDatas.push({ name: 'Trainer Sales by Trainers', type: 'doughnut', data: data1, total: response.length })
@@ -419,13 +419,13 @@ class GraphExport extends Component {
     branches.forEach(t => totalBranch += t.amount)
     const data1 = {
       labels: transactionType.map(transaction => transaction.transactionName),
-      datasets: [{ data: transactionType.map(transaction => transaction.amount.toFixed(3)), backgroundColor: ['#28a745', '#dc3545', 'yellow'], hoverBackgroundColor: ['#28a745', '#dc3545', 'yellow'] }],
+      datasets: [{ data: transactionType.map(transaction => transaction.amount && transaction.amount.toFixed(3)), backgroundColor: ['#28a745', '#dc3545', 'yellow'], hoverBackgroundColor: ['#28a745', '#dc3545', 'yellow'] }],
       text: `${t('Total')}`,
       text2: `${this.props.defaultCurrency} ${totalTransaction.toFixed(3)}`
     }
     const data2 = {
       labels: branches.map(branch => branch.branchName),
-      datasets: [{ data: branches.map(branch => branch.amount.toFixed(3)), backgroundColor: colors.map(color => color), hoverBackgroundColor: colors.map(color => color) }],
+      datasets: [{ data: branches.map(branch => branch.amount && branch.amount.toFixed(3)), backgroundColor: colors.map(color => color), hoverBackgroundColor: colors.map(color => color) }],
       text: `${t('Total')}`,
       text2: `${this.props.defaultCurrency} ${totalBranch.toFixed(3)}`
     }

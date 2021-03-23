@@ -151,19 +151,21 @@ class Packages extends Component {
   handleEdit(packages) {
     scrollToTop()
     this.setState({
-      name: packages.packageName,
-      amount: packages.amount.toFixed(3),
-      period: packages.period._id,
-      startDate: new Date(packages.startDate),
-      endDate: new Date(packages.endDate),
-      description: packages.description,
-      color: packages.color,
-      image: packages.image,
-      fromTime: packages.fromTime ? new Date(packages.fromTime) : new Date(),
-      toTime: packages.fromTime ? new Date(packages.toTime) : new Date(),
-      // salesBranches: packages.salesBranches.map(a => { return { label: a.branchName, value: a._id } }),
-      // accessBranches: packages.accessBranches.map(a => { return { label: a.branchName, value: a._id } }),
-      packageId: packages._id
+      ...this.default, ...{
+        name: packages.packageName,
+        amount: packages.amount.toFixed(3),
+        period: packages.period._id,
+        startDate: new Date(packages.startDate),
+        endDate: new Date(packages.endDate),
+        description: packages.description,
+        color: packages.color,
+        image: packages.image,
+        fromTime: packages.fromTime ? new Date(packages.fromTime) : new Date(),
+        toTime: packages.fromTime ? new Date(packages.toTime) : new Date(),
+        // salesBranches: packages.salesBranches.map(a => { return { label: a.branchName, value: a._id } }),
+        // accessBranches: packages.accessBranches.map(a => { return { label: a.branchName, value: a._id } }),
+        packageId: packages._id
+      }
     })
   }
 

@@ -184,7 +184,7 @@ ul.notificationMenu li {
   z-index: 97;
   top: 74px;
   right: 19px;
-  padding: 10px 0 0 0;
+  padding: 0 0 0 0;
   margin: 0;
   background-color: #fff;
   box-shadow: 0 1px 5px 0 #ccc;
@@ -2392,6 +2392,14 @@ For Common Currency
     max-width: calc(100% - 72px - 2rem);
   }
 }
+@media only screen and (max-width: 1300px) and (min-width: 1200px)  {
+  .add-class-special-col {
+    width: 800px;
+    flex: 0 0 800px;
+    min-width: 800px;
+    max-width: 800px;
+  }
+}
 
 /* Assets */
 @media (min-width: 992px) {
@@ -3799,4 +3807,8 @@ input:focus {
 
 input:focus {
   border: 1px solid inherit;
+}
+
+.modal {
+  overflow: auto !important;
 }

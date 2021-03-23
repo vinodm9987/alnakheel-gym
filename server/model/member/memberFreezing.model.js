@@ -7,16 +7,19 @@ const MemberFreezeSchema = new Schema({
 
     fromDate: Date, toDate: Date, noOfDays: Number,
 
-    status: { type: String, enum: ["Pending", "Completed"], default: "Pending" },
-
     reactivationDate: Date, reason: String,
 
     totalAmount: Number, actualAmount: Number, cashAmount: Number, cardAmount: Number,
 
     cardNumber: String, vatAmount: Number, returningDate: Date,
 
-    typeOfFreeze: { type: String, enum: ['Froze', 'Canceled'], default: 'Froze' },
+    status: { type: Boolean, default: true },
 
+    typeOfFreeze: { type: String, enum: ['Pending', 'Froze', 'Canceled'], default: 'Pending' },
+
+    orderNo: String,
+
+    doneBy: { type: Schema.Types.ObjectId, ref: "Credential" },
 
 }, { timestamps: { createdAt: "created_at", updatedAt: "updated_at" } }, { strict: false });
 

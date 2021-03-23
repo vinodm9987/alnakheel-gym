@@ -239,21 +239,23 @@ class AddClass extends Component {
     this.props.dispatch(getAllVat({ branch: c.branch._id }))
     this.props.dispatch(getAllRoomByBranch({ branch: c.branch._id }))
     this.setState({
-      className: c.className,
-      trainer: c.trainer,
-      amount: c.amount.toFixed(3),
-      branch: c.branch._id,
-      room: c.room._id,
-      capacity: c.capacity,
-      description: c.description,
-      image: c.image,
-      color: c.color,
-      startDate: new Date(c.startDate),
-      endDate: new Date(c.endDate),
-      startTime: new Date(c.startTime),
-      endTime: new Date(c.endTime),
-      classDays,
-      classId: c._id
+      ...this.default, ...{
+        className: c.className,
+        trainer: c.trainer,
+        amount: c.amount.toFixed(3),
+        branch: c.branch._id,
+        room: c.room._id,
+        capacity: c.capacity,
+        description: c.description,
+        image: c.image,
+        color: c.color,
+        startDate: new Date(c.startDate),
+        endDate: new Date(c.endDate),
+        startTime: new Date(c.startTime),
+        endTime: new Date(c.endTime),
+        classDays,
+        classId: c._id
+      }
     })
   }
 
@@ -568,7 +570,7 @@ class AddClass extends Component {
               {branch && this.props.activeVats && this.props.activeVats.length > 0 &&
                 <div className="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
                   <div className="form-group inlineFormGroup">
-                    <label htmlFor="VAT" className="mx-sm-2 inlineFormLabel type2">VAT</label>
+                    <label htmlFor="VAT" className="mx-sm-2 inlineFormLabel type1">{t('VAT')}</label>
                     <div className="form-group">
                       {this.props.activeVats && this.props.activeVats.map((vat, i) => {
                         const { vatName, taxPercent, defaultVat, _id } = vat
@@ -588,7 +590,7 @@ class AddClass extends Component {
               }
               {/* ------------------------ */}
 
-              <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
+              <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6 add-class-special-col">
                 <div className="col-12 subHead pb-3 px-4">
                   <h5 className="font-weight-bold">{t('Duration')}</h5>
                 </div>
@@ -646,7 +648,7 @@ class AddClass extends Component {
                 </div>
               </div>
 
-              <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
+              <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6 add-class-special-col">
                 <div className="col-12 subHead pb-3 px-4">
                   <h5 className="font-weight-bold">{t('Class Time')}</h5>
                   {/* translte tushar */}
@@ -725,25 +727,25 @@ class AddClass extends Component {
                 </div>
                 {/* <div className="row">
                   <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12"> */}
-                    <div className="form-group inlineFormGroup">
-                      <label className="mx-sm-2 inlineFormLabel type3">{t('Days')}</label>
-                      <Select
-                        formatOptionLabel={formatOptionLabelDays}
-                        options={classDays}
-                        value={''}
-                        className={this.state.classDaysE ? "form-control graySelect mx-sm-2 inlineFormInputs FormInputsError h-auto w-100 p-0" : "form-control graySelect mx-sm-2 inlineFormInputs h-auto w-100 p-0"}
-                        onChange={(e) => this.selectClassDays(e)}
-                        isSearchable={false}
-                        isClearable={false}
-                        styles={colourStyles}
-                        placeholder={t('Select days')}
-                        closeMenuOnSelect={false}
-                      />
-                      <div className="errorMessageWrapper">
-                        <small className="text-danger mx-sm-2 errorMessage">{this.state.classDaysE}</small>
-                      </div>
-                    </div>
-                  {/* </div>
+                <div className="form-group inlineFormGroup">
+                  <label className="mx-sm-2 inlineFormLabel type3">{t('Days')}</label>
+                  <Select
+                    formatOptionLabel={formatOptionLabelDays}
+                    options={classDays}
+                    value={''}
+                    className={this.state.classDaysE ? "form-control graySelect mx-sm-2 inlineFormInputs FormInputsError h-auto w-100 p-0" : "form-control graySelect mx-sm-2 inlineFormInputs h-auto w-100 p-0"}
+                    onChange={(e) => this.selectClassDays(e)}
+                    isSearchable={false}
+                    isClearable={false}
+                    styles={colourStyles}
+                    placeholder={t('Select days')}
+                    closeMenuOnSelect={false}
+                  />
+                  <div className="errorMessageWrapper">
+                    <small className="text-danger mx-sm-2 errorMessage">{this.state.classDaysE}</small>
+                  </div>
+                </div>
+                {/* </div>
                 </div> */}
               </div>
               {/* see design */}

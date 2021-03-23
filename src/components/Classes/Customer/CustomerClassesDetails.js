@@ -159,7 +159,7 @@ class CustomerClassesDetails extends Component {
                               <h6 className="SegoeBold">{taxPercent === 0 ? `${vatName}` : `${taxPercent}%`}</h6>
                             </div>
                             <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 d-flex justify-content-end">
-                              <button disabled={(capacity - (occupied ? occupied : 0)) === 0} type="button" onClick={(e) => this.handleSubmit(e, totalAmount, _id)} className="btn btn-success">Book a Class</button>
+                              <button disabled={(capacity - (occupied ? occupied : 0)) === 0} type="button" onClick={(e) => this.handleSubmit(e, totalAmount, _id)} className="btn btn-success">{t('Book a Class')}</button>
                             </div>
                           </div>
                         </div>

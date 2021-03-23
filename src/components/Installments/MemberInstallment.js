@@ -2,16 +2,17 @@ import React, { Component } from 'react'
 
 class MemberInstallment extends Component {
     render() {
+        const { t } = this.props
         return (
             <div className="mainPage p-3 membersInstallment">
                 <div className="row">
                     <div className="col-12 pageBreadCrumbs">
-                        <span className="crumbText">Home</span><span className="mx-2">/</span><span className="crumbText">Members</span><span className="mx-2">/</span><span className="crumbText">Member Installments</span>
+                        <span className="crumbText">{t('Home')}</span><span className="mx-2">/</span><span className="crumbText">{t('Members')}</span><span className="mx-2">/</span><span className="crumbText">{t('Member Installments')}</span>
                     </div>
                     <div className="col-12">
                         <div className="row">
                             <div className="col-12 col-sm-12 pageHead">
-                                <h1>Member Installments</h1>
+                                <h1>{t('Member Installments')}</h1>
                             </div>
                         </div>
                         <div className="pageHeadLine"></div>
@@ -22,7 +23,7 @@ class MemberInstallment extends Component {
                                 <form className="form-inline row">
                                     <div className="col-12">
                                         <div className="row d-block d-sm-flex justify-content-between pt-5">
-                                            <div className="col w-auto px-1 flexBasis-auto flex-grow-1"><h4 className="px-3">Members List</h4></div>
+                                            <div className="col w-auto px-1 flexBasis-auto flex-grow-1"><h4 className="px-3">{t('Members List')}</h4></div>
                                             <div className="col w-auto px-1 flexBasis-auto flex-grow-0">
                                                 <div className="form-group inlineFormGroup">
                                                     <input type="text" autoComplete="off" className="form-control mx-sm-2 badge-pill inlineFormInputs" placeholder="Search" />
@@ -38,12 +39,12 @@ class MemberInstallment extends Component {
                                     <table className="borderRoundSeperateTable tdGray">
                                         <thead>
                                             <tr>
-                                                <th>Member Name</th>
-                                                <th>Package Name</th>
-                                                <th>Total Amount</th>
-                                                <th>Paid Amount</th>
-                                                <th>Remaining Amount</th>
-                                                <th className="text-center">Action</th>
+                                                <th>{t('Member Name')}</th>
+                                                <th>{t('Package Name')}</th>
+                                                <th>{t('Total Amount')}</th>
+                                                <th>{t('Paid Amount')}</th>
+                                                <th>{t('Remaining Amount')}</th>
+                                                <th className="text-center">{t('Action')}</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -65,7 +66,7 @@ class MemberInstallment extends Component {
                                                 <td className="text-danger"><h4 className="m-0">$ 300</h4></td>
                                                 <td className="text-danger"><h4 className="m-0">$ 200</h4></td>
                                                 <td className="text-center">
-                                                    <a href="/#" type="button" className="btn btn-primary btn-sm w-100px rounded-50px" >Details</a>
+                                                    <a href="/#" type="button" className="btn btn-primary btn-sm w-100px rounded-50px" >{t('Details')}</a>
                                                 </td>
                                             </tr>
                                         </tbody>

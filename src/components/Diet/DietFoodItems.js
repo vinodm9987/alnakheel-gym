@@ -76,7 +76,11 @@ class DietFoodItems extends Component {
   handleEdit(doc) {
     scrollToTop()
     const { itemName, calories, measurement, measurementValue, _id } = doc
-    this.setState({ itemName, calories, measurement, measurementValue, id: _id })
+    this.setState({
+      ...this.default, ...{
+        itemName, calories, measurement, measurementValue, id: _id
+      }
+    })
   }
 
   renderTable() {

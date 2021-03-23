@@ -50,7 +50,7 @@ class TrainerMyClasses extends Component {
       <div className="mainPage p-3 TrainerMyClasses">
         <div className="row">
           <div className="col-12 pageBreadCrumbs">
-            <span className="crumbText">Home</span><span className="mx-2">/</span><span className="crumbText">My Classes</span>
+            <span className="crumbText">{t('Home')}</span><span className="mx-2">/</span><span className="crumbText">{t('My Classes')}</span>
           </div>
           <div className="col-12">
             <div className="row">
@@ -90,7 +90,7 @@ class TrainerMyClasses extends Component {
                     </div>
                     <div className="p-3 flex-shrink-1 flex-grow-1 w-100" style={{ backgroundColor: color }}>
                       <div className="d-flex justify-content-end align-items-center">
-                        <small className="px-1 text-white">Total Members</small>
+                        <small className="px-1 text-white">{t('Total Members')}</small>
                         <span className="d-flex mx-1 btn btn-warning btn-sm align-items-center borderRound bg-white border-0 dirltrtar">
                           <span className="mx-1 iconv1 iconv1-capacity"></span>
                           <span className="text-body">{`${occupied ? occupied : 0} / ${capacity}`}</span>
@@ -108,7 +108,7 @@ class TrainerMyClasses extends Component {
                           <span className="text-white whiteSpaceNoWrap">{`${dateToDDMMYYYY(startDate)} - ${dateToDDMMYYYY(endDate)}`}</span>
                         </span>
                         <Link to={`/trainer-classes-details/${_id}`}>
-                          <button className="btn btn-warning btn-sm text-body bg-white border-0 mb-2">View Details</button>
+                          <button className="btn btn-warning btn-sm text-body bg-white border-0 mb-2">{t('View Details')}</button>
                         </Link>
                       </div>
                     </div>

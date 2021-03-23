@@ -18,9 +18,9 @@ export const generateReport = (image, tabledData, reportName, fromDate, toDate, 
     // const date = new Date().getTime()
     // const xOffsetReport = (pdf.internal.pageSize.width / 2) - (pdf.getStringUnitWidth(`test`) * pdf.internal.getFontSize() / 2);
     if (data.pageCount > 1) {
-      branchName && image && pdf.addImage(image, 'PNG', pageWidth / 2 - 30, 10, 80, 32)
+      branchName && image && pdf.addImage(image, 'PNG', pageWidth / 2 - 30, 10, 32, 32)
     } else {
-      branchName && image && pdf.addImage(image, 'PNG', pageWidth / 2 - 70, 10, 150, 60);
+      branchName && image && pdf.addImage(image, 'PNG', pageWidth / 2 - 30, 10, 60, 60);
     }
 
   }

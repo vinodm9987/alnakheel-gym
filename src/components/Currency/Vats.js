@@ -100,7 +100,7 @@ class Vat extends Component {
                   </select>
                   <span className="iconv1 iconv1-arrow-down selectBoxIcon"></span>
                   <div className="errorMessageWrapper">
-                    <small className="text-danger mx-sm-2  errorMessage px-4">{this.state.branchE}</small>
+                    <small className="text-danger mx-sm-2 errorMessage">{this.state.branchE}</small>
                   </div>
                 </div>
               </div>
@@ -118,7 +118,7 @@ class Vat extends Component {
                 </select> */}
                   {/* <span className="iconv1 iconv1-arrow-down selectBoxIcon"></span> */}
                   <div className="errorMessageWrapper">
-                    <small className="text-danger mx-sm-2  errorMessage px-4">{this.state.vatNameE}</small>
+                    <small className="text-danger mx-sm-2 errorMessage">{this.state.vatNameE}</small>
                   </div>
                 </div>
               </div>
@@ -131,7 +131,7 @@ class Vat extends Component {
                     <label for="vatValue" className="form-control w-50px text-center px-0" style={{ borderRadius: '2px' }}>%</label>
                   </div>
                   <div className="errorMessageWrapper">
-                    <small className="text-danger mx-sm-2 errorMessage px-4">{this.state.taxPercentE}</small>
+                    <small className="text-danger mx-sm-2 errorMessage">{this.state.taxPercentE}</small>
                   </div>
                 </div>
               </div>

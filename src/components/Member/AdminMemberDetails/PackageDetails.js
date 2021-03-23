@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { DonutChart } from '../../Layout'
 import { connect } from 'react-redux'
-import { dateToDDMMYYYY, calculateDays } from '../../../utils/apis/helpers'
+import { dateToDDMMYYYY, calculateDays, dateToHHMM } from '../../../utils/apis/helpers'
 import { validator } from '../../../utils/apis/helpers'
 import { updateMemberDetails } from '../../../actions/member.action'
 import { startPackage } from '../../../actions/bioStar.action'
@@ -11,6 +11,9 @@ import { withTranslation } from 'react-i18next'
 import { GET_ALERT_ERROR } from '../../../actions/types'
 import DateFnsUtils from '@date-io/date-fns';
 import { DatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
+import instaimg from '../../../assets/img/insta.jpg'
+import QRCode from 'qrcode.react'
+import { PRODIP } from '../../../config'
 
 class PackageDetails extends Component {
 
@@ -32,14 +35,17 @@ class PackageDetails extends Component {
     cardNumberE: '',
     Installments: [],
     installmentTotalAmount: 0,
+    installmentToBePaid: 0,
     installmentPaidAmount: 0,
     installmentRemainAmount: 0,
     installmentPackageName: '',
     installmentTrainerName: '',
+    installmentStartDate: new Date(),
+    installmentEndDate: new Date(),
     showCheque: false,
     bankName: '',
     chequeNumber: '',
-    chequeDate: '',
+    chequeDate: new Date(),
     cheque: 0,
     bankNameE: '',
     chequeNumberE: '',
@@ -56,34 +62,51 @@ class PackageDetails extends Component {
     })
   }
 
-  setInstallments(Installments, installmentTotalAmount, installmentPackageName) {
-    let paidAmount = 0
+  handlePrint() {
+    var w = window.open('', 'new div', 'height=400,width=600');
+    var printOne = $('#newPrint').html();
+    w.document.body.innerHTML = printOne
+    w.window.print();
+    w.document.close();
+    return false;
+  }
+
+  setInstallments(Installments, installmentTotalAmount, installmentPackageName, installmentStartDate, installmentEndDate) {
+    let paidAmount = 0, toBePaid = 0
     if (Installments && Installments.length) {
       Installments.forEach((installment) => {
         if (installment.paidStatus === 'Paid') {
-          paidAmount += installment.actualAmount ? installment.actualAmount : installment.totalAmount
+          paidAmount += installment.totalAmount
+          toBePaid += installment.actualAmount
         }
       })
     }
-    let remainAmount = parseFloat(installmentTotalAmount) - parseFloat(paidAmount)
+    let remainAmount = parseFloat(installmentTotalAmount) - parseFloat(toBePaid)
     if (Installments && Installments.length) {
-      this.setState({ Installments, installmentTotalAmount, installmentPaidAmount: paidAmount, installmentRemainAmount: remainAmount, installmentPackageName })
+      this.setState({
+        Installments, installmentTotalAmount, installmentToBePaid: toBePaid, installmentPaidAmount: paidAmount,
+        installmentRemainAmount: remainAmount, installmentPackageName, installmentStartDate, installmentEndDate
+      })
     }
   }
 
 
-  setTrainerInstallments(Installments, installmentTotalAmount, installmentTrainerName) {
-    let paidAmount = 0
+  setTrainerInstallments(Installments, installmentTotalAmount, installmentTrainerName, installmentPackageName, installmentStartDate, installmentEndDate) {
+    let paidAmount = 0, toBePaid = 0
     if (Installments && Installments.length) {
       Installments.forEach((installment) => {
         if (installment.paidStatus === 'Paid') {
-          paidAmount += installment.actualAmount ? installment.actualAmount : installment.totalAmount
+          paidAmount += installment.totalAmount
+          toBePaid += installment.actualAmount
         }
       })
     }
-    let remainAmount = parseFloat(installmentTotalAmount) - parseFloat(paidAmount)
+    let remainAmount = parseFloat(installmentTotalAmount) - parseFloat(toBePaid)
     if (Installments && Installments.length) {
-      this.setState({ Installments, installmentTotalAmount, installmentPaidAmount: paidAmount, installmentRemainAmount: remainAmount, installmentTrainerName })
+      this.setState({
+        Installments, installmentTotalAmount, installmentToBePaid: toBePaid, installmentPaidAmount: paidAmount, installmentRemainAmount: remainAmount,
+        installmentTrainerName, installmentPackageName: `${installmentTrainerName}-${installmentPackageName}`, installmentStartDate, installmentEndDate
+      })
     }
   }
 
@@ -250,8 +273,8 @@ class PackageDetails extends Component {
   render() {
     const { t } = this.props
     if (this.props.memberById) {
-      const { packageDetails, doneFingerAuth } = this.props.memberById
-      const { cash, paidType, card, digital, totalAmount } = this.state
+      const { packageDetails, doneFingerAuth, branch, credentialId, memberId, mobileNo } = this.props.memberById
+      const { cash, paidType, card, digital, totalAmount, installmentReceipt } = this.state
 
       let totalLeftAfterDigital = totalAmount - digital
       let totalLeftAfterCash = totalAmount - digital - cash
@@ -574,7 +597,7 @@ class PackageDetails extends Component {
                               <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
                                 <div className="form-group inlineFormGroup mb-3">
                                   <label htmlFor="bankName" className="mx-sm-2 inlineFormLabel mb-1">{t('Bank Name')}</label>
-                                  <input type="text" autoComplete="off" className={this.state.bankNameE ? "form-control mx-sm-2 inlineFormInputs FormInputsError w-100 py-0 px-2 d-flex align-items-center bg-white dirltr" : "form-control mx-sm-2 inlineFormInputs w-100 py-0 px-2 d-flex align-items-center bg-white dirltr"}
+                                  <input type="text" autoComplete="off" className={this.state.bankNameE ? "form-control mx-sm-2 inlineFormInputs FormInputsError w-100 py-0 px-2 d-flex align-items-center bg-white" : "form-control mx-sm-2 inlineFormInputs w-100 py-0 px-2 d-flex align-items-center bg-white"}
                                     id="bankName"
                                     value={this.state.bankName} onChange={(e) => this.setState({ bankName: e.target.value })}
                                   />
@@ -606,14 +629,14 @@ class PackageDetails extends Component {
                                       autoOk
                                       invalidDateMessage=''
                                       minDateMessage=''
-                                      className={this.state.chequeDateE ? "form-control mx-sm-2 inlineFormInputs FormInputsError w-100 p-0 d-flex align-items-center bg-white dirltr" : "form-control mx-sm-2 inlineFormInputs w-100 p-0 d-flex align-items-center bg-white dirltr"}
+                                      className={this.state.chequeDateE ? "form-control pl-2 bg-white mx-sm-2 inlineFormInputs FormInputsError" : "form-control pl-2 bg-white mx-sm-2 inlineFormInputs"}
                                       minDate={new Date()}
                                       format="dd/MM/yyyy"
                                       value={this.state.chequeDate}
                                       onChange={(e) => this.setState(validator(e, 'chequeDate', 'date', []))}
                                     />
                                   </MuiPickersUtilsProvider>
-                                  <span className="icon-date dateBoxIcon"></span>
+                                  <span class="iconv1 iconv1-calander dateBoxIcon"></span>
                                   <div className="errorMessageWrapper">
                                     <small className="text-danger mx-sm-2 errorMessage"></small>
                                   </div>
@@ -672,8 +695,8 @@ class PackageDetails extends Component {
                         <th>{t('To Date')}</th>
                         <th>{t('Amount')}</th>
                         {/* <th>{t('Trainer')}</th> */}
-                        <th className="text-center">Installments</th>
-                        <th className="text-center">Action</th>
+                        <th className="text-center">{t('Installments')}</th>
+                        <th className="text-center">{t('Action')}</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -695,9 +718,14 @@ class PackageDetails extends Component {
                             {paidStatus === 'Installment'
                               ? <td className="text-center">
                                 <span className="badge badge-pill badge-primary px-3 py-2 cursorPointer" data-toggle="modal" data-target="#InstallmentDetails"
-                                  onClick={() => this.setInstallments(Installments, amount, packageName)}>Payment Details</span>
+                                  onClick={() => this.setInstallments(Installments, amount, packageName, startDate, endDate)}>{t('Payment Details')}</span>
                               </td>
-                              : <td className="text-center">NA</td>
+                              : <td className="text-center">
+                                {/* <span className="iconv1 iconv1-eye bg-success tableDownloadViewIcons" data-toggle="modal" data-target="#ReceiptModal"
+                                onClick={() => this.setState({ installmentReceipt: order })}></span> */}
+                                <span className="iconv1 iconv1-eye bg-success tableDownloadViewIcons" data-toggle="modal" data-target="#ReceiptModal"
+                                  onClick={() => this.setState({ installmentReceipt: pack, installmentPackageName: packageName, installmentStartDate: startDate, installmentEndDate: endDate })} ></span>
+                              </td>
                             }
                           </tr>
                         )
@@ -720,15 +748,15 @@ class PackageDetails extends Component {
                         <th>{t('Start Date')}</th>
                         <th>{t('End Date')}</th>
                         <th>{t('Amount')}</th>
-                        <th>{t('Action')}</th>
+                        <th className="text-center">{t('Action')}</th>
                       </tr>
                     </thead>
                     <tbody>
                       {packageDetails && packageDetails.map((pack) => {
                         const { packages: { packageName }, trainerDetails } = pack
                         return (
-                          trainerDetails && trainerDetails.map((t, j) => {
-                            const { trainerStart, trainerEnd, trainer: { credentialId: { userName, avatar } }, trainerFees: { amount }, Installments } = t
+                          trainerDetails && trainerDetails.map((ta, j) => {
+                            const { trainerStart, trainerEnd, trainer: { credentialId: { userName, avatar } }, trainerFees: { amount }, Installments } = ta
                             return (
                               <tr key={j}>
                                 <td>
@@ -741,10 +769,19 @@ class PackageDetails extends Component {
                                 <td className="dirltrtar">{dateToDDMMYYYY(trainerStart)}</td>
                                 <td className="dirltrtar">{dateToDDMMYYYY(trainerEnd)}</td>
                                 <td className="text-danger font-weight-bold"><span>{this.props.defaultCurrency}</span><span className="pl-1"></span><span>{amount}</span></td>
-                                <td className="text-center">
-                                  <span className="badge badge-pill badge-primary px-3 py-2 cursorPointer" data-toggle="modal" data-target="#InstallmentDetails1"
-                                    onClick={() => this.setTrainerInstallments(Installments, amount, userName)}>Payment Details</span>
-                                </td>
+                                {/* tushar if installment */}
+                                {Installments.length > 0
+                                  ? <td className="text-center">
+                                    <span className="badge badge-pill badge-primary px-3 py-2 cursorPointer" data-toggle="modal" data-target="#InstallmentDetails1"
+                                      onClick={() => this.setTrainerInstallments(Installments, amount, userName, packageName, trainerStart, trainerEnd)}>{t('Payment Details')}</span>
+                                  </td>
+                                  : <td className="text-center">
+                                    {/* <span className="iconv1 iconv1-eye bg-success tableDownloadViewIcons" data-toggle="modal" data-target="#ReceiptModal"
+                                  onClick={() => this.setState({ installmentReceipt: order })}></span> */}
+                                    <span className="iconv1 iconv1-eye bg-success tableDownloadViewIcons" data-toggle="modal" data-target="#ReceiptModal"
+                                      onClick={() => this.setState({ installmentReceipt: ta, installmentPackageName: `${userName}-${packageName}`, installmentStartDate: trainerStart, installmentEndDate: trainerEnd })} ></span>
+                                  </td>
+                                }
                               </tr>
                             )
                           })
@@ -765,7 +802,7 @@ class PackageDetails extends Component {
               <div className="modal-dialog modal-lg modal-dialog-centered">
                 <div className="modal-content">
                   <div className="modal-header">
-                    <h4 className="modal-title">Payment Details</h4>
+                    <h4 className="modal-title">{t('Payment Details')}</h4>
                     <button type="button" className="close align-self-center" data-dismiss="modal"><span className="iconv1 iconv1-close"></span></button>
                   </div>
                   <div className="modal-body px-4">
@@ -775,28 +812,33 @@ class PackageDetails extends Component {
                         <h6 className="text-danger">{this.state.installmentPackageName}</h6>
                       </div>
                       <div className="m-1">
-                        <h6 className="font-weight-bold mb-1">Total Amount</h6>
+                        <h6 className="font-weight-bold mb-1">{t('Total Amount')}</h6>
                         <h6 className="text-danger"><b>{this.props.defaultCurrency} {this.state.installmentTotalAmount}</b></h6>
                       </div>
                       <div className="m-1">
-                        <h6 className="font-weight-bold mb-1">Paid Amount</h6>
+                        <h6 className="font-weight-bold mb-1">{t('To Be Paid')}</h6>
+                        <h6 className="text-danger"><b>{this.props.defaultCurrency} {this.state.installmentToBePaid}</b></h6>
+                      </div>
+                      <div className="m-1">
+                        <h6 className="font-weight-bold mb-1">{t('Paid Amount')}</h6>
                         <h6 className="text-danger"><b>{this.props.defaultCurrency} {this.state.installmentPaidAmount}</b></h6>
                       </div>
                       <div className="m-1">
-                        <h6 className="font-weight-bold mb-1">Remaining Amount</h6>
+                        <h6 className="font-weight-bold mb-1">{t('Remaining Amount')}</h6>
                         <h6 className="text-danger"><b>{this.props.defaultCurrency} {this.state.installmentRemainAmount}</b></h6>
                       </div>
                     </div>
-                    <h5 className="m-1 py-3"><b>Installment History</b></h5>
+                    <h5 className="m-1 py-3"><b>{t('Installment History')}</b></h5>
                     <div className="table-responsive">
                       <table className="table table-striped InstallmentTable">
                         <thead>
                           <tr className="border">
-                            <th>Installment Type</th>
-                            <th>Amount</th>
-                            <th>Due Date</th>
-                            <th>Paid Date</th>
+                            <th>{t('Installment Type')}</th>
+                            <th>{t('Amount')}</th>
+                            <th>{t('Due Date')}</th>
+                            <th>{t('Paid Date')}</th>
                             <th>{t('Status')}</th>
+                            <th className="text-center">{t('Action')}</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -807,7 +849,15 @@ class PackageDetails extends Component {
                                 <td className="text-danger font-weight-bold">{this.props.defaultCurrency} {installment.actualAmount ? installment.actualAmount : installment.totalAmount}</td>
                                 <td>{dateToDDMMYYYY(installment.dueDate)}</td>
                                 <td>{dateToDDMMYYYY(installment.dateOfPaid)}</td>
-                                {installment.paidStatus === 'Paid' ? <td className="text-success font-weight-bold">Paid</td> : <td className="text-danger font-weight-bold">Pending</td>}
+                                {installment.paidStatus === 'Paid' ? <td className="text-success font-weight-bold">{t('Paid')}</td> : <td className="text-danger font-weight-bold">{t('Pending')}</td>}
+                                {/* tushar new button here */}
+                                {installment.paidStatus === 'Paid' &&
+                                  <td className="text-center">
+                                    <span className="iconv1 iconv1-eye bg-success tableDownloadViewIcons" data-toggle="modal" data-target="#ReceiptModal"
+                                      onClick={() => this.setState({ installmentReceipt: installment })} ></span>
+                                  </td>
+                                }
+                                {/* -/ tushar new button here over */}
                               </tr>
                             )
                           })}
@@ -825,38 +875,43 @@ class PackageDetails extends Component {
               <div className="modal-dialog modal-lg modal-dialog-centered">
                 <div className="modal-content">
                   <div className="modal-header">
-                    <h4 className="modal-title">Payment Details</h4>
+                    <h4 className="modal-title">{t('Payment Details')}</h4>
                     <button type="button" className="close align-self-center" data-dismiss="modal"><span className="iconv1 iconv1-close"></span></button>
                   </div>
                   <div className="modal-body px-4">
                     <div className="d-flex flex-wrap justify-content-between p-1">
                       <div className="m-1">
-                        <h6 className="font-weight-bold mb-1">Trainer Name</h6>
+                        <h6 className="font-weight-bold mb-1">{t('Trainer Name')}</h6>
                         <h6 className="text-danger">{this.state.installmentTrainerName}</h6>
                       </div>
                       <div className="m-1">
-                        <h6 className="font-weight-bold mb-1">Total Amount</h6>
+                        <h6 className="font-weight-bold mb-1">{t('Total Amount')}</h6>
                         <h6 className="text-danger"><b>{this.props.defaultCurrency} {this.state.installmentTotalAmount}</b></h6>
                       </div>
                       <div className="m-1">
-                        <h6 className="font-weight-bold mb-1">Paid Amount</h6>
+                        <h6 className="font-weight-bold mb-1">{t('To Be Paid')}</h6>
+                        <h6 className="text-danger"><b>{this.props.defaultCurrency} {this.state.installmentToBePaid}</b></h6>
+                      </div>
+                      <div className="m-1">
+                        <h6 className="font-weight-bold mb-1">{t('Paid Amount')}</h6>
                         <h6 className="text-danger"><b>{this.props.defaultCurrency} {this.state.installmentPaidAmount}</b></h6>
                       </div>
                       <div className="m-1">
-                        <h6 className="font-weight-bold mb-1">Remaining Amount</h6>
+                        <h6 className="font-weight-bold mb-1">{t('Remaining Amount')}</h6>
                         <h6 className="text-danger"><b>{this.props.defaultCurrency} {this.state.installmentRemainAmount}</b></h6>
                       </div>
                     </div>
-                    <h5 className="m-1 py-3"><b>Installment History</b></h5>
+                    <h5 className="m-1 py-3"><b>{t('Installment History')}</b></h5>
                     <div className="table-responsive">
                       <table className="table table-striped InstallmentTable">
                         <thead>
                           <tr className="border">
-                            <th>Installment Type</th>
-                            <th>Amount</th>
-                            <th>Due Date</th>
-                            <th>Paid Date</th>
+                            <th>{t('Installment Type')}</th>
+                            <th>{t('Amount')}</th>
+                            <th>{t('Due Date')}</th>
+                            <th>{t('Paid Date')}</th>
                             <th>{t('Status')}</th>
+                            <th className="text-center">{t('Action')}</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -867,7 +922,13 @@ class PackageDetails extends Component {
                                 <td className="text-danger font-weight-bold">{this.props.defaultCurrency} {installment.actualAmount ? installment.actualAmount : installment.totalAmount}</td>
                                 <td>{dateToDDMMYYYY(installment.dueDate)}</td>
                                 <td>{dateToDDMMYYYY(installment.dateOfPaid)}</td>
-                                {installment.paidStatus === 'Paid' ? <td className="text-success font-weight-bold">Paid</td> : <td className="text-danger font-weight-bold">Pending</td>}
+                                {installment.paidStatus === 'Paid' ? <td className="text-success font-weight-bold">{t('Paid')}</td> : <td className="text-danger font-weight-bold">{t('Pending')}</td>}
+                                {installment.paidStatus === 'Paid' &&
+                                  <td className="text-center">
+                                    <span className="iconv1 iconv1-eye bg-success tableDownloadViewIcons" data-toggle="modal" data-target="#ReceiptModal"
+                                      onClick={() => this.setState({ installmentReceipt: installment })} ></span>
+                                  </td>
+                                }
                               </tr>
                             )
                           })}
@@ -881,6 +942,344 @@ class PackageDetails extends Component {
           }
           {/* ------------Pop up Installments details Ends------------ */}
 
+
+
+
+
+
+          {/* --------------Receipt Modal-=--------------- */}
+          {installmentReceipt &&
+            <div className="modal fade commonYellowModal" id="ReceiptModal">
+              <div className="modal-dialog modal-lg" id="ReceiptModal2">
+                <div className="modal-content">
+                  <div className="modal-header">
+                    <h4 className="modal-title">{t('Receipt')}</h4>
+                    <button type="button" className="close" data-dismiss="modal"><span className="iconv1 iconv1-close"></span></button>
+                  </div>
+                  <div className="modal-body">
+                    <div className="container">
+                      <div className="text-center my-3">
+                        <img alt='' src={branch.avatar ? `/${branch.avatar.path}` : ''} className="mb-2" width="100" />
+                      </div>
+                      <h4 className="border-bottom border-dark text-center font-weight-bold pb-1">{t('Tax Invoice')}</h4>
+                      <div className="row px-5 justify-content-between">
+                        <div className="col-free p-3">
+                          <div className="mb-3">
+                            <label className="m-0 font-weight-bold">{t('VAT Reg Number')}</label>
+                            <p className="">{branch.vatRegNo}</p>
+                          </div>
+                          <div className="">
+                            <label className="m-0 font-weight-bold">{t('Address')}</label>
+                            <p className="whiteSpaceNormal mnw-150px mxw-200px">{branch.address}</p>
+                          </div>
+                        </div>
+                        <div className="col-free p-3">
+                          <div className="mb-3">
+                            <label className="m-0 font-weight-bold">{t('Tax Invoice No')}</label>
+                            <p className="">{installmentReceipt.orderNo}</p>
+                          </div>
+                          <div className="">
+                            <label className="m-0 font-weight-bold">{t('Date & Time')}</label>
+                            <p className="">{dateToDDMMYYYY(installmentReceipt.dateOfPaid)} {dateToHHMM(installmentReceipt.timeOfPaid)}</p>
+                          </div>
+                        </div>
+                        <div className="col-free p-3">
+                          <div className="">
+                            <label className="m-0 font-weight-bold">{t('Receipt Total')}</label>
+                            <p className="h4 font-weight-bold">{this.props.defaultCurrency} {parseFloat(installmentReceipt.totalAmount).toFixed(3)}</p>
+                          </div>
+                          <div className="">
+                            <label className="m-0 font-weight-bold">{t('Telephone')}</label>
+                            <p className="">{branch.telephone}</p>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="bgGray d-flex flex-wrap px-5 py-4 justify-content-between">
+                        <div className="">
+                          <h6 className="font-weight-bold m-1">
+                            <span className="px-1">{t('ID')}:</span>
+                            <span className="px-1">{memberId}</span>
+                          </h6>
+                        </div>
+                        <h6 className="font-weight-bold m-1">{credentialId.userName}</h6>
+                        <div className="">
+                          <h6 className="font-weight-bold m-1">
+                            <span className="px-1">{t('Mob')}:</span>
+                            <span className="px-1">{mobileNo}</span>
+                          </h6>
+                        </div>
+                      </div>
+                      <div className="table-responsive RETable">
+                        <table className="table">
+                          <thead>
+                            <tr>
+                              <th>{t('Name')}</th>
+                              <th className="w-50px">{t('From Date')}</th>
+                              <th className="w-50px">{t('To Date')}</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr>
+                              <td>{this.state.installmentPackageName} {installmentReceipt.installmentName ? installmentReceipt.installmentName : ''}</td>
+                              <td>{dateToDDMMYYYY(this.state.installmentStartDate)}</td>
+                              <td>{dateToDDMMYYYY(this.state.installmentEndDate)}</td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <div className="text-right my-1">{t('Amount Total')} :</div>
+                                {parseFloat(installmentReceipt.discount) ?
+                                  <div className="text-right my-1">{t('Discount')} :</div>
+                                  : <div></div>}
+                                {parseFloat(installmentReceipt.giftcard) ?
+                                  <div className="text-right my-1">{t('Gift Card')} :</div>
+                                  : <div></div>}
+                                {parseFloat(installmentReceipt.vatAmount) ?
+                                  <div className="text-right my-1">{t('VAT(5%)')} :</div>
+                                  : <div></div>}
+                                {parseFloat(installmentReceipt.digitalAmount) ?
+                                  <div className="text-right my-1">{t('Digital')} :</div>
+                                  : <div></div>}
+                                {parseFloat(installmentReceipt.cashAmount) ?
+                                  <div className="text-right my-1">{t('Cash')} :</div>
+                                  : <div></div>}
+                                {parseFloat(installmentReceipt.cardAmount) ?
+                                  <div className="text-right my-1">{t('Card')} :</div>
+                                  : <div></div>}
+                                {parseFloat(installmentReceipt.chequeAmount) ?
+                                  <div className="text-right my-1">{t('Cheque')} :</div>
+                                  : <div></div>}
+                                {installmentReceipt.bankName ?
+                                  <div className="text-right my-1">{t('Bank Name')} :</div>
+                                  : <div></div>}
+                                {installmentReceipt.chequeNumber ?
+                                  <div className="text-right my-1">{t('Cheque Number')} :</div>
+                                  : <div></div>}
+                                {installmentReceipt.chequeDate ?
+                                  <div className="text-right my-1">{t('Cheque Date')} :</div>
+                                  : <div></div>}
+                                <div className="text-right my-1">{t('Grand Total')} :</div>
+                                <div className="text-right my-1">{t('Paid Amount')} :</div>
+                                {installmentReceipt.cardNumber ?
+                                  <div className="text-right my-1">{t('Card last four digit')} :</div>
+                                  : <div></div>}
+                              </td>
+                              <td className="">
+                                <div className="my-1"><span className="">{this.props.defaultCurrency}</span> <span className="px-1">{parseFloat(installmentReceipt.actualAmount).toFixed(3)}</span></div>
+                                {parseFloat(installmentReceipt.discount) ?
+                                  <div className="my-1"><span className="invisible">{this.props.defaultCurrency}</span> <span className="px-1">{parseFloat(installmentReceipt.discount).toFixed(3)}</span></div>
+                                  : <div></div>}
+                                {parseFloat(installmentReceipt.giftcard) ?
+                                  <div className="my-1"><span className="invisible">{this.props.defaultCurrency}</span> <span className="px-1">{parseFloat(installmentReceipt.giftcard).toFixed(3)}</span></div>
+                                  : <div></div>}
+                                {parseFloat(installmentReceipt.vatAmount) ?
+                                  <div className="my-1"><span className="invisible">{this.props.defaultCurrency}</span> <span className="px-1">{parseFloat(installmentReceipt.vatAmount).toFixed(3)}</span></div>
+                                  : <div></div>}
+                                {parseFloat(installmentReceipt.digitalAmount) ?
+                                  <div className="my-1"><span className="invisible">{this.props.defaultCurrency}</span> <span className="px-1">{parseFloat(installmentReceipt.digitalAmount).toFixed(3)}</span></div>
+                                  : <div></div>}
+                                {parseFloat(installmentReceipt.cashAmount) ?
+                                  <div className="my-1"><span className="invisible">{this.props.defaultCurrency}</span> <span className="px-1">{parseFloat(installmentReceipt.cashAmount).toFixed(3)}</span></div>
+                                  : <div></div>}
+                                {parseFloat(installmentReceipt.cardAmount) ?
+                                  <div className="my-1"><span className="invisible">{this.props.defaultCurrency}</span> <span className="px-1">{parseFloat(installmentReceipt.cardAmount).toFixed(3)}</span></div>
+                                  : <div></div>}
+                                {parseFloat(installmentReceipt.chequeAmount) ?
+                                  <div className="my-1"><span className="invisible">{this.props.defaultCurrency}</span> <span className="px-1">{parseFloat(installmentReceipt.chequeAmount).toFixed(3)}</span></div>
+                                  : <div></div>}
+                                {installmentReceipt.bankName ?
+                                  <div className="my-1"><span className="invisible">{this.props.defaultCurrency}</span> <span className="px-1">{installmentReceipt.bankName}</span></div>
+                                  : <div></div>}
+                                {installmentReceipt.chequeNumber ?
+                                  <div className="my-1"><span className="invisible">{this.props.defaultCurrency}</span> <span className="px-1">{installmentReceipt.chequeNumber}</span></div>
+                                  : <div></div>}
+                                {installmentReceipt.chequeDate ?
+                                  <div className="my-1"><span className="invisible">{this.props.defaultCurrency}</span> <span className="px-1">{dateToDDMMYYYY(installmentReceipt.chequeDate)}</span></div>
+                                  : <div></div>}
+                                <div className="my-1"><span className="">{this.props.defaultCurrency}</span> <span className="px-1">{parseFloat(installmentReceipt.totalAmount).toFixed(3)}</span></div>
+                                <div className="my-1"><span className="">{this.props.defaultCurrency}</span> <span className="px-1">{parseFloat(installmentReceipt.totalAmount).toFixed(3)}</span></div>
+                                {installmentReceipt.cardNumber ?
+                                  <div className="my-1"><span className="invisible">{this.props.defaultCurrency}</span> <span className="px-1">{installmentReceipt.cardNumber}</span></div>
+                                  : <div></div>}
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div className="d-flex flex-wrap justify-content-between align-items-center my-4">
+                        <div className="d-flex">
+                          <div className="mr-3 text-center">
+                            <img src={instaimg} alt="" className="w-30px" />
+                            <h6 className="font-weight-bold mb-0 mt-1">{t('Follow Us')}</h6>
+                          </div>
+                          <div className="w-50px mr-3">
+                            <QRCode value={`http://instagram.com/${branch.instaId}/`} renderAs='svg' width="50" height="50" />
+                          </div>
+                        </div>
+                        {installmentReceipt.doneBy && <h6 className="font-weight-bold">{t('Served by')}: {installmentReceipt.doneBy.userName}</h6>}
+                      </div>
+                      <div className="d-flex align-items-center justify-content-center">
+                        <div className="text-center">
+                          <h6 className="font-weight-bold">{t('Membership cannot be refunded or transferred to others.')}</h6>
+                          <h6 className="font-weight-bold">{t('Thank You')}</h6>
+                        </div>
+                      </div>
+                      <div className="text-center">
+                        <button type="button" className="btn btn-success px-4 py-1 my-2" data-dismiss="modal" onClick={() => this.handlePrint()}>{t('Print Receipt')}</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          }
+          {/* --------------Receipt Modal Ends-=--------------- */}
+
+          {installmentReceipt &&
+            <div className="PageBillWrapper d-none" id="newPrint">
+              <div style={{ width: "80mm", padding: "4px", margin: "auto" }}>
+                <div style={{ display: "flex", justifyContent: "center" }}>
+                  <img src={branch.avatar ? `${PRODIP}/${branch.avatar.path}` : ''} width="100" style={{ width: "100px" }} alt="" />
+                </div>
+                <h5 style={{ textAlign: "center", margin: "19px 0px 9px 0px", fontSize: "19px" }}>{t('Tax Invoice')}</h5>
+                <p style={{ textAlign: "center", margin: "0 0 10px 0", fontSize: "14px" }}>
+                  <span>{branch.branchName}</span><br />
+                  <span>{branch.address}</span><br />
+                </p>
+                <p style={{ textAlign: "center", margin: "0 0 10px 0", fontSize: "14px" }}>
+                  <span>{t('Tel')} : {branch.telephone}</span>
+                </p>
+                <p style={{ textAlign: "center", margin: "0 0 10px 0", fontSize: "14px" }}>{t('VAT Reg No')} - {branch.vatRegNo}</p>
+                <p style={{ display: "flex", justifyContent: "space-between", margin: "0", fontSize: "14px" }}>
+                  <span>{dateToDDMMYYYY(installmentReceipt.dateOfPaid)} {dateToHHMM(installmentReceipt.timeOfPaid)}</span>
+                  <span style={{ width: "4px", height: "4px" }}></span>
+                  <span>{t('Bill No')} : {installmentReceipt.orderNo}</span>
+                </p>
+                <div>
+                  <p style={{ display: "flex", textAlign: "center", justifyContent: "center", margin: "10px 0", fontSize: "14px" }}>
+                    <span style={{ display: "flex" }}>
+                      <span>{t('Mob')}</span><span style={{ padding: "0 4px" }}>:</span><span>{mobileNo}</span>
+                    </span>
+                  </p>
+                  <p style={{ display: "flex", textAlign: "center", justifyContent: "space-between", margin: "0 0 10px 0", fontSize: "14px" }}>
+                    <span style={{ display: "flex" }}>
+                      <span>{t('ID')}</span><span style={{ padding: "0 4px" }}>:</span><span>{memberId}</span>
+                    </span>
+                    <span>{credentialId.userName}</span>
+                  </p>
+                </div>
+                <table style={{ width: "100%", fontSize: "14px" }}>
+                  <tbody>
+                    <tr>
+                      <td style={{ borderTop: "1px dashed #000", borderBottom: "1px dashed #000" }}>{t('Name')}</td>
+                      <td style={{ borderTop: "1px dashed #000", borderBottom: "1px dashed #000", width: "50px", textAlign: "center" }}>{t('From Date')}</td>
+                      <td style={{ borderTop: "1px dashed #000", borderBottom: "1px dashed #000", width: "50px", textAlign: "center" }}>{t('To Date')}</td>
+                    </tr>
+                    <tr>
+                      <td>{this.state.installmentPackageName} {installmentReceipt.installmentName ? installmentReceipt.installmentName : ''}</td>
+                      <td style={{ textAlign: "center" }}>{dateToDDMMYYYY(this.state.installmentStartDate)}</td>
+                      <td style={{ textAlign: "center" }}>{dateToDDMMYYYY(this.state.installmentEndDate)}</td>
+                    </tr>
+                  </tbody>
+                </table>
+                <table style={{ width: "100%", textAlign: "right", borderTop: "1px dashed #000", borderBottom: "1px dashed #000", fontSize: "14px" }}>
+                  <tbody>
+                    <tr>
+                      <td style={{ textAlign: "right", padding: "4px 4px 0 4px", width: "100%" }}>{t('Amount Total')} {this.props.defaultCurrency} : </td>
+                      <td style={{ textAlign: "right", padding: "4px 0px 0 0px" }}>{parseFloat(installmentReceipt.actualAmount).toFixed(3)}</td>
+                    </tr>
+                    {parseFloat(installmentReceipt.discount) ?
+                      <tr>
+                        <td style={{ textAlign: "right", padding: "0 4px", width: "100%" }}>{t('Discount')} {this.props.defaultCurrency} : </td>
+                        <td style={{ textAlign: "right", padding: "0" }}>{parseFloat(installmentReceipt.discount).toFixed(3)}</td>
+                      </tr>
+                      : <tr></tr>}
+                    {parseFloat(installmentReceipt.giftcard) ?
+                      <tr>
+                        <td style={{ textAlign: "right", padding: "0 4px", width: "100%" }}>{t('Giftcard')} {this.props.defaultCurrency} : </td>
+                        <td style={{ textAlign: "right", padding: "0" }}>{parseFloat(installmentReceipt.giftcard).toFixed(3)}</td>
+                      </tr>
+                      : <tr></tr>}
+                    {parseFloat(installmentReceipt.vatAmount) ?
+                      <tr>
+                        <td style={{ textAlign: "right", padding: "0 4px", width: "100%" }}>{t('VAT')} {this.props.defaultCurrency} : </td>
+                        <td style={{ textAlign: "right", padding: "0" }}>{parseFloat(installmentReceipt.vatAmount).toFixed(3)}</td>
+                      </tr>
+                      : <tr></tr>}
+                    {parseFloat(installmentReceipt.digitalAmount) ?
+                      <tr>
+                        <td style={{ textAlign: "right", padding: "0 4px", width: "100%" }}>{t('Digital')} {this.props.defaultCurrency} : </td>
+                        <td style={{ textAlign: "right", padding: "0" }}>{parseFloat(installmentReceipt.digitalAmount).toFixed(3)}</td>
+                      </tr>
+                      : <tr></tr>}
+                    {parseFloat(installmentReceipt.cashAmount) ?
+                      <tr>
+                        <td style={{ textAlign: "right", padding: "0 4px", width: "100%" }}>{t('Cash')} {this.props.defaultCurrency} : </td>
+                        <td style={{ textAlign: "right", padding: "0" }}>{parseFloat(installmentReceipt.cashAmount).toFixed(3)}</td>
+                      </tr>
+                      : <tr></tr>}
+                    {parseFloat(installmentReceipt.cardAmount) ?
+                      <tr>
+                        <td style={{ textAlign: "right", padding: "0px 4px 4px 4px", width: "100%" }}>{t('Card')} {this.props.defaultCurrency} : </td>
+                        <td style={{ textAlign: "right", padding: "0px 0px 4px 0px" }}>{parseFloat(installmentReceipt.cardAmount).toFixed(3)}</td>
+                      </tr>
+                      : <tr></tr>}
+                    {parseFloat(installmentReceipt.chequeAmount) ?
+                      <tr>
+                        <td style={{ textAlign: "right", padding: "0px 4px 4px 4px", width: "100%" }}>{t('Cheque')} {this.props.defaultCurrency} : </td>
+                        <td style={{ textAlign: "right", padding: "0px 0px 4px 0px" }}>{parseFloat(installmentReceipt.chequeAmount).toFixed(3)}</td>
+                      </tr>
+                      : <tr></tr>}
+                    {installmentReceipt.bankName ?
+                      <tr>
+                        <td style={{ textAlign: "right", padding: "0px 4px 4px 4px", width: "100%" }}>{t('Bank Name')} : </td>
+                        <td style={{ textAlign: "right", padding: "0px 0px 4px 0px" }}>{installmentReceipt.bankName}</td>
+                      </tr>
+                      : <tr></tr>}
+                    {installmentReceipt.chequeNumber ?
+                      <tr>
+                        <td style={{ textAlign: "right", padding: "0px 4px 4px 4px", width: "100%" }}>{t('Cheque Number')} : </td>
+                        <td style={{ textAlign: "right", padding: "0px 0px 4px 0px" }}>{installmentReceipt.chequeNumber}</td>
+                      </tr>
+                      : <tr></tr>}
+                    {installmentReceipt.chequeDate ?
+                      <tr>
+                        <td style={{ textAlign: "right", padding: "0px 4px 4px 4px", width: "100%" }}>{t('Cheque Date')} : </td>
+                        <td style={{ textAlign: "right", padding: "0px 0px 4px 0px" }}>{dateToDDMMYYYY(installmentReceipt.chequeDate)}</td>
+                      </tr>
+                      : <tr></tr>}
+                    <tr>
+                      <td style={{ textAlign: "right", padding: "0px 4px 4px 4px", width: "100%" }}>{t('Grand Total')} {this.props.defaultCurrency} : </td>
+                      <td style={{ textAlign: "right", padding: "0px 0px 4px 0px" }}>{parseFloat(installmentReceipt.totalAmount).toFixed(3)}</td>
+                    </tr>
+                    <tr>
+                      <td style={{ textAlign: "right", padding: "0px 4px 4px 4px", width: "100%" }}>{t('Paid Amount')} {this.props.defaultCurrency} : </td>
+                      <td style={{ textAlign: "right", padding: "0px 0px 4px 0px" }}>{parseFloat(installmentReceipt.totalAmount).toFixed(3)}</td>
+                    </tr>
+                    {installmentReceipt.cardNumber ?
+                      <tr>
+                        <td style={{ textAlign: "right", padding: "0px 4px 4px 4px", width: "100%" }}>{t('Card last four digit')} :</td>
+                        <td style={{ textAlign: "right", padding: "0px 0px 4px 0px" }}>{installmentReceipt.cardNumber}</td>
+                      </tr>
+                      : <tr></tr>}
+                  </tbody>
+                </table>
+                <div style={{ display: "flex", justifyContent: "space-between", margin: "10px 0", fontSize: "14px" }}>
+                  <div style={{ display: "flex", flexDirection: "row", justifyContent: "center", alignItems: "center" }}>
+                    <div style={{ marginRight: "10px", justifyContent: "center" }}>
+                      <img src={instaimg} alt="" style={{ width: "30px", height: "30px" }} />
+                    </div>
+                    <QRCode value={`http://instagram.com/${branch.instaId}/`} renderAs='svg' width="50" height="50" />
+                  </div>
+                  {installmentReceipt.doneBy && <span>{t('Served by')} : {installmentReceipt.doneBy.userName}</span>}
+                </div>
+                <p style={{ display: "flex", margin: "0 0 10px 0", fontSize: "14px" }}>
+                  <span>{t('NB')}:</span>
+                  <span style={{ flexGrow: "1", textAlign: "center" }}>{t('Membership cannot be refunded or transferred to others.')}</span>
+                </p>
+                <p style={{ textAlign: "center", margin: "0 0 10px 0", fontSize: "14px" }}>{t('Thank You')}</p>
+              </div>
+            </div>
+          }
         </div>
       )
     } else {

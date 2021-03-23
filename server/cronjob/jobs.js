@@ -1,14 +1,16 @@
 const { logger: { logger } } = require('../../config');
 
-const { memberExpired, memberAboutToExpiry, stockExpired, stockExpiry,
-    contractExpired, contractExpiry, employeeVisaExpiry, freezeAction,
-    assetsExpiry, assetsExpired } = require('../notification/helper');
+const { memberExpired, memberAboutToExpiry, stockExpired,
+    stockExpiry, contractExpired, contractExpiry,
+    employeeVisaExpiry, assetsExpiry, assetsExpired } = require('../notification/helper');
 
 const { Member, Stocks, Contract, Employee, MemberFreezing, Assets } = require('../model');
 
 const { Formate: { setTime, formateBioStarDate } } = require('../utils');
 
-const { updateMemberInAllBranches } = require('../service/branch.service');
+const { memberFreezeNotification, memberFreeze } = require('../worker/freeze')
+
+const { freezeMember, disableMember, updateMemberInBioStar } = require('../biostar');
 
 
 module.exports = {
@@ -56,8 +58,9 @@ module.exports = {
         for (let i = 0; i < response.length; i++) {
             const { itemName, branch: { branchName } } = response[i];
             const today = new Date().setHours(0, 0, 0, 0);
-            let expiryMonth = new Date(response[i].expiryDate).setMonth(new Date(response[i].expiryDate).getMonth() - 1);
-            let expiryDate = new Date(response[i].expiryDate).getTime();
+            const expiryDate = new Date(setTime(response[i].expiryDate)).getTime();
+            let expiryMonth = new Date(setTime(response[i].expiryDate))
+                .setMonth(new Date(response[i].expiryDate).getMonth() - 1);
             if (expiryMonth === today) {
                 try { await stockExpired(itemName, branchName) }
                 catch (error) { logger.error(error); }
@@ -69,9 +72,9 @@ module.exports = {
     },
 
     checkAssetsExpiry: async () => {
-        const response = await Assets.find({ status: true }).populate('branch').lean();
+        const response = await Assets.find({ status: true }).populate('assetBranch').lean();
         for (let i = 0; i < response.length; i++) {
-            const { _id, warranty, dateOfPurchase, assetName, branch: { branchName } } = response[i];
+            const { _id, warranty, dateOfPurchase, assetName, assetBranch: { branchName } } = response[i];
             const today = new Date().setHours(0, 0, 0, 0);
             let warrantyDate = new Date(new Date(dateOfPurchase).setMonth(new Date(dateOfPurchase).getMonth() + +warranty));
             let warrantyMonthDate = new Date(new Date(warrantyDate).setMonth(new Date(warrantyDate).getMonth() - 1));
@@ -102,22 +105,15 @@ module.exports = {
         const response = await Employee.find({}).populate("credentialId").lean();
         for (let i = 0; i < response.length; i++) {
             const { _id, visaDetails, credentialId: { userName } } = response[i];
-            const pastMonth = new Date().setHours(0, 0, 0, 0);
+            const today = new Date().setHours(0, 0, 0, 0);
             if (visaDetails && visaDetails.expiryDate) {
-                let expiryMonth = new Date(visaDetails.expiryDate)
-                    .setMonth(new Date(visaDetails.expiryDate).getMonth() - 1);
-                if (expiryMonth === pastMonth) {
+                let expiryMonth = new Date(visaDetails.expiryDate).setHours(0, 0, 0, 0);
+                if (expiryMonth === today) {
                     try { await employeeVisaExpiry(userName, _id) }
                     catch (error) { logger.error(error); }
                 }
             }
         }
-    },
-
-    checkFreezeMember: async () => {
-        const response = await MemberFreezing
-            .find({ fromDate: setTime(new Date()) }).count();
-        await freezeAction(response)
     },
 
 
@@ -132,7 +128,7 @@ module.exports = {
                     const endDate = packages.extendDate ? packages.extendDate : packages.endDate
                     const obj = module.exports.makeBioStarObject
                         (member, packages.packages.bioStarInfo, packages.startDate, endDate);
-                    await updateMemberInAllBranches(obj)
+                    await updateMemberInBioStar(obj)
                 }
             }
         }
@@ -152,5 +148,53 @@ module.exports = {
             startDate: formateBioStarDate(startDate),
         };
         return obj;
+    },
+
+
+    freezeMember: async () => {
+        const today = new Date(new Date().setHours(0, 0, 0, 0));
+        const member = await MemberFreezing.find({ typeOfFreeze: 'Pending', status: true, fromDate: today }).lean();
+        const users = member.map(doc => { return doc.memberId });
+        for (const item of member) {
+            let memberInfo = await Member.findById(item.memberId);
+            let startDate = new Date(item.reactivationDate).toISOString();
+            let largest = setTime(new Date());
+            let today = new Date(setTime(new Date())).getTime();
+            for (const [i] of memberInfo.packageDetails.entries()) {
+                let temp = await memberFreeze(memberInfo, i, largest, item.noOfDays, item._id, startDate);
+                largest = new Date(temp) > new Date(largest) ? new Date(temp) : largest;
+            }
+            let checkLargest = new Date(largest).getTime();
+            if (today !== checkLargest) {
+                await freezeMember(memberInfo.memberId, startDate, largest);
+            }
+        }
+        await memberFreezeNotification(users);
+    },
+
+    checkInstallmentsPending: async () => {
+        try {
+            const members = await Member.find({ status: true, doneFingerAuth: true });
+            const today = new Date(setTime(new Date())).getTime();
+            for (const [i, member] of members.entries()) {
+                for (const packages of member.packageDetails) {
+                    if (packages.Installments && packages.Installments.length) {
+                        for (const installment of packages.Installments) {
+                            let dueDate = new Date(setTime(installment.dueDate)).getTime();
+                            if (dueDate === today && installment.paidStatus === 'UnPaid') {
+                                members[i].status = false;
+                                await members[i].save();
+                                await disableMember(members[i].memberId, 'IN');
+                            }
+                        }
+                    }
+                }
+            }
+        } catch (error) {
+            logger.error(error);
+        }
+
     }
+
+
 };

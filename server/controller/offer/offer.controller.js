@@ -50,12 +50,13 @@ exports.updateOffer = async (req, res) => {
     if (startDate) req.body["startDate"] = setTime(req.body.startDate);
     if (endDate) req.body["endDate"] = setTime(req.body.endDate);
     req.responseData = await Offer.findById(req.params.id).lean()
+    await Stocks.findByIdAndUpdate(req.responseData.product, { offerDetails: { isOffer: false } }, { new: true });
     Offer.findByIdAndUpdate(req.params.id, req.body, { new: true })
         .populate('product')
         .then(async (response) => {
-        const offerDetails = { isOffer: true, offerDetails: response._id };
-        await Stocks.findByIdAndUpdate(req.body.product, { offerDetails }, { new: true });
-        auditLogger(req, 'Success')
+            const offerDetails = { isOffer: true, offerDetails: response._id };
+            await Stocks.findByIdAndUpdate(req.body.product, { offerDetails }, { new: true });
+            auditLogger(req, 'Success')
             successResponseHandler(res, response, "successfully update new offer");
         }).catch(error => {
             logger.error(error);

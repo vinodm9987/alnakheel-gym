@@ -43,8 +43,8 @@ class DietPlan extends Component {
             <table className="table table-borderless whiteSpaceNoWrap">
               <thead>
                 <tr>
-                  <th className="pl-4"><span className="pl-1">Session Name</span></th>
-                  <th className="text-right pr-5"><span className="text-right pr-5">Session Timing</span></th>
+                  <th className="pl-4"><span className="pl-1">{t('Session Name')}</span></th>
+                  <th className="text-right pr-5"><span className="text-right pr-5">{t('Session Timing')}</span></th>
                 </tr>
               </thead>
             </table>
@@ -73,7 +73,7 @@ class DietPlan extends Component {
                                 <th>{t('Diet Session')}</th>
                                 <th>{t('QTY/Grams')}</th>
                                 <th>{t('Calories')}</th>
-                                <th>{t('Speciafications')}</th>
+                                <th>{t('Specifications')}</th>
                               </tr>
                             </thead>
                             <tbody>

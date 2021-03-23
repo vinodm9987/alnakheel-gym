@@ -426,33 +426,6 @@
         ]
     },
     {
-        "moduleName": "Rewards",
-        "icon": "iconv1 iconv1-menu-rewards",
-        "component": [
-            {
-                "componentName": "Add Giftcard",
-                "route": "/giftcard",
-                "componentPath": "GiftCards",
-                "read": false,
-                "write": false
-            },
-            {
-                "componentName": "Reward Policy",
-                "route": "/reward-policy",
-                "componentPath": "RewardPolicy",
-                "read": false,
-                "write": false
-            },
-            {
-                "componentName": "Reward Transaction History",
-                "route": "/reward-transaction-history",
-                "componentPath": "RewardTransactionHistory",
-                "read": false,
-                "write": false
-            }
-        ]
-    },
-    {
         "moduleName": "Info",
         "icon": "iconv1 iconv1-menu-info",
         "component": [

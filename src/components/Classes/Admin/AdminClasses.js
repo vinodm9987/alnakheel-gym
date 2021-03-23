@@ -54,7 +54,7 @@ class AdminClasses extends Component {
                 <h1>{t('Classes')}</h1>
               </div>
               <div className="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-8 d-flex flex-wrap align-items-center justify-content-end pageHeadRight">
-                <span onClick={() => this.resetDate()} className="btn btn-warning btn-sm text-white my-1">ALL</span>
+                <span onClick={() => this.resetDate()} className="btn btn-warning btn-sm text-white my-1">{t('ALL')}</span>
                 {/* Call Me When You Do This Area */}
                 <div className="position-relative w-200px mw-100 pr-15px">
                   <div className="form-group m-2 position-relative">

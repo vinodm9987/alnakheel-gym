@@ -2,15 +2,15 @@ const {
     logger: { logger },
     handler: { successResponseHandler, errorResponseHandler },
 } = require('../../../config');
-const { Formate: { setTime } } = require('../../utils');
+const { Formate: { setTime }, IdGenerator: { generateOrderId } } = require('../../utils');
 
 
 const { Member, Employee } = require('../../model');
 
 
+const { disableMember } = require('../../biostar')
 
-
-exports.getPackageInstallment = async(req, res) => {
+exports.getPackageInstallment = async (req, res) => {
     try {
         const members = await Member.find({})
             .populate('credentialId packageDetails.packages').lean();
@@ -47,7 +47,7 @@ exports.getPackageInstallment = async(req, res) => {
 };
 
 
-exports.getTrainerInstallment = async(req, res) => {
+exports.getTrainerInstallment = async (req, res) => {
     try {
         const members = await Member.find({})
             .populate('credentialId  packageDetails.packages')
@@ -64,8 +64,8 @@ exports.getTrainerInstallment = async(req, res) => {
                             const dueDate = new Date(setTime(installment.dueDate));
                             const todayMonth = new Date(dueDate).getMonth();
                             const thisYear = new Date(dueDate).getFullYear();
-                            const monthConditions = req.body.month ? req.body.month === todayMonth : true;
-                            const yearConditions = req.body.year ? req.body.year === thisYear : true;
+                            const monthConditions = typeof req.body.month === 'number' ? req.body.month === todayMonth : false;
+                            const yearConditions = typeof req.body.year === 'number' ? req.body.year === thisYear : false;
                             if (monthConditions && yearConditions && installment.paidStatus !== 'Paid') {
                                 const memberObj = Object.assign({}, member);
                                 delete memberObj.packageDetails;
@@ -92,10 +92,11 @@ exports.getTrainerInstallment = async(req, res) => {
 
 
 
-exports.changeDueDateOfPackageInstallment = async(req, res) => {
+exports.changeDueDateOfPackageInstallment = async (req, res) => {
     try {
         const dueDate = setTime(req.body.dueDate);
-        const member = await Member.findById(req.body.memberId);
+        const member = await Member.findByIdAndUpdate(req.body.memberId, { status: true });
+        await disableMember(member.memberId, 'AC')
         for (const [i, packages] of member.packageDetails.entries()) {
             if (packages._id.toString() === req.body.packagesDetailsId) {
                 for (const [j, installment] of member.packageDetails[i].Installments.entries()) {
@@ -114,7 +115,7 @@ exports.changeDueDateOfPackageInstallment = async(req, res) => {
 };
 
 
-exports.changeDueDateOfTrainerInstallment = async(req, res) => {
+exports.changeDueDateOfTrainerInstallment = async (req, res) => {
     try {
         const dueDate = setTime(req.body.dueDate);
         const member = await Member.findById(req.body.memberId);
@@ -139,15 +140,16 @@ exports.changeDueDateOfTrainerInstallment = async(req, res) => {
     }
 };
 
-exports.payPackageInstallments = async(req, res) => {
+exports.payPackageInstallments = async (req, res) => {
     try {
         const dueDate = setTime(req.body.dueDate);
-        const member = await Member.findById(req.body.memberId);
+        const member = await Member.findByIdAndUpdate(req.body.memberId, { status: true });
+        await disableMember(member.memberId, 'AC')
+        let obj = Object.assign({}, {});
         for (const [i, packages] of member.packageDetails.entries()) {
             if (packages._id.toString() === req.body.packagesDetailsId && packages.Installments) {
                 for (const [k, installment] of member.packageDetails[i].Installments.entries()) {
                     if (installment._id.toString() === req.body.installmentId) {
-                        let obj = Object.assign({}, {});
                         obj['dateOfPaid'] = setTime(new Date());
                         obj['timeOfPaid'] = new Date();
                         obj['cardNumber'] = req.body.cardNumber;
@@ -164,14 +166,17 @@ exports.payPackageInstallments = async(req, res) => {
                         obj['actualAmount'] = req.body.actualAmount;
                         obj['paidStatus'] = 'Paid';
                         obj['dueDate'] = dueDate;
-                        obj['installmentName'] = req.body.installmentName;
-                        member.packageDetails[i].Installments[k] = obj
+                        obj["orderNo"] = generateOrderId()
+                        if (req.headers.userid) obj["doneBy"] = req.headers.userid;
+                        member.packageDetails[i].Installments[k] = { ...member.packageDetails[i].Installments[k].toJSON(), ...obj };
                     }
                 }
             }
         }
-        const response = await member.save();
-        return successResponseHandler(res, response, "success");
+        await member.save();
+        const response = await Member.findById(req.body.memberId)
+            .populate('credentialId branch packageDetails.packages packageDetails.doneBy')
+        return successResponseHandler(res, { ...response, ...{ displayReceipt: true, obj: obj } }, "success");
     } catch (error) {
         logger.error(error);
         return errorResponseHandler(res, error, 'failed');
@@ -179,17 +184,17 @@ exports.payPackageInstallments = async(req, res) => {
 };
 
 
-exports.payTrainerInstallments = async(req, res) => {
+exports.payTrainerInstallments = async (req, res) => {
     try {
         const dueDate = setTime(req.body.dueDate);
         const member = await Member.findById(req.body.memberId);
+        let obj = Object.assign({}, {});
         for (const [i, packages] of member.packageDetails.entries()) {
             if (packages._id.toString() === req.body.packagesDetailsId) {
                 for (const [j, trainer] of member.packageDetails[i].trainerDetails.entries()) {
                     if (trainer._id.toString() === req.body.trainerDetailsId) {
                         for (const [k, installment] of member.packageDetails[i].trainerDetails[j].Installments.entries()) {
                             if (installment._id.toString() === req.body.installmentId) {
-                                let obj = Object.assign({}, {});
                                 obj['dateOfPaid'] = setTime(new Date());
                                 obj['timeOfPaid'] = new Date();
                                 obj['cardNumber'] = req.body.cardNumber;
@@ -207,6 +212,8 @@ exports.payTrainerInstallments = async(req, res) => {
                                 obj['paidStatus'] = 'Paid';
                                 obj['dueDate'] = dueDate;
                                 obj['installmentName'] = req.body.installmentName;
+                                obj["orderNo"] = generateOrderId()
+                                if (req.headers.userid) obj["doneBy"] = req.headers.userid;
                                 member.packageDetails[i].trainerDetails[j].Installments[k] = obj
                             }
                         }
@@ -214,8 +221,11 @@ exports.payTrainerInstallments = async(req, res) => {
                 }
             }
         }
-        const response = await member.save();
-        return successResponseHandler(res, response, "success");
+        await member.save();
+        const response = await Member.findById(req.body.memberId)
+            .populate('credentialId branch')
+            .populate('packageDetails.doneBy')
+        return successResponseHandler(res, { ...response, ...{ displayReceipt: true, obj: obj } }, "success");
     } catch (error) {
         logger.error(error);
         return errorResponseHandler(res, error, 'failed');

@@ -34,11 +34,12 @@ class ShoppingCart extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
+    const { t } = this.props
     if (this.props.amountByRedeemCode && this.props.amountByRedeemCode.redeemCode !== (prevProps.amountByRedeemCode && prevProps.amountByRedeemCode.redeemCode)) {
       if (prevState.subTotalGiftCard >= this.props.amountByRedeemCode.giftCard.amount) {
         this.setState({ giftcard: this.props.amountByRedeemCode.giftCard.amount, redeemCode: this.props.amountByRedeemCode.redeemCode, memberTransactionId: this.props.amountByRedeemCode._id })
       } else {
-        this.props.dispatch({ type: GET_ALERT_ERROR, payload: 'Sorry gift card is not valid on this transaction' })
+        this.props.dispatch({ type: GET_ALERT_ERROR, payload: t('Sorry gift card is not valid on this transaction') })
       }
     }
   }
@@ -96,6 +97,7 @@ class ShoppingCart extends Component {
   }
 
   addGiftcard(subTotalGiftCard) {
+    const { t } = this.props
     if (this.state.member) {
       subTotalGiftCard && this.setState({ subTotalGiftCard, cash: 0, card: 0 }, () => {
         if (this.state.text !== this.state.redeemCode) {
@@ -106,7 +108,7 @@ class ShoppingCart extends Component {
         }
       })
     } else {
-      this.props.dispatch({ type: GET_ALERT_ERROR, payload: 'Sorry gift card is not valid' })
+      this.props.dispatch({ type: GET_ALERT_ERROR, payload: t('Sorry gift card is not valid') })
     }
   }
 

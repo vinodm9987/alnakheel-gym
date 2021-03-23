@@ -3,14 +3,14 @@ const {
     updateMember, updateMemberAndAddPackage, createNewMemberByAdmin, getFirstRegisterMembers, payAtGymMobile,
     updateMemberDetails, getAllActiveMember, getAllActiveMemberOfTrainer, getMemberById,
     getActiveRegisterMembers, getBioStarToken, getAllPendingMember, addMemberFaceRecognition, updateFaceRecognition,
-    startPackage, updateMemberProfile, blackListUser, getActiveStatusRegisterMembers, getActiveStatusNotExpiredRegisterMembers,
+    updateMemberProfile, blackListUser, getActiveStatusRegisterMembers, getActiveStatusNotExpiredRegisterMembers,
     getExpiredMembers, getAboutToExpireMembers, getClassesMembers, getCprData, getMemberByMemberId, bookTrainer
 } = require('../controller/member/member.controller');
 
 
 
-const { applyFreezeMember, applyFreezeAllMember, getPendingFreezeMember,
-    freezeMember, getFreezeHistory, removeMemberFreeze, cancelFreeze } = require('../controller/member/memberFreeze.controller');
+const { applyFreezeMember, applyFreezeAllMember, getPendingFreezeMember, memberFreezeUpdate,
+    getFreezeHistory, removeMemberFreeze, cancelFreeze } = require('../controller/member/memberFreeze.controller');
 
 
 const { addWaterInTake, getMemberWaterInTake, updateMemberWaterInTake } = require('../controller/member/waterInTake.controller');
@@ -84,8 +84,6 @@ exports.routes = (express, app) => {
 
     router.post('/addMemberFaceRecognition', addMemberFaceRecognition);
 
-    router.post('/startPackage', startPackage);
-
     router.post('/blackListUser/:id', blackListUser);
 
 
@@ -124,13 +122,13 @@ exports.routes = (express, app) => {
 
     router.post('/getPendingFreezeMember', getPendingFreezeMember);
 
-    router.post('/freezeMember', freezeMember);
-
     router.post('/getFreezeHistory', getFreezeHistory);
 
     router.post('/removeMemberFreeze', removeMemberFreeze);
 
     router.post('/cancelFreeze', cancelFreeze);
+
+    router.post('/memberFreezeUpdate/:id', memberFreezeUpdate);
 
 
 

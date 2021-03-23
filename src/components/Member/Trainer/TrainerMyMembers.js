@@ -36,12 +36,12 @@ class TrainerMyMembers extends Component {
       <div className="mainPage p-3 TrainerMyMembers">
         <div className="row">
           <div className="col-12 pageBreadCrumbs">
-            <span className="crumbText">Home</span><span className="mx-2">/</span><span className="crumbText">My Members</span>
+            <span className="crumbText">{t('Home')}</span><span className="mx-2">/</span><span className="crumbText">{t('My Members')}</span>
           </div>
           <div className="col-12">
             <div className="row">
               <div className="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4 pageHead">
-                <h1>My Members</h1>
+                <h1>{t('My Members')}</h1>
               </div>
               <div className="col-12 pageHeadDown">
                 <div className="pageHeadLine"></div>
@@ -58,7 +58,7 @@ class TrainerMyMembers extends Component {
                     <div className="row d-flex justify-content-between pt-5">
                       <div className="col w-auto flexBasis-auto flex-grow-0">
                         <div className="col-12 subHead text-body">
-                          <h3 className="mt-0 mb-3"><b>My Members</b></h3>
+                          <h3 className="mt-0 mb-3"><b>{t('My Members')}</b></h3>
                         </div>
                       </div>
                       <div className="col w-auto px-1 flexBasis-auto flex-grow-0">
@@ -83,7 +83,7 @@ class TrainerMyMembers extends Component {
                     <div className="card bg-light text-dark w-100 h-100 p-0 flex-row flex-wrap align-items-start justify-content-center align-content-start">
                       <div className="card-body w-100 d-block">
                         <div className="d-flex justify-content-between align-items-center">
-                          <span className="text-primary">ID : {memberId}</span>
+                          <span className="text-primary">{t('ID')} : {memberId}</span>
                           <Link type="button" className="btn btn-sm btn-primary px-3 borderRound" to={`/trainer-members-details/${_id}`}>{t('Details')}</Link>
                         </div>
                       </div>
@@ -99,7 +99,7 @@ class TrainerMyMembers extends Component {
                       </div> */}
                       <div className="d-flex flex-md-column align-items-center text-center">
                         <span className="m-3">
-                          <small className="d-block text-muted whiteSpaceNoWrap">Phone Number</small>
+                          <small className="d-block text-muted whiteSpaceNoWrap">{t('Phone Number')}</small>
                           <small className="d-block text-primary whiteSpaceNoWrap dirltrtar d-inline-block">{mobileNo}</small>
                         </span>
                         <span className="m-3">

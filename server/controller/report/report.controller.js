@@ -74,7 +74,7 @@ const getActiveMembers = async (body) => {
   if (body.branch) queryCond["branch"] = body.branch;
   let response = await Member.find(queryCond)
     .populate('credentialId').populate("packageDetails.packages")
-    .populate({ path: "packageDetails.trainer", populate: { path: "credentialId" } }).lean()
+    .populate({ path: "packageDetails.trainerDetails.trainer", populate: { path: "credentialId" } }).lean()
   response = response.filter(member => {
     if (body.fromDate && body.toDate) {
       if (new Date(setTime(body.fromDate)) <= member.admissionDate && new Date(setTime(body.toDate)) >= member.admissionDate) {
@@ -149,7 +149,7 @@ const getUpcomingExpiry = async (body) => {
   let queryCond = {};
   if (body.branch) queryCond["branch"] = body.branch
   const members = await Member.find(queryCond).populate('credentialId packageDetails.packages')
-    .populate({ path: "packageDetails.trainer", populate: { path: "credentialId" } }).lean();
+    .populate({ path: "packageDetails.trainerDetails.trainer", populate: { path: "credentialId" } }).lean();
   let packagesResponse = await Package.find({}, 'packageName color').lean();
   let packages = []
   packagesResponse.forEach(ele => {
@@ -164,7 +164,7 @@ const getUpcomingExpiry = async (body) => {
       if (members[i].packageDetails[j].extendDate) {
         endDate = members[i].packageDetails[j].extendDate;
       }
-      if (new Date(setTime(endDate)).setDate(new Date(setTime(endDate)).getDate() - 7) <= today && today < new Date(setTime(endDate))) {
+      if (today.getTime() === new Date(endDate).setDate(new Date(endDate).getDate() - 1)) {
         aboutToExpire = true;
         let packageIndex = packages.findIndex(ele => ele._id.toString() === members[i].packageDetails[j].packages._id.toString());
         if (members[i].packageDetails[j].packages._id.toString() === packages[packageIndex]._id.toString() && packageIndex !== -1) {
@@ -183,8 +183,9 @@ const getExpiredMembers = async (body) => {
   let queryCond = {};
   queryCond['packageDetails.isExpiredPackage'] = true;
   if (body.branch) queryCond["branch"] = body.branch
-  let response = await Member.find(queryCond).populate('credentialId').populate("packageDetails.packages")
-    .populate({ path: "packageDetails.trainer", populate: { path: "credentialId" } }).lean();
+  let response = await Member.find(queryCond)
+    .populate('credentialId').populate("packageDetails.packages")
+    .populate({ path: "packageDetails.trainerDetails.trainer", populate: { path: "credentialId" } }).lean();
   let packagesResponse = await Package.find({}, 'packageName color').lean();
   let packages = []
   packagesResponse.forEach(ele => {
@@ -284,56 +285,56 @@ const getFreezedMembers = async (body) => {
 }
 
 const getPackageRenewal = async (body) => {
-  let queryCond = {};
-  queryCond['packageDetails.packageRenewal'] = true;
-  if (body.branch) queryCond["branch"] = body.branch
-  let packagesResponse = await Package.find({}, 'packageName color').lean();
-  let packages = []
-  packagesResponse.forEach(ele => {
-    packages.push({ ...ele, ...{ count: 0 } })
-  })
-  let branchResponse = await Branch.find({}, 'branchName').lean();
-  let branches = []
-  branchResponse.forEach(ele => {
-    branches.push({ ...ele, ...{ count: 0 } })
-  })
-  let response = await Member.find(queryCond)
-    .populate('credentialId branch').populate("packageDetails.packages")
-    .populate({ path: "packageDetails.trainer", populate: { path: "credentialId" } }).lean()
-  response.forEach(member => {
-    member.packageDetails = member.packageDetails.filter(pack => pack.packageRenewal)
-  })
-  response.forEach(member => {
-    if (body.fromDate && body.toDate) {
-      member.packageDetails = member.packageDetails.filter(pack => {
-        if (pack.extendDate) {
-          if (new Date(setTime(body.fromDate)) <= pack.extendDate && new Date(setTime(body.toDate)) >= pack.extendDate) {
-            return pack
-          }
-        } else {
-          if (new Date(setTime(body.fromDate)) <= pack.endDate && new Date(setTime(body.toDate)) >= pack.endDate) {
-            return pack
-          }
-        }
-      })
-    }
-  })
-  response = response.filter(member => member.packageDetails.length > 0)
-  response.forEach(member => {
-    member.packageDetails.forEach(doc => {
-      if (doc.packageRenewal) {
-        let branchIndex = branches.findIndex(b => b._id.toString() === member.branch._id.toString())
-        let packageIndex = packages.findIndex(ele => ele._id.toString() === doc.packages._id.toString());
-        if (doc.packages._id.toString() === packages[packageIndex]._id.toString() && packageIndex !== -1) {
-          packages[packageIndex].count++;
-        }
-        if (member.branch._id.toString() === branches[branchIndex]._id.toString() && branchIndex !== -1) {
-          branches[branchIndex].count++;
-        }
-      }
-    });
-  })
-  return { response, packages, branches }
+  // let queryCond = {};
+  // queryCond['packageDetails.packageRenewal'] = true;
+  // if (body.branch) queryCond["branch"] = body.branch
+  // let packagesResponse = await Package.find({}, 'packageName color').lean();
+  // let packages = []
+  // packagesResponse.forEach(ele => {
+  //   packages.push({ ...ele, ...{ count: 0 } })
+  // })
+  // let branchResponse = await Branch.find({}, 'branchName').lean();
+  // let branches = []
+  // branchResponse.forEach(ele => {
+  //   branches.push({ ...ele, ...{ count: 0 } })
+  // })
+  // let response = await Member.find(queryCond)
+  //   .populate('credentialId branch').populate("packageDetails.packages")
+  //   .populate({ path: "packageDetails.trainerDetails.trainer", populate: { path: "credentialId" } }).lean()
+  // response.forEach(member => {
+  //   member.packageDetails = member.packageDetails.filter(pack => pack.packageRenewal)
+  // })
+  // response.forEach(member => {
+  //   if (body.fromDate && body.toDate) {
+  //     member.packageDetails = member.packageDetails.filter(pack => {
+  //       if (pack.extendDate) {
+  //         if (new Date(setTime(body.fromDate)) <= pack.extendDate && new Date(setTime(body.toDate)) >= pack.extendDate) {
+  //           return pack
+  //         }
+  //       } else {
+  //         if (new Date(setTime(body.fromDate)) <= pack.endDate && new Date(setTime(body.toDate)) >= pack.endDate) {
+  //           return pack
+  //         }
+  //       }
+  //     })
+  //   }
+  // })
+  // response = response.filter(member => member.packageDetails.length > 0)
+  // response.forEach(member => {
+  //   member.packageDetails.forEach(doc => {
+  //     if (doc.packageRenewal) {
+  //       let branchIndex = branches.findIndex(b => b._id.toString() === member.branch._id.toString())
+  //       let packageIndex = packages.findIndex(ele => ele._id.toString() === doc.packages._id.toString());
+  //       if (doc.packages._id.toString() === packages[packageIndex]._id.toString() && packageIndex !== -1) {
+  //         packages[packageIndex].count++;
+  //       }
+  //       if (member.branch._id.toString() === branches[branchIndex]._id.toString() && branchIndex !== -1) {
+  //         branches[branchIndex].count++;
+  //       }
+  //     }
+  //   });
+  // })
+  // return { response, packages, branches }
 }
 
 const getPackageType = async (body) => {
@@ -353,7 +354,7 @@ const getPackageType = async (body) => {
   })
   let response = await Member.find(queryCond)
     .populate('credentialId branch').populate("packageDetails.packages")
-    .populate({ path: "packageDetails.trainer", populate: { path: "credentialId" } }).lean()
+    .populate({ path: "packageDetails.trainerDetails.trainer", populate: { path: "credentialId" } }).lean()
   response = response.filter(member => {
     if (body.fromDate && body.toDate) {
       if (new Date(setTime(body.fromDate)) <= member.admissionDate && new Date(setTime(body.toDate)) >= member.admissionDate) {
@@ -365,12 +366,12 @@ const getPackageType = async (body) => {
   })
   response.forEach(member => {
     member.packageDetails.forEach(doc => {
-      let branchIndex = branches.findIndex(b => b._id.toString() === member.branch.toString())
+      let branchIndex = branches.findIndex(b => b._id.toString() === member.branch._id.toString())
       let packageIndex = packages.findIndex(ele => ele._id.toString() === doc.packages._id.toString());
       if (doc.packages._id.toString() === packages[packageIndex]._id.toString() && packageIndex !== -1) {
         packages[packageIndex].count++;
       }
-      if (member.branch.toString() === branches[branchIndex]._id.toString() && branchIndex !== -1) {
+      if (member.branch._id.toString() === branches[branchIndex]._id.toString() && branchIndex !== -1) {
         branches[branchIndex].count++
       }
     });
@@ -382,11 +383,11 @@ const getPackageType = async (body) => {
 const getAssignedTrainers = async (body) => {
   let queryCond = {};
   queryCond["doneFingerAuth"] = true;
-  queryCond['packageDetails.dateOfPurchase'] = { '$exists': true }
-  queryCond['packageDetails.trainerFees'] = { '$exists': true }
+  queryCond['packageDetails.dateOfPaid'] = { '$exists': true }
+  queryCond['packageDetails.trainerDetails.trainerFees'] = { '$exists': true }
 
   if (body.branch) queryCond["branch"] = body.branch
-  if (body.trainerId) queryCond['packageDetails.trainer'] = body.trainerId
+  if (body.trainerId) queryCond['packageDetails.trainerDetails.trainer'] = body.trainerId
 
   let designation = await Designation.findOne({ designationName: DESIGNATION[4] }).lean()
   let trainersResponse = await Employee.find({ designation: designation._id, status: true }, 'credentialId').populate('credentialId').lean();
@@ -400,29 +401,41 @@ const getAssignedTrainers = async (body) => {
     periods.push({ ...ele, ...{ amount: 0 } })
   })
   let response = await Member.find(queryCond)
-    .populate('credentialId branch').populate("packageDetails.packages packageDetails.trainerFees packageDetails.doneBy")
-    .populate({ path: "packageDetails.trainer", populate: { path: "credentialId" } })
-    .populate({ path: "packageDetails.trainerFees", populate: { path: "period" } }).lean()
-  response.forEach(member => {
-    if (body.fromDate && body.toDate) {
-      member.packageDetails = member.packageDetails.filter(pack => {
-        if (new Date(setTime(body.fromDate)) <= pack.dateOfPurchase && new Date(setTime(body.toDate)) >= pack.dateOfPurchase) {
-          return pack
-        }
-      })
-    }
-  })
+    .populate('credentialId branch')
+    .populate('packageDetails.packages packageDetails.doneBy packageDetails.trainerDetails.doneBy packageDetails.trainerDetails.Installments.doneBy')
+    .populate({ path: "packageDetails.trainerDetails.trainer", populate: { path: "credentialId" } })
+    .populate({ path: "packageDetails.packages", populate: { path: "period" } })
+    .populate({ path: "packageDetails.trainerDetails.trainerFees", populate: { path: "period" } }).lean()
   response.forEach(member => {
     member.packageDetails.forEach(doc => {
-      if (doc.dateOfPurchase && doc.trainerFees) {
-        let periodIndex = periods.findIndex(p => p._id.toString() === doc.trainerFees.period._id.toString())
-        let trainerIndex = trainers.findIndex(ele => ele._id.toString() === doc.trainer._id.toString());
-        if (doc.trainer._id.toString() === trainers[trainerIndex]._id.toString() && trainerIndex !== -1) {
-          trainers[trainerIndex].amount = trainers[trainerIndex].amount + doc.trainerFees.amount
-        }
-        if (doc.trainerFees.period._id.toString() === periods[periodIndex]._id.toString() && periodIndex !== -1) {
-          periods[periodIndex].amount = periods[periodIndex].amount + doc.trainerFees.amount
-        }
+      if (doc.trainerDetails && doc.trainerDetails.length) {
+        doc.trainerDetails.forEach(trainerDetail => {
+          let periodIndex = periods.findIndex(p => p._id.toString() === trainerDetail.trainerFees.period._id.toString())
+          let trainerIndex = trainers.findIndex(ele => ele._id.toString() === trainerDetail.trainer._id.toString());
+          if (trainerDetail.Installments && trainerDetail.Installments.length) {
+            trainerDetail.Installments.forEach(installment => {
+              if (installment.paidStatus === 'Paid' && new Date(setTime(body.fromDate)) <= installment.dateOfPaid && new Date(setTime(body.toDate)) >= installment.dateOfPaid) {
+                installment.display = true
+                if (trainerDetail.trainer._id.toString() === trainers[trainerIndex]._id.toString() && trainerIndex !== -1) {
+                  trainers[trainerIndex].amount += typeof installment.totalAmount === 'number' ? installment.totalAmount : 0
+                }
+                if (trainerDetail.trainerFees.period._id.toString() === periods[periodIndex]._id.toString() && periodIndex !== -1) {
+                  periods[periodIndex].amount += typeof installment.totalAmount === 'number' ? installment.totalAmount : 0
+                }
+              }
+            })
+          } else {
+            if ((trainerDetail.paidStatus === 'Paid' || trainerDetail.paidStatus === 'Installment') && new Date(setTime(body.fromDate)) <= trainerDetail.dateOfPaid && new Date(setTime(body.toDate)) >= trainerDetail.dateOfPaid) {
+              trainerDetail.display = true
+              if (trainerDetail.trainer._id.toString() === trainers[trainerIndex]._id.toString() && trainerIndex !== -1) {
+                trainers[trainerIndex].amount += typeof trainerDetail.totalAmount === 'number' ? trainerDetail.totalAmount : 0
+              }
+              if (trainerDetail.trainerFees.period._id.toString() === periods[periodIndex]._id.toString() && periodIndex !== -1) {
+                periods[periodIndex].amount += typeof trainerDetail.totalAmount === 'number' ? trainerDetail.totalAmount : 0
+              }
+            }
+          }
+        })
       }
     });
     if (body.trainerId) member.customTrainerId = body.trainerId
@@ -528,29 +541,56 @@ const getGeneralSales = async (body) => {
   })
 
   let totalAmountOfMember = await Member.find(queryCond)
-    .populate('credentialId branch').populate("packageDetails.packages packageDetails.doneBy")
-    .populate({ path: "packageDetails.trainer", populate: { path: "credentialId" } }).lean();
+    .populate('credentialId branch')
+    .populate('packageDetails.packages packageDetails.doneBy packageDetails.Installments.doneBy packageDetails.trainerDetails.doneBy packageDetails.trainerDetails.Installments.doneBy')
+    .populate({ path: "packageDetails.trainerDetails.trainer", populate: { path: "credentialId" } })
+    .populate({ path: "packageDetails.packages", populate: { path: "period" } })
+    .populate({ path: "packageDetails.trainerDetails.trainerFees", populate: { path: "period" } }).lean()
   totalAmountOfMember.forEach(ele => {
-    ele.packageDetails = ele.packageDetails.filter(doc => {
-      if (doc.paidStatus === 'Paid') {
-        if (body.fromDate && body.toDate) {
-          if (
-            new Date(setTime(body.fromDate)) <= (doc.startDate ? doc.startDate : ele.admissionDate) &&
-            new Date(setTime(body.toDate)) >= (doc.startDate ? doc.startDate : ele.admissionDate)
-          ) {
-            return doc
+    ele.transactionType = "Packages"
+    ele.packageDetails.forEach((doc, i) => {
+      let branchIndex = branches.findIndex(b => b._id.toString() === ele.branch._id.toString())
+      if (doc.Installments && doc.Installments.length) {
+        doc.Installments.forEach(installment => {
+          if (installment.paidStatus === 'Paid' && new Date(setTime(body.fromDate)) <= installment.dateOfPaid && new Date(setTime(body.toDate)) >= installment.dateOfPaid) {
+            installment.display = true
+            transactionType[0].amount += typeof installment.totalAmount === 'number' ? installment.totalAmount : 0
+            if (ele.branch._id.toString() === branches[branchIndex]._id.toString() && branchIndex !== -1) {
+              branches[branchIndex].amount += typeof installment.totalAmount === 'number' ? installment.totalAmount : 0
+            }
           }
-        } else {
-          return doc
+        })
+      } else {
+        if (new Date(setTime(body.fromDate)) <= doc.dateOfPaid && new Date(setTime(body.toDate)) >= doc.dateOfPaid) {
+          doc.display = true
+          transactionType[0].amount += typeof doc.totalAmount === 'number' ? doc.totalAmount : 0
+          if (ele.branch._id.toString() === branches[branchIndex]._id.toString() && branchIndex !== -1) {
+            branches[branchIndex].amount += typeof doc.totalAmount === 'number' ? doc.totalAmount : 0
+          }
         }
       }
-    })
-    ele.transactionType = "Packages"
-    ele.packageDetails.forEach(doc => {
-      transactionType[0].amount += +doc.totalAmount
-      let branchIndex = branches.findIndex(b => b._id.toString() === ele.branch._id.toString())
-      if (ele.branch._id.toString() === branches[branchIndex]._id.toString() && branchIndex !== -1) {
-        branches[branchIndex].amount += +doc.totalAmount
+      if (doc.trainerDetails && doc.trainerDetails.length) {
+        doc.trainerDetails.forEach(trainerDetail => {
+          if (trainerDetail.Installments && trainerDetail.Installments.length) {
+            trainerDetail.Installments = trainerDetail.Installments.forEach(installment => {
+              if (installment.paidStatus === 'Paid' && new Date(setTime(body.fromDate)) <= installment.dateOfPaid && new Date(setTime(body.toDate)) >= installment.dateOfPaid) {
+                installment.display = true
+                transactionType[0].amount += typeof installment.totalAmount === 'number' ? installment.totalAmount : 0
+                if (ele.branch._id.toString() === branches[branchIndex]._id.toString() && branchIndex !== -1) {
+                  branches[branchIndex].amount += typeof installment.totalAmount === 'number' ? installment.totalAmount : 0
+                }
+              }
+            })
+          } else {
+            if (new Date(setTime(body.fromDate)) <= trainerDetail.dateOfPaid && new Date(setTime(body.toDate)) >= trainerDetail.dateOfPaid) {
+              trainerDetail.display = true
+              transactionType[0].amount += typeof trainerDetail.totalAmount === 'number' ? trainerDetail.totalAmount : 0
+              if (ele.branch._id.toString() === branches[branchIndex]._id.toString() && branchIndex !== -1) {
+                branches[branchIndex].amount += typeof trainerDetail.totalAmount === 'number' ? trainerDetail.totalAmount : 0
+              }
+            }
+          }
+        })
       }
     })
   })
@@ -574,32 +614,65 @@ const getPackageSales = async (body) => {
   })
 
   let totalAmountOfMember = await Member.find(queryCond)
-    .populate('credentialId branch packageDetails.trainerFees').populate("packageDetails.packages packageDetails.doneBy")
-    .populate({ path: "packageDetails.trainer", populate: { path: "credentialId" } }).lean();
+    .populate('credentialId branch')
+    .populate('packageDetails.packages packageDetails.doneBy packageDetails.Installments.doneBy packageDetails.trainerDetails.doneBy packageDetails.trainerDetails.Installments.doneBy')
+    .populate({ path: "packageDetails.trainerDetails.trainer", populate: { path: "credentialId" } })
+    .populate({ path: "packageDetails.packages", populate: { path: "period" } })
+    .populate({ path: "packageDetails.trainerDetails.trainerFees", populate: { path: "period" } }).lean()
   totalAmountOfMember.forEach(ele => {
-    ele.packageDetails = ele.packageDetails.filter(doc => {
-      if (doc.paidStatus === 'Paid') {
-        if (body.fromDate && body.toDate) {
-          if (
-            new Date(setTime(body.fromDate)) <= (doc.startDate ? doc.startDate : ele.admissionDate) &&
-            new Date(setTime(body.toDate)) >= (doc.startDate ? doc.startDate : ele.admissionDate)
-          ) {
-            return doc
+    ele.transactionType = "Packages"
+    ele.packageDetails.forEach((doc, i) => {
+      let branchIndex = branches.findIndex(b => b._id.toString() === ele.branch._id.toString())
+      let packageIndex = packages.findIndex(ele => ele._id.toString() === doc.packages._id.toString());
+      if (doc.Installments && doc.Installments.length) {
+        doc.Installments.forEach(installment => {
+          if (installment.paidStatus === 'Paid' && new Date(setTime(body.fromDate)) <= installment.dateOfPaid && new Date(setTime(body.toDate)) >= installment.dateOfPaid) {
+            installment.display = true
+            if (doc.packages._id.toString() === packages[packageIndex]._id.toString() && packageIndex !== -1) {
+              packages[packageIndex].amount += typeof installment.totalAmount === 'number' ? installment.totalAmount : 0
+            }
+            if (ele.branch._id.toString() === branches[branchIndex]._id.toString() && branchIndex !== -1) {
+              branches[branchIndex].amount += typeof installment.totalAmount === 'number' ? installment.totalAmount : 0
+            }
           }
-        } else {
-          return doc
+        })
+      } else {
+        if (new Date(setTime(body.fromDate)) <= doc.dateOfPaid && new Date(setTime(body.toDate)) >= doc.dateOfPaid) {
+          doc.display = true
+          if (doc.packages._id.toString() === packages[packageIndex]._id.toString() && packageIndex !== -1) {
+            packages[packageIndex].amount += typeof doc.totalAmount === 'number' ? doc.totalAmount : 0
+          }
+          if (ele.branch._id.toString() === branches[branchIndex]._id.toString() && branchIndex !== -1) {
+            branches[branchIndex].amount += typeof doc.totalAmount === 'number' ? doc.totalAmount : 0
+          }
         }
       }
-    })
-    ele.transactionType = "Packages"
-    ele.packageDetails.forEach(doc => {
-      let branchIndex = branches.findIndex(b => b._id.toString() === ele.branch._id.toString())
-      if (ele.branch._id.toString() === branches[branchIndex]._id.toString() && branchIndex !== -1) {
-        branches[branchIndex].amount += +doc.totalAmount
-      }
-      let packageIndex = packages.findIndex(ele => ele._id.toString() === doc.packages._id.toString());
-      if (doc.packages._id.toString() === packages[packageIndex]._id.toString() && packageIndex !== -1) {
-        packages[packageIndex].amount += +doc.totalAmount;
+      if (doc.trainerDetails && doc.trainerDetails.length) {
+        doc.trainerDetails.forEach(trainerDetail => {
+          if (trainerDetail.Installments && trainerDetail.Installments.length) {
+            trainerDetail.Installments = trainerDetail.Installments.forEach(installment => {
+              if (installment.paidStatus === 'Paid' && new Date(setTime(body.fromDate)) <= installment.dateOfPaid && new Date(setTime(body.toDate)) >= installment.dateOfPaid) {
+                installment.display = true
+                if (doc.packages._id.toString() === packages[packageIndex]._id.toString() && packageIndex !== -1) {
+                  packages[packageIndex].amount += typeof installment.totalAmount === 'number' ? installment.totalAmount : 0
+                }
+                if (ele.branch._id.toString() === branches[branchIndex]._id.toString() && branchIndex !== -1) {
+                  branches[branchIndex].amount += typeof installment.totalAmount === 'number' ? installment.totalAmount : 0
+                }
+              }
+            })
+          } else {
+            if (new Date(setTime(body.fromDate)) <= trainerDetail.dateOfPaid && new Date(setTime(body.toDate)) >= trainerDetail.dateOfPaid) {
+              trainerDetail.display = true
+              if (doc.packages._id.toString() === packages[packageIndex]._id.toString() && packageIndex !== -1) {
+                packages[packageIndex].amount += typeof trainerDetail.totalAmount === 'number' ? trainerDetail.totalAmount : 0
+              }
+              if (ele.branch._id.toString() === branches[branchIndex]._id.toString() && branchIndex !== -1) {
+                branches[branchIndex].amount += typeof trainerDetail.totalAmount === 'number' ? trainerDetail.totalAmount : 0
+              }
+            }
+          }
+        })
       }
     })
   })
@@ -756,12 +829,12 @@ const getSalesByPaymentMethod = async (body) => {
       }
     })
     totalAmountOfStockSell.forEach(doc => {
-      transactionType[1].amount += (body.paymentMethod === 'Cash' ? +doc.cashAmount : body.paymentMethod === 'Card' ? +doc.cardAmount : (+doc.digitalAmount ? +doc.digitalAmount : 0))
+      transactionType[1].amount += (body.paymentMethod === 'Cash' ? +doc.cashAmount : body.paymentMethod === 'Card' ? +doc.cardAmount : body.paymentMethod === 'Digital' ? (+doc.digitalAmount ? +doc.digitalAmount : 0) : (+doc.chequeAmount ? +doc.chequeAmount : 0))
       doc.transactionType = "POS"
       doc.paymentMethod = body.paymentMethod
       let branchIndex = branches.findIndex(b => b._id.toString() === doc.branch._id.toString())
       if (doc.branch._id.toString() === branches[branchIndex]._id.toString() && branchIndex !== -1) {
-        branches[branchIndex].amount += (body.paymentMethod === 'Cash' ? +doc.cashAmount : body.paymentMethod === 'Card' ? +doc.cardAmount : (+doc.digitalAmount ? +doc.digitalAmount : 0))
+        branches[branchIndex].amount += (body.paymentMethod === 'Cash' ? +doc.cashAmount : body.paymentMethod === 'Card' ? +doc.cardAmount : body.paymentMethod === 'Digital' ? (+doc.digitalAmount ? +doc.digitalAmount : 0) : (+doc.chequeAmount ? +doc.chequeAmount : 0))
       }
     })
   }
@@ -782,42 +855,69 @@ const getSalesByPaymentMethod = async (body) => {
       }
     })
     memberClasses.forEach(doc => {
-      transactionType[2].amount += (body.paymentMethod === 'Cash' ? +doc.cashAmount : body.paymentMethod === 'Card' ? +doc.cardAmount : (+doc.digitalAmount ? +doc.digitalAmount : 0))
+      transactionType[2].amount += (body.paymentMethod === 'Cash' ? +doc.cashAmount : body.paymentMethod === 'Card' ? +doc.cardAmount : body.paymentMethod === 'Digital' ? (+doc.digitalAmount ? +doc.digitalAmount : 0) : (+doc.chequeAmount ? +doc.chequeAmount : 0))
       doc.transactionType = "Classes"
       doc.paymentMethod = body.paymentMethod
       let branchIndex = branches.findIndex(b => b._id.toString() === doc.member.branch._id.toString())
       if (doc.member.branch._id.toString() === branches[branchIndex]._id.toString() && branchIndex !== -1) {
-        branches[branchIndex].amount += (body.paymentMethod === 'Cash' ? +doc.cashAmount : body.paymentMethod === 'Card' ? +doc.cardAmount : (+doc.digitalAmount ? +doc.digitalAmount : 0))
+        branches[branchIndex].amount += (body.paymentMethod === 'Cash' ? +doc.cashAmount : body.paymentMethod === 'Card' ? +doc.cardAmount : body.paymentMethod === 'Digital' ? (+doc.digitalAmount ? +doc.digitalAmount : 0) : (+doc.chequeAmount ? +doc.chequeAmount : 0))
       }
     })
   }
 
   if (body.transactionType === 'Packages' || body.transactionType === '') {
     totalAmountOfMember = await Member.find(queryCond)
-      .populate('credentialId branch').populate("packageDetails.packages packageDetails.doneBy")
-      .populate({ path: "packageDetails.trainer", populate: { path: "credentialId" } }).lean();
+      .populate('credentialId branch')
+      .populate('packageDetails.packages packageDetails.doneBy packageDetails.Installments.doneBy packageDetails.trainerDetails.doneBy packageDetails.trainerDetails.Installments.doneBy')
+      .populate({ path: "packageDetails.trainerDetails.trainer", populate: { path: "credentialId" } })
+      .populate({ path: "packageDetails.packages", populate: { path: "period" } })
+      .populate({ path: "packageDetails.trainerDetails.trainerFees", populate: { path: "period" } }).lean()
     totalAmountOfMember.forEach(ele => {
-      ele.packageDetails = ele.packageDetails.filter(doc => {
-        if (doc.paidStatus === 'Paid') {
-          if (body.fromDate && body.toDate) {
-            if (
-              new Date(setTime(body.fromDate)) <= (doc.startDate ? doc.startDate : ele.admissionDate) &&
-              new Date(setTime(body.toDate)) >= (doc.startDate ? doc.startDate : ele.admissionDate)
-            ) {
-              return doc
-            }
-          } else {
-            return doc
-          }
-        }
-      })
       ele.transactionType = "Packages"
       ele.paymentMethod = body.paymentMethod
-      ele.packageDetails.forEach(doc => {
-        transactionType[0].amount += (body.paymentMethod === 'Cash' ? (+doc.cashAmount ? +doc.cashAmount : 0) : body.paymentMethod === 'Card' ? (+doc.cardAmount ? +doc.cardAmount : 0) : (+doc.digitalAmount ? +doc.digitalAmount : 0))
+      ele.packageDetails.forEach((doc, i) => {
         let branchIndex = branches.findIndex(b => b._id.toString() === ele.branch._id.toString())
-        if (ele.branch._id.toString() === branches[branchIndex]._id.toString() && branchIndex !== -1) {
-          branches[branchIndex].amount += (body.paymentMethod === 'Cash' ? (+doc.cashAmount ? +doc.cashAmount : 0) : body.paymentMethod === 'Card' ? (+doc.cardAmount ? +doc.cardAmount : 0) : (+doc.digitalAmount ? +doc.digitalAmount : 0))
+        if (doc.Installments && doc.Installments.length) {
+          doc.Installments.forEach(installment => {
+            if (installment.paidStatus === 'Paid' && new Date(setTime(body.fromDate)) <= installment.dateOfPaid && new Date(setTime(body.toDate)) >= installment.dateOfPaid) {
+              installment.display = true
+              transactionType[0].amount += (body.paymentMethod === 'Cash' ? (+installment.cashAmount ? +installment.cashAmount : 0) : body.paymentMethod === 'Card' ? (+installment.cardAmount ? +installment.cardAmount : 0) : body.paymentMethod === 'Digital' ? (+installment.digitalAmount ? +installment.digitalAmount : 0) : (+installment.chequeAmount ? +installment.chequeAmount : 0))
+              if (ele.branch._id.toString() === branches[branchIndex]._id.toString() && branchIndex !== -1) {
+                branches[branchIndex].amount += (body.paymentMethod === 'Cash' ? (+installment.cashAmount ? +installment.cashAmount : 0) : body.paymentMethod === 'Card' ? (+installment.cardAmount ? +installment.cardAmount : 0) : body.paymentMethod === 'Digital' ? (+installment.digitalAmount ? +installment.digitalAmount : 0) : (+installment.chequeAmount ? +installment.chequeAmount : 0))
+              }
+            }
+          })
+        } else {
+          if (new Date(setTime(body.fromDate)) <= doc.dateOfPaid && new Date(setTime(body.toDate)) >= doc.dateOfPaid) {
+            doc.display = true
+            transactionType[0].amount += (body.paymentMethod === 'Cash' ? (+doc.cashAmount ? +doc.cashAmount : 0) : body.paymentMethod === 'Card' ? (+doc.cardAmount ? +doc.cardAmount : 0) : body.paymentMethod === 'Digital' ? (+doc.digitalAmount ? +doc.digitalAmount : 0) : (+doc.chequeAmount ? +doc.chequeAmount : 0))
+            if (ele.branch._id.toString() === branches[branchIndex]._id.toString() && branchIndex !== -1) {
+              branches[branchIndex].amount += (body.paymentMethod === 'Cash' ? (+doc.cashAmount ? +doc.cashAmount : 0) : body.paymentMethod === 'Card' ? (+doc.cardAmount ? +doc.cardAmount : 0) : body.paymentMethod === 'Digital' ? (+doc.digitalAmount ? +doc.digitalAmount : 0) : (+doc.chequeAmount ? +doc.chequeAmount : 0))
+            }
+          }
+        }
+        if (doc.trainerDetails && doc.trainerDetails.length) {
+          doc.trainerDetails.forEach(trainerDetail => {
+            if (trainerDetail.Installments && trainerDetail.Installments.length) {
+              trainerDetail.Installments = trainerDetail.Installments.forEach(installment => {
+                if (installment.paidStatus === 'Paid' && new Date(setTime(body.fromDate)) <= installment.dateOfPaid && new Date(setTime(body.toDate)) >= installment.dateOfPaid) {
+                  installment.display = true
+                  transactionType[0].amount += (body.paymentMethod === 'Cash' ? (+installment.cashAmount ? +installment.cashAmount : 0) : body.paymentMethod === 'Card' ? (+installment.cardAmount ? +installment.cardAmount : 0) : body.paymentMethod === 'Digital' ? (+installment.digitalAmount ? +installment.digitalAmount : 0) : (+installment.chequeAmount ? +installment.chequeAmount : 0))
+                  if (ele.branch._id.toString() === branches[branchIndex]._id.toString() && branchIndex !== -1) {
+                    branches[branchIndex].amount += (body.paymentMethod === 'Cash' ? (+installment.cashAmount ? +installment.cashAmount : 0) : body.paymentMethod === 'Card' ? (+installment.cardAmount ? +installment.cardAmount : 0) : body.paymentMethod === 'Digital' ? (+installment.digitalAmount ? +installment.digitalAmount : 0) : (+installment.chequeAmount ? +installment.chequeAmount : 0))
+                  }
+                }
+              })
+            } else {
+              if (new Date(setTime(body.fromDate)) <= trainerDetail.dateOfPaid && new Date(setTime(body.toDate)) >= trainerDetail.dateOfPaid) {
+                trainerDetail.display = true
+                transactionType[0].amount += (body.paymentMethod === 'Cash' ? (+trainerDetail.cashAmount ? +trainerDetail.cashAmount : 0) : body.paymentMethod === 'Card' ? (+trainerDetail.cardAmount ? +trainerDetail.cardAmount : 0) : body.paymentMethod === 'Digital' ? (+trainerDetail.digitalAmount ? +trainerDetail.digitalAmount : 0) : (+trainerDetail.chequeAmount ? +trainerDetail.chequeAmount : 0))
+                if (ele.branch._id.toString() === branches[branchIndex]._id.toString() && branchIndex !== -1) {
+                  branches[branchIndex].amount += (body.paymentMethod === 'Cash' ? (+trainerDetail.cashAmount ? +trainerDetail.cashAmount : 0) : body.paymentMethod === 'Card' ? (+trainerDetail.cardAmount ? +trainerDetail.cardAmount : 0) : body.paymentMethod === 'Digital' ? (+trainerDetail.digitalAmount ? +trainerDetail.digitalAmount : 0) : (+trainerDetail.chequeAmount ? +trainerDetail.chequeAmount : 0))
+                }
+              }
+            }
+          })
         }
       })
     })
@@ -830,7 +930,7 @@ const getSalesByPaymentMethod = async (body) => {
 const getTodaySalesByStaff = async (body) => {
   let queryCond = {};
   let transactionType = [{ transactionName: "Packages", amount: 0 }, { transactionName: "POS", amount: 0 }, { transactionName: "Classes", amount: 0 }]
-  let paymentMethod = [{ paymentName: "Digital", amount: 0 }, { paymentName: "Cash", amount: 0 }, { paymentName: "Card", amount: 0 }]
+  let paymentMethod = [{ paymentName: "Digital", amount: 0 }, { paymentName: "Cash", amount: 0 }, { paymentName: "Card", amount: 0 }, { paymentName: "Cheque", amount: 0 }]
 
   let totalAmountOfStockSell = [], memberClasses = [], totalAmountOfMember = []
 
@@ -850,6 +950,7 @@ const getTodaySalesByStaff = async (body) => {
       paymentMethod[0].amount += (+doc.digitalAmount ? +doc.digitalAmount : 0)
       paymentMethod[1].amount += (+doc.cashAmount ? +doc.cashAmount : 0)
       paymentMethod[2].amount += (+doc.cardAmount ? +doc.cardAmount : 0)
+      paymentMethod[3].amount += (+doc.chequeAmount ? +doc.chequeAmount : 0)
       doc.transactionType = "POS"
     })
   }
@@ -875,6 +976,7 @@ const getTodaySalesByStaff = async (body) => {
       paymentMethod[0].amount += (+doc.digitalAmount ? +doc.digitalAmount : 0)
       paymentMethod[1].amount += (+doc.cashAmount ? +doc.cashAmount : 0)
       paymentMethod[2].amount += (+doc.cardAmount ? +doc.cardAmount : 0)
+      paymentMethod[3].amount += (+doc.chequeAmount ? +doc.chequeAmount : 0)
       doc.transactionType = "Classes"
     })
   }
@@ -896,10 +998,40 @@ const getTodaySalesByStaff = async (body) => {
       })
       ele.transactionType = "Packages"
       ele.packageDetails.forEach(doc => {
-        transactionType[0].amount += +doc.totalAmount
-        paymentMethod[0].amount += (+doc.digitalAmount ? +doc.digitalAmount : 0)
-        paymentMethod[1].amount += (+doc.cashAmount ? +doc.cashAmount : 0)
-        paymentMethod[2].amount += (+doc.cardAmount ? +doc.cardAmount : 0)
+        if (doc.Installments && doc.Installments.length) {
+          doc.Installments.forEach(installment => {
+            transactionType[0].amount += typeof installment.totalAmount === 'number' ? installment.totalAmount : 0
+            paymentMethod[0].amount += (+installment.digitalAmount ? +installment.digitalAmount : 0)
+            paymentMethod[1].amount += (+installment.cashAmount ? +installment.cashAmount : 0)
+            paymentMethod[2].amount += (+installment.cardAmount ? +installment.cardAmount : 0)
+            paymentMethod[3].amount += (+installment.chequeAmount ? +installment.chequeAmount : 0)
+          })
+        } else {
+          transactionType[0].amount += typeof doc.totalAmount === 'number' ? doc.totalAmount : 0
+          paymentMethod[0].amount += (+doc.digitalAmount ? +doc.digitalAmount : 0)
+          paymentMethod[1].amount += (+doc.cashAmount ? +doc.cashAmount : 0)
+          paymentMethod[2].amount += (+doc.cardAmount ? +doc.cardAmount : 0)
+          paymentMethod[3].amount += (+doc.chequeAmount ? +doc.chequeAmount : 0)
+        }
+        if (doc.trainerDetails && doc.trainerDetails.length) {
+          doc.trainerDetails.forEach(trainerDetail => {
+            if (trainerDetail.Installments && trainerDetail.Installments.length) {
+              trainerDetail.Installments.forEach(installment => {
+                transactionType[0].amount += typeof installment.totalAmount === 'number' ? installment.totalAmount : 0
+                paymentMethod[0].amount += (+installment.digitalAmount ? +installment.digitalAmount : 0)
+                paymentMethod[1].amount += (+installment.cashAmount ? +installment.cashAmount : 0)
+                paymentMethod[2].amount += (+installment.cardAmount ? +installment.cardAmount : 0)
+                paymentMethod[3].amount += (+installment.chequeAmount ? +installment.chequeAmount : 0)
+              })
+            } else {
+              transactionType[0].amount += typeof trainerDetail.totalAmount === 'number' ? trainerDetail.totalAmount : 0
+              paymentMethod[0].amount += (+trainerDetail.digitalAmount ? +trainerDetail.digitalAmount : 0)
+              paymentMethod[1].amount += (+trainerDetail.cashAmount ? +trainerDetail.cashAmount : 0)
+              paymentMethod[2].amount += (+trainerDetail.cardAmount ? +trainerDetail.cardAmount : 0)
+              paymentMethod[3].amount += (+trainerDetail.chequeAmount ? +trainerDetail.chequeAmount : 0)
+            }
+          })
+        }
       })
     })
   }
@@ -1283,7 +1415,7 @@ const getVatReport = async (body) => {
       .lean();
     totalAmountOfMember.forEach(ele => {
       ele.packageDetails = ele.packageDetails.filter(doc => {
-        if (doc.paidStatus === 'Paid') {
+        if (doc.paidStatus === 'Paid' || doc.paidStatus === 'Installment') {
           if (body.fromDate && body.toDate) {
             if (
               new Date(setTime(body.fromDate)) <= (doc.startDate ? doc.startDate : ele.admissionDate) &&

@@ -80,13 +80,15 @@ class CreateOffers extends Component {
   handleEdit(c) {
     scrollToTop()
     this.setState({
-      offerName: c.offerName,
-      startDate: new Date(c.startDate),
-      endDate: new Date(c.endDate),
-      offerPercentage: c.offerPercentage,
-      product: c.product,
-      offerId: c._id,
-      actualPrice: c.product.sellingPrice
+      ...this.default, ...{
+        offerName: c.offerName,
+        startDate: new Date(c.startDate),
+        endDate: new Date(c.endDate),
+        offerPercentage: c.offerPercentage,
+        product: c.product,
+        offerId: c._id,
+        actualPrice: c.product.sellingPrice
+      }
     })
   }
 
@@ -275,7 +277,7 @@ class CreateOffers extends Component {
             <thead>
               <tr>
                 <th>{t('Offer Name')}</th>
-                <th className="text-center">{t('Product Name')}</th>
+                <th>{t('Product Name')}</th>
                 <th className="text-center">{t('Actual Price')}</th>
                 <th className="text-center">{t('Offer Percentage')}</th>
                 <th className="text-center">{t('Start Date')}</th>

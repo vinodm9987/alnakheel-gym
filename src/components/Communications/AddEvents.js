@@ -63,10 +63,12 @@ class AddEvents extends Component {
   handleEdit(c) {
     scrollToTop()
     this.setState({
-      eventTitle: c.eventTitle,
-      startDate: new Date(c.startDate),
-      endDate: new Date(c.endDate),
-      eventId: c._id
+      ...this.default, ...{
+        eventTitle: c.eventTitle,
+        startDate: new Date(c.startDate),
+        endDate: new Date(c.endDate),
+        eventId: c._id
+      }
     })
   }
 

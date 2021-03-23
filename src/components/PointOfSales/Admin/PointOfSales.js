@@ -15,6 +15,7 @@ import instaimg from '../../../assets/img/insta.jpg'
 import { dateToDDMMYYYY, dateToHHMM, setTime, validator } from '../../../utils/apis/helpers';
 import DateFnsUtils from '@date-io/date-fns';
 import { DatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
+import { PRODIP } from '../../../config'
 
 class PointOfSales extends Component {
 
@@ -55,7 +56,7 @@ class PointOfSales extends Component {
       showCheque: false,
       bankName: '',
       chequeNumber: '',
-      chequeDate: '',
+      chequeDate: new Date(),
       cheque: 0,
       bankNameE: '',
       chequeNumberE: '',
@@ -313,7 +314,8 @@ class PointOfSales extends Component {
 
   handleSubmit() {
     const { t } = this.props
-    const { cash, card, digital, addedStocks, customerStatus, member, discount, giftcard, memberTransactionId, branch, cashE, cardE, digitalE, cardNumber, cheque } = this.state
+    const { cash, card, digital, addedStocks, customerStatus, member, discount, giftcard, memberTransactionId, branch, cashE, cardE, digitalE, cardNumber,
+      cheque, bankName, chequeNumber, chequeDate } = this.state
     if (customerStatus === 'Member') {
       let purchaseStock = []
       let actualAmount = 0
@@ -343,6 +345,8 @@ class PointOfSales extends Component {
           cardAmount: card ? card : 0,
           digitalAmount: digital ? digital : 0,
           cardNumber,
+          chequeAmount: cheque ? parseFloat(cheque) : 0,
+          bankName: bankName, chequeNumber: chequeNumber, chequeDate: cheque ? chequeDate : '',
           memberTransactionId
         }
         this.props.dispatch(addStockSell(stockSellsInfo))
@@ -380,6 +384,8 @@ class PointOfSales extends Component {
           cardAmount: card ? card : 0,
           digitalAmount: digital ? digital : 0,
           cardNumber,
+          chequeAmount: cheque ? parseFloat(cheque) : 0,
+          bankName: bankName, chequeNumber: chequeNumber, chequeDate: cheque ? chequeDate : '',
           paymentType: 'POS'
         }
         this.props.dispatch(addStockSell(stockSellsInfo))
@@ -571,7 +577,7 @@ class PointOfSales extends Component {
                               {/* If Offer */}
                               {offerDetails && offerDetails.isOffer && offerDetails.offerDetails.status && setTime(offerDetails.offerDetails.endDate) >= setTime(new Date()) &&
                                 <div className="offered">
-                                  <span className="semiCut-text pr-1 pl-3">OFFER</span>
+                                  <span className="semiCut-text pr-1 pl-3">{t('OFFER')}</span>
                                 </div>
                               }
                               {/* /- If Offer */}
@@ -728,7 +734,7 @@ class PointOfSales extends Component {
                     {/* } */}
 
                     {/* Popup Discount */}
-                    <button type="button" id="Discount2" className="d-none" data-toggle="modal" data-target="#Discount" ref="openDiscount">Open modal</button>
+                    <button type="button" id="Discount2" className="d-none" data-toggle="modal" data-target="#Discount" ref="openDiscount">{t('Open')}</button>
                     <div className="modal fade commonYellowModal" id="Discount">
                       <div className="modal-dialog modal-dialog-centered">
                         <div className="modal-content">
@@ -854,7 +860,7 @@ class PointOfSales extends Component {
                               <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
                                 <div className="form-group inlineFormGroup mb-3">
                                   <label htmlFor="bankName" className="mx-sm-2 inlineFormLabel mb-1">{t('Bank Name')}</label>
-                                  <input type="text" autoComplete="off" className={this.state.bankNameE ? "form-control mx-sm-2 inlineFormInputs FormInputsError w-100 py-0 px-2 d-flex align-items-center bg-white dirltr" : "form-control mx-sm-2 inlineFormInputs w-100 py-0 px-2 d-flex align-items-center bg-white dirltr"}
+                                  <input type="text" autoComplete="off" className={this.state.bankNameE ? "form-control mx-sm-2 inlineFormInputs FormInputsError w-100 py-0 px-2 d-flex align-items-center bg-white" : "form-control mx-sm-2 inlineFormInputs w-100 py-0 px-2 d-flex align-items-center bg-white"}
                                     id="bankName"
                                     value={this.state.bankName} onChange={(e) => this.setState({ bankName: e.target.value })}
                                   />
@@ -886,14 +892,14 @@ class PointOfSales extends Component {
                                       autoOk
                                       invalidDateMessage=''
                                       minDateMessage=''
-                                      className={this.state.chequeDateE ? "form-control mx-sm-2 inlineFormInputs FormInputsError w-100 p-0 d-flex align-items-center bg-white dirltr" : "form-control mx-sm-2 inlineFormInputs w-100 p-0 d-flex align-items-center bg-white dirltr"}
+                                      className={this.state.chequeDateE ? "form-control pl-2 bg-white mx-sm-2 inlineFormInputs FormInputsError" : "form-control pl-2 bg-white mx-sm-2 inlineFormInputs"}
                                       minDate={new Date()}
                                       format="dd/MM/yyyy"
                                       value={this.state.chequeDate}
                                       onChange={(e) => this.setState(validator(e, 'chequeDate', 'date', []))}
                                     />
                                   </MuiPickersUtilsProvider>
-                                  <span className="icon-date dateBoxIcon"></span>
+                                  <span class="iconv1 iconv1-calander dateBoxIcon"></span>
                                   <div className="errorMessageWrapper">
                                     <small className="text-danger mx-sm-2 errorMessage"></small>
                                   </div>
@@ -934,13 +940,13 @@ class PointOfSales extends Component {
 
         </div>
         {/* --------------Receipt Modal-=--------------- */}
-        <button type="button" className="btn btn-primary d-none" data-toggle="modal" data-target="#ReceiptModal" data-backdrop="static" data-keyboard="false" ref="receiptOpenModal">Receipt</button>
+        <button type="button" className="btn btn-primary d-none" data-toggle="modal" data-target="#ReceiptModal" data-backdrop="static" data-keyboard="false" ref="receiptOpenModal">{t('Receipt')}</button>
         {posReceipt &&
           <div className="modal fade commonYellowModal" id="ReceiptModal">
             <div className="modal-dialog modal-lg" id="ReceiptModal2">
               <div className="modal-content">
                 <div className="modal-header">
-                  <h4 className="modal-title">Receipt</h4>
+                  <h4 className="modal-title">{t('Receipt')}</h4>
                   <button type="button" className="close" data-dismiss="modal" ref="receiptCloseModal" onClick={() => this.handleReceiptClose()}><span className="iconv1 iconv1-close"></span></button>
                 </div>
                 <div className="modal-body">
@@ -952,19 +958,19 @@ class PointOfSales extends Component {
                     <div className="row px-5 justify-content-between">
                       <div className="col-free p-3">
                         <div className="mb-3">
-                          <label className="m-0 font-weight-bold">VAT Reg Number</label>
+                          <label className="m-0 font-weight-bold">{t('VAT Reg Number')}</label>
                           <p className="">{filteredBranches && filteredBranches.filter(b => b._id === branch)[0] &&
                             filteredBranches.filter(b => b._id === branch)[0].vatRegNo}</p>
                         </div>
                         <div className="">
-                          <label className="m-0 font-weight-bold">Address</label>
+                          <label className="m-0 font-weight-bold">{t('Address')}</label>
                           <p className="whiteSpaceNormal mnw-150px mxw-200px">{filteredBranches && filteredBranches.filter(b => b._id === branch)[0] &&
                             filteredBranches.filter(b => b._id === branch)[0].address}</p>
                         </div>
                       </div>
                       <div className="col-free p-3">
                         <div className="mb-3">
-                          <label className="m-0 font-weight-bold">Tax Invoice No</label>
+                          <label className="m-0 font-weight-bold">{t('Tax Invoice No')}</label>
                           <p className="">{posReceipt.orderNo}</p>
                         </div>
                         <div className="">
@@ -974,11 +980,11 @@ class PointOfSales extends Component {
                       </div>
                       <div className="col-free p-3">
                         <div className="">
-                          <label className="m-0 font-weight-bold">Receipt Total</label>
+                          <label className="m-0 font-weight-bold">{t('Receipt Total')}</label>
                           <p className="h4 font-weight-bold">{this.props.defaultCurrency} {parseFloat(posReceipt.totalAmount).toFixed(3)}</p>
                         </div>
                         <div className="">
-                          <label className="m-0 font-weight-bold">Telephone</label>
+                          <label className="m-0 font-weight-bold">{t('Telephone')}</label>
                           <p className="">{filteredBranches && filteredBranches.filter(b => b._id === branch)[0] &&
                             filteredBranches.filter(b => b._id === branch)[0].telephone}</p>
                         </div>
@@ -988,14 +994,14 @@ class PointOfSales extends Component {
                       <div className="bgGray d-flex flex-wrap px-5 py-4 justify-content-between">
                         <div className="">
                           <h6 className="font-weight-bold m-1">
-                            <span className="px-1">ID:</span>
+                            <span className="px-1">{t('ID')}:</span>
                             <span className="px-1">{member.memberId}</span>
                           </h6>
                         </div>
                         <h6 className="font-weight-bold m-1">{member.credentialId.userName}</h6>
                         <div className="">
                           <h6 className="font-weight-bold m-1">
-                            <span className="px-1">Mob:</span>
+                            <span className="px-1">{t('Mob')}:</span>
                             <span className="px-1">{member.mobileNo}</span>
                           </h6>
                         </div>
@@ -1005,11 +1011,11 @@ class PointOfSales extends Component {
                       <table className="table">
                         <thead>
                           <tr>
-                            <th>No</th>
-                            <th>Description</th>
-                            <th>Price</th>
-                            <th>Qty</th>
-                            <th>Total</th>
+                            <th>{t('No')}</th>
+                            <th>{t('Description')}</th>
+                            <th>{t('Price')}</th>
+                            <th>{t('Qty')}</th>
+                            <th>{t('Total')}</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -1027,27 +1033,39 @@ class PointOfSales extends Component {
                           })}
                           <tr>
                             <td colSpan="4">
-                              <div className="text-right my-1">Amount Total :</div>
+                              <div className="text-right my-1">{t('Amount Total')} :</div>
                               {parseFloat(posReceipt.discount) ?
-                                <div className="text-right my-1">Discount :</div>
+                                <div className="text-right my-1">{t('Discount')} :</div>
                                 : <div></div>}
                               {parseFloat(posReceipt.giftcard) ?
-                                <div className="text-right my-1">Gift Card :</div>
+                                <div className="text-right my-1">{t('Gift Card')} :</div>
                                 : <div></div>}
                               {parseFloat(posReceipt.vatAmount) ?
-                                <div className="text-right my-1">VAT:</div>
+                                <div className="text-right my-1">{t('VAT')}:</div>
                                 : <div></div>}
                               {parseFloat(posReceipt.digitalAmount) ?
-                                <div className="text-right my-1">Digital :</div>
+                                <div className="text-right my-1">{t('Digital')} :</div>
                                 : <div></div>}
                               {parseFloat(posReceipt.cashAmount) ?
-                                <div className="text-right my-1">Cash :</div>
+                                <div className="text-right my-1">{t('Cash')} :</div>
                                 : <div></div>}
                               {parseFloat(posReceipt.cardAmount) ?
-                                <div className="text-right my-1">Card :</div>
+                                <div className="text-right my-1">{t('Card')} :</div>
                                 : <div></div>}
-                              <div className="text-right my-1">Grand Total :</div>
-                              <div className="text-right my-1">Paid Amount :</div>
+                              {parseFloat(posReceipt.chequeAmount) ?
+                                <div className="text-right my-1">{t('Cheque')} :</div>
+                                : <div></div>}
+                              {posReceipt.bankName ?
+                                <div className="text-right my-1">{t('Bank Name')} :</div>
+                                : <div></div>}
+                              {posReceipt.chequeNumber ?
+                                <div className="text-right my-1">{t('Cheque Number')} :</div>
+                                : <div></div>}
+                              {posReceipt.chequeDate ?
+                                <div className="text-right my-1">{t('Cheque Date')} :</div>
+                                : <div></div>}
+                              <div className="text-right my-1">{t('Grand Total')} :</div>
+                              <div className="text-right my-1">{t('Paid Amount')} :</div>
                               {posReceipt.cardNumber ?
                                 <div className="text-right my-1">{t('Card last four digit')} :</div>
                                 : <div></div>}
@@ -1072,6 +1090,18 @@ class PointOfSales extends Component {
                               {parseFloat(posReceipt.cardAmount) ?
                                 <div className="my-1"><span className="invisible">{this.props.defaultCurrency}</span> <span className="px-1">{parseFloat(posReceipt.cardAmount).toFixed(3)}</span></div>
                                 : <div></div>}
+                              {parseFloat(posReceipt.chequeAmount) ?
+                                <div className="my-1"><span className="invisible">{this.props.defaultCurrency}</span> <span className="px-1">{parseFloat(posReceipt.chequeAmount).toFixed(3)}</span></div>
+                                : <div></div>}
+                              {posReceipt.bankName ?
+                                <div className="my-1"><span className="invisible">{this.props.defaultCurrency}</span> <span className="px-1">{posReceipt.bankName}</span></div>
+                                : <div></div>}
+                              {posReceipt.chequeNumber ?
+                                <div className="my-1"><span className="invisible">{this.props.defaultCurrency}</span> <span className="px-1">{posReceipt.chequeNumber}</span></div>
+                                : <div></div>}
+                              {posReceipt.chequeDate ?
+                                <div className="my-1"><span className="invisible">{this.props.defaultCurrency}</span> <span className="px-1">{dateToDDMMYYYY(posReceipt.chequeDate)}</span></div>
+                                : <div></div>}
                               <div className="my-1"><span className="">{this.props.defaultCurrency}</span> <span className="px-1">{parseFloat(posReceipt.totalAmount).toFixed(3)}</span></div>
                               <div className="my-1"><span className="">{this.props.defaultCurrency}</span> <span className="px-1">{parseFloat(posReceipt.totalAmount).toFixed(3)}</span></div>
                               {posReceipt.cardNumber ?
@@ -1093,28 +1123,28 @@ class PointOfSales extends Component {
                       <div className="d-flex">
                         <div className="mr-3 text-center">
                           <img src={instaimg} alt="" className="w-30px" />
-                          <h6 className="font-weight-bold mb-0 mt-1">Follow Us</h6>
+                          <h6 className="font-weight-bold mb-0 mt-1">{t('Follow Us')}</h6>
                         </div>
                         <div className="w-50px mr-3">
                           <QRCode value={`http://instagram.com/${filteredBranches && filteredBranches.filter(b => b._id === branch)[0] &&
                             filteredBranches.filter(b => b._id === branch)[0].instaId}/`} renderAs='svg' width="50" height="50" />
                         </div>
                       </div>
-                      {/* <h6 className="font-weight-bold">Paid Amount: {this.props.defaultCurrency} {parseFloat(posReceipt.totalAmount).toFixed(3)}</h6> */}
+                      {/* <h6 className="font-weight-bold">{t('Paid Amount')}: {this.props.defaultCurrency} {parseFloat(posReceipt.totalAmount).toFixed(3)}</h6> */}
                       {this.props.loggedUser && <h6 className="font-weight-bold">{t('Served by')}: {this.props.loggedUser.userName}</h6>}
                     </div>
                     {/* <div className="text-center px-5">
-                      <h5 className="text-muted">Membership cannot be refunded or transferred to others.</h5>
+                      <h5 className="text-muted">{t('Membership cannot be refunded or transferred to others.')}</h5>
                       <h5 className="font-weight-bold">{t('Thank You')}</h5>
                     </div> */}
                     <div className="d-flex align-items-center justify-content-center">
                       <div className="text-center">
-                        <h6 className="font-weight-bold" >Membership cannot be refunded or transferred to others.</h6>
+                        <h6 className="font-weight-bold" >{t('Membership cannot be refunded or transferred to others.')}</h6>
                         <h6 className="font-weight-bold">{t('Thank You')}</h6>
                       </div>
                     </div>
                     <div className="text-center">
-                      <button type="button" className="btn btn-success px-4 py-1 my-2" data-dismiss="modal" onClick={() => this.handlePrint()}>Print Receipt</button>
+                      <button type="button" className="btn btn-success px-4 py-1 my-2" data-dismiss="modal" onClick={() => this.handlePrint()}>{t('Print Receipt')}</button>
                     </div>
                   </div>
                 </div>
@@ -1125,117 +1155,139 @@ class PointOfSales extends Component {
         {/* --------------Receipt Modal Ends-=--------------- */}
 
         {posReceipt &&
-          <div className="PageBillWrapper d-none">
-            <div style={{ width: "450px", padding: "15px", margin: "auto" }} id="newPrint">
+          <div className="PageBillWrapper d-none" id="newPrint">
+            <div style={{ width: "80mm", padding: "4px", margin: "auto" }}>
               <div style={{ display: "flex", justifyContent: "center" }}>
-                <img src={`/${avatarPath}`} width="200" style={{ width: "100px" }} alt="" />
+                <img src={`${PRODIP}/${avatarPath}`} width="100" style={{ width: "100px" }} alt="" />
               </div>
-              <h5 style={{ textAlign: "center", margin: "19px 0" }}>{t('Tax Invoice')}</h5>
-              <p style={{ textAlign: "center", margin: "0 0 10px 0" }}>
+              <h5 style={{ textAlign: "center", margin: "19px 0px 9px 0px", fontSize: "19px" }}>{t('Tax Invoice')}</h5>
+              <p style={{ textAlign: "center", margin: "0 0 10px 0", fontSize: "14px" }}>
                 <span>{filteredBranches && filteredBranches.filter(b => b._id === branch)[0] &&
                   filteredBranches.filter(b => b._id === branch)[0].branchName}</span><br />
                 <span>{filteredBranches && filteredBranches.filter(b => b._id === branch)[0] &&
                   filteredBranches.filter(b => b._id === branch)[0].address}</span><br />
-                {/* <span>Road/Street 50, Samaheej,</span><br /> */}
-                {/* <span>Block 236, Bahrain,</span><br /> */}
-                <span>Tel : {filteredBranches && filteredBranches.filter(b => b._id === branch)[0] &&
+              </p>
+              <p style={{ textAlign: "center", margin: "0 0 10px 0", fontSize: "14px" }}>
+                <span>{t('Tel')} : {filteredBranches && filteredBranches.filter(b => b._id === branch)[0] &&
                   filteredBranches.filter(b => b._id === branch)[0].telephone}</span><br />
               </p>
-              <p style={{ textAlign: "center", margin: "0 0 10px 0" }}>VAT - {filteredBranches && filteredBranches.filter(b => b._id === branch)[0] &&
+              <p style={{ textAlign: "center", margin: "0 0 10px 0", fontSize: "14px" }}>{t('VAT Reg No')} - {filteredBranches && filteredBranches.filter(b => b._id === branch)[0] &&
                 filteredBranches.filter(b => b._id === branch)[0].vatRegNo}</p>
-              <p style={{ display: "flex", justifyContent: "space-between", margin: "0" }}>
-                <span style={{ padding: "2px", fontSize: "14px" }}>{dateToDDMMYYYY(posReceipt.dateOfPurchase)} {dateToHHMM(posReceipt.created_at)}</span>
-                <span style={{ padding: "2px", fontSize: "14px" }}>Bill No:{posReceipt.orderNo}</span>
+              <p style={{ display: "flex", justifyContent: "space-between", margin: "0", fontSize: "14px" }}>
+                <span>{dateToDDMMYYYY(posReceipt.dateOfPurchase)} {dateToHHMM(posReceipt.created_at)}</span>
+                <span style={{ width: "4px", height: "4px" }}></span>
+                <span>{t('Bill No')} : {posReceipt.orderNo}</span>
               </p>
               {member &&
                 <div>
-                  <p style={{ display: "flex", textAlign: "center", justifyContent: "space-between" }}>
-                    <span>{t('ID:')} <span style={{ padding: "10px" }}>{member.memberId}</span></span>
-                    <span>{t('Mob:')} <span style={{ padding: "10px" }}>{member.mobileNo}</span></span>
+                  <p style={{ display: "flex", textAlign: "center", justifyContent: "center", margin: "10px 0", fontSize: "14px" }}>
+                    <span style={{ display: "flex" }}>
+                      <span>{t('Mob')}</span><span style={{ padding: "0 4px" }}>:</span><span>{member.mobileNo}</span>
+                    </span>
                   </p>
-                  <p style={{ display: "flex", textAlign: "center", justifyContent: "center", marginTop: "0" }}>
+                  <p style={{ display: "flex", textAlign: "center", justifyContent: "space-between", margin: "0 0 10px 0", fontSize: "14px" }}>
+                    <span style={{ display: "flex" }}>
+                      <span>{t('ID')}</span><span style={{ padding: "0 4px" }}>:</span><span>{member.memberId}</span>
+                    </span>
                     <span>{member.credentialId.userName}</span>
                   </p>
                 </div>
               }
-              {/* <p style={{ textAlign: "right", margin: "0 0 10px 0" }}>66988964</p> */}
-              <table style={{ width: "100%" }}>
+              <table style={{ width: "100%", fontSize: "14px" }}>
                 <tbody>
                   <tr style={{ borderTop: "1px dashed #000" }}>
-                    <td>{t('No.')}</td>
-                    <td>DESCRIPTION</td>
-                    <td>PRICE</td>
-                    <td>QTY</td>
-                    <td>TOTAL</td>
+                    <td style={{ borderTop: "1px dashed #000", borderBottom: "1px dashed #000", width: "50px" }}>{t('No.')}</td>
+                    <td style={{ borderTop: "1px dashed #000", borderBottom: "1px dashed #000" }}>{t('Description')}</td>
+                    <td style={{ borderTop: "1px dashed #000", borderBottom: "1px dashed #000", width: "50px", textAlign: "center" }}>{t('Price')}</td>
+                    <td style={{ borderTop: "1px dashed #000", borderBottom: "1px dashed #000", width: "50px", textAlign: "center" }}>{t('Qty')}</td>
+                    <td style={{ borderTop: "1px dashed #000", borderBottom: "1px dashed #000", width: "50px", textAlign: "center" }}>{t('Total')}</td>
                   </tr>
-                  {/* <tr style={{ borderTop: "1px dashed #000" }}>
-                  <td>1</td>
-                  <td>3 Month</td>
-                  <td>26-Dec-19</td>
-                  <td>13-Sep-20</td>
-                </tr> */}
                   {addedStocks && addedStocks.map((addedStock, i) => {
                     const { itemName, addedQuantity, addedPrice } = addedStock
                     return (
                       <tr key={i}>
                         <td>{i + 1}</td>
                         <td>{itemName}</td>
-                        <td>{this.props.defaultCurrency} {(parseFloat(addedPrice) / addedQuantity).toFixed(3)}</td>
-                        <td>{addedQuantity}</td>
-                        <td>{this.props.defaultCurrency} {parseFloat(addedPrice).toFixed(3)}</td>
+                        <td style={{ textAlign: "center" }}>{this.props.defaultCurrency} {(parseFloat(addedPrice) / addedQuantity).toFixed(3)}</td>
+                        <td style={{ textAlign: "center" }}>{addedQuantity}</td>
+                        <td style={{ textAlign: "center" }}>{this.props.defaultCurrency} {parseFloat(addedPrice).toFixed(3)}</td>
                       </tr>
                     )
                   })}
                 </tbody>
               </table>
-              <table style={{ width: "100%", textAlign: "right", borderTop: "1px dashed #000", borderBottom: "1px dashed #000" }}>
+              <table style={{ width: "100%", textAlign: "right", borderTop: "1px dashed #000", borderBottom: "1px dashed #000", fontSize: "14px" }}>
                 <tbody>
                   <tr>
-                    <td style={{ textAlign: "right", padding: "4px 4px 0 4px", width: "100%" }}>{t('Amount Total')} {this.props.defaultCurrency}: </td>
+                    <td style={{ textAlign: "right", padding: "4px 4px 0 4px", width: "100%" }}>{t('Amount Total')} {this.props.defaultCurrency} : </td>
                     <td style={{ textAlign: "right", padding: "4px 0px 0 0px" }}>{parseFloat(posReceipt.actualAmount).toFixed(3)}</td>
                   </tr>
                   {parseFloat(posReceipt.discount) ?
                     <tr>
-                      <td style={{ textAlign: "right", padding: "0 4px", width: "100%" }}>{t('Discount')} {this.props.defaultCurrency}: </td>
+                      <td style={{ textAlign: "right", padding: "0 4px", width: "100%" }}>{t('Discount')} {this.props.defaultCurrency} : </td>
                       <td style={{ textAlign: "right", padding: "0" }}>{parseFloat(posReceipt.discount).toFixed(3)}</td>
                     </tr>
                     : <tr></tr>}
                   {parseFloat(posReceipt.giftcard) ?
                     <tr>
-                      <td style={{ textAlign: "right", padding: "0 4px", width: "100%" }}>Giftcard {this.props.defaultCurrency}: </td>
+                      <td style={{ textAlign: "right", padding: "0 4px", width: "100%" }}>{t('Giftcard')} {this.props.defaultCurrency} : </td>
                       <td style={{ textAlign: "right", padding: "0" }}>{parseFloat(posReceipt.giftcard).toFixed(3)}</td>
                     </tr>
                     : <tr></tr>}
                   {parseFloat(posReceipt.vatAmount) ?
                     <tr>
-                      <td style={{ textAlign: "right", padding: "0 4px", width: "100%" }}>{t('VAT')} {this.props.defaultCurrency}: </td>
+                      <td style={{ textAlign: "right", padding: "0 4px", width: "100%" }}>{t('VAT')} {this.props.defaultCurrency} : </td>
                       <td style={{ textAlign: "right", padding: "0" }}>{parseFloat(posReceipt.vatAmount).toFixed(3)}</td>
                     </tr>
                     : <tr></tr>}
                   {parseFloat(posReceipt.digitalAmount) ?
                     <tr>
-                      <td style={{ textAlign: "right", padding: "0 4px", width: "100%" }}>{t('Digital')} {this.props.defaultCurrency}: </td>
-                      <td style={{ textAlign: "right", padding: "0" }}>5{parseFloat(posReceipt.digitalAmount).toFixed(3)}</td>
+                      <td style={{ textAlign: "right", padding: "0 4px", width: "100%" }}>{t('Digital')} {this.props.defaultCurrency} : </td>
+                      <td style={{ textAlign: "right", padding: "0" }}>{parseFloat(posReceipt.digitalAmount).toFixed(3)}</td>
                     </tr>
                     : <tr></tr>}
                   {parseFloat(posReceipt.cashAmount) ?
                     <tr>
-                      <td style={{ textAlign: "right", padding: "0 4px", width: "100%" }}>{t('Cash')} {this.props.defaultCurrency}: </td>
-                      <td style={{ textAlign: "right", padding: "0" }}>5{parseFloat(posReceipt.cashAmount).toFixed(3)}</td>
+                      <td style={{ textAlign: "right", padding: "0 4px", width: "100%" }}>{t('Cash')} {this.props.defaultCurrency} : </td>
+                      <td style={{ textAlign: "right", padding: "0" }}>{parseFloat(posReceipt.cashAmount).toFixed(3)}</td>
                     </tr>
                     : <tr></tr>}
                   {parseFloat(posReceipt.cardAmount) ?
                     <tr>
-                      <td style={{ textAlign: "right", padding: "0px 4px 4px 4px", width: "100%" }}>{t('Card')} {this.props.defaultCurrency}: </td>
+                      <td style={{ textAlign: "right", padding: "0px 4px 4px 4px", width: "100%" }}>{t('Card')} {this.props.defaultCurrency} : </td>
                       <td style={{ textAlign: "right", padding: "0px 0px 4px 0px" }}>{parseFloat(posReceipt.cardAmount).toFixed(3)}</td>
                     </tr>
                     : <tr></tr>}
+                  {parseFloat(posReceipt.chequeAmount) ?
+                    <tr>
+                      <td style={{ textAlign: "right", padding: "0px 4px 4px 4px", width: "100%" }}>{t('Cheque')} {this.props.defaultCurrency} : </td>
+                      <td style={{ textAlign: "right", padding: "0px 0px 4px 0px" }}>{parseFloat(posReceipt.chequeAmount).toFixed(3)}</td>
+                    </tr>
+                    : <tr></tr>}
+                  {posReceipt.bankName ?
+                    <tr>
+                      <td style={{ textAlign: "right", padding: "0px 4px 4px 4px", width: "100%" }}>{t('Bank Name')} : </td>
+                      <td style={{ textAlign: "right", padding: "0px 0px 4px 0px" }}>{posReceipt.bankName}</td>
+                    </tr>
+                    : <tr></tr>}
+                  {posReceipt.chequeNumber ?
+                    <tr>
+                      <td style={{ textAlign: "right", padding: "0px 4px 4px 4px", width: "100%" }}>{t('Cheque Number')} : </td>
+                      <td style={{ textAlign: "right", padding: "0px 0px 4px 0px" }}>{posReceipt.chequeNumber}</td>
+                    </tr>
+                    : <tr></tr>}
+                  {posReceipt.chequeDate ?
+                    <tr>
+                      <td style={{ textAlign: "right", padding: "0px 4px 4px 4px", width: "100%" }}>{t('Cheque Date')} : </td>
+                      <td style={{ textAlign: "right", padding: "0px 0px 4px 0px" }}>{dateToDDMMYYYY(posReceipt.chequeDate)}</td>
+                    </tr>
+                    : <tr></tr>}
                   <tr>
-                    <td style={{ textAlign: "right", padding: "0px 4px 4px 4px", width: "100%" }}>{t('Grand Total')} {this.props.defaultCurrency}: </td>
+                    <td style={{ textAlign: "right", padding: "0px 4px 4px 4px", width: "100%" }}>{t('Grand Total')} {this.props.defaultCurrency} : </td>
                     <td style={{ textAlign: "right", padding: "0px 0px 4px 0px" }}>{parseFloat(posReceipt.totalAmount).toFixed(3)}</td>
                   </tr>
                   <tr>
-                    <td style={{ textAlign: "right", padding: "0px 4px 4px 4px", width: "100%" }}>{t('Paid Amount')} {this.props.defaultCurrency}: </td>
+                    <td style={{ textAlign: "right", padding: "0px 4px 4px 4px", width: "100%" }}>{t('Paid Amount')} {this.props.defaultCurrency} : </td>
                     <td style={{ textAlign: "right", padding: "0px 0px 4px 0px" }}>{parseFloat(posReceipt.totalAmount).toFixed(3)}</td>
                   </tr>
                   {posReceipt.cardNumber ?
@@ -1246,22 +1298,22 @@ class PointOfSales extends Component {
                     : <tr></tr>}
                 </tbody>
               </table>
-              <div style={{ display: "flex", justifyContent: "space-between", margin: "10px 0" }}>
+              <div style={{ display: "flex", justifyContent: "space-between", margin: "10px 0", fontSize: "14px" }}>
                 <div style={{ display: "flex", flexDirection: "row", justifyContent: "center", alignItems: "center" }}>
                   <div style={{ marginRight: "10px", justifyContent: "center" }}>
                     <img src={instaimg} alt="" style={{ width: "30px", height: "30px" }} />
-                    {/* <h6>Follow Us</h6> */}
+                    {/* <h6>{t('Follow Us')}</h6> */}
                   </div>
                   <QRCode value={`http://instagram.com/${filteredBranches && filteredBranches.filter(b => b._id === branch)[0] &&
                     filteredBranches.filter(b => b._id === branch)[0].instaId}/`} renderAs='svg' width="50" height="50" />
                 </div>
-                {this.props.loggedUser && <span>{t('Served by')}: {this.props.loggedUser.userName}</span>}
+                {this.props.loggedUser && <span>{t('Served by')} : {this.props.loggedUser.userName}</span>}
               </div>
-              <p style={{ display: "flex", margin: "0 0 10px 0" }}>
+              <p style={{ display: "flex", margin: "0 0 10px 0", fontSize: "14px" }}>
                 <span>{t('NB')}:</span>
-                <span style={{ flexGrow: "1", textAlign: "center" }}>Membership cannot be refunded or transferred to others.</span>
+                <span style={{ flexGrow: "1", textAlign: "center" }}>{t('Membership cannot be refunded or transferred to others.')}</span>
               </p>
-              <p style={{ textAlign: "center", margin: "0 0 10px 0" }}>{t('Thank You')}</p>
+              <p style={{ textAlign: "center", margin: "0 0 10px 0", fontSize: "14px" }}>{t('Thank You')}</p>
             </div>
           </div>
         }

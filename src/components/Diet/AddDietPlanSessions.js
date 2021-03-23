@@ -73,10 +73,12 @@ class AddDietPlanSessions extends Component {
   handleEdit(doc) {
     scrollToTop()
     this.setState({
-      sessionName: doc.sessionName,
-      fromTime: new Date(doc.fromTime),
-      toTime: new Date(doc.toTime),
-      docId: doc._id
+      ...this.default, ...{
+        sessionName: doc.sessionName,
+        fromTime: new Date(doc.fromTime),
+        toTime: new Date(doc.toTime),
+        docId: doc._id
+      }
     })
   }
 

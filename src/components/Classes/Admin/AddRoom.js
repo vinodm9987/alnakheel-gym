@@ -65,9 +65,11 @@ class AddRoom extends Component {
   handleEdit(room) {
     scrollToTop()
     this.setState({
-      roomName: room.roomName,
-      branch: room.branch._id,
-      roomId: room._id
+      ...this.default, ...{
+        roomName: room.roomName,
+        branch: room.branch._id,
+        roomId: room._id
+      }
     })
   }
 
@@ -91,8 +93,7 @@ class AddRoom extends Component {
                 <div className="form-group inlineFormGroup">
                   <label htmlFor="RoomName" className="mx-sm-2 inlineFormLabel type1">{t('Room Name')}</label>
                   <input type="text" autoComplete="off" className={this.state.roomNameE ? "form-control mx-sm-2 inlineFormInputs FormInputsError" : "form-control mx-sm-2 inlineFormInputs"} id="RoomName"
-                    value={roomName} onChange={(e) => this.setState(validator(e, 'roomName', 'text', [t('Enter room name')]))}
-                  />
+                    value={roomName} onChange={(e) => this.setState(validator(e, 'roomName', 'text', [t('Enter room name')]))} />
                   <div className="errorMessageWrapper">
                     <small className="text-danger mx-sm-2 errorMessage">{this.state.roomNameE}</small>
                   </div>

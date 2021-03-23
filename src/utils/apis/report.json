@@ -29,7 +29,7 @@
           "Package Start Date",
           "Package End Date",
           "Trainer Name",
-          "Paid Amount"
+          "To Be Paid"
         ],
         "description": "This report will list all Active members who enrolled their fingerprint and started their package Successfully."
       },
@@ -54,8 +54,7 @@
           "Package",
           "Expired Date",
           "Trainer Name",
-          "Paid Amount",
-          "Any Valid Package",
+          "To Be Paid",
           "Mobile No",
           "Email ID"
         ],
@@ -71,7 +70,6 @@
           "Package",
           "Expiry Date",
           "Trainer Name",
-          "Paid Amount",
           "Mobile No",
           "Email ID"
         ],
@@ -110,30 +108,9 @@
         "description": "This report will list all Freezed members for specific period."
       },
       {
-        "name": "Package Renewal",
-        "headers": [
-          "SNo",
-          "Receipt No.",
-          "Date & Time",
-          "Member ID",
-          "Member Name",
-          "Admission Date",
-          "Mobile No",
-          "Branch",
-          "Package",
-          "Trainer Name",
-          "Start Date",
-          "End Date",
-          "Paid Amount",
-          "Renewed By"
-        ],
-        "description": "This report will list all members who renewed their Packages for specific period."
-      },
-      {
         "name": "Package Type",
         "headers": [
           "SNo",
-          "Receipt No.",
           "Date & Time",
           "Member ID",
           "Member Name",
@@ -143,8 +120,7 @@
           "Package",
           "Start Date",
           "End Date",
-          "Paid Amount",
-          "Done By"
+          "To Be Paid"
         ],
         "description": "This report will list all members who registered for packages for specific period."
       },
@@ -184,10 +160,13 @@
           "Mobile No",
           "Branch",
           "Transaction Type",
+          "Name",
           "Paid Amount",
+          "Discount",
           "Cash",
           "Card",
           "Digital",
+          "Cheque",
           "Done By"
         ],
         "description": "This report will show branches general sales for specific period."
@@ -203,14 +182,14 @@
           "Admission Date",
           "Mobile No",
           "Branch",
-          "Package",
           "Transaction Type",
-          "Package Amount",
-          "Trainer Amount",
+          "Name",
           "Paid Amount",
+          "Discount",
           "Cash",
           "Card",
           "Digital",
+          "Cheque",
           "Done By"
         ],
         "description": "This report will show branches Package sales for specific period."
@@ -234,6 +213,7 @@
           "Cash",
           "Card",
           "Digital",
+          "Cheque",
           "Done By"
         ],
         "description": "This report will show branches item sales for specific period."
@@ -253,9 +233,11 @@
           "Start Date",
           "Amount",
           "Paid Amount",
+          "Discount",
           "Cash",
           "Card",
           "Digital",
+          "Cheque",
           "Done By"
         ],
         "description": "This report will show branches classes sales for specific period."

@@ -49,7 +49,8 @@ const {
     Employee,
     MemberCode,
     MemberClass,
-    AdminPassword
+    AdminPassword,
+    Counter
 } = require('../../model');
 
 const { auditLogger } = require('../../middleware/auditlog.middleware');
@@ -92,7 +93,7 @@ const memberSearch = (response, search, searchFor) => {
 
 
 exports.updateMemberProfile = (req, res) => {
-    uploadAvatar(req, res, async(error, result) => {
+    uploadAvatar(req, res, async (error, result) => {
         if (error) return errorResponseHandler(res, error, "while uploading profile error occurred !");
         if (req.files.length > 0) await Credential.findByIdAndUpdate(req.params.id, { avatar: req.files[0] })
         req.responseData = await Member.findOne({ credentialId: req.params.id }).populate('credentialId').lean()
@@ -117,7 +118,7 @@ exports.updateMemberProfile = (req, res) => {
  */
 
 
-exports.getAllMember = async(req, res) => {
+exports.getAllMember = async (req, res) => {
     try {
         let search = '',
             searchFor = ''
@@ -164,7 +165,7 @@ exports.getAllActiveMember = (req, res) => {
  * get all actives members of trainer
  */
 
-exports.getAllActiveMemberOfTrainer = async(req, res) => {
+exports.getAllActiveMemberOfTrainer = async (req, res) => {
     Member.find({ status: true, "packageDetails.trainer": req.params.employeeId }).then(response => {
         successResponseHandler(res, response, "successfully get all member of trainer !!");
     }).catch(error => {
@@ -183,7 +184,7 @@ exports.getAllActiveMemberOfTrainer = async(req, res) => {
  */
 
 exports.createNewMember = (req, res) => {
-    uploadAvatar(req, res, async(error, data) => {
+    uploadAvatar(req, res, async (error, data) => {
         if (error)
             return errorResponseHandler(res, error, "while uploading profile error occurred !");
         try {
@@ -258,36 +259,30 @@ exports.createNewMember = (req, res) => {
  */
 
 exports.createNewMemberByAdmin = (req, res) => {
-    uploadAvatar(req, res, async(error, data) => {
+    uploadAvatar(req, res, async (error, data) => {
         if (error) return errorResponseHandler(res, error, "while uploading profile error occurred !");
         try {
             const memberDesignation = await Designation.findOne({ designationName: DESIGNATION[2] })
             const {
-                mobileNo,
-                gender,
-                dateOfBirth,
-                nationality,
-                userName,
-                email,
-                personalId,
-                branch,
-                height,
-                weight,
-                packageDetails,
-                questions,
-                relationship,
-                emergencyNumber,
-                referralCode,
-                notes
+                mobileNo, gender, dateOfBirth, nationality, userName, email,
+                personalId, branch, height, weight, packageDetails, relationship,
+                emergencyNumber, referralCode, notes
             } = JSON.parse(req.body.data);
             if (req.headers.userid) {
                 packageDetails[0]["doneBy"] = req.headers.userid;
             }
             if (packageDetails[0].Installments && packageDetails[0].Installments.length) {
                 packageDetails[0].Installments[0].dateOfPaid = setTime(new Date())
+                packageDetails[0].Installments[0].timeOfPaid = new Date();
+                packageDetails[0].Installments[0]["orderNo"] = generateOrderId();
+                if (packageDetails[0].Installments[0].chequeDate) {
+                    packageDetails[0].Installments[0]["chequeDate"] = setTime(packageDetails[0].Installments[0].chequeDate);
+                }
+                if (req.headers.userid) packageDetails[0].Installments[0]["doneBy"] = req.headers.userid;
             } else {
                 packageDetails[0]["dateOfPaid"] = setTime(new Date())
             }
+            packageDetails[0]["dateOfPaid"] = setTime(new Date())
             packageDetails[0]["startDate"] = setTime(packageDetails[0].startDate);
             packageDetails[0]["endDate"] = setTime(packageDetails[0].endDate);
             packageDetails[0]["orderNo"] = generateOrderId()
@@ -298,24 +293,12 @@ exports.createNewMemberByAdmin = (req, res) => {
             }
             const { memberCounter } = await createId('memberCounter');
             const member = new Member({
-                mobileNo,
-                gender,
-                dateOfBirth,
-                nationality,
-                personalId,
-                height,
-                weight,
-                branch,
-                packageDetails,
-                questions,
-                relationship,
-                emergencyNumber,
-                startWeight: weight,
-                notes
+                mobileNo, gender, dateOfBirth, nationality, personalId, height,
+                weight, branch, packageDetails, relationship,
+                emergencyNumber, startWeight: weight, notes
             });
             const credential = new Credential({
-                userName,
-                email,
+                userName, email,
                 designation: memberDesignation._id,
                 userId: member._id,
                 designationName: DESIGNATION[2]
@@ -335,10 +318,12 @@ exports.createNewMemberByAdmin = (req, res) => {
             const newMemberResponse = await Member.findById(response._id)
                 .populate('credentialId branch').populate('packageDetails.doneBy')
             await auditLogger(req, 'Success')
-            return successResponseHandler(res, {...newMemberResponse, ... { displayReceipt: true } }, "successfully added new member !!");
+            return successResponseHandler(res, { ...newMemberResponse, ... { displayReceipt: true } }, "successfully added new member !!");
         } catch (error) {
             logger.error(error);
             auditLogger(req, 'Failed')
+            let counter = await Counter.findOne({});
+            await Counter.findByIdAndUpdate(counter._id, { $inc: { 'memberCounter': -1 } }).lean();
             if (error.message.indexOf('duplicate key error') !== -1)
                 return errorResponseHandler(res, error, "Email is already exist !");
             else
@@ -351,7 +336,7 @@ exports.createNewMemberByAdmin = (req, res) => {
 
 
 
-exports.addMemberFaceRecognition = async(req, res) => {
+exports.addMemberFaceRecognition = async (req, res) => {
     try {
         const { raw_image, templates } = await getFaceRecognitionTemplate()
         const bioObject = { raw_image, templates }
@@ -386,7 +371,7 @@ exports.addMemberFaceRecognition = async(req, res) => {
 };
 
 
-exports.updateFaceRecognition = async(req, res) => {
+exports.updateFaceRecognition = async (req, res) => {
     try {
         await AdminPassword.findOne({ password: req.body.password }).then(async user => {
             if (!user) return errorResponseHandler(res, '', "Your entered password is wrong !");
@@ -395,7 +380,6 @@ exports.updateFaceRecognition = async(req, res) => {
                 const userData = await Member.findById(req.body.memberId).lean()
                 const bioObject = { raw_image, templates, memberId: userData.memberId, }
                 await updateFaceRecognition(bioObject)
-                await Member.findByIdAndUpdate(req.body.memberId, { biometricTemplate: bioObject }, { new: true })
                 const newResponse = await Member.findById(req.body.memberId).populate('credentialId branch')
                     .populate({ path: "packageDetails.trainerDetails.trainer", populate: { path: "credentialId" } })
                     .populate({ path: "packageDetails.packages", populate: { path: "period" } })
@@ -416,7 +400,7 @@ exports.updateFaceRecognition = async(req, res) => {
  */
 
 
-exports.updateMemberDetails = async(req, res) => {
+exports.updateMemberDetails = async (req, res) => {
     let isUsedReferralCode = await MemberCode.findOne({ "joinMember.member": req.params.id, "joinMember.status": "Join" }).lean();
     if (isUsedReferralCode) req.body["walletPoints"] = await updateTransaction(isUsedReferralCode, req.params.id);
     let memberAllClassResponse = await MemberClass.find({ member: req.params.id }).populate('classId').lean()
@@ -460,7 +444,7 @@ exports.updateMemberDetails = async(req, res) => {
  *  update member info
  */
 exports.updateMember = (req, res) => {
-    uploadAvatar(req, res, async(error, data) => {
+    uploadAvatar(req, res, async (error, data) => {
         if (error)
             return errorResponseHandler(res, error, "while uploading profile error occurred !");
         try {
@@ -468,7 +452,7 @@ exports.updateMember = (req, res) => {
             let newObj = { mobileNo, gender, dateOfBirth, nationality, personalId, branch, height, weight, emergencyNumber, relationship, notes };
             req.responseData = await Member.findById(memberId).populate('credentialId').lean()
             if (userName || email) {
-                let obj = { userName, email }
+                let obj = { userName, email, memberId: req.responseData.memberId }
                 if (req.files.length > 0) obj["avatar"] = req.files[0];
                 await Credential.findByIdAndUpdate(credentialId, obj)
             }
@@ -497,27 +481,15 @@ exports.updateMember = (req, res) => {
  *  update member and add package for the first time
  */
 exports.updateMemberAndAddPackage = (req, res) => {
-    uploadAvatar(req, res, async(error, data) => {
+    uploadAvatar(req, res, async (error, data) => {
         if (error)
             return errorResponseHandler(res, error, "while uploading profile error occurred !");
         try {
             const {
-                mobileNo,
-                gender,
-                dateOfBirth,
-                nationality,
-                userName,
-                email,
-                personalId,
-                branch,
-                height,
-                weight,
-                emergencyNumber,
-                relationship,
-                memberId,
-                credentialId,
-                notes,
-                packageDetails
+                mobileNo, gender, dateOfBirth, nationality,
+                userName, email, personalId, branch, height,
+                weight, emergencyNumber, relationship,
+                memberId, credentialId, notes, packageDetails
             } = JSON.parse(req.body.data);
             if (req.headers.userid) {
                 packageDetails[0]["doneBy"] = req.headers.userid
@@ -529,19 +501,9 @@ exports.updateMemberAndAddPackage = (req, res) => {
             if (isUsedReferralCode) req.body["walletPoints"] = await updateTransaction(isUsedReferralCode, memberId);
             let memberAllClassResponse = await MemberClass.find({ member: req.params.id }).populate('classId').lean()
             let newObj = {
-                mobileNo,
-                gender,
-                dateOfBirth,
-                nationality,
-                personalId,
-                branch,
-                height,
-                weight,
-                emergencyNumber,
-                relationship,
-                notes,
-                packageDetails,
-                isPackageSelected: true
+                mobileNo, gender, dateOfBirth, nationality, personalId,
+                branch, height, weight, emergencyNumber, relationship,
+                notes, packageDetails, isPackageSelected: true
             }
             if (memberAllClassResponse.length === 0) {
                 const { memberCounter } = await createId('memberCounter');
@@ -559,7 +521,7 @@ exports.updateMemberAndAddPackage = (req, res) => {
             const policy = await checkExpiryOfPolicy();
             if (policy) await addPointOfPolicy(packageDetails[0].totalAmount, response._id);
             auditLogger(req, 'Success')
-            return successResponseHandler(res, {...response, ... { displayReceipt: true } }, "successfully updated Member !!");
+            return successResponseHandler(res, { ...response, ... { displayReceipt: true } }, "successfully updated Member !!");
         } catch (error) {
             logger.error(error);
             auditLogger(req, 'Failed')
@@ -605,10 +567,12 @@ exports.getMemberByCredentialId = (req, res) => {
 exports.getMemberById = (req, res) => {
     Member.findById(req.params.id)
         .populate('credentialId branch')
-        .populate('packageDetails.packages')
+        .populate('packageDetails.packages packageDetails.doneBy packageDetails.trainerDetails.doneBy')
+        .populate('packageDetails.Installments.doneBy')
         .populate({ path: "packageDetails.trainerDetails.trainer", populate: { path: "credentialId" } })
         .populate({ path: "packageDetails.packages", populate: { path: "period" } })
-        .populate({ path: "packageDetails.trainerDetails.trainerFees", populate: { path: "period" } })
+        .populate({ path: "packageDetails.trainerDetails.trainerFees", populate: { path: "period" } }).lean()
+        .populate({ path: "packageDetails.trainerDetails.Installments.doneBy", }).lean()
         .then(response => {
             successResponseHandler(res, response, "successfully get  member details by id !!");
         }).catch(error => {
@@ -628,7 +592,7 @@ exports.getMemberById = (req, res) => {
  *  get all first registered member
  */
 
-exports.getFirstRegisterMembers = async(req, res) => {
+exports.getFirstRegisterMembers = async (req, res) => {
     try {
         let search = req.body.search.toLowerCase()
         let queryCond = {};
@@ -653,14 +617,14 @@ exports.getFirstRegisterMembers = async(req, res) => {
  *  get all pending registration
  */
 
-exports.getAllPendingMember = async(req, res) => {
+exports.getAllPendingMember = async (req, res) => {
     try {
         let search = req.body.search.toLowerCase()
         let queryCond = {};
         queryCond["doneFingerAuth"] = false;
         queryCond["isPackageSelected"] = false;
         if (req.body.branch) queryCond["branch"] = req.body.branch
-        let response = await Member.find(queryCond).populate('credentialId branch').populate("packageDetails.packages").lean()
+        let response = await Member.find(queryCond, { faceRecognitionTemplate: 0 }).populate('credentialId branch').populate("packageDetails.packages").lean()
         let newResponse = memberSearch(response, search, req.body.searchFor);
         return successResponseHandler(res, newResponse, "successfully get all member details !!");
     } catch (error) {
@@ -679,13 +643,13 @@ exports.getAllPendingMember = async(req, res) => {
  *  get all active registered member
  */
 
-exports.getActiveRegisterMembers = async(req, res) => {
+exports.getActiveRegisterMembers = async (req, res) => {
     try {
         let search = req.body.search.toLowerCase()
         let queryCond = { 'packageDetails.isExpiredPackage': false };
         queryCond["doneFingerAuth"] = true;
         if (req.body.branch) queryCond["branch"] = req.body.branch;
-        let response = await Member.find(queryCond).populate('credentialId branch').populate("packageDetails.packages").lean()
+        let response = await Member.find(queryCond, { faceRecognitionTemplate: 0 }).populate('credentialId branch').populate("packageDetails.packages").lean()
         let newResponse = memberSearch(response, search, req.body.searchFor);
         return successResponseHandler(res, newResponse, "successfully get all member details !!");
     } catch (error) {
@@ -702,14 +666,14 @@ exports.getActiveRegisterMembers = async(req, res) => {
  *  get all active registered member with Status flag
  */
 
-exports.getActiveStatusRegisterMembers = async(req, res) => {
+exports.getActiveStatusRegisterMembers = async (req, res) => {
     try {
         let search = req.body.search.toLowerCase()
         let queryCond = {};
         queryCond["doneFingerAuth"] = true;
         queryCond["status"] = true;
         if (req.body.branch) queryCond["branch"] = req.body.branch;
-        let response = await Member.find(queryCond)
+        let response = await Member.find(queryCond, { faceRecognitionTemplate: 0 })
             .populate('credentialId').populate("packageDetails.packages")
             .populate({ path: 'packageDetails.trainer', populate: { path: "credentialId" } }).lean()
         let newResponse = memberSearch(response, search, req.body.searchFor);
@@ -726,7 +690,7 @@ exports.getActiveStatusRegisterMembers = async(req, res) => {
  *  get all active registered member with Status flag and  not expired also
  */
 
-exports.getActiveStatusNotExpiredRegisterMembers = async(req, res) => {
+exports.getActiveStatusNotExpiredRegisterMembers = async (req, res) => {
     try {
         let search = req.body.search.toLowerCase()
         let queryCond = { 'packageDetails.isExpiredPackage': false };
@@ -734,7 +698,7 @@ exports.getActiveStatusNotExpiredRegisterMembers = async(req, res) => {
         queryCond["doneFingerAuth"] = true;
         queryCond["status"] = true;
         if (req.body.branch) queryCond["branch"] = req.body.branch;
-        let response = await Member.find(queryCond)
+        let response = await Member.find(queryCond, { faceRecognitionTemplate: 0 })
             .populate('credentialId').populate("packageDetails.packages")
             .populate({ path: 'packageDetails.trainer', populate: { path: "credentialId" } }).lean()
         let newResponse = memberSearch(response, search, req.body.searchFor);
@@ -752,7 +716,7 @@ exports.getActiveStatusNotExpiredRegisterMembers = async(req, res) => {
  */
 
 
-exports.generateToken = async(req, res) => {
+exports.generateToken = async (req, res) => {
     try {
         const email = await Credential.findOne({ email: req.body.email }).lean();
         if (email) errorResponseHandler(res, 'error', 'Email is already in use !')
@@ -776,20 +740,24 @@ exports.generateToken = async(req, res) => {
  *
  */
 
-exports.payAtGymMobile = async(req, res) => {
+exports.payAtGymMobile = async (req, res) => {
     let queryCond = {}
-    if (req.headers.userid) req.body.packageDetails["doneBy"] = req.headers.userid;
     req.body.packageDetails["startDate"] = setTime(req.body.packageDetails.startDate);
     req.body.packageDetails["endDate"] = setTime(req.body.packageDetails.endDate);
-    req.body.packageDetails["orderNo"] = generateOrderId()
     req.body.packageDetails["dateOfPaid"] = setTime(new Date());
     req.body.packageDetails["timeOfPaid"] = new Date();
-    if (req.body.packageDetails.Installments) {
-        req.body.packageDetails.Installments.map(doc => {
-            doc.dateOfPaid = setTime(new Date())
-            doc.timeOfPaid = new Date();
-            return doc;
+    if (req.body.packageDetails.Installments && req.body.packageDetails.Installments.length) {
+        req.body.packageDetails.Installments.map((doc, i) => {
+            if (i === 0) {
+                doc.dateOfPaid = setTime(new Date())
+                doc.timeOfPaid = new Date();
+                doc["orderNo"] = generateOrderId()
+                if (req.headers.userid) doc["doneBy"] = req.headers.userid;
+            }
         });
+    } else {
+        req.body.packageDetails["orderNo"] = generateOrderId()
+        if (req.headers.userid) req.body.packageDetails["doneBy"] = req.headers.userid;
     }
     req.responseData = await Member.findById(req.params.id).populate('credentialId').lean()
     Member.findByIdAndUpdate(req.params.id, { $push: { packageDetails: req.body.packageDetails }, $set: queryCond })
@@ -797,7 +765,7 @@ exports.payAtGymMobile = async(req, res) => {
         .populate('packageDetails.doneBy')
         .then(response => {
             auditLogger(req, 'Success')
-            successResponseHandler(res, {...response, ... { displayReceipt: true } }, "successfully save the transaction !!");
+            successResponseHandler(res, { ...response, ...{ displayReceipt: true } }, "successfully save the transaction !!");
         }).catch(error => {
             logger.error(error);
             auditLogger(req, 'Failed')
@@ -815,18 +783,27 @@ exports.payAtGymMobile = async(req, res) => {
  *
  */
 
-exports.bookTrainer = async(req, res) => {
+exports.bookTrainer = async (req, res) => {
     try {
         let trainerDetails = req.body.trainerDetails;
         trainerDetails['trainerStart'] = setTime(trainerDetails['trainerStart']);
         trainerDetails['trainerEnd'] = setTime(trainerDetails['trainerEnd']);
         trainerDetails["dateOfPaid"] = setTime(new Date());
         trainerDetails["timeOfPaid"] = new Date();
-        if (trainerDetails.Installments) {
-            req.body.trainerDetails.Installments.forEach(doc => {
-                doc.dateOfPaid = setTime(new Date())
-                doc.timeOfPaid = new Date();
+        if (trainerDetails.Installments && trainerDetails.Installments.length) {
+            req.body.trainerDetails.Installments.forEach((doc, i) => {
+                if (i === 0) {
+                    doc.dateOfPaid = setTime(new Date())
+                    doc.timeOfPaid = new Date();
+                    doc["orderNo"] = generateOrderId()
+                    if (req.headers.userid) doc["doneBy"] = req.headers.userid;
+                }
             });
+            trainerDetails["paidStatus"] = 'Installment';
+        } else {
+            trainerDetails["orderNo"] = generateOrderId()
+            if (req.headers.userid) trainerDetails["doneBy"] = req.headers.userid;
+            trainerDetails["paidStatus"] = 'Paid';
         }
         const member = await Member.findById(req.body.memberId);
         for (const [i, packages] of member.packageDetails.entries()) {
@@ -834,8 +811,11 @@ exports.bookTrainer = async(req, res) => {
                 member.packageDetails[i].trainerDetails.push(trainerDetails);
             }
         }
-        const response = await member.save();
-        return successResponseHandler(res, response, "Successfully Booked a Trainer!");
+        await member.save();
+        const response = await Member.findById(req.body.memberId)
+            .populate('credentialId branch')
+            .populate('packageDetails.doneBy')
+        return successResponseHandler(res, { ...response, ...{ displayReceipt: true } }, "Successfully Booked a Trainer!");
     } catch (error) {
         logger.error(error);
         return errorResponseHandler(res, error, "Failed to Booked a Trainer!");
@@ -852,7 +832,7 @@ exports.bookTrainer = async(req, res) => {
 
 
 
-exports.getBioStarToken = async(req, res) => {
+exports.getBioStarToken = async (req, res) => {
     try {
         let tokenData = await bioStarToken()
         successResponseHandler(res, tokenData, "successfully save the transaction !!");
@@ -865,93 +845,28 @@ exports.getBioStarToken = async(req, res) => {
 
 
 
-/**
- *  start the package of member
- */
-
-
-exports.startPackage = async(req, res) => {
-    try {
-        req.body["startDate"] = setTime(req.body.startDate);
-        req.body["endDate"] = setTime(req.body.endDate);
-        req.body["trainerStart"] = setTime(req.body.trainerStart);
-        req.body["trainerEnd"] = setTime(req.body.trainerEnd);
-        await Member.update({ 'packageDetails._id': req.body.packageDetailId }, {
-            $set: {
-                'packageDetails.$.startDate': req.body.startDate,
-                'packageDetails.$.endDate': req.body.endDate,
-                'packageDetails.$.trainerDetails.$.trainerStart': req.body.trainerStart,
-                'packageDetails.$.trainerDetails.$.trainerEnd': req.body.trainerEnd
-            }
-        });
-        let memberAllClassResponse = await MemberClass.find({ member: req.body.memberId }).populate('classId').lean()
-        const userData = await Member.findById(req.body.memberId).populate('credentialId packageDetails.packages').lean();
-        const photo = sharp(userData.credentialId.avatar.path).rotate().resize(200).toBuffer()
-        let obj = {
-                accessGroupName: userData.packageDetails[0].packages.bioStarInfo.accessGroupName,
-                accessGroupId: userData.packageDetails[0].packages.bioStarInfo.accessGroupId,
-                userGroupId: userData.packageDetails[0].packages.bioStarInfo.userGroupId,
-                endDate: req.body.endDate,
-                memberId: userData.memberId,
-                name: userData.credentialId.userName,
-                email: userData.credentialId.email,
-                newPhoto: photo.toString('base64').replace('data:image/png;base64,', ''),
-                phoneNumber: userData.mobileNo,
-                template0: userData.biometricTemplate.template0,
-                template1: userData.biometricTemplate.template1,
-                startDate: req.body.startDate
-            }
-            // if (memberAllClassResponse.length === 0) {
-            //     if (userData.packageDetails.length )
-            //     new Date(fromTime.setFullYear(2020, 11, 9))
-            //     obj = {
-            //         ...obj, ...{
-            //             accessGroupName: userData.packageDetails[0].packages.bioStarInfo.accessGroupName,
-            //             accessGroupId: userData.packageDetails[0].packages.bioStarInfo.accessGroupId,
-            //             userGroupId: userData.packageDetails[0].packages.bioStarInfo.userGroupId
-            //         }
-            //     }
-            // }
-        userData.packageDetails.forEach(packageDetail => {
-            if (new Date(packageDetail.endDate) > new Date(req.body.endDate)) obj.endDate = packageDetail.endDate
-        })
-        memberAllClassResponse.forEach(memberClass => {
-            if (new Date(memberClass.classId.startDate) < new Date(obj.startDate)) obj.startDate = memberClass.classId.startDate
-            if (new Date(memberClass.classId.endDate) > new Date(obj.endDate)) obj.endDate = memberClass.classId.endDate
-        })
-        if (userData.packageDetails.length > 1) await updateMemberInBioStar(obj);
-        else await addMemberInBioStar(obj);
-        const newResponse = await Member.findById(req.body.memberId).populate('credentialId branch')
-            .populate({ path: "packageDetails.trainerDetails.trainer", populate: { path: "credentialId" } })
-            .populate({ path: "packageDetails.packages", populate: { path: "period" } })
-            .populate({ path: "packageDetails.trainerDetails.trainerFees", populate: { path: "period" } }).lean()
-        if (req.body.trainer) { await newMemberAssign(req.body.trainer); }
-        successResponseHandler(res, newResponse, "successfully save the transaction !!");
-    } catch (error) {
-        logger.error(error);
-        errorResponseHandler(res, error, "Exception while send code !");
-    }
-};
 
 /**
  * black list user from account
  */
 
 
-exports.blackListUser = async(req, res) => {
+exports.blackListUser = async (req, res) => {
     try {
+        let status;
+        if (req.body.status) status = "IN"
+        else status = 'AC';
         if (req.body.memberId) {
-            let status;
-            if (req.body.status) status = "IN"
-            else status = 'AC';
             await disableMember(req.body.memberId, status)
-            req.responseData = await Member.findById(req.params.id).populate('credentialId').lean()
+            req.responseData = await Member.findById(req.params.id, { faceRecognitionTemplate: 0 }).populate('credentialId').lean()
             let response = await Member.findByIdAndUpdate(req.params.id, { status: !req.body.status })
             auditLogger(req, 'Success')
             successResponseHandler(res, response, "successfully operation done on member")
         } else {
-            let response = await Employee.findByIdAndUpdate(req.params.id, { status: !req.body.status })
-            successResponseHandler(res, response, "successfully operation done on Employee")
+            await disableMember('E' + req.body.employeeId, status)
+            req.responseData = await Employee.findByIdAndUpdate(req.params.id, { status: !req.body.status })
+            auditLogger(req, 'Success')
+            successResponseHandler(res, [], "successfully operation done on Employee")
         }
     } catch (error) {
         logger.error(error);
@@ -966,13 +881,13 @@ exports.blackListUser = async(req, res) => {
  * expire list of member
  */
 
-exports.getExpiredMembers = async(req, res) => {
+exports.getExpiredMembers = async (req, res) => {
     try {
         let queryCond = {};
         if (req.body.branch) queryCond["branch"] = req.body.branch;
         queryCond['packageDetails.isExpiredPackage'] = true;
         let search = req.body.search.toLowerCase()
-        let response = await Member.find(queryCond)
+        let response = await Member.find(queryCond, { faceRecognitionTemplate: 0 })
             .populate('credentialId').populate("packageDetails.packages branch").lean()
         let newResponse = response.filter(doc => {
             if (search) {
@@ -993,13 +908,13 @@ exports.getExpiredMembers = async(req, res) => {
 }
 
 
-exports.getAboutToExpireMembers = async(req, res) => {
+exports.getAboutToExpireMembers = async (req, res) => {
     try {
         let queryCond = {};
         let search = req.body.search.toLowerCase()
         if (req.body.trainer) queryCond["packageDetails"] = { $elemMatch: { trainer: req.body.trainer } };
         if (req.body.branch) queryCond["branch"] = req.body.branch;
-        const members = await Member.find(queryCond).populate('credentialId packageDetails.packages branch');
+        const members = await Member.find(queryCond, { faceRecognitionTemplate: 0 }).populate('credentialId packageDetails.packages branch');
         const expiredMembers = [];
         for (let i = 0; i < members.length; i++) {
             let aboutToExpire = false;
@@ -1009,7 +924,7 @@ exports.getAboutToExpireMembers = async(req, res) => {
                 if (members[i].packageDetails[j].extendDate) {
                     endDate = members[i].packageDetails[j].extendDate;
                 }
-                if (new Date(convertToDate(endDate)).setDate(new Date(convertToDate(endDate)).getDate() - 2) <= today && today < new Date(convertToDate(endDate))) {
+                if (today.getTime() === new Date(endDate).setDate(new Date(endDate).getDate() - 1)) {
                     aboutToExpire = true;
                 }
             }
@@ -1036,20 +951,20 @@ exports.getAboutToExpireMembers = async(req, res) => {
 };
 
 
-exports.getClassesMembers = async(req, res) => {
+exports.getClassesMembers = async (req, res) => {
     try {
         let search = req.body.search.toLowerCase()
         let queryCond = {};
         queryCond["doneFingerAuth"] = false;
         queryCond["isPackageSelected"] = false;
         if (req.body.branch) queryCond["branch"] = req.body.branch
-        let pendingMember = await Member.find(queryCond).populate('credentialId branch').lean()
+        let pendingMember = await Member.find(queryCond, { faceRecognitionTemplate: 0 }).populate('credentialId branch').lean()
         pendingMember = memberSearch(pendingMember, search);
         let pendingMemberClasses = []
         for (let i = 0; i < pendingMember.length; i++) {
             let classesDetails = await MemberClass.find({ 'member': pendingMember[i]._id.toString() }).populate('classId').lean()
             if (classesDetails.length > 0) {
-                pendingMemberClasses.push({...pendingMember[i], ... { classesDetails } })
+                pendingMemberClasses.push({ ...pendingMember[i], ... { classesDetails } })
             }
         }
         return successResponseHandler(res, pendingMemberClasses, "successfully get all member details !!");
@@ -1060,7 +975,7 @@ exports.getClassesMembers = async(req, res) => {
 };
 
 
-exports.getCprData = async(req, res) => {
+exports.getCprData = async (req, res) => {
     try {
         const myFileURL = new URL('file:///C:/Users/Administrator/AppData/Local/Temp/2/eRevealerGcc.xml');
         var parser = new xml2js.Parser();
@@ -1076,9 +991,9 @@ exports.getCprData = async(req, res) => {
 };
 
 
-exports.getMemberByMemberId = async(req, res) => {
+exports.getMemberByMemberId = async (req, res) => {
     try {
-        let memberInfo = await Member.findOne({ memberId: +req.body.memberId })
+        let memberInfo = await Member.findOne({ memberId: +req.body.memberId }, { faceRecognitionTemplate: 0 })
             .populate('credentialId')
             .populate({ path: "packageDetails.packages", populate: { path: "period" } }).lean()
         memberInfo["fingerScanStatus"] = req.body.fingerScanStatus
@@ -1090,4 +1005,4 @@ exports.getMemberByMemberId = async(req, res) => {
         logger.error(error);
         errorResponseHandler(res, error, "Exception while getting member details !");
     }
-}
+};

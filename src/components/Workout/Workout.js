@@ -31,7 +31,7 @@ class Workout extends Component {
                       <Link to='/workouts' className="nav-item nav-link" role="tab">{t('Add Workouts')}</Link>
                       <Link to='/workouts/workouts-list' className="nav-item nav-link active" role="tab">{t('Workouts List')}</Link>
                     </Route>
-                    {/* <Link to='/workouts' className={this.state.url === '/workouts' ? "nav-item nav-link active" : "nav-item nav-link"} data-toggle="tab" role="tab">Add Workouts</Link>
+                    {/* <Link to='/workouts' className={this.state.url === '/workouts' ? "nav-item nav-link active" : "nav-item nav-link"} data-toggle="tab" role="tab">{t('Add Workouts')}</Link>
                     <Link to='/workouts/workouts-list' className={this.state.url === '/workouts/workouts-list' ? "nav-item nav-link active" : "nav-item nav-link"} data-toggle="tab" role="tab">Workouts List</Link> */}
 
                   </div>
